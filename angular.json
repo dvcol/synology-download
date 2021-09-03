@@ -16,10 +16,10 @@
       "architect": {
         "build": {
           "builder": "@angular-builders/custom-webpack:browser",
-          "customWebpackConfig": {
-            "path": "./webpack.config.ts"
-          },
           "options": {
+            "customWebpackConfig": {
+              "path": "./webpack.config.ts"
+            },
             "outputPath": "dist/synology-download",
             "index": "src/index.html",
             "main": "src/main.ts",
