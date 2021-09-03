@@ -1,0 +1,50 @@
+{
+  "name": "synology-download",
+  "version": "0.1.0",
+  "description": "Chrome extension for Synology Download Station",
+  "manifest_version": 2,
+  "icons": {
+    "16": "assets/icons/icon-16.png",
+    "32": "assets/icons/icon-32.png",
+    "64": "assets/icons/icon-64.png",
+    "128": "assets/icons/icon-128.png",
+    "256": "assets/icons/icon-256.png"
+  },
+  "permissions": [
+    "contextMenus",
+    "notifications",
+    "storage",
+    "http://*/*",
+    "https://*/*"
+  ],
+  "browser_action": {
+    "browser_style": true,
+    "default_title": "Synology Download Station",
+    "default_popup": "index.html"
+,
+    "default_icon": {
+      "16": "assets/icons/icon-16.png",
+      "32": "assets/icons/icon-32.png",
+      "64": "assets/icons/icon-64.png",
+      "128": "assets/icons/icon-128.png",
+      "256": "assets/icons/icon-256.png"
+    }
+  },
+  "background": {
+    "scripts": [
+      "background.js",
+      "runtime.js"
+    ]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ]
+}
