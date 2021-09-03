@@ -1,11 +1,10 @@
 const LEFT_MOUSE_BUTTON = 0;
-
 const DOWNLOAD_ONLY_PROTOCOLS = ['magnet', 'thunder', 'flashget', 'qqdl', 'ed2k'];
 
 function startsWithAnyProtocol(
-  url: string,
-  protocols: string | string[]
-): boolean {
+  url,
+  protocols
+) {
   if (typeof protocols === 'string') {
     return url.startsWith(`${protocols}:`);
   } else {
@@ -14,9 +13,9 @@ function startsWithAnyProtocol(
 }
 
 function recursivelyFindAnchorAncestor(
-  e: HTMLElement | null,
-  depth: number = 10,
-): HTMLAnchorElement | undefined {
+  e,
+  depth = 10,
+) {
   if (e == null) {
     return undefined;
   } else if (e instanceof HTMLAnchorElement) {
@@ -30,17 +29,18 @@ function recursivelyFindAnchorAncestor(
 
 // I hate this implementation. True protocol handling for extensions does not exist.
 // https://bugzilla.mozilla.org/show_bug.cgi?id=1271553
-document.addEventListener('click', (e: MouseEvent) => {
+document.addEventListener('click', (e) => {
   if (e.button === LEFT_MOUSE_BUTTON) {
-    const anchor = recursivelyFindAnchorAncestor(e.target as HTMLElement);
+    const anchor = recursivelyFindAnchorAncestor(e.target);
     if (
       anchor != null &&
       anchor.href
       &&
       startsWithAnyProtocol(anchor.href, DOWNLOAD_ONLY_PROTOCOLS)
     ) {
-      console.log(anchor.href);
+      chrome.runtime.sendMessage({type: "link", url: anchor.href}, () => console.log('sent'));
       e.preventDefault();
     }
   }
 });
+

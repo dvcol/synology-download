@@ -10,8 +10,7 @@
   "files": [
     "src/main.ts",
     "src/polyfills.ts",
-    "src/background.ts",
-    "src/content.ts"
+    "src/background.ts"
   ],
   "include": [
     "src/**/*.d.ts"

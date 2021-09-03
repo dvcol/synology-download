@@ -35,6 +35,11 @@
               "src/styles.scss"
             ],
             "scripts": [
+              {
+                "input": "src/content.js",
+                "inject": false,
+                "bundleName": "content"
+              }
             ]
           },
           "configurations": {

@@ -20,8 +20,7 @@
   "browser_action": {
     "browser_style": true,
     "default_title": "Synology Download Station",
-    "default_popup": "index.html"
-,
+    "default_popup": "index.html",
     "default_icon": {
       "16": "assets/icons/icon-16.png",
       "32": "assets/icons/icon-32.png",
@@ -39,7 +38,8 @@
   "content_scripts": [
     {
       "matches": [
-        "*://*/*"
+        "http://*/*",
+        "https://*/*"
       ],
       "js": [
         "content.js"

@@ -1,5 +1,7 @@
 import type {Configuration} from 'webpack';
 
 module.exports = {
-  entry: {background: 'src/background.ts', content: 'src/content.ts'},
+  entry: {
+    background: 'src/background.ts'
+  },
 } as Configuration;

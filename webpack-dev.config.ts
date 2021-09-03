@@ -10,8 +10,7 @@ module.exports = {
     new ExtensionReloader({
       reloadPage: true, // Force the reload of the page also
       entries: { // The entries used for the content/background scripts or extension pages
-        background: 'background',
-        content: 'content',
+        background: 'background'
       }
     })
   ]
