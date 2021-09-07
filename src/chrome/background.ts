@@ -2,15 +2,26 @@ import MessageSender = chrome.runtime.MessageSender;
 
 export {}
 
+// Add the context menu
 chrome.contextMenus.create({
     enabled: true,
-    id:"open",
+    id: "open",
     title: 'Download with Synology Diskstation',
     contexts: ['link', 'audio', 'video', 'image', 'selection'],
-    onclick: () =>
-        window.open('index.html', 'extension_popup', 'width=300,height=400,status=no,scrollbars=yes,resizable=no')
+    onclick: () => {
+        // On click instruct content.ts to open the modal
+        chrome.tabs.query({active: true, currentWindow: true}, tabs => {
+            if (tabs[0].id !== undefined) chrome.tabs.sendMessage(tabs[0].id, {type: "popup"});
+        });
+    }
 });
 
-chrome.runtime.onMessage.addListener((request: any, sender: MessageSender, sendResponse: any) => console.log(request, sender, sendResponse));
+// On message from content.ts handle link
+chrome.runtime.onMessage.addListener((request: any, sender: MessageSender, sendResponse: any) => {
+    console.log(request, sender, sendResponse)
+    if (request.type === "link") {
+        console.log(request.url);
+    }
+});
 
 
