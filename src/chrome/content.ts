@@ -1,9 +1,11 @@
 const LEFT_MOUSE_BUTTON = 0;
 const DOWNLOAD_ONLY_PROTOCOLS = ['magnet', 'thunder', 'flashget', 'qqdl', 'ed2k'];
 
+export {}
+
 function startsWithAnyProtocol(
-    url,
-    protocols
+    url: string,
+    protocols: string | string[]
 ) {
     if (typeof protocols === 'string') {
         return url.startsWith(`${protocols}:`);
@@ -13,9 +15,9 @@ function startsWithAnyProtocol(
 }
 
 function recursivelyFindAnchorAncestor(
-    e,
-    depth = 10,
-) {
+    e: HTMLElement | null,
+    depth: number = 10
+): HTMLAnchorElement | undefined {
     if (e == null) {
         return undefined;
     } else if (e instanceof HTMLAnchorElement) {
@@ -31,7 +33,7 @@ function recursivelyFindAnchorAncestor(
 // https://bugzilla.mozilla.org/show_bug.cgi?id=1271553
 document.addEventListener('click', (e) => {
     if (e.button === LEFT_MOUSE_BUTTON) {
-        const anchor = recursivelyFindAnchorAncestor(e.target);
+        const anchor = recursivelyFindAnchorAncestor(e.target as HTMLElement);
         if (
             anchor != null &&
             anchor.href
