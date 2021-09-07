@@ -1,3 +1,5 @@
+import {ChromeMessage, ChromeMessageType} from "../model/message";
+
 export {}
 /**
  * List of supported protocols
@@ -52,13 +54,16 @@ document.addEventListener('click', (e) => {
             &&
             startsWithAnyProtocol(anchor.href, DOWNLOAD_ONLY_PROTOCOLS)
         ) {
-            chrome.runtime.sendMessage({type: "link", url: anchor.href}, () => console.log('sent'));
+            chrome.runtime.sendMessage({type: ChromeMessageType.link, payload: anchor.href} as ChromeMessage, () => console.log('sent'));
             openModal();
             e.preventDefault();
         }
     }
 });
 
+/**
+ * Open a modal popup for complex download actions
+ */
 function openModal() {
     const modal = document.createElement("dialog");
     modal.setAttribute("style", "padding: 0;border: 0;");
@@ -82,9 +87,10 @@ function openModal() {
     });
 }
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+// Listen to popup triggers coming from background
+chrome.runtime.onMessage.addListener((request : ChromeMessage, sender, sendResponse) => {
     console.log(request, sender, sendResponse)
-    if (request.type === "popup") {
+    if (request.type === ChromeMessageType.popup) {
         openModal();
     }
 });
