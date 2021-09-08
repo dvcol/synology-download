@@ -1,4 +1,4 @@
-import {ChromeMessage, ChromeMessageType} from "../model/message";
+import {ChromeMessage, ChromeMessageType} from "../models/message.model";
 
 export {}
 /**
@@ -54,8 +54,10 @@ document.addEventListener('click', (e) => {
             &&
             startsWithAnyProtocol(anchor.href, DOWNLOAD_ONLY_PROTOCOLS)
         ) {
-            chrome.runtime.sendMessage({type: ChromeMessageType.link, payload: anchor.href} as ChromeMessage, () => console.log('sent'));
-            openModal();
+            chrome.runtime.sendMessage({
+                type: ChromeMessageType.link,
+                payload: anchor.href
+            } as ChromeMessage, () => console.log('sent'));
             e.preventDefault();
         }
     }
@@ -75,8 +77,10 @@ function openModal() {
 
     const iframe = document.getElementById("popupContainer") as HTMLIFrameElement;
     iframe.src = chrome.extension.getURL("index.html");
+    iframe.style.minHeight = '60vh';
+    iframe.style.minWidth = '60vh';
 
-    dialog.querySelector("dialog").addEventListener("click", (e: any) => {
+    dialog.addEventListener("click", (e: any) => {
         const rect = e.target.getBoundingClientRect();
         const minX = rect.left + e.target.clientLeft;
         const minY = rect.top + e.target.clientTop;
@@ -88,8 +92,8 @@ function openModal() {
 }
 
 // Listen to popup triggers coming from background
-chrome.runtime.onMessage.addListener((request : ChromeMessage, sender, sendResponse) => {
-    console.log(request, sender, sendResponse)
+chrome.runtime.onMessage.addListener((request: ChromeMessage) => {
+    console.log(request)
     if (request.type === ChromeMessageType.popup) {
         openModal();
     }

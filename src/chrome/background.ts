@@ -1,6 +1,6 @@
 import MessageSender = chrome.runtime.MessageSender;
-import {ChromeMessageType} from "../model/message";
-import {ContextMenuOption} from "../model/options";
+import {ChromeMessageType} from "../models/message.model";
+import {ContextMenuOption} from "../models/options.model";
 
 export {}
 
@@ -37,9 +37,7 @@ function buildContextMenu(options: ContextMenuOption[] | undefined) {
 function persistContextMenu(filter: (args: ContextMenuOption[] | undefined) => ContextMenuOption[] | undefined) {
     chrome.storage.sync.get('menus',
         (response) => {
-            console.log(response)
             const menus = filter(response?.menus);
-            console.log(menus)
             chrome.storage.sync.set({menus}, () => buildContextMenu(menus));
         });
 }
@@ -66,7 +64,7 @@ saveContextMenu({
 
 // On message from chrome handle payload
 chrome.runtime.onMessage.addListener((request: any, sender: MessageSender, sendResponse: any) => {
-    console.log(request, sender, sendResponse)
+    console.log(request)
     if (request.type === ChromeMessageType.link) {
         console.log(request.payload);
     } else if (request.type === ChromeMessageType.option) {
