@@ -1,50 +1,41 @@
-import React from 'react';
-import {Avatar, IconButton, LinearProgress, List, ListItem, ListItemAvatar, ListItemText} from "@mui/material";
-import {useSelector} from "react-redux";
-import {NavbarState} from "../../services/slices/navbar.slice";
-import DeleteIcon from '@mui/icons-material/Delete';
-import DownloadIcon from '@mui/icons-material/Download';
+import React, {useEffect, useState} from 'react';
+import {Accordion, AccordionDetails, AccordionSummary, Typography} from "@mui/material";
+import TaskCard from "../task-card/task-card";
+import {Drink, synologyClient} from "../../services/http/synology-client";
+import {finalize, tap} from "rxjs";
 
 const TabPanel = () => {
-    const value = useSelector((state: NavbarState) => state.navbar.value);
+    const [drinks, setDrinks] = useState<Drink[]>([]);
+    useEffect(() => {
+        const subscription = synologyClient.search("gin")
+            .pipe(
+                tap((res) => console.log(res.drinks)),
+                finalize(console.log)
+            )
+            .subscribe((res) => setDrinks(res.drinks));
 
-    const [progress, setProgress] = React.useState(0);
-
-    React.useEffect(() => {
-        const timer = setInterval(() => {
-            setProgress((oldProgress) => {
-                if (oldProgress === 100) {
-                    return 0;
-                }
-                const diff = Math.random() * 10;
-                return Math.min(oldProgress + diff, 100);
-            });
-        }, 500);
-
-        return () => {
-            clearInterval(timer);
-        };
+        return () => subscription.unsubscribe();
     }, []);
     return (
-        <List>
-            <ListItem
-                secondaryAction={
-                    <IconButton edge="end" aria-label="delete">
-                        <DeleteIcon/>
-                    </IconButton>
-                }
-            >
-                <ListItemAvatar>
-                    <Avatar>
-                        <DownloadIcon/>
-                    </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                    primary={value}
-                    secondary={<LinearProgress variant="determinate" value={progress}/>}
-                />
-            </ListItem>
-        </List>
+        <React.Fragment>
+            {drinks.map(() =>
+                <Accordion>
+                    <AccordionSummary
+                        aria-controls="task-content"
+                        id="task-header"
+                        sx={{padding: 0}}
+                    >
+                        <TaskCard/>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <Typography>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                            malesuada lacus ex, sit amet blandit leo lobortis eget.
+                        </Typography>
+                    </AccordionDetails>
+                </Accordion>
+            )}
+        </React.Fragment>
     );
 }
 
