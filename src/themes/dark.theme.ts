@@ -1,5 +1,7 @@
 import {createTheme} from "@mui/material";
 
+export const isDarkTheme = () => window.matchMedia('(prefers-color-scheme: dark').matches
+
 export const darkTheme = () => {
     const theme = {
         components: {
@@ -22,7 +24,7 @@ export const darkTheme = () => {
             }
         }
     }
-    if (window.matchMedia('(prefers-color-scheme: dark').matches) {
+    if (isDarkTheme()) {
         return createTheme({
             ...theme,
             palette: {

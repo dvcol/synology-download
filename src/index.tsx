@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.scss';
 import Navbar from './components/navbar/navbar';
 import reportWebVitals from './reportWebVitals';
-import TabPanel from "./components/tab-panel/tab-panel";
+import TaskPanel from "./components/task-panel/task-panel";
 import {Provider} from "react-redux";
 import store from "./services/store";
 import {CssBaseline, ThemeProvider} from "@mui/material";
@@ -15,7 +15,7 @@ ReactDOM.render(
             <ThemeProvider theme={darkTheme()}>
                 <CssBaseline />
                 <Navbar/>
-                <TabPanel/>
+                <TaskPanel/>
             </ThemeProvider>
         </Provider>
     </React.StrictMode>,

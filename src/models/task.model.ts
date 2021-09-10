@@ -60,7 +60,7 @@ export interface StatusExtra {
 export interface Additional {
     detail: Detail,
     transfer: Transfer,
-    file: File,
+    file: File[],
     tracker: Tracker,
     peer: Peer
 }
@@ -136,10 +136,11 @@ export const taskStatusToColor = (status: TaskStatus) => {
     }
 }
 
-export const computeTaskProgress = (task: Task): number => {
-    const downloaded = Number(task.additional?.transfer?.size_downloaded);
-    if (downloaded && Number.isFinite(downloaded)) {
-        const progress = Math.floor((Number(downloaded) / task.size) * 100,);
+export const computeProgress = (downloaded: number | any, size: number | any): number => {
+    const numDownloaded = Number(downloaded);
+    const numSize = Number(size);
+    if (numDownloaded && Number.isFinite(numDownloaded) && numSize && Number.isFinite(numSize)) {
+        const progress = Math.floor((numDownloaded / numSize) * 100,);
         return Number.isFinite(progress) ? progress : 0;
     }
     return 0
@@ -167,7 +168,7 @@ export const formatTime = (s: number): string => {
     return `${hours ? hours + ":" : ""}${hours ? withZero(minutes) : minutes}:${withZero(seconds)}`;
 }
 
-export const formatBytes = (byte: number | string): string => {
+export const formatBytes = (byte: number | any): string => {
     const num = Number(byte);
     if (num && Number.isFinite(num)) {
         return prettyBytes(num)

@@ -18,14 +18,14 @@ class SynologyClient extends BaseHttpService {
     getByStatus(status?: TaskStatus | TaskStatus[]): Observable<Task[]> {
         const result = mockTasks.filter((t) => status
             ? Array.isArray(status)
-                ? status.map(toString).includes(t.status)
-                : t.status === status.toString()
+                ? status.includes(t.status)
+                : t.status === status
             : true)
         mockTasks.forEach(t => {
             console.log(t.status, status, !!status, Array.isArray(status), status
                 ? Array.isArray(status)
-                    ? status.map(toString).includes(t.status)
-                    : t.status === status.toString()
+                    ? status.includes(t.status)
+                    : t.status === status
                 : true)
         })
         console.log(status, result)
