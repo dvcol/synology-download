@@ -11,7 +11,7 @@ import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import {TabType} from "../../models/navbar.model";
 import {computeEta, computeProgress, formatBytes, Task, TaskStatus, taskStatusToColor} from "../../models/task.model";
 import {blue, green, orange, purple, red} from "@mui/material/colors";
-import ProgressBar from "../progress/progress";
+import ProgressBar from "../progress-bar/progress-bar";
 
 const TaskCard = ({task, tabType}: { task: Task, tabType: TabType }) => {
     const statusIcon = (status: TaskStatus): React.ReactNode => {
