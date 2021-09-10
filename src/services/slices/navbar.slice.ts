@@ -5,11 +5,11 @@ import {TabType} from "../../models/navbar.model";
 export const navbarSlice = createSlice({
     name: 'navbar',
     initialState: {
-        value: TabType.all,
+        tabType: TabType.all,
     },
     reducers: {
-        set: ({value}, {payload}) => ({value: payload}),
-        reset: () => ({value: TabType.all})
+        set: ({tabType}, {payload}) => ({tabType: payload}),
+        reset: () => ({tabType: TabType.all})
     }
 })
 

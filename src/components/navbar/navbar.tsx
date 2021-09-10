@@ -10,7 +10,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 const Navbar = () => {
     const dispatch = useDispatch();
 
-    const value = useSelector((state: NavbarState) => state.navbar.value);
+    const tabType = useSelector((state: NavbarState) => state.navbar.tabType);
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => dispatch(set(newValue));
 
@@ -24,7 +24,7 @@ const Navbar = () => {
                         textColor="primary"
                         indicatorColor="primary"
                         onChange={handleChange}
-                        value={value}
+                        value={tabType}
                     >
                         {tabs}
                     </Tabs>

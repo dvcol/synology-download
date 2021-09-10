@@ -6,12 +6,17 @@ import reportWebVitals from './reportWebVitals';
 import TabPanel from "./components/tab-panel/tab-panel";
 import {Provider} from "react-redux";
 import store from "./services/store";
+import {CssBaseline, ThemeProvider} from "@mui/material";
+import {darkTheme} from "./themes/dark.theme";
 
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
-            <Navbar/>
-            <TabPanel/>
+            <ThemeProvider theme={darkTheme()}>
+                <CssBaseline />
+                <Navbar/>
+                <TabPanel/>
+            </ThemeProvider>
         </Provider>
     </React.StrictMode>,
     document.getElementById('root')

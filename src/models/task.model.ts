@@ -1,4 +1,5 @@
 import {ColorLevel} from "./material-ui.model";
+import prettyBytes from "pretty-bytes";
 
 /**
  * Task object for Synology Download Station
@@ -121,7 +122,7 @@ export interface Peer {
 export const taskStatusToColor = (status: TaskStatus) => {
     switch (status) {
         case TaskStatus.downloading:
-            return ColorLevel.primary;
+            return ColorLevel.info
         case TaskStatus.seeding:
             return ColorLevel.secondary
         case TaskStatus.finished:
@@ -131,6 +132,45 @@ export const taskStatusToColor = (status: TaskStatus) => {
         case TaskStatus.error:
             return ColorLevel.error;
         default:
-            return ColorLevel.info
+            return ColorLevel.primary;
     }
+}
+
+export const computeTaskProgress = (task: Task): number => {
+    const downloaded = Number(task.additional?.transfer?.size_downloaded);
+    if (downloaded && Number.isFinite(downloaded)) {
+        const progress = Math.floor((Number(downloaded) / task.size) * 100,);
+        return Number.isFinite(progress) ? progress : 0;
+    }
+    return 0
+}
+
+export const computeEta = (task: Task): string | undefined => {
+    const downloaded = Number(task.additional?.transfer?.size_downloaded);
+    const speed = Number(task.additional?.transfer?.speed_download);
+    if (downloaded && Number.isFinite(downloaded) && speed && Number.isFinite(speed)) {
+        const secondsRemaining = Math.round((task.size - downloaded) / speed);
+        return Number.isFinite(secondsRemaining) ? formatTime(secondsRemaining) : undefined;
+    }
+    return undefined
+}
+
+export const formatTime = (s: number): string => {
+    const hours = Math.floor(s / (60 * 60));
+    const minutes = Math.floor(s / 60) - hours * 60;
+    const seconds = Math.floor(s) - hours * 60 * 60 - minutes * 60;
+
+    function withZero(n: number) {
+        return n > 9 ? n.toString() : `0${n.toString()}`;
+    }
+
+    return `${hours ? hours + ":" : ""}${hours ? withZero(minutes) : minutes}:${withZero(seconds)}`;
+}
+
+export const formatBytes = (byte: number | string): string => {
+    const num = Number(byte);
+    if (num && Number.isFinite(num)) {
+        return prettyBytes(num)
+    }
+    return '0 B'
 }
