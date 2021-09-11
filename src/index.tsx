@@ -3,22 +3,26 @@ import ReactDOM from 'react-dom';
 import './index.scss';
 import Navbar from './components/navbar/navbar';
 import reportWebVitals from './reportWebVitals';
-import TaskPanel from "./components/task-panel/task-panel";
 import {Provider} from "react-redux";
 import store from "./services/store";
 import {CssBaseline, ThemeProvider} from "@mui/material";
 import {darkTheme} from "./themes/dark.theme";
+import TabPanel from "./components/tab-panel/tab-panel";
+import {BrowserRouter as Router} from "react-router-dom";
 
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
             <ThemeProvider theme={darkTheme()}>
-                <CssBaseline />
-                <Navbar/>
-                <TaskPanel/>
+                <Router>
+                    <CssBaseline/>
+                    <Navbar/>
+                    <TabPanel/>
+                </Router>
             </ThemeProvider>
         </Provider>
-    </React.StrictMode>,
+    </React.StrictMode>
+    ,
     document.getElementById('root')
 );
 

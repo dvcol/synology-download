@@ -1,4 +1,5 @@
 import {createTheme} from "@mui/material";
+import {Property} from "csstype";
 
 export const isDarkTheme = () => window.matchMedia('(prefers-color-scheme: dark').matches
 
@@ -21,12 +22,27 @@ export const darkTheme = () => {
                         }
                     }
                 }
+            },
+            MuiTab: {
+                styleOverrides: {
+                    root: {
+                        textTransform: 'capitalize' as Property.TextTransform
+                    }
+                }
+            },
+            MuiTabs: {
+                styleOverrides: {
+                    flexContainer: {
+                        height: '100%'
+                    }
+                }
             }
         }
     }
     if (isDarkTheme()) {
         return createTheme({
             ...theme,
+
             palette: {
                 mode: 'dark',
                 background: {

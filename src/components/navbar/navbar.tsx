@@ -1,5 +1,6 @@
+import {Link} from "react-router-dom";
 import React from 'react';
-import {AppBar, Box, Tabs, Toolbar,} from "@mui/material";
+import {AppBar, Tabs, Toolbar,} from "@mui/material";
 import {TabType} from "../../models/navbar.model";
 import {useDispatch, useSelector} from "react-redux";
 import {NavbarState, set} from "../../services/slices/navbar.slice";
@@ -14,24 +15,24 @@ const Navbar = () => {
 
     const handleChange = (event: React.SyntheticEvent, newValue: string) => dispatch(set(newValue));
 
-    const tabs = Object.values(TabType).map((type, i) => (<NavbarTab value={type} index={i}/>))
+    const tabs = Object.values(TabType).map((type, i) => (<NavbarTab value={type} index={i} component={Link} to="/"/>))
     return (
-        <Box>
-            <AppBar color="inherit" position="sticky" sx={{padding: '0 0.5rem'}}>
-                <Toolbar disableGutters={true}>
-                    <Tabs
-                        aria-label="download filtered tabs"
-                        textColor="primary"
-                        indicatorColor="primary"
-                        onChange={handleChange}
-                        value={tabType}
-                    >
-                        {tabs}
-                    </Tabs>
-                    <NavbarMenu label={<MenuIcon/>}/>
-                </Toolbar>
-            </AppBar>
-        </Box>
+        <AppBar color="inherit" position="sticky" sx={{padding: '0 0.5rem'}}>
+            <Toolbar disableGutters={true} sx={{justifyContent: "space-between"}}>
+                <Tabs
+                    aria-label="download filtered tabs"
+                    textColor="primary"
+                    indicatorColor="primary"
+                    variant="scrollable"
+                    onChange={handleChange}
+                    value={tabType}
+                    sx={{minHeight: 64, height: '100%'}}
+                >
+                    {tabs}
+                </Tabs>
+                <NavbarMenu label={<MenuIcon/>}/>
+            </Toolbar>
+        </AppBar>
     )
 }
 

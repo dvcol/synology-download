@@ -51,7 +51,7 @@ const TaskCard = ({task, tabType}: { task: Task, tabType: TabType }) => {
     }
 
     return (
-        <ListItem>
+        <ListItem sx={{minWidth: '40rem'}}>
             <ListItemAvatar sx={{minWidth: 66}}>
                 <Avatar sx={{width: 50, height: 50, bgcolor: avatarBgColor(task.status)}}>
                     {statusIcon(task.status)}

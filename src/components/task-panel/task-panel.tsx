@@ -37,9 +37,9 @@ const TaskPanel = () => {
             .subscribe((res) => setTasks(res));
 
         return () => subscription.unsubscribe();
-    }, []);
+    }, [tabType]);
     return (
-        <Container disableGutters={true} sx={{overflow: 'auto', maxHeight: '30rem', padding: '0.25rem'}}>
+        <Container disableGutters sx={{overflow: 'auto', maxHeight: '30rem', padding: '0.25rem'}}>
             {tasks.map((t) =>
                 <Accordion>
                     <AccordionSummary

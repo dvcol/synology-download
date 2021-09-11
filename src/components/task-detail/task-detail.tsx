@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, Button, Grid, ListItem, ListItemText, Stack, Typography} from "@mui/material";
+import {Button, Container, Grid, ListItem, ListItemText, Stack, Typography} from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import {computeProgress, formatBytes, Task, TaskStatus} from "../../models/task.model";
 import PauseIcon from "@mui/icons-material/Pause";
@@ -44,7 +44,10 @@ const TaskDetail = ({task}: { task: Task }) => {
                     </Stack>
                 </Grid>
             </Grid>
-            <Box sx={{mt: '1rem', bgcolor: isDarkTheme() ? grey[900] : grey[200]}}>
+            <Container disableGutters sx={{
+                mt: '1rem', maxHeight: '13rem', overflow: 'auto',
+                bgcolor: isDarkTheme() ? grey[900] : grey[200]
+            }}>
                 {task.additional?.file?.map((f) => (
                     <ListItem>
                         <ListItemText
@@ -73,7 +76,7 @@ const TaskDetail = ({task}: { task: Task }) => {
                         />
                     </ListItem>
                 ))}
-            </Box>
+            </Container>
         </Typography>
     )
 }

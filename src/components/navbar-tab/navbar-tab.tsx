@@ -2,7 +2,7 @@ import React from 'react';
 import {Badge, BadgeProps, styled, Tab} from "@mui/material";
 import {TabType, tabTypeToColor} from "../../models/navbar.model";
 
-type NavbarTabProps = { value: TabType, index: number }
+type NavbarTabProps = { value: TabType, index: number, [key: string]: any }
 
 const NavbarTab = ({value, index, ...props}: NavbarTabProps) => {
     const a11yProps = (type: TabType) => ({id: `simple-tab-${type}`, 'aria-controls': `simple-tabpanel-${type}`})
@@ -20,7 +20,8 @@ const NavbarTab = ({value, index, ...props}: NavbarTabProps) => {
                 </StyledBadge>
             }
             {...a11yProps(value)}
-            value={value}/>
+            value={value}
+        />
     )
 }
 
