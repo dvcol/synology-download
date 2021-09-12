@@ -1,8 +1,8 @@
-import {ContextMenuOption} from "./options.model";
-
 /**
  * Enumeration for message types
  */
+import {ContextMenuOption} from "./context-menu.model";
+
 export enum ChromeMessageType {
     link = 'link',
     popup = 'popup',

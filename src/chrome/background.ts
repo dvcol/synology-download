@@ -1,14 +1,27 @@
 import MessageSender = chrome.runtime.MessageSender;
 import {ChromeMessageType} from "../models/message.model";
-import {ContextMenuOption} from "../models/options.model";
+import {ContextMenuOption} from "../models/context-menu.model";
+import {defaultOptions, Settings, settingsKey} from "../models/settings.model";
+import {settingsSlice, sync} from "../services/slices/settings.slice";
+import {configureStore} from "@reduxjs/toolkit";
+import {navbarSlice} from "../services/slices/navbar.slice";
 
 export {}
+
+// Declared in background for persistance
+export const store = configureStore({
+    reducer: {
+        navbar: navbarSlice.reducer,
+        settings: settingsSlice.reducer
+    },
+});
 
 
 /**
  * Add a new context menu to chrome with the given options
  */
-function addContextMenu(option: ContextMenuOption) {
+function createContextMenu(option: ContextMenuOption) {
+    console.log('createContextMenu', option);
     chrome.contextMenus.create({
         ...option,
         enabled: true,
@@ -25,42 +38,22 @@ function addContextMenu(option: ContextMenuOption) {
  * Build context menu for the menu options given
  * @param options the options
  */
-function buildContextMenu(options: ContextMenuOption[] | undefined) {
+export function buildContextMenu(options: ContextMenuOption[] | undefined) {
     chrome.contextMenus.removeAll();
-    if (options?.length) options.forEach((o) => addContextMenu(o))
+    if (options?.length) options.forEach((o) => createContextMenu(o))
 }
 
-/**
- * Persist into sync storage the contextMenuOption
- * @param filter a filter function to handle menu parsing
- */
-function persistContextMenu(filter: (args: ContextMenuOption[] | undefined) => ContextMenuOption[] | undefined) {
-    chrome.storage.sync.get('menus',
-        (response) => {
-            const menus = filter(response?.menus);
-            chrome.storage.sync.set({menus}, () => buildContextMenu(menus));
-        });
-}
+// Restore settings
+// TODO: Remove clear
+chrome.storage.sync.get(settingsKey, ({settings}) => {
+        const parsed: Settings = JSON.parse(settings || "{}")
+        store.dispatch(sync(parsed));
+        // Build context menu if exist
+        buildContextMenu(parsed?.menus || defaultOptions.menus);
+        console.log('re-load', parsed, store.getState().settings)
+    }
+);
 
-/**
- * Save or update a contextMenu into synced options
- * @param option the option
- */
-export const saveContextMenu = (option: ContextMenuOption) => persistContextMenu((menus) => menus?.length ? [...menus.filter((o: ContextMenuOption) => o.id !== option.id), option] : [option]);
-
-/**
- * delete a contextMenu into synced options
- * @param id the id of the option
- */
-export const deleteContextMenu = (id: string) => persistContextMenu((menus) => menus?.filter((o: ContextMenuOption) => o.id !== id));
-
-// TODO : delete
-// Placeholder to init context menu
-saveContextMenu({
-    id: 'open',
-    title: 'Download with Synology Diskstation',
-    contexts: ['link', 'audio', 'video', 'image', 'selection']
-});
 
 // On message from chrome handle payload
 chrome.runtime.onMessage.addListener((request: any, sender: MessageSender, sendResponse: any) => {
@@ -68,8 +61,8 @@ chrome.runtime.onMessage.addListener((request: any, sender: MessageSender, sendR
     if (request.type === ChromeMessageType.link) {
         console.log(request.payload);
     } else if (request.type === ChromeMessageType.option) {
-        addContextMenu(request.payload)
+        console.log('message option', store.getState().settings.menus);
+        buildContextMenu(store.getState().settings.menus);
     }
 });
-
 

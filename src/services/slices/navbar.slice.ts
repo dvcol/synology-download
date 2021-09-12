@@ -1,15 +1,17 @@
 import {combineReducers, createSlice} from '@reduxjs/toolkit'
-import {TabType} from "../../models/navbar.model";
-
+import {defaultTabs} from "../../models/tab.model";
 
 export const navbarSlice = createSlice({
     name: 'navbar',
     initialState: {
-        tabType: TabType.all,
+        tab: defaultTabs[0],
     },
     reducers: {
-        set: ({tabType}, {payload}) => ({tabType: payload}),
-        reset: () => ({tabType: TabType.all})
+        set: ({tab}, {payload}) => {
+            console.log(tab, payload);
+            return {tab: payload}
+        },
+        reset: () => ({tab: defaultTabs[0]})
     }
 })
 

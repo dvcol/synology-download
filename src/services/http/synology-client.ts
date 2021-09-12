@@ -9,6 +9,7 @@ export type Drink = {
     strDrinkThumb: string
 }
 
+// TODO: Remove Mock
 class SynologyClient extends BaseHttpService {
 
     search(term: string): Observable<{ drinks: Drink[] }> {
@@ -21,14 +22,6 @@ class SynologyClient extends BaseHttpService {
                 ? status.includes(t.status)
                 : t.status === status
             : true)
-        mockTasks.forEach(t => {
-            console.log(t.status, status, !!status, Array.isArray(status), status
-                ? Array.isArray(status)
-                    ? status.includes(t.status)
-                    : t.status === status
-                : true)
-        })
-        console.log(status, result)
         return of(result)
     }
 }
