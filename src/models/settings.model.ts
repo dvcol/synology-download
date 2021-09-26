@@ -17,13 +17,13 @@ export interface Connection {
     password?: string
 }
 
-export interface Settings {
+export interface SettingsSlice {
     connection: Connection,
     tabs: TaskTab[],
     menus: ContextMenuOption[]
 }
 
-export const defaultOptions: Settings = {
+export const defaultOptions: SettingsSlice = {
     connection: {protocol: 'http'},
     tabs: defaultTabs,
     menus: [defaultMenu]

@@ -2,36 +2,39 @@ import {Link} from "react-router-dom";
 import React from 'react';
 import {AppBar, Tabs, Toolbar,} from "@mui/material";
 import {useDispatch, useSelector} from "react-redux";
-import {NavbarState, set} from "../../services/slices/navbar.slice";
+import {set} from "../../services/store/slices/navbar.slice";
+import {setStatuses} from "../../services/store/slices/tasks.slice";
 import NavbarTab from "../navbar-tab/navbar-tab";
 import NavbarMenu from "../navbar-menu/navbar-menu";
 import MenuIcon from '@mui/icons-material/Menu';
-import {SettingsState} from "../../services/slices/settings.slice";
+import {getTab} from "../../services/store/selectors/navbar.selector";
+import {getTabs} from "../../services/store/selectors/settings.selector";
 
 const Navbar = () => {
     const dispatch = useDispatch();
 
-    const tabs = useSelector((state: SettingsState) => state.settings.tabs);
-    const tab = useSelector((state: NavbarState) => state.navbar.tab);
+    const tabs = useSelector(getTabs);
+    const tab = useSelector(getTab);
 
-    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-        console.log(tab, newValue)
-        return dispatch(set(newValue))
+    const handleChange = (event: React.SyntheticEvent, index: number): void => {
+        const newTab = tabs?.length > index ? tabs[index] : undefined;
+        dispatch(set(newTab))
+        dispatch(setStatuses(newTab?.status || []))
     };
 
-    const tabComponents = tabs?.map((taskTab, i) => (<NavbarTab value={taskTab} index={i} component={Link} to="/"/>))
+    const getValue = (): number => tabs?.findIndex(t => t.id === tab?.id) ?? -1
+
+    const tabComponents = tabs?.map((taskTab) => (<NavbarTab tab={taskTab} component={Link} to="/"/>))
     return (
         <AppBar color="inherit" position="sticky" sx={{padding: '0 0.5rem'}}>
             <Toolbar disableGutters={true} sx={{justifyContent: "space-between"}}>
-                {JSON.stringify(tab)}
-                {JSON.stringify(tabs[0])}
                 <Tabs
                     aria-label="download filtered tabs"
                     textColor="primary"
                     indicatorColor="primary"
                     variant="scrollable"
                     onChange={handleChange}
-                    value={tab}
+                    value={getValue()}
                     sx={{minHeight: 64, height: '100%'}}
                 >
                     {tabComponents}

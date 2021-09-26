@@ -115,6 +115,14 @@ export interface Peer {
     speed_upload: number
 }
 
+export enum TaskListOption {
+    detail = 'detail',
+    transfer = 'transfer',
+    file = 'file',
+    tracker = 'tracker',
+    peer = 'peer'
+}
+
 /**
  * Mapping function between task status and color level
  * @param status the TabType to map

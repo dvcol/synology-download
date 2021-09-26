@@ -7,13 +7,11 @@ import LoopIcon from '@mui/icons-material/Loop';
 import DownloadDoneIcon from '@mui/icons-material/DownloadDone';
 import UploadIcon from '@mui/icons-material/Upload';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-
-import {TabType} from "../../models/tab.model";
 import {computeEta, computeProgress, formatBytes, Task, TaskStatus, taskStatusToColor} from "../../models/task.model";
 import {blue, green, orange, purple, red} from "@mui/material/colors";
 import ProgressBar from "../progress-bar/progress-bar";
 
-const TaskCard = ({task, tabName}: { task: Task, tabName: TabType | string }) => {
+const TaskCard = ({task, statuses}: { task: Task, statuses?: TaskStatus[] }) => {
     const statusIcon = (status: TaskStatus): React.ReactNode => {
         switch (status) {
             case TaskStatus.waiting:
@@ -68,7 +66,7 @@ const TaskCard = ({task, tabName}: { task: Task, tabName: TabType | string }) =>
                     >
                         <Grid container>
                             <Grid item xs={10}>
-                                {(tabName === TabType.all || !Object.values(TabType).map(toString).includes(tabName)) &&
+                                {(!statuses || statuses?.length > 1) &&
                                 <React.Fragment>
                                     <span>{task.status.toUpperCase()}</span>
                                     <span> – </span>

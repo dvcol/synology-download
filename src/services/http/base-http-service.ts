@@ -1,5 +1,5 @@
 import {Observable} from "rxjs";
-import {BaseHttpRequest, Body, HttpHeaders, Method} from "../../models/http.model";
+import {BaseHttpRequest, Body, HttpHeaders, HttpParameters, Method} from "../../models/http.model";
 
 /** Base Http request class implementation*/
 export class BaseHttpService {
@@ -7,11 +7,29 @@ export class BaseHttpService {
     constructor(private baseUrl: string = '') {
     }
 
-    request<T>({url, method, headers, body}: BaseHttpRequest): Observable<T> {
+    setBaseUrl(baseUrl: string): void {
+        this.baseUrl = baseUrl;
+    }
+
+    buildUrl(url: string | URL, params?: HttpParameters): URL {
+        const builder = new URL(`${this.baseUrl}/${url}`);
+        if (params) {
+            Object.entries(params)
+                .map(e => ({key: e[0], value: e[1]}))
+                .forEach(({key, value}) =>
+                    Array.isArray(value)
+                        ? value.forEach((val) => builder.searchParams.append(key, val))
+                        : builder.searchParams.append(key, value)
+                )
+        }
+        return builder
+    }
+
+    request<T>({url, method, headers, params, body}: BaseHttpRequest): Observable<T> {
         return new Observable<T>(observer => {
             // Controller for abort-able fetch request
             const controller = new AbortController();
-            fetch(this.baseUrl + url, {method, headers, body, signal: controller.signal})
+            fetch(this.buildUrl(url, params).toString(), {method, headers, body, signal: controller.signal})
                 .then((r: Response) => r.json())
                 .then((data: T) => {
                     observer.next(data);
@@ -21,27 +39,27 @@ export class BaseHttpService {
             // Abort fetch on unsubscribe
             return () => controller.abort()
         })
-    };
-
-    get<T>(url: string = '', headers: HttpHeaders = {'Access-Control-Allow-Origin': '*'}): Observable<T> {
-        return this.request({url, method: Method.GET, headers});
     }
 
-    post<T>(body: Body, url: string = '', headers: HttpHeaders = {
+    get<T>(url: string = '', params?: HttpParameters, headers: HttpHeaders = {'Access-Control-Allow-Origin': '*'}): Observable<T> {
+        return this.request({url, method: Method.GET, params, headers});
+    }
+
+    post<T>(body: Body, url: string = '', params?: HttpParameters, headers: HttpHeaders = {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json'
     }): Observable<T> {
-        return this.request({url, method: Method.POST, headers, body});
+        return this.request({url, method: Method.POST, params, headers, body});
     }
 
-    put<T>(body: Body, url: string = '', headers: HttpHeaders = {
+    put<T>(body: Body, url: string = '', params?: HttpParameters, headers: HttpHeaders = {
         'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json'
     }): Observable<T> {
-        return this.request({url, method: Method.PUT, headers, body});
+        return this.request({url, method: Method.PUT, params, headers, body});
     }
 
-    delete<T>(url: string = '', headers: HttpHeaders = {'Access-Control-Allow-Origin': '*'}): Observable<T> {
-        return this.request({url, method: Method.DELETE, headers});
+    delete<T>(url: string = '', params?: HttpParameters, headers: HttpHeaders = {'Access-Control-Allow-Origin': '*'}): Observable<T> {
+        return this.request({url, method: Method.DELETE, params, headers});
     }
 }

@@ -25,20 +25,53 @@ import {
     addTaskTab,
     removeContextMenu,
     removeTaskTab,
-    set,
-    SettingsState
-} from "../../services/slices/settings.slice";
+    resetTaskTab,
+    sync
+} from "../../services/store/slices/settings.slice";
+import {setTasks} from "../../services/store/slices/tasks.slice";
 import {useDispatch, useSelector} from "react-redux";
 import AddIcon from '@mui/icons-material/Add';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {defaultMenu} from "../../models/context-menu.model";
 import {defaultTabs} from "../../models/tab.model";
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
+import {getPassword, getSettings, getUrl, getUsername} from "../../services/store/selectors/settings.selector";
+import {v4 as uuid} from 'uuid';
+import {synologyClient} from "../../services/http/synology-client.service";
+import {TaskListOption} from "../../models/task.model";
 
 export const Settings = () => {
     // form
-    const settings = useSelector((state: SettingsState) => state.settings);
     const dispatch = useDispatch()
     const [error, setError] = React.useState(false);
+
+    const settings = useSelector(getSettings);
+    const url = useSelector(getUrl);
+    const username = useSelector(getUsername);
+    const password = useSelector(getPassword);
+
+    // TODO : migrate to react-hook-form & move this to login service
+    const testLogin = () => {
+        console.log(url, username, password)
+        if (url && username && password) {
+            synologyClient.setBaseUrl(url);
+            synologyClient.login(username, password).subscribe(() => {
+                // TODO: Notification connection success
+                synologyClient
+                    .list([TaskListOption.detail, TaskListOption.file, TaskListOption.transfer])
+                    .subscribe((res) => {
+                    dispatch(setTasks(res?.data?.tasks))
+                });
+            });
+        }
+    }
+
+    const testLogout = () => {
+        console.log(url, username, password)
+        synologyClient.logout().subscribe(() => {
+            // TODO: Notificaiton conneciton succes
+        });
+    }
 
     // Tab highlight
     const [header, setHeader] = React.useState(SettingHeader.connection);
@@ -107,9 +140,8 @@ export const Settings = () => {
                                     label="Protocol"
                                     defaultValue="http"
                                     value={settings?.connection.protocol}
-                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => dispatch(set({
-                                        ...settings,
-                                        connection: {protocol: event.target.value}
+                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => dispatch(sync({
+                                        connection: {...settings?.connection, protocol: event.target.value}
                                     }))}
                                     sx={{flex: '1 0 6rem'}}
                                     error={error}
@@ -124,6 +156,10 @@ export const Settings = () => {
                                     id="host-input"
                                     label="Path"
                                     type="text"
+                                    value={settings?.connection.path}
+                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => dispatch(sync({
+                                        connection: {...settings?.connection, path: event.target.value}
+                                    }))}
                                     sx={{flex: '1 1 auto'}}
                                     error={error}
                                 />
@@ -134,6 +170,10 @@ export const Settings = () => {
                                     id="port-input"
                                     label="Port"
                                     type="number"
+                                    value={settings?.connection.port}
+                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => dispatch(sync({
+                                        connection: {...settings?.connection, port: Number(event.target.value)}
+                                    }))}
                                     sx={{flex: '1 0 6rem'}}
                                     error={error}
                                 />
@@ -142,12 +182,21 @@ export const Settings = () => {
                                 <TextField
                                     id="username-input"
                                     label="Username"
-                                    type="text" sx={{flex: '1 1 auto'}}
+                                    value={settings?.connection.username}
+                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => dispatch(sync({
+                                        connection: {...settings?.connection, username: event.target.value}
+                                    }))}
+                                    type="text"
+                                    sx={{flex: '1 1 auto'}}
                                     error={error}
                                 />
                                 <TextField
                                     id="password-input"
                                     label="Password"
+                                    value={settings?.connection.password}
+                                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => dispatch(sync({
+                                        connection: {...settings?.connection, password: event.target.value}
+                                    }))}
                                     type="password" sx={{flex: '1 1 auto'}}
                                     error={error}
                                 />
@@ -156,8 +205,11 @@ export const Settings = () => {
                     </CardContent>
                     <CardActions sx={{justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem'}}>
                         <Stack direction="row" spacing={2}>
-                            <Button variant="outlined" onClick={() => setError(!error)}>
+                            <Button variant="outlined" onClick={testLogin}>
                                 Test connection
+                            </Button>
+                            <Button variant="outlined" onClick={testLogout}>
+                                Test Logout
                             </Button>
                         </Stack>
                     </CardActions>
@@ -194,7 +246,7 @@ export const Settings = () => {
                                 </AccordionSummary>
                                 <AccordionDetails>
                                     <Fab color="primary" aria-label="add"
-                                         onClick={() => dispatch(removeTaskTab(t.name))}>
+                                         onClick={() => dispatch(removeTaskTab(t.id))}>
                                         <AddIcon/>
                                     </Fab>
                                 </AccordionDetails>
@@ -204,8 +256,16 @@ export const Settings = () => {
                     <CardActions sx={{justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem'}}>
 
                         <Fab color="primary" aria-label="add"
-                             onClick={() => dispatch(addTaskTab({...defaultTabs[0], name: String(Math.random())}))}>
+                             onClick={() => dispatch(addTaskTab({
+                                 ...defaultTabs[0],
+                                 name: String(Math.random()),
+                                 id: uuid()
+                             }))}>
                             <AddIcon/>
+                        </Fab>
+                        <Fab color="primary" aria-label="reset"
+                             onClick={() => dispatch(resetTaskTab())}>
+                            <SettingsBackupRestoreIcon/>
                         </Fab>
                     </CardActions>
                 </Card>
@@ -259,7 +319,7 @@ export const Settings = () => {
                     </CardContent>
                     <CardActions sx={{justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem'}}>
                         <Fab color="primary" aria-label="add"
-                             onClick={() => dispatch(addContextMenu({...defaultMenu, id: String(Math.random())}))}>
+                             onClick={() => dispatch(addContextMenu({...defaultMenu, id: uuid()}))}>
                             <AddIcon/>
                         </Fab>
                     </CardActions>

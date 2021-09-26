@@ -6,7 +6,8 @@ import {ContextMenuOption} from "./context-menu.model";
 export enum ChromeMessageType {
     link = 'link',
     popup = 'popup',
-    option = 'option'
+    addMenu = 'addMenu',
+    removeMenu = 'removeMenu'
 }
 
 /**

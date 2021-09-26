@@ -11,7 +11,7 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import MenuItemIcon from "../menu-item-icon/menu-item-icon";
 import {Link} from "react-router-dom";
 import {useDispatch} from "react-redux";
-import {set} from "../../services/slices/navbar.slice";
+import {reset} from "../../services/store/slices/navbar.slice";
 
 type NavbarMenuProps = { label: React.ReactNode }
 
@@ -24,7 +24,7 @@ const NavbarMenu = ({label}: NavbarMenuProps) => {
     const handleClose = () => {
         setAnchorEl(null);
         // clear tabs
-        dispatch(set(null));
+        dispatch(reset());
     };
 
     return (
