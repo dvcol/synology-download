@@ -72,8 +72,11 @@ const TaskCard = ({task, statuses}: { task: Task, statuses?: TaskStatus[] }) => 
                                     <span> – </span>
                                 </React.Fragment>
                                 }
-                                <span>{computeEta(task) || 'no estimate'}</span>
-                                <span> – </span>
+                                {[TaskStatus.downloading, TaskStatus.seeding].includes(task.status) &&
+                                <React.Fragment>
+                                    <span>{computeEta(task) ? `${computeEta(task)} remaining` : 'no estimates'}</span>
+                                    <span> – </span>
+                                </React.Fragment>}
                                 <span>{formatBytes(task.additional?.transfer?.size_downloaded)} of {formatBytes(task.size)} downloaded</span>
                             </Grid>
                             <Grid item xs={2} sx={{display: 'flex', justifyContent: 'flex-end'}}>
@@ -81,7 +84,11 @@ const TaskCard = ({task, statuses}: { task: Task, statuses?: TaskStatus[] }) => 
                             </Grid>
                         </Grid>
                         <ProgressBar
-                            variant="determinate"
+                            variant={
+                                [TaskStatus.seeding, TaskStatus.extracting, TaskStatus.finishing].includes(task.status)
+                                    ? "indeterminate"
+                                    : "determinate"
+                            }
                             value={computeProgress(task.additional?.transfer?.size_downloaded, task.size)}
                             color={taskStatusToColor(task.status)}
                         />

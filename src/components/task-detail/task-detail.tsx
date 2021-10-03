@@ -1,16 +1,35 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Button, Container, Grid, ListItem, ListItemText, Stack, Typography} from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import {computeProgress, formatBytes, Task, TaskStatus} from "../../models/task.model";
 import PauseIcon from "@mui/icons-material/Pause";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CircularProgress from '@mui/material/CircularProgress';
 import {isDarkTheme} from "../../themes/dark.theme";
 import {grey} from "@mui/material/colors";
 import ProgressBar from "../progress-bar/progress-bar";
+import {synologyClient} from "../../services/http/synology-client.service";
+import {finalize, Observable} from "rxjs";
+import {setTasks} from "../../services/store/slices/tasks.slice";
+import {useDispatch} from "react-redux";
 
 
 const TaskDetail = ({task}: { task: Task }) => {
+    const dispatch = useDispatch();
+
+    const [loading, setLoading]: [Record<string, boolean>, any] = useState({});
+
+    const onClick = (button: string, request: Observable<any>) => () => {
+        setLoading({...loading, [button]: true})
+        request
+            .pipe(finalize(() => setLoading({...loading, [button]: false})))
+            .subscribe(() => synologyClient
+                .listTasks()
+                .subscribe((res) => dispatch(setTasks(res?.data?.tasks))))
+    }
+
+    const isDisabled = () => Object.values(loading).some(Boolean);
 
     return (
         <Typography
@@ -23,24 +42,37 @@ const TaskDetail = ({task}: { task: Task }) => {
                 </Grid>
                 <Grid item xs={8} sx={{display: 'flex', justifyContent: 'flex-end'}}>
                     <Stack direction="row" spacing={2}>
-                        <Button startIcon={<PlayArrowIcon/>}
+                        <Button startIcon={loading.play ? <CircularProgress size={'1.25rem'} color="success"/> :
+                            <PlayArrowIcon/>}
                                 variant="contained"
                                 color="success"
-                                disabled={![TaskStatus.paused, TaskStatus.finished].includes(task.status)}
+                                onClick={onClick('play', synologyClient.resumeTask(task.id))}
+                                disabled={isDisabled() || ![TaskStatus.paused, TaskStatus.finished].includes(task.status)}
                         >Play</Button>
-                        <Button startIcon={<PauseIcon/>}
-                                variant="contained"
-                                color="warning"
-                                disabled={![TaskStatus.downloading, TaskStatus.seeding, TaskStatus.waiting].includes(task.status)}
+                        <Button
+                            startIcon={loading.pause ? <CircularProgress size={'1.25rem'} color="warning"/> :
+                                <PauseIcon/>}
+                            variant="contained"
+                            color="warning"
+                            onClick={onClick('pause', synologyClient.pauseTask(task.id))}
+                            disabled={isDisabled() || ![TaskStatus.downloading, TaskStatus.seeding, TaskStatus.waiting].includes(task.status)}
                         >Pause</Button>
 
-                        <Button startIcon={<EditIcon/>}
-                                variant="outlined"
-                                color="secondary"
-                                disabled={![TaskStatus.downloading, TaskStatus.waiting, TaskStatus.paused].includes(task.status)}
+                        <Button
+                            startIcon={loading.edit ? <CircularProgress size={'1.25rem'} color="secondary"/> :
+                                <EditIcon/>}
+                            variant="outlined"
+                            color="secondary"
+                            onClick={onClick('edit', synologyClient.editTask(task.id, 'download'))}
+                            disabled={isDisabled() || ![TaskStatus.downloading, TaskStatus.waiting, TaskStatus.paused].includes(task.status)}
                         >Edit</Button>
-                        <Button startIcon={<DeleteIcon/>} variant="outlined"
-                                color="error">Delete</Button>
+                        <Button startIcon={loading.delete ? <CircularProgress size={'1.25rem'} color="error"/> :
+                            <DeleteIcon/>}
+                                variant="outlined"
+                                color="error"
+                                disabled={isDisabled()}
+                                onClick={onClick('delete', synologyClient.deleteTask(task.id))}
+                        >Delete</Button>
                     </Stack>
                 </Grid>
             </Grid>

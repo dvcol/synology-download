@@ -11,6 +11,7 @@ const syncReducer = (oldSettings: SettingsSlice, action: PayloadAction<Partial<S
     console.log('sync reducer', newSettings)
     chrome.storage.sync.set({settings: JSON.stringify(newSettings)}, () => {
         //TODO: notification setting saved
+        console.info('Setting sync success');
     });
     return newSettings;
 }

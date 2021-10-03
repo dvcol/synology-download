@@ -28,7 +28,6 @@ import {
     resetTaskTab,
     sync
 } from "../../services/store/slices/settings.slice";
-import {setTasks} from "../../services/store/slices/tasks.slice";
 import {useDispatch, useSelector} from "react-redux";
 import AddIcon from '@mui/icons-material/Add';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -38,7 +37,6 @@ import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore
 import {getPassword, getSettings, getUrl, getUsername} from "../../services/store/selectors/settings.selector";
 import {v4 as uuid} from 'uuid';
 import {synologyClient} from "../../services/http/synology-client.service";
-import {TaskListOption} from "../../models/task.model";
 
 export const Settings = () => {
     // form
@@ -55,13 +53,16 @@ export const Settings = () => {
         console.log(url, username, password)
         if (url && username && password) {
             synologyClient.setBaseUrl(url);
-            synologyClient.login(username, password).subscribe(() => {
-                // TODO: Notification connection success
-                synologyClient
-                    .list([TaskListOption.detail, TaskListOption.file, TaskListOption.transfer])
-                    .subscribe((res) => {
-                    dispatch(setTasks(res?.data?.tasks))
-                });
+            synologyClient.login(username, password).subscribe({
+                complete: () => {
+                    dispatch(sync({polling: {enabled: true}}))
+                    // TODO: Notification connection success
+                    console.info('Polling setting change success');
+                },
+                error: () => {
+                    dispatch(sync({polling: {enabled: false}}))
+                    console.error('Polling login failed')
+                }
             });
         }
     }
@@ -69,7 +70,9 @@ export const Settings = () => {
     const testLogout = () => {
         console.log(url, username, password)
         synologyClient.logout().subscribe(() => {
-            // TODO: Notificaiton conneciton succes
+            dispatch(sync({polling: {enabled: false}}))
+            // TODO: Notificaiton logout success
+            console.info('Polling setting change success');
         });
     }
 

@@ -173,7 +173,7 @@ export const formatTime = (s: number): string => {
         return n > 9 ? n.toString() : `0${n.toString()}`;
     }
 
-    return `${hours ? hours + ":" : ""}${hours ? withZero(minutes) : minutes}:${withZero(seconds)}`;
+    return `${hours ? hours + "h " : ""}${hours ? withZero(minutes) : minutes}m ${withZero(seconds)}s`;
 }
 
 export const formatBytes = (byte: number | any): string => {

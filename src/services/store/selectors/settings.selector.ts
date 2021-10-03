@@ -33,3 +33,8 @@ export const getPassword = createSelector(
     (state: SettingsState) => state,
     (state) => state.settings.connection.password
 )
+
+export const getPolling = createSelector(
+    (state: SettingsState) => state,
+    (state) => state.settings.polling
+)

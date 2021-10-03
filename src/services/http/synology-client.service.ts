@@ -1,8 +1,16 @@
 import {BaseHttpService} from "./base-http-service";
 import {Observable, tap} from "rxjs";
 import {HttpParameters, HttpResponse} from "../../models/http.model";
-import { TaskListOption} from "../../models/task.model";
-import {API, Endpoint, ListSuccess, LoginSuccess, Method, SessionName} from "../../models/synology.model";
+import {TaskListOption} from "../../models/task.model";
+import {
+    API,
+    CommonResponse,
+    Endpoint,
+    ListResponse,
+    LoginResponse,
+    Method,
+    SessionName
+} from "../../models/synology.model";
 
 class SynologyClientService extends BaseHttpService {
     private prefix = 'webapi';
@@ -16,7 +24,7 @@ class SynologyClientService extends BaseHttpService {
         this.sid = sid;
     }
 
-    login(account: string, passwd: string, otp_code?: string): Observable<HttpResponse<LoginSuccess>> {
+    login(account: string, passwd: string, otp_code?: string): Observable<HttpResponse<LoginResponse>> {
         const params: HttpParameters = {
             api: API.Auth,
             version: '2',
@@ -27,12 +35,12 @@ class SynologyClientService extends BaseHttpService {
             passwd
         }
         if (otp_code) params.otp_code = otp_code
-        return this.get<HttpResponse<LoginSuccess>>(Endpoint.Auth, params)
+        return this.get<HttpResponse<LoginResponse>>(Endpoint.Auth, params)
             .pipe(tap(console.log), tap(({data: {sid}}) => this.setSid(sid)))
     }
 
-    logout(): Observable<HttpResponse<unknown>> {
-        return this.get(Endpoint.Auth,
+    logout(): Observable<HttpResponse<void>> {
+        return this.get<HttpResponse<void>>(Endpoint.Auth,
             {
                 api: API.Auth,
                 version: '1',
@@ -41,17 +49,42 @@ class SynologyClientService extends BaseHttpService {
             }).pipe(tap(console.log), tap(() => this.setSid()))
     }
 
-    list(additional?: TaskListOption[], offset = 0, limit = -1): Observable<HttpResponse<ListSuccess>> {
-        const params: HttpParameters = {
-            api: API.DownloadStation,
-            version: '1',
-            method: Method.list
-        }
+    commonTaskGet<T>(params: HttpParameters): Observable<HttpResponse<T>> {
+        if (this.sid) params.sid = this.sid;
+        return this.get<HttpResponse<T>>(Endpoint.DonwloadStation, {api: API.DownloadStation, version: '1', ...params})
+    }
+
+    listTasks(additional: TaskListOption[] = [TaskListOption.detail, TaskListOption.file, TaskListOption.transfer], offset = 0, limit = -1): Observable<HttpResponse<ListResponse>> {
+        const params: HttpParameters = {method: Method.list}
         if (additional?.length) params.additional = `${additional}`
         if (offset) params.offset = `${offset}`
         if (limit) params.limit = `${limit}`
-        if(this.sid) params.sid = this.sid;
-        return this.get(Endpoint.DonwloadStation, params)
+        return this.commonTaskGet<ListResponse>(params)
+    }
+
+    createTask(uri: string, destination?: string, username?: string, password?: string, unzip?: string) {
+        const params: HttpParameters = {method: Method.create, uri}
+        if (destination) params.destination = destination
+        if (username) params.username = username
+        if (password) params.password = password
+        if (unzip) params.unzip = unzip
+        return this.commonTaskGet<void>(params)
+    }
+
+    deleteTask(id: string | string[], force = false): Observable<HttpResponse<CommonResponse[]>> {
+        return this.commonTaskGet<CommonResponse[]>({method: Method.delete, id, "force_complete": `${force}`})
+    }
+
+    pauseTask(id: string | string[]): Observable<HttpResponse<CommonResponse[]>> {
+        return this.commonTaskGet<CommonResponse[]>({method: Method.pause, id})
+    }
+
+    resumeTask(id: string | string[]): Observable<HttpResponse<CommonResponse[]>> {
+        return this.commonTaskGet<CommonResponse[]>({method: Method.resume, id})
+    }
+
+    editTask(id: string | string[], destination: string): Observable<HttpResponse<CommonResponse[]>> {
+        return this.commonTaskGet<CommonResponse[]>({method: Method.edit, id, destination})
     }
 
 }

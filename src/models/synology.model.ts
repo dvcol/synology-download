@@ -18,7 +18,12 @@ export enum Endpoint {
 export enum Method {
     login = 'login',
     logout = 'logout',
-    list = 'list'
+    list = 'list',
+    create = 'create',
+    delete = 'delete',
+    pause = 'pause',
+    resume = 'resume',
+    edit = 'edit'
 }
 
 export enum ErrorCode {
@@ -35,15 +40,30 @@ export enum ErrorCode {
     Auth_Error_401 = 'Account disabled',
     Auth_Error_402 = 'Permission denied',
     Auth_Error_403 = '2-step verification code required',
-    Auth_Error_404 = 'Failed to authenticate 2-step verification code'
+    Auth_Error_404 = 'Failed to authenticate 2-step verification code',
+
+    Task_Error_400 = 'File upload failed',
+    Task_Error_401 = 'Max number of tasks reached',
+    Task_Error_402 = 'Destination denied',
+    Task_Error_403 = 'Destination does not exist',
+    Task_Error_404 = 'Invalid task id',
+    Task_Error_405 = 'Invalid task action',
+    Task_Error_406 = 'No default destination',
+    Task_Error_407 = 'Set destination failed',
+    Task_Error_408 = 'File does not exist',
 }
 
-export interface LoginSuccess {
+export interface LoginResponse {
     sid: string
 }
 
-export interface ListSuccess {
+export interface ListResponse {
     total: number,
     offset: number,
     tasks: Task[]
+}
+
+export interface CommonResponse {
+    error: number,
+    id: string
 }
