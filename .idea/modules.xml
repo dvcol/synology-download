@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/synology-download.iml" filepath="$PROJECT_DIR$/.idea/synology-download.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/synology-download-react-v1.iml" filepath="$PROJECT_DIR$/.idea/synology-download-react-v1.iml" />
     </modules>
   </component>
 </project>
