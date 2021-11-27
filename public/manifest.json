@@ -32,7 +32,7 @@
   },
   "background": {
     "scripts": [
-      "./static/js/background.js"
+      "/static/js/background.js"
     ]
   },
   "content_scripts": [
@@ -42,7 +42,7 @@
         "https://*/*"
       ],
       "js": [
-        "./static/js/content.js"
+        "/static/js/content.js"
       ]
     }
   ],
