@@ -19,3 +19,6 @@
 
 # secrets
 secrets.*.js
+
+# intellij
+.idea
