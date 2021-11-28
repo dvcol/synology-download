@@ -25,6 +25,7 @@ const testLogin = () => {
 
   const username = getUsername(store.getState());
   const password = getPassword(store.getState());
+  // TODO :  move this to login service
   if (url && username && password) {
     synologyClient.login(username, password).subscribe({
       complete: () => {

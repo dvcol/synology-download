@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { TasksState } from '../slices';
-import { TaskStatus } from '../../models';
+import { TabCount, TaskStatus } from '../../models';
 
 export const getTasks = createSelector(
   (state: TasksState) => state,
@@ -20,7 +20,7 @@ export const getFilteredTasks = createSelector(
 );
 
 export const getCountByStatus = createSelector(getTasks, (tasks) => {
-  const count: { [status: string]: number } = { total: tasks?.length };
+  const count: TabCount = { total: tasks?.length };
   Object.keys(TaskStatus).forEach(
     (status) =>
       (count[status] = tasks.reduce(

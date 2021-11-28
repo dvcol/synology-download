@@ -19,12 +19,12 @@ export const tasksSlice = createSlice({
       ...state,
       statuses: action?.payload,
     }),
-    reset: () => initialState,
+    resetTasks: () => initialState,
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setTasks, setStatuses, reset } = tasksSlice.actions;
+export const { setTasks, setStatuses, resetTasks } = tasksSlice.actions;
 
 const rootReducer = combineReducers({
   tasks: tasksSlice.reducer,
