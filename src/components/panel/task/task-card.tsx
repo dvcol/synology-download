@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  Avatar,
-  Grid,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Typography,
-} from '@mui/material';
+import { Avatar, Grid, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -14,24 +7,11 @@ import LoopIcon from '@mui/icons-material/Loop';
 import DownloadDoneIcon from '@mui/icons-material/DownloadDone';
 import UploadIcon from '@mui/icons-material/Upload';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import {
-  computeEta,
-  computeProgress,
-  formatBytes,
-  Task,
-  TaskStatus,
-  taskStatusToColor,
-} from '../../../models';
+import { computeEta, computeProgress, formatBytes, Task, TaskStatus, taskStatusToColor } from '../../../models';
 import { blue, green, orange, purple, red } from '@mui/material/colors';
 import ProgressBar from '../../progress-bar/progress-bar';
 
-export const TaskCard = ({
-  task,
-  statuses,
-}: {
-  task: Task;
-  statuses?: TaskStatus[];
-}) => {
+export const TaskCard = ({ task, statuses }: { task: Task; statuses?: TaskStatus[] }) => {
   const statusIcon = (status: TaskStatus): React.ReactNode => {
     switch (status) {
       case TaskStatus.waiting:
@@ -69,23 +49,15 @@ export const TaskCard = ({
   };
 
   return (
-    <ListItem sx={{ minWidth: '40rem' }}>
+    <ListItem sx={{ minWidth: '40rem' }} dense={true}>
       <ListItemAvatar sx={{ minWidth: 66 }}>
-        <Avatar
-          sx={{ width: 50, height: 50, bgcolor: avatarBgColor(task.status) }}
-        >
-          {statusIcon(task.status)}
-        </Avatar>
+        <Avatar sx={{ width: 50, height: 50, bgcolor: avatarBgColor(task.status) }}>{statusIcon(task.status)}</Avatar>
       </ListItemAvatar>
       <ListItemText
-        primary={task.title}
+        sx={{ maxWidth: '80vw', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflowX: 'hidden' }}
+        primary={<Typography component="span">{task.title}</Typography>}
         secondary={
-          <Typography
-            sx={{ display: 'inline' }}
-            component="span"
-            variant="caption"
-            color="text.secondary"
-          >
+          <Typography sx={{ display: 'inline' }} component="span" variant="caption" color="text.secondary">
             <Grid container>
               <Grid item xs={10}>
                 {(!statuses || statuses?.length > 1) && (
@@ -94,47 +66,23 @@ export const TaskCard = ({
                     <span> – </span>
                   </React.Fragment>
                 )}
-                {[TaskStatus.downloading, TaskStatus.seeding].includes(
-                  task.status
-                ) && (
+                {[TaskStatus.downloading, TaskStatus.seeding].includes(task.status) && (
                   <React.Fragment>
-                    <span>
-                      {computeEta(task)
-                        ? `${computeEta(task)} remaining`
-                        : 'no estimates'}
-                    </span>
+                    <span>{computeEta(task) ? `${computeEta(task)} remaining` : 'no estimates'}</span>
                     <span> – </span>
                   </React.Fragment>
                 )}
                 <span>
-                  {formatBytes(task.additional?.transfer?.size_downloaded)} of{' '}
-                  {formatBytes(task.size)} downloaded
+                  {formatBytes(task.additional?.transfer?.size_downloaded)} of {formatBytes(task.size)} downloaded
                 </span>
               </Grid>
-              <Grid
-                item
-                xs={2}
-                sx={{ display: 'flex', justifyContent: 'flex-end' }}
-              >
-                <span>
-                  {formatBytes(task.additional?.transfer?.speed_download)}/s
-                </span>
+              <Grid item xs={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <span>{formatBytes(task.additional?.transfer?.speed_download)}/s</span>
               </Grid>
             </Grid>
             <ProgressBar
-              variant={
-                [
-                  TaskStatus.seeding,
-                  TaskStatus.extracting,
-                  TaskStatus.finishing,
-                ].includes(task.status)
-                  ? 'indeterminate'
-                  : 'determinate'
-              }
-              value={computeProgress(
-                task.additional?.transfer?.size_downloaded,
-                task.size
-              )}
+              variant={[TaskStatus.seeding, TaskStatus.extracting, TaskStatus.finishing].includes(task.status) ? 'indeterminate' : 'determinate'}
+              value={computeProgress(task.additional?.transfer?.size_downloaded, task.size)}
               color={taskStatusToColor(task.status)}
             />
           </Typography>

@@ -1,20 +1,7 @@
 import React, { useState } from 'react';
-import {
-  Button,
-  Container,
-  Grid,
-  ListItem,
-  ListItemText,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Button, Container, Grid, ListItem, ListItemText, Stack, Typography } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import {
-  computeProgress,
-  formatBytes,
-  Task,
-  TaskStatus,
-} from '../../../models';
+import { computeProgress, formatBytes, Task, TaskStatus } from '../../../models';
 import PauseIcon from '@mui/icons-material/Pause';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -35,12 +22,15 @@ export const TaskDetail = ({ task }: { task: Task }) => {
   const onClick = (button: string, request: Observable<any>) => () => {
     setLoading({ ...loading, [button]: true });
     request
-      .pipe(finalize(() => setLoading({ ...loading, [button]: false })))
-      .subscribe(() =>
-        synologyClient
-          .listTasks()
-          .subscribe((res) => dispatch(setTasks(res?.data?.tasks)))
-      );
+      .pipe(
+        finalize(() =>
+          setLoading({
+            ...loading,
+            [button]: false,
+          })
+        )
+      )
+      .subscribe(() => synologyClient.listTasks().subscribe((res) => dispatch(setTasks(res?.data?.tasks))));
   };
 
   const isDisabled = () => Object.values(loading).some(Boolean);
@@ -54,79 +44,35 @@ export const TaskDetail = ({ task }: { task: Task }) => {
         <Grid item xs={8} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Stack direction="row" spacing={2}>
             <Button
-              startIcon={
-                loading.play ? (
-                  <CircularProgress size={'1.25rem'} color="success" />
-                ) : (
-                  <PlayArrowIcon />
-                )
-              }
+              startIcon={loading.play ? <CircularProgress size={'1.25rem'} color="success" /> : <PlayArrowIcon />}
               variant="contained"
               color="success"
               onClick={onClick('play', synologyClient.resumeTask(task.id))}
-              disabled={
-                isDisabled() ||
-                ![TaskStatus.paused, TaskStatus.finished].includes(task.status)
-              }
+              disabled={isDisabled() || ![TaskStatus.paused, TaskStatus.finished].includes(task.status)}
             >
               Play
             </Button>
             <Button
-              startIcon={
-                loading.pause ? (
-                  <CircularProgress size={'1.25rem'} color="warning" />
-                ) : (
-                  <PauseIcon />
-                )
-              }
+              startIcon={loading.pause ? <CircularProgress size={'1.25rem'} color="warning" /> : <PauseIcon />}
               variant="contained"
               color="warning"
               onClick={onClick('pause', synologyClient.pauseTask(task.id))}
-              disabled={
-                isDisabled() ||
-                ![
-                  TaskStatus.downloading,
-                  TaskStatus.seeding,
-                  TaskStatus.waiting,
-                ].includes(task.status)
-              }
+              disabled={isDisabled() || ![TaskStatus.downloading, TaskStatus.seeding, TaskStatus.waiting].includes(task.status)}
             >
               Pause
             </Button>
 
             <Button
-              startIcon={
-                loading.edit ? (
-                  <CircularProgress size={'1.25rem'} color="secondary" />
-                ) : (
-                  <EditIcon />
-                )
-              }
+              startIcon={loading.edit ? <CircularProgress size={'1.25rem'} color="secondary" /> : <EditIcon />}
               variant="outlined"
               color="secondary"
-              onClick={onClick(
-                'edit',
-                synologyClient.editTask(task.id, 'download')
-              )}
-              disabled={
-                isDisabled() ||
-                ![
-                  TaskStatus.downloading,
-                  TaskStatus.waiting,
-                  TaskStatus.paused,
-                ].includes(task.status)
-              }
+              onClick={onClick('edit', synologyClient.editTask(task.id, 'download'))}
+              disabled={isDisabled() || ![TaskStatus.downloading, TaskStatus.waiting, TaskStatus.paused].includes(task.status)}
             >
               Edit
             </Button>
             <Button
-              startIcon={
-                loading.delete ? (
-                  <CircularProgress size={'1.25rem'} color="error" />
-                ) : (
-                  <DeleteIcon />
-                )
-              }
+              startIcon={loading.delete ? <CircularProgress size={'1.25rem'} color="error" /> : <DeleteIcon />}
               variant="outlined"
               color="error"
               disabled={isDisabled()}
@@ -150,35 +96,20 @@ export const TaskDetail = ({ task }: { task: Task }) => {
           <ListItem>
             <ListItemText
               primary={
-                <Typography
-                  sx={{ display: 'inline' }}
-                  component="span"
-                  variant="caption"
-                  color="text.secondary"
-                >
+                <Typography sx={{ display: 'inline' }} component="span" variant="caption" color="text.secondary">
                   <Grid container>
                     <Grid item xs={8}>
                       <span>{f.priority}</span>
                       <span> – </span>
                       <span>{f.filename}</span>
                     </Grid>
-                    <Grid
-                      item
-                      xs={4}
-                      sx={{ display: 'flex', justifyContent: 'flex-end' }}
-                    >
-                      {formatBytes(f.size_downloaded)} of {formatBytes(f.size)}{' '}
-                      downloaded
+                    <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                      {formatBytes(f.size_downloaded)} of {formatBytes(f.size)} downloaded
                     </Grid>
                   </Grid>
                 </Typography>
               }
-              secondary={
-                <ProgressBar
-                  variant="determinate"
-                  value={computeProgress(f.size_downloaded, f.size)}
-                />
-              }
+              secondary={<ProgressBar variant="determinate" value={computeProgress(f.size_downloaded, f.size)} />}
             />
           </ListItem>
         ))}

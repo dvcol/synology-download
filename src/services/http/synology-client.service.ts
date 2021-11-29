@@ -1,17 +1,6 @@
 import { BaseHttpService } from './base-http-service';
 import { Observable, tap } from 'rxjs';
-import {
-  API,
-  CommonResponse,
-  Endpoint,
-  HttpParameters,
-  HttpResponse,
-  ListResponse,
-  LoginResponse,
-  SessionName,
-  SynologyMethod,
-  TaskListOption,
-} from '../../models';
+import { API, CommonResponse, Endpoint, HttpParameters, HttpResponse, ListResponse, LoginResponse, SessionName, SynologyMethod, TaskListOption } from '../../models';
 
 class SynologyClientService extends BaseHttpService {
   private prefix = 'webapi';
@@ -25,11 +14,7 @@ class SynologyClientService extends BaseHttpService {
     this.sid = sid;
   }
 
-  login(
-    account: string,
-    passwd: string,
-    otp_code?: string
-  ): Observable<HttpResponse<LoginResponse>> {
+  login(account: string, passwd: string, otp_code?: string): Observable<HttpResponse<LoginResponse>> {
     const params: HttpParameters = {
       api: API.Auth,
       version: '2',
@@ -67,15 +52,7 @@ class SynologyClientService extends BaseHttpService {
     });
   }
 
-  listTasks(
-    additional: TaskListOption[] = [
-      TaskListOption.detail,
-      TaskListOption.file,
-      TaskListOption.transfer,
-    ],
-    offset = 0,
-    limit = -1
-  ): Observable<HttpResponse<ListResponse>> {
+  listTasks(additional: TaskListOption[] = [TaskListOption.detail, TaskListOption.file, TaskListOption.transfer], offset = 0, limit = -1): Observable<HttpResponse<ListResponse>> {
     const params: HttpParameters = { method: SynologyMethod.list };
     if (additional?.length) params.additional = `${additional}`;
     if (offset) params.offset = `${offset}`;
@@ -83,13 +60,7 @@ class SynologyClientService extends BaseHttpService {
     return this.commonTaskGet<ListResponse>(params);
   }
 
-  createTask(
-    uri: string,
-    destination?: string,
-    username?: string,
-    password?: string,
-    unzip?: string
-  ) {
+  createTask(uri: string, destination?: string, username?: string, password?: string, unzip?: string): Observable<HttpResponse<void>> {
     const params: HttpParameters = { method: SynologyMethod.create, uri };
     if (destination) params.destination = destination;
     if (username) params.username = username;
@@ -98,10 +69,7 @@ class SynologyClientService extends BaseHttpService {
     return this.commonTaskGet<void>(params);
   }
 
-  deleteTask(
-    id: string | string[],
-    force = false
-  ): Observable<HttpResponse<CommonResponse[]>> {
+  deleteTask(id: string | string[], force = false): Observable<HttpResponse<CommonResponse[]>> {
     return this.commonTaskGet<CommonResponse[]>({
       method: SynologyMethod.delete,
       id,
@@ -116,19 +84,14 @@ class SynologyClientService extends BaseHttpService {
     });
   }
 
-  resumeTask(
-    id: string | string[]
-  ): Observable<HttpResponse<CommonResponse[]>> {
+  resumeTask(id: string | string[]): Observable<HttpResponse<CommonResponse[]>> {
     return this.commonTaskGet<CommonResponse[]>({
       method: SynologyMethod.resume,
       id,
     });
   }
 
-  editTask(
-    id: string | string[],
-    destination: string
-  ): Observable<HttpResponse<CommonResponse[]>> {
+  editTask(id: string | string[], destination: string): Observable<HttpResponse<CommonResponse[]>> {
     return this.commonTaskGet<CommonResponse[]>({
       method: SynologyMethod.edit,
       id,

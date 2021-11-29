@@ -1,7 +1,7 @@
 import { wrapStore } from 'webext-redux';
 import { store } from '../../store';
 import { ChromeMessageType } from '../../models';
-import { createContextMenu, removeContextMenu } from '../../services';
+import { createContextMenu, removeContextMenu, synologyClient } from '../../services';
 import { restoreSettings } from './modules/settings-handler';
 
 console.log('This is the background page.');
@@ -18,6 +18,11 @@ chrome.runtime.onMessage.addListener((request: any) => {
   console.log(request);
   if (request.type === ChromeMessageType.link) {
     console.log(request.payload);
+    // TODO notification
+    synologyClient.createTask(request.payload).subscribe({
+      complete: () => console.info('suces created'),
+      error: (err) => console.error(err),
+    });
   } else if (request.type === ChromeMessageType.addMenu) {
     console.log('message addMenu', request);
     createContextMenu(request.payload);
