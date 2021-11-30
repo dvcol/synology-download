@@ -11,7 +11,9 @@
     "256": "assets/icons/icon-256.png"
   },
   "options_page": "options.html",
-  "background": { "service_worker": "background.bundle.js" },
+  "background": {
+    "service_worker": "background.bundle.js"
+  },
   "action": {
     "default_title": "Synology Download Station",
     "default_popup": "popup.html",
@@ -25,8 +27,14 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*", "<all_urls>"],
-      "js": ["contentScript.bundle.js"]
+      "matches": [
+        "http://*/*",
+        "https://*/*",
+        "<all_urls>"
+      ],
+      "js": [
+        "contentScript.bundle.js"
+      ]
     }
   ],
   "permissions": [
@@ -36,13 +44,17 @@
     "tabs"
   ],
   "host_permissions": [
-    "http://*/*",
-    "https://*/*"
+    "<all_urls>"
   ],
   "web_accessible_resources": [
     {
-      "resources": [],
-      "matches": []
+      "resources": ["*.html"],
+      "matches": [
+        "<all_urls>"
+      ]
     }
-  ]
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
 }

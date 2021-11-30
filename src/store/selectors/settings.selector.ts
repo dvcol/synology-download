@@ -15,9 +15,7 @@ export const getConnection = createSelector(
 
 export const getUrl = createSelector(getConnection, (state) => {
   if (state.protocol && state.path && state.port) {
-    return new URL(
-      `${state.protocol}://${state.path}:${state.port}`
-    ).toString();
+    return new URL(`${state.protocol}://${state.path}:${state.port}`).toString();
   }
   return undefined;
 });

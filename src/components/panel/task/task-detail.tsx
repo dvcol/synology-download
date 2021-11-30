@@ -92,24 +92,29 @@ export const TaskDetail = ({ task }: { task: Task }) => {
           bgcolor: isDarkTheme() ? grey[900] : grey[200],
         }}
       >
-        {task.additional?.file?.map((f) => (
-          <ListItem>
+        {task.additional?.file?.map((f, i) => (
+          <ListItem key={`${i}-${f.filename}`}>
             <ListItemText
               primary={
-                <Typography sx={{ display: 'inline' }} component="span" variant="caption" color="text.secondary">
-                  <Grid container>
-                    <Grid item xs={8}>
-                      <span>{f.priority}</span>
-                      <span> – </span>
-                      <span>{f.filename}</span>
-                    </Grid>
-                    <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                      {formatBytes(f.size_downloaded)} of {formatBytes(f.size)} downloaded
-                    </Grid>
+                <Grid container>
+                  <Grid item xs={8}>
+                    <span>{f.priority}</span>
+                    <span> – </span>
+                    <span>{f.filename}</span>
                   </Grid>
-                </Typography>
+                  <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    {formatBytes(f.size_downloaded)} of {formatBytes(f.size)} downloaded
+                  </Grid>
+                </Grid>
               }
+              primaryTypographyProps={{
+                component: 'span',
+                variant: 'caption',
+                color: 'text.secondary',
+                sx: { display: 'inline' },
+              }}
               secondary={<ProgressBar variant="determinate" value={computeProgress(f.size_downloaded, f.size)} />}
+              secondaryTypographyProps={{ component: 'span' }}
             />
           </ListItem>
         ))}

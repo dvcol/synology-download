@@ -1,42 +1,28 @@
 import { Observable } from 'rxjs';
-import {
-  BaseHttpRequest,
-  Body,
-  HttpHeaders,
-  HttpMethod,
-  HttpParameters,
-} from '../../models';
+import { BaseHttpRequest, Body, HttpHeaders, HttpMethod, HttpParameters } from '../../models';
 
 /** Base Http request class implementation*/
 export class BaseHttpService {
   constructor(private baseUrl: string = '') {}
 
   setBaseUrl(baseUrl: string): void {
+    console.log('setting url to', baseUrl);
     this.baseUrl = baseUrl;
   }
 
   buildUrl(url: string | URL, params?: HttpParameters): URL {
-    console.log(this.baseUrl, url);
+    console.log('baseUrl is', this.baseUrl);
+    console.log('url is', url);
     const builder = new URL(`${this.baseUrl}/${url}`);
     if (params) {
       Object.entries(params)
         .map((e) => ({ key: e[0], value: e[1] }))
-        .forEach(({ key, value }) =>
-          Array.isArray(value)
-            ? value.forEach((val) => builder.searchParams.append(key, val))
-            : builder.searchParams.append(key, value)
-        );
+        .forEach(({ key, value }) => (Array.isArray(value) ? value.forEach((val) => builder.searchParams.append(key, val)) : builder.searchParams.append(key, value)));
     }
     return builder;
   }
 
-  request<T>({
-    url,
-    method,
-    headers,
-    params,
-    body,
-  }: BaseHttpRequest): Observable<T> {
+  request<T>({ url, method, headers, params, body }: BaseHttpRequest): Observable<T> {
     return new Observable<T>((observer) => {
       // Controller for abort-able fetch request
       const controller = new AbortController();
@@ -57,11 +43,7 @@ export class BaseHttpService {
     });
   }
 
-  get<T>(
-    url: string = '',
-    params?: HttpParameters,
-    headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*' }
-  ): Observable<T> {
+  get<T>(url: string = '', params?: HttpParameters, headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*' }): Observable<T> {
     return this.request({ url, method: HttpMethod.GET, params, headers });
   }
 
@@ -95,11 +77,7 @@ export class BaseHttpService {
     return this.request({ url, method: HttpMethod.PUT, params, headers, body });
   }
 
-  delete<T>(
-    url: string = '',
-    params?: HttpParameters,
-    headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*' }
-  ): Observable<T> {
+  delete<T>(url: string = '', params?: HttpParameters, headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*' }): Observable<T> {
     return this.request({ url, method: HttpMethod.DELETE, params, headers });
   }
 }

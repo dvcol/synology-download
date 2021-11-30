@@ -16,18 +16,7 @@ const alias = {
 // load the secrets
 const secretsPath = path.join(__dirname, 'secrets.' + env.NODE_ENV + '.js');
 
-const fileExtensions = [
-  'jpg',
-  'jpeg',
-  'png',
-  'gif',
-  'eot',
-  'otf',
-  'svg',
-  'ttf',
-  'woff',
-  'woff2',
-];
+const fileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'eot', 'otf', 'svg', 'ttf', 'woff', 'woff2'];
 
 if (fileSystem.existsSync(secretsPath)) {
   alias['secrets'] = secretsPath;
@@ -36,10 +25,10 @@ if (fileSystem.existsSync(secretsPath)) {
 const options = {
   mode: process.env.NODE_ENV || 'development',
   entry: {
-    popup: path.join(__dirname, 'src', 'pages', 'Popup'),
-    options: path.join(__dirname, 'src', 'pages', 'Options'),
-    background: path.join(__dirname, 'src', 'pages', 'Background'),
-    contentScript: path.join(__dirname, 'src', 'pages', 'Content'),
+    popup: path.join(__dirname, 'src', 'pages', 'popup'),
+    options: path.join(__dirname, 'src', 'pages', 'options'),
+    background: path.join(__dirname, 'src', 'pages', 'background'),
+    contentScript: path.join(__dirname, 'src', 'pages', 'content'),
   },
   chromeExtensionBoilerplate: {
     notHotReload: ['contentScript'],
@@ -101,9 +90,7 @@ const options = {
   },
   resolve: {
     alias: alias,
-    extensions: fileExtensions
-      .map((extension) => '.' + extension)
-      .concat(['.js', '.jsx', '.ts', '.tsx', '.css', '.scss']),
+    extensions: fileExtensions.map((extension) => '.' + extension).concat(['.js', '.jsx', '.ts', '.tsx', '.css', '.scss']),
   },
   plugins: [
     new webpack.ProgressPlugin(),
@@ -138,13 +125,13 @@ const options = {
       ],
     }),
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'src', 'pages', 'Options', 'index.html'),
+      template: path.join(__dirname, 'src', 'pages', 'options', 'index.html'),
       filename: 'options.html',
       chunks: ['options'],
       cache: false,
     }),
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'src', 'pages', 'Popup', 'index.html'),
+      template: path.join(__dirname, 'src', 'pages', 'popup', 'index.html'),
       filename: 'popup.html',
       chunks: ['popup'],
       cache: false,

@@ -16,12 +16,12 @@ export const darkTheme = () => {
               width: '0.25rem',
             },
             '&::-webkit-scrollbar-track': {
-              '-webkit-box-shadow': 'inset 0 0 6px rgba(0,0,0,0.00)',
+              boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
             },
             '&::-webkit-scrollbar-thumb': {
               backgroundColor: 'rgb(150 150 150 / 50%)',
-              '-webkit-box-shadow': 'inset 0 0 6px rgba(0, 0, 0, 0.1)',
-              'border-radius': '0.5rem',
+              boxShadow: 'inset 0 0 6px rgba(0, 0, 0, 0.1)',
+              borderRadius: '0.5rem',
             },
           },
         },
@@ -37,6 +37,14 @@ export const darkTheme = () => {
         styleOverrides: {
           flexContainer: {
             height: '100%',
+          },
+        },
+      },
+      MuiAccordionSummary: {
+        styleOverrides: {
+          content: {
+            width: '100%',
+            margin: 0,
           },
         },
       },

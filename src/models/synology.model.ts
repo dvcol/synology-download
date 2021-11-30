@@ -12,7 +12,7 @@ export enum API {
 
 export enum Endpoint {
   Auth = 'auth.cgi',
-  DonwloadStation = 'DownloadStation/task.cgi',
+  DownloadStation = 'DownloadStation/task.cgi',
 }
 
 export enum SynologyMethod {

@@ -45,7 +45,7 @@ class SynologyClientService extends BaseHttpService {
 
   commonTaskGet<T>(params: HttpParameters): Observable<HttpResponse<T>> {
     if (this.sid) params.sid = this.sid;
-    return this.get<HttpResponse<T>>(Endpoint.DonwloadStation, {
+    return this.get<HttpResponse<T>>(Endpoint.DownloadStation, {
       api: API.DownloadStation,
       version: '1',
       ...params,

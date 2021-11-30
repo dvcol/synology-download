@@ -1,5 +1,5 @@
 import React from 'react';
-import { Avatar, Grid, ListItem, ListItemAvatar, ListItemText, Typography } from '@mui/material';
+import { Avatar, Grid, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -49,15 +49,16 @@ export const TaskCard = ({ task, statuses }: { task: Task; statuses?: TaskStatus
   };
 
   return (
-    <ListItem sx={{ minWidth: '40rem' }} dense={true}>
+    <ListItem sx={{ minWidth: '40rem', padding: '0.5rem 1rem' }} dense={true}>
       <ListItemAvatar sx={{ minWidth: 66 }}>
         <Avatar sx={{ width: 50, height: 50, bgcolor: avatarBgColor(task.status) }}>{statusIcon(task.status)}</Avatar>
       </ListItemAvatar>
       <ListItemText
-        sx={{ maxWidth: '80vw', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflowX: 'hidden' }}
-        primary={<Typography component="span">{task.title}</Typography>}
+        sx={{ maxWidth: '100vw', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflowX: 'hidden' }}
+        primary={task.title}
+        primaryTypographyProps={{ component: 'span' }}
         secondary={
-          <Typography sx={{ display: 'inline' }} component="span" variant="caption" color="text.secondary">
+          <React.Fragment>
             <Grid container>
               <Grid item xs={10}>
                 {(!statuses || statuses?.length > 1) && (
@@ -85,8 +86,14 @@ export const TaskCard = ({ task, statuses }: { task: Task; statuses?: TaskStatus
               value={computeProgress(task.additional?.transfer?.size_downloaded, task.size)}
               color={taskStatusToColor(task.status)}
             />
-          </Typography>
+          </React.Fragment>
         }
+        secondaryTypographyProps={{
+          component: 'span',
+          variant: 'caption',
+          color: 'text.secondary',
+          sx: { display: 'inline' },
+        }}
       />
     </ListItem>
   );

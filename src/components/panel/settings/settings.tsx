@@ -20,18 +20,7 @@ import {
   Typography,
 } from '@mui/material';
 import { defaultMenu, defaultTabs, SettingHeader } from '../../../models';
-import {
-  addContextMenu,
-  addTaskTab,
-  getPassword,
-  getSettings,
-  getUrl,
-  getUsername,
-  removeContextMenu,
-  removeTaskTab,
-  resetTaskTab,
-  syncSettings,
-} from '../../../store';
+import { addContextMenu, addTaskTab, getPassword, getSettings, getUrl, getUsername, removeContextMenu, removeTaskTab, resetTaskTab, syncSettings } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import AddIcon from '@mui/icons-material/Add';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -79,28 +68,22 @@ export const Settings = () => {
 
   // Tab highlight
   const [header, setHeader] = React.useState(SettingHeader.connection);
-  const handleChange = (event: React.SyntheticEvent, newValue: SettingHeader) =>
-    setHeader(newValue);
+  const handleChange = (event: React.SyntheticEvent, newValue: SettingHeader) => setHeader(newValue);
 
   //TODO : Refactor sub card
   const [expanded, setExpanded] = React.useState<string | false>(false);
-  const handleExpand =
-    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-      setExpanded(isExpanded ? panel : false);
-    };
+  const handleExpand = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+    setExpanded(isExpanded ? panel : false);
+  };
 
   //TODO : Refactor sub card
   const [expanded2, setExpanded2] = React.useState<string | false>(false);
-  const handleExpand2 =
-    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-      setExpanded2(isExpanded ? panel : false);
-    };
+  const handleExpand2 = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+    setExpanded2(isExpanded ? panel : false);
+  };
 
   return (
-    <Container
-      disableGutters
-      sx={{ display: 'flex', flex: '1 1 auto', height: '30rem' }}
-    >
+    <Container disableGutters sx={{ display: 'flex', flex: '1 1 auto', height: 'calc(100vh - 65px)' }} maxWidth={false}>
       <Paper elevation={1}>
         <Tabs
           orientation="vertical"
@@ -114,13 +97,7 @@ export const Settings = () => {
           }}
         >
           {Object.values(SettingHeader).map((t) => (
-            <Tab
-              label={t}
-              value={t}
-              disableFocusRipple={true}
-              href={`#${t}`}
-              key={t}
-            />
+            <Tab label={t} value={t} disableFocusRipple={true} href={`#${t}`} key={t} />
           ))}
         </Tabs>
       </Paper>
@@ -131,12 +108,7 @@ export const Settings = () => {
           '& .MuiCard-root': { mb: '1rem' },
         }}
       >
-        <Typography
-          id={SettingHeader.connection}
-          variant="h5"
-          color="text.secondary"
-          sx={{ mb: '1rem', textTransform: 'capitalize' }}
-        >
+        <Typography id={SettingHeader.connection} variant="h5" color="text.secondary" sx={{ mb: '1rem', textTransform: 'capitalize' }}>
           {SettingHeader.connection}
         </Typography>
 
@@ -148,23 +120,14 @@ export const Settings = () => {
               </Typography>
             }
             subheader={
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                gutterBottom={true}
-              >
+              <Typography variant="caption" color="text.secondary" gutterBottom={true}>
                 Two-factor authentication is not currently supported.
               </Typography>
             }
             sx={{ p: '1rem 1rem 0' }}
           ></CardHeader>
           <CardContent>
-            <Box
-              component="form"
-              sx={{ '& .MuiFormControl-root': { m: '0.5rem' } }}
-              noValidate
-              autoComplete="off"
-            >
+            <Box component="form" sx={{ '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <TextField
                   id="protocol-select"
@@ -192,11 +155,7 @@ export const Settings = () => {
                     https
                   </MenuItem>
                 </TextField>
-                <Typography
-                  id="protocol-path-slash"
-                  variant="body2"
-                  color="text.secondary"
-                >
+                <Typography id="protocol-path-slash" variant="body2" color="text.secondary">
                   ://
                 </Typography>
                 <TextField
@@ -217,11 +176,7 @@ export const Settings = () => {
                   sx={{ flex: '1 1 auto' }}
                   error={error}
                 />
-                <Typography
-                  id="path-port-dot"
-                  variant="body2"
-                  color="text.secondary"
-                >
+                <Typography id="path-port-dot" variant="body2" color="text.secondary">
                   :
                 </Typography>
                 <TextField
@@ -283,26 +238,19 @@ export const Settings = () => {
               </Box>
             </Box>
           </CardContent>
-          <CardActions
-            sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}
-          >
+          <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
             <Stack direction="row" spacing={2}>
               <Button variant="outlined" onClick={testLogin}>
-                Test connection
+                Login
               </Button>
               <Button variant="outlined" onClick={testLogout}>
-                Test Logout
+                Logout
               </Button>
             </Stack>
           </CardActions>
         </Card>
 
-        <Typography
-          id={SettingHeader.interface}
-          variant="h5"
-          color="text.secondary"
-          sx={{ mb: '1rem', textTransform: 'capitalize' }}
-        >
+        <Typography id={SettingHeader.interface} variant="h5" color="text.secondary" sx={{ mb: '1rem', textTransform: 'capitalize' }}>
           {SettingHeader.interface}
         </Typography>
 
@@ -317,37 +265,20 @@ export const Settings = () => {
           ></CardHeader>
           <CardContent>
             {settings?.tabs?.map((t) => (
-              <Accordion
-                expanded={expanded2 === t.name}
-                onChange={handleExpand2(t.name)}
-              >
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1bh-content"
-                  id="panel1bh-header"
-                >
-                  <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                    {t.name}
-                  </Typography>
-                  <Typography sx={{ color: 'text.secondary' }}>
-                    {t.status}
-                  </Typography>
+              <Accordion expanded={expanded2 === t.name} onChange={handleExpand2(t.name)}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header">
+                  <Typography sx={{ width: '33%', flexShrink: 0 }}>{t.name}</Typography>
+                  <Typography sx={{ color: 'text.secondary' }}>{t.status}</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <Fab
-                    color="primary"
-                    aria-label="add"
-                    onClick={() => dispatch(removeTaskTab(t.id))}
-                  >
+                  <Fab color="primary" aria-label="add" onClick={() => dispatch(removeTaskTab(t.id))}>
                     <AddIcon />
                   </Fab>
                 </AccordionDetails>
               </Accordion>
             ))}
           </CardContent>
-          <CardActions
-            sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}
-          >
+          <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
             <Fab
               color="primary"
               aria-label="add"
@@ -363,11 +294,7 @@ export const Settings = () => {
             >
               <AddIcon />
             </Fab>
-            <Fab
-              color="primary"
-              aria-label="reset"
-              onClick={() => dispatch(resetTaskTab())}
-            >
+            <Fab color="primary" aria-label="reset" onClick={() => dispatch(resetTaskTab())}>
               <SettingsBackupRestoreIcon />
             </Fab>
           </CardActions>
@@ -396,55 +323,27 @@ export const Settings = () => {
           ></CardHeader>
           <CardContent>
             {settings?.menus?.map((t) => (
-              <Accordion
-                expanded={expanded2 === t.id}
-                onChange={handleExpand2(t.id)}
-              >
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1bh-content"
-                  id="panel1bh-header"
-                >
-                  <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                    {t.id}
-                  </Typography>
-                  <Typography sx={{ color: 'text.secondary' }}>
-                    {t.title}
-                  </Typography>
+              <Accordion expanded={expanded2 === t.id} onChange={handleExpand2(t.id)}>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header">
+                  <Typography sx={{ width: '33%', flexShrink: 0 }}>{t.id}</Typography>
+                  <Typography sx={{ color: 'text.secondary' }}>{t.title}</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <Fab
-                    color="primary"
-                    aria-label="add"
-                    onClick={() => dispatch(removeContextMenu(t.id))}
-                  >
+                  <Fab color="primary" aria-label="add" onClick={() => dispatch(removeContextMenu(t.id))}>
                     <AddIcon />
                   </Fab>
                 </AccordionDetails>
               </Accordion>
             ))}
           </CardContent>
-          <CardActions
-            sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}
-          >
-            <Fab
-              color="primary"
-              aria-label="add"
-              onClick={() =>
-                dispatch(addContextMenu({ ...defaultMenu, id: uuid() }))
-              }
-            >
+          <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
+            <Fab color="primary" aria-label="add" onClick={() => dispatch(addContextMenu({ ...defaultMenu, id: uuid() }))}>
               <AddIcon />
             </Fab>
           </CardActions>
         </Card>
 
-        <Typography
-          id={SettingHeader.notification}
-          variant="h5"
-          color="text.secondary"
-          sx={{ mb: '1rem', textTransform: 'capitalize' }}
-        >
+        <Typography id={SettingHeader.notification} variant="h5" color="text.secondary" sx={{ mb: '1rem', textTransform: 'capitalize' }}>
           {SettingHeader.notification}
         </Typography>
       </Container>
