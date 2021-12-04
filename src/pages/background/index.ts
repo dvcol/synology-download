@@ -40,7 +40,6 @@ chrome.runtime.onConnect.addListener((port) => {
 
 // On message from chrome handle payload
 chrome.runtime.onMessage.addListener((request: any) => {
-  console.log(request);
   if (request.type === ChromeMessageType.link) {
     console.log(request.payload);
     QueryService.createTask(request.payload).subscribe();

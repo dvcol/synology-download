@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button, Container, Grid, ListItem, ListItemText, Stack, Typography } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { computeProgress, formatBytes, Task, TaskStatus } from '../../../models';
@@ -9,28 +9,19 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { isDarkTheme } from '../../../themes';
 import { grey } from '@mui/material/colors';
 import ProgressBar from '../../progress-bar/progress-bar';
-import { finalize, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { QueryService } from '../../../services';
 
-export const TaskDetail = ({ task }: { task: Task }) => {
-  const [loading, setLoading]: [Record<string, boolean>, any] = useState({});
-
-  const onClick = (button: string, request: Observable<any>) => {
-    setLoading({ ...loading, [button]: true });
-    request
-      .pipe(
-        finalize(() =>
-          setLoading({
-            ...loading,
-            [button]: false,
-          })
-        )
-      )
-      .subscribe();
-  };
-
+export const TaskDetail = ({
+  task,
+  loading,
+  buttonClick,
+}: {
+  task: Task;
+  loading: Record<string, boolean>;
+  buttonClick: (button: string, request: Observable<any>, $event?: React.MouseEvent) => void;
+}) => {
   const isDisabled = () => Object.values(loading).some(Boolean);
-
   return (
     <Typography component="span" variant="body2">
       <Grid container sx={{ alignItems: 'center' }}>
@@ -43,7 +34,7 @@ export const TaskDetail = ({ task }: { task: Task }) => {
               startIcon={loading.play ? <CircularProgress size={'1.25rem'} color="success" /> : <PlayArrowIcon />}
               variant="contained"
               color="success"
-              onClick={() => onClick('play', QueryService.resumeTask(task.id))}
+              onClick={() => buttonClick('play', QueryService.resumeTask(task.id))}
               disabled={isDisabled() || ![TaskStatus.paused, TaskStatus.finished].includes(task.status)}
             >
               Play
@@ -52,7 +43,7 @@ export const TaskDetail = ({ task }: { task: Task }) => {
               startIcon={loading.pause ? <CircularProgress size={'1.25rem'} color="warning" /> : <PauseIcon />}
               variant="contained"
               color="warning"
-              onClick={() => onClick('pause', QueryService.pauseTask(task.id))}
+              onClick={() => buttonClick('pause', QueryService.pauseTask(task.id))}
               disabled={isDisabled() || ![TaskStatus.downloading, TaskStatus.seeding, TaskStatus.waiting].includes(task.status)}
             >
               Pause
@@ -62,7 +53,7 @@ export const TaskDetail = ({ task }: { task: Task }) => {
               startIcon={loading.edit ? <CircularProgress size={'1.25rem'} color="secondary" /> : <EditIcon />}
               variant="outlined"
               color="secondary"
-              onClick={() => onClick('edit', QueryService.editTask(task.id, 'download'))}
+              onClick={() => buttonClick('edit', QueryService.editTask(task.id, 'download'))}
               disabled={isDisabled() || ![TaskStatus.downloading, TaskStatus.waiting, TaskStatus.paused].includes(task.status)}
             >
               Edit
@@ -72,7 +63,7 @@ export const TaskDetail = ({ task }: { task: Task }) => {
               variant="outlined"
               color="error"
               disabled={isDisabled()}
-              onClick={() => onClick('delete', QueryService.deleteTask(task.id))}
+              onClick={() => buttonClick('delete', QueryService.deleteTask(task.id))}
             >
               Delete
             </Button>

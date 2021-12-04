@@ -34,15 +34,31 @@ export const TaskItem = ({ task, status }: { task: Task; status?: TaskStatus[] }
 
   return (
     <Accordion onChange={(_, state) => setExpanded(state)}>
-      <AccordionSummary aria-controls="task-content" id="task-header" sx={{ padding: 0 }} onMouseOver={() => setVisible(true)} onMouseLeave={() => setVisible(false)}>
+      <AccordionSummary
+        aria-controls="task-content"
+        id="task-header"
+        sx={{ padding: 0 }}
+        onMouseOver={() => setVisible(true)}
+        onMouseLeave={() => setVisible(false)}
+      >
         <TaskCard task={task} statuses={status} />
         {visible && !expanded && (
           <ButtonGroup orientation="vertical" aria-label="vertical contained button group" variant="text">
-            <Button key="delete" sx={{ display: 'flex', flex: '1 1 auto' }} disabled={isDisabled()} onClick={($event) => onClick('delete', QueryService.deleteTask(task.id), $event)}>
+            <Button
+              key="delete"
+              sx={{ display: 'flex', flex: '1 1 auto' }}
+              disabled={isDisabled()}
+              onClick={($event) => onClick('delete', QueryService.deleteTask(task.id), $event)}
+            >
               <DeleteIcon />
             </Button>
             {[TaskStatus.downloading, TaskStatus.seeding, TaskStatus.waiting].includes(task.status) ? (
-              <Button key="pause" sx={{ display: 'flex', flex: '1 1 auto' }} onClick={($event) => onClick('play', QueryService.pauseTask(task.id), $event)} disabled={isDisabled()}>
+              <Button
+                key="pause"
+                sx={{ display: 'flex', flex: '1 1 auto' }}
+                onClick={($event) => onClick('play', QueryService.pauseTask(task.id), $event)}
+                disabled={isDisabled()}
+              >
                 <PauseIcon />
               </Button>
             ) : (
@@ -59,7 +75,7 @@ export const TaskItem = ({ task, status }: { task: Task; status?: TaskStatus[] }
         )}
       </AccordionSummary>
       <AccordionDetails>
-        <TaskDetail task={task} />
+        <TaskDetail task={task} loading={loading} buttonClick={onClick} />
       </AccordionDetails>
     </Accordion>
   );

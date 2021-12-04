@@ -2,7 +2,7 @@ import { SynologyDownloadService } from '../http';
 import { getPassword, getUrl, getUsername, setTasks, store$, syncPolling } from '../../store';
 import { Store } from 'redux';
 import { Store as ProxyStore } from 'webext-redux';
-import { delay, distinctUntilChanged, map, Observable, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { CommonResponse, HttpResponse, ListResponse, LoginResponse } from '../../models'; // TODO error handling
 
 // TODO error handling
@@ -12,12 +12,8 @@ export class QueryService {
 
   static init(store: Store | ProxyStore) {
     this.store = store;
-    store$(this.store)
-      .pipe(
-        map((state) => getUrl(state)),
-        distinctUntilChanged(),
-        tap((url) => console.log('base url changed', url))
-      )
+    store$(this.store, getUrl)
+      .pipe(tap((url) => console.log('base url changed', url)))
       .subscribe((url) => this.downloadClient.setBaseUrl(url));
   }
 
@@ -68,23 +64,22 @@ export class QueryService {
 
   static resumeTask(id: string | string[]): Observable<HttpResponse<CommonResponse[]>> {
     this.readyCheck();
-    return this.downloadClient.resumeTask(id).pipe(tap((res) => this.listTasks()));
+    return this.downloadClient.resumeTask(id).pipe(tap((res) => this.listTasks().subscribe()));
   }
 
   static pauseTask(id: string | string[]): Observable<HttpResponse<CommonResponse[]>> {
     this.readyCheck();
-    return this.downloadClient.pauseTask(id).pipe(tap((res) => this.listTasks()));
+    return this.downloadClient.pauseTask(id).pipe(tap((res) => this.listTasks().subscribe()));
   }
 
   static createTask(uri: string, destination?: string, username?: string, password?: string, unzip?: string): Observable<HttpResponse<void>> {
     this.readyCheck();
     return this.downloadClient.createTask(uri, destination, username, password, unzip).pipe(
-      delay(500),
       tap({
         complete: () => {
           // TODO notification
           console.info('task successfully created');
-          this.listTasks();
+          this.listTasks().subscribe();
         },
         error: (err) => console.error('task failed to create', err),
       })
@@ -93,11 +88,11 @@ export class QueryService {
 
   static editTask(id: string | string[], destination: string): Observable<HttpResponse<CommonResponse[]>> {
     this.readyCheck();
-    return this.downloadClient.editTask(id, destination).pipe(tap((res) => this.listTasks()));
+    return this.downloadClient.editTask(id, destination).pipe(tap((res) => this.listTasks().subscribe()));
   }
 
   static deleteTask(id: string | string[], force = false): Observable<HttpResponse<CommonResponse[]>> {
     this.readyCheck();
-    return this.downloadClient.deleteTask(id, force).pipe(tap((res) => this.listTasks()));
+    return this.downloadClient.deleteTask(id, force).pipe(tap((res) => this.listTasks().subscribe()));
   }
 }

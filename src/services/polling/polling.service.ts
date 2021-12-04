@@ -1,4 +1,4 @@
-import { distinctUntilChanged, repeatWhen, skipWhile, Subject, switchMap, takeUntil, tap, timer } from 'rxjs';
+import { distinctUntilChanged, repeatWhen, skipWhile, Subject, switchMap, takeUntil, timer } from 'rxjs';
 import { Store } from 'redux';
 import { Store as ProxyStore } from 'webext-redux';
 import { getInterval, getPollingEnabled, store$ } from '../../store';
@@ -18,8 +18,7 @@ export class PollingService {
       timer(0, interval).pipe(
         skipWhile(() => !this.enabled),
         takeUntil(this.stop$),
-        repeatWhen(() => this.start$),
-        tap(() => console.log('polling every', this.interval))
+        repeatWhen(() => this.start$)
       )
     )
   );
@@ -28,21 +27,8 @@ export class PollingService {
     this.store = store;
     this.timer$.subscribe(() => QueryService.listTasks().subscribe());
 
-    store$(this.store, getInterval)
-      .pipe(tap((polling) => console.log('polling changed', polling)))
-      .subscribe(() => this.change(this.interval));
-
-    store$(this.store, getPollingEnabled)
-      .pipe(tap((enabled) => console.log('enabled changed', enabled)))
-      .subscribe((enabled) => {
-        if (enabled) {
-          console.log('starting');
-          this.start();
-        } else {
-          console.log('stopping');
-          this.stop();
-        }
-      });
+    store$(this.store, getInterval).subscribe(() => this.change(this.interval));
+    store$(this.store, getPollingEnabled).subscribe((enabled) => (enabled ? this.start() : this.stop()));
   }
 
   static get enabled(): boolean {

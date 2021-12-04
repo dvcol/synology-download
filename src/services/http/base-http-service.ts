@@ -10,8 +10,6 @@ export class BaseHttpService {
   }
 
   buildUrl(url: string | URL, params?: HttpParameters): URL {
-    console.log('baseUrl is', this.baseUrl);
-    console.log('url is', url);
     const builder = new URL(`${this.baseUrl}/${url}`);
     if (params) {
       Object.entries(params)
