@@ -1,14 +1,14 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { TasksState } from '../slices';
 import { TabCount, TaskStatus } from '../../models';
+import { StoreState } from '../store';
 
 export const getTasks = createSelector(
-  (state: TasksState) => state,
+  (state: StoreState) => state,
   (state) => state.tasks.entities
 );
 
 export const getStatuses = createSelector(
-  (state: TasksState) => state,
+  (state: StoreState) => state,
   (state) => state.tasks.statuses
 );
 

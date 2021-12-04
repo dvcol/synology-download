@@ -9,26 +9,32 @@ import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LaunchIcon from '@mui/icons-material/Launch';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import NavbarMenuIcon from './navbar-menu-icon';
-import { getUrl, resetNavbar } from '../../store';
+import { getUrl, setNavbar } from '../../store';
 
 type NavbarMenuProps = { label: React.ReactNode };
 
 export const NavbarMenu = ({ label }: NavbarMenuProps) => {
-  const dispatch = useDispatch();
   const url = useSelector(getUrl);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
-  const handleTab = () => resetNavbar();
+  const handleTab = () => setNavbar();
   const handleUrl = () => chrome.tabs.create({ url });
   return (
     <React.Fragment>
       <Tooltip title="Actions and Settings">
-        <IconButton sx={{ ml: '0.5rem' }} id="basic-button" aria-controls="basic-menu" aria-haspopup="true" aria-expanded={open ? 'true' : undefined} onClick={handleClick}>
+        <IconButton
+          sx={{ ml: '0.5rem' }}
+          id="basic-button"
+          aria-controls="basic-menu"
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
+        >
           {label}
         </IconButton>
       </Tooltip>

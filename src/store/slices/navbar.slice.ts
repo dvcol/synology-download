@@ -1,9 +1,16 @@
-import { combineReducers, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { NavbarSlice, TaskTab } from '../../models';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { defaultTabs, NavbarSlice, TaskTab } from '../../models';
+import { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
+import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
 
-const initialState: NavbarSlice = { tab: undefined };
+interface NavbarReducers<S = NavbarSlice> extends SliceCaseReducers<S> {
+  setNavbar: CaseReducer<S, PayloadAction<TaskTab | undefined>>;
+  resetNavbar: CaseReducer<S>;
+}
 
-export const navbarSlice = createSlice({
+const initialState: NavbarSlice = { tab: defaultTabs[0] };
+
+export const navbarSlice = createSlice<NavbarSlice, NavbarReducers, 'navbar'>({
   name: 'navbar',
   initialState,
   reducers: {
@@ -12,16 +19,8 @@ export const navbarSlice = createSlice({
       tab: action?.payload,
     }),
     resetNavbar: () => initialState,
-  },
+  } as NavbarReducers,
 });
 
 // Action creators are generated for each case reducer function
 export const { setNavbar, resetNavbar } = navbarSlice.actions;
-
-const rootReducer = combineReducers({
-  navbar: navbarSlice.reducer,
-});
-
-export type NavbarState = ReturnType<typeof rootReducer>;
-
-export default navbarSlice.reducer;

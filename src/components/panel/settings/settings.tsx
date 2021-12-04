@@ -20,13 +20,24 @@ import {
   Typography,
 } from '@mui/material';
 import { defaultMenu, defaultTabs, SettingHeader } from '../../../models';
-import { addContextMenu, addTaskTab, getPassword, getSettings, getUrl, getUsername, removeContextMenu, removeTaskTab, resetTaskTab, syncSettings } from '../../../store';
+import {
+  addContextMenu,
+  addTaskTab,
+  getPassword,
+  getSettings,
+  getUrl,
+  getUsername,
+  removeContextMenu,
+  removeTaskTab,
+  resetTaskTab,
+  syncConnection,
+} from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import AddIcon from '@mui/icons-material/Add';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { v4 as uuid } from 'uuid';
-import { synologyClient } from '../../../services';
+import { QueryService } from '../../../services';
 
 export const Settings = () => {
   // form
@@ -40,30 +51,13 @@ export const Settings = () => {
 
   // TODO : migrate to react-hook-form & move this to login service
   const testLogin = () => {
-    console.log(url, username, password);
-    if (url && username && password) {
-      synologyClient.setBaseUrl(url);
-      synologyClient.login(username, password).subscribe({
-        complete: () => {
-          dispatch(syncSettings({ polling: { enabled: true } }));
-          // TODO: Notification connection success
-          console.info('Polling setting change success');
-        },
-        error: () => {
-          dispatch(syncSettings({ polling: { enabled: false } }));
-          console.error('Polling login failed');
-        },
-      });
-    }
+    console.log('login in');
+    QueryService.login().subscribe();
   };
 
   const testLogout = () => {
-    console.log(url, username, password);
-    synologyClient.logout().subscribe(() => {
-      dispatch(syncSettings({ polling: { enabled: false } }));
-      // TODO: Notificaiton logout success
-      console.info('Polling setting change success');
-    });
+    console.log('login out');
+    QueryService.logout().subscribe();
   };
 
   // Tab highlight
@@ -137,11 +131,8 @@ export const Settings = () => {
                   value={settings?.connection.protocol}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                     dispatch(
-                      syncSettings({
-                        connection: {
-                          ...settings?.connection,
-                          protocol: event.target.value,
-                        },
+                      syncConnection({
+                        protocol: event.target.value,
                       })
                     )
                   }
@@ -165,11 +156,8 @@ export const Settings = () => {
                   value={settings?.connection.path}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                     dispatch(
-                      syncSettings({
-                        connection: {
-                          ...settings?.connection,
-                          path: event.target.value,
-                        },
+                      syncConnection({
+                        path: event.target.value,
                       })
                     )
                   }
@@ -186,11 +174,8 @@ export const Settings = () => {
                   value={settings?.connection.port}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                     dispatch(
-                      syncSettings({
-                        connection: {
-                          ...settings?.connection,
-                          port: Number(event.target.value),
-                        },
+                      syncConnection({
+                        port: Number(event.target.value),
                       })
                     )
                   }
@@ -205,11 +190,8 @@ export const Settings = () => {
                   value={settings?.connection.username}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                     dispatch(
-                      syncSettings({
-                        connection: {
-                          ...settings?.connection,
-                          username: event.target.value,
-                        },
+                      syncConnection({
+                        username: event.target.value,
                       })
                     )
                   }
@@ -223,11 +205,8 @@ export const Settings = () => {
                   value={settings?.connection.password}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                     dispatch(
-                      syncSettings({
-                        connection: {
-                          ...settings?.connection,
-                          password: event.target.value,
-                        },
+                      syncConnection({
+                        password: event.target.value,
                       })
                     )
                   }

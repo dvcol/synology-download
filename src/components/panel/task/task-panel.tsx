@@ -1,11 +1,11 @@
 import React from 'react';
 import { Container } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { getFilteredTasks, getTab } from '../../../store';
+import { getFilteredTasks, getTabOrFirst } from '../../../store';
 import TaskItem from './task-item';
 
 export const TaskPanel = () => {
-  const tab = useSelector(getTab);
+  const tab = useSelector(getTabOrFirst);
   const tasks = useSelector(getFilteredTasks);
 
   return (

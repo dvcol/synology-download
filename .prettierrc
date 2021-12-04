@@ -3,5 +3,5 @@
   "trailingComma": "es5",
   "requirePragma": false,
   "arrowParens": "always",
-  "printWidth": 200
+  "printWidth": 150
 }

@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { NavbarState } from '../slices';
+import { StoreState } from '../store';
 
 export const getTab = createSelector(
-  (state: NavbarState) => state,
+  (state: StoreState) => state,
   (state) => state.navbar.tab
 );

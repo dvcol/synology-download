@@ -1,40 +1,38 @@
-import {defaultTabs, TaskTab} from "./tab.model";
-import {ContextMenuOption, defaultMenu} from "./context-menu.model";
-
-export const settingsKey = 'settings';
+import { defaultTabs } from './tab.model';
+import { defaultMenu } from './context-menu.model';
+import { SettingsSlice } from './store.model';
 
 export enum SettingHeader {
-    connection = 'connection',
-    interface = 'interface',
-    notification = 'notification'
+  connection = 'connection',
+  interface = 'interface',
+  notification = 'notification',
 }
 
 export interface Connection {
-    protocol?: string,
-    path?: string,
-    port?: number,
-    username?: string,
-    password?: string
+  protocol?: string;
+  path?: string;
+  port?: number;
+  username?: string;
+  password?: string;
 }
 
 export interface Polling {
-    enabled: boolean,
-    // 0 means disabled
-    background?: number,
-    // 0 means disabled
-    popup?: number
+  enabled: boolean;
+  // 0 means disabled
+  background: number;
+  // 0 means disabled
+  popup: number;
 }
 
-export interface SettingsSlice {
-    connection: Connection,
-    polling: Polling
-    tabs: TaskTab[],
-    menus: ContextMenuOption[]
-}
+export const defaultPolling: Polling = {
+  enabled: false,
+  background: 60000,
+  popup: 3000,
+};
 
-export const defaultOptions: SettingsSlice = {
-    connection: {protocol: 'http'},
-    polling: {enabled: false, background: 60000, popup: 5000},
-    tabs: defaultTabs,
-    menus: [defaultMenu]
-}
+export const defaultSettings: SettingsSlice = {
+  connection: { protocol: 'http' },
+  polling: defaultPolling,
+  tabs: defaultTabs,
+  menus: [defaultMenu],
+};

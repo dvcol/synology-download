@@ -21,15 +21,13 @@ export const Navbar = () => {
     dispatch(setStatuses(newTab?.status || []));
   };
 
-  const getValue = (): number => tabs?.findIndex((t) => t.id === tab?.id) ?? -1;
+  const getValue = (): number => {
+    const index = tabs?.findIndex((t) => t.id === tab?.id);
+    return index && index > -1 ? index : 0;
+  };
 
   const tabComponents = tabs?.map((taskTab, index) => (
-    <NavbarTab
-      tab={taskTab}
-      component={Link}
-      to="/"
-      key={`${taskTab.id}-${index}`}
-    />
+    <NavbarTab tab={taskTab} value={index} component={Link} to="/" key={`${taskTab.id}-${index}`} />
   ));
   return (
     <AppBar color="inherit" position="sticky" sx={{ padding: '0 0.5rem' }}>

@@ -2,11 +2,15 @@ import { BaseHttpService } from './base-http-service';
 import { Observable, tap } from 'rxjs';
 import { API, CommonResponse, Endpoint, HttpParameters, HttpResponse, ListResponse, LoginResponse, SessionName, SynologyMethod, TaskListOption } from '../../models';
 
-class SynologyClientService extends BaseHttpService {
-  private prefix = 'webapi';
+export class SynologyDownloadService extends BaseHttpService {
+  private static prefix = 'webapi';
   private sid?: string;
 
-  setBaseUrl(baseUrl: string, prefix = this.prefix): void {
+  constructor(protected baseUrl = '', prefix = SynologyDownloadService.prefix) {
+    super(baseUrl + prefix);
+  }
+
+  setBaseUrl(baseUrl: string, prefix = SynologyDownloadService.prefix): void {
     super.setBaseUrl(baseUrl + prefix);
   }
 
@@ -99,5 +103,3 @@ class SynologyClientService extends BaseHttpService {
     });
   }
 }
-
-export const synologyClient = new SynologyClientService();

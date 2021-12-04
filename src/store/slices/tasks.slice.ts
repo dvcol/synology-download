@@ -1,13 +1,21 @@
-import { combineReducers, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Task, TasksSlice, TaskStatus } from '../../models';
 import { mockTasks } from './task.mock';
+import { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
+import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
+
+interface TasksReducers<S = TasksSlice> extends SliceCaseReducers<S> {
+  setTasks: CaseReducer<S, PayloadAction<Task[]>>;
+  setStatuses: CaseReducer<S, PayloadAction<TaskStatus[]>>;
+  resetTasks: CaseReducer<S>;
+}
 
 const initialState: TasksSlice = {
   entities: mockTasks,
   statuses: [],
 };
 
-export const tasksSlice = createSlice({
+export const tasksSlice = createSlice<TasksSlice, TasksReducers, 'tasks'>({
   name: 'tasks',
   initialState,
   reducers: {
@@ -20,16 +28,8 @@ export const tasksSlice = createSlice({
       statuses: action?.payload,
     }),
     resetTasks: () => initialState,
-  },
+  } as TasksReducers,
 });
 
 // Action creators are generated for each case reducer function
 export const { setTasks, setStatuses, resetTasks } = tasksSlice.actions;
-
-const rootReducer = combineReducers({
-  tasks: tasksSlice.reducer,
-});
-
-export type TasksState = ReturnType<typeof rootReducer>;
-
-export default tasksSlice.reducer;

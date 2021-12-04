@@ -9,17 +9,13 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { isDarkTheme } from '../../../themes';
 import { grey } from '@mui/material/colors';
 import ProgressBar from '../../progress-bar/progress-bar';
-import { synologyClient } from '../../../services';
 import { finalize, Observable } from 'rxjs';
-import { useDispatch } from 'react-redux';
-import { setTasks } from '../../../store';
+import { QueryService } from '../../../services';
 
 export const TaskDetail = ({ task }: { task: Task }) => {
-  const dispatch = useDispatch();
-
   const [loading, setLoading]: [Record<string, boolean>, any] = useState({});
 
-  const onClick = (button: string, request: Observable<any>) => () => {
+  const onClick = (button: string, request: Observable<any>) => {
     setLoading({ ...loading, [button]: true });
     request
       .pipe(
@@ -30,7 +26,7 @@ export const TaskDetail = ({ task }: { task: Task }) => {
           })
         )
       )
-      .subscribe(() => synologyClient.listTasks().subscribe((res) => dispatch(setTasks(res?.data?.tasks))));
+      .subscribe();
   };
 
   const isDisabled = () => Object.values(loading).some(Boolean);
@@ -47,7 +43,7 @@ export const TaskDetail = ({ task }: { task: Task }) => {
               startIcon={loading.play ? <CircularProgress size={'1.25rem'} color="success" /> : <PlayArrowIcon />}
               variant="contained"
               color="success"
-              onClick={onClick('play', synologyClient.resumeTask(task.id))}
+              onClick={() => onClick('play', QueryService.resumeTask(task.id))}
               disabled={isDisabled() || ![TaskStatus.paused, TaskStatus.finished].includes(task.status)}
             >
               Play
@@ -56,7 +52,7 @@ export const TaskDetail = ({ task }: { task: Task }) => {
               startIcon={loading.pause ? <CircularProgress size={'1.25rem'} color="warning" /> : <PauseIcon />}
               variant="contained"
               color="warning"
-              onClick={onClick('pause', synologyClient.pauseTask(task.id))}
+              onClick={() => onClick('pause', QueryService.pauseTask(task.id))}
               disabled={isDisabled() || ![TaskStatus.downloading, TaskStatus.seeding, TaskStatus.waiting].includes(task.status)}
             >
               Pause
@@ -66,7 +62,7 @@ export const TaskDetail = ({ task }: { task: Task }) => {
               startIcon={loading.edit ? <CircularProgress size={'1.25rem'} color="secondary" /> : <EditIcon />}
               variant="outlined"
               color="secondary"
-              onClick={onClick('edit', synologyClient.editTask(task.id, 'download'))}
+              onClick={() => onClick('edit', QueryService.editTask(task.id, 'download'))}
               disabled={isDisabled() || ![TaskStatus.downloading, TaskStatus.waiting, TaskStatus.paused].includes(task.status)}
             >
               Edit
@@ -76,7 +72,7 @@ export const TaskDetail = ({ task }: { task: Task }) => {
               variant="outlined"
               color="error"
               disabled={isDisabled()}
-              onClick={onClick('delete', synologyClient.deleteTask(task.id))}
+              onClick={() => onClick('delete', QueryService.deleteTask(task.id))}
             >
               Delete
             </Button>

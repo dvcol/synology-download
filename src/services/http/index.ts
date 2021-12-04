@@ -1,2 +1,2 @@
 export * from './base-http-service';
-export * from './synology-client.service';
+export * from './synology-download.service';

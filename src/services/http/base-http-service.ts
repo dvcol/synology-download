@@ -3,10 +3,9 @@ import { BaseHttpRequest, Body, HttpHeaders, HttpMethod, HttpParameters } from '
 
 /** Base Http request class implementation*/
 export class BaseHttpService {
-  constructor(private baseUrl: string = '') {}
+  constructor(protected baseUrl: string = '') {}
 
   setBaseUrl(baseUrl: string): void {
-    console.log('setting url to', baseUrl);
     this.baseUrl = baseUrl;
   }
 
@@ -17,7 +16,9 @@ export class BaseHttpService {
     if (params) {
       Object.entries(params)
         .map((e) => ({ key: e[0], value: e[1] }))
-        .forEach(({ key, value }) => (Array.isArray(value) ? value.forEach((val) => builder.searchParams.append(key, val)) : builder.searchParams.append(key, value)));
+        .forEach(({ key, value }) =>
+          Array.isArray(value) ? value.forEach((val) => builder.searchParams.append(key, val)) : builder.searchParams.append(key, value)
+        );
     }
     return builder;
   }
