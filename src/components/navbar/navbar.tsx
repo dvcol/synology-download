@@ -31,7 +31,7 @@ export const Navbar = () => {
   ));
   return (
     <AppBar color="inherit" position="sticky" sx={{ padding: '0 0.5rem' }}>
-      <Toolbar disableGutters={true} sx={{ justifyContent: 'space-between' }}>
+      <Toolbar disableGutters={true} sx={{ minHeight: 48, justifyContent: 'space-between' }}>
         <Tabs
           aria-label="download filtered tabs"
           textColor="primary"
@@ -39,7 +39,7 @@ export const Navbar = () => {
           variant="scrollable"
           onChange={handleChange}
           value={getValue()}
-          sx={{ minHeight: 64, height: '100%' }}
+          sx={{ height: '100%' }}
         >
           {tabComponents}
         </Tabs>

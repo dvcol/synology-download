@@ -15,7 +15,6 @@ proxyStore
   .then(() => {
     // Set store to query service
     QueryService.init(proxyStore);
-    proxyStore.subscribe(() => console.log('proxy store change', proxyStore.getState()));
     // Register as open
     chrome.runtime.connect({ name: ModalInstance.popup });
   })

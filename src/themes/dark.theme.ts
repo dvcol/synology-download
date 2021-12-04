@@ -26,6 +26,15 @@ export const darkTheme = () => {
           },
         },
       },
+      MuiToolbar: {
+        styleOverrides: {
+          root: {
+            '@media (min-width: 600px)': {
+              minHeight: 48,
+            },
+          },
+        },
+      },
       MuiTab: {
         styleOverrides: {
           root: {

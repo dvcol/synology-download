@@ -77,7 +77,7 @@ export const Settings = () => {
   };
 
   return (
-    <Container disableGutters sx={{ display: 'flex', flex: '1 1 auto', height: 'calc(100vh - 65px)' }} maxWidth={false}>
+    <Container disableGutters sx={{ display: 'flex', flex: '1 1 auto', height: 'calc(100vh - 48px)' }} maxWidth={false}>
       <Paper elevation={1}>
         <Tabs
           orientation="vertical"
