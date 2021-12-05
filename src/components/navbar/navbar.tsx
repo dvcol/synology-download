@@ -13,10 +13,8 @@ export const Navbar = () => {
   const tabs = useSelector(getTabs);
   const tab = useSelector(getTab);
 
-  console.log('init', tabs, tab);
   const handleChange = (event: React.SyntheticEvent, index: number): void => {
     const newTab = tabs?.length > index ? tabs[index] : undefined;
-    console.log('change', tab, newTab);
     dispatch(setNavbar(newTab));
     dispatch(setStatuses(newTab?.status || []));
   };

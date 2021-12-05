@@ -44,9 +44,7 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
         open={open}
         onClose={handleClose}
         onClick={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-        }}
+        MenuListProps={{ 'aria-labelledby': 'basic-button' }}
       >
         <NavbarMenuIcon label="Add file upload" icon={<AddIcon />} component={Link} to="/add" />
         <NavbarMenuIcon label="Add url upload" icon={<AddLinkIcon />} component={Link} to="/add" />

@@ -6,12 +6,11 @@ export const getSettings = createSelector(
   (state) => state.settings
 );
 
-export const getTabs = createSelector(getSettings, (state) => state.tabs);
+export const getTabs = createSelector(getSettings, (setting) => setting?.tabs);
 
-export const getConnection = createSelector(
-  (state: StoreState) => state,
-  (state) => state.settings.connection
-);
+export const getMenus = createSelector(getSettings, (setting) => setting?.menus);
+
+export const getConnection = createSelector(getSettings, (setting) => setting?.connection);
 
 export const getUrl = createSelector(getConnection, (state) => {
   if (state.protocol && state.path && state.port) {
@@ -20,17 +19,8 @@ export const getUrl = createSelector(getConnection, (state) => {
   return '';
 });
 
-export const getUsername = createSelector(
-  (state: StoreState) => state,
-  (state) => state.settings.connection.username
-);
+export const getUsername = createSelector(getConnection, (connection) => connection?.username);
 
-export const getPassword = createSelector(
-  (state: StoreState) => state,
-  (state) => state.settings.connection.password
-);
+export const getPassword = createSelector(getConnection, (connection) => connection?.password);
 
-export const getPolling = createSelector(
-  (state: StoreState) => state,
-  (state) => state.settings?.polling
-);
+export const getPolling = createSelector(getSettings, (setting) => setting?.polling);

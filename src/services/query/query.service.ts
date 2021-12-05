@@ -12,7 +12,8 @@ export class QueryService {
 
   static init(store: Store | ProxyStore) {
     this.store = store;
-    store$(this.store, getUrl)
+    console.log('initialising with', store);
+    store$(store, getUrl)
       .pipe(tap((url) => console.log('base url changed', url)))
       .subscribe((url) => this.downloadClient.setBaseUrl(url));
   }
