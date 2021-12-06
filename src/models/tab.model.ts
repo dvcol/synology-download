@@ -47,23 +47,12 @@ export const defaultTabs: TaskTab[] = [
   {
     id: uuid(),
     name: TabType.active,
-    status: [
-      TaskStatus.downloading,
-      TaskStatus.finishing,
-      TaskStatus.hash_checking,
-      TaskStatus.extracting,
-      TaskStatus.seeding,
-    ],
+    status: [TaskStatus.downloading, TaskStatus.finishing, TaskStatus.hash_checking, TaskStatus.extracting, TaskStatus.seeding],
   },
   {
     id: uuid(),
     name: TabType.inactive,
-    status: [
-      TaskStatus.waiting,
-      TaskStatus.filehosting_waiting,
-      TaskStatus.paused,
-      TaskStatus.error,
-    ],
+    status: [TaskStatus.waiting, TaskStatus.filehosting_waiting, TaskStatus.paused, TaskStatus.error],
     color: ColorLevel.warning,
   },
   {

@@ -7,7 +7,7 @@ import {
   CardHeader,
   Checkbox,
   FormControlLabel,
-  FormHelperText,
+  LinearProgress,
   MenuItem,
   Stack,
   TextField,
@@ -19,7 +19,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { QueryService } from '../../../services';
 import { Controller, RegisterOptions, useForm } from 'react-hook-form';
 import { Connection } from '../../../models';
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 
 // TODO : error on logout break UI
 export const SettingsCredentials = () => {
@@ -42,20 +42,28 @@ export const SettingsCredentials = () => {
   };
 
   const [loginError, setLoginError] = useState<boolean>();
+  const [loading, setLoading] = useState<boolean>();
 
-  const onSubmit = (data: any, error: any) => console.log(data, error);
-
-  const syncOnSubscribe = (data: Connection, query: Observable<any>) =>
-    query.subscribe({
-      complete: () => {
-        dispatch(data?.rememberMe ? syncConnection(data) : setConnection(data));
-        setLoginError(false);
-      },
-      error: () => {
-        setLoginError(true);
-        QueryService.setBaseUrl(urlReducer(connection));
-      },
-    });
+  const syncOnSubscribe = (data: Connection, query: Observable<any>) => {
+    const timeout = setTimeout(() => setLoading(true), 500);
+    return query
+      .pipe(
+        finalize(() => {
+          clearTimeout(timeout);
+          setLoading(false);
+        })
+      )
+      .subscribe({
+        complete: () => {
+          dispatch(data?.rememberMe ? syncConnection(data) : setConnection(data));
+          setLoginError(false);
+        },
+        error: () => {
+          setLoginError(true);
+          QueryService.setBaseUrl(urlReducer(connection));
+        },
+      });
+  };
 
   // Todo request indicator ?
   const testLogin = (data: Connection) => {
@@ -72,6 +80,7 @@ export const SettingsCredentials = () => {
 
   return (
     <Card raised={true}>
+      {loading && <LinearProgress />}
       <CardHeader
         title={'Credentials'}
         titleTypographyProps={{ variant: 'h6', color: 'text.primary' }}
@@ -79,8 +88,13 @@ export const SettingsCredentials = () => {
         subheaderTypographyProps={{ variant: 'caption', color: 'text.secondary', gutterBottom: true }}
         sx={{ p: '1rem 1rem 0' }}
       />
+      {loginError !== undefined && (
+        <Typography variant="caption" color={loginError ? 'error' : '#66bb6a'} sx={{ p: '0 1rem' }}>
+          {loginError ? 'Login attempt failed' : 'Logged in successfully'}
+        </Typography>
+      )}
       <CardContent>
-        <Box component="form" sx={{ '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+        <Box component="form" sx={{ '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Controller
               name="protocol"
@@ -183,34 +197,41 @@ export const SettingsCredentials = () => {
         </Box>
       </CardContent>
 
-      {loginError !== undefined && (
-        // TODO: rethink message, transition ? card background ?
-        <CardContent>
-          <FormHelperText id="login-error-text" error={loginError}>
-            {loginError ? 'Login attempt failed' : 'Logged in successfully'}
-          </FormHelperText>
-        </CardContent>
-      )}
-
       <CardActions sx={{ justifyContent: 'space-between', padding: '0 1.5rem 1.5rem' }}>
         <Controller
           name="rememberMe"
           control={control}
           render={({ field }) => (
             <FormControlLabel
-              control={<Checkbox {...field} checked={field.value} onChange={(e) => field.onChange(e.target.checked)} />}
+              control={<Checkbox {...field} checked={field.value} sx={{ marginLeft: '0' }} onChange={(e) => field.onChange(e.target.checked)} />}
               label="Remember me"
             />
           )}
         />
-        <Stack direction="row" spacing={2}>
-          <Button variant="outlined" type="submit" disabled={!isValid} onClick={handleSubmit(testLogin)}>
-            Test Login
-          </Button>
-          <Button variant="outlined" type="submit" disabled={!isValid} onClick={handleSubmit(loginLogout)}>
-            {logged ? 'Logout' : 'Login'}
-          </Button>
-        </Stack>
+        <Box>
+          <Stack direction="row" spacing={2}>
+            <Button
+              className="boarder-animation"
+              variant="outlined"
+              color={loginError !== undefined ? (loginError ? 'error' : 'success') : 'info'}
+              type="submit"
+              disabled={!isValid}
+              onClick={handleSubmit(testLogin)}
+            >
+              Test Login
+            </Button>
+            <Button
+              variant="outlined"
+              color={logged ? 'error' : 'success'}
+              sx={{ width: '5rem' }}
+              type="submit"
+              disabled={!isValid}
+              onClick={handleSubmit(loginLogout)}
+            >
+              {logged ? 'Logout' : 'Login'}
+            </Button>
+          </Stack>
+        </Box>
       </CardActions>
     </Card>
   );

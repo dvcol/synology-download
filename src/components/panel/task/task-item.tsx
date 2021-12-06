@@ -17,15 +17,13 @@ export const TaskItem = ({ task, status }: { task: Task; status?: TaskStatus[] }
   const onClick = (button: string, request: Observable<any>, $event?: React.MouseEvent) => {
     console.log('on clicked');
     $event?.stopPropagation();
-    setLoading({ ...loading, [button]: true });
+    const timeout = setTimeout(() => setLoading({ ...loading, [button]: true }), 500);
     request
       .pipe(
-        finalize(() =>
-          setLoading({
-            ...loading,
-            [button]: false,
-          })
-        )
+        finalize(() => {
+          clearTimeout(timeout);
+          setLoading({ ...loading, [button]: false });
+        })
       )
       .subscribe();
   };

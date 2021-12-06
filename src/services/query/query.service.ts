@@ -1,8 +1,20 @@
 import { SynologyDownloadService } from '../http';
-import { getPassword, getUrl, getUsername, setLogged, setTasks, store$, syncPolling } from '../../store';
+import {
+  getActiveTasksIds,
+  getFinishedTasksIds,
+  getPassword,
+  getPausedTasksIds,
+  getTasksIds,
+  getUrl,
+  getUsername,
+  setLogged,
+  setTasks,
+  store$,
+  syncPolling,
+} from '../../store';
 import { Store } from 'redux';
 import { Store as ProxyStore } from 'webext-redux';
-import { Observable, tap } from 'rxjs';
+import { EMPTY, Observable, tap } from 'rxjs';
 import { CommonResponse, HttpResponse, ListResponse, LoginResponse } from '../../models'; // TODO error handling
 
 // TODO error handling
@@ -79,9 +91,17 @@ export class QueryService {
     return this.downloadClient.resumeTask(id).pipe(tap((res) => this.listTasks().subscribe()));
   }
 
+  static resumeAllTasks(ids: string[] = getPausedTasksIds(this.store.getState())): Observable<HttpResponse<CommonResponse[]>> {
+    return ids?.length ? this.resumeTask(ids.join(',')) : EMPTY;
+  }
+
   static pauseTask(id: string | string[]): Observable<HttpResponse<CommonResponse[]>> {
     this.readyCheck();
     return this.downloadClient.pauseTask(id).pipe(tap((res) => this.listTasks().subscribe()));
+  }
+
+  static pauseAllTasks(ids: string[] = getActiveTasksIds(this.store.getState())): Observable<HttpResponse<CommonResponse[]>> {
+    return ids?.length ? this.pauseTask(ids.join(',')) : EMPTY;
   }
 
   static createTask(uri: string, destination?: string, username?: string, password?: string, unzip?: string): Observable<HttpResponse<void>> {
@@ -106,5 +126,13 @@ export class QueryService {
   static deleteTask(id: string | string[], force = false): Observable<HttpResponse<CommonResponse[]>> {
     this.readyCheck();
     return this.downloadClient.deleteTask(id, force).pipe(tap((res) => this.listTasks().subscribe()));
+  }
+
+  static deleteAllTasks(ids: string[] = getTasksIds(this.store.getState()), force = false): Observable<HttpResponse<CommonResponse[]>> {
+    return ids?.length ? this.deleteTask(ids.join(',')) : EMPTY;
+  }
+
+  static deleteFinishedTasks(ids: string[] = getFinishedTasksIds(this.store.getState()), force = false): Observable<HttpResponse<CommonResponse[]>> {
+    return this.deleteAllTasks(ids, force);
   }
 }
