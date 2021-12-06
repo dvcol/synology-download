@@ -2,7 +2,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Card, CardActions, CardC
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { addTaskTab, getTabs, removeTaskTab, resetTaskTab } from '../../../store';
 import AddIcon from '@mui/icons-material/Add';
-import { defaultTabs } from '../../../models';
+import { defaultTabs, InterfaceHeader } from '../../../models';
 import { v4 as uuid } from 'uuid';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import React from 'react';
@@ -18,9 +18,15 @@ export const SettingsTabs = () => {
     setExpanded(isExpanded ? panel : false);
   };
 
+  const title = InterfaceHeader.tabs;
   return (
     <Card raised={true}>
-      <CardHeader title={'Tabs'} titleTypographyProps={{ variant: 'h6', color: 'text.primary' }} sx={{ p: '1rem 1rem 0' }} />
+      <CardHeader
+        id={title}
+        title={title}
+        titleTypographyProps={{ variant: 'h6', color: 'text.primary' }}
+        sx={{ p: '1rem 1rem 0', textTransform: 'capitalize' }}
+      />
       <CardContent>
         {tabs?.map((t) => (
           <Accordion expanded={expanded === t.name} onChange={handleExpand2(t.name)} key={t.id}>

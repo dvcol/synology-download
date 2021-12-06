@@ -8,6 +8,17 @@ export enum SettingHeader {
   notification = 'notification',
 }
 
+export enum ConnectionHeader {
+  credential = 'credentials',
+  polling = 'polling',
+}
+
+export enum InterfaceHeader {
+  modals = 'modals',
+  tabs = 'tabs',
+  context = 'context',
+}
+
 export interface Connection {
   rememberMe?: boolean;
   protocol?: string;

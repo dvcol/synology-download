@@ -18,7 +18,7 @@ import { getConnection, getLogged, setConnection, syncConnection, urlReducer } f
 import { useDispatch, useSelector } from 'react-redux';
 import { QueryService } from '../../../services';
 import { Controller, RegisterOptions, useForm } from 'react-hook-form';
-import { Connection } from '../../../models';
+import { Connection, ConnectionHeader } from '../../../models';
 import { finalize, Observable } from 'rxjs';
 
 // TODO : error on logout break UI
@@ -78,15 +78,17 @@ export const SettingsCredentials = () => {
     syncOnSubscribe(data, logged ? QueryService.logout() : QueryService.login());
   };
 
+  const title = ConnectionHeader.credential;
   return (
     <Card raised={true}>
       {loading && <LinearProgress />}
       <CardHeader
-        title={'Credentials'}
+        id={title}
+        title={title}
         titleTypographyProps={{ variant: 'h6', color: 'text.primary' }}
         subheader={'Two-factor authentication is not currently supported.'}
         subheaderTypographyProps={{ variant: 'caption', color: 'text.secondary', gutterBottom: true }}
-        sx={{ p: '1rem 1rem 0' }}
+        sx={{ p: '1rem 1rem 0', textTransform: 'capitalize' }}
       />
       {loginError !== undefined && (
         <Typography variant="caption" color={loginError ? 'error' : '#66bb6a'} sx={{ p: '0 1rem' }}>

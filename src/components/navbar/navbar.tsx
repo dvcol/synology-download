@@ -38,6 +38,7 @@ export const Navbar = () => {
           onChange={handleChange}
           value={getValue()}
           sx={{ height: '100%' }}
+          TabIndicatorProps={{ style: tab ? undefined : { display: 'none' } }}
         >
           {tabComponents}
         </Tabs>

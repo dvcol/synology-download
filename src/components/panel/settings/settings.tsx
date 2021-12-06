@@ -1,17 +1,25 @@
 import React from 'react';
-import { Container, Paper, Tab, Tabs, Typography } from '@mui/material';
-import { SettingHeader } from '../../../models';
+import { Container, Paper, Tab, Tabs } from '@mui/material';
+import { ConnectionHeader, InterfaceHeader, SettingHeader } from '../../../models';
 import { SettingsCredentials } from './settings-credentials';
 import { SettingsTabs } from './settings-tabs';
 import { SettingsContext } from './settings-context';
 import { SettingsModal } from './settings-modals';
 import { SettingsNotifications } from './settings-notifications';
 import { SettingsPolling } from './settings-polling';
+import { SettingsHeader } from './settings-header';
 
 export const Settings = () => {
   // Tab highlight
-  const [header, setHeader] = React.useState(SettingHeader.connection);
-  const handleChange = (event: React.SyntheticEvent, newValue: SettingHeader) => setHeader(newValue);
+  const [tab, setTab] = React.useState<string>(SettingHeader.connection);
+  const handleChange = (event: React.SyntheticEvent, newValue: SettingHeader) => setTab(newValue);
+  const handleActive = (label: string, inView: boolean) => inView && setTab(label);
+
+  const tabs = [
+    { label: SettingHeader.connection, links: [ConnectionHeader.credential, ConnectionHeader.polling] },
+    { label: SettingHeader.interface, links: [InterfaceHeader.tabs, InterfaceHeader.modals, InterfaceHeader.context] },
+    { label: SettingHeader.notification },
+  ];
 
   return (
     <Container disableGutters sx={{ display: 'flex', flex: '1 1 auto', height: 'calc(100vh - 48px)' }} maxWidth={false}>
@@ -19,7 +27,7 @@ export const Settings = () => {
         <Tabs
           orientation="vertical"
           selectionFollowsFocus={true}
-          value={header}
+          value={tab}
           onChange={handleChange}
           aria-label="Vertical tabs example"
           sx={{
@@ -27,30 +35,41 @@ export const Settings = () => {
             '& .MuiTab-root': { alignItems: 'flex-start' },
           }}
         >
-          {Object.values(SettingHeader).map((t, i) => (
-            <Tab label={t} key={`${i}-${t}`} value={t} disableFocusRipple={true} href={`#${t}`} />
-          ))}
+          {tabs.map(({ label, links }, i) => [
+            <Tab
+              label={label}
+              key={`${i}-${label}`}
+              value={label}
+              disableFocusRipple={true}
+              href={`#${label}`}
+              sx={{ fontWeight: '700', fontSize: '0.75rem', backdropFilter: 'contrast(1.1)' }}
+            />,
+            ...(links?.map((link, j) => (
+              <Tab
+                label={link}
+                key={`${i}-${j}-${link}`}
+                value={link}
+                disableFocusRipple={true}
+                href={`#${link}`}
+                sx={{ backdropFilter: 'contrast(0.9)' }}
+              />
+            )) ?? []),
+          ])}
         </Tabs>
       </Paper>
       <Container sx={{ p: '0 1.5rem', overflow: 'auto', '& .MuiCard-root': { mb: '1rem' } }}>
-        <Typography id={SettingHeader.connection} variant="h5" color="text.secondary" sx={{ p: '1rem 0', textTransform: 'capitalize' }}>
-          {SettingHeader.connection}
-        </Typography>
+        <SettingsHeader label={SettingHeader.connection} onChange={handleActive} />
 
         <SettingsCredentials />
         <SettingsPolling />
 
-        <Typography id={SettingHeader.interface} variant="h5" color="text.secondary" sx={{ p: '1rem 0', textTransform: 'capitalize' }}>
-          {SettingHeader.interface}
-        </Typography>
+        <SettingsHeader label={SettingHeader.interface} onChange={handleActive} />
 
         <SettingsTabs />
         <SettingsModal />
         <SettingsContext />
 
-        <Typography id={SettingHeader.notification} variant="h5" color="text.secondary" sx={{ p: '1rem 0', textTransform: 'capitalize' }}>
-          {SettingHeader.notification}
-        </Typography>
+        <SettingsHeader label={SettingHeader.notification} onChange={handleActive} />
 
         <SettingsNotifications />
       </Container>

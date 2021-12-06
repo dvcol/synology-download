@@ -9,7 +9,7 @@ import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LaunchIcon from '@mui/icons-material/Launch';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import NavbarMenuIcon from './navbar-menu-icon';
 import { getUrl, setNavbar } from '../../store';
 import { QueryService } from '../../services';
@@ -17,6 +17,7 @@ import { QueryService } from '../../services';
 type NavbarMenuProps = { label: React.ReactNode };
 
 export const NavbarMenu = ({ label }: NavbarMenuProps) => {
+  const dispatch = useDispatch();
   const url = useSelector(getUrl);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -24,7 +25,7 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
-  const handleTab = () => setNavbar();
+  const handleTab = () => dispatch(setNavbar());
   const handleUrl = () => chrome.tabs.create({ url });
 
   // Dialog

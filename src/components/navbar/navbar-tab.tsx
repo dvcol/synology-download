@@ -8,9 +8,7 @@ type NavbarTabProps = { tab: TaskTab; [key: string]: any };
 
 export const NavbarTab = ({ tab, ...props }: NavbarTabProps) => {
   const countByStatus = useSelector(getCountByStatus);
-  const count =
-    tab?.status?.reduce((acc, status) => acc + countByStatus[status], 0) ??
-    countByStatus?.total;
+  const count = tab?.status?.reduce((acc, status) => acc + countByStatus[status], 0) ?? countByStatus?.total;
 
   const a11yProps = (name: TabType | string) => ({
     id: `simple-tab-${name}`,
@@ -23,11 +21,7 @@ export const NavbarTab = ({ tab, ...props }: NavbarTabProps) => {
     <Tab
       {...props}
       label={
-        <StyledBadge
-          sx={{ padding: '0 0.5rem' }}
-          badgeContent={count}
-          color={tab?.color || ColorLevel.info}
-        >
+        <StyledBadge sx={{ padding: '0 0.5rem' }} badgeContent={count} color={tab?.color || ColorLevel.info}>
           {tab?.name}
         </StyledBadge>
       }

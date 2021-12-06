@@ -2,7 +2,7 @@ import { Accordion, AccordionDetails, AccordionSummary, Card, CardActions, CardC
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { addContextMenu, getMenus, removeContextMenu } from '../../../store';
 import AddIcon from '@mui/icons-material/Add';
-import { defaultMenu } from '../../../models';
+import { defaultMenu, InterfaceHeader } from '../../../models';
 import { v4 as uuid } from 'uuid';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,15 +17,14 @@ export const SettingsContext = () => {
   };
 
   // TODO : migrate to react-hook-form & move this to login service
+  const title = InterfaceHeader.context;
   return (
     <Card raised={true}>
       <CardHeader
-        title={
-          <Typography variant="h6" color="text.primary">
-            Context action
-          </Typography>
-        }
-        sx={{ p: '1rem 1rem 0' }}
+        id={title}
+        title={title}
+        titleTypographyProps={{ variant: 'h6', color: 'text.primary' }}
+        sx={{ p: '1rem 1rem 0', textTransform: 'capitalize' }}
       />
       <CardContent>
         {menus?.map((t) => (
