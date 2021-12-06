@@ -2,14 +2,14 @@ import { ReducersMapObject, Store } from 'redux';
 import { Store as ProxyStore } from 'webext-redux';
 
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { modalSlice, navbarSlice, settingsSlice, tasksSlice } from './slices';
+import { navbarSlice, settingsSlice, stateSlice, tasksSlice } from './slices';
 import { RootSlice } from '../models';
 import { BehaviorSubject, distinctUntilChanged, finalize, map } from 'rxjs';
 
 export const proxyStore = new ProxyStore();
 
 const reducers: ReducersMapObject<RootSlice> = {
-  [modalSlice.name]: modalSlice.reducer,
+  [stateSlice.name]: stateSlice.reducer,
   [navbarSlice.name]: navbarSlice.reducer,
   [tasksSlice.name]: tasksSlice.reducer,
   [settingsSlice.name]: settingsSlice.reducer,
@@ -26,9 +26,6 @@ export const store: Store = configureStore({
 
 export const store$ = (_store: Store | ProxyStore, getter: (state: StoreState) => any = (state: StoreState) => state) => {
   const _store$ = new BehaviorSubject<RootSlice>(_store.getState());
-  const unsubscribe = _store.subscribe(() => {
-    console.log('store change', _store.getState());
-    _store$.next(_store.getState());
-  });
+  const unsubscribe = _store.subscribe(() => _store$.next(_store.getState()));
   return _store$.pipe(map(getter), distinctUntilChanged(), finalize(unsubscribe));
 };

@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { getTab } from './navbar.selector';
 import { getPolling, getTabs } from './settings.selector';
-import { isModalOpen } from './modal.selector';
+import { isModalOpen } from './state.selector';
 
 export const getTabOrFirst = createSelector(getTab, getTabs, (tab, tabs) => tab ?? (tabs?.length ? tabs[0] : tab));
 

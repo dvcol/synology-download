@@ -1,5 +1,5 @@
 import { SynologyDownloadService } from '../http';
-import { getPassword, getUrl, getUsername, setTasks, store$, syncPolling } from '../../store';
+import { getPassword, getUrl, getUsername, setLogged, setTasks, store$, syncPolling } from '../../store';
 import { Store } from 'redux';
 import { Store as ProxyStore } from 'webext-redux';
 import { Observable, tap } from 'rxjs';
@@ -15,7 +15,11 @@ export class QueryService {
     console.log('initialising with', store);
     store$(store, getUrl)
       .pipe(tap((url) => console.log('base url changed', url)))
-      .subscribe((url) => this.downloadClient.setBaseUrl(url));
+      .subscribe((url) => this.setBaseUrl(url));
+  }
+
+  static setBaseUrl(baseUrl: string): void {
+    this.downloadClient.setBaseUrl(baseUrl);
   }
 
   static get isReady() {
@@ -26,20 +30,26 @@ export class QueryService {
     if (!QueryService.isReady) throw new Error('Query service is not ready');
   }
 
-  static login(
+  static loginTest(
     username = getUsername(this.store.getState()),
     password = getPassword(this.store.getState())
   ): Observable<HttpResponse<LoginResponse>> {
     this.readyCheck();
     if (!username || !password) throw new Error(`Missing required username '${username}' or password  '${password}'`);
-    return this.downloadClient.login(username, password).pipe(
+    return this.downloadClient.login(username, password);
+  }
+
+  static login(username?: string, password?: string): Observable<HttpResponse<LoginResponse>> {
+    return this.loginTest(username, password).pipe(
       tap({
         complete: () => {
+          this.store.dispatch(setLogged(true));
           this.store.dispatch(syncPolling({ enabled: true }));
           // TODO: Notification connection success
           console.info('Polling setting change success');
         },
         error: () => {
+          this.store.dispatch(setLogged(false));
           this.store.dispatch(syncPolling({ enabled: false }));
           console.error('Login failed');
         },
@@ -51,6 +61,7 @@ export class QueryService {
     this.readyCheck();
     return this.downloadClient.logout().pipe(
       tap(() => {
+        this.store.dispatch(setLogged(false));
         this.store.dispatch(syncPolling({ enabled: false }));
         // TODO: Notification logout success
         console.info('Polling setting change success');

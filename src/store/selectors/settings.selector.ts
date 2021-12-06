@@ -1,5 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { StoreState } from '../store';
+import { Connection } from '../../models';
 
 export const getSettings = createSelector(
   (state: StoreState) => state,
@@ -12,12 +13,14 @@ export const getMenus = createSelector(getSettings, (setting) => setting?.menus)
 
 export const getConnection = createSelector(getSettings, (setting) => setting?.connection);
 
-export const getUrl = createSelector(getConnection, (state) => {
-  if (state.protocol && state.path && state.port) {
-    return new URL(`${state.protocol}://${state.path}:${state.port}`).toString();
+export const urlReducer = (connection: Connection) => {
+  if (connection.protocol && connection.path && connection.port) {
+    return new URL(`${connection.protocol}://${connection.path}:${connection.port}`).toString();
   }
   return '';
-});
+};
+
+export const getUrl = createSelector(getConnection, urlReducer);
 
 export const getUsername = createSelector(getConnection, (connection) => connection?.username);
 

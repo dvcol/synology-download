@@ -15,7 +15,7 @@ export const syncReducer = (oldSettings: SettingsSlice, action: PayloadAction<Pa
   return newSettings;
 };
 
-const setNestedReducer = <T>(oldSettings: SettingsSlice, action: PayloadAction<Partial<T>>, name: keyof SettingsSlice): SettingsSlice => {
+export const setNestedReducer = <T>(oldSettings: SettingsSlice, action: PayloadAction<Partial<T>>, name: keyof SettingsSlice): SettingsSlice => {
   return { ...oldSettings, [name]: { ...oldSettings[name], ...action?.payload } };
 };
 

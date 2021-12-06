@@ -9,12 +9,15 @@ export enum SettingHeader {
 }
 
 export interface Connection {
+  rememberMe?: boolean;
   protocol?: string;
   path?: string;
   port?: number;
   username?: string;
   password?: string;
 }
+
+export const defaultConnection: Connection = { rememberMe: false, protocol: 'http', port: 5000 };
 
 export interface Polling {
   enabled: boolean;
@@ -31,7 +34,7 @@ export const defaultPolling: Polling = {
 };
 
 export const defaultSettings: SettingsSlice = {
-  connection: { protocol: 'http' },
+  connection: defaultConnection,
   polling: defaultPolling,
   tabs: defaultTabs,
   menus: [defaultMenu],

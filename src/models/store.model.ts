@@ -3,9 +3,12 @@ import { ContextMenuOption } from './context-menu.model';
 import { Connection, Polling } from './settings.model';
 import { Task, TaskStatus } from './task.model';
 
-export interface ModalSlice {
-  popup: boolean;
-  option: boolean;
+export interface StateSlice {
+  logged: boolean;
+  modal: {
+    popup: boolean;
+    option: boolean;
+  };
 }
 
 export interface NavbarSlice {
@@ -25,7 +28,7 @@ export interface SettingsSlice {
 }
 
 export interface RootSlice {
-  modal: ModalSlice;
+  state: StateSlice;
   navbar: NavbarSlice;
   tasks: TasksSlice;
   settings: SettingsSlice;

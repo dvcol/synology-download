@@ -6,6 +6,7 @@ import { SettingsTabs } from './settings-tabs';
 import { SettingsContext } from './settings-context';
 import { SettingsModal } from './settings-modals';
 import { SettingsNotifications } from './settings-notifications';
+import { SettingsPolling } from './settings-polling';
 
 export const Settings = () => {
   // Tab highlight
@@ -37,6 +38,7 @@ export const Settings = () => {
         </Typography>
 
         <SettingsCredentials />
+        <SettingsPolling />
 
         <Typography id={SettingHeader.interface} variant="h5" color="text.secondary" sx={{ p: '1rem 0', textTransform: 'capitalize' }}>
           {SettingHeader.interface}

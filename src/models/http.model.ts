@@ -16,29 +16,17 @@ export enum HttpMethod {
 export type HttpMethods = keyof typeof HttpMethod;
 
 /** Allowed Body types */
-export type Body =
-  | string
-  | Blob
-  | ArrayBufferView
-  | ArrayBuffer
-  | FormData
-  | URLSearchParams
-  | ReadableStream<Uint8Array>
-  | null
-  | undefined;
+export type Body = string | Blob | ArrayBufferView | ArrayBuffer | FormData | URLSearchParams | ReadableStream<Uint8Array> | null | undefined;
 
 /** Allowed Http Headers */
-export type HttpHeaders =
-  | Headers
-  | string[][]
-  | Record<string, string>
-  | undefined;
+export type HttpHeaders = Headers | string[][] | Record<string, string> | undefined;
 
 export type HttpParameters = { [key: string]: string | string[] };
 
 /** Base Http request interface*/
 export interface BaseHttpRequest {
   url: string | URL;
+  skipBase?: boolean;
   method?: HttpMethod;
   headers?: HttpHeaders;
   params?: HttpParameters;

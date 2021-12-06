@@ -2,12 +2,13 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ChromeMessage, ChromeMessageType, Connection, ContextMenuOption, defaultSettings, Polling, SettingsSlice, TaskTab } from '../../models';
 import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
 import { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
-import { addTo, removeFrom, setReducer, syncNestedReducer, syncReducer } from '../reducers';
+import { addTo, removeFrom, setNestedReducer, setReducer, syncNestedReducer, syncReducer } from '../reducers';
 
 interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   setSettings: CaseReducer<S, PayloadAction<S>>;
   syncSettings: CaseReducer<S, PayloadAction<Partial<S>>>;
   resetSettings: CaseReducer<S>;
+  setConnection: CaseReducer<S, PayloadAction<Partial<Connection>>>;
   syncConnection: CaseReducer<S, PayloadAction<Partial<Connection>>>;
   syncPolling: CaseReducer<S, PayloadAction<Partial<Polling>>>;
   addContextMenu: CaseReducer<S, PayloadAction<ContextMenuOption>>;
@@ -24,6 +25,7 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
     setSettings: setReducer,
     syncSettings: syncReducer,
     resetSettings: (oldSettings) => syncReducer(oldSettings, { type: 'sync', payload: defaultSettings }),
+    setConnection: (oldSettings, action) => setNestedReducer<Connection>(oldSettings, action, 'connection'),
     syncConnection: (oldSettings, action) => syncNestedReducer<Connection>(oldSettings, action, 'connection'),
     syncPolling: (oldSettings, action) => syncNestedReducer<Polling>(oldSettings, action, 'polling'),
     addContextMenu: (oldSettings, action: PayloadAction<ContextMenuOption>): SettingsSlice => {
@@ -42,8 +44,10 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
         return removeFrom<ContextMenuOption, string>(oldSettings, action, 'menus', (o) => o.id !== action?.payload);
       }
     },
-    addTaskTab: (oldSettings, action: PayloadAction<TaskTab>): SettingsSlice => addTo<TaskTab>(oldSettings, action, 'tabs', (o) => o.id !== action?.payload.id),
-    removeTaskTab: (oldSettings, action: PayloadAction<string>): SettingsSlice => removeFrom<TaskTab, string>(oldSettings, action, 'tabs', (o) => o.id !== action?.payload),
+    addTaskTab: (oldSettings, action: PayloadAction<TaskTab>): SettingsSlice =>
+      addTo<TaskTab>(oldSettings, action, 'tabs', (o) => o.id !== action?.payload.id),
+    removeTaskTab: (oldSettings, action: PayloadAction<string>): SettingsSlice =>
+      removeFrom<TaskTab, string>(oldSettings, action, 'tabs', (o) => o.id !== action?.payload),
     resetTaskTab: (oldSettings): SettingsSlice =>
       syncReducer(oldSettings, {
         type: 'sync',
@@ -53,4 +57,16 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
 });
 
 // Action creators are generated for each case reducer function
-export const { setSettings, syncSettings, syncConnection, syncPolling, resetSettings, addContextMenu, removeContextMenu, addTaskTab, removeTaskTab, resetTaskTab } = settingsSlice.actions;
+export const {
+  setSettings,
+  syncSettings,
+  setConnection,
+  syncConnection,
+  syncPolling,
+  resetSettings,
+  addContextMenu,
+  removeContextMenu,
+  addTaskTab,
+  removeTaskTab,
+  resetTaskTab,
+} = settingsSlice.actions;
