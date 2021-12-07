@@ -21,7 +21,13 @@ export const stateSlice = createSlice<StateSlice, StateReducers, 'state'>({
   name: 'state',
   initialState,
   reducers: {
-    setLogged: (state, { payload: logged }) => ({ ...state, logged }),
+    setLogged: (state, { payload: logged }) => {
+      chrome.storage.sync.set({ [stateSlice.name]: JSON.stringify({ logged }) }, () => {
+        //TODO: notification logged in saved
+        console.info('State sync success', state);
+      });
+      return { ...state, logged };
+    },
     setPopup: (state, { payload: popup }) => ({ ...state, modal: { ...state.modal, popup } }),
     setOption: (state, { payload: option }) => ({ ...state, modal: { ...state.modal, option } }),
   } as StateReducers,

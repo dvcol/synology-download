@@ -1,7 +1,7 @@
 import { distinctUntilChanged, repeatWhen, skipWhile, Subject, switchMap, takeUntil, timer } from 'rxjs';
 import { Store } from 'redux';
 import { Store as ProxyStore } from 'webext-redux';
-import { getInterval, getPollingEnabled, store$ } from '../../store';
+import { getLogged, getPollingEnabled, getPollingInterval, store$ } from '../../store';
 import { defaultPolling } from '../../models';
 import { QueryService } from '../query';
 
@@ -27,16 +27,16 @@ export class PollingService {
     this.store = store;
     this.timer$.subscribe(() => QueryService.listTasks().subscribe());
 
-    store$(this.store, getInterval).subscribe(() => this.change(this.interval));
+    store$(this.store, getPollingInterval).subscribe(() => this.change(this.interval));
     store$(this.store, getPollingEnabled).subscribe((enabled) => (enabled ? this.start() : this.stop()));
   }
 
   static get enabled(): boolean {
-    return QueryService.isReady && getPollingEnabled(this.store.getState());
+    return QueryService.isReady && getLogged(this.store.getState()) && getPollingEnabled(this.store.getState());
   }
 
   static get interval(): number {
-    return getInterval(this.store.getState()) ?? defaultPolling.popup;
+    return getPollingInterval(this.store.getState()) ?? defaultPolling.background.interval;
   }
 
   static start(): void {

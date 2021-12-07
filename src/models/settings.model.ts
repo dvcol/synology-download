@@ -33,15 +33,15 @@ export const defaultConnection: Connection = { rememberMe: false, protocol: 'htt
 export interface Polling {
   enabled: boolean;
   // 0 means disabled
-  background: number;
+  background: { enabled: boolean; interval: number };
   // 0 means disabled
-  popup: number;
+  popup: { enabled: boolean; interval: number };
 }
 
 export const defaultPolling: Polling = {
   enabled: false,
-  background: 60000,
-  popup: 3000,
+  background: { enabled: true, interval: 60000 },
+  popup: { enabled: true, interval: 3000 },
 };
 
 export const defaultSettings: SettingsSlice = {

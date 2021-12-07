@@ -10,7 +10,6 @@ import {
   setLogged,
   setTasks,
   store$,
-  syncPolling,
 } from '../../store';
 import { Store } from 'redux';
 import { Store as ProxyStore } from 'webext-redux';
@@ -35,7 +34,7 @@ export class QueryService {
   }
 
   static get isReady() {
-    return !!(this.downloadClient && getUrl(this.store.getState())?.length);
+    return !!(this.downloadClient && this.downloadClient.getBaseUrl()?.length);
   }
 
   private static readyCheck() {
@@ -56,13 +55,11 @@ export class QueryService {
       tap({
         complete: () => {
           this.store.dispatch(setLogged(true));
-          this.store.dispatch(syncPolling({ enabled: true }));
           // TODO: Notification connection success
-          console.info('Polling setting change success');
+          console.info('logged in success');
         },
         error: () => {
           this.store.dispatch(setLogged(false));
-          this.store.dispatch(syncPolling({ enabled: false }));
           console.error('Login failed');
         },
       })
@@ -74,7 +71,6 @@ export class QueryService {
     return this.downloadClient.logout().pipe(
       tap(() => {
         this.store.dispatch(setLogged(false));
-        this.store.dispatch(syncPolling({ enabled: false }));
         // TODO: Notification logout success
         console.info('Polling setting change success');
       })
