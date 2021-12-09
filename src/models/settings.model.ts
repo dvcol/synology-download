@@ -1,6 +1,7 @@
 import { defaultTabs } from './tab.model';
 import { defaultMenu } from './context-menu.model';
 import { SettingsSlice } from './store.model';
+import { TaskStatus } from './task.model';
 
 export enum SettingHeader {
   connection = 'connection',
@@ -44,7 +45,19 @@ export const defaultPolling: Polling = {
   popup: { enabled: true, interval: 3000 },
 };
 
+export interface Notifications {
+  count: {
+    status?: TaskStatus[];
+    color?: string;
+  };
+}
+
+export const defaultNotifications: Notifications = {
+  count: {},
+};
+
 export const defaultSettings: SettingsSlice = {
+  notifications: defaultNotifications,
   connection: defaultConnection,
   polling: defaultPolling,
   tabs: defaultTabs,

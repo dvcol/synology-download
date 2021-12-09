@@ -13,7 +13,7 @@ export function createContextMenu(option: ContextMenuOption) {
     },
     () => {
       //TODO: notification menu created
-      console.info('Context menu created');
+      console.debug('Context menu created');
     }
   );
 
@@ -34,7 +34,7 @@ export function removeContextMenu(id: string) {
   console.log('deleteContextMenu', id);
   chrome.contextMenus.remove(id, () => {
     //TODO: notification menu removed
-    console.info('Context menu removed');
+    console.debug('Context menu removed');
   });
 }
 

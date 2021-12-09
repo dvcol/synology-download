@@ -1,6 +1,6 @@
 import { TaskTab } from './tab.model';
 import { ContextMenuOption } from './context-menu.model';
-import { Connection, Polling } from './settings.model';
+import { Connection, Notifications, Polling } from './settings.model';
 import { Task, TaskStatus } from './task.model';
 
 export interface StateSlice {
@@ -18,9 +18,11 @@ export interface NavbarSlice {
 export interface TasksSlice {
   entities: Task[];
   statuses: TaskStatus[];
+  count?: number;
 }
 
 export interface SettingsSlice {
+  notifications: Notifications;
   connection: Connection;
   polling: Polling;
   tabs: TaskTab[];

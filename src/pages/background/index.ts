@@ -5,7 +5,6 @@ import { createContextMenu, PollingService, QueryService, removeContextMenu } fr
 import { restoreSettings } from './modules/settings-handler';
 
 console.log('This is the background page.');
-console.log('Put the background scripts here.');
 
 // Wrap proxy store see https://github.com/tshaddix/webext-redux
 wrapStore(store);
@@ -22,17 +21,13 @@ restoreSettings();
 // Listen to ports
 chrome.runtime.onConnect.addListener((port) => {
   if (ModalInstance.popup.toString() === port.name) {
-    console.log('opening popup', port.name);
     store.dispatch(setPopup(true));
     port.onDisconnect.addListener(() => {
-      console.log('closing popup', port.name);
       store.dispatch(setPopup(false));
     });
   } else if (ModalInstance.option.toString() === port.name) {
     store.dispatch(setOption(true));
     port.onDisconnect.addListener(() => {
-      console.log('opening option', port.name);
-      console.log('closing option', port.name);
       store.dispatch(setOption(false));
     });
   }

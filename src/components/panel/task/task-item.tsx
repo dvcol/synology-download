@@ -12,10 +12,9 @@ import { QueryService } from '../../../services';
 export const TaskItem = ({ task, status }: { task: Task; status?: TaskStatus[] }) => {
   const [expanded, setExpanded] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [loading, setLoading]: [Record<string, boolean>, any] = useState({});
+  const [loading, setLoading] = useState<Record<string, boolean>>({});
 
-  const onClick = (button: string, request: Observable<any>, $event?: React.MouseEvent) => {
-    console.log('on clicked');
+  const onClick = <T,>(button: string, request: Observable<T>, $event?: React.MouseEvent): void => {
     $event?.stopPropagation();
     const timeout = setTimeout(() => setLoading({ ...loading, [button]: true }), 500);
     request

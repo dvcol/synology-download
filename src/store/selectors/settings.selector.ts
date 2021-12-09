@@ -27,3 +27,7 @@ export const getUsername = createSelector(getConnection, (connection) => connect
 export const getPassword = createSelector(getConnection, (connection) => connection?.password);
 
 export const getPolling = createSelector(getSettings, (setting) => setting?.polling);
+
+export const getNotifications = createSelector(getSettings, (setting) => setting?.notifications);
+
+export const getNotificationsCount = createSelector(getNotifications, (notifications) => notifications?.count);

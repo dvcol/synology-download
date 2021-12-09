@@ -10,7 +10,7 @@ export const syncReducer = (oldSettings: SettingsSlice, action: PayloadAction<Pa
   const newSettings = setReducer(oldSettings, action);
   chrome.storage.sync.set({ [settingsSlice.name]: JSON.stringify(newSettings) }, () => {
     //TODO: notification setting saved
-    console.info('Setting sync success', newSettings);
+    console.debug('Setting sync success', newSettings);
   });
   return newSettings;
 };
@@ -23,7 +23,7 @@ export const syncNestedReducer = <T>(oldSettings: SettingsSlice, action: Payload
   const newSettings = setNestedReducer(oldSettings, action, name);
   chrome.storage.sync.set({ settings: JSON.stringify(newSettings) }, () => {
     //TODO: notification setting saved
-    console.info('Setting sync success', newSettings);
+    console.debug('Setting sync success', newSettings);
   });
   return newSettings;
 };

@@ -1,6 +1,17 @@
 import { BaseHttpService } from './base-http-service';
 import { Observable, tap } from 'rxjs';
-import { API, CommonResponse, Endpoint, HttpParameters, HttpResponse, ListResponse, LoginResponse, SessionName, SynologyMethod, TaskListOption } from '../../models';
+import {
+  API,
+  CommonResponse,
+  Endpoint,
+  HttpParameters,
+  HttpResponse,
+  ListResponse,
+  LoginResponse,
+  SessionName,
+  SynologyMethod,
+  TaskListOption,
+} from '../../models';
 
 export class SynologyDownloadService extends BaseHttpService {
   private static prefix = 'webapi';
@@ -29,10 +40,7 @@ export class SynologyDownloadService extends BaseHttpService {
       passwd,
     };
     if (otp_code) params.otp_code = otp_code;
-    return this.get<HttpResponse<LoginResponse>>(Endpoint.Auth, params).pipe(
-      tap(console.log),
-      tap(({ data: { sid } }) => this.setSid(sid))
-    );
+    return this.get<HttpResponse<LoginResponse>>(Endpoint.Auth, params).pipe(tap(({ data: { sid } }) => this.setSid(sid)));
   }
 
   logout(): Observable<HttpResponse<void>> {
@@ -41,10 +49,7 @@ export class SynologyDownloadService extends BaseHttpService {
       version: '1',
       method: SynologyMethod.logout,
       session: SessionName.DownloadStation,
-    }).pipe(
-      tap(console.log),
-      tap(() => this.setSid())
-    );
+    }).pipe(tap(() => this.setSid()));
   }
 
   commonTaskGet<T>(params: HttpParameters): Observable<HttpResponse<T>> {
@@ -56,7 +61,11 @@ export class SynologyDownloadService extends BaseHttpService {
     });
   }
 
-  listTasks(additional: TaskListOption[] = [TaskListOption.detail, TaskListOption.file, TaskListOption.transfer], offset = 0, limit = -1): Observable<HttpResponse<ListResponse>> {
+  listTasks(
+    additional: TaskListOption[] = [TaskListOption.detail, TaskListOption.file, TaskListOption.transfer],
+    offset = 0,
+    limit = -1
+  ): Observable<HttpResponse<ListResponse>> {
     const params: HttpParameters = { method: SynologyMethod.list };
     if (additional?.length) params.additional = `${additional}`;
     if (offset) params.offset = `${offset}`;

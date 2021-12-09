@@ -18,15 +18,12 @@ import { CommonResponse, HttpResponse, ListResponse, LoginResponse } from '../..
 
 // TODO error handling
 export class QueryService {
-  private static store: any;
+  private static store: any | Store | ProxyStore;
   private static downloadClient = new SynologyDownloadService();
 
   static init(store: Store | ProxyStore) {
     this.store = store;
-    console.log('initialising with', store);
-    store$(store, getUrl)
-      .pipe(tap((url) => console.log('base url changed', url)))
-      .subscribe((url) => this.setBaseUrl(url));
+    store$(store, getUrl).subscribe((url) => this.setBaseUrl(url));
   }
 
   static setBaseUrl(baseUrl: string): void {
