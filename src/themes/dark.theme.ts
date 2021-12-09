@@ -57,6 +57,13 @@ export const darkTheme = () => {
           },
         },
       },
+      MuiCardHeader: {
+        styleOverrides: {
+          action: {
+            alignSelf: 'center',
+          },
+        },
+      },
     },
   };
   if (isDarkTheme()) {

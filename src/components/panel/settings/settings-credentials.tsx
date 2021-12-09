@@ -19,9 +19,9 @@ import { QueryService } from '../../../services';
 import { RegisterOptions, useForm } from 'react-hook-form';
 import { Connection, ConnectionHeader } from '../../../models';
 import { finalize, Observable } from 'rxjs';
-import { FormSwitch } from '../../form/form-switch';
 import { FormInput } from '../../form/form-input';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { FormCheckbox } from '../../form/form-checkbox';
 
 export const SettingsCredentials = () => {
   const dispatch = useDispatch();
@@ -92,7 +92,7 @@ export const SettingsCredentials = () => {
         title={title}
         titleTypographyProps={{ variant: 'h6', color: 'text.primary' }}
         subheader={'Two-factor authentication is not currently supported.'}
-        subheaderTypographyProps={{ variant: 'caption', color: 'text.secondary', gutterBottom: true }}
+        subheaderTypographyProps={{ color: 'text.secondary', gutterBottom: true }}
         sx={{ p: '1rem 1rem 0', textTransform: 'capitalize' }}
       />
       <CardContent>
@@ -169,7 +169,7 @@ export const SettingsCredentials = () => {
       </CardContent>
 
       <CardActions sx={{ justifyContent: 'space-between', padding: '0 1.5rem 1.5rem' }}>
-        <FormSwitch controllerProps={{ name: 'rememberMe', control }} formControlLabelProps={{ label: 'Remember me' }} />
+        <FormCheckbox controllerProps={{ name: 'rememberMe', control }} formControlLabelProps={{ label: 'Remember me' }} />
         <Box>
           <Stack direction="row" spacing={2}>
             <Button variant="outlined" color={getColor('test')} type="submit" disabled={!isValid} onClick={handleSubmit(testLogin)}>

@@ -27,7 +27,6 @@ export const SettingsPolling = () => {
     reset(data);
   };
 
-  // TODO fix UI
   const title = ConnectionHeader.polling;
   return (
     <Card raised={true}>
@@ -35,44 +34,73 @@ export const SettingsPolling = () => {
         id={title}
         title={title}
         titleTypographyProps={{ variant: 'h6', color: 'text.primary' }}
+        subheader={'Periodically polls the DiskStation to fetch tasks.'}
+        action={<FormSwitch controllerProps={{ name: 'enabled', control }} formControlLabelProps={{ label: '' }} />}
         sx={{ p: '1rem 1rem 0', textTransform: 'capitalize' }}
       />
       <CardContent>
         <Box component="form" sx={{ '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <FormSwitch controllerProps={{ name: 'enabled', control }} formControlLabelProps={{ label: 'Enable periodic polling' }} />
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <FormSwitch
-              controllerProps={{ name: 'popup.enabled', control }}
-              formControlLabelProps={{ label: 'Enable popup polling', disabled: !getValues()?.enabled }}
-            />
+          <CardHeader
+            title={'Popup'}
+            titleTypographyProps={{ variant: 'subtitle2' }}
+            subheader={'Enables or disables polling when the popup is open.'}
+            subheaderTypographyProps={{ variant: 'subtitle2' }}
+            action={
+              <FormSwitch
+                controllerProps={{ name: 'popup.enabled', control }}
+                formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
+              />
+            }
+            sx={{ p: '0.5rem 0' }}
+          />
+          <CardHeader
+            title={'Background'}
+            titleTypographyProps={{ variant: 'subtitle2' }}
+            subheader={
+              <Box>
+                <Box>Enables or disables polling when the popup is open.</Box>
+                <Box>Note that background polling is necessary for notification and icon count.</Box>
+              </Box>
+            }
+            subheaderTypographyProps={{ variant: 'subtitle2' }}
+            action={
+              <FormSwitch
+                controllerProps={{ name: 'background.enabled', control }}
+                formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
+              />
+            }
+            sx={{ p: '0.5rem 0' }}
+          />
+          <CardHeader
+            title={'Interval'}
+            titleTypographyProps={{ variant: 'subtitle2' }}
+            subheader={'Changes the polling interval for ask fetching.'}
+            subheaderTypographyProps={{ variant: 'subtitle2' }}
+            sx={{ p: '1rem 0' }}
+          />
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <FormInput
               controllerProps={{ name: 'popup.interval', control, rules: rules.interval }}
               textFieldProps={{
                 type: 'number',
-                label: 'Interval',
+                label: 'Popup interval',
                 InputProps: {
                   endAdornment: <InputAdornment position="end">ms</InputAdornment>,
                 },
                 disabled: !getValues()?.enabled || !getValues()?.popup?.enabled,
+                sx: { flex: '1 1 30ch' },
               }}
-            />
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <FormSwitch
-              controllerProps={{ name: 'background.enabled', control }}
-              formControlLabelProps={{ label: 'Enable background polling', disabled: !getValues()?.enabled }}
             />
             <FormInput
               controllerProps={{ name: 'background.interval', control, rules: rules.interval }}
               textFieldProps={{
                 type: 'number',
-                label: 'Interval',
+                label: 'Background interval',
                 InputProps: {
                   endAdornment: <InputAdornment position="end">ms</InputAdornment>,
                 },
                 disabled: !getValues()?.enabled || !getValues()?.background?.enabled,
+                sx: { flex: '1 1 30ch' },
               }}
             />
           </Box>
