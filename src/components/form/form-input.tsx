@@ -12,13 +12,17 @@ export const FormInput = <TFieldValues extends FieldValues = FieldValues, TName 
   textFieldProps?: TextFieldProps;
 }>) => {
   const render: ControllerProps['render'] = ({ field, fieldState: { invalid, error } }) => {
-    const _textFieldProps = {
+    const _textFieldProps: TextFieldProps = {
       id: `${controllerProps.name}-input`,
       error: invalid,
       helperText: error?.message,
 
       sx: { flex: '1 1 auto' },
       ...textFieldProps,
+      onChange: (e) => {
+        field.onChange(e);
+        if (textFieldProps?.onChange) textFieldProps.onChange(e);
+      },
     };
     return (
       <TextField {...field} {..._textFieldProps}>

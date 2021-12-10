@@ -1,8 +1,9 @@
 import React from 'react';
-import { Container } from '@mui/material';
+import { Collapse, Container } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { getFilteredTasks, getTabOrFirst } from '../../../store';
 import TaskItem from './task-item';
+import { TransitionGroup } from 'react-transition-group';
 
 export const TaskPanel = () => {
   const tab = useSelector(getTabOrFirst);
@@ -10,7 +11,14 @@ export const TaskPanel = () => {
 
   return (
     <Container disableGutters sx={{ overflow: 'auto', height: 'calc(100vh - 48px)', padding: '0.25rem' }} maxWidth={false}>
-      {tab && tasks?.map((task, i) => <TaskItem key={`${i}-${task.id}`} task={task} status={tab?.status} />)}
+      <TransitionGroup component={null}>
+        {tab &&
+          tasks?.map((task, i) => (
+            <Collapse key={`${i}-${task.id}`}>
+              <TaskItem task={task} status={tab?.status} />
+            </Collapse>
+          ))}
+      </TransitionGroup>
     </Container>
   );
 };

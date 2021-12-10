@@ -21,8 +21,8 @@ export const NavbarTab = ({ tab, ...props }: NavbarTabProps) => {
     <Tab
       {...props}
       label={
-        <StyledBadge sx={{ padding: '0 0.5rem' }} badgeContent={count} color={tab?.color || ColorLevel.info}>
-          {tab?.name}
+        <StyledBadge sx={{ padding: '0 0.5rem' }} badgeContent={count} color={tab?.color || ColorLevel.primary}>
+          {tab?.name ?? ''}
         </StyledBadge>
       }
       {...a11yProps(tab?.name)}

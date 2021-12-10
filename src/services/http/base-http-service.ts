@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { BaseHttpRequest, Body, HttpHeaders, HttpMethod, HttpParameters } from '../../models';
 
 /** Base Http request class implementation*/
@@ -26,10 +26,17 @@ export class BaseHttpService {
   }
 
   request<T>({ url, method, headers, params, body }: BaseHttpRequest): Observable<T> {
+    let _url: string;
+    try {
+      _url = this.buildUrl(url, params).toString();
+    } catch (error) {
+      console.debug('Failed to build urp for ', this.baseUrl, url, params);
+      return throwError(() => error);
+    }
     return new Observable<T>((observer) => {
       // Controller for abort-able fetch request
       const controller = new AbortController();
-      fetch(this.buildUrl(url, params).toString(), {
+      fetch(_url, {
         method,
         headers,
         body,
@@ -46,13 +53,13 @@ export class BaseHttpService {
     });
   }
 
-  get<T>(url: string = '', params?: HttpParameters, headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*' }): Observable<T> {
+  get<T>(url = '', params?: HttpParameters, headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*' }): Observable<T> {
     return this.request({ url, method: HttpMethod.GET, params, headers });
   }
 
   post<T>(
     body: Body,
-    url: string = '',
+    url = '',
     params?: HttpParameters,
     headers: HttpHeaders = {
       'Access-Control-Allow-Origin': '*',
@@ -70,7 +77,7 @@ export class BaseHttpService {
 
   put<T>(
     body: Body,
-    url: string = '',
+    url = '',
     params?: HttpParameters,
     headers: HttpHeaders = {
       'Access-Control-Allow-Origin': '*',
@@ -80,7 +87,7 @@ export class BaseHttpService {
     return this.request({ url, method: HttpMethod.PUT, params, headers, body });
   }
 
-  delete<T>(url: string = '', params?: HttpParameters, headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*' }): Observable<T> {
+  delete<T>(url = '', params?: HttpParameters, headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*' }): Observable<T> {
     return this.request({ url, method: HttpMethod.DELETE, params, headers });
   }
 }

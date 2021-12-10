@@ -13,15 +13,15 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useState } from 'react';
-import { getConnection, getLogged, setConnection, syncConnection, urlReducer } from '../../../store';
+import { getConnection, getLogged, setConnection, syncConnection, syncRememberMe, urlReducer } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
 import { QueryService } from '../../../services';
 import { RegisterOptions, useForm } from 'react-hook-form';
 import { Connection, ConnectionHeader } from '../../../models';
 import { finalize, Observable } from 'rxjs';
-import { FormInput } from '../../form/form-input';
+import { FormCheckbox, FormInput } from '../../form';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { FormCheckbox } from '../../form/form-checkbox';
+import { SwitchBaseProps } from '@mui/material/internal/SwitchBase';
 
 export const SettingsCredentials = () => {
   const dispatch = useDispatch();
@@ -48,11 +48,22 @@ export const SettingsCredentials = () => {
   const [loading, setLoading] = useState<boolean>();
   const [showPassword, setShowPassword] = useState<boolean>();
 
-  const syncOnSubscribe = (data: Connection, query: Observable<any>, type: keyof LoginError = 'login') => {
+  const setUrl = (data: Connection, type: keyof LoginError) => {
+    try {
+      QueryService.setBaseUrl(urlReducer(data));
+    } catch (error) {
+      console.debug('Failed to build url for ', data);
+      setLoginError({ ...loginError, [type]: true });
+    }
+  };
+
+  const syncOnSubscribe = (data: Connection, query: (u?: string, p?: string) => Observable<unknown>, type: keyof LoginError) => {
+    setUrl(data, type);
     reset(data);
     setLoginError({});
     const timeout = setTimeout(() => setLoading(true), 500);
     return query
+      .bind(QueryService)(data?.username, data?.password)
       .pipe(
         finalize(() => {
           clearTimeout(timeout);
@@ -71,17 +82,16 @@ export const SettingsCredentials = () => {
       });
   };
 
-  const testLogin = (data: Connection) => {
-    QueryService.setBaseUrl(urlReducer(data));
-    syncOnSubscribe(data, QueryService.loginTest(data?.username, data?.password), 'test');
+  const testLogin = (data: Connection) => syncOnSubscribe(data, QueryService.loginTest, 'test');
+
+  const loginLogout = (data: Connection) => syncOnSubscribe(data, logged ? QueryService.logout : QueryService.login, 'login');
+
+  const getColor = (type: keyof LoginError) => {
+    if (loginError[type] === undefined || isDirty) return 'info';
+    return loginError[type] ? 'error' : 'success';
   };
 
-  const loginLogout = (data: Connection) => {
-    QueryService.setBaseUrl(urlReducer(data));
-    syncOnSubscribe(data, logged ? QueryService.logout() : QueryService.login(data?.username, data?.password));
-  };
-
-  const getColor = (type: keyof LoginError) => (loginError[type] === undefined || isDirty ? 'info' : loginError[type] ? 'error' : 'success');
+  const onRememberMeChange: SwitchBaseProps['onChange'] = (_, rememberMe) => dispatch(syncRememberMe(rememberMe));
 
   const title = ConnectionHeader.credential;
   return (
@@ -169,7 +179,11 @@ export const SettingsCredentials = () => {
       </CardContent>
 
       <CardActions sx={{ justifyContent: 'space-between', padding: '0 1.5rem 1.5rem' }}>
-        <FormCheckbox controllerProps={{ name: 'rememberMe', control }} formControlLabelProps={{ label: 'Remember me' }} />
+        <FormCheckbox
+          controllerProps={{ name: 'rememberMe', control }}
+          checkboxProps={{ onChange: onRememberMeChange }}
+          formControlLabelProps={{ label: 'Remember me' }}
+        />
         <Box>
           <Stack direction="row" spacing={2}>
             <Button variant="outlined" color={getColor('test')} type="submit" disabled={!isValid} onClick={handleSubmit(testLogin)}>

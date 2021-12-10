@@ -37,6 +37,7 @@ export const defaultTabs: TaskTab[] = [
     id: uuid(),
     name: TabType.downloading,
     status: [TaskStatus.downloading],
+    color: ColorLevel.info,
   },
   {
     id: uuid(),
@@ -48,6 +49,7 @@ export const defaultTabs: TaskTab[] = [
     id: uuid(),
     name: TabType.active,
     status: [TaskStatus.downloading, TaskStatus.finishing, TaskStatus.hash_checking, TaskStatus.extracting, TaskStatus.seeding],
+    color: ColorLevel.secondary,
   },
   {
     id: uuid(),

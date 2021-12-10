@@ -33,16 +33,16 @@ export enum TaskType {
  * Enumeration for possible task status
  */
 export enum TaskStatus {
-  waiting = 'waiting',
   downloading = 'downloading',
   paused = 'paused',
+  error = 'error',
+  seeding = 'seeding',
+  waiting = 'waiting',
+  extracting = 'extracting',
   finishing = 'finishing',
   finished = 'finished',
   hash_checking = 'hash_checking',
-  seeding = 'seeding',
   filehosting_waiting = 'filehosting_waiting',
-  extracting = 'extracting',
-  error = 'error',
 }
 
 /**

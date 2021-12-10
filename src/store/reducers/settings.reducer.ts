@@ -1,6 +1,7 @@
 import { SettingsSlice } from '../../models';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { settingsSlice } from '../slices';
+import { parseJSON } from '../../utils';
 
 export const setReducer = (oldSettings: SettingsSlice, action: PayloadAction<Partial<SettingsSlice>>): SettingsSlice => ({
   ...oldSettings,
@@ -26,6 +27,20 @@ export const syncNestedReducer = <T>(oldSettings: SettingsSlice, action: Payload
     console.debug('Setting sync success', newSettings);
   });
   return newSettings;
+};
+
+export const syncRememberMeReducer = (oldSettings: SettingsSlice, { payload: rememberMe }: PayloadAction<boolean>): SettingsSlice => {
+  const setSettings = { ...oldSettings, connection: { ...oldSettings.connection, rememberMe } };
+  chrome.storage.sync.get(settingsSlice.name, ({ settings }) => {
+    const _settings = parseJSON<SettingsSlice>(settings);
+    const syncedSettings = { ..._settings, connection: { ..._settings?.connection, rememberMe } };
+    chrome.storage.sync.set({ settings: syncedSettings }, () => {
+      //TODO: notification setting saved
+      console.debug('Setting sync success', syncedSettings, setSettings);
+    });
+  });
+
+  return setSettings;
 };
 
 const syncPayload = <T>(oldSettings: SettingsSlice | any, key: string, filter: (array: T[]) => T[]): SettingsSlice => {

@@ -8,6 +8,7 @@ import { SettingsModal } from './settings-modals';
 import { SettingsNotifications } from './settings-notifications';
 import { SettingsPolling } from './settings-polling';
 import { SettingsHeader } from './settings-header';
+import { SettingsTasksCount } from './settings-tasks-count';
 
 export const Settings = () => {
   // Tab highlight
@@ -71,6 +72,7 @@ export const Settings = () => {
 
         <SettingsHeader label={SettingHeader.notification} onChange={handleActive} />
 
+        <SettingsTasksCount />
         <SettingsNotifications />
       </Container>
     </Container>

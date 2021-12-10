@@ -42,6 +42,15 @@ export const darkTheme = () => {
           },
         },
       },
+      MuiTabScrollButton: {
+        styleOverrides: {
+          root: {
+            '&.Mui-disabled': {
+              opacity: '0.1',
+            },
+          },
+        },
+      },
       MuiTabs: {
         styleOverrides: {
           flexContainer: {
@@ -61,6 +70,7 @@ export const darkTheme = () => {
         styleOverrides: {
           action: {
             alignSelf: 'center',
+            display: 'contents',
           },
         },
       },

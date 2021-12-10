@@ -1,8 +1,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ChromeMessage, ChromeMessageType, Connection, ContextMenuOption, defaultSettings, Polling, SettingsSlice, TaskTab } from '../../models';
+import {
+  ChromeMessage,
+  ChromeMessageType,
+  Connection,
+  ContextMenuOption,
+  defaultSettings,
+  Notifications,
+  Polling,
+  SettingsSlice,
+  TaskTab,
+} from '../../models';
 import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
 import { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
-import { addTo, removeFrom, setNestedReducer, setReducer, syncNestedReducer, syncReducer } from '../reducers';
+import { addTo, removeFrom, setNestedReducer, setReducer, syncNestedReducer, syncReducer, syncRememberMeReducer } from '../reducers';
 
 interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   setSettings: CaseReducer<S, PayloadAction<S>>;
@@ -10,7 +20,9 @@ interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   resetSettings: CaseReducer<S>;
   setConnection: CaseReducer<S, PayloadAction<Partial<Connection>>>;
   syncConnection: CaseReducer<S, PayloadAction<Partial<Connection>>>;
+  syncRememberMe: CaseReducer<S, PayloadAction<boolean>>;
   syncPolling: CaseReducer<S, PayloadAction<Partial<Polling>>>;
+  syncNotifications: CaseReducer<S, PayloadAction<Partial<Notifications>>>;
   addContextMenu: CaseReducer<S, PayloadAction<ContextMenuOption>>;
   removeContextMenu: CaseReducer<S, PayloadAction<string>>;
   addTaskTab: CaseReducer<S, PayloadAction<TaskTab>>;
@@ -27,7 +39,15 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
     resetSettings: (oldSettings) => syncReducer(oldSettings, { type: 'sync', payload: defaultSettings }),
     setConnection: (oldSettings, action) => setNestedReducer<Connection>(oldSettings, action, 'connection'),
     syncConnection: (oldSettings, action) => syncNestedReducer<Connection>(oldSettings, action, 'connection'),
+    syncRememberMe: (oldSettings, action) => syncRememberMeReducer(oldSettings, action),
     syncPolling: (oldSettings, action) => syncNestedReducer<Polling>(oldSettings, action, 'polling'),
+    syncNotifications: (oldSettings, action) => {
+      const color = action?.payload?.count?.color;
+      if (color !== oldSettings?.notifications?.count?.color) {
+        chrome.action.setBadgeBackgroundColor({ color: color ?? '' }).then(() => console.debug('Badge color changed to ', color));
+      }
+      return syncNestedReducer<Notifications>(oldSettings, action, 'notifications');
+    },
     addContextMenu: (oldSettings, action: PayloadAction<ContextMenuOption>): SettingsSlice => {
       chrome.runtime.sendMessage({
         type: ChromeMessageType.addMenu,
@@ -63,6 +83,8 @@ export const {
   setConnection,
   syncConnection,
   syncPolling,
+  syncNotifications,
+  syncRememberMe,
   resetSettings,
   addContextMenu,
   removeContextMenu,

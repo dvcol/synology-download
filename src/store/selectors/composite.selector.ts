@@ -16,8 +16,6 @@ export const getPollingEnabled = createSelector(
   (polling, open) => polling?.enabled && (open ? polling?.popup?.enabled : polling?.background?.enabled)
 );
 
-export const getTasksCount = createSelector(
-  getTasks,
-  getNotificationsCount,
-  (tasks, count) => tasks?.filter((t) => count?.status?.includes(t?.status)).length ?? 0
+export const getTasksCount = createSelector(getTasks, getNotificationsCount, (tasks, count) =>
+  count?.enabled ? tasks?.filter((t) => count?.status?.includes(t?.status)).length ?? 0 : undefined
 );

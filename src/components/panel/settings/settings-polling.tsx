@@ -22,9 +22,15 @@ export const SettingsPolling = () => {
   const rules: Record<string, RegisterOptions> = {
     interval: { min: 500, max: 86400 },
   };
+
   const onSubmit = (data: Polling) => {
     dispatch(syncPolling(data));
     reset(data);
+  };
+
+  const onSubmitColor = () => {
+    if (isDirty) return 'primary';
+    return isSubmitSuccessful ? 'success' : 'info';
   };
 
   const title = ConnectionHeader.polling;
@@ -110,7 +116,7 @@ export const SettingsPolling = () => {
         <Stack direction="row" spacing={2}>
           <Button
             variant="outlined"
-            color={isDirty ? 'primary' : isSubmitSuccessful ? 'success' : 'info'}
+            color={onSubmitColor()}
             sx={{ width: '5rem' }}
             type="submit"
             disabled={!isValid}
