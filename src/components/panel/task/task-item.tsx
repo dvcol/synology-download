@@ -9,7 +9,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import TaskDetail from './task-detail';
 import { QueryService } from '../../../services';
 
-export const TaskItem = ({ task, status }: { task: Task; status?: TaskStatus[] }) => {
+export const TaskItem = React.forwardRef<HTMLDivElement, { task: Task; status?: TaskStatus[] }>(({ task, status }, ref) => {
   const [expanded, setExpanded] = useState(false);
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState<Record<string, boolean>>({});
@@ -30,7 +30,7 @@ export const TaskItem = ({ task, status }: { task: Task; status?: TaskStatus[] }
   const isDisabled = () => Object.values(loading).some(Boolean);
 
   return (
-    <Accordion onChange={(_, state) => setExpanded(state)}>
+    <Accordion ref={ref} onChange={(_, state) => setExpanded(state)}>
       <AccordionSummary
         aria-controls="task-content"
         id="task-header"
@@ -76,6 +76,6 @@ export const TaskItem = ({ task, status }: { task: Task; status?: TaskStatus[] }
       </AccordionDetails>
     </Accordion>
   );
-};
+});
 
 export default TaskItem;

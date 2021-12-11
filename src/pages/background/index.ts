@@ -1,6 +1,6 @@
 import { wrapStore } from 'webext-redux';
 import { setOption, setPopup, store } from '../../store';
-import { ChromeMessageType, ModalInstance } from '../../models';
+import { ChromeMessage, ChromeMessageType, ContextMenuOption, CreateTaskPayload, ModalInstance } from '../../models';
 import { createContextMenu, PollingService, QueryService, removeContextMenu } from '../../services';
 import { restoreSettings } from './modules/settings-handler';
 
@@ -34,15 +34,16 @@ chrome.runtime.onConnect.addListener((port) => {
 });
 
 // On message from chrome handle payload
-chrome.runtime.onMessage.addListener((request: any) => {
-  if (request.type === ChromeMessageType.link) {
+chrome.runtime.onMessage.addListener((request: ChromeMessage) => {
+  if (request.type === ChromeMessageType.createTask) {
     console.log(request.payload);
-    QueryService.createTask(request.payload).subscribe();
+    const { uri, source } = request.payload as CreateTaskPayload;
+    QueryService.createTask(uri, source).subscribe();
   } else if (request.type === ChromeMessageType.addMenu) {
     console.log('message addMenu', request);
-    createContextMenu(request.payload);
+    createContextMenu(request.payload as ContextMenuOption);
   } else if (request.type === ChromeMessageType.removeMenu) {
     console.log('message removeMenu', request);
-    removeContextMenu(request.payload);
+    removeContextMenu(request.payload as string);
   }
 });

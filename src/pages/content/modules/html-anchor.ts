@@ -3,13 +3,7 @@ import { ChromeMessage, ChromeMessageType } from '../../../models';
 /**
  * List of supported protocols
  */
-const DOWNLOAD_ONLY_PROTOCOLS = [
-  'magnet',
-  'thunder',
-  'flashget',
-  'qqdl',
-  'ed2k',
-];
+const DOWNLOAD_ONLY_PROTOCOLS = ['magnet', 'thunder', 'flashget', 'qqdl', 'ed2k'];
 
 /**
  * Check if the url starts with the given protocol(s)
@@ -29,10 +23,7 @@ function startsWithAnyProtocol(url: string, protocols: string | string[]) {
  * @param e the element
  * @param depth the tree depth
  */
-function recursivelyFindAnchorAncestor(
-  e: HTMLElement | null,
-  depth: number = 10
-): HTMLAnchorElement | undefined {
+function recursivelyFindAnchorAncestor(e: HTMLElement | null, depth = 10): HTMLAnchorElement | undefined {
   if (e == null) {
     return undefined;
   } else if (e instanceof HTMLAnchorElement) {
@@ -51,15 +42,14 @@ export const addClickListener = () =>
     // Left clicks only
     if (e.button === 0) {
       const anchor = recursivelyFindAnchorAncestor(e.target as HTMLElement);
-      if (
-        anchor != null &&
-        anchor.href &&
-        startsWithAnyProtocol(anchor.href, DOWNLOAD_ONLY_PROTOCOLS)
-      ) {
+      if (anchor != null && anchor.href && startsWithAnyProtocol(anchor.href, DOWNLOAD_ONLY_PROTOCOLS)) {
         chrome.runtime.sendMessage(
           {
-            type: ChromeMessageType.link,
-            payload: anchor.href,
+            type: ChromeMessageType.createTask,
+            payload: {
+              uri: anchor.href,
+              source: document.URL,
+            },
           } as ChromeMessage,
           () => console.log('sent')
         );

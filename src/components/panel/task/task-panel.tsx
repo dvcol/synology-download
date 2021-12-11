@@ -10,11 +10,11 @@ export const TaskPanel = () => {
   const tasks = useSelector(getFilteredTasks);
 
   return (
-    <Container disableGutters sx={{ overflow: 'auto', height: 'calc(100vh - 48px)', padding: '0.25rem' }} maxWidth={false}>
+    <Container disableGutters maxWidth={false} sx={{ overflow: 'auto', height: 'calc(100vh - 48px)', padding: '0.25rem' }}>
       <TransitionGroup component={null}>
         {tab &&
-          tasks?.map((task, i) => (
-            <Collapse key={`${i}-${task.id}`}>
+          tasks?.map((task) => (
+            <Collapse key={task.id}>
               <TaskItem task={task} status={tab?.status} />
             </Collapse>
           ))}

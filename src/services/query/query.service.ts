@@ -14,7 +14,8 @@ import {
 import { Store } from 'redux';
 import { Store as ProxyStore } from 'webext-redux';
 import { EMPTY, Observable, tap } from 'rxjs';
-import { CommonResponse, HttpResponse, ListResponse, LoginResponse } from '../../models'; // TODO error handling
+import { CommonResponse, HttpResponse, ListResponse, LoginResponse } from '../../models';
+import { NotificationService } from '../notification'; // TODO error handling
 
 // TODO error handling
 export class QueryService {
@@ -97,13 +98,21 @@ export class QueryService {
     return ids?.length ? this.pauseTask(ids.join(',')) : EMPTY;
   }
 
-  static createTask(uri: string, destination?: string, username?: string, password?: string, unzip?: string): Observable<HttpResponse<void>> {
+  static createTask(
+    uri: string,
+    source?: string,
+    destination?: string,
+    username?: string,
+    password?: string,
+    unzip?: string
+  ): Observable<HttpResponse<void>> {
     this.readyCheck();
     return this.downloadClient.createTask(uri, destination, username, password, unzip).pipe(
       tap({
         complete: () => {
           // TODO notification
           console.info('task successfully created');
+          NotificationService.create(uri, source, destination);
           this.listTasks().subscribe();
         },
         error: (err) => console.error('task failed to create', err),
