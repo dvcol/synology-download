@@ -37,16 +37,19 @@ chrome.runtime.onConnect.addListener((port) => {
 });
 
 // On message from chrome handle payload
-chrome.runtime.onMessage.addListener((request: ChromeMessage) => {
-  if (request.type === ChromeMessageType.createTask) {
-    console.log(request.payload);
-    const { uri, source } = request.payload as CreateTaskPayload;
-    QueryService.createTask(uri, source).subscribe();
-  } else if (request.type === ChromeMessageType.addMenu) {
-    console.log('message addMenu', request);
-    createContextMenu(request.payload as ContextMenuOption);
-  } else if (request.type === ChromeMessageType.removeMenu) {
-    console.log('message removeMenu', request);
-    removeContextMenu(request.payload as string);
+chrome.runtime.onMessage.addListener(({ type, payload }: ChromeMessage) => {
+  switch (type) {
+    case ChromeMessageType.createTask:
+      payload = payload as CreateTaskPayload;
+      QueryService.createTask(payload.uri, payload.source).subscribe();
+      break;
+    case ChromeMessageType.addMenu:
+      console.debug('message addMenu', type, payload);
+      createContextMenu(payload as ContextMenuOption);
+      break;
+    case ChromeMessageType.removeMenu:
+      console.log('message removeMenu', type, payload);
+      removeContextMenu(payload as string);
+      break;
   }
 });

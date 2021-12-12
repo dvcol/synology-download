@@ -7,14 +7,15 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { darkTheme } from '../../themes';
 import { Navbar, Panel } from '../../components';
 import { proxyStore } from '../../store';
-import { QueryService } from '../../services';
+import { NotificationService, QueryService } from '../../services';
 import { ModalInstance } from '../../models';
 
 proxyStore
   .ready()
   .then(() => {
-    // Set store to query service
+    // Pass store to services and init
     QueryService.init(proxyStore);
+    NotificationService.init(proxyStore, true);
     // Register as open
     chrome.runtime.connect({ name: ModalInstance.popup });
   })

@@ -12,16 +12,16 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import React, {useState} from 'react';
-import {getConnection, getLogged, setConnection, syncConnection, syncRememberMe, urlReducer} from '../../../store';
-import {useDispatch, useSelector} from 'react-redux';
-import {QueryService} from '../../../services';
-import {RegisterOptions, useForm} from 'react-hook-form';
-import {Connection, ConnectionHeader} from '../../../models';
-import {finalize, Observable} from 'rxjs';
-import {FormCheckbox, FormInput} from '../../form';
-import {Visibility, VisibilityOff} from '@mui/icons-material';
-import {SwitchBaseProps} from '@mui/material/internal/SwitchBase';
+import React, { useState } from 'react';
+import { getConnection, getLogged, setConnection, syncConnection, syncRememberMe, urlReducer } from '../../../store';
+import { useDispatch, useSelector } from 'react-redux';
+import { NotificationService, QueryService } from '../../../services';
+import { RegisterOptions, useForm } from 'react-hook-form';
+import { Connection, ConnectionHeader } from '../../../models';
+import { finalize, Observable } from 'rxjs';
+import { FormCheckbox, FormInput } from '../../form';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { SwitchBaseProps } from '@mui/material/internal/SwitchBase';
 
 export const SettingsCredentials = () => {
   const dispatch = useDispatch();
@@ -52,8 +52,9 @@ export const SettingsCredentials = () => {
     try {
       QueryService.setBaseUrl(urlReducer(data));
     } catch (error) {
-      console.debug('Failed to build url for ', data);
       setLoginError({ ...loginError, [type]: true });
+      console.debug('Failed to set url', error);
+      NotificationService.debug('Failed to set url', JSON.stringify(error));
     }
   };
 
@@ -74,10 +75,12 @@ export const SettingsCredentials = () => {
         complete: () => {
           dispatch(data?.rememberMe ? syncConnection(data) : setConnection(data));
           setLoginError({ ...loginError, [type]: false });
+          NotificationService.info('Login successful', 'Logged successfully into Download Station', urlReducer(data));
         },
-        error: () => {
+        error: (error) => {
           setLoginError({ ...loginError, [type]: true });
           QueryService.setBaseUrl(urlReducer(connection));
+          NotificationService.error('Failed to login', JSON.stringify(error), urlReducer(data));
         },
       });
   };
@@ -186,7 +189,7 @@ export const SettingsCredentials = () => {
         />
         <Box>
           <Stack direction="row" spacing={2}>
-            <Button variant="outlined" color={getColor('test')}  disabled={!isValid} onClick={handleSubmit(testLogin)}>
+            <Button variant="outlined" color={getColor('test')} disabled={!isValid} onClick={handleSubmit(testLogin)}>
               Test Login
             </Button>
             <Button

@@ -81,8 +81,8 @@ export const defaultNotifications: Notifications = {
     level: NotificationLevel.info,
     scope: {
       background: true,
-      popup: false,
-      recap: false,
+      popup: true,
+      recap: true,
       finished: true,
       failed: true,
     },

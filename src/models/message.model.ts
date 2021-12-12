@@ -1,4 +1,5 @@
 import { ContextMenuOption } from './context-menu.model';
+import { ChromeNotification } from './notification.model';
 
 /**
  * Enumeration for message types
@@ -8,6 +9,7 @@ export enum ChromeMessageType {
   popup = 'popup',
   addMenu = 'addMenu',
   removeMenu = 'removeMenu',
+  notification = 'notification',
 }
 
 /**
@@ -21,7 +23,7 @@ export interface CreateTaskPayload {
 /**
  * Type union of possible message payloads
  */
-export type ChromeMessagePayload = string | ContextMenuOption | CreateTaskPayload;
+export type ChromeMessagePayload = string | ContextMenuOption | CreateTaskPayload | ChromeNotification;
 
 /**
  * Message interface for communication between content & background

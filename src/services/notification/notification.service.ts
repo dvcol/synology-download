@@ -4,10 +4,11 @@ import { Store } from 'redux';
 import { Store as ProxyStore } from 'webext-redux';
 import { getNotificationsBannerLevel, getNotificationsEnabled } from '../../store';
 import { bufferDebounceUnless, skipUntilRepeat } from '../../utils';
-import { ChromeNotification, NotificationLevel, NotificationLevelKeys } from '../../models';
+import { ChromeMessage, ChromeMessageType, ChromeNotification, NotificationLevel, NotificationLevelKeys } from '../../models';
 
 export class NotificationService {
   private static store: any | Store | ProxyStore;
+  private static isProxy: boolean;
 
   private static readonly stop$ = new Subject<void>();
   private static readonly start$ = new Subject<void>();
@@ -31,13 +32,20 @@ export class NotificationService {
         bufferDebounceUnless(400, 10),
         skipUntilRepeat(() => !this.enabled, this.stop$, this.start$),
         map((n) => this.handleNotification(n, title, message)),
-        tap((n) => n && chrome.notifications.create(n))
+        tap((n) => this.createOrForward(n))
       );
 
-  static init(store: Store | ProxyStore): void {
+  static init(store: Store | ProxyStore, isProxy = false): void {
     this.store = store;
+    this.isProxy = isProxy;
     this.notify$.pipe(this.bufferStopStart('Notification', '')).subscribe();
     this.error$.pipe(this.bufferStopStart('Errors', '')).subscribe();
+
+    if (!isProxy) {
+      chrome.runtime.onMessage.addListener(({ type, payload }: ChromeMessage) => {
+        if (type === ChromeMessageType.notification) this.createOrForward(payload as ChromeNotification);
+      });
+    }
   }
 
   private static handleNotification(
@@ -59,6 +67,17 @@ export class NotificationService {
       };
     }
     return undefined;
+  }
+
+  private static createOrForward(notification?: ChromeNotification) {
+    if (notification && this.isProxy) {
+      chrome.runtime.sendMessage({
+        type: ChromeMessageType.notification,
+        payload: notification,
+      } as ChromeMessage);
+    } else if (notification) {
+      chrome.notifications.create(notification);
+    }
   }
 
   private static notify(

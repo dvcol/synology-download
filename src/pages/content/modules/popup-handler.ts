@@ -22,7 +22,7 @@ export const open = () => {
   dialog.showModal();
 
   const iframe = document.getElementById('popupContainer') as HTMLIFrameElement;
-  iframe.src = chrome.runtime.getURL('popup.html');
+  iframe.src = chrome.runtime.getURL('options.html');
   iframe.style.minHeight = '60vh';
   iframe.style.minWidth = '60vh';
 
