@@ -1,9 +1,10 @@
-import { distinctUntilChanged, repeatWhen, skipWhile, Subject, switchMap, takeUntil, timer } from 'rxjs';
+import { distinctUntilChanged, Subject, switchMap, timer } from 'rxjs';
 import { Store } from 'redux';
 import { Store as ProxyStore } from 'webext-redux';
 import { getLogged, getPollingEnabled, getPollingInterval, getTasksCount, setTasksCount, store$ } from '../../store';
 import { defaultPolling } from '../../models';
 import { QueryService } from '../query';
+import { skipUntilRepeat } from '../../utils';
 
 export class PollingService {
   private static store: any | Store | ProxyStore;
@@ -14,14 +15,16 @@ export class PollingService {
 
   static readonly timer$ = this.change$.pipe(
     distinctUntilChanged(),
-    switchMap((interval) =>
-      timer(0, interval).pipe(
-        skipWhile(() => !this.enabled),
-        takeUntil(this.stop$),
-        repeatWhen(() => this.start$)
-      )
-    )
+    switchMap((interval) => timer(0, interval).pipe(skipUntilRepeat(() => !this.enabled, this.stop$, this.start$)))
   );
+
+  static get enabled(): boolean {
+    return QueryService.isReady && getLogged(this.store.getState()) && getPollingEnabled(this.store.getState());
+  }
+
+  static get interval(): number {
+    return getPollingInterval(this.store.getState()) ?? defaultPolling.background.interval;
+  }
 
   static init(store: Store | ProxyStore): void {
     this.store = store;
@@ -30,14 +33,6 @@ export class PollingService {
     store$(this.store, getPollingInterval).subscribe(() => this.change(this.interval));
     store$(this.store, getPollingEnabled).subscribe((enabled) => (enabled ? this.start() : this.stop()));
     store$(this.store, getTasksCount).subscribe((count) => this.store.dispatch(setTasksCount(count)));
-  }
-
-  static get enabled(): boolean {
-    return QueryService.isReady && getLogged(this.store.getState()) && getPollingEnabled(this.store.getState());
-  }
-
-  static get interval(): number {
-    return getPollingInterval(this.store.getState()) ?? defaultPolling.background.interval;
   }
 
   static start(): void {

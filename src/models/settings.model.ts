@@ -2,6 +2,7 @@ import { defaultTabs, TabType } from './tab.model';
 import { defaultMenu } from './context-menu.model';
 import { SettingsSlice } from './store.model';
 import { TaskStatus } from './task.model';
+import { NotificationLevel, NotificationScope } from './notification.model';
 
 export enum SettingHeader {
   connection = 'connection',
@@ -57,8 +58,15 @@ export interface NotificationsCount {
   color: string;
 }
 
+export interface NotificationsBanner {
+  enabled: boolean;
+  level: NotificationLevel;
+  scope: NotificationScope;
+}
+
 export interface Notifications {
   count: NotificationsCount;
+  banner: NotificationsBanner;
 }
 
 export const defaultNotifications: Notifications = {
@@ -67,6 +75,17 @@ export const defaultNotifications: Notifications = {
     template: TabType.all,
     status: Object.values(TaskStatus),
     color: '#4285f4',
+  },
+  banner: {
+    enabled: true,
+    level: NotificationLevel.info,
+    scope: {
+      background: true,
+      popup: false,
+      recap: false,
+      finished: true,
+      failed: true,
+    },
   },
 };
 

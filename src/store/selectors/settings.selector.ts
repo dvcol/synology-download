@@ -31,3 +31,7 @@ export const getPolling = createSelector(getSettings, (setting) => setting?.poll
 export const getNotifications = createSelector(getSettings, (setting) => setting?.notifications);
 
 export const getNotificationsCount = createSelector(getNotifications, (notifications) => notifications?.count);
+
+export const getNotificationsBanner = createSelector(getNotifications, (notifications) => notifications?.banner);
+
+export const getNotificationsBannerLevel = createSelector(getNotifications, (notifications) => notifications?.banner?.level);

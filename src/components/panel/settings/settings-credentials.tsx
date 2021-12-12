@@ -12,16 +12,16 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
-import { getConnection, getLogged, setConnection, syncConnection, syncRememberMe, urlReducer } from '../../../store';
-import { useDispatch, useSelector } from 'react-redux';
-import { QueryService } from '../../../services';
-import { RegisterOptions, useForm } from 'react-hook-form';
-import { Connection, ConnectionHeader } from '../../../models';
-import { finalize, Observable } from 'rxjs';
-import { FormCheckbox, FormInput } from '../../form';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { SwitchBaseProps } from '@mui/material/internal/SwitchBase';
+import React, {useState} from 'react';
+import {getConnection, getLogged, setConnection, syncConnection, syncRememberMe, urlReducer} from '../../../store';
+import {useDispatch, useSelector} from 'react-redux';
+import {QueryService} from '../../../services';
+import {RegisterOptions, useForm} from 'react-hook-form';
+import {Connection, ConnectionHeader} from '../../../models';
+import {finalize, Observable} from 'rxjs';
+import {FormCheckbox, FormInput} from '../../form';
+import {Visibility, VisibilityOff} from '@mui/icons-material';
+import {SwitchBaseProps} from '@mui/material/internal/SwitchBase';
 
 export const SettingsCredentials = () => {
   const dispatch = useDispatch();
@@ -106,7 +106,7 @@ export const SettingsCredentials = () => {
         sx={{ p: '1rem 1rem 0', textTransform: 'capitalize' }}
       />
       <CardContent>
-        <Box component="form" sx={{ '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">
+        <Box component="form" sx={{ '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off" onSubmit={handleSubmit(loginLogout)}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <FormInput
               controllerProps={{ name: 'protocol', control, rules: rules.protocol }}
@@ -186,7 +186,7 @@ export const SettingsCredentials = () => {
         />
         <Box>
           <Stack direction="row" spacing={2}>
-            <Button variant="outlined" color={getColor('test')} type="submit" disabled={!isValid} onClick={handleSubmit(testLogin)}>
+            <Button variant="outlined" color={getColor('test')}  disabled={!isValid} onClick={handleSubmit(testLogin)}>
               Test Login
             </Button>
             <Button

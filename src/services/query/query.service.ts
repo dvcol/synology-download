@@ -15,7 +15,7 @@ import { Store } from 'redux';
 import { Store as ProxyStore } from 'webext-redux';
 import { EMPTY, Observable, tap } from 'rxjs';
 import { CommonResponse, HttpResponse, ListResponse, LoginResponse } from '../../models';
-import { NotificationService } from '../notification'; // TODO error handling
+import { NotificationService } from '../notification';
 
 // TODO error handling
 export class QueryService {
@@ -51,14 +51,11 @@ export class QueryService {
   static login(username?: string, password?: string): Observable<HttpResponse<LoginResponse>> {
     return this.loginTest(username, password).pipe(
       tap({
-        complete: () => {
-          this.store.dispatch(setLogged(true));
-          // TODO: Notification connection success
-          console.info('logged in success');
-        },
-        error: () => {
+        complete: () => this.store.dispatch(setLogged(true)),
+        error: (error) => {
           this.store.dispatch(setLogged(false));
-          console.error('Login failed');
+          console.error('Login failed', error);
+          NotificationService.error(error, 'Failed to login');
         },
       })
     );
@@ -66,13 +63,7 @@ export class QueryService {
 
   static logout(): Observable<HttpResponse<void>> {
     this.readyCheck();
-    return this.downloadClient.logout().pipe(
-      tap(() => {
-        this.store.dispatch(setLogged(false));
-        // TODO: Notification logout success
-        console.info('Polling setting change success');
-      })
-    );
+    return this.downloadClient.logout().pipe(tap(() => this.store.dispatch(setLogged(false))));
   }
 
   static listTasks(): Observable<HttpResponse<ListResponse>> {
@@ -110,12 +101,13 @@ export class QueryService {
     return this.downloadClient.createTask(uri, destination, username, password, unzip).pipe(
       tap({
         complete: () => {
-          // TODO notification
-          console.info('task successfully created');
-          NotificationService.create(uri, source, destination);
           this.listTasks().subscribe();
+          NotificationService.create(uri, source, destination);
         },
-        error: (err) => console.error('task failed to create', err),
+        error: (err) => {
+          console.error('task failed to create', err);
+          NotificationService.error(err, 'Failed to add download task', source);
+        },
       })
     );
   }

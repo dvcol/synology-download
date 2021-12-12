@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { getTab } from './navbar.selector';
-import { getNotificationsCount, getPolling, getTabs } from './settings.selector';
+import { getNotificationsBanner, getNotificationsCount, getPolling, getTabs } from './settings.selector';
 import { isModalOpen } from './state.selector';
 import { getTasks } from './tasks.selector';
 
@@ -13,9 +13,15 @@ export const getPollingInterval = createSelector(isModalOpen, getPolling, (open,
 export const getPollingEnabled = createSelector(
   getPolling,
   isModalOpen,
-  (polling, open) => polling?.enabled && (open ? polling?.popup?.enabled : polling?.background?.enabled)
+  ({ enabled, popup, background }, open) => enabled && (open ? popup?.enabled : background?.enabled)
 );
 
-export const getTasksCount = createSelector(getTasks, getNotificationsCount, (tasks, count) =>
-  count?.enabled ? tasks?.filter((t) => count?.status?.includes(t?.status)).length ?? 0 : undefined
+export const getTasksCount = createSelector(getTasks, getNotificationsCount, (tasks, { enabled, status }) =>
+  enabled ? tasks?.filter((t) => status?.includes(t?.status)).length ?? 0 : undefined
+);
+
+export const getNotificationsEnabled = createSelector(
+  getNotificationsBanner,
+  isModalOpen,
+  ({ enabled, scope }, open) => enabled && (open ? scope?.popup : scope?.background)
 );

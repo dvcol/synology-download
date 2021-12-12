@@ -1,7 +1,7 @@
 import { wrapStore } from 'webext-redux';
 import { setOption, setPopup, store } from '../../store';
 import { ChromeMessage, ChromeMessageType, ContextMenuOption, CreateTaskPayload, ModalInstance } from '../../models';
-import { createContextMenu, PollingService, QueryService, removeContextMenu } from '../../services';
+import { createContextMenu, NotificationService, PollingService, QueryService, removeContextMenu } from '../../services';
 import { restoreSettings } from './modules/settings-handler';
 
 console.log('This is the background page.');
@@ -14,6 +14,9 @@ QueryService.init(store);
 
 // Init polling
 PollingService.init(store);
+
+// Init notifications
+NotificationService.init(store);
 
 // Restore settings & polling
 restoreSettings();

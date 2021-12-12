@@ -1,46 +1,110 @@
 import { parse, ParsedQuery } from 'query-string';
+import { filter, map, Observable, Subject, tap } from 'rxjs';
+import { Store } from 'redux';
+import { Store as ProxyStore } from 'webext-redux';
+import { getNotificationsBannerLevel, getNotificationsEnabled } from '../../store';
+import { bufferDebounceUnless, skipUntilRepeat } from '../../utils';
+import { ChromeNotification, NotificationLevel, NotificationLevelKeys } from '../../models';
 
 export class NotificationService {
-  static error(): void {
-    chrome.notifications.create({
-      priority: 1,
+  private static store: any | Store | ProxyStore;
+
+  private static readonly stop$ = new Subject<void>();
+  private static readonly start$ = new Subject<void>();
+
+  private static readonly notify$ = new Subject<ChromeNotification>();
+  private static readonly error$ = new Subject<ChromeNotification>();
+
+  static get enabled(): boolean {
+    return getNotificationsEnabled(this.store.getState());
+  }
+
+  static get level(): NotificationLevel {
+    return getNotificationsBannerLevel(this.store.getState());
+  }
+
+  private static bufferStopStart =
+    (title: string, message: string) =>
+    (source$: Observable<ChromeNotification>): Observable<ChromeNotification | undefined> =>
+      source$.pipe(
+        filter(({ priority }) => Number(priority) + 2 >= this.level), // because Chrome scale is -2 to 2
+        bufferDebounceUnless(400, 10),
+        skipUntilRepeat(() => !this.enabled, this.stop$, this.start$),
+        map((n) => this.handleNotification(n, title, message)),
+        tap((n) => n && chrome.notifications.create(n))
+      );
+
+  static init(store: Store | ProxyStore): void {
+    this.store = store;
+    this.notify$.pipe(this.bufferStopStart('Notification', '')).subscribe();
+    this.error$.pipe(this.bufferStopStart('Errors', '')).subscribe();
+  }
+
+  private static handleNotification(
+    array: ChromeNotification[],
+    title: string,
+    message: string,
+    contextMessage?: string
+  ): ChromeNotification | undefined {
+    if (array?.length === 1) {
+      return array[0];
+    } else if (array?.length) {
+      return {
+        type: 'list',
+        title,
+        message,
+        contextMessage,
+        iconUrl: 'assets/icons/icon-64.png',
+        items: array.map(({ message: mMessage }, i) => ({ title: `${i}`, message: mMessage?.slice(0, 30) + '...' ?? '' })),
+      };
+    }
+    return undefined;
+  }
+
+  private static notify(
+    level: NotificationLevel,
+    title: string,
+    message: string,
+    contextMessage?: string,
+    iconUrl = 'assets/icons/icon-64.png'
+  ): void {
+    (level > NotificationLevel.info ? this.error$ : this.notify$).next({
+      priority: level - 2, // because Chrome scale is -2 to 2
       type: 'basic',
-      title: 'Primary Title',
-      message: 'Primary message to display',
-      contextMessage: 'Secondary message to display',
-      iconUrl: 'assets/icons/icon-64.png',
-      buttons: [{ title: 'Button 1' }, { title: 'Button 2' }],
+      title: `[${NotificationLevelKeys[level]}] : ${title}`,
+      message,
+      contextMessage,
+      iconUrl,
     });
+  }
+
+  static trace(title: string, message: string, contextMessage?: string, iconUrl?: string) {
+    this.notify(NotificationLevel.trace, title, message, contextMessage, iconUrl);
+  }
+
+  static debug(title: string, message: string, contextMessage?: string, iconUrl?: string) {
+    this.notify(NotificationLevel.debug, title, message, contextMessage, iconUrl);
+  }
+
+  static info(title: string, message: string, contextMessage?: string, iconUrl?: string) {
+    this.notify(NotificationLevel.info, title, message, contextMessage, iconUrl);
+  }
+
+  static warn(title: string, message: string, contextMessage?: string, iconUrl?: string) {
+    this.notify(NotificationLevel.warn, title, message, contextMessage, iconUrl);
+  }
+
+  static error(title: string, message: string, contextMessage?: string, iconUrl?: string) {
+    this.notify(NotificationLevel.error, title, message, contextMessage, iconUrl);
   }
 
   static create(uri: string, source?: string, destination?: string): void {
-    // TODO temporary downloading task replaced by with name
     const parsed: ParsedQuery = parse(uri);
-    console.log('parsed', parsed);
     const message = typeof parsed?.dn === 'string' ? parsed?.dn : parsed?.dn?.shift() ?? uri;
-    chrome.notifications.create({
-      type: 'basic',
-      title: 'Adding download task' + (destination ? ` to '${destination}'` : ''),
-      message,
-      contextMessage: source,
-      iconUrl: 'assets/icons/icon-64.png',
-      buttons: [{ title: 'Edit' }, { title: 'Cancel' }],
-    });
-  }
 
-  static createList() {
-    chrome.notifications.create({
-      type: 'list',
-      title: 'Primary Title',
-      message: 'Primary message to display',
-      contextMessage: 'Secondary message to display',
-      iconUrl: 'assets/icons/icon-64.png',
-      items: [
-        { title: 'Item1', message: 'This is item 1.' },
-        { title: 'Item2', message: 'This is item 2.' },
-        { title: 'Item3', message: 'This is item 3.' },
-      ],
-      buttons: [{ title: 'Button 1' }, { title: 'Button 2' }],
-    });
+    // TODO Handle more than just magnet URL
+    console.debug('parsed', parsed);
+
+    this.info('Adding download task' + (destination ? ` to '${destination}'` : ''), message, source);
   }
 }

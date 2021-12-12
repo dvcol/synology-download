@@ -11,10 +11,7 @@ export function createContextMenu(option: ContextMenuOption) {
       ...option,
       enabled: true,
     },
-    () => {
-      //TODO: notification menu created
-      console.debug('Context menu created');
-    }
+    () => console.debug('Context menu created')
   );
 
   chrome.contextMenus.onClicked.addListener(function (info, tab) {
@@ -32,10 +29,7 @@ export function createContextMenu(option: ContextMenuOption) {
  */
 export function removeContextMenu(id: string) {
   console.log('deleteContextMenu', id);
-  chrome.contextMenus.remove(id, () => {
-    //TODO: notification menu removed
-    console.debug('Context menu removed');
-  });
+  chrome.contextMenus.remove(id, () => console.debug('Context menu removed'));
 }
 
 /**
