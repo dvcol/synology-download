@@ -14,7 +14,6 @@ export const Settings = () => {
   // Tab highlight
   const [tab, setTab] = React.useState<string>(SettingHeader.connection);
   const handleChange = (event: React.SyntheticEvent, newValue: SettingHeader) => setTab(newValue);
-  const handleActive = (label: string, inView: boolean) => inView && setTab(label);
 
   const tabs = [
     { label: SettingHeader.connection, links: [ConnectionHeader.credential, ConnectionHeader.polling] },
@@ -59,18 +58,18 @@ export const Settings = () => {
         </Tabs>
       </Paper>
       <Container sx={{ p: '0 1.5rem', overflow: 'auto', '& .MuiCard-root': { mb: '1rem' } }}>
-        <SettingsHeader label={SettingHeader.connection} onChange={handleActive} />
+        <SettingsHeader label={SettingHeader.connection} />
 
         <SettingsCredentials />
         <SettingsPolling />
 
-        <SettingsHeader label={SettingHeader.interface} onChange={handleActive} />
+        <SettingsHeader label={SettingHeader.interface} />
 
         <SettingsTabs />
         <SettingsModal />
         <SettingsContext />
 
-        <SettingsHeader label={SettingHeader.notification} onChange={handleActive} />
+        <SettingsHeader label={SettingHeader.notification} />
 
         <SettingsTasksCount />
         <SettingsBanner />
