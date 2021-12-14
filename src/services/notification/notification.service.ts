@@ -2,7 +2,7 @@ import { parse, ParsedQuery } from 'query-string';
 import { filter, map, Observable, Subject, tap } from 'rxjs';
 import { Store } from 'redux';
 import { Store as ProxyStore } from 'webext-redux';
-import { getNotificationsBannerLevel, getNotificationsEnabled } from '../../store';
+import { getNotificationsBannerLevel, getNotificationsEnabled, getTasksCount, setTasksCount, store$ } from '../../store';
 import { bufferDebounceUnless, skipUntilRepeat } from '../../utils';
 import { ChromeMessage, ChromeMessageType, ChromeNotification, NotificationLevel, NotificationLevelKeys } from '../../models';
 
@@ -32,7 +32,7 @@ export class NotificationService {
         bufferDebounceUnless(400, 10),
         skipUntilRepeat(() => !this.enabled, this.stop$, this.start$),
         map((n) => this.handleNotification(n, title, message)),
-        tap((n) => this.createOrForward(n))
+        tap((n) => n && chrome.notifications.create(n))
       );
 
   static init(store: Store | ProxyStore, isProxy = false): void {
@@ -41,9 +41,11 @@ export class NotificationService {
     this.notify$.pipe(this.bufferStopStart('Notification', '')).subscribe();
     this.error$.pipe(this.bufferStopStart('Errors', '')).subscribe();
 
+    store$(this.store, getTasksCount).subscribe((count) => this.store.dispatch(setTasksCount(count)));
+
     if (!isProxy) {
       chrome.runtime.onMessage.addListener(({ type, payload }: ChromeMessage) => {
-        if (type === ChromeMessageType.notification) this.createOrForward(payload as ChromeNotification);
+        if (type === ChromeMessageType.notification) this.sendOrForward(payload as ChromeNotification);
       });
     }
   }
@@ -69,52 +71,59 @@ export class NotificationService {
     return undefined;
   }
 
-  private static createOrForward(notification?: ChromeNotification) {
+  private static sendOrForward(notification?: ChromeNotification) {
     if (notification && this.isProxy) {
       chrome.runtime.sendMessage({
         type: ChromeMessageType.notification,
         payload: notification,
       } as ChromeMessage);
     } else if (notification) {
-      chrome.notifications.create(notification);
+      (notification.priority ?? 0 > NotificationLevel.info + 2 // because Chrome scale is -2 to 2
+        ? this.error$
+        : this.notify$
+      ).next(notification);
     }
   }
 
-  private static notify(
-    level: NotificationLevel,
-    title: string,
-    message: string,
-    contextMessage?: string,
-    iconUrl = 'assets/icons/icon-64.png'
-  ): void {
-    (level > NotificationLevel.info ? this.error$ : this.notify$).next({
+  private static build(level: NotificationLevel, title: string, message: string, contextMessage?: string, iconUrl = 'assets/icons/icon-64.png') {
+    return {
       priority: level - 2, // because Chrome scale is -2 to 2
       type: 'basic',
       title: `[${NotificationLevelKeys[level]}] : ${title}`,
       message,
       contextMessage,
       iconUrl,
-    });
+    };
+  }
+
+  private static buildAndSend(
+    level: NotificationLevel,
+    title: string,
+    message: string,
+    contextMessage?: string,
+    iconUrl = 'assets/icons/icon-64.png'
+  ): void {
+    this.sendOrForward(this.build(level, title, message, contextMessage, iconUrl));
   }
 
   static trace(title: string, message: string, contextMessage?: string, iconUrl?: string) {
-    this.notify(NotificationLevel.trace, title, message, contextMessage, iconUrl);
+    this.buildAndSend(NotificationLevel.trace, title, message, contextMessage, iconUrl);
   }
 
   static debug(title: string, message: string, contextMessage?: string, iconUrl?: string) {
-    this.notify(NotificationLevel.debug, title, message, contextMessage, iconUrl);
+    this.buildAndSend(NotificationLevel.debug, title, message, contextMessage, iconUrl);
   }
 
   static info(title: string, message: string, contextMessage?: string, iconUrl?: string) {
-    this.notify(NotificationLevel.info, title, message, contextMessage, iconUrl);
+    this.buildAndSend(NotificationLevel.info, title, message, contextMessage, iconUrl);
   }
 
   static warn(title: string, message: string, contextMessage?: string, iconUrl?: string) {
-    this.notify(NotificationLevel.warn, title, message, contextMessage, iconUrl);
+    this.buildAndSend(NotificationLevel.warn, title, message, contextMessage, iconUrl);
   }
 
   static error(title: string, message: string, contextMessage?: string, iconUrl?: string) {
-    this.notify(NotificationLevel.error, title, message, contextMessage, iconUrl);
+    this.buildAndSend(NotificationLevel.error, title, message, contextMessage, iconUrl);
   }
 
   static create(uri: string, source?: string, destination?: string): void {

@@ -1,7 +1,7 @@
-import { distinctUntilChanged, Subject, switchMap, timer } from 'rxjs';
+import { combineLatest, distinctUntilChanged, Subject, switchMap, timer } from 'rxjs';
 import { Store } from 'redux';
 import { Store as ProxyStore } from 'webext-redux';
-import { getLogged, getPollingEnabled, getPollingInterval, getTasksCount, setTasksCount, store$ } from '../../store';
+import { getLogged, getPollingEnabled, getPollingInterval, store$ } from '../../store';
 import { defaultPolling } from '../../models';
 import { QueryService } from '../query';
 import { skipUntilRepeat } from '../../utils';
@@ -15,14 +15,14 @@ export class PollingService {
 
   static readonly timer$ = this.change$.pipe(
     distinctUntilChanged(),
-    switchMap((interval) => timer(0, interval).pipe(skipUntilRepeat(() => !this.enabled, this.stop$, this.start$)))
+    switchMap((interval) => timer(0, interval).pipe(skipUntilRepeat(() => !this.isReady(), this.stop$, this.start$)))
   );
 
-  static get enabled(): boolean {
+  private static isReady(): boolean {
     return QueryService.isReady && getLogged(this.store.getState()) && getPollingEnabled(this.store.getState());
   }
 
-  static get interval(): number {
+  private static interval(): number {
     return getPollingInterval(this.store.getState()) ?? defaultPolling.background.interval;
   }
 
@@ -30,9 +30,10 @@ export class PollingService {
     this.store = store;
     this.timer$.subscribe(() => QueryService.listTasks().subscribe());
 
-    store$(this.store, getPollingInterval).subscribe(() => this.change(this.interval));
-    store$(this.store, getPollingEnabled).subscribe((enabled) => (enabled ? this.start() : this.stop()));
-    store$(this.store, getTasksCount).subscribe((count) => this.store.dispatch(setTasksCount(count)));
+    store$(this.store, getPollingInterval).subscribe(() => this.change(this.interval()));
+    combineLatest([store$(this.store, getPollingEnabled), store$(this.store, getLogged)]).subscribe(([enabled, logged]) =>
+      enabled && logged ? this.start() : this.stop()
+    );
   }
 
   static start(): void {

@@ -8,7 +8,7 @@ type NavbarTabProps = { tab: TaskTab; [key: string]: any };
 
 export const NavbarTab = ({ tab, ...props }: NavbarTabProps) => {
   const countByStatus = useSelector(getTabCountByStatus);
-  const count = tab?.status?.reduce((acc, status) => acc + countByStatus[status], 0) ?? countByStatus?.total;
+  const count = tab?.status?.reduce((acc, status) => acc + (countByStatus[status] ?? 0), 0) ?? countByStatus?.total;
 
   const a11yProps = (name: TabType | string) => ({
     id: `simple-tab-${name}`,

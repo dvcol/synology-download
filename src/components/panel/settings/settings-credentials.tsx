@@ -73,9 +73,17 @@ export const SettingsCredentials = () => {
       )
       .subscribe({
         complete: () => {
-          dispatch(data?.rememberMe ? syncConnection(data) : setConnection(data));
+          if (type === 'login') {
+            dispatch(data?.rememberMe ? syncConnection(data) : setConnection(data));
+          } else {
+            QueryService.setBaseUrl(urlReducer(connection));
+          }
           setLoginError({ ...loginError, [type]: false });
-          NotificationService.info('Login successful', 'Logged successfully into Download Station', urlReducer(data));
+          NotificationService.info(
+            `Login ${type === 'test' ? 'test' : ''} successful`,
+            'Logged successfully into Download Station',
+            urlReducer(data)
+          );
         },
         error: (error) => {
           setLoginError({ ...loginError, [type]: true });
