@@ -11,7 +11,7 @@ export enum SettingHeader {
 }
 
 export enum NotificationHeader {
-  push = 'push notification',
+  banner = 'banners',
   count = 'tasks count',
 }
 
@@ -82,7 +82,6 @@ export const defaultNotifications: Notifications = {
     scope: {
       background: true,
       popup: true,
-      recap: true,
       finished: true,
       failed: true,
     },

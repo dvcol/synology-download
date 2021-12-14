@@ -3,7 +3,7 @@ export * from './settings-context';
 export * from './settings-credentials';
 export * from './settings-header';
 export * from './settings-modals';
-export * from './settings-notifications';
+export * from './settings-banner';
 export * from './settings-polling';
 export * from './settings-tabs';
 export * from './settings-tasks-count';

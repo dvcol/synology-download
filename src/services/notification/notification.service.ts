@@ -28,7 +28,7 @@ export class NotificationService {
     (title: string, message: string) =>
     (source$: Observable<ChromeNotification>): Observable<ChromeNotification | undefined> =>
       source$.pipe(
-        filter(({ priority }) => Number(priority) + 2 >= this.level), // because Chrome scale is -2 to 2
+        filter(({ priority }) => Number(priority) >= this.level),
         bufferDebounceUnless(400, 10),
         skipUntilRepeat(() => !this.enabled, this.stop$, this.start$),
         map((n) => this.handleNotification(n, title, message)),
@@ -78,18 +78,15 @@ export class NotificationService {
         payload: notification,
       } as ChromeMessage);
     } else if (notification) {
-      (notification.priority ?? 0 > NotificationLevel.info + 2 // because Chrome scale is -2 to 2
-        ? this.error$
-        : this.notify$
-      ).next(notification);
+      (notification.priority ?? 0 > NotificationLevel.info ? this.error$ : this.notify$).next(notification);
     }
   }
 
-  private static build(level: NotificationLevel, title: string, message: string, contextMessage?: string, iconUrl = 'assets/icons/icon-64.png') {
+  private static build(priority: NotificationLevel, title: string, message: string, contextMessage?: string, iconUrl = 'assets/icons/icon-64.png') {
     return {
-      priority: level - 2, // because Chrome scale is -2 to 2
+      priority,
       type: 'basic',
-      title: `[${NotificationLevelKeys[level]}] : ${title}`,
+      title: `[${NotificationLevelKeys[priority]}] : ${title}`,
       message,
       contextMessage,
       iconUrl,

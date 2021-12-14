@@ -1,11 +1,11 @@
 import NotificationOptions = chrome.notifications.NotificationOptions;
 
 export enum NotificationLevel {
-  trace,
-  debug,
-  info,
-  warn,
-  error,
+  trace = -2,
+  debug = -1,
+  info = 0,
+  warn = 1,
+  error = 2,
 }
 
 export const NotificationLevelKeys = {
@@ -19,7 +19,6 @@ export const NotificationLevelKeys = {
 export interface NotificationScope {
   background: boolean;
   popup: boolean;
-  recap: boolean;
   finished: boolean;
   failed: boolean;
 }

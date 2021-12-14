@@ -1,11 +1,11 @@
 import React from 'react';
 import { Container, Paper, Tab, Tabs } from '@mui/material';
-import { ConnectionHeader, InterfaceHeader, SettingHeader } from '../../../models';
+import { ConnectionHeader, InterfaceHeader, NotificationHeader, SettingHeader } from '../../../models';
 import { SettingsCredentials } from './settings-credentials';
 import { SettingsTabs } from './settings-tabs';
 import { SettingsContext } from './settings-context';
 import { SettingsModal } from './settings-modals';
-import { SettingsNotifications } from './settings-notifications';
+import { SettingsBanner } from './settings-banner';
 import { SettingsPolling } from './settings-polling';
 import { SettingsHeader } from './settings-header';
 import { SettingsTasksCount } from './settings-tasks-count';
@@ -19,7 +19,7 @@ export const Settings = () => {
   const tabs = [
     { label: SettingHeader.connection, links: [ConnectionHeader.credential, ConnectionHeader.polling] },
     { label: SettingHeader.interface, links: [InterfaceHeader.tabs, InterfaceHeader.modals, InterfaceHeader.context] },
-    { label: SettingHeader.notification },
+    { label: SettingHeader.notification, links: [NotificationHeader.count, NotificationHeader.banner] },
   ];
 
   return (
@@ -73,7 +73,7 @@ export const Settings = () => {
         <SettingsHeader label={SettingHeader.notification} onChange={handleActive} />
 
         <SettingsTasksCount />
-        <SettingsNotifications />
+        <SettingsBanner />
       </Container>
     </Container>
   );

@@ -38,7 +38,6 @@ export const SettingsTasksCount = () => {
   } = useForm<NotificationsCount>({ mode: 'onChange', defaultValues: notifications?.count });
 
   const onSubmit = (count: NotificationsCount) => {
-    console.log('count submit', count);
     dispatch(syncNotifications({ ...notifications, count }));
     reset(count);
   };
