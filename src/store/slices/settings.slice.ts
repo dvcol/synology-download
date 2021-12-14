@@ -25,9 +25,9 @@ interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   syncNotifications: CaseReducer<S, PayloadAction<Partial<Notifications>>>;
   addContextMenu: CaseReducer<S, PayloadAction<ContextMenuOption>>;
   removeContextMenu: CaseReducer<S, PayloadAction<string>>;
-  addTaskTab: CaseReducer<S, PayloadAction<TaskTab>>;
+  saveTaskTab: CaseReducer<S, PayloadAction<TaskTab>>;
   removeTaskTab: CaseReducer<S, PayloadAction<string>>;
-  resetTaskTab: CaseReducer<S>;
+  resetTaskTabs: CaseReducer<S>;
 }
 
 export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'settings'>({
@@ -64,11 +64,11 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
         return removeFrom<ContextMenuOption, string>(oldSettings, action, 'menus', (o) => o.id !== action?.payload);
       }
     },
-    addTaskTab: (oldSettings, action: PayloadAction<TaskTab>): SettingsSlice =>
-      addTo<TaskTab>(oldSettings, action, 'tabs', (o) => o.id !== action?.payload.id),
+    saveTaskTab: (oldSettings, action: PayloadAction<TaskTab>): SettingsSlice =>
+      addTo<TaskTab>(oldSettings, action, 'tabs', (o) => o.id === action?.payload.id),
     removeTaskTab: (oldSettings, action: PayloadAction<string>): SettingsSlice =>
       removeFrom<TaskTab, string>(oldSettings, action, 'tabs', (o) => o.id !== action?.payload),
-    resetTaskTab: (oldSettings): SettingsSlice =>
+    resetTaskTabs: (oldSettings): SettingsSlice =>
       syncReducer(oldSettings, {
         type: 'sync',
         payload: { tabs: defaultSettings.tabs },
@@ -88,7 +88,7 @@ export const {
   resetSettings,
   addContextMenu,
   removeContextMenu,
-  addTaskTab,
+  saveTaskTab,
   removeTaskTab,
-  resetTaskTab,
+  resetTaskTabs,
 } = settingsSlice.actions;

@@ -58,11 +58,24 @@ export const darkTheme = () => {
           },
         },
       },
+      MuiListItemText: {
+        styleOverrides: {
+          primary: {
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          },
+          secondary: {
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          },
+        },
+      },
       MuiAccordionSummary: {
         styleOverrides: {
           content: {
             width: '100%',
             margin: 0,
+            overflow: 'hidden',
           },
         },
       },

@@ -12,7 +12,7 @@ export const FormTab = ({
 }: React.PropsWithChildren<{
   useFormProps: Pick<UseFormReturn<Tab>, 'control' | 'getValues' | 'reset'>;
   tab: Tab;
-  disabled: boolean;
+  disabled?: boolean;
 }>) => {
   const getTaskTab = (type?: TabType | string): TaskTab | undefined => defaultTabs.find((t) => t.name === type);
   const getTemplateStatuses = (taskTab?: TaskTab): TaskStatus[] => (taskTab?.status?.length ? taskTab?.status : status) ?? [];
@@ -27,7 +27,6 @@ export const FormTab = ({
     const _color = getColorFromLevel(tab?.color) ?? color;
     setBadgeColor(_color);
     reset({ ...getValues(), status: _status, color: _color });
-    console.log(type, tab, _color, _status);
   };
 
   const getHighlightColor = (s: TaskStatus): ColorLevel => {

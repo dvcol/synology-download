@@ -54,7 +54,7 @@ export const TaskCard = ({ task, statuses }: { task: Task; statuses?: TaskStatus
         <Avatar sx={{ width: 50, height: 50, bgcolor: avatarBgColor(task.status) }}>{statusIcon(task.status)}</Avatar>
       </ListItemAvatar>
       <ListItemText
-        sx={{ maxWidth: '100vw', textOverflow: 'ellipsis', whiteSpace: 'nowrap', overflowX: 'hidden' }}
+        sx={{ maxWidth: '100vw', whiteSpace: 'nowrap' }}
         primary={task.title}
         primaryTypographyProps={{ component: 'span' }}
         secondary={

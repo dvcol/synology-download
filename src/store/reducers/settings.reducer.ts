@@ -47,11 +47,19 @@ const syncPayload = <T extends TaskTab | ContextMenuOption>(
 
 export const addTo = <T extends TaskTab | ContextMenuOption>(
   oldSettings: SettingsSlice,
-  action: PayloadAction<T>,
+  { payload }: PayloadAction<T>,
   key: 'tabs' | 'menus',
   filter: (obj: T) => boolean
 ): SettingsSlice => {
-  return syncPayload<T>(oldSettings, key, (array) => (array?.length ? [...array.filter(filter), action?.payload] : [action?.payload]));
+  return syncPayload<T>(oldSettings, key, (array) => {
+    const index = array?.findIndex(filter);
+    if (index > -1) {
+      const _array = [...array];
+      _array.splice(index, 1, payload);
+      return _array;
+    }
+    return [...array, payload];
+  });
 };
 export const removeFrom = <T extends TaskTab | ContextMenuOption, U>(
   oldSettings: SettingsSlice,

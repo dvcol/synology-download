@@ -29,7 +29,6 @@
     "react-intersection-observer": "^8.32.5",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.0.2",
-    "react-transition-group": "^4.4.2",
     "rxjs": "^7.4.0",
     "uuid": "^8.3.2",
     "webext-redux": "^2.1.9"
