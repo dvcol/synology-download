@@ -18,7 +18,7 @@ type NavbarMenuProps = { label: React.ReactNode };
 
 export const NavbarMenu = ({ label }: NavbarMenuProps) => {
   const dispatch = useDispatch();
-  const url = useSelector(getUrl);
+  const url = useSelector(getUrl) + 'index.cgi?launchApp=SYNO.SDS.DownloadStation.Application';
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
