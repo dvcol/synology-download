@@ -1,4 +1,4 @@
-import { defaultTabs, TabType } from './tab.model';
+import { defaultTabs, Tab, TabType } from './tab.model';
 import { defaultMenu } from './context-menu.model';
 import { SettingsSlice } from './store.model';
 import { TaskStatus } from './task.model';
@@ -51,11 +51,8 @@ export const defaultPolling: Polling = {
   popup: { enabled: true, interval: 3000 },
 };
 
-export interface NotificationsCount {
+export interface NotificationsCount extends Tab {
   enabled: boolean;
-  template: TabType;
-  status: TaskStatus[];
-  color: string;
 }
 
 export interface NotificationsBanner {
