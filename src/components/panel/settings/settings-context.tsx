@@ -28,7 +28,7 @@ export const SettingsContext = () => {
       />
       <CardContent>
         {menus?.map((t) => (
-          <Accordion expanded={expanded === t.id} onChange={handleExpand(t.id)}>
+          <Accordion key={t.id} expanded={expanded === t.id} onChange={handleExpand(t.id)}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header">
               <Typography sx={{ width: '33%', flexShrink: 0 }}>{t.id}</Typography>
               <Typography sx={{ color: 'text.secondary' }}>{t.title}</Typography>

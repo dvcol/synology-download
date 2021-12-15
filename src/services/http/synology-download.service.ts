@@ -1,64 +1,30 @@
-import { BaseHttpService } from './base-http-service';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import {
   API,
   CommonResponse,
+  Controller,
   Endpoint,
   HttpParameters,
   HttpResponse,
+  InfoResponse,
   ListResponse,
-  LoginResponse,
-  SessionName,
   SynologyMethod,
   TaskListOption,
 } from '../../models';
+import { SynologyService } from './synology.service';
 
-export class SynologyDownloadService extends BaseHttpService {
-  private static prefix = 'webapi';
-  private sid?: string;
-
-  constructor(protected baseUrl = '', prefix = SynologyDownloadService.prefix) {
-    super(baseUrl + prefix);
+export class SynologyDownloadService extends SynologyService {
+  constructor(protected baseUrl = '', prefix = Controller.DownloadStation) {
+    super(baseUrl, prefix);
   }
 
-  setBaseUrl(baseUrl: string, prefix = SynologyDownloadService.prefix): void {
-    super.setBaseUrl(baseUrl + prefix);
+  commonTaskGet<T>(params: HttpParameters, version = '1', api = API.DownloadStationTask, endpoint = Endpoint.Task): Observable<HttpResponse<T>> {
+    return super.commonTaskGet(params, version, api, endpoint);
   }
 
-  setSid(sid?: string): void {
-    this.sid = sid;
-  }
-
-  login(account: string, passwd: string, otp_code?: string): Observable<HttpResponse<LoginResponse>> {
-    const params: HttpParameters = {
-      api: API.Auth,
-      version: '2',
-      method: SynologyMethod.login,
-      session: SessionName.DownloadStation,
-      format: 'sid',
-      account,
-      passwd,
-    };
-    if (otp_code) params.otp_code = otp_code;
-    return this.get<HttpResponse<LoginResponse>>(Endpoint.Auth, params).pipe(tap(({ data: { sid } }) => this.setSid(sid)));
-  }
-
-  logout(): Observable<HttpResponse<void>> {
-    return this.get<HttpResponse<void>>(Endpoint.Auth, {
-      api: API.Auth,
-      version: '1',
-      method: SynologyMethod.logout,
-      session: SessionName.DownloadStation,
-    }).pipe(tap(() => this.setSid()));
-  }
-
-  commonTaskGet<T>(params: HttpParameters): Observable<HttpResponse<T>> {
-    if (this.sid) params.sid = this.sid;
-    return this.get<HttpResponse<T>>(Endpoint.DownloadStation, {
-      api: API.DownloadStation,
-      version: '1',
-      ...params,
-    });
+  info(query: string[] = ['ALL']): Observable<HttpResponse<InfoResponse>> {
+    const params: HttpParameters = { method: SynologyMethod.query, query: query?.join(',') };
+    return this.commonTaskGet<InfoResponse>(params);
   }
 
   listTasks(

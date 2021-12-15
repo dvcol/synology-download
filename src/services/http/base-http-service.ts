@@ -5,10 +5,6 @@ import { BaseHttpRequest, Body, HttpHeaders, HttpMethod, HttpParameters } from '
 export class BaseHttpService {
   constructor(protected baseUrl: string = '') {}
 
-  getBaseUrl(): string {
-    return this.baseUrl;
-  }
-
   setBaseUrl(baseUrl: string): void {
     this.baseUrl = baseUrl;
   }

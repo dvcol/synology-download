@@ -9,3 +9,4 @@ export * from './tab.model';
 export * from './task.model';
 export * from './modal-instance.model';
 export * from './notification.model';
+export * from './api-info.model';

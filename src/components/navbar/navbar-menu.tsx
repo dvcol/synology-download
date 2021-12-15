@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, Menu, Tooltip } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import InfoIcon from '@mui/icons-material/Info';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
 import AddLinkIcon from '@mui/icons-material/AddLink';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -62,6 +63,7 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
         <NavbarMenuIcon label="Remove all" icon={<DeleteSweepIcon />} onClick={() => setPrompt(true)} />
         <Divider />
         <NavbarMenuIcon label="Settings" icon={<SettingsIcon />} component={Link} to="/settings" onClick={handleTab} />
+        <NavbarMenuIcon label="Info" icon={<InfoIcon />} component={Link} to="/info" onClick={handleTab} />
         <NavbarMenuIcon label="Open Download Station" icon={<LaunchIcon />} onClick={handleUrl} />
       </Menu>
 

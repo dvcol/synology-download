@@ -1,4 +1,4 @@
-import { SynologyDownloadService } from '../http';
+import { SynologyAuthService, SynologyDownloadService, SynologyFileService, SynologyInfoService } from '../http';
 import {
   getActiveTasksIds,
   getFinishedTasksIds,
@@ -14,13 +14,19 @@ import {
 import { Store } from 'redux';
 import { Store as ProxyStore } from 'webext-redux';
 import { EMPTY, Observable, tap } from 'rxjs';
-import { CommonResponse, HttpResponse, ListResponse, LoginResponse } from '../../models';
+import { CommonResponse, HttpResponse, InfoResponse, ListResponse, LoginResponse } from '../../models';
 import { NotificationService } from '../notification';
 
 // TODO error handling
 export class QueryService {
   private static store: any | Store | ProxyStore;
+
+  private static infoClient = new SynologyInfoService();
+  private static authClient = new SynologyAuthService();
+  private static fileClient = new SynologyFileService();
   private static downloadClient = new SynologyDownloadService();
+
+  private static baseUrl: string;
 
   static init(store: Store | ProxyStore) {
     this.store = store;
@@ -28,15 +34,31 @@ export class QueryService {
   }
 
   static setBaseUrl(baseUrl: string): void {
+    this.baseUrl = baseUrl;
+    this.infoClient.setBaseUrl(baseUrl);
+    this.authClient.setBaseUrl(baseUrl);
+    this.fileClient.setBaseUrl(baseUrl);
     this.downloadClient.setBaseUrl(baseUrl);
   }
 
+  static setSid(sid?: string): void {
+    this.infoClient.setSid(sid);
+    this.authClient.setSid(sid);
+    this.fileClient.setSid(sid);
+    this.downloadClient.setSid(sid);
+  }
+
   static get isReady() {
-    return !!(this.downloadClient && this.downloadClient.getBaseUrl()?.length);
+    return !!this.baseUrl?.length;
   }
 
   private static readyCheck() {
     if (!QueryService.isReady) throw new Error('Query service is not ready');
+  }
+
+  static info(): Observable<HttpResponse<InfoResponse>> {
+    this.readyCheck();
+    return this.infoClient.info();
   }
 
   static loginTest(
@@ -45,13 +67,16 @@ export class QueryService {
   ): Observable<HttpResponse<LoginResponse>> {
     this.readyCheck();
     if (!username || !password) throw new Error(`Missing required username '${username}' or password  '${password}'`);
-    return this.downloadClient.login(username, password);
+    return this.authClient.login(username, password);
   }
 
   static login(username?: string, password?: string): Observable<HttpResponse<LoginResponse>> {
     return this.loginTest(username, password).pipe(
       tap({
-        complete: () => this.store.dispatch(setLogged(true)),
+        next: ({ data: { sid } }) => {
+          this.setSid(sid);
+          this.store.dispatch(setLogged(true));
+        },
         error: (error) => {
           this.store.dispatch(setLogged(false));
           console.error('Login failed', error);
@@ -63,7 +88,12 @@ export class QueryService {
 
   static logout(): Observable<HttpResponse<void>> {
     this.readyCheck();
-    return this.downloadClient.logout().pipe(tap(() => this.store.dispatch(setLogged(false))));
+    return this.authClient.logout().pipe(
+      tap(() => {
+        this.setSid();
+        this.store.dispatch(setLogged(false));
+      })
+    );
   }
 
   static listTasks(): Observable<HttpResponse<ListResponse>> {
