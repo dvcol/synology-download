@@ -74,7 +74,7 @@ export const TaskDetail = ({
         disableGutters
         sx={{
           mt: '1rem',
-          maxHeight: '13rem',
+          maxHeight: '20rem',
           overflow: 'auto',
           bgcolor: isDarkTheme() ? grey[900] : grey[200],
         }}
