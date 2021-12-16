@@ -58,8 +58,8 @@ export const SettingsCredentials = () => {
     }
   };
 
-  const syncOnSubscribe = (data: Connection, query: (u?: string, p?: string) => Observable<unknown>, type: keyof LoginError) => {
-    setUrl(data, type);
+  const syncOnSubscribe = (data: Connection, query: (u?: string, p?: string) => Observable<unknown>, type: 'test' | 'login' | 'logout') => {
+    setUrl(data, type === 'test' ? 'test' : 'login');
     reset(data);
     setLoginError({});
     const timeout = setTimeout(() => setLoading(true), 500);
@@ -73,29 +73,26 @@ export const SettingsCredentials = () => {
       )
       .subscribe({
         complete: () => {
-          if (type === 'login') {
-            dispatch(data?.rememberMe ? syncConnection(data) : setConnection(data));
-          } else {
+          // Todo logout, rework test
+          if (type === 'test') {
             QueryService.setBaseUrl(urlReducer(connection));
+          } else {
+            dispatch(data?.rememberMe ? syncConnection(data) : setConnection(data));
           }
           setLoginError({ ...loginError, [type]: false });
-          NotificationService.info(
-            `Login ${type === 'test' ? 'test' : ''} successful`,
-            'Logged successfully into Download Station',
-            urlReducer(data)
-          );
+          NotificationService.info('Login/Logout', `The ${type} was successful`, urlReducer(data));
         },
-        error: (error) => {
+        error: (error: Error) => {
           setLoginError({ ...loginError, [type]: true });
           QueryService.setBaseUrl(urlReducer(connection));
-          NotificationService.error('Failed to login', JSON.stringify(error), urlReducer(data));
+          NotificationService.error(`The ${type} has failed`, error?.message ?? error?.name, urlReducer(data));
         },
       });
   };
 
   const testLogin = (data: Connection) => syncOnSubscribe(data, QueryService.loginTest, 'test');
 
-  const loginLogout = (data: Connection) => syncOnSubscribe(data, logged ? QueryService.logout : QueryService.login, 'login');
+  const loginLogout = (data: Connection) => syncOnSubscribe(data, logged ? QueryService.logout : QueryService.login, logged ? 'logout' : 'login');
 
   const getColor = (type: keyof LoginError) => {
     if (loginError[type] === undefined || isDirty) return 'info';

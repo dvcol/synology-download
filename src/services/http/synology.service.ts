@@ -1,6 +1,7 @@
 import { BaseHttpService } from './base-http-service';
-import { Observable } from 'rxjs';
-import { API, Controller, Endpoint, HttpParameters, HttpResponse } from '../../models';
+import { map, Observable } from 'rxjs';
+import { Api, Controller, Endpoint, HttpMethod, HttpParameters, HttpResponse, SynologyError } from '../../models';
+import { stringifyParams } from '../../utils';
 
 export class SynologyService extends BaseHttpService {
   protected prefix = Controller.Common;
@@ -19,8 +20,34 @@ export class SynologyService extends BaseHttpService {
     this.sid = sid;
   }
 
-  commonTaskGet<T>(params: HttpParameters, version: string, api: API, endpoint: Endpoint): Observable<HttpResponse<T>> {
+  query<T>(method: HttpMethod, params: HttpParameters, version: string, api: Api, endpoint: Endpoint): Observable<HttpResponse<T>> {
     if (this.sid) params.sid = this.sid;
-    return this.get<HttpResponse<T>>(endpoint, { api, version, ...params });
+    switch (method) {
+      case HttpMethod.POST:
+      case HttpMethod.post:
+        return this.post<HttpResponse<T>>(endpoint, stringifyParams({ ...params, api, version }));
+      case HttpMethod.PUT:
+      case HttpMethod.put:
+        return this.put<HttpResponse<T>>(endpoint, stringifyParams({ ...params, api, version }));
+      case HttpMethod.DELETE:
+      case HttpMethod.delete:
+        return this.delete<HttpResponse<T>>(endpoint, { api, version, ...params });
+      case HttpMethod.GET:
+      case HttpMethod.get:
+      default:
+        return this.get<HttpResponse<T>>(endpoint, { api, version, ...params });
+    }
+  }
+
+  do<T>(method: HttpMethod, params: HttpParameters, version: string, api: Api, endpoint: Endpoint): Observable<T> {
+    return this.query<T>(method, params, version, api, endpoint).pipe(
+      map((response) => {
+        if (response?.success) {
+          return response.data;
+        } else {
+          throw new SynologyError(api, response?.error);
+        }
+      })
+    );
   }
 }

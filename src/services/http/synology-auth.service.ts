@@ -1,25 +1,35 @@
 import { Observable } from 'rxjs';
-import { API, Endpoint, HttpParameters, HttpResponse, LoginResponse, SessionName, SynologyMethod } from '../../models';
+import { AuthMethod, CommonAPI, Endpoint, HttpMethod, HttpParameters, LoginResponse, SessionName } from '../../models';
 import { SynologyService } from './synology.service';
 
+// TDODO : handle HTTPS & 2FA
 export class SynologyAuthService extends SynologyService {
-  commonTaskGet<T>(params: HttpParameters, version = '1', api = API.Auth, endpoint = Endpoint.Auth): Observable<HttpResponse<T>> {
-    return super.commonTaskGet(params, version, api, endpoint);
+  _do<T>(method: HttpMethod, params: HttpParameters, version = '1', api = CommonAPI.Auth, endpoint = Endpoint.Auth): Observable<T> {
+    return super.do<T>(method, params, version, api, endpoint);
   }
-  login(account: string, passwd: string, otp_code?: string): Observable<HttpResponse<LoginResponse>> {
+
+  login(
+    account: string,
+    passwd: string,
+    otp_code?: string,
+    deviceToken?: 'yes' | 'no',
+    deviceName?: string,
+    deviceId?: number,
+    format: 'cookie' | 'sid' = 'cookie'
+  ): Observable<LoginResponse> {
     const params: HttpParameters = {
-      method: SynologyMethod.login,
+      method: AuthMethod.login,
       session: SessionName.DiskStation,
-      format: 'sid',
+      format,
       account,
       passwd,
     };
     if (otp_code) params.otp_code = otp_code;
-    return this.commonTaskGet<LoginResponse>(params, '2');
+    return this._do<LoginResponse>(HttpMethod.GET, params, '2');
   }
 
-  logout(): Observable<HttpResponse<void>> {
-    const params: HttpParameters = { method: SynologyMethod.logout, session: SessionName.DiskStation };
-    return this.commonTaskGet<void>(params);
+  logout(): Observable<void> {
+    const params: HttpParameters = { method: AuthMethod.logout, session: SessionName.DiskStation };
+    return this._do<void>(HttpMethod.GET, params);
   }
 }

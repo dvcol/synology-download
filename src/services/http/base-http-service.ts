@@ -49,13 +49,13 @@ export class BaseHttpService {
     });
   }
 
-  get<T>(url = '', params?: HttpParameters, headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*' }): Observable<T> {
+  get<T>(url: string, params?: HttpParameters, headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*' }): Observable<T> {
     return this.request({ url, method: HttpMethod.GET, params, headers });
   }
 
   post<T>(
+    url: string,
     body: Body,
-    url = '',
     params?: HttpParameters,
     headers: HttpHeaders = {
       'Access-Control-Allow-Origin': '*',
@@ -72,8 +72,8 @@ export class BaseHttpService {
   }
 
   put<T>(
+    url: string,
     body: Body,
-    url = '',
     params?: HttpParameters,
     headers: HttpHeaders = {
       'Access-Control-Allow-Origin': '*',
@@ -83,7 +83,7 @@ export class BaseHttpService {
     return this.request({ url, method: HttpMethod.PUT, params, headers, body });
   }
 
-  delete<T>(url = '', params?: HttpParameters, headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*' }): Observable<T> {
+  delete<T>(url: string, params?: HttpParameters, headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*' }): Observable<T> {
     return this.request({ url, method: HttpMethod.DELETE, params, headers });
   }
 }

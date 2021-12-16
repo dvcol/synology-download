@@ -1,4 +1,5 @@
 export * from './context-menu.model';
+export * from './error.model';
 export * from './http.model';
 export * from './material-ui.model';
 export * from './message.model';

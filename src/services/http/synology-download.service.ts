@@ -1,15 +1,14 @@
 import { Observable } from 'rxjs';
 import {
-  API,
   CommonResponse,
   Controller,
+  DownloadStationAPI,
   Endpoint,
+  HttpMethod,
   HttpParameters,
-  HttpResponse,
-  InfoResponse,
   ListResponse,
-  SynologyMethod,
   TaskListOption,
+  TaskMethod,
 } from '../../models';
 import { SynologyService } from './synology.service';
 
@@ -18,61 +17,56 @@ export class SynologyDownloadService extends SynologyService {
     super(baseUrl, prefix);
   }
 
-  commonTaskGet<T>(params: HttpParameters, version = '1', api = API.DownloadStationTask, endpoint = Endpoint.Task): Observable<HttpResponse<T>> {
-    return super.commonTaskGet(params, version, api, endpoint);
-  }
-
-  info(query: string[] = ['ALL']): Observable<HttpResponse<InfoResponse>> {
-    const params: HttpParameters = { method: SynologyMethod.query, query: query?.join(',') };
-    return this.commonTaskGet<InfoResponse>(params);
+  _do<T>(method: HttpMethod, params: HttpParameters, version = '1', api = DownloadStationAPI.Task, endpoint = Endpoint.Task): Observable<T> {
+    return super.do<T>(method, params, version, api, endpoint);
   }
 
   listTasks(
     additional: TaskListOption[] = [TaskListOption.detail, TaskListOption.file, TaskListOption.transfer],
     offset = 0,
     limit = -1
-  ): Observable<HttpResponse<ListResponse>> {
-    const params: HttpParameters = { method: SynologyMethod.list };
+  ): Observable<ListResponse> {
+    const params: HttpParameters = { method: TaskMethod.list };
     if (additional?.length) params.additional = `${additional}`;
     if (offset) params.offset = `${offset}`;
     if (limit) params.limit = `${limit}`;
-    return this.commonTaskGet<ListResponse>(params);
+    return this._do<ListResponse>(HttpMethod.POST, params);
   }
 
-  createTask(uri: string, destination?: string, username?: string, password?: string, unzip?: string): Observable<HttpResponse<void>> {
-    const params: HttpParameters = { method: SynologyMethod.create, uri };
+  createTask(uri: string, destination?: string, username?: string, password?: string, unzip?: string): Observable<void> {
+    const params: HttpParameters = { method: TaskMethod.create, uri };
     if (destination) params.destination = destination;
     if (username) params.username = username;
     if (password) params.password = password;
     if (unzip) params.unzip = unzip;
-    return this.commonTaskGet<void>(params);
+    return this._do<void>(HttpMethod.POST, params);
   }
 
-  deleteTask(id: string | string[], force = false): Observable<HttpResponse<CommonResponse[]>> {
-    return this.commonTaskGet<CommonResponse[]>({
-      method: SynologyMethod.delete,
+  deleteTask(id: string | string[], force = false): Observable<CommonResponse[]> {
+    return this._do<CommonResponse[]>(HttpMethod.PUT, {
+      method: TaskMethod.delete,
       id,
       force_complete: `${force}`,
     });
   }
 
-  pauseTask(id: string | string[]): Observable<HttpResponse<CommonResponse[]>> {
-    return this.commonTaskGet<CommonResponse[]>({
-      method: SynologyMethod.pause,
+  pauseTask(id: string | string[]): Observable<CommonResponse[]> {
+    return this._do<CommonResponse[]>(HttpMethod.PUT, {
+      method: TaskMethod.pause,
       id,
     });
   }
 
-  resumeTask(id: string | string[]): Observable<HttpResponse<CommonResponse[]>> {
-    return this.commonTaskGet<CommonResponse[]>({
-      method: SynologyMethod.resume,
+  resumeTask(id: string | string[]): Observable<CommonResponse[]> {
+    return this._do<CommonResponse[]>(HttpMethod.PUT, {
+      method: TaskMethod.resume,
       id,
     });
   }
 
-  editTask(id: string | string[], destination: string): Observable<HttpResponse<CommonResponse[]>> {
-    return this.commonTaskGet<CommonResponse[]>({
-      method: SynologyMethod.edit,
+  editTask(id: string | string[], destination: string): Observable<CommonResponse[]> {
+    return this._do<CommonResponse[]>(HttpMethod.PUT, {
+      method: TaskMethod.edit,
       id,
       destination,
     });
