@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Divider, IconButton, Menu, Tooltip } from '@mui/material';
+import { DialogContentText, Divider, IconButton, Menu, Tooltip } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import InfoIcon from '@mui/icons-material/Info';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import NavbarMenuIcon from './navbar-menu-icon';
 import { getUrl, setNavbar } from '../../store';
 import { QueryService } from '../../services';
+import { ConfirmationDialog } from '../dialog';
 
 type NavbarMenuProps = { label: React.ReactNode };
 
@@ -67,34 +68,26 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
         <NavbarMenuIcon label="Open Download Station" icon={<LaunchIcon />} onClick={handleUrl} />
       </Menu>
 
-      <Dialog open={prompt} onClose={() => setPrompt(false)} aria-labelledby="confirm-delete-dialog" maxWidth={'xs'}>
-        <DialogTitle id="alert-dialog-title">Please confirm</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            This action will remove <b>all tasks</b> (active, inactive, etc.).
-          </DialogContentText>
-          <br />
-          <DialogContentText id="alert-dialog-description">
-            Once deleted, you'll have to re-add all tasks manually, they can not be restored or restarted.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button variant="outlined" onClick={() => setPrompt(false)}>
-            Cancel
-          </Button>
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={() => {
-              setPrompt(false);
-              QueryService.deleteAllTasks().subscribe();
-            }}
-            autoFocus
-          >
-            Confirm
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <ConfirmationDialog
+        open={prompt}
+        title={'Please confirm'}
+        description={
+          <React.Fragment>
+            <DialogContentText id="alert-dialog-description">
+              This action will remove <b>all tasks</b> (active, inactive, etc.).
+            </DialogContentText>
+            <br />
+            <DialogContentText id="alert-dialog-description">
+              Once deleted, you'll have to re-add all tasks manually, they can not be restored or restarted.
+            </DialogContentText>
+          </React.Fragment>
+        }
+        onCancel={() => setPrompt(false)}
+        onConfirm={() => {
+          setPrompt(false);
+          QueryService.deleteAllTasks().subscribe();
+        }}
+      />
     </React.Fragment>
   );
 };

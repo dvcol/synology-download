@@ -5,12 +5,13 @@ import { computeProgress, formatBytes, Task, TaskStatus } from '../../../models'
 import PauseIcon from '@mui/icons-material/Pause';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import CircularProgress from '@mui/material/CircularProgress';
 import { isDarkTheme } from '../../../themes';
 import { grey } from '@mui/material/colors';
-import ProgressBar from '../../progress-bar/progress-bar';
+import ProgressBar from '../../ui-element/progress-bar';
 import { Observable } from 'rxjs';
 import { QueryService } from '../../../services';
+import { ConfirmationDialog } from '../../dialog';
+import { IconLoader } from '../../ui-element';
 
 export const TaskDetail = ({
   task,
@@ -19,8 +20,9 @@ export const TaskDetail = ({
 }: {
   task: Task;
   loading: Record<string, boolean>;
-  buttonClick: (button: string, request: Observable<any>, $event?: React.MouseEvent) => void;
+  buttonClick: (button: string, request: Observable<any>, $event?: React.MouseEvent, delay?: number) => void;
 }) => {
+  const [prompt, setPrompt] = React.useState(false);
   const isDisabled = () => Object.values(loading).some(Boolean);
   return (
     <Typography component="span" variant="body2">
@@ -31,7 +33,7 @@ export const TaskDetail = ({
         <Grid item xs={8} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Stack direction="row" spacing={2}>
             <Button
-              startIcon={loading.play ? <CircularProgress size={'1.25rem'} color="success" /> : <PlayArrowIcon />}
+              startIcon={<IconLoader icon={<PlayArrowIcon />} loading={loading?.play} props={{ size: '1.25rem', color: 'success' }} />}
               variant="contained"
               color="success"
               onClick={() => buttonClick('play', QueryService.resumeTask(task.id))}
@@ -40,7 +42,7 @@ export const TaskDetail = ({
               Play
             </Button>
             <Button
-              startIcon={loading.pause ? <CircularProgress size={'1.25rem'} color="warning" /> : <PauseIcon />}
+              startIcon={<IconLoader icon={<PauseIcon />} loading={loading?.pause} props={{ size: '1.25rem', color: 'warning' }} />}
               variant="contained"
               color="warning"
               onClick={() => buttonClick('pause', QueryService.pauseTask(task.id))}
@@ -50,7 +52,7 @@ export const TaskDetail = ({
             </Button>
 
             <Button
-              startIcon={loading.edit ? <CircularProgress size={'1.25rem'} color="secondary" /> : <EditIcon />}
+              startIcon={<IconLoader icon={<EditIcon />} loading={loading?.edit} props={{ size: '1.25rem', color: 'secondary' }} />}
               variant="outlined"
               color="secondary"
               onClick={() => buttonClick('edit', QueryService.editTask(task.id, 'download'))}
@@ -59,14 +61,24 @@ export const TaskDetail = ({
               Edit
             </Button>
             <Button
-              startIcon={loading.delete ? <CircularProgress size={'1.25rem'} color="error" /> : <DeleteIcon />}
+              startIcon={<IconLoader icon={<DeleteIcon />} loading={loading?.delete} props={{ size: '1.25rem', color: 'error' }} />}
               variant="outlined"
               color="error"
               disabled={isDisabled()}
-              onClick={() => buttonClick('delete', QueryService.deleteTask(task.id))}
+              onClick={() => setPrompt(true)}
             >
               Delete
             </Button>
+            <ConfirmationDialog
+              open={prompt}
+              title={'Please confirm'}
+              description={'This action will permanently remove this task.'}
+              onCancel={() => setPrompt(false)}
+              onConfirm={() => {
+                setPrompt(false);
+                buttonClick('delete', QueryService.deleteTask(task.id), undefined, 0);
+              }}
+            />
           </Stack>
         </Grid>
       </Grid>

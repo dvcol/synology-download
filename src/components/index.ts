@@ -1,4 +1,5 @@
 export * from './navbar';
 export * from './panel';
 export * from './form';
-export * from './progress-bar/progress-bar';
+export * from './dialog';
+export * from './ui-element';

@@ -6,6 +6,7 @@ import { getNotificationsBannerLevel, getNotificationsEnabled, getTasksCount, se
 import { bufferDebounceUnless, skipUntilRepeat } from '../../utils';
 import { ChromeMessage, ChromeMessageType, ChromeNotification, NotificationLevel, NotificationLevelKeys } from '../../models';
 
+// TODO use Mui Snackbar to do in popup & in context notifications
 export class NotificationService {
   private static store: any | Store | ProxyStore;
   private static isProxy: boolean;
@@ -25,11 +26,11 @@ export class NotificationService {
   }
 
   private static bufferStopStart =
-    (title: string, message: string) =>
+    (title: string, message?: string) =>
     (source$: Observable<ChromeNotification>): Observable<ChromeNotification | undefined> =>
       source$.pipe(
         filter(({ priority }) => Number(priority) >= this.level),
-        bufferDebounceUnless(400, 10),
+        bufferDebounceUnless(200, 10),
         skipUntilRepeat(() => !this.enabled, this.stop$, this.start$),
         map((n) => this.handleNotification(n, title, message)),
         tap((n) => n && chrome.notifications.create(n))
@@ -38,8 +39,8 @@ export class NotificationService {
   static init(store: Store | ProxyStore, isProxy = false): void {
     this.store = store;
     this.isProxy = isProxy;
-    this.notify$.pipe(this.bufferStopStart('Notification', '')).subscribe();
-    this.error$.pipe(this.bufferStopStart('Errors', '')).subscribe();
+    this.notify$.pipe(this.bufferStopStart('Notification')).subscribe();
+    this.error$.pipe(this.bufferStopStart('Errors')).subscribe();
 
     store$(this.store, getTasksCount).subscribe((count) => this.store.dispatch(setTasksCount(count)));
 
@@ -53,7 +54,7 @@ export class NotificationService {
   private static handleNotification(
     array: ChromeNotification[],
     title: string,
-    message: string,
+    message?: string,
     contextMessage?: string
   ): ChromeNotification | undefined {
     if (array?.length === 1) {
@@ -61,8 +62,8 @@ export class NotificationService {
     } else if (array?.length) {
       return {
         type: 'list',
-        title,
-        message,
+        title: Array.from(new Set(array?.map(({ title: t }) => t))).join(', ') ?? title,
+        message: message ?? '',
         contextMessage,
         iconUrl: 'assets/icons/icon-64.png',
         items: array.map(({ message: mMessage }, i) => ({ title: `${i}`, message: mMessage?.slice(0, 30) + '...' ?? '' })),

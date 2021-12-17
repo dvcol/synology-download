@@ -9,7 +9,7 @@ import UploadIcon from '@mui/icons-material/Upload';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { computeEta, computeProgress, formatBytes, Task, TaskStatus, taskStatusToColor } from '../../../models';
 import { blue, green, orange, purple, red } from '@mui/material/colors';
-import ProgressBar from '../../progress-bar/progress-bar';
+import ProgressBar from '../../ui-element/progress-bar';
 
 export const TaskCard = ({ task, statuses }: { task: Task; statuses?: TaskStatus[] }) => {
   const statusIcon = (status: TaskStatus): React.ReactNode => {
