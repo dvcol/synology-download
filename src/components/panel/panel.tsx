@@ -9,9 +9,9 @@ export const Panel = () => {
     <React.Fragment>
       <Routes>
         <Route path="*" element={<TaskPanel />} />
-        <Route path="/add" element={<TaskAdd />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/info" element={<Info />} />
+        <Route path="/add/*" element={<TaskAdd />} />
+        <Route path="/settings/*" element={<Settings />} />
+        <Route path="/info/*" element={<Info />} />
       </Routes>
     </React.Fragment>
   );

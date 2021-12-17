@@ -2,13 +2,15 @@ import React from 'react';
 import { Container, Paper, Tab, Tabs } from '@mui/material';
 import { ConnectionHeader, InterfaceHeader, NotificationHeader, SettingHeader } from '../../../models';
 import { SettingsCredentials } from './settings-credentials';
-import { SettingsTabs } from './settings-tabs';
-import { SettingsContext } from './settings-context';
-import { SettingsModal } from './settings-modals';
-import { SettingsBanner } from './settings-banner';
-import { SettingsPolling } from './settings-polling';
+import { Route, Routes } from 'react-router-dom';
+import { HashLink as Link } from 'react-router-hash-link';
 import { SettingsHeader } from './settings-header';
+import { SettingsPolling } from './settings-polling';
+import { SettingsTabs } from './settings-tabs';
+import { SettingsModal } from './settings-modals';
+import { SettingsContext } from './settings-context';
 import { SettingsTasksCount } from './settings-tasks-count';
+import { SettingsBanner } from './settings-banner';
 
 export const Settings = () => {
   // Tab highlight
@@ -41,16 +43,18 @@ export const Settings = () => {
               key={`${i}-${label}`}
               value={label}
               disableFocusRipple={true}
-              href={`#${label}`}
+              component={Link}
+              to={`${label}#${label}`}
               sx={{ fontWeight: '700', fontSize: '0.75rem', backdropFilter: 'contrast(1.1)' }}
             />,
-            ...(links?.map((link, j) => (
+            ...(links?.map((l, j) => (
               <Tab
-                label={link}
-                key={`${i}-${j}-${link}`}
-                value={link}
+                label={l}
+                key={`${i}-${j}-${l}`}
+                value={l}
                 disableFocusRipple={true}
-                href={`#${link}`}
+                component={Link}
+                to={`${label}#${l}`}
                 sx={{ backdropFilter: 'contrast(0.9)' }}
               />
             )) ?? []),
@@ -58,21 +62,39 @@ export const Settings = () => {
         </Tabs>
       </Paper>
       <Container sx={{ p: '0 1.5rem', overflow: 'auto', '& .MuiCard-root': { mb: '1rem' } }}>
-        <SettingsHeader label={SettingHeader.connection} />
-
-        <SettingsCredentials />
-        <SettingsPolling />
-
-        <SettingsHeader label={SettingHeader.interface} />
-
-        <SettingsTabs />
-        <SettingsModal />
-        <SettingsContext />
-
-        <SettingsHeader label={SettingHeader.notification} />
-
-        <SettingsTasksCount />
-        <SettingsBanner />
+        <Routes>
+          <Route
+            path="/*"
+            element={
+              <React.Fragment>
+                <SettingsHeader label={SettingHeader.connection} />
+                <SettingsCredentials />
+                <SettingsPolling />
+              </React.Fragment>
+            }
+          />
+          <Route
+            path={SettingHeader.interface}
+            element={
+              <React.Fragment>
+                <SettingsHeader label={SettingHeader.interface} />
+                <SettingsTabs />
+                <SettingsModal />
+                <SettingsContext />
+              </React.Fragment>
+            }
+          />
+          <Route
+            path={SettingHeader.notification}
+            element={
+              <React.Fragment>
+                <SettingsHeader label={SettingHeader.notification} />
+                <SettingsTasksCount />
+                <SettingsBanner />
+              </React.Fragment>
+            }
+          />
+        </Routes>
       </Container>
     </Container>
   );
