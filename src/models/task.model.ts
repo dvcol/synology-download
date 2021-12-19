@@ -1,6 +1,12 @@
 import { ColorLevel } from './material-ui.model';
 import prettyBytes from 'pretty-bytes';
 
+export interface TaskList {
+  total: number;
+  offset: number;
+  tasks: Task[];
+}
+
 /**
  * Task object for Synology Download Station
  */
@@ -9,13 +15,11 @@ export interface Task {
   type: TaskType;
   username: string;
   title: string;
-  /**
-   * Task size in bytes
-   */
+  /** Task size in bytes */
   size: number;
   status: TaskStatus;
-  status_extra: StatusExtra;
-  additional: Additional;
+  status_extra: TaskStatusExtra;
+  additional: TaskAdditional;
 }
 
 /**
@@ -48,7 +52,7 @@ export enum TaskStatus {
 /**
  * Status_Extra object which provides extra information about task status.
  */
-export interface StatusExtra {
+export interface TaskStatusExtra {
   /** for more details
    * see: https://global.download.synology.com/download/Document/Software/DeveloperGuide/Package/DownloadStation/All/enu/Synology_Download_Station_Web_API.pdf
    */
@@ -57,15 +61,23 @@ export interface StatusExtra {
   unzip_progress: number;
 }
 
-export interface Additional {
-  detail: Detail;
-  transfer: Transfer;
-  file: File[];
-  tracker: Tracker;
-  peer: Peer;
+export interface TaskAdditional {
+  detail: TaskDetail;
+  transfer: TaskTransfer;
+  file: TaskFile[];
+  tracker: TaskTracker;
+  peer: TaskPeer;
 }
 
-export interface Detail {
+export enum TaskListOption {
+  detail = 'detail',
+  transfer = 'transfer',
+  file = 'file',
+  tracker = 'tracker',
+  peer = 'peer',
+}
+
+export interface TaskDetail {
   destination: string;
   /** Task uri: HTTP/FTP/BT/Magnet/ED2K links */
   uri: string;
@@ -76,7 +88,7 @@ export interface Detail {
   connected_leechers: number;
 }
 
-export interface Transfer {
+export interface TaskTransfer {
   /** Task downloaded size in bytes */
   size_downloaded: string;
   /** Task uploaded size in bytes */
@@ -87,7 +99,7 @@ export interface Transfer {
   speed_upload: number;
 }
 
-export interface File {
+export interface TaskFile {
   filename: string;
   /** File size in bytes */
   size: string;
@@ -96,7 +108,7 @@ export interface File {
   priority: 'skip' | 'low' | 'normal' | 'high';
 }
 
-export interface Tracker {
+export interface TaskTracker {
   url: string;
   status: string;
   update_timer: number;
@@ -104,7 +116,7 @@ export interface Tracker {
   peers: number;
 }
 
-export interface Peer {
+export interface TaskPeer {
   address: string;
   /** Peer client name */
   agent: string;
@@ -113,14 +125,6 @@ export interface Peer {
   speed_download: number;
   /** Task upload speed: byte/s */
   speed_upload: number;
-}
-
-export enum TaskListOption {
-  detail = 'detail',
-  transfer = 'transfer',
-  file = 'file',
-  tracker = 'tracker',
-  peer = 'peer',
 }
 
 /**

@@ -6,7 +6,7 @@ import {
   Endpoint,
   HttpMethod,
   HttpParameters,
-  ListResponse,
+  TaskList,
   TaskListOption,
   TaskMethod,
 } from '../../models';
@@ -21,16 +21,18 @@ export class SynologyDownloadService extends SynologyService {
     return super.do<T>(method, params, version, api, endpoint);
   }
 
-  listTasks(
-    additional: TaskListOption[] = [TaskListOption.detail, TaskListOption.file, TaskListOption.transfer],
-    offset = 0,
-    limit = -1
-  ): Observable<ListResponse> {
+  /**
+   * List all tasks
+   * @param offset Beginning task on the requested record. Default to “0”
+   * @param limit Number of records requested: “-1” means to list all tasks. Default to “-1”.
+   * @param additional Additional requested info, separated by ",". When an additional option is requested, objects will be provided in the specified additional option.
+   */
+  listTasks(offset?: number, limit?: number, additional?: TaskListOption[]): Observable<TaskList> {
     const params: HttpParameters = { method: TaskMethod.list };
     if (additional?.length) params.additional = `${additional}`;
     if (offset) params.offset = `${offset}`;
     if (limit) params.limit = `${limit}`;
-    return this._do<ListResponse>(HttpMethod.POST, params);
+    return this._do<TaskList>(HttpMethod.POST, params);
   }
 
   createTask(uri: string, destination?: string, username?: string, password?: string, unzip?: string): Observable<void> {

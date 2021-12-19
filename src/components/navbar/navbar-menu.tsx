@@ -55,8 +55,8 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
         onClick={handleClose}
         MenuListProps={{ 'aria-labelledby': 'basic-button' }}
       >
-        <NavbarMenuIcon label="Add file upload" icon={<AddIcon />} component={Link} to="/add" />
-        <NavbarMenuIcon label="Add url upload" icon={<AddLinkIcon />} component={Link} to="/add" />
+        <NavbarMenuIcon label="Add file upload" icon={<AddIcon />} component={Link} to="/add" onClick={handleTab} />
+        <NavbarMenuIcon label="Add url upload" icon={<AddLinkIcon />} component={Link} to="/add" onClick={handleTab} />
         <Divider />
         <NavbarMenuIcon label="Clear completed items" icon={<ClearAllIcon />} onClick={() => QueryService.deleteFinishedTasks().subscribe()} />
         <NavbarMenuIcon label="Resume all" icon={<PlayArrowIcon />} onClick={() => QueryService.resumeAllTasks().subscribe()} />

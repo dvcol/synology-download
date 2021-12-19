@@ -4,6 +4,7 @@ import { ApiInfo, InfoResponse } from '../../../models';
 import { QueryService } from '../../../services';
 import { tap } from 'rxjs';
 
+// TODO: dak info, file info, task info
 export const Info = () => {
   const [infos, setInfos] = React.useState<InfoResponse>();
 

@@ -1,4 +1,3 @@
-import { Task } from './task.model';
 import { ApiInfo } from './api-info.model';
 
 export enum SessionName {
@@ -73,7 +72,12 @@ export enum TaskMethod {
   edit = 'edit',
 }
 
-export type SynologyMethod = InfoMethod | AuthMethod | TaskMethod;
+export enum FileMethod {
+  list = 'list',
+  listShare = 'list_share',
+}
+
+export type SynologyMethod = InfoMethod | AuthMethod | TaskMethod | FileMethod;
 
 // TODO : Error code return handling
 export const CommonErrorCode = {
@@ -159,12 +163,6 @@ export interface InfoResponse {
 
 export interface LoginResponse {
   sid: string;
-}
-
-export interface ListResponse {
-  total: number;
-  offset: number;
-  tasks: Task[];
 }
 
 export interface CommonResponse {

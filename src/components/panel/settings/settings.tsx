@@ -79,8 +79,11 @@ export const Settings = () => {
               <React.Fragment>
                 <SettingsHeader label={SettingHeader.interface} />
                 <SettingsTabs />
+                {/* TODO: settings for task sorting */}
                 <SettingsModal />
                 <SettingsContext />
+                {/* TODO: settings for folder display */}
+                {/*  TODO : settings clear/delete by tabs or global */}
               </React.Fragment>
             }
           />
@@ -91,6 +94,7 @@ export const Settings = () => {
                 <SettingsHeader label={SettingHeader.notification} />
                 <SettingsTasksCount />
                 <SettingsBanner />
+                {/*  TODO: settings for snack notification  */}
               </React.Fragment>
             }
           />

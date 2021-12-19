@@ -14,7 +14,17 @@ import {
 import { Store } from 'redux';
 import { Store as ProxyStore } from 'webext-redux';
 import { EMPTY, Observable, tap } from 'rxjs';
-import { CommonResponse, InfoResponse, ListResponse, LoginResponse, SynologyError } from '../../models';
+import {
+  CommonResponse,
+  FileList,
+  FileListOption,
+  FolderList,
+  InfoResponse,
+  LoginResponse,
+  SynologyError,
+  TaskList,
+  TaskListOption,
+} from '../../models';
 import { NotificationService } from '../notification';
 
 // TODO error handling
@@ -101,9 +111,21 @@ export class QueryService {
     );
   }
 
-  static listTasks(): Observable<ListResponse> {
+  static listFolders(): Observable<FolderList> {
     this.readyCheck();
-    return this.downloadClient.listTasks().pipe(tap(({ tasks }) => this.store.dispatch(setTasks(tasks))));
+    return this.fileClient.listFolder(0, 0, true);
+  }
+
+  static listFiles(folderPath: string, filetype: 'all' | 'dir' = 'all'): Observable<FileList> {
+    this.readyCheck();
+    return this.fileClient.listFile(folderPath, 0, 0, filetype, [FileListOption.perm]);
+  }
+
+  static listTasks(): Observable<TaskList> {
+    this.readyCheck();
+    return this.downloadClient
+      .listTasks(0, -1, [TaskListOption.detail, TaskListOption.file, TaskListOption.transfer])
+      .pipe(tap(({ tasks }) => this.store.dispatch(setTasks(tasks))));
   }
 
   static resumeTask(id: string | string[]): Observable<CommonResponse[]> {
