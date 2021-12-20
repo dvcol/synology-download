@@ -26,6 +26,7 @@ import {
   TaskListOption,
 } from '../../models';
 import { NotificationService } from '../notification';
+import { DownloadStationConfig } from '../../models/download-station-config.model';
 
 // TODO error handling
 export class QueryService {
@@ -119,6 +120,11 @@ export class QueryService {
   static listFiles(folderPath: string, filetype: 'all' | 'dir' = 'all'): Observable<FileList> {
     this.readyCheck();
     return this.fileClient.listFile(folderPath, 0, 0, filetype, [FileListOption.perm]);
+  }
+
+  static config(): Observable<DownloadStationConfig> {
+    this.readyCheck();
+    return this.downloadClient.config();
   }
 
   static listTasks(): Observable<TaskList> {

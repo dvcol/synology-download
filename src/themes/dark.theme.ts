@@ -87,6 +87,11 @@ export const darkTheme = () => {
           },
         },
       },
+      MuiBreadcrumbs: {
+        styleOverrides: {
+          ol: { flexFlow: 'nowrap' },
+        },
+      },
     },
   };
   if (isDarkTheme()) {

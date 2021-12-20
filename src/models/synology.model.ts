@@ -25,6 +25,7 @@ export enum CommonAPI {
 export enum DownloadStationAPI {
   Schedule = 'SYNO.DownloadStation.Schedule',
   Task = 'SYNO.DownloadStation.Task',
+  Info = 'SYNO.DownloadStation.Info',
   Statistic = 'SYNO.DownloadStation.Statistic',
   RssSite = 'SYNO.DownloadStation.RSS.Site',
   RssFeed = 'SYNO.DownloadStation.RSS.Feed',
@@ -70,6 +71,7 @@ export enum TaskMethod {
   pause = 'pause',
   resume = 'resume',
   edit = 'edit',
+  config = 'getconfig',
 }
 
 export enum FileMethod {

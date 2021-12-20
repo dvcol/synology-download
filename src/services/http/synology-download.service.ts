@@ -11,6 +11,7 @@ import {
   TaskMethod,
 } from '../../models';
 import { SynologyService } from './synology.service';
+import { DownloadStationConfig } from '../../models/download-station-config.model';
 
 export class SynologyDownloadService extends SynologyService {
   constructor(protected baseUrl = '', prefix = Controller.DownloadStation) {
@@ -19,6 +20,10 @@ export class SynologyDownloadService extends SynologyService {
 
   _do<T>(method: HttpMethod, params: HttpParameters, version = '1', api = DownloadStationAPI.Task, endpoint = Endpoint.Task): Observable<T> {
     return super.do<T>(method, params, version, api, endpoint);
+  }
+
+  config(): Observable<DownloadStationConfig> {
+    return this._do(HttpMethod.POST, { method: TaskMethod.config }, '1', DownloadStationAPI.Info, Endpoint.Info);
   }
 
   /**
