@@ -1,17 +1,4 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  IconButton,
-  InputAdornment,
-  LinearProgress,
-  MenuItem,
-  Stack,
-  Typography,
-} from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, CardHeader, LinearProgress, MenuItem, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { getConnection, getLogged, setConnection, syncConnection, syncRememberMe, urlReducer } from '../../../store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,9 +7,9 @@ import { RegisterOptions, useForm } from 'react-hook-form';
 import { Connection, ConnectionHeader } from '../../../models';
 import { finalize, Observable } from 'rxjs';
 import { FormCheckbox, FormInput } from '../../form';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { SwitchBaseProps } from '@mui/material/internal/SwitchBase';
 
+// TODO : 2FA & HTTPS
 export const SettingsCredentials = () => {
   const dispatch = useDispatch();
   const connection = useSelector(getConnection);
@@ -46,7 +33,6 @@ export const SettingsCredentials = () => {
   type LoginError = { test?: boolean; login?: boolean };
   const [loginError, setLoginError] = useState<LoginError>({});
   const [loading, setLoading] = useState<boolean>();
-  const [showPassword, setShowPassword] = useState<boolean>();
 
   const setUrl = (data: Connection, type: keyof LoginError) => {
     try {
@@ -169,17 +155,8 @@ export const SettingsCredentials = () => {
             <FormInput
               controllerProps={{ name: 'password', control, rules: rules.password }}
               textFieldProps={{
-                type: showPassword ? 'text' : 'password',
+                type: 'password',
                 label: 'Password',
-                InputProps: {
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton aria-label="toggle password visibility" onClick={() => setShowPassword(!showPassword)} edge="end">
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                },
               }}
             />
           </Box>

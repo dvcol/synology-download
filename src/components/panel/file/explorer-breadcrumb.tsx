@@ -15,22 +15,20 @@ export const ExplorerBreadCrumbs = ({
   return (
     <Breadcrumbs aria-label="breadcrumb" maxItems={4}>
       <Button
+        key={`home-${disabled}`}
         variant="text"
-        startIcon={<HomeIcon sx={{ width: '0.9rem', height: '0.9rem' }} />}
-        sx={{ textTransform: 'capitalize' }}
+        sx={{ textTransform: 'none', minWidth: '0', mr: '-4px' }}
         onClick={($event) => onClick($event, 0)}
         disabled={disabled}
       >
-        <Typography component={'span'} sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-          Root
-        </Typography>
+        <HomeIcon sx={{ width: '0.9rem', height: '0.9rem', mb: '2px' }} />
       </Button>
       {crumbs?.map((folder, i) => (
         <Button
-          key={i}
+          key={`${i}-${disabled}`}
           variant="text"
-          startIcon={<FolderIcon sx={{ width: '0.9rem', height: '0.9rem' }} />}
-          sx={{ textTransform: 'capitalize' }}
+          startIcon={<FolderIcon sx={{ width: '0.9rem', height: '0.9rem', mb: '2px' }} />}
+          sx={{ textTransform: 'none' }}
           onClick={($event) => onClick($event, i + 1)}
           disabled={disabled}
         >

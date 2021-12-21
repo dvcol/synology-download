@@ -4,6 +4,20 @@ import { Property } from 'csstype';
 export const isDarkTheme = () => window.matchMedia('(prefers-color-scheme: dark').matches;
 
 export const darkTheme = () => {
+  const scrollbar = {
+    '&::-webkit-scrollbar': {
+      width: '0.25rem',
+    },
+    '&::-webkit-scrollbar-track': {
+      boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: 'rgb(150 150 150 / 50%)',
+      boxShadow: 'inset 0 0 6px rgba(0, 0, 0, 0.1)',
+      borderRadius: '0.5rem',
+    },
+  };
+
   const theme = {
     typography: {
       fontSize: 12,
@@ -11,19 +25,17 @@ export const darkTheme = () => {
     components: {
       MuiContainer: {
         styleOverrides: {
-          root: {
-            '&::-webkit-scrollbar': {
-              width: '0.25rem',
-            },
-            '&::-webkit-scrollbar-track': {
-              boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-            },
-            '&::-webkit-scrollbar-thumb': {
-              backgroundColor: 'rgb(150 150 150 / 50%)',
-              boxShadow: 'inset 0 0 6px rgba(0, 0, 0, 0.1)',
-              borderRadius: '0.5rem',
-            },
-          },
+          root: scrollbar,
+        },
+      },
+      MuiPaper: {
+        styleOverrides: {
+          root: scrollbar,
+        },
+      },
+      MuiTreeView: {
+        styleOverrides: {
+          root: scrollbar,
         },
       },
       MuiToolbar: {

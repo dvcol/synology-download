@@ -1,6 +1,5 @@
 import React from 'react';
 import { DialogContentText, Divider, IconButton, Menu, Tooltip } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
 import InfoIcon from '@mui/icons-material/Info';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
 import AddLinkIcon from '@mui/icons-material/AddLink';
@@ -55,8 +54,7 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
         onClick={handleClose}
         MenuListProps={{ 'aria-labelledby': 'basic-button' }}
       >
-        <NavbarMenuIcon label="Add file upload" icon={<AddIcon />} component={Link} to="/add" onClick={handleTab} />
-        <NavbarMenuIcon label="Add url upload" icon={<AddLinkIcon />} component={Link} to="/add" onClick={handleTab} />
+        <NavbarMenuIcon label="Add download task" icon={<AddLinkIcon />} component={Link} to="/add" onClick={handleTab} />
         <Divider />
         <NavbarMenuIcon label="Clear completed items" icon={<ClearAllIcon />} onClick={() => QueryService.deleteFinishedTasks().subscribe()} />
         <NavbarMenuIcon label="Resume all" icon={<PlayArrowIcon />} onClick={() => QueryService.resumeAllTasks().subscribe()} />

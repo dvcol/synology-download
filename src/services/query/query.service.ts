@@ -112,12 +112,12 @@ export class QueryService {
     );
   }
 
-  static listFolders(): Observable<FolderList> {
+  static listFolders(readonly = true): Observable<FolderList> {
     this.readyCheck();
-    return this.fileClient.listFolder(0, 0, true);
+    return this.fileClient.listFolder(0, 0, readonly);
   }
 
-  static listFiles(folderPath: string, filetype: 'all' | 'dir' = 'all'): Observable<FileList> {
+  static listFiles(folderPath: string, filetype: 'all' | 'dir' = 'dir'): Observable<FileList> {
     this.readyCheck();
     return this.fileClient.listFile(folderPath, 0, 0, filetype, [FileListOption.perm]);
   }

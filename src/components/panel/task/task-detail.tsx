@@ -12,6 +12,7 @@ import { Observable } from 'rxjs';
 import { QueryService } from '../../../services';
 import { ConfirmationDialog } from '../../dialog';
 import { IconLoader } from '../../ui-element';
+import { TaskEdit } from './task-edit';
 
 export const TaskDetail = ({
   task,
@@ -23,6 +24,7 @@ export const TaskDetail = ({
   buttonClick: (button: string, request: Observable<any>, $event?: React.MouseEvent, delay?: number) => void;
 }) => {
   const [prompt, setPrompt] = React.useState(false);
+  const [openEdit, setOpenEdit] = React.useState(false);
   const isDisabled = () => Object.values(loading).some(Boolean);
   return (
     <Typography component="span" variant="body2">
@@ -50,16 +52,16 @@ export const TaskDetail = ({
             >
               Pause
             </Button>
-
             <Button
               startIcon={<IconLoader icon={<EditIcon />} loading={loading?.edit} props={{ size: '1.25rem', color: 'secondary' }} />}
               variant="outlined"
               color="secondary"
-              onClick={() => buttonClick('edit', QueryService.editTask(task.id, 'download'))}
+              onClick={() => setOpenEdit(true)}
               disabled={isDisabled() || ![TaskStatus.downloading, TaskStatus.waiting, TaskStatus.paused].includes(task.status)}
             >
               Edit
-            </Button>
+            </Button>{' '}
+            <TaskEdit open={openEdit} task={task} onFormCancel={() => setOpenEdit(false)} onFormSubmit={() => setOpenEdit(false)} />
             <Button
               startIcon={<IconLoader icon={<DeleteIcon />} loading={loading?.delete} props={{ size: '1.25rem', color: 'error' }} />}
               variant="outlined"

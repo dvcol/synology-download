@@ -4,8 +4,7 @@ import { ConnectionHeader, Polling } from '../../../models';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPolling, syncPolling } from '../../../store';
 import { RegisterOptions, useForm } from 'react-hook-form';
-import { FormInput } from '../../form/form-input';
-import { FormSwitch } from '../../form/form-switch';
+import { FormInput, FormSwitch } from '../../form';
 
 export const SettingsPolling = () => {
   const dispatch = useDispatch();

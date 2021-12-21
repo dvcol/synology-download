@@ -72,10 +72,14 @@ export class SynologyDownloadService extends SynologyService {
   }
 
   editTask(id: string | string[], destination: string): Observable<CommonResponse[]> {
-    return this._do<CommonResponse[]>(HttpMethod.PUT, {
-      method: TaskMethod.edit,
-      id,
-      destination,
-    });
+    return this._do<CommonResponse[]>(
+      HttpMethod.PUT,
+      {
+        method: TaskMethod.edit,
+        id,
+        destination,
+      },
+      '2'
+    );
   }
 }
