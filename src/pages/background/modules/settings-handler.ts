@@ -22,7 +22,7 @@ export const restoreSettings = () =>
       store.dispatch(setNavbar(restoredSettings?.tabs[0]));
     }
     // restore context menu
-    buildContextMenu(restoredSettings?.menus || defaultSettings.menus);
+    buildContextMenu(restoredSettings?.menus || defaultSettings.menus).subscribe();
 
     chrome.storage.sync.get(stateSlice.name, ({ state }) => {
       const restoredState: StateSlice = JSON.parse(state || '{}');

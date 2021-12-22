@@ -1,15 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {
-  ChromeMessage,
-  ChromeMessageType,
-  Connection,
-  ContextMenuOption,
-  defaultSettings,
-  Notifications,
-  Polling,
-  SettingsSlice,
-  TaskTab,
-} from '../../models';
+import { Connection, ContextMenuOption, defaultSettings, Notifications, Polling, SettingsSlice, TaskTab } from '../../models';
 import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
 import { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
 import { addTo, removeFrom, setNestedReducer, setReducer, syncNestedReducer, syncReducer, syncRememberMeReducer } from '../reducers';
@@ -43,24 +33,16 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
     syncPolling: (oldSettings, action) => syncNestedReducer<Polling>(oldSettings, action, 'polling'),
     syncNotifications: (oldSettings, action) => {
       const color = action?.payload?.count?.color;
+      // TODO : move to thunk ?
       if (color !== oldSettings?.notifications?.count?.color) {
         chrome.action.setBadgeBackgroundColor({ color: color ?? '' }).then(() => console.debug('Badge color changed to ', color));
       }
       return syncNestedReducer<Notifications>(oldSettings, action, 'notifications');
     },
-    addContextMenu: (oldSettings, action: PayloadAction<ContextMenuOption>): SettingsSlice => {
-      chrome.runtime.sendMessage({
-        type: ChromeMessageType.addMenu,
-        payload: action.payload,
-      } as ChromeMessage);
-      return addTo<ContextMenuOption>(oldSettings, action, 'menus', (o) => o.id !== action?.payload.id);
-    },
+    addContextMenu: (oldSettings, action: PayloadAction<ContextMenuOption>): SettingsSlice =>
+      addTo<ContextMenuOption>(oldSettings, action, 'menus', (o) => o.id === action?.payload.id),
     removeContextMenu: (oldSettings, action: PayloadAction<string>): SettingsSlice | void => {
       if (oldSettings.menus?.length) {
-        chrome.runtime.sendMessage({
-          type: ChromeMessageType.removeMenu,
-          payload: action?.payload,
-        } as ChromeMessage);
         return removeFrom<ContextMenuOption, string>(oldSettings, action, 'menus', (o) => o.id !== action?.payload);
       }
     },

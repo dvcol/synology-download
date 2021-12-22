@@ -2,8 +2,12 @@ import { Observable } from 'rxjs';
 import { AuthMethod, CommonAPI, Endpoint, HttpMethod, HttpParameters, LoginResponse, SessionName } from '../../models';
 import { SynologyService } from './synology.service';
 
-// TDODO : handle HTTPS & 2FA
+// TODO : handle HTTPS & 2FA
 export class SynologyAuthService extends SynologyService {
+  constructor(protected isProxy = false, protected name: string = 'SynologyAuthService') {
+    super(isProxy, name);
+  }
+
   _do<T>(method: HttpMethod, params: HttpParameters, version = '1', api = CommonAPI.Auth, endpoint = Endpoint.Auth): Observable<T> {
     return super.do<T>(method, params, version, api, endpoint);
   }

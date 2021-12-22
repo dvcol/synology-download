@@ -3,8 +3,8 @@ import { filter, map, Observable, Subject, tap } from 'rxjs';
 import { Store } from 'redux';
 import { Store as ProxyStore } from 'webext-redux';
 import { getNotificationsBannerLevel, getNotificationsEnabled, getTasksCount, setTasksCount, store$ } from '../../store';
-import { bufferDebounceUnless, skipUntilRepeat } from '../../utils';
-import { ChromeMessage, ChromeMessageType, ChromeNotification, NotificationLevel, NotificationLevelKeys } from '../../models';
+import { bufferDebounceUnless, onMessage, sendMessage, skipUntilRepeat } from '../../utils';
+import { ChromeMessageType, ChromeNotification, NotificationLevel, NotificationLevelKeys } from '../../models';
 
 // TODO use Mui Snackbar to do in popup & in context notifications
 export class NotificationService {
@@ -39,15 +39,14 @@ export class NotificationService {
   static init(store: Store | ProxyStore, isProxy = false): void {
     this.store = store;
     this.isProxy = isProxy;
-    this.notify$.pipe(this.bufferStopStart('Notification')).subscribe();
-    this.error$.pipe(this.bufferStopStart('Errors')).subscribe();
-
-    store$(this.store, getTasksCount).subscribe((count) => this.store.dispatch(setTasksCount(count)));
 
     if (!isProxy) {
-      chrome.runtime.onMessage.addListener(({ type, payload }: ChromeMessage) => {
-        if (type === ChromeMessageType.notification) this.sendOrForward(payload as ChromeNotification);
-      });
+      this.notify$.pipe(this.bufferStopStart('Notification')).subscribe();
+      this.error$.pipe(this.bufferStopStart('Errors')).subscribe();
+
+      store$(this.store, getTasksCount).subscribe((count) => this.store.dispatch(setTasksCount(count)));
+
+      onMessage<ChromeNotification>([ChromeMessageType.notification]).subscribe(({ message: { payload } }) => this.sendOrForward(payload));
     }
   }
 
@@ -74,10 +73,7 @@ export class NotificationService {
 
   private static sendOrForward(notification?: ChromeNotification) {
     if (notification && this.isProxy) {
-      chrome.runtime.sendMessage({
-        type: ChromeMessageType.notification,
-        payload: notification,
-      } as ChromeMessage);
+      sendMessage<ChromeNotification>({ type: ChromeMessageType.notification, payload: notification }).subscribe();
     } else if (notification) {
       (notification.priority ?? 0 > NotificationLevel.info ? this.error$ : this.notify$).next(notification);
     }

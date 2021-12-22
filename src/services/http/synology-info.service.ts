@@ -3,6 +3,10 @@ import { CommonAPI, Endpoint, HttpMethod, HttpParameters, InfoMethod, InfoRespon
 import { SynologyService } from './synology.service';
 
 export class SynologyInfoService extends SynologyService {
+  constructor(protected isProxy = false, protected name: string = 'SynologyInfoService') {
+    super(isProxy, name);
+  }
+
   _do<T>(method: HttpMethod, params: HttpParameters, version = '1', api = CommonAPI.Info, endpoint = Endpoint.Query): Observable<T> {
     return super.do<T>(method, params, version, api, endpoint);
   }

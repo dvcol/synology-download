@@ -11,6 +11,7 @@ interface TasksReducers<S = TasksSlice> extends SliceCaseReducers<S> {
 }
 
 const setCount = (count?: string, plural = false) => {
+  // TODO : move to thunk ?
   chrome.action.setBadgeText({ text: count ?? '' }).then(() => console.debug('Badge changed to ', count));
   chrome.action.setTitle({ title: `${count ?? 0} task${plural ? 's' : ''} currently on your Download Station` }).then();
 };

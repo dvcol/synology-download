@@ -1,4 +1,5 @@
-import { ChromeMessage, ChromeMessageType } from '../../../models';
+import { ChromeMessageType, CreateTaskPayload } from '../../../models';
+import { sendMessage } from '../../../utils';
 
 /**
  * List of supported protocols
@@ -43,16 +44,13 @@ export const addClickListener = () =>
     if (e.button === 0) {
       const anchor = recursivelyFindAnchorAncestor(e.target as HTMLElement);
       if (anchor != null && anchor.href && startsWithAnyProtocol(anchor.href, DOWNLOAD_ONLY_PROTOCOLS)) {
-        chrome.runtime.sendMessage(
-          {
-            type: ChromeMessageType.createTask,
-            payload: {
-              uri: anchor.href,
-              source: document.URL,
-            },
-          } as ChromeMessage,
-          () => console.log('sent')
-        );
+        sendMessage<CreateTaskPayload>({
+          type: ChromeMessageType.createTask,
+          payload: {
+            uri: anchor.href,
+            source: document.URL,
+          },
+        }).subscribe(() => console.log('sent'));
         e.preventDefault();
       }
     }

@@ -1,8 +1,9 @@
 import { wrapStore } from 'webext-redux';
 import { setOption, setPopup, store } from '../../store';
-import { ChromeMessage, ChromeMessageType, ContextMenuOption, CreateTaskPayload, ModalInstance } from '../../models';
+import { ChromeMessageType, ContextMenuOption, CreateTaskPayload, ModalInstance } from '../../models';
 import { createContextMenu, NotificationService, PollingService, QueryService, removeContextMenu } from '../../services';
 import { restoreSettings } from './modules/settings-handler';
+import { onMessage } from '../../utils';
 
 console.log('This is the background page.');
 
@@ -22,6 +23,7 @@ NotificationService.init(store);
 restoreSettings();
 
 // Listen to ports
+// TODO: move to rxjs ?
 chrome.runtime.onConnect.addListener((port) => {
   if (ModalInstance.popup.toString() === port.name) {
     store.dispatch(setPopup(true));
@@ -37,19 +39,20 @@ chrome.runtime.onConnect.addListener((port) => {
 });
 
 // On message from chrome handle payload
-chrome.runtime.onMessage.addListener(({ type, payload }: ChromeMessage) => {
-  switch (type) {
-    case ChromeMessageType.createTask:
-      payload = payload as CreateTaskPayload;
-      QueryService.createTask(payload.uri, payload.source).subscribe();
-      break;
-    case ChromeMessageType.addMenu:
-      console.debug('message addMenu', type, payload);
-      createContextMenu(payload as ContextMenuOption);
-      break;
-    case ChromeMessageType.removeMenu:
-      console.log('message removeMenu', type, payload);
-      removeContextMenu(payload as string);
-      break;
+onMessage([ChromeMessageType.createTask, ChromeMessageType.addMenu, ChromeMessageType.removeMenu], true).subscribe(
+  ({ message: { type, payload }, sendResponse }) => {
+    console.log('type', type);
+    switch (type) {
+      case ChromeMessageType.createTask:
+        payload = payload as CreateTaskPayload;
+        QueryService.createTask(payload.uri, payload.source).subscribe(() => sendResponse());
+        break;
+      case ChromeMessageType.addMenu:
+        createContextMenu(payload as ContextMenuOption).subscribe(() => sendResponse());
+        break;
+      case ChromeMessageType.removeMenu:
+        removeContextMenu(payload as string).subscribe(() => sendResponse());
+        break;
+    }
   }
-});
+);

@@ -1,4 +1,5 @@
 import { ApiInfo } from './api-info.model';
+import { HttpMethod, HttpParameters } from './http.model';
 
 export enum SessionName {
   DiskStation = 'DiskStation',
@@ -170,4 +171,11 @@ export interface LoginResponse {
 export interface CommonResponse {
   error: number;
   id: string;
+}
+
+export type SynologyQueryArgs = [method: HttpMethod, params: HttpParameters, version: string, api: Api, endpoint: Endpoint];
+
+export interface SynologyQueryPayload {
+  id: string;
+  args: SynologyQueryArgs;
 }

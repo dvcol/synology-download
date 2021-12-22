@@ -1,13 +1,12 @@
 import { combineLatest, distinctUntilChanged, Subject, switchMap, timer } from 'rxjs';
 import { Store } from 'redux';
-import { Store as ProxyStore } from 'webext-redux';
 import { getLogged, getPollingEnabled, getPollingInterval, store$ } from '../../store';
 import { defaultPolling } from '../../models';
 import { QueryService } from '../query';
 import { skipUntilRepeat } from '../../utils';
 
 export class PollingService {
-  private static store: any | Store | ProxyStore;
+  private static store: Store;
 
   private static readonly stop$ = new Subject<void>();
   private static readonly start$ = new Subject<void>();
@@ -26,7 +25,7 @@ export class PollingService {
     return getPollingInterval(this.store.getState()) ?? defaultPolling.background.interval;
   }
 
-  static init(store: Store | ProxyStore): void {
+  static init(store: Store): void {
     this.store = store;
     this.timer$.subscribe(() => QueryService.listTasks().subscribe());
 

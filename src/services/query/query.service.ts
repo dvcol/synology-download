@@ -31,17 +31,25 @@ import { DownloadStationConfig } from '../../models/download-station-config.mode
 // TODO error handling
 export class QueryService {
   private static store: any | Store | ProxyStore;
+  private static isProxy: boolean;
 
-  private static infoClient = new SynologyInfoService();
-  private static authClient = new SynologyAuthService();
-  private static fileClient = new SynologyFileService();
-  private static downloadClient = new SynologyDownloadService();
+  private static infoClient: SynologyInfoService;
+  private static authClient: SynologyAuthService;
+  private static fileClient: SynologyFileService;
+  private static downloadClient: SynologyDownloadService;
 
   private static baseUrl: string;
 
-  static init(store: Store | ProxyStore) {
+  static init(store: Store | ProxyStore, isProxy = false) {
     this.store = store;
-    store$(store, getUrl).subscribe((url) => this.setBaseUrl(url));
+    this.isProxy = isProxy;
+
+    this.infoClient = new SynologyInfoService(isProxy);
+    this.authClient = new SynologyAuthService(isProxy);
+    this.fileClient = new SynologyFileService(isProxy);
+    this.downloadClient = new SynologyDownloadService(isProxy);
+
+    if (!isProxy) store$(store, getUrl).subscribe((url) => this.setBaseUrl(url));
   }
 
   static setBaseUrl(baseUrl: string): void {
@@ -60,7 +68,7 @@ export class QueryService {
   }
 
   static get isReady() {
-    return !!this.baseUrl?.length;
+    return this.isProxy || !!this.baseUrl?.length;
   }
 
   private static readyCheck() {

@@ -14,8 +14,8 @@ import { SynologyService } from './synology.service';
 import { DownloadStationConfig } from '../../models/download-station-config.model';
 
 export class SynologyDownloadService extends SynologyService {
-  constructor(protected baseUrl = '', prefix = Controller.DownloadStation) {
-    super(baseUrl, prefix);
+  constructor(isProxy = false, name = 'SynologyDownloadService', prefix = Controller.DownloadStation) {
+    super(isProxy, name, prefix);
   }
 
   _do<T>(method: HttpMethod, params: HttpParameters, version = '1', api = DownloadStationAPI.Task, endpoint = Endpoint.Task): Observable<T> {

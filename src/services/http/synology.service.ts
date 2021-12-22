@@ -1,15 +1,39 @@
 import { BaseHttpService } from './base-http-service';
-import { map, Observable } from 'rxjs';
-import { Api, Controller, Endpoint, HttpMethod, HttpParameters, HttpResponse, SynologyError } from '../../models';
-import { stringifyParams } from '../../utils';
+import { catchError, map, Observable, of } from 'rxjs';
+import {
+  Api,
+  ChromeMessageType,
+  Controller,
+  Endpoint,
+  HttpMethod,
+  HttpParameters,
+  HttpResponse,
+  SynologyError,
+  SynologyQueryArgs,
+  SynologyQueryPayload,
+} from '../../models';
+import { onMessage, sendMessage, stringifyParams } from '../../utils';
 
 export class SynologyService extends BaseHttpService {
-  protected prefix = Controller.Common;
-  private sid?: string;
+  protected sid?: string;
 
-  constructor(protected baseUrl = '', prefix = Controller.Common) {
-    super(baseUrl + prefix);
-    this.prefix = prefix;
+  constructor(protected isProxy = false, protected name: string = 'SynologyService', protected prefix = Controller.Common) {
+    super(prefix);
+
+    if (!isProxy) this.listen();
+  }
+
+  listen(name = this.name): void {
+    onMessage<SynologyQueryPayload>([ChromeMessageType.query], true).subscribe(({ message: { payload }, sendResponse }) => {
+      if (payload?.id === name) {
+        this.query(...payload?.args)
+          .pipe(
+            map((response) => ({ success: true, payload: response })),
+            catchError((error) => of({ success: false, error }))
+          )
+          .subscribe((response) => sendResponse(response));
+      }
+    });
   }
 
   setBaseUrl(baseUrl: string, prefix = this.prefix): void {
@@ -39,15 +63,22 @@ export class SynologyService extends BaseHttpService {
     }
   }
 
+  forward<T>(...args: SynologyQueryArgs): Observable<T> {
+    return sendMessage<SynologyQueryPayload, T>({ type: ChromeMessageType.query, payload: { id: this.name, args } });
+  }
+
   do<T>(method: HttpMethod, params: HttpParameters, version: string, api: Api, endpoint: Endpoint): Observable<T> {
-    return this.query<T>(method, params, version, api, endpoint).pipe(
-      map((response) => {
-        if (response?.success) {
-          return response.data;
-        } else {
-          throw new SynologyError(api, response?.error);
-        }
-      })
-    );
+    return (this.isProxy ? this.forward : this.query)
+      .bind(this)<T>(method, params, version, api, endpoint)
+      .pipe(
+        map((response) => {
+          if (response?.success === true) {
+            return response.data;
+          } else if (response?.success === false) {
+            throw new SynologyError(api, response?.error);
+          }
+          return response;
+        })
+      );
   }
 }

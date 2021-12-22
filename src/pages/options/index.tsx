@@ -16,7 +16,7 @@ proxyStore
   .ready()
   .then(() => {
     // Pass store to services and init
-    QueryService.init(proxyStore);
+    QueryService.init(proxyStore, true);
     NotificationService.init(proxyStore, true);
     // Register as open
     chrome.runtime.connect({ name: ModalInstance.option });

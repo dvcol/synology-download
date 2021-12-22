@@ -1,13 +1,8 @@
-import { ChromeMessage, ChromeMessageType } from '../../../models';
+import { ChromeMessageType } from '../../../models';
+import { onMessage } from '../../../utils';
 
 // Listen to popup triggers coming from background
-export const addPopupListener = () =>
-  chrome.runtime.onMessage.addListener(async (request: ChromeMessage) => {
-    console.log(request);
-    if (request.type === ChromeMessageType.popup) {
-      open();
-    }
-  });
+export const addPopupListener = () => onMessage<string>([ChromeMessageType.popup]).subscribe(() => open());
 
 /**
  * Open a modal popup for complex download actions

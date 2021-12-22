@@ -1,4 +1,19 @@
-import { buffer, debounceTime, elementAt, Observable, OperatorFunction, race, repeat, repeatWhen, skipWhile, takeUntil } from 'rxjs';
+import {
+  buffer,
+  debounceTime,
+  elementAt,
+  filter,
+  fromEventPattern,
+  Observable,
+  OperatorFunction,
+  race,
+  repeat,
+  repeatWhen,
+  skipWhile,
+  takeUntil,
+} from 'rxjs';
+import { ChromeMessage, ChromeMessageHandler, ChromeMessagePayload, ChromeMessageType, ChromeResponse } from '../models';
+import MessageSender = chrome.runtime.MessageSender;
 
 /**
  * Type signature for the rxjs operator that start emitting when skip condition is falsy, keeps emitting until stop$ emits and restart emitting if start$ emits.
@@ -62,10 +77,39 @@ export const bufferDebounceUnless: BufferDebounceUnless = (debounce, limit) => (
       })
   );
 
-export type BufferStopStart = <T>(
-  debounce: number,
-  limit: number,
-  skip: (value: T, index: number) => boolean,
-  stop$: Observable<unknown>,
-  start$: Observable<unknown>
-) => OperatorFunction<T, T[]>;
+/**
+ * Rxjs wrapper for chrome.runtime.onMessage event listener
+ * @param async if the listener waits for async response or not
+ * @param types optional type filtering
+ */
+export const onMessage = <M = ChromeMessagePayload, R = any>(types?: ChromeMessageType[], async = false): Observable<ChromeMessageHandler<M, R>> =>
+  fromEventPattern<ChromeMessageHandler<M, R>>(
+    (handler) => {
+      const wrapper = (message: ChromeMessage<M>, sender: MessageSender, sendResponse: (response?: ChromeResponse<R>) => void) => {
+        handler({ message, sender, sendResponse });
+        return async;
+      };
+      chrome.runtime.onMessage.addListener(wrapper);
+      return wrapper;
+    },
+    (handler, wrapper) => chrome.runtime.onMessage.removeListener(wrapper)
+  ).pipe(filter(({ message }) => !types?.length || !!types?.includes(message?.type)));
+
+/**
+ * Rxjs wrapper for chrome.runtime.sendMessage event sender
+ * @param message the ChromeMessage to send
+ */
+export const sendMessage = <M = ChromeMessagePayload, R = void>(message: ChromeMessage<M>): Observable<R> =>
+  new Observable<R>((subscriber) => {
+    chrome.runtime.sendMessage(message, (response) => {
+      if (response?.success === false) {
+        subscriber.error(response?.error);
+      } else if (response?.success) {
+        subscriber.next(response?.payload);
+        subscriber.complete();
+      } else {
+        subscriber.next(response);
+        subscriber.complete();
+      }
+    });
+  });

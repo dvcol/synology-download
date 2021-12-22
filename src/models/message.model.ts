@@ -1,5 +1,7 @@
 import { ContextMenuOption } from './context-menu.model';
 import { ChromeNotification } from './notification.model';
+import { SynologyQueryPayload } from './synology.model';
+import MessageSender = chrome.runtime.MessageSender;
 
 /**
  * Enumeration for message types
@@ -10,6 +12,7 @@ export enum ChromeMessageType {
   addMenu = 'addMenu',
   removeMenu = 'removeMenu',
   notification = 'notification',
+  query = 'query',
 }
 
 /**
@@ -23,12 +26,26 @@ export interface CreateTaskPayload {
 /**
  * Type union of possible message payloads
  */
-export type ChromeMessagePayload = string | ContextMenuOption | CreateTaskPayload | ChromeNotification;
+export type ChromeMessagePayload = string | ContextMenuOption | CreateTaskPayload | ChromeNotification | SynologyQueryPayload;
 
 /**
  * Message interface for communication between content & background
  */
-export interface ChromeMessage {
+export interface ChromeMessage<T extends ChromeMessagePayload = ChromeMessagePayload> {
   type: ChromeMessageType;
-  payload?: ChromeMessagePayload;
+  payload?: T;
 }
+
+/**
+ * Message handler signature for Rxjs wrapping.
+ */
+export type ChromeMessageHandler<M, R> = {
+  message: ChromeMessage<M>;
+  sender: MessageSender;
+  sendResponse: (response?: ChromeResponse<R>) => void;
+};
+
+/**
+ * Response wrapper for payload proxy
+ */
+export type ChromeResponse<T = any> = { success: boolean; payload?: T; error?: Error };

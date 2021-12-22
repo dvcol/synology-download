@@ -15,6 +15,10 @@ import {
 import { SynologyService } from './synology.service';
 
 export class SynologyFileService extends SynologyService {
+  constructor(protected isProxy = false, protected name: string = 'SynologyFileService') {
+    super(isProxy, name);
+  }
+
   _do<T>(method: HttpMethod, params: HttpParameters, version = '2', api = FileStationAPI.List, endpoint = Endpoint.Entry): Observable<T> {
     return super.do<T>(method, params, version, api, endpoint);
   }

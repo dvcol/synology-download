@@ -2,10 +2,11 @@ import { Accordion, AccordionDetails, AccordionSummary, Card, CardActions, CardC
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { addContextMenu, getMenus, removeContextMenu } from '../../../store';
 import AddIcon from '@mui/icons-material/Add';
-import { defaultMenu, InterfaceHeader } from '../../../models';
+import { ChromeMessageType, ContextMenuOption, defaultMenu, InterfaceHeader } from '../../../models';
 import { v4 as uuid } from 'uuid';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { sendMessage } from '../../../utils';
 
 export const SettingsContext = () => {
   const dispatch = useDispatch();
@@ -34,7 +35,15 @@ export const SettingsContext = () => {
               <Typography sx={{ color: 'text.secondary' }}>{t.title}</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Fab color="primary" aria-label="add" onClick={() => dispatch(removeContextMenu(t.id))}>
+              <Fab
+                color="primary"
+                aria-label="add"
+                onClick={() => {
+                  // TODO : move to thunk ?
+                  sendMessage<string>({ type: ChromeMessageType.removeMenu, payload: t.id }).subscribe();
+                  dispatch(removeContextMenu(t.id));
+                }}
+              >
                 <AddIcon />
               </Fab>
             </AccordionDetails>
@@ -42,7 +51,16 @@ export const SettingsContext = () => {
         ))}
       </CardContent>
       <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
-        <Fab color="primary" aria-label="add" onClick={() => dispatch(addContextMenu({ ...defaultMenu, id: uuid() }))}>
+        <Fab
+          color="primary"
+          aria-label="add"
+          onClick={() => {
+            const payload = { ...defaultMenu, id: uuid() };
+            // TODO : move to thunk ?
+            sendMessage<ContextMenuOption>({ type: ChromeMessageType.addMenu, payload }).subscribe();
+            dispatch(addContextMenu(payload));
+          }}
+        >
           <AddIcon />
         </Fab>
       </CardActions>

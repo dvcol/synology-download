@@ -22,6 +22,7 @@ export const stateSlice = createSlice<StateSlice, StateReducers, 'state'>({
   initialState,
   reducers: {
     setLogged: (state, { payload: logged }) => {
+      // TODO : move to thunk ?
       chrome.storage.sync.set({ [stateSlice.name]: JSON.stringify({ logged }) }, () => console.debug('State sync success', state));
       return { ...state, logged };
     },

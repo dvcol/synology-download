@@ -9,6 +9,7 @@ export const setReducer = (oldSettings: SettingsSlice, action: PayloadAction<Par
 });
 export const syncReducer = (oldSettings: SettingsSlice, action: PayloadAction<Partial<SettingsSlice>>): SettingsSlice => {
   const newSettings = setReducer(oldSettings, action);
+  // TODO : move to thunk ?
   chrome.storage.sync.set({ [settingsSlice.name]: JSON.stringify(newSettings) }, () => console.debug('Setting sync success', newSettings));
   return newSettings;
 };
@@ -19,12 +20,14 @@ export const setNestedReducer = <T>(oldSettings: SettingsSlice, action: PayloadA
 
 export const syncNestedReducer = <T>(oldSettings: SettingsSlice, action: PayloadAction<Partial<T>>, name: keyof SettingsSlice): SettingsSlice => {
   const newSettings = setNestedReducer(oldSettings, action, name);
+  // TODO : move to thunk ?
   chrome.storage.sync.set({ settings: JSON.stringify(newSettings) }, () => console.debug('Setting sync success', newSettings));
   return newSettings;
 };
 
 export const syncRememberMeReducer = (oldSettings: SettingsSlice, { payload: rememberMe }: PayloadAction<boolean>): SettingsSlice => {
   const setSettings = { ...oldSettings, connection: { ...oldSettings.connection, rememberMe } };
+  // TODO : move to thunk ?
   chrome.storage.sync.get(settingsSlice.name, ({ settings }) => {
     const _settings = parseJSON<SettingsSlice>(settings);
     const syncedSettings = { ..._settings, connection: { ..._settings?.connection, rememberMe } };
