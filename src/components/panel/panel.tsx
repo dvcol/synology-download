@@ -3,17 +3,18 @@ import { Route, Routes } from 'react-router-dom';
 import { TaskAdd, TaskPanel } from './task';
 import { Settings } from './settings';
 import { Info } from './info';
+import { Container } from '@mui/material';
 
 export const Panel = () => {
   return (
-    <React.Fragment>
+    <Container disableGutters maxWidth={false} sx={{ overflow: 'auto', height: 'calc(100vh - 48px)' }}>
       <Routes>
         <Route path="*" element={<TaskPanel />} />
-        <Route path="/add/*" element={<TaskAdd />} />
+        <Route path="/add/*" element={<TaskAdd cardProps={{ sx: { m: '0.3rem' } }} />} />
         <Route path="/settings/*" element={<Settings />} />
         <Route path="/info/*" element={<Info />} />
       </Routes>
-    </React.Fragment>
+    </Container>
   );
 };
 

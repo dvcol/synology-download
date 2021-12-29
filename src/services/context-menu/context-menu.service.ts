@@ -20,6 +20,7 @@ export function createContextMenu(option: ContextMenuOption): Observable<void> {
             // On click instruct content.ts to open the modal
             chrome.tabs.sendMessage(tab.id, {
               type: ChromeMessageType.popup,
+              payload: info,
             });
           }
         });

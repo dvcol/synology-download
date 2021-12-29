@@ -38,7 +38,7 @@ function recursivelyFindAnchorAncestor(e: HTMLElement | null, depth = 10): HTMLA
 
 // Inspired by https://github.com/seansfkelley/nas-download-manager/blob/master/src/content/index.ts
 // Detect if the click event is on a supported downloadable link
-export const addClickListener = () =>
+export const addAnchorClickListener = () =>
   document.addEventListener('click', async (e) => {
     // Left clicks only
     if (e.button === 0) {

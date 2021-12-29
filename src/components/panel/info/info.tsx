@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Container, Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { ApiInfo, InfoResponse } from '../../../models';
 import { QueryService } from '../../../services';
 import { tap } from 'rxjs';
@@ -12,7 +12,7 @@ export const Info = () => {
     QueryService.isReady &&
       QueryService.info()
         .pipe(tap(console.log))
-        .subscribe((res) => setInfos(res?.data));
+        .subscribe((info) => setInfos(info));
   }, []);
 
   const ApiInfoDetail = ({ api }: { api: ApiInfo }) => (
@@ -38,7 +38,7 @@ export const Info = () => {
     </Grid>
   );
   return (
-    <Container disableGutters sx={{ display: 'flex', flex: '1 1 auto', height: 'calc(100vh - 48px)', flexDirection: 'column' }} maxWidth={false}>
+    <Box>
       {infos &&
         Object.entries(infos)?.map(([k, v]) => (
           <div key={k}>
@@ -46,7 +46,7 @@ export const Info = () => {
             <ApiInfoDetail api={v} />
           </div>
         ))}
-    </Container>
+    </Box>
   );
 };
 

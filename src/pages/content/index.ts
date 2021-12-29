@@ -1,6 +1,6 @@
-import { addClickListener, addPopupListener } from './modules';
+import { addAnchorClickListener, renderContentApp } from './modules';
 
 console.log('Content script works!');
 
-addClickListener();
-addPopupListener();
+renderContentApp();
+addAnchorClickListener();

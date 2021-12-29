@@ -38,6 +38,11 @@ export const darkTheme = () => {
           root: scrollbar,
         },
       },
+      MuiInputBase: {
+        styleOverrides: {
+          input: scrollbar,
+        },
+      },
       MuiToolbar: {
         styleOverrides: {
           root: {

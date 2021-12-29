@@ -1,2 +1,2 @@
-export * from './html-anchor';
-export * from './popup-handler';
+export * from './anchor';
+export * from './modal';
