@@ -30,7 +30,7 @@ export const renderContentApp = () => {
 
   const app = shadowRoot.querySelector(`#${ModalInstance.modal}-app`);
   const container = shadowRoot.querySelector(`#${ModalInstance.modal}-container`) as HTMLElement;
-  const cache = createCache({ key: 'css', container });
+  const cache = createCache({ key: `${ModalInstance.modal}-cache`, container });
 
   proxyStore
     .ready()

@@ -15,6 +15,7 @@ import { Store } from 'redux';
 import { Store as ProxyStore } from 'webext-redux';
 import { EMPTY, Observable, tap } from 'rxjs';
 import {
+  ChromeMessageType,
   CommonResponse,
   FileList,
   FileListOption,
@@ -27,6 +28,7 @@ import {
 } from '../../models';
 import { NotificationService } from '../notification';
 import { DownloadStationConfig } from '../../models/download-station-config.model';
+import { onMessage, sendMessage } from '../../utils';
 
 // TODO error handling
 export class QueryService {
@@ -49,15 +51,24 @@ export class QueryService {
     this.fileClient = new SynologyFileService(isProxy);
     this.downloadClient = new SynologyDownloadService(isProxy);
 
-    if (!isProxy) store$(store, getUrl).subscribe((url) => this.setBaseUrl(url));
+    if (!isProxy) {
+      store$(store, getUrl).subscribe((url) => this.setBaseUrl(url));
+      onMessage<string>([ChromeMessageType.baseUrl]).subscribe(({ message: { payload } }) => {
+        if (payload) this.setBaseUrl(payload);
+      });
+    }
   }
 
   static setBaseUrl(baseUrl: string): void {
-    this.baseUrl = baseUrl;
-    this.infoClient.setBaseUrl(baseUrl);
-    this.authClient.setBaseUrl(baseUrl);
-    this.fileClient.setBaseUrl(baseUrl);
-    this.downloadClient.setBaseUrl(baseUrl);
+    if (this.isProxy) {
+      sendMessage<string>({ type: ChromeMessageType.baseUrl, payload: baseUrl }).subscribe();
+    } else {
+      this.baseUrl = baseUrl;
+      this.infoClient.setBaseUrl(baseUrl);
+      this.authClient.setBaseUrl(baseUrl);
+      this.fileClient.setBaseUrl(baseUrl);
+      this.downloadClient.setBaseUrl(baseUrl);
+    }
   }
 
   static setSid(sid?: string): void {

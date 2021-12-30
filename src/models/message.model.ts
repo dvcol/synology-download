@@ -14,6 +14,7 @@ export enum ChromeMessageType {
   removeMenu = 'removeMenu',
   notification = 'notification',
   query = 'query',
+  baseUrl = 'baseUrl',
 }
 
 /**
