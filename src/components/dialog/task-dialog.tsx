@@ -21,7 +21,6 @@ export const TaskDialog = ({ container }: React.PropsWithRef<{ container?: Porta
 
   useEffect(() => {
     onMessage<OnClickData>([ChromeMessageType.popup]).subscribe(({ message }) => {
-      console.log('open modal', message);
       if (message?.payload) {
         const { linkUrl: uri, pageUrl: source } = message.payload;
         setForm({ uri, source });

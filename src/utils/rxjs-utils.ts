@@ -113,3 +113,23 @@ export const sendMessage = <M = ChromeMessagePayload, R = void>(message: ChromeM
       }
     });
   });
+
+/**
+ * Rxjs wrapper for chrome.tabs.sendMessage event sender
+ * @param tabId the id of the target tab
+ * @param message the ChromeMessage to send
+ */
+export const sendTabMessage = <M = ChromeMessagePayload, R = void>(tabId: number, message: ChromeMessage<M>): Observable<R> =>
+  new Observable<R>((subscriber) => {
+    chrome.tabs.sendMessage(tabId, message, (response) => {
+      if (response?.success === false) {
+        subscriber.error(response?.error);
+      } else if (response?.success) {
+        subscriber.next(response?.payload);
+        subscriber.complete();
+      } else {
+        subscriber.next(response);
+        subscriber.complete();
+      }
+    });
+  });

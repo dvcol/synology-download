@@ -79,25 +79,21 @@ export class NotificationService {
     }
   }
 
-  private static build(priority: NotificationLevel, title: string, message: string, contextMessage?: string, iconUrl = 'assets/icons/icon-64.png') {
-    return {
+  private static buildAndSend(
+    priority: NotificationLevel,
+    title: string,
+    message: string,
+    contextMessage?: string,
+    iconUrl = 'assets/icons/icon-64.png'
+  ): void {
+    this.sendOrForward({
       priority,
       type: 'basic',
       title: `[${NotificationLevelKeys[priority]}] : ${title}`,
       message,
       contextMessage,
       iconUrl,
-    };
-  }
-
-  private static buildAndSend(
-    level: NotificationLevel,
-    title: string,
-    message: string,
-    contextMessage?: string,
-    iconUrl = 'assets/icons/icon-64.png'
-  ): void {
-    this.sendOrForward(this.build(level, title, message, contextMessage, iconUrl));
+    });
   }
 
   static trace(title: string, message: string, contextMessage?: string, iconUrl?: string) {

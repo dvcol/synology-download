@@ -1,5 +1,7 @@
 import { ChromeMessageType, ContextMenuOption } from '../../models';
 import { EMPTY, forkJoin, Observable } from 'rxjs';
+import { sendTabMessage } from '../../utils';
+import OnClickData = chrome.contextMenus.OnClickData;
 
 /**
  * Add a new context menu to chrome with the given options
@@ -18,10 +20,7 @@ export function createContextMenu(option: ContextMenuOption): Observable<void> {
         chrome.contextMenus.onClicked.addListener(function (info, tab) {
           if (info.menuItemId === option.id && tab?.id !== undefined) {
             // On click instruct content.ts to open the modal
-            chrome.tabs.sendMessage(tab.id, {
-              type: ChromeMessageType.popup,
-              payload: info,
-            });
+            sendTabMessage<OnClickData>(tab.id, { type: ChromeMessageType.popup, payload: info }).subscribe();
           }
         });
 

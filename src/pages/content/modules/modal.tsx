@@ -7,7 +7,7 @@ import { darkTheme } from '../../../themes';
 import { proxyStore } from '../../../store';
 import { NotificationService, QueryService } from '../../../services';
 import { ModalInstance } from '../../../models';
-import { TaskDialog } from '../../../components';
+import { NotificationStack, TaskDialog } from '../../../components';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 
@@ -47,6 +47,7 @@ export const renderContentApp = () => {
           <Provider store={proxyStore}>
             <CacheProvider value={cache}>
               <ThemeProvider theme={darkTheme()}>
+                <NotificationStack />
                 <TaskDialog container={container} />
               </ThemeProvider>
             </CacheProvider>

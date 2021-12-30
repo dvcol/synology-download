@@ -1,3 +1,4 @@
+export * from './App';
 export * from './navbar';
 export * from './panel';
 export * from './form';
