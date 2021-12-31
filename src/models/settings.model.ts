@@ -2,7 +2,8 @@ import { defaultTabs, Tab, TabType } from './tab.model';
 import { defaultMenu } from './context-menu.model';
 import { SettingsSlice } from './store.model';
 import { TaskStatus } from './task.model';
-import { NotificationLevel, NotificationScope } from './notification.model';
+import { BannerNotificationScope, NotificationLevel, SnackNotificationScope } from './notification.model';
+import { OptionsObject } from 'notistack';
 
 export enum SettingHeader {
   connection = 'connection',
@@ -35,7 +36,7 @@ export interface Connection {
   password?: string;
 }
 
-export const defaultConnection: Connection = { rememberMe: false, protocol: 'http', port: 5000 };
+export const defaultConnection: Connection = { rememberMe: true, protocol: 'http', port: 5000 };
 
 export interface Polling {
   enabled: boolean;
@@ -58,11 +59,20 @@ export interface NotificationsCount extends Tab {
 export interface NotificationsBanner {
   enabled: boolean;
   level: NotificationLevel;
-  scope: NotificationScope;
+  scope: BannerNotificationScope;
+}
+
+export interface NotificationsSnack {
+  enabled: boolean;
+  level: NotificationLevel;
+  scope: SnackNotificationScope;
+  timeout: OptionsObject['autoHideDuration'];
+  position: OptionsObject['anchorOrigin'];
 }
 
 export interface Notifications {
   count: NotificationsCount;
+  snack: NotificationsSnack;
   banner: NotificationsBanner;
 }
 
@@ -72,6 +82,16 @@ export const defaultNotifications: Notifications = {
     template: TabType.all,
     status: Object.values(TaskStatus),
     color: '#4285f4',
+  },
+  snack: {
+    enabled: true,
+    level: NotificationLevel.info,
+    scope: {
+      popup: true,
+      content: true,
+    },
+    timeout: 3000,
+    position: { vertical: 'bottom', horizontal: 'right' },
   },
   banner: {
     enabled: true,

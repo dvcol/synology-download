@@ -20,7 +20,7 @@ export const getTasksCount = createSelector(getTasks, getNotificationsCount, (ta
   enabled ? tasks?.filter((t) => status?.includes(t?.status)).length ?? 0 : undefined
 );
 
-export const getNotificationsEnabled = createSelector(
+export const getNotificationsBannerEnabled = createSelector(
   getNotificationsBanner,
   isModalOpen,
   ({ enabled, scope }, open) => enabled && (open ? scope?.popup : scope?.background)

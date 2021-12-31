@@ -1,4 +1,5 @@
 import NotificationOptions = chrome.notifications.NotificationOptions;
+import { OptionsObject } from 'notistack';
 
 export enum NotificationLevel {
   trace = -2,
@@ -16,11 +17,31 @@ export const NotificationLevelKeys = {
   [NotificationLevel.error]: 'Error',
 };
 
-export interface NotificationScope {
+export enum NotificationType {
+  banner = 'banner',
+  snack = 'snack',
+}
+
+export interface BannerNotificationScope {
   background: boolean;
   popup: boolean;
   finished: boolean;
   failed: boolean;
 }
 
+export interface SnackNotificationScope {
+  popup: boolean;
+  content: boolean;
+}
+
 export type ChromeNotification = NotificationOptions;
+
+export interface SnackMessage {
+  title: string;
+  message: string;
+  contextMessage?: string;
+  priority?: NotificationLevel;
+  success?: boolean;
+}
+
+export type SnackNotification = { message: SnackMessage; options: OptionsObject };

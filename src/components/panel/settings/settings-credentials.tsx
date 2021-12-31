@@ -40,7 +40,7 @@ export const SettingsCredentials = () => {
     } catch (error) {
       setLoginError({ ...loginError, [type]: true });
       console.debug('Failed to set url', error);
-      NotificationService.debug('Failed to set url', JSON.stringify(error));
+      NotificationService.debug({ title: 'Failed to set url', message: JSON.stringify(error) });
     }
   };
 
@@ -66,12 +66,12 @@ export const SettingsCredentials = () => {
             dispatch(data?.rememberMe ? syncConnection(data) : setConnection(data));
           }
           setLoginError({ ...loginError, [type]: false });
-          NotificationService.info('Login/Logout', `The ${type} was successful`, urlReducer(data));
+          NotificationService.info({ title: 'Login/Logout', message: `The ${type} was successful`, contextMessage: urlReducer(data) });
         },
         error: (error: Error) => {
           setLoginError({ ...loginError, [type]: true });
           QueryService.setBaseUrl(urlReducer(connection));
-          NotificationService.error(`The ${type} has failed`, error?.message ?? error?.name, urlReducer(data));
+          NotificationService.error({ title: `The ${type} has failed`, message: error?.message ?? error?.name, contextMessage: urlReducer(data) });
         },
       });
   };

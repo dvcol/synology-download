@@ -181,7 +181,7 @@ export class QueryService {
         },
         error: (err) => {
           console.error('task failed to create', err);
-          NotificationService.error(err, 'Failed to add download task', source);
+          NotificationService.error({ title: err, message: 'Failed to add download task', contextMessage: source });
         },
       })
     );
