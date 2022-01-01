@@ -1,4 +1,4 @@
-import { ChromeMessageType, ContextMenuOption } from '../../models';
+import { ChromeMessageType, ContextMenu } from '../../models';
 import { EMPTY, forkJoin, Observable } from 'rxjs';
 import { sendTabMessage } from '../../utils';
 import OnClickData = chrome.contextMenus.OnClickData;
@@ -6,7 +6,7 @@ import OnClickData = chrome.contextMenus.OnClickData;
 /**
  * Add a new context menu to chrome with the given options
  */
-export function createContextMenu(option: ContextMenuOption): Observable<void> {
+export function createContextMenu(option: ContextMenu): Observable<void> {
   return new Observable<void>((subscriber) => {
     console.debug('adding context menu');
     chrome.contextMenus.create(
@@ -49,7 +49,7 @@ export function removeContextMenu(id: string): Observable<void> {
  * Build context menu for the menu options given
  * @param options the options
  */
-export function buildContextMenu(options: ContextMenuOption[] | undefined): Observable<void | void[]> {
+export function buildContextMenu(options: ContextMenu[] | undefined): Observable<void | void[]> {
   chrome.contextMenus.removeAll();
   if (options?.length) return forkJoin(options.map(createContextMenu));
   return EMPTY;

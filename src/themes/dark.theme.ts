@@ -7,6 +7,7 @@ export const darkTheme = () => {
   const scrollbar = {
     '&::-webkit-scrollbar': {
       width: '0.25rem',
+      height: '0.25rem',
     },
     '&::-webkit-scrollbar-track': {
       boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
@@ -118,7 +119,8 @@ export const darkTheme = () => {
       },
       MuiBreadcrumbs: {
         styleOverrides: {
-          ol: { flexFlow: 'nowrap' },
+          root: scrollbar,
+          ol: { flexFlow: 'nowrap', minHeight: '33px' },
         },
       },
     },

@@ -1,6 +1,6 @@
 import { wrapStore } from 'webext-redux';
 import { setOption, setPopup, store } from '../../store';
-import { ChromeMessageType, ContextMenuOption, CreateTaskPayload, ModalInstance } from '../../models';
+import { ChromeMessageType, ContextMenu, CreateTaskPayload, ModalInstance } from '../../models';
 import { createContextMenu, NotificationService, PollingService, QueryService, removeContextMenu } from '../../services';
 import { restoreSettings } from './modules/settings-handler';
 import { onMessage } from '../../utils';
@@ -51,7 +51,7 @@ onMessage([ChromeMessageType.createTask, ChromeMessageType.addMenu, ChromeMessag
         });
         break;
       case ChromeMessageType.addMenu:
-        createContextMenu(payload as ContextMenuOption).subscribe({
+        createContextMenu(payload as ContextMenu).subscribe({
           next: () => sendResponse({ success: true, payload }),
           error: (error) => sendResponse({ success: false, error }),
         });

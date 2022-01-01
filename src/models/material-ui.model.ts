@@ -41,3 +41,37 @@ export const ColorMap: Record<string, ColorLevel> = {
 export const getLevelFromColor = (color: string): ColorLevel | undefined => {
   return ColorMap[color];
 };
+
+export enum MaterialIcon {
+  add = 'add',
+  folder = 'folder',
+  music = 'music',
+  musicLibrary = 'musicLibrary',
+  video = 'video',
+  videoLibrary = 'videoLibrary',
+  photo = 'photo',
+  photoLibrary = 'photoLibrary',
+  document = 'document',
+  game = 'game',
+  secure = 'secure',
+  private = 'private',
+  server = 'server',
+  download = 'download',
+}
+
+export const MaterialIconMap: Record<MaterialIcon, string> = {
+  [MaterialIcon.add]: 'Add',
+  [MaterialIcon.folder]: 'Folder',
+  [MaterialIcon.music]: 'Music',
+  [MaterialIcon.musicLibrary]: 'Music library',
+  [MaterialIcon.video]: 'Video',
+  [MaterialIcon.videoLibrary]: 'Video Library',
+  [MaterialIcon.photo]: 'Photo',
+  [MaterialIcon.photoLibrary]: 'Photo Library',
+  [MaterialIcon.document]: 'Document',
+  [MaterialIcon.game]: 'Game',
+  [MaterialIcon.secure]: 'Secure',
+  [MaterialIcon.private]: 'Private',
+  [MaterialIcon.server]: 'Server',
+  [MaterialIcon.download]: 'Download',
+};

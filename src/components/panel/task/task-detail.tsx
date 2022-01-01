@@ -37,11 +37,11 @@ export const TaskDetail = ({
             <Button
               startIcon={<IconLoader icon={<PlayArrowIcon />} loading={loading?.play} props={{ size: '1.25rem', color: 'success' }} />}
               variant="contained"
-              color="success"
+              color={TaskStatus.finished === task.status ? 'secondary' : 'success'}
               onClick={() => buttonClick('play', QueryService.resumeTask(task.id))}
               disabled={isDisabled() || ![TaskStatus.paused, TaskStatus.finished].includes(task.status)}
             >
-              Play
+              {TaskStatus.finished === task.status ? 'Seed' : 'Play'}
             </Button>
             <Button
               startIcon={<IconLoader icon={<PauseIcon />} loading={loading?.pause} props={{ size: '1.25rem', color: 'warning' }} />}
@@ -84,42 +84,44 @@ export const TaskDetail = ({
           </Stack>
         </Grid>
       </Grid>
-      <Container
-        disableGutters
-        sx={{
-          mt: '1rem',
-          maxHeight: '20rem',
-          overflow: 'auto',
-          bgcolor: isDarkTheme() ? grey[900] : grey[200],
-        }}
-      >
-        {task.additional?.file?.map((f, i) => (
-          <ListItem key={`${i}-${f.filename}`}>
-            <ListItemText
-              primary={
-                <Grid container>
-                  <Grid item xs={8}>
-                    <span>{f.priority}</span>
-                    <span> – </span>
-                    <span>{f.filename}</span>
+      {!!task.additional?.file?.length && (
+        <Container
+          disableGutters
+          sx={{
+            mt: '1rem',
+            maxHeight: '20rem',
+            overflow: 'auto',
+            bgcolor: isDarkTheme() ? grey[900] : grey[200],
+          }}
+        >
+          {task.additional.file.map((f, i) => (
+            <ListItem key={`${i}-${f.filename}`}>
+              <ListItemText
+                primary={
+                  <Grid container>
+                    <Grid item xs={8}>
+                      <span>{f.priority}</span>
+                      <span> – </span>
+                      <span>{f.filename}</span>
+                    </Grid>
+                    <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                      {formatBytes(f.size_downloaded)} of {formatBytes(f.size)} downloaded
+                    </Grid>
                   </Grid>
-                  <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    {formatBytes(f.size_downloaded)} of {formatBytes(f.size)} downloaded
-                  </Grid>
-                </Grid>
-              }
-              primaryTypographyProps={{
-                component: 'span',
-                variant: 'caption',
-                color: 'text.secondary',
-                sx: { display: 'inline' },
-              }}
-              secondary={<ProgressBar variant="determinate" value={computeProgress(f.size_downloaded, f.size)} />}
-              secondaryTypographyProps={{ component: 'span' }}
-            />
-          </ListItem>
-        ))}
-      </Container>
+                }
+                primaryTypographyProps={{
+                  component: 'span',
+                  variant: 'caption',
+                  color: 'text.secondary',
+                  sx: { display: 'inline' },
+                }}
+                secondary={<ProgressBar variant="determinate" value={computeProgress(f.size_downloaded, f.size)} />}
+                secondaryTypographyProps={{ component: 'span' }}
+              />
+            </ListItem>
+          ))}
+        </Container>
+      )}
     </Typography>
   );
 };

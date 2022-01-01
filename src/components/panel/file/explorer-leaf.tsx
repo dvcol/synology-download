@@ -9,12 +9,14 @@ export const ExplorerLeaf = ({
   folder,
   tree,
   loading,
+  flatten,
   disabled,
 }: {
   nodeId: string;
   folder: Folder | File;
   tree: Record<string, Folder[] | File[]>;
   loading: Record<string, boolean>;
+  flatten?: boolean;
   disabled?: boolean;
 }) => {
   const isLoading = loading[nodeId];
@@ -28,8 +30,9 @@ export const ExplorerLeaf = ({
       icon={folder?.isdir ? undefined : <InsertDriveFileOutlinedIcon />}
       sx={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
     >
-      {folder?.isdir && <ExplorerLoading loading={isLoading} empty={!children?.length} />}
-      {folder?.isdir &&
+      {!flatten && folder?.isdir && <ExplorerLoading loading={isLoading} empty={!children?.length} />}
+      {!flatten &&
+        folder?.isdir &&
         !isLoading &&
         children?.map((sf, i) => (
           <ExplorerLeaf key={`${nodeId}-${i}-${disabled}`} nodeId={`${nodeId}-${i}`} folder={sf} tree={tree} loading={loading} disabled={disabled} />

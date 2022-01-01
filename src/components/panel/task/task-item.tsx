@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { finalize, Observable } from 'rxjs';
-import { Accordion, AccordionDetails, AccordionSummary, Button, ButtonGroup } from '@mui/material';
+import { Accordion, AccordionDetails, AccordionSummary, Button, ButtonGroup, Tooltip } from '@mui/material';
 import TaskCard from './task-card';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Task, TaskStatus } from '../../../models';
@@ -33,7 +33,7 @@ export const TaskItem = React.forwardRef<HTMLDivElement, { task: Task; status?: 
   const isDisabled = () => Object.values(loading).some(Boolean);
 
   return (
-    <Accordion ref={ref} onChange={(_, state) => setExpanded(state)}>
+    <Accordion ref={ref} onChange={(_, state) => setExpanded(state)} TransitionProps={{ unmountOnExit: true }}>
       <AccordionSummary
         aria-controls="task-content"
         id="task-header"
@@ -44,17 +44,19 @@ export const TaskItem = React.forwardRef<HTMLDivElement, { task: Task; status?: 
         <TaskCard task={task} statuses={status} />
         {visible && !expanded && (
           <ButtonGroup orientation="vertical" aria-label="vertical contained button group" variant="text">
-            <Button
-              key="delete"
-              sx={{ display: 'flex', flex: '1 1 auto' }}
-              disabled={isDisabled()}
-              onClick={($event) => {
-                $event.stopPropagation();
-                setConfirm(true);
-              }}
-            >
-              <IconLoader icon={<DeleteIcon />} loading={loading?.delete} props={{ size: '1rem', color: 'error' }} />
-            </Button>
+            <Tooltip title="Delete" placement={'left'}>
+              <Button
+                key="delete"
+                sx={{ display: 'flex', flex: '1 1 auto' }}
+                disabled={isDisabled()}
+                onClick={($event) => {
+                  $event.stopPropagation();
+                  setConfirm(true);
+                }}
+              >
+                <IconLoader icon={<DeleteIcon />} loading={loading?.delete} props={{ size: '1rem', color: 'error' }} />
+              </Button>
+            </Tooltip>
             <ConfirmationDialog
               open={confirm}
               title={'Please confirm'}
@@ -70,23 +72,27 @@ export const TaskItem = React.forwardRef<HTMLDivElement, { task: Task; status?: 
               }}
             />
             {[TaskStatus.downloading, TaskStatus.seeding, TaskStatus.waiting].includes(task.status) ? (
-              <Button
-                key="pause"
-                sx={{ display: 'flex', flex: '1 1 auto' }}
-                onClick={($event) => onClick('play', QueryService.pauseTask(task.id), $event)}
-                disabled={isDisabled()}
-              >
-                <IconLoader icon={<PauseIcon />} loading={loading?.pause} props={{ size: '1rem', color: 'warning' }} />
-              </Button>
+              <Tooltip title="Pause" placement={'left'}>
+                <Button
+                  key="pause"
+                  sx={{ display: 'flex', flex: '1 1 auto' }}
+                  onClick={($event) => onClick('play', QueryService.pauseTask(task.id), $event)}
+                  disabled={isDisabled()}
+                >
+                  <IconLoader icon={<PauseIcon />} loading={loading?.pause} props={{ size: '1rem', color: 'warning' }} />
+                </Button>
+              </Tooltip>
             ) : (
-              <Button
-                key="play"
-                sx={{ display: 'flex', flex: '1 1 auto' }}
-                onClick={($event) => onClick('play', QueryService.resumeTask(task.id), $event)}
-                disabled={isDisabled() || ![TaskStatus.paused, TaskStatus.finished].includes(task.status)}
-              >
-                <IconLoader icon={<PlayArrowIcon />} loading={loading?.play} props={{ size: '1rem', color: 'success' }} />
-              </Button>
+              <Tooltip title={TaskStatus.paused === task.status ? 'Play' : 'Seed'} placement={'left'}>
+                <Button
+                  key="play"
+                  sx={{ display: 'flex', flex: '1 1 auto' }}
+                  onClick={($event) => onClick('play', QueryService.resumeTask(task.id), $event)}
+                  disabled={isDisabled() || ![TaskStatus.paused, TaskStatus.finished].includes(task.status)}
+                >
+                  <IconLoader icon={<PlayArrowIcon />} loading={loading?.play} props={{ size: '1rem', color: 'success' }} />
+                </Button>
+              </Tooltip>
             )}
           </ButtonGroup>
         )}

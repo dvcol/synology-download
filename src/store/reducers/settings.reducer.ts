@@ -1,7 +1,8 @@
-import { ContextMenuOption, SettingsSlice, TaskTab } from '../../models';
+import { ContextMenu, SettingsSlice, TaskTab } from '../../models';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { settingsSlice } from '../slices';
 import { parseJSON } from '../../utils';
+import { QuickMenu } from '../../models/quick-menu.model';
 
 export const setReducer = (oldSettings: SettingsSlice, action: PayloadAction<Partial<SettingsSlice>>): SettingsSlice => ({
   ...oldSettings,
@@ -37,24 +38,23 @@ export const syncRememberMeReducer = (oldSettings: SettingsSlice, { payload: rem
   return setSettings;
 };
 
-const syncPayload = <T extends TaskTab | ContextMenuOption>(
-  oldSettings: SettingsSlice,
-  key: 'tabs' | 'menus',
-  filter: (array: T[]) => T[]
-): SettingsSlice => {
+type Payloads = TaskTab | ContextMenu | QuickMenu;
+type Keys = 'tabs' | 'menus' | 'quick';
+
+const syncPayload = <P extends Payloads, K extends Keys>(oldSettings: SettingsSlice, key: K, filter: (array: P[]) => P[]): SettingsSlice => {
   return syncReducer(oldSettings, {
     type: 'sync',
-    payload: { ...oldSettings, [key]: filter(oldSettings[key] as T[]) },
+    payload: { ...oldSettings, [key]: filter(oldSettings[key] as P[]) },
   });
 };
 
-export const addTo = <T extends TaskTab | ContextMenuOption>(
+export const addTo = <P extends Payloads, K extends Keys>(
   oldSettings: SettingsSlice,
-  { payload }: PayloadAction<T>,
-  key: 'tabs' | 'menus',
-  filter: (obj: T) => boolean
+  { payload }: PayloadAction<P>,
+  key: K,
+  filter: (obj: P) => boolean
 ): SettingsSlice => {
-  return syncPayload<T>(oldSettings, key, (array) => {
+  return syncPayload<P, K>(oldSettings, key, (array) => {
     const index = array?.findIndex(filter);
     if (index > -1) {
       const _array = [...array];
@@ -64,11 +64,11 @@ export const addTo = <T extends TaskTab | ContextMenuOption>(
     return [...array, payload];
   });
 };
-export const removeFrom = <T extends TaskTab | ContextMenuOption, U>(
+export const removeFrom = <P extends Payloads, K extends Keys, T = string>(
   oldSettings: SettingsSlice,
-  action: PayloadAction<U>,
-  key: 'tabs' | 'menus',
-  filter: (obj: T) => boolean
+  action: PayloadAction<T>,
+  key: K,
+  filter: (obj: P) => boolean
 ): SettingsSlice => {
-  return syncPayload<T>(oldSettings, key, (array) => array?.filter(filter));
+  return syncPayload<P, K>(oldSettings, key, (array) => array?.filter(filter));
 };

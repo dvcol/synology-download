@@ -1,9 +1,10 @@
 import { defaultTabs, Tab, TabType } from './tab.model';
-import { defaultMenu } from './context-menu.model';
+import { defaultContextMenu } from './context-menu.model';
 import { SettingsSlice } from './store.model';
 import { TaskStatus } from './task.model';
 import { BannerNotificationScope, NotificationLevel, SnackNotificationScope } from './notification.model';
 import { OptionsObject } from 'notistack';
+import { defaultQuickMenu } from './quick-menu.model';
 
 export enum SettingHeader {
   connection = 'connection',
@@ -23,9 +24,9 @@ export enum ConnectionHeader {
 }
 
 export enum InterfaceHeader {
-  modals = 'modals',
   tabs = 'tabs',
-  context = 'context',
+  quickMenu = 'Quick Menu',
+  contextMenu = 'Context Menu',
 }
 
 export interface Connection {
@@ -111,5 +112,6 @@ export const defaultSettings: SettingsSlice = {
   connection: defaultConnection,
   polling: defaultPolling,
   tabs: defaultTabs,
-  menus: [defaultMenu],
+  menus: [defaultContextMenu],
+  quick: [defaultQuickMenu],
 };

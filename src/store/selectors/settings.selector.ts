@@ -11,6 +11,8 @@ export const getTabs = createSelector(getSettings, (setting) => setting?.tabs);
 
 export const getMenus = createSelector(getSettings, (setting) => setting?.menus);
 
+export const getQuick = createSelector(getSettings, (setting) => setting?.quick);
+
 export const getConnection = createSelector(getSettings, (setting) => setting?.connection);
 
 export const urlReducer = (connection: Connection) => {

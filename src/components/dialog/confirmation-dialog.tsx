@@ -27,7 +27,7 @@ export const ConfirmationDialog = ({
     setState(false);
   };
   return (
-    <Dialog open={state} onClose={() => setState(false)} aria-labelledby="confirm-delete-dialog" maxWidth={'xs'}>
+    <Dialog open={state} onClose={onCancelHandler} aria-labelledby="confirm-delete-dialog" maxWidth={'xs'}>
       <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
       <DialogContent>{description}</DialogContent>
       <DialogActions>

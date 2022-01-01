@@ -10,6 +10,7 @@ import { ModalInstance } from '../../../models';
 import { NotificationStack, TaskDialog } from '../../../components';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
+import { QuickMenuDialog } from '../../../components/dialog/quick-menu-dialog';
 
 /**
  * Open a modal popup for complex download actions
@@ -48,6 +49,7 @@ export const renderContentApp = () => {
             <CacheProvider value={cache}>
               <ThemeProvider theme={darkTheme()}>
                 <NotificationStack maxSnack={5} />
+                <QuickMenuDialog container={container} />
                 <TaskDialog container={container} />
               </ThemeProvider>
             </CacheProvider>

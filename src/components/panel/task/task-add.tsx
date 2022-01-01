@@ -4,15 +4,7 @@ import { useForm } from 'react-hook-form';
 import { QueryService } from '../../../services';
 import { FormExplorer, FormInput, FormSwitch } from '../../form';
 import { firstValueFrom } from 'rxjs';
-
-export type TaskForm = {
-  uri?: string;
-  source?: string; // Custom Task
-  destination?: { custom?: boolean; path: string };
-  username?: string;
-  password?: string;
-  unzip?: string; // unzip password
-};
+import { TaskForm, TaskFormValid } from '../../../models';
 
 export const TaskAdd = ({
   form,
@@ -24,7 +16,7 @@ export const TaskAdd = ({
   form?: TaskForm;
   withCancel?: boolean;
   onFormCancel?: (form: TaskForm) => void;
-  onFormSubmit?: (form: TaskForm & { uri: string }) => void;
+  onFormSubmit?: (form: TaskFormValid) => void;
   cardProps?: CardProps;
 }) => {
   const [path, setPath] = React.useState<string>(form?.destination?.path ?? '');
@@ -47,20 +39,21 @@ export const TaskAdd = ({
     },
   });
 
-  // move to store init
+  // TODO move to store init
   useEffect(() => {
-    QueryService.isReady &&
+    if (!path?.length && QueryService.isReady) {
       QueryService.config().subscribe(({ default_destination: _path }) => {
         reset({ ...getValues(), destination: { ...getValues()?.destination, path: _path } });
         setPath(_path);
       });
+    }
   }, []);
 
   const onCancel = (data: TaskForm = getValues()) => {
     onFormCancel && onFormCancel(data);
   };
 
-  const onSubmit = (data: TaskForm & { uri: string }) => {
+  const onSubmit = (data: TaskFormValid) => {
     const { uri, source, destination, username, password, unzip } = data;
 
     if (uri?.length) {

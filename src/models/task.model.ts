@@ -187,3 +187,14 @@ export const formatBytes = (byte: number | any): string => {
   }
   return '0 B';
 };
+
+export type TaskForm = {
+  uri?: string;
+  source?: string; // Custom Task
+  destination?: { custom?: boolean; path?: string };
+  username?: string;
+  password?: string;
+  unzip?: string; // unzip password
+};
+
+export type TaskFormValid = TaskForm & { uri: string };

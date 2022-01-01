@@ -1,7 +1,8 @@
 import { TaskTab } from './tab.model';
-import { ContextMenuOption } from './context-menu.model';
+import { ContextMenu } from './context-menu.model';
 import { Connection, Notifications, Polling } from './settings.model';
 import { Task, TaskStatus } from './task.model';
+import { QuickMenu } from './quick-menu.model';
 
 export interface StateSlice {
   logged: boolean;
@@ -26,7 +27,8 @@ export interface SettingsSlice {
   connection: Connection;
   polling: Polling;
   tabs: TaskTab[];
-  menus: ContextMenuOption[];
+  menus: ContextMenu[];
+  quick: QuickMenu[];
 }
 
 export interface RootSlice {

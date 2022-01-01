@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Connection, ContextMenuOption, defaultSettings, Notifications, Polling, SettingsSlice, TaskTab } from '../../models';
+import { Connection, ContextMenu, defaultSettings, Notifications, Polling, SettingsSlice, TaskTab } from '../../models';
 import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
 import { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
 import { addTo, removeFrom, setNestedReducer, setReducer, syncNestedReducer, syncReducer, syncRememberMeReducer } from '../reducers';
+import { QuickMenu } from '../../models/quick-menu.model';
 
 interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   setSettings: CaseReducer<S, PayloadAction<S>>;
@@ -13,11 +14,14 @@ interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   syncRememberMe: CaseReducer<S, PayloadAction<boolean>>;
   syncPolling: CaseReducer<S, PayloadAction<Partial<Polling>>>;
   syncNotifications: CaseReducer<S, PayloadAction<Partial<Notifications>>>;
-  addContextMenu: CaseReducer<S, PayloadAction<ContextMenuOption>>;
+  addContextMenu: CaseReducer<S, PayloadAction<ContextMenu>>;
   removeContextMenu: CaseReducer<S, PayloadAction<string>>;
   saveTaskTab: CaseReducer<S, PayloadAction<TaskTab>>;
   removeTaskTab: CaseReducer<S, PayloadAction<string>>;
   resetTaskTabs: CaseReducer<S>;
+  saveQuickMenu: CaseReducer<S, PayloadAction<QuickMenu>>;
+  removeQuickMenu: CaseReducer<S, PayloadAction<string>>;
+  resetQuickMenus: CaseReducer<S>;
 }
 
 export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'settings'>({
@@ -39,21 +43,30 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
       }
       return syncNestedReducer<Notifications>(oldSettings, action, 'notifications');
     },
-    addContextMenu: (oldSettings, action: PayloadAction<ContextMenuOption>): SettingsSlice =>
-      addTo<ContextMenuOption>(oldSettings, action, 'menus', (o) => o.id === action?.payload.id),
+    addContextMenu: (oldSettings, action: PayloadAction<ContextMenu>): SettingsSlice =>
+      addTo<ContextMenu, 'menus'>(oldSettings, action, 'menus', (o) => o.id === action?.payload.id),
     removeContextMenu: (oldSettings, action: PayloadAction<string>): SettingsSlice | void => {
       if (oldSettings.menus?.length) {
-        return removeFrom<ContextMenuOption, string>(oldSettings, action, 'menus', (o) => o.id !== action?.payload);
+        return removeFrom<ContextMenu, 'menus'>(oldSettings, action, 'menus', (o) => o.id !== action?.payload);
       }
     },
     saveTaskTab: (oldSettings, action: PayloadAction<TaskTab>): SettingsSlice =>
-      addTo<TaskTab>(oldSettings, action, 'tabs', (o) => o.id === action?.payload.id),
+      addTo<TaskTab, 'tabs'>(oldSettings, action, 'tabs', (o) => o.id === action?.payload.id),
     removeTaskTab: (oldSettings, action: PayloadAction<string>): SettingsSlice =>
-      removeFrom<TaskTab, string>(oldSettings, action, 'tabs', (o) => o.id !== action?.payload),
+      removeFrom<TaskTab, 'tabs'>(oldSettings, action, 'tabs', (o) => o.id !== action?.payload),
     resetTaskTabs: (oldSettings): SettingsSlice =>
       syncReducer(oldSettings, {
         type: 'sync',
         payload: { tabs: defaultSettings.tabs },
+      }),
+    saveQuickMenu: (oldSettings, action: PayloadAction<QuickMenu>): SettingsSlice =>
+      addTo<QuickMenu, 'quick'>(oldSettings, action, 'quick', (o) => o.id === action?.payload.id),
+    removeQuickMenu: (oldSettings, action: PayloadAction<string>): SettingsSlice =>
+      removeFrom<QuickMenu, 'quick'>(oldSettings, action, 'quick', (o) => o.id !== action?.payload),
+    resetQuickMenus: (oldSettings): SettingsSlice =>
+      syncReducer(oldSettings, {
+        type: 'sync',
+        payload: { quick: defaultSettings.quick },
       }),
   } as SettingsReducers,
 });
@@ -73,4 +86,7 @@ export const {
   saveTaskTab,
   removeTaskTab,
   resetTaskTabs,
+  saveQuickMenu,
+  removeQuickMenu,
+  resetQuickMenus,
 } = settingsSlice.actions;

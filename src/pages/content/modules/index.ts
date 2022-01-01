@@ -1,2 +1,2 @@
 export * from './anchor';
-export * from './modal';
+export * from './content';

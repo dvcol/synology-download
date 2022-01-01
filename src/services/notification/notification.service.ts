@@ -57,7 +57,6 @@ export class NotificationService {
     return this.snack$.pipe(
       filter(({ priority }) => {
         const snack = getNotificationsSnack(this.store.getState());
-        console.log('subscribing filter', snack);
         return snack?.enabled && Number(priority) >= snack.level;
       }),
       map((n) => this.handleSnackNotification(n))
@@ -97,7 +96,7 @@ export class NotificationService {
     } else if (message?.priority === NotificationLevel.error) {
       variant = 'error';
     }
-    return { message, options: { autoHideDuration, anchorOrigin, preventDuplicate: true, variant } };
+    return { message, options: { autoHideDuration, anchorOrigin, variant, preventDuplicate: true, disableWindowBlurListener: true } };
   }
 
   private static sendOrForward(notification?: ChromeNotification) {
@@ -145,6 +144,7 @@ export class NotificationService {
     // TODO Handle more than just magnet URL
     const parsed: ParsedQuery = parse(uri);
     const title = typeof parsed?.dn === 'string' ? parsed?.dn : parsed?.dn?.shift() ?? uri;
+    // TODO display error & delete/pause button after creation ?
     this.info({
       title: 'Task created successfully.',
       message: `Title:\xa0${title}${destination ? '\nDestination folder: ' + destination : ''}`,

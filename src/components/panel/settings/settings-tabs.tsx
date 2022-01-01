@@ -37,9 +37,15 @@ export const SettingsTabs = () => {
       />
       <CardContent>
         {tabs?.map((t) => (
-          <Accordion key={t.id} expanded={expanded === t.id} onChange={handleExpand(t.id)} sx={{ borderRadius: '0' }}>
+          <Accordion
+            key={t.id}
+            expanded={expanded === t.id}
+            onChange={handleExpand(t.id)}
+            sx={{ borderRadius: '0' }}
+            TransitionProps={{ unmountOnExit: true }}
+          >
             <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header" sx={{ overflow: 'hidden' }}>
-              <Typography sx={{ width: '33%', flexShrink: 0, textTransform: 'capitalize' }}>{t.name}</Typography>
+              <Typography sx={{ width: '40%', flexShrink: 0, textTransform: 'capitalize' }}>{t.name}</Typography>
               <Typography
                 sx={{
                   color: 'text.secondary',

@@ -2,13 +2,13 @@ import { Accordion, AccordionDetails, AccordionSummary, Card, CardActions, CardC
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { addContextMenu, getMenus, removeContextMenu } from '../../../store';
 import AddIcon from '@mui/icons-material/Add';
-import { ChromeMessageType, ContextMenuOption, defaultMenu, InterfaceHeader } from '../../../models';
+import { ChromeMessageType, ContextMenu, defaultContextMenu, InterfaceHeader } from '../../../models';
 import { v4 as uuid } from 'uuid';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { sendMessage } from '../../../utils';
 
-export const SettingsContext = () => {
+export const SettingsContextMenu = () => {
   const dispatch = useDispatch();
   const menus = useSelector(getMenus);
 
@@ -18,7 +18,7 @@ export const SettingsContext = () => {
   };
 
   // TODO : migrate to react-hook-form & move this to login service
-  const title = InterfaceHeader.context;
+  const title = InterfaceHeader.contextMenu;
   return (
     <Card raised={true}>
       <CardHeader
@@ -29,7 +29,7 @@ export const SettingsContext = () => {
       />
       <CardContent>
         {menus?.map((t) => (
-          <Accordion key={t.id} expanded={expanded === t.id} onChange={handleExpand(t.id)}>
+          <Accordion key={t.id} expanded={expanded === t.id} onChange={handleExpand(t.id)} TransitionProps={{ unmountOnExit: true }}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header">
               <Typography sx={{ width: '33%', flexShrink: 0 }}>{t.id}</Typography>
               <Typography sx={{ color: 'text.secondary' }}>{t.title}</Typography>
@@ -55,9 +55,9 @@ export const SettingsContext = () => {
           color="primary"
           aria-label="add"
           onClick={() => {
-            const payload = { ...defaultMenu, id: uuid() };
+            const payload = { ...defaultContextMenu, id: uuid() };
             // TODO : move to thunk ?
-            sendMessage<ContextMenuOption>({ type: ChromeMessageType.addMenu, payload }).subscribe();
+            sendMessage<ContextMenu>({ type: ChromeMessageType.addMenu, payload }).subscribe();
             dispatch(addContextMenu(payload));
           }}
         >

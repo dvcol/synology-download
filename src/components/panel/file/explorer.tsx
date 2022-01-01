@@ -22,15 +22,20 @@ export type ExplorerProps = {
 
 export type ExplorerEvent = { id?: string; path?: string; folder?: File | Folder };
 
+// TODO implement virtual scroll
 export const Explorer = ({ collapseOnSelect, flatten, disabled, readonly, fileType, startPath, onChange }: ExplorerProps) => {
   const [tree, setTree] = React.useState<Record<string, File[] | Folder[]>>({});
-  const [loading, setLoading] = React.useState<Record<string, boolean>>({});
+  const [loading, setLoading] = React.useState<Record<string, boolean>>({ root: true });
   const [selected, setSelected] = React.useState<string>('root');
   const [expanded, setExpanded] = React.useState<string[]>([]);
   const [crumbs, setCrumbs] = React.useState<string[]>([]);
 
   useEffect(() => {
-    QueryService.isReady && QueryService.listFolders().subscribe((list) => setTree({ root: list?.shares ?? [] }));
+    QueryService.isReady &&
+      QueryService.listFolders(readonly ?? true).subscribe((list) => {
+        setTree({ root: list?.shares ?? [] });
+        setLoading({ ...loading, root: false });
+      });
   }, []);
 
   useEffect(() => {
@@ -39,7 +44,7 @@ export const Explorer = ({ collapseOnSelect, flatten, disabled, readonly, fileTy
 
   const listFiles = (path: string, key: string): Observable<FileList> => {
     setLoading({ ...loading, [key]: true });
-    return QueryService.listFiles(path, 'dir').pipe(
+    return QueryService.listFiles(path, fileType ?? 'dir').pipe(
       tap((list: FileList) => setTree({ ...tree, [key]: list?.files ?? [] })),
       finalize(() => {
         setTimeout(() => setLoading({ ...loading, [key]: false }), 200);

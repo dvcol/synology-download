@@ -7,8 +7,8 @@ import { HashLink as Link } from 'react-router-hash-link';
 import { SettingsHeader } from './settings-header';
 import { SettingsPolling } from './settings-polling';
 import { SettingsTabs } from './settings-tabs';
-import { SettingsModal } from './settings-modals';
-import { SettingsContext } from './settings-context';
+import { SettingsQuickMenu } from './settings-quick-menu';
+import { SettingsContextMenu } from './settings-context-menu';
 import { SettingsTasksCount } from './settings-tasks-count';
 import { SettingsBanner } from './settings-banner';
 import { SettingsSnack } from './settings-snack';
@@ -20,7 +20,7 @@ export const Settings = () => {
 
   const tabs = [
     { label: SettingHeader.connection, links: [ConnectionHeader.credential, ConnectionHeader.polling] },
-    { label: SettingHeader.interface, links: [InterfaceHeader.tabs, InterfaceHeader.modals, InterfaceHeader.context] },
+    { label: SettingHeader.interface, links: [InterfaceHeader.tabs, InterfaceHeader.quickMenu, InterfaceHeader.contextMenu] },
     { label: SettingHeader.notification, links: [NotificationHeader.count, NotificationHeader.snack, NotificationHeader.banner] },
   ];
 
@@ -46,7 +46,7 @@ export const Settings = () => {
               disableFocusRipple={true}
               component={Link}
               to={`${label}#${label}`}
-              sx={{ fontWeight: '700', fontSize: '0.75rem', backdropFilter: 'contrast(1.1)' }}
+              sx={{ fontWeight: '700', fontSize: '0.75rem', backdropFilter: 'contrast(1.1)', whiteSpace: 'nowrap' }}
             />,
             ...(links?.map((l, j) => (
               <Tab
@@ -56,7 +56,7 @@ export const Settings = () => {
                 disableFocusRipple={true}
                 component={Link}
                 to={`${label}#${l}`}
-                sx={{ backdropFilter: 'contrast(0.9)' }}
+                sx={{ backdropFilter: 'contrast(0.9)', whiteSpace: 'nowrap' }}
               />
             )) ?? []),
           ])}
@@ -81,8 +81,8 @@ export const Settings = () => {
                 <SettingsHeader label={SettingHeader.interface} />
                 <SettingsTabs />
                 {/* TODO: settings for task sorting */}
-                <SettingsModal />
-                <SettingsContext />
+                <SettingsQuickMenu />
+                <SettingsContextMenu />
                 {/* TODO: settings for folder display */}
                 {/*  TODO : settings clear/delete by tabs or global */}
               </React.Fragment>
