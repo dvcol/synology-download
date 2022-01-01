@@ -2,11 +2,10 @@ import { AccordionDetails, Box, Button, Card, CardActions, CardHeader, ListItemI
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { removeQuickMenu, saveQuickMenu } from '../../../store';
-import { QuickMenu } from '../../../models/quick-menu.model';
+import { MaterialIcon, MaterialIconMap, QuickMenu } from '../../../models';
 import { useForm } from 'react-hook-form';
 import { FormExplorer, FormInput, FormSwitch } from '../../form';
 import { MuiIcon } from '../../ui-element';
-import { MaterialIcon, MaterialIconMap } from '../../../models';
 
 export const SettingsMenu = ({ menu }: { menu: QuickMenu }) => {
   const dispatch = useDispatch();

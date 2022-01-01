@@ -6,7 +6,7 @@ import { QueryService } from '../../services';
 import { MaterialIcon, TaskForm } from '../../models';
 import { useSelector } from 'react-redux';
 import { getQuick, StoreState } from '../../store';
-import { QuickMenu } from '../../models/quick-menu.model';
+import { QuickMenu } from '../../models/menu.model';
 import { MuiIcon } from '../ui-element';
 
 export const QuickMenuDialog = ({ container }: React.PropsWithRef<{ container?: PortalProps['container'] }>) => {

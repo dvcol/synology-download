@@ -106,6 +106,7 @@ export const darkTheme = () => {
             width: '100%',
             margin: 0,
             overflow: 'hidden',
+            alignItems: 'center',
           },
         },
       },

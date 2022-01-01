@@ -3,7 +3,7 @@ import { Connection, ContextMenu, defaultSettings, Notifications, Polling, Setti
 import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
 import { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
 import { addTo, removeFrom, setNestedReducer, setReducer, syncNestedReducer, syncReducer, syncRememberMeReducer } from '../reducers';
-import { QuickMenu } from '../../models/quick-menu.model';
+import { QuickMenu } from '../../models/menu.model';
 
 interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   setSettings: CaseReducer<S, PayloadAction<S>>;
@@ -14,7 +14,7 @@ interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   syncRememberMe: CaseReducer<S, PayloadAction<boolean>>;
   syncPolling: CaseReducer<S, PayloadAction<Partial<Polling>>>;
   syncNotifications: CaseReducer<S, PayloadAction<Partial<Notifications>>>;
-  addContextMenu: CaseReducer<S, PayloadAction<ContextMenu>>;
+  saveContextMenu: CaseReducer<S, PayloadAction<ContextMenu>>;
   removeContextMenu: CaseReducer<S, PayloadAction<string>>;
   saveTaskTab: CaseReducer<S, PayloadAction<TaskTab>>;
   removeTaskTab: CaseReducer<S, PayloadAction<string>>;
@@ -43,7 +43,7 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
       }
       return syncNestedReducer<Notifications>(oldSettings, action, 'notifications');
     },
-    addContextMenu: (oldSettings, action: PayloadAction<ContextMenu>): SettingsSlice =>
+    saveContextMenu: (oldSettings, action: PayloadAction<ContextMenu>): SettingsSlice =>
       addTo<ContextMenu, 'menus'>(oldSettings, action, 'menus', (o) => o.id === action?.payload.id),
     removeContextMenu: (oldSettings, action: PayloadAction<string>): SettingsSlice | void => {
       if (oldSettings.menus?.length) {
@@ -81,7 +81,7 @@ export const {
   syncNotifications,
   syncRememberMe,
   resetSettings,
-  addContextMenu,
+  saveContextMenu,
   removeContextMenu,
   saveTaskTab,
   removeTaskTab,

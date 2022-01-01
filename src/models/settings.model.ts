@@ -1,10 +1,9 @@
 import { defaultTabs, Tab, TabType } from './tab.model';
-import { defaultContextMenu } from './context-menu.model';
 import { SettingsSlice } from './store.model';
 import { TaskStatus } from './task.model';
 import { BannerNotificationScope, NotificationLevel, SnackNotificationScope } from './notification.model';
 import { OptionsObject } from 'notistack';
-import { defaultQuickMenu } from './quick-menu.model';
+import { defaultContextMenu, defaultQuickMenu } from './menu.model';
 
 export enum SettingHeader {
   connection = 'connection',

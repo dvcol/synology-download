@@ -1,8 +1,7 @@
 import { TaskTab } from './tab.model';
-import { ContextMenu } from './context-menu.model';
 import { Connection, Notifications, Polling } from './settings.model';
 import { Task, TaskStatus } from './task.model';
-import { QuickMenu } from './quick-menu.model';
+import { ContextMenu, QuickMenu } from './menu.model';
 
 export interface StateSlice {
   logged: boolean;

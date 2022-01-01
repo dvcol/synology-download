@@ -2,6 +2,7 @@ export * from './settings';
 export * from './settings-context-menu';
 export * from './settings-credentials';
 export * from './settings-header';
+export * from './settings-interface';
 export * from './settings-menu';
 export * from './settings-polling';
 export * from './settings-quick-menu';
