@@ -24,7 +24,7 @@ export const TaskAdd = ({
   form?: TaskForm;
   withCancel?: boolean;
   onFormCancel?: (form: TaskForm) => void;
-  onFormSubmit?: (form: TaskForm) => void;
+  onFormSubmit?: (form: TaskForm & { uri: string }) => void;
   cardProps?: CardProps;
 }) => {
   const [path, setPath] = React.useState<string>(form?.destination?.path ?? '');
@@ -60,7 +60,7 @@ export const TaskAdd = ({
     onFormCancel && onFormCancel(data);
   };
 
-  const onSubmit = (data: TaskForm) => {
+  const onSubmit = (data: TaskForm & { uri: string }) => {
     const { uri, source, destination, username, password, unzip } = data;
 
     if (uri?.length) {

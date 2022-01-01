@@ -1,5 +1,5 @@
 import { Box, Card, CardContent, CardHeader, Collapse, IconButton, IconButtonProps, styled, SvgIconProps, Theme, Typography } from '@mui/material';
-import React, { forwardRef, useCallback, useState } from 'react';
+import React, { forwardRef, useCallback, useEffect, useState } from 'react';
 import { SnackbarKey, useSnackbar } from 'notistack';
 import { ColorLevel, ColorLevelMap, NotificationLevel, SnackMessage } from '../../../models';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
@@ -21,10 +21,12 @@ const ExpandMore = styled(({ expand, ...other }: IconButtonProps & { expand: boo
   }),
 }));
 
-export const SnackNotificationCard = forwardRef<HTMLDivElement, { id: SnackbarKey; notification: SnackMessage }>(
-  ({ id, notification: { title, message, contextMessage, priority, success } }, ref) => {
+export const SnackNotificationCard = forwardRef<HTMLDivElement, { id: SnackbarKey; notification: SnackMessage; expanded?: boolean }>(
+  ({ id, notification: { title, message, contextMessage, priority, success }, expanded }, ref) => {
     const { closeSnackbar } = useSnackbar();
-    const [expanded, setExpanded] = useState(false);
+    const [_expanded, setExpanded] = useState(expanded ?? false);
+
+    useEffect(() => setExpanded(expanded ?? false), [expanded]);
 
     const handleExpandClick = useCallback(() => {
       setExpanded((oldExpanded) => !oldExpanded);
@@ -73,7 +75,7 @@ export const SnackNotificationCard = forwardRef<HTMLDivElement, { id: SnackbarKe
           avatar={handleIcon({ sx: { fontSize: '18px' } })}
           action={
             <Box sx={{ marginLeft: 'auto' }}>
-              <ExpandMore expand={expanded} onClick={handleExpandClick} aria-expanded={expanded} aria-label="show more">
+              <ExpandMore expand={_expanded} onClick={handleExpandClick} aria-expanded={_expanded} aria-label="show more">
                 <ExpandMoreIcon sx={{ fontSize: '18px' }} />
               </ExpandMore>
               <IconButton onClick={handleDismiss}>
@@ -81,19 +83,22 @@ export const SnackNotificationCard = forwardRef<HTMLDivElement, { id: SnackbarKe
               </IconButton>
             </Box>
           }
-          title={title}
-          titleTypographyProps={{ variant: 'subtitle2', sx: { fontSize: '14px' } }}
+          title={<Box sx={{ overflowWrap: 'break-word', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</Box>}
+          titleTypographyProps={{
+            variant: 'subtitle2',
+            sx: { fontSize: '14px', overflow: 'hidden', width: '218px' },
+          }}
           sx={{ padding: '8px 8px 8px 16px', bgcolor: handleColor() }}
         />
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <CardContent sx={{ padding: '8px 8px 8px 16px !important' }}>
+        <Collapse in={_expanded} timeout="auto" unmountOnExit>
+          <CardContent sx={{ padding: '8px 8px 8px 16px !important', whiteSpace: 'pre-line' }}>
             {message && (
-              <Typography variant={'body2'} sx={{ fontSize: '12px' }}>
+              <Typography variant={'body2'} sx={{ fontSize: '12px', overflowWrap: 'break-word' }}>
                 {message}
               </Typography>
             )}
             {contextMessage && (
-              <Typography variant={'caption'} sx={{ fontSize: '10px', color: 'darkgrey' }}>
+              <Typography variant={'caption'} sx={{ fontSize: '10px', color: 'darkgrey', overflowWrap: 'break-word' }}>
                 {contextMessage}
               </Typography>
             )}

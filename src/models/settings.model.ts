@@ -12,6 +12,7 @@ export enum SettingHeader {
 }
 
 export enum NotificationHeader {
+  snack = 'snackbar',
   banner = 'banners',
   count = 'tasks count',
 }
@@ -90,7 +91,7 @@ export const defaultNotifications: Notifications = {
       popup: true,
       content: true,
     },
-    timeout: 3000,
+    timeout: 5000,
     position: { vertical: 'bottom', horizontal: 'right' },
   },
   banner: {

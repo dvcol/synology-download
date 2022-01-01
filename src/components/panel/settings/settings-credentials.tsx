@@ -94,10 +94,10 @@ export const SettingsCredentials = () => {
       <CardHeader
         id={title}
         title={title}
-        titleTypographyProps={{ variant: 'h6', color: 'text.primary' }}
+        titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
         subheader={'Two-factor authentication is not currently supported.'}
         subheaderTypographyProps={{ color: 'text.secondary', gutterBottom: true }}
-        sx={{ p: '1rem 1rem 0', textTransform: 'capitalize' }}
+        sx={{ p: '1rem 1rem 0' }}
       />
       <CardContent>
         <Box component="form" sx={{ '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off" onSubmit={handleSubmit(loginLogout)}>

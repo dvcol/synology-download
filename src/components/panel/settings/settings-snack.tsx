@@ -1,12 +1,12 @@
-import { Button, Card, CardActions, CardContent, CardHeader, MenuItem, Stack } from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, CardHeader, InputAdornment, MenuItem, Stack } from '@mui/material';
 import React from 'react';
-import { NotificationHeader, NotificationLevel, NotificationLevelKeys, Notifications, NotificationsBanner } from '../../../models';
+import { NotificationHeader, NotificationLevel, NotificationLevelKeys, Notifications, NotificationsSnack } from '../../../models';
 import { FormInput, FormSwitch } from '../../form';
 import { useDispatch, useSelector } from 'react-redux';
 import { getNotifications, syncNotifications } from '../../../store';
 import { useForm } from 'react-hook-form';
 
-export const SettingsBanner = () => {
+export const SettingsSnack = () => {
   const dispatch = useDispatch();
   const notifications: Notifications = useSelector(getNotifications);
 
@@ -16,11 +16,11 @@ export const SettingsBanner = () => {
     control,
     getValues,
     formState: { isValid, isDirty, isSubmitSuccessful },
-  } = useForm<NotificationsBanner>({ mode: 'onChange', defaultValues: notifications?.banner });
+  } = useForm<NotificationsSnack>({ mode: 'onChange', defaultValues: notifications?.snack });
 
-  const onSubmit = (banner: NotificationsBanner) => {
-    dispatch(syncNotifications({ ...notifications, banner }));
-    reset(banner);
+  const onSubmit = (snack: NotificationsSnack) => {
+    dispatch(syncNotifications({ ...notifications, snack }));
+    reset(snack);
   };
 
   const onSubmitColor = () => {
@@ -28,19 +28,79 @@ export const SettingsBanner = () => {
     return isSubmitSuccessful ? 'success' : 'info';
   };
 
-  const title = NotificationHeader.banner;
+  const title = NotificationHeader.snack;
   return (
     <Card raised={true}>
       <CardHeader
         id={title}
         title={title}
         titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
-        subheader="Note that notification banners use and are subject to specific OS APIs."
+        subheader={'Note that snackbar banner are dependant on content script injection into tabs.'}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
         action={<FormSwitch controllerProps={{ name: 'enabled', control }} formControlLabelProps={{ label: '' }} />}
         sx={{ p: '1rem 1rem 0' }}
       />
       <CardContent>
+        <CardHeader
+          title={'Positioning'}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheader={'Changes where the snackbar notifications are displayed from.'}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          sx={{ p: '0rem 0rem 1rem' }}
+        />
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <FormInput
+            controllerProps={{ name: 'position.vertical', control }}
+            textFieldProps={{
+              select: true,
+              label: 'Vertical position',
+              sx: { flex: '1 1 50%', textTransform: 'capitalize', p: '0.5rem 0.5rem 0.5rem 0' },
+              disabled: !getValues()?.enabled,
+            }}
+          >
+            {['top', 'bottom'].map((position) => (
+              <MenuItem key={position} value={position} sx={{ textTransform: 'capitalize' }}>
+                {position}
+              </MenuItem>
+            ))}
+          </FormInput>
+          <FormInput
+            controllerProps={{ name: 'position.horizontal', control }}
+            textFieldProps={{
+              select: true,
+              label: 'Horizontal position',
+              sx: { flex: '1 1 50%', textTransform: 'capitalize', p: '0.5rem 0 0.5rem 0.5rem' },
+              disabled: !getValues()?.enabled,
+            }}
+          >
+            {['left', 'center', 'right'].map((position) => (
+              <MenuItem key={position} value={position} sx={{ textTransform: 'capitalize' }}>
+                {position}
+              </MenuItem>
+            ))}
+          </FormInput>
+        </Box>
+        <CardHeader
+          title={'Notification timeout'}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheader={'Define how long the notification is displayed before being dismissed.'}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          action={
+            <FormInput
+              controllerProps={{ name: 'timeout', control, rules: { min: 500, max: 60000 } }}
+              textFieldProps={{
+                type: 'number',
+                label: 'Display timeout',
+                InputProps: {
+                  endAdornment: <InputAdornment position="end">ms</InputAdornment>,
+                },
+                disabled: !getValues()?.enabled,
+                sx: { flex: '1 1 36ch' },
+              }}
+            />
+          }
+          sx={{ p: '0.5rem 0' }}
+        />
         <CardHeader
           title={'Notification level'}
           titleTypographyProps={{ variant: 'subtitle2' }}
@@ -65,25 +125,11 @@ export const SettingsBanner = () => {
           }
           sx={{ p: '0.5rem 0' }}
         />
-
         <Card sx={{ p: '0.5rem 1rem', m: '0.5rem 0' }}>
-          <CardHeader
-            title={'Background'}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheader={'Enables or disables background banner notifications.'}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={
-              <FormSwitch
-                controllerProps={{ name: 'scope.background', control }}
-                formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
-              />
-            }
-            sx={{ p: '0.5rem 0' }}
-          />
           <CardHeader
             title={'Popup'}
             titleTypographyProps={{ variant: 'subtitle2' }}
-            subheader={'Enables or disables banner notifications when the popup is open.'}
+            subheader={'Enables or disables snackbar notifications within the popup.'}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
             action={
               <FormSwitch controllerProps={{ name: 'scope.popup', control }} formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }} />
@@ -91,26 +137,13 @@ export const SettingsBanner = () => {
             sx={{ p: '0.5rem 0' }}
           />
           <CardHeader
-            title={'Completed tasks'}
+            title={'Tab'}
             titleTypographyProps={{ variant: 'subtitle2' }}
-            subheader={'Enables or disables banner for completed tasks.'}
+            subheader={'Enables or disables snackbar notifications inside active tabs.'}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
             action={
               <FormSwitch
-                controllerProps={{ name: 'scope.finished', control }}
-                formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
-              />
-            }
-            sx={{ p: '0.5rem 0' }}
-          />
-          <CardHeader
-            title={'Failed tasks'}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheader={'Enables or disables banner for failed tasks.'}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={
-              <FormSwitch
-                controllerProps={{ name: 'scope.failed', control }}
+                controllerProps={{ name: 'scope.content', control }}
                 formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
               />
             }

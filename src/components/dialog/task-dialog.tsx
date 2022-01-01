@@ -4,19 +4,17 @@ import { TaskAdd, TaskForm } from '../panel';
 import React, { useEffect } from 'react';
 import { onMessage } from '../../utils';
 import { PortalProps } from '@mui/base/Portal';
+import { NotificationService } from '../../services';
 import OnClickData = chrome.contextMenus.OnClickData;
 
 export const TaskDialog = ({ container }: React.PropsWithRef<{ container?: PortalProps['container'] }>) => {
   const [form, setForm] = React.useState<TaskForm>();
   const [open, setOpen] = React.useState<boolean>(false);
 
-  const onFormCancel = () => {
-    console.log('cancel form');
+  const onFormCancel = (_form: TaskForm) => setOpen(false);
+  const onFormSubmit = ({ uri, source, destination }: TaskForm & { uri: string }) => {
     setOpen(false);
-  };
-  const onFormSubmit = () => {
-    setOpen(false);
-    console.log('submitted form');
+    NotificationService.create(uri, source, destination?.path);
   };
 
   useEffect(() => {

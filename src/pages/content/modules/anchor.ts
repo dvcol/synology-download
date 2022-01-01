@@ -1,5 +1,6 @@
 import { ChromeMessageType, CreateTaskPayload } from '../../../models';
 import { sendMessage } from '../../../utils';
+import { NotificationService } from '../../../services';
 
 /**
  * List of supported protocols
@@ -44,13 +45,15 @@ export const addAnchorClickListener = () =>
     if (e.button === 0) {
       const anchor = recursivelyFindAnchorAncestor(e.target as HTMLElement);
       if (anchor != null && anchor.href && startsWithAnyProtocol(anchor.href, DOWNLOAD_ONLY_PROTOCOLS)) {
-        sendMessage<CreateTaskPayload>({
+        sendMessage<CreateTaskPayload, CreateTaskPayload>({
           type: ChromeMessageType.createTask,
           payload: {
             uri: anchor.href,
             source: document.URL,
           },
-        }).subscribe(() => console.log('sent'));
+        }).subscribe(({ uri, source }) => {
+          NotificationService.create(uri, source);
+        });
         e.preventDefault();
       }
     }

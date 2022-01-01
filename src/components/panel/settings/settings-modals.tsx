@@ -9,8 +9,8 @@ export const SettingsModal = () => {
       <CardHeader
         id={title}
         title={title}
-        titleTypographyProps={{ variant: 'h6', color: 'text.primary' }}
-        sx={{ p: '1rem 1rem 0', textTransform: 'capitalize' }}
+        titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
+        sx={{ p: '1rem 1rem 0' }}
       />
       <CardContent>Modal settings</CardContent>
     </Card>

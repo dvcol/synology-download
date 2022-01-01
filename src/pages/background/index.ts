@@ -45,13 +45,22 @@ onMessage([ChromeMessageType.createTask, ChromeMessageType.addMenu, ChromeMessag
     switch (type) {
       case ChromeMessageType.createTask:
         payload = payload as CreateTaskPayload;
-        QueryService.createTask(payload.uri, payload.source).subscribe(() => sendResponse());
+        QueryService.createTask(payload.uri, payload.source).subscribe({
+          next: () => sendResponse({ success: true, payload }),
+          error: (error) => sendResponse({ success: false, error }),
+        });
         break;
       case ChromeMessageType.addMenu:
-        createContextMenu(payload as ContextMenuOption).subscribe(() => sendResponse());
+        createContextMenu(payload as ContextMenuOption).subscribe({
+          next: () => sendResponse({ success: true, payload }),
+          error: (error) => sendResponse({ success: false, error }),
+        });
         break;
       case ChromeMessageType.removeMenu:
-        removeContextMenu(payload as string).subscribe(() => sendResponse());
+        removeContextMenu(payload as string).subscribe({
+          next: () => sendResponse({ success: true, payload }),
+          error: (error) => sendResponse({ success: false, error }),
+        });
         break;
     }
   }

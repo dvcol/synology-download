@@ -144,7 +144,12 @@ export class NotificationService {
   static create(uri: string, source?: string, destination?: string): void {
     // TODO Handle more than just magnet URL
     const parsed: ParsedQuery = parse(uri);
-    const message = typeof parsed?.dn === 'string' ? parsed?.dn : parsed?.dn?.shift() ?? uri;
-    this.info({ title: 'Adding download task' + (destination ? ` to '${destination}'` : ''), message, contextMessage: source, success: true });
+    const title = typeof parsed?.dn === 'string' ? parsed?.dn : parsed?.dn?.shift() ?? uri;
+    this.info({
+      title: 'Task created successfully.',
+      message: `Title:\xa0${title}${destination ? '\nDestination folder: ' + destination : ''}`,
+      contextMessage: source,
+      success: true,
+    });
   }
 }

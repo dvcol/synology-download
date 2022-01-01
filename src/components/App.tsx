@@ -14,7 +14,7 @@ export const App = ({ store }: { store: Store | ProxyStore }) => {
     <React.StrictMode>
       <Provider store={store}>
         <ThemeProvider theme={darkTheme()}>
-          <NotificationStack />
+          <NotificationStack maxSnack={1} />
           <Router>
             <CssBaseline />
             <Navbar />

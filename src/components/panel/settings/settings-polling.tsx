@@ -38,10 +38,10 @@ export const SettingsPolling = () => {
       <CardHeader
         id={title}
         title={title}
-        titleTypographyProps={{ variant: 'h6', color: 'text.primary' }}
+        titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
         subheader={'Periodically polls the DiskStation to fetch tasks.'}
         action={<FormSwitch controllerProps={{ name: 'enabled', control }} formControlLabelProps={{ label: '' }} />}
-        sx={{ p: '1rem 1rem 0', textTransform: 'capitalize' }}
+        sx={{ p: '1rem 1rem 0' }}
       />
       <CardContent>
         <Box component="form" sx={{ '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">

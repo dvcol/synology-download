@@ -11,6 +11,7 @@ import { SettingsModal } from './settings-modals';
 import { SettingsContext } from './settings-context';
 import { SettingsTasksCount } from './settings-tasks-count';
 import { SettingsBanner } from './settings-banner';
+import { SettingsSnack } from './settings-snack';
 
 export const Settings = () => {
   // Tab highlight
@@ -20,7 +21,7 @@ export const Settings = () => {
   const tabs = [
     { label: SettingHeader.connection, links: [ConnectionHeader.credential, ConnectionHeader.polling] },
     { label: SettingHeader.interface, links: [InterfaceHeader.tabs, InterfaceHeader.modals, InterfaceHeader.context] },
-    { label: SettingHeader.notification, links: [NotificationHeader.count, NotificationHeader.banner] },
+    { label: SettingHeader.notification, links: [NotificationHeader.count, NotificationHeader.snack, NotificationHeader.banner] },
   ];
 
   return (
@@ -93,8 +94,8 @@ export const Settings = () => {
               <React.Fragment>
                 <SettingsHeader label={SettingHeader.notification} />
                 <SettingsTasksCount />
+                <SettingsSnack />
                 <SettingsBanner />
-                {/*  TODO: settings for snack notification  */}
               </React.Fragment>
             }
           />

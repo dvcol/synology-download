@@ -47,7 +47,7 @@ export const renderContentApp = () => {
           <Provider store={proxyStore}>
             <CacheProvider value={cache}>
               <ThemeProvider theme={darkTheme()}>
-                <NotificationStack />
+                <NotificationStack maxSnack={5} />
                 <TaskDialog container={container} />
               </ThemeProvider>
             </CacheProvider>
