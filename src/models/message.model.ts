@@ -8,27 +8,20 @@ import OnClickData = chrome.contextMenus.OnClickData;
  * Enumeration for message types
  */
 export enum ChromeMessageType {
-  createTask = 'createTask',
   popup = 'popup',
   addMenu = 'addMenu',
+  updateMenu = 'updateMenu',
   removeMenu = 'removeMenu',
+  resetMenu = 'resetMenu',
   notification = 'notification',
   query = 'query',
   baseUrl = 'baseUrl',
 }
 
 /**
- * Payload for Task creation
- */
-export interface CreateTaskPayload {
-  uri: string;
-  source: string;
-}
-
-/**
  * Type union of possible message payloads
  */
-export type ChromeMessagePayload = string | ContextMenu | CreateTaskPayload | ChromeNotification | SynologyQueryPayload | OnClickData;
+export type ChromeMessagePayload = string | ContextMenu | ContextMenu[] | ChromeNotification | SynologyQueryPayload | OnClickData;
 
 /**
  * Message interface for communication between content & background

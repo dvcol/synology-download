@@ -1,9 +1,10 @@
 import { wrapStore } from 'webext-redux';
 import { setOption, setPopup, store } from '../../store';
-import { ChromeMessageType, ContextMenu, CreateTaskPayload, ModalInstance } from '../../models';
-import { createContextMenu, NotificationService, PollingService, QueryService, removeContextMenu } from '../../services';
+import { ChromeMessageType, ContextMenu, ModalInstance } from '../../models';
+import { buildContextMenu, NotificationService, PollingService, QueryService, removeContextMenu, saveContextMenu } from '../../services';
 import { restoreSettings } from './modules/settings-handler';
 import { onMessage } from '../../utils';
+import { Observable } from 'rxjs';
 
 console.log('This is the background page.');
 
@@ -39,28 +40,30 @@ chrome.runtime.onConnect.addListener((port) => {
 });
 
 // On message from chrome handle payload
-onMessage([ChromeMessageType.createTask, ChromeMessageType.addMenu, ChromeMessageType.removeMenu], true).subscribe(
+onMessage([ChromeMessageType.addMenu, ChromeMessageType.updateMenu, ChromeMessageType.removeMenu, ChromeMessageType.resetMenu], true).subscribe(
   ({ message: { type, payload }, sendResponse }) => {
     console.log('type', type);
+
+    const handle = <T>(obs$: Observable<T>) =>
+      obs$.subscribe({
+        next: () => {
+          sendResponse({ success: true, payload });
+        },
+        error: (error) => sendResponse({ success: false, error }),
+      });
+
     switch (type) {
-      case ChromeMessageType.createTask:
-        payload = payload as CreateTaskPayload;
-        QueryService.createTask(payload.uri, payload.source).subscribe({
-          next: () => sendResponse({ success: true, payload }),
-          error: (error) => sendResponse({ success: false, error }),
-        });
-        break;
       case ChromeMessageType.addMenu:
-        createContextMenu(payload as ContextMenu).subscribe({
-          next: () => sendResponse({ success: true, payload }),
-          error: (error) => sendResponse({ success: false, error }),
-        });
+        handle(saveContextMenu(payload as ContextMenu));
+        break;
+      case ChromeMessageType.updateMenu:
+        handle(saveContextMenu(payload as ContextMenu, true));
         break;
       case ChromeMessageType.removeMenu:
-        removeContextMenu(payload as string).subscribe({
-          next: () => sendResponse({ success: true, payload }),
-          error: (error) => sendResponse({ success: false, error }),
-        });
+        handle(removeContextMenu(payload as string));
+        break;
+      case ChromeMessageType.resetMenu:
+        handle(buildContextMenu(payload as ContextMenu[]));
         break;
     }
   }

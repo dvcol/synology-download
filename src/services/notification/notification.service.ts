@@ -49,7 +49,10 @@ export class NotificationService {
 
       store$(this.store, getTasksCount).subscribe((count) => this.store.dispatch(setTasksCount(count)));
 
-      onMessage<ChromeNotification>([ChromeMessageType.notification]).subscribe(({ message: { payload } }) => this.sendOrForward(payload));
+      onMessage<ChromeNotification>([ChromeMessageType.notification], true).subscribe(({ message: { payload }, sendResponse }) => {
+        this.sendOrForward(payload);
+        sendResponse();
+      });
     }
   }
 

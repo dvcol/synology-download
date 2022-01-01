@@ -1,8 +1,7 @@
-import { ContextMenu, SettingsSlice, TaskTab } from '../../models';
+import { ContextMenu, QuickMenu, SettingsSlice, TaskTab } from '../../models';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { settingsSlice } from '../slices';
 import { parseJSON } from '../../utils';
-import { QuickMenu } from '../../models/menu.model';
 
 export const setReducer = (oldSettings: SettingsSlice, action: PayloadAction<Partial<SettingsSlice>>): SettingsSlice => ({
   ...oldSettings,

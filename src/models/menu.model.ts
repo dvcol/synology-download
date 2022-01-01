@@ -27,6 +27,6 @@ export interface ContextMenu extends Menu {
 
 export const defaultContextMenu: ContextMenu = {
   id: uuid(),
-  title: 'Download with Synology Diskstation',
+  title: 'Add to Synology Diskstation',
   contexts: ['link', 'audio', 'video', 'image', 'selection'],
 };

@@ -24,14 +24,15 @@ export const TaskDialog = ({ container }: React.PropsWithRef<{ container?: Porta
 
   useEffect(() => {
     const abort$ = new Subject<void>();
-    onMessage<OnClickData>([ChromeMessageType.popup])
+    onMessage<OnClickData>([ChromeMessageType.popup], true)
       .pipe(takeUntil(abort$))
-      .subscribe(({ message }) => {
+      .subscribe(({ message, sendResponse }) => {
         if (message?.payload) {
           const { linkUrl: uri, pageUrl: source } = message.payload;
           setForm({ uri, source });
           setOpen(true);
         }
+        sendResponse();
       });
     taskDialog$.pipe(takeUntil(abort$)).subscribe(({ open: _open, form: _form }) => {
       _form && setForm(_form);

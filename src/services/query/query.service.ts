@@ -53,8 +53,9 @@ export class QueryService {
 
     if (!isProxy) {
       store$(store, getUrl).subscribe((url) => this.setBaseUrl(url));
-      onMessage<string>([ChromeMessageType.baseUrl]).subscribe(({ message: { payload } }) => {
+      onMessage<string>([ChromeMessageType.baseUrl], true).subscribe(({ message: { payload }, sendResponse }) => {
         if (payload) this.setBaseUrl(payload);
+        sendResponse();
       });
     }
   }

@@ -7,8 +7,8 @@ import { HashLink as Link } from 'react-router-hash-link';
 import { SettingsHeader } from './settings-header';
 import { SettingsPolling } from './settings-polling';
 import { SettingsTabs } from './settings-tabs';
-import { SettingsQuickMenu } from './settings-quick-menu';
-import { SettingsContextMenu } from './settings-context-menu';
+import { SettingsQuickMenus } from './settings-quick-menus';
+import { SettingsContextMenus } from './settings-context-menus';
 import { SettingsTasksCount } from './settings-tasks-count';
 import { SettingsBanner } from './settings-banner';
 import { SettingsSnack } from './settings-snack';
@@ -81,8 +81,8 @@ export const Settings = () => {
                 <SettingsHeader label={SettingHeader.interface} />
                 <SettingsTabs />
                 {/* TODO: settings for task sorting */}
-                <SettingsQuickMenu />
-                <SettingsContextMenu />
+                <SettingsQuickMenus />
+                <SettingsContextMenus />
                 {/* TODO: settings for folder display */}
                 {/*  TODO : settings clear/delete by tabs or global */}
               </React.Fragment>
