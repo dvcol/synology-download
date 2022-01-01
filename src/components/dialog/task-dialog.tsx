@@ -1,13 +1,12 @@
-import { ChromeMessageType, TaskForm, TaskFormValid } from '../../models';
+import { ChromeMessageType, ContextMenuOnClickPayload, TaskForm, TaskFormValid } from '../../models';
 import { Dialog, DialogContent } from '@mui/material';
 import { TaskAdd } from '../panel';
 import React, { useEffect } from 'react';
 import { onMessage } from '../../utils';
 import { PortalProps } from '@mui/base/Portal';
-import { NotificationService } from '../../services';
+import { NotificationService, QueryService } from '../../services';
 import { taskDialog$ } from '../../pages/content';
 import { Subject, takeUntil } from 'rxjs';
-import OnClickData = chrome.contextMenus.OnClickData;
 
 export const TaskDialog = ({ container }: React.PropsWithRef<{ container?: PortalProps['container'] }>) => {
   const [form, setForm] = React.useState<TaskForm>();
@@ -24,13 +23,22 @@ export const TaskDialog = ({ container }: React.PropsWithRef<{ container?: Porta
 
   useEffect(() => {
     const abort$ = new Subject<void>();
-    onMessage<OnClickData>([ChromeMessageType.popup], true)
+    onMessage<ContextMenuOnClickPayload>([ChromeMessageType.popup], true)
       .pipe(takeUntil(abort$))
       .subscribe(({ message, sendResponse }) => {
         if (message?.payload) {
-          const { linkUrl: uri, pageUrl: source } = message.payload;
-          setForm({ uri, source });
-          setOpen(true);
+          const {
+            info: { linkUrl: uri, pageUrl: source },
+            menu: { modal, destination },
+          } = message.payload;
+
+          console.log(modal, destination, message);
+          if (modal) {
+            setForm({ uri, source, destination });
+            setOpen(true);
+          } else if (uri) {
+            QueryService.createTask(uri, source, destination?.path).subscribe();
+          }
         }
         sendResponse();
       });

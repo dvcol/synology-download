@@ -1,43 +1,42 @@
-import { ChromeMessageType, ContextMenu } from '../../models';
-import { EMPTY, forkJoin, Observable } from 'rxjs';
+import { ChromeMessageType, ContextMenu, ContextMenuOnClickPayload } from '../../models';
+import { EMPTY, forkJoin, Observable, Subscriber } from 'rxjs';
 import { sendTabMessage } from '../../utils';
 import OnClickData = chrome.contextMenus.OnClickData;
+import Tab = chrome.tabs.Tab;
+import UpdateProperties = chrome.contextMenus.UpdateProperties;
+
+/**
+ * Update an already creation context menu
+ */
+const updateContextMenu = (id: string, updates: UpdateProperties, subscriber: Subscriber<void>) =>
+  chrome.contextMenus.update(id, updates, () => {
+    console.debug('Context menu updated');
+    subscriber.next();
+    subscriber.complete();
+  });
 
 /**
  * Add or update a context menu to chrome with the given options
  */
-export function saveContextMenu({ destination, modal, ...option }: ContextMenu, update?: boolean): Observable<void> {
+export function saveContextMenu(menu: ContextMenu, update?: boolean): Observable<void> {
   return new Observable<void>((subscriber) => {
-    console.debug('adding context menu');
+    const { destination, modal, ...option } = menu;
+    const { id, ...updates } = option;
+
+    // On click instruct content.ts to open the modal
+    const onclick = (info: OnClickData, tab?: Tab) => {
+      if (info.menuItemId === option.id && tab?.id !== undefined) {
+        sendTabMessage<ContextMenuOnClickPayload>(tab.id, { type: ChromeMessageType.popup, payload: { info, menu } }).subscribe();
+      }
+    };
 
     if (update) {
-      const { id, ...updates } = option;
-      chrome.contextMenus.update(id, updates, () => {
-        console.debug('Context menu updated');
-
-        subscriber.next();
-        subscriber.complete();
-      });
+      updateContextMenu(id, { ...updates, onclick }, subscriber);
     } else {
-      chrome.contextMenus.create(
-        {
-          ...option,
-          enabled: true,
-        },
-        () => {
-          console.debug('Context menu created');
-
-          chrome.contextMenus.onClicked.addListener(function (info, tab) {
-            if (info.menuItemId === option.id && tab?.id !== undefined) {
-              // On click instruct content.ts to open the modal
-              sendTabMessage<OnClickData>(tab.id, { type: ChromeMessageType.popup, payload: info }).subscribe();
-            }
-          });
-
-          subscriber.next();
-          subscriber.complete();
-        }
-      );
+      chrome.contextMenus.create({ ...option, enabled: true }, () => {
+        console.debug('Context menu created');
+        updateContextMenu(id, { ...updates, onclick }, subscriber);
+      });
     }
   });
 }

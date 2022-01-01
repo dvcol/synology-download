@@ -18,10 +18,15 @@ export enum ChromeMessageType {
   baseUrl = 'baseUrl',
 }
 
+export type ContextMenuOnClickPayload = {
+  info: OnClickData;
+  menu: ContextMenu;
+};
+
 /**
  * Type union of possible message payloads
  */
-export type ChromeMessagePayload = string | ContextMenu | ContextMenu[] | ChromeNotification | SynologyQueryPayload | OnClickData;
+export type ChromeMessagePayload = string | ContextMenu | ContextMenu[] | ChromeNotification | SynologyQueryPayload | ContextMenuOnClickPayload;
 
 /**
  * Message interface for communication between content & background
