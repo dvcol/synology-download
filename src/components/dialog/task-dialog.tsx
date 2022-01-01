@@ -32,7 +32,6 @@ export const TaskDialog = ({ container }: React.PropsWithRef<{ container?: Porta
             menu: { modal, destination },
           } = message.payload;
 
-          console.log(modal, destination, message);
           if (modal) {
             setForm({ uri, source, destination });
             setOpen(true);

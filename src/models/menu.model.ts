@@ -18,15 +18,31 @@ export const defaultQuickMenu: QuickMenu = {
   icon: MaterialIcon.download,
 };
 
+export enum ContextType {
+  all = 'all',
+  page = 'page',
+  frame = 'frame',
+  selection = 'selection',
+  link = 'link',
+  editable = 'editable',
+  image = 'image',
+  video = 'video',
+  audio = 'audio',
+  launcher = 'launcher',
+  browser_action = 'browser_action',
+  page_action = 'page_action',
+  action = 'action',
+}
+
 /**
  * Options for saved context Menus
  */
 export interface ContextMenu extends Menu {
-  contexts: string[];
+  contexts: ContextType[];
 }
 
 export const defaultContextMenu: ContextMenu = {
   id: uuid(),
   title: 'Add to Synology Diskstation',
-  contexts: ['link', 'audio', 'video', 'image', 'selection'],
+  contexts: [ContextType.link, ContextType.audio, ContextType.video, ContextType.image, ContextType.selection],
 };
