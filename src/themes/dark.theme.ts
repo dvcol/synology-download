@@ -51,9 +51,20 @@ export const darkTheme = () => {
           root: scrollbar,
         },
       },
+      MuiTreeItem: {
+        styleOverrides: {
+          label: { fontSize: 'inherit' },
+        },
+      },
       MuiInputBase: {
         styleOverrides: {
           input: scrollbar,
+          root: { fontSize: 'inherit' },
+        },
+      },
+      MuiInputLabel: {
+        styleOverrides: {
+          root: { fontSize: 'inherit' },
         },
       },
       MuiToolbar: {

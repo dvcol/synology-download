@@ -6,8 +6,8 @@ export const ExplorerLoading = ({ loading, empty }: { loading?: boolean; empty?:
   return (
     <React.Fragment>
       {loading && (
-        <Typography sx={{ m: '0.25rem 0' }}>
-          <Box component={'span'} sx={{ m: '0 0.3rem 0 0.7rem' }}>
+        <Typography sx={{ m: '4px 0', fontSize: '14px' }}>
+          <Box component={'span'} sx={{ m: '0 6px 0 12px' }}>
             <CircularProgress size={'0.6rem'} />
           </Box>
           <span>Loading folder content</span>
@@ -18,11 +18,12 @@ export const ExplorerLoading = ({ loading, empty }: { loading?: boolean; empty?:
           sx={{
             display: 'flex',
             alignItems: 'center',
-            pl: '0.5rem',
-            m: '0.25rem 0',
+            pl: '8px',
+            m: '4px 0',
+            fontSize: '14px',
           }}
         >
-          <InfoIcon sx={{ width: '1rem', height: '1rem', mr: '0.25rem' }} />
+          <InfoIcon sx={{ width: '16px', height: '16px', mr: '4px' }} />
           <span>This folder does not contain any sub-folders.</span>
         </Typography>
       )}

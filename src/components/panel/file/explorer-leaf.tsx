@@ -28,7 +28,7 @@ export const ExplorerLeaf = ({
       label={folder.name}
       disabled={disabled}
       icon={folder?.isdir ? undefined : <InsertDriveFileOutlinedIcon />}
-      sx={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}
+      sx={{ overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis', fontSize: '14px' }}
     >
       {!flatten && folder?.isdir && <ExplorerLoading loading={isLoading} empty={!children?.length} />}
       {!flatten &&

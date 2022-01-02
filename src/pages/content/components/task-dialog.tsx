@@ -1,6 +1,6 @@
 import { ChromeMessageType, ContextMenuOnClickPayload, TaskForm, TaskFormValid } from '../../../models';
 import { Dialog, DialogContent } from '@mui/material';
-import { TaskAdd } from '../../../components/panel';
+import { TaskAdd } from '../../../components';
 import React, { useEffect } from 'react';
 import { onMessage } from '../../../utils';
 import { PortalProps } from '@mui/base/Portal';
