@@ -7,10 +7,11 @@ import { darkTheme } from '../../../themes';
 import { proxyStore } from '../../../store';
 import { NotificationService, QueryService } from '../../../services';
 import { ModalInstance } from '../../../models';
-import { NotificationStack, TaskDialog } from '../../../components';
+import { NotificationStack } from '../../../components';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
-import { QuickMenuDialog } from '../../../components/dialog/quick-menu-dialog';
+import { QuickMenuDialog } from './quick-menu-dialog';
+import { TaskDialog } from './task-dialog';
 
 /**
  * Open a modal popup for complex download actions

@@ -1,6 +1,7 @@
-import { addAnchorClickListener, renderContentApp } from './modules';
+import { addAnchorClickListener } from './modules';
 import { Subject } from 'rxjs';
 import { TaskForm } from '../../models';
+import { renderContentApp } from './components';
 
 console.log('Content script works!');
 

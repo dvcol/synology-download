@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
-import { anchor$, taskDialog$ } from '../../pages/content';
+import { anchor$, taskDialog$ } from '../index';
 import { PortalProps } from '@mui/base/Portal';
-import { QueryService } from '../../services';
-import { MaterialIcon, QuickMenu, TaskForm } from '../../models';
+import { QueryService } from '../../../services';
+import { MaterialIcon, QuickMenu, TaskForm } from '../../../models';
 import { useSelector } from 'react-redux';
-import { getQuick, StoreState } from '../../store';
-import { MuiIcon } from '../ui-element';
+import { getQuick, StoreState } from '../../../store';
+import { MuiIcon } from '../../../components/ui-element';
 
 export const QuickMenuDialog = ({ container }: React.PropsWithRef<{ container?: PortalProps['container'] }>) => {
   const [_anchor, setAnchor] = React.useState<Element | null>();
