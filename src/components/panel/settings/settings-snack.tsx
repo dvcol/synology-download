@@ -54,7 +54,7 @@ export const SettingsSnack = () => {
             textFieldProps={{
               select: true,
               label: 'Vertical position',
-              sx: { flex: '1 1 50%', textTransform: 'capitalize', p: '0.5rem 0.5rem 0.5rem 0' },
+              sx: { flex: '1 1 50%', textTransform: 'capitalize', mr: '0.25rem' },
               disabled: !getValues()?.enabled,
             }}
           >
@@ -69,7 +69,7 @@ export const SettingsSnack = () => {
             textFieldProps={{
               select: true,
               label: 'Horizontal position',
-              sx: { flex: '1 1 50%', textTransform: 'capitalize', p: '0.5rem 0 0.5rem 0.5rem' },
+              sx: { flex: '1 1 50%', textTransform: 'capitalize', ml: '0.25rem' },
               disabled: !getValues()?.enabled,
             }}
           >
@@ -95,7 +95,7 @@ export const SettingsSnack = () => {
                   endAdornment: <InputAdornment position="end">ms</InputAdornment>,
                 },
                 disabled: !getValues()?.enabled,
-                sx: { flex: '1 1 36ch' },
+                sx: { flex: '0 0 14rem' },
               }}
             />
           }
