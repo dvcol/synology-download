@@ -29,11 +29,11 @@ export class SynologyAuthService extends SynologyService {
       passwd,
     };
     if (otp_code) params.otp_code = otp_code;
-    return this._do<LoginResponse>(HttpMethod.GET, params, '2');
+    return this._do<LoginResponse>(HttpMethod.POST, params, '2');
   }
 
   logout(): Observable<void> {
     const params: HttpParameters = { method: AuthMethod.logout, session: SessionName.DiskStation };
-    return this._do<void>(HttpMethod.GET, params);
+    return this._do<void>(HttpMethod.PUT, params);
   }
 }

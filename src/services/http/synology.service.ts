@@ -45,7 +45,7 @@ export class SynologyService extends BaseHttpService {
   }
 
   query<T>(method: HttpMethod, params: HttpParameters, version: string, api: Api, endpoint: Endpoint): Observable<HttpResponse<T>> {
-    if (this.sid) params.sid = this.sid;
+    if (this.sid) params._sid = this.sid;
     switch (method) {
       case HttpMethod.POST:
       case HttpMethod.post:
