@@ -44,7 +44,7 @@ export const defaultTabs: TaskTab[] = [
     id: uuid(),
     name: TabType.downloading,
     template: TabType.downloading,
-    status: [TaskStatus.downloading],
+    status: [TaskStatus.downloading, TaskStatus.waiting],
     color: ColorLevel.info,
   },
   {

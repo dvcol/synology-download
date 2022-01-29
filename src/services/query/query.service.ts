@@ -9,6 +9,7 @@ import {
   getUsername,
   setLogged,
   setTasks,
+  spliceTasks,
   store$,
 } from '../../store';
 import { Store } from 'redux';
@@ -195,7 +196,12 @@ export class QueryService {
 
   static deleteTask(id: string | string[], force = false): Observable<CommonResponse[]> {
     this.readyCheck();
-    return this.downloadClient.deleteTask(id, force).pipe(tap(() => this.listTasks().subscribe()));
+    return this.downloadClient.deleteTask(id, force).pipe(
+      tap(() => {
+        this.store.dispatch(spliceTasks(id));
+        this.listTasks().subscribe();
+      })
+    );
   }
 
   static deleteAllTasks(ids: string[] = getTasksIds(this.store.getState()), force = false): Observable<CommonResponse[]> {

@@ -49,7 +49,7 @@ export interface Polling {
 
 export const defaultPolling: Polling = {
   enabled: true,
-  background: { enabled: true, interval: 60000 },
+  background: { enabled: true, interval: 20000 },
   popup: { enabled: true, interval: 3000 },
 };
 

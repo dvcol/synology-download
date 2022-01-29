@@ -5,6 +5,7 @@ import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
 
 interface TasksReducers<S = TasksSlice> extends SliceCaseReducers<S> {
   setTasks: CaseReducer<S, PayloadAction<Task[]>>;
+  spliceTasks: CaseReducer<S, PayloadAction<string | string[]>>;
   setStatuses: CaseReducer<S, PayloadAction<TaskStatus[]>>;
   setTasksCount: CaseReducer<S, PayloadAction<number>>;
   resetTasks: CaseReducer<S>;
@@ -27,6 +28,10 @@ export const tasksSlice = createSlice<TasksSlice, TasksReducers, 'tasks'>({
   initialState,
   reducers: {
     setTasks: (state, { payload: entities }) => ({ ...state, entities }),
+    spliceTasks: (state, { payload: ids }) => ({
+      ...state,
+      entities: state.entities?.filter((e) => (Array.isArray(ids) ? !ids.includes(e.id) : e.id !== ids)),
+    }),
     setStatuses: (state, { payload: statuses }) => ({ ...state, statuses }),
     setTasksCount: (state, { payload: count }) => {
       setCount(count ? count.toString() : '', count > 1);
@@ -37,4 +42,4 @@ export const tasksSlice = createSlice<TasksSlice, TasksReducers, 'tasks'>({
 });
 
 // Action creators are generated for each case reducer function
-export const { setTasks, setStatuses, setTasksCount, resetTasks } = tasksSlice.actions;
+export const { setTasks, spliceTasks, setStatuses, setTasksCount, resetTasks } = tasksSlice.actions;

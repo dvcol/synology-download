@@ -5,7 +5,7 @@ import { renderContentApp } from './components';
 
 console.log('Content script works!');
 
-export type AnchorPayload = { anchor: Element | null; form: TaskForm };
+export type AnchorPayload = { event: MouseEvent; anchor: Element | null; form: TaskForm };
 export const anchor$ = new Subject<AnchorPayload>();
 
 export type TaskDialogPayload = { open: boolean; form?: TaskForm };

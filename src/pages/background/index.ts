@@ -14,11 +14,11 @@ wrapStore(store);
 // Set store to query service
 QueryService.init(store);
 
-// Init polling
-PollingService.init(store);
-
 // Init notifications
 NotificationService.init(store);
+
+// Init polling
+PollingService.init(store);
 
 // Restore settings & polling
 restoreSettings();
