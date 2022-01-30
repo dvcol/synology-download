@@ -5,6 +5,7 @@ import { buildContextMenu, NotificationService, PollingService, QueryService, re
 import { restoreSettings } from './modules/settings-handler';
 import { onMessage } from '../../utils';
 import { Observable } from 'rxjs';
+import { restoreTasks } from './modules/tasks-handler';
 
 console.log('This is the background page.');
 
@@ -22,6 +23,9 @@ PollingService.init(store);
 
 // Restore settings & polling
 restoreSettings();
+
+// Restore Tasks
+restoreTasks();
 
 // Listen to ports
 // TODO: move to rxjs ?

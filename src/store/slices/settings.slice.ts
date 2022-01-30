@@ -75,24 +75,3 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
       }),
   } as SettingsReducers,
 });
-
-// Action creators are generated for each case reducer function
-export const {
-  setSettings,
-  syncSettings,
-  setConnection,
-  syncConnection,
-  syncPolling,
-  syncNotifications,
-  syncRememberMe,
-  resetSettings,
-  saveContextMenu,
-  removeContextMenu,
-  resetContextMenu,
-  saveTaskTab,
-  removeTaskTab,
-  resetTaskTabs,
-  saveQuickMenu,
-  removeQuickMenu,
-  resetQuickMenus,
-} = settingsSlice.actions;

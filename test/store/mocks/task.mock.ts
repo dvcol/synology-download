@@ -1,7 +1,7 @@
-import {Task} from "../../models/task.model";
+import { Task } from '../../../src/models';
 
-
-export const mockWaiting: Task = JSON.parse('{\n' +
+export const mockWaiting: Task = JSON.parse(
+  '{\n' +
     '                "id": "dbid_001",\n' +
     '                "type": "bt",\n' +
     '                "username": "admin",\n' +
@@ -37,10 +37,11 @@ export const mockWaiting: Task = JSON.parse('{\n' +
     '                                }\n' +
     '                            ]\n' +
     '                    }\n' +
-    '            }')
+    '            }'
+);
 
 export const mockDownloading: Task = JSON.parse(
-    '{\n' +
+  '{\n' +
     '        "id": "dbid_001",\n' +
     '        "type": "bt",\n' +
     '        "username": "admin",\n' +
@@ -69,10 +70,10 @@ export const mockDownloading: Task = JSON.parse(
     '                    }\n' +
     '            }\n' +
     '    }'
-)
+);
 
 export const mockPaused: Task = JSON.parse(
-    '{\n' +
+  '{\n' +
     '        "id": "dbid_001",\n' +
     '        "type": "bt",\n' +
     '        "username": "admin",\n' +
@@ -91,10 +92,10 @@ export const mockPaused: Task = JSON.parse(
     '                    }\n' +
     '            }\n' +
     '    }'
-)
+);
 
 export const mockFinishing: Task = JSON.parse(
-    '{\n' +
+  '{\n' +
     '        "id": "dbid_001",\n' +
     '        "type": "bt",\n' +
     '        "username": "admin",\n' +
@@ -113,10 +114,10 @@ export const mockFinishing: Task = JSON.parse(
     '                    }\n' +
     '            }\n' +
     '    }'
-)
+);
 
 export const mockFinished: Task = JSON.parse(
-    '{\n' +
+  '{\n' +
     '        "id": "dbid_001",\n' +
     '        "type": "bt",\n' +
     '        "username": "admin",\n' +
@@ -135,10 +136,10 @@ export const mockFinished: Task = JSON.parse(
     '                    }\n' +
     '            }\n' +
     '    }'
-)
+);
 
 export const mockHash: Task = JSON.parse(
-    '{\n' +
+  '{\n' +
     '        "id": "dbid_001",\n' +
     '        "type": "bt",\n' +
     '        "username": "admin",\n' +
@@ -157,10 +158,10 @@ export const mockHash: Task = JSON.parse(
     '                    }\n' +
     '            }\n' +
     '    }'
-)
+);
 
 export const mockSeeding: Task = JSON.parse(
-    '{\n' +
+  '{\n' +
     '        "id": "dbid_001",\n' +
     '        "type": "bt",\n' +
     '        "username": "admin",\n' +
@@ -179,10 +180,10 @@ export const mockSeeding: Task = JSON.parse(
     '                    }\n' +
     '            }\n' +
     '    }'
-)
+);
 
 export const mockHostingWaiting: Task = JSON.parse(
-    '{\n' +
+  '{\n' +
     '        "id": "dbid_001",\n' +
     '        "type": "bt",\n' +
     '        "username": "admin",\n' +
@@ -201,11 +202,10 @@ export const mockHostingWaiting: Task = JSON.parse(
     '                    }\n' +
     '            }\n' +
     '    }'
-)
-
+);
 
 export const mockExtracting: Task = JSON.parse(
-    '{\n' +
+  '{\n' +
     '        "id": "dbid_001",\n' +
     '        "type": "bt",\n' +
     '        "username": "admin",\n' +
@@ -224,9 +224,9 @@ export const mockExtracting: Task = JSON.parse(
     '                    }\n' +
     '            }\n' +
     '    }'
-)
+);
 export const mockError: Task = JSON.parse(
-    '{\n' +
+  '{\n' +
     '        "id": "dbid_001",\n' +
     '        "type": "bt",\n' +
     '        "username": "admin",\n' +
@@ -245,114 +245,123 @@ export const mockError: Task = JSON.parse(
     '                    }\n' +
     '            }\n' +
     '    }'
-)
+);
 
-export const mockTasks: Task[] =
-    [
-        mockDownloading,
-        mockWaiting,
-        mockPaused,
-        mockFinishing,
-        mockFinished,
-        mockHash,
-        mockSeeding,
-        mockHostingWaiting,
-        mockExtracting,
-        mockError,
-        JSON.parse('{\n' +
-            '        "id": "dbid_001",\n' +
-            '        "type": "bt",\n' +
-            '        "username": "admin",\n' +
-            '        "title": "TOP 100 MIX",\n' +
-            '        "size": "9427312332",\n' +
-            '        "status": "downloading",\n' +
-            '        "status_extra": null,\n' +
-            '        "additional":\n' +
-            '            {\n' +
-            '                "detail":\n' +
-            '                    {\n' +
-            '                        "connected_leechers": 0,\n' +
-            '                        "connected_seeders": 0,\n' +
-            '                        "create_time": "1341210005",\n' +
-            '                        "destination": "Download",\n' +
-            '                        "priority": "auto",\n' +
-            '                        "total_peers": 0,\n' +
-            '                        "uri": "http://mp3.com/mix.torrent"\n' +
-            '                    },\n' +
-            '                "file":\n' +
-            '                    [\n' +
-            '                        {\n' +
-            '                            "filename": "mix001.mp3",\n' +
-            '                            "priority": "normal",\n' +
-            '                            "size": "41835",\n' +
-            '                            "size_downloaded": "0"\n' +
-            '                        },\n' +
-            '                        {\n' +
-            '                            "filename": "mix002.mp3",\n' +
-            '                            "priority": "normal",\n' +
-            '                            "size": "31689",\n' +
-            '                            "size_downloaded": "0"\n' +
-            '                        }\n' +
-            '                    ]\n' +
-            '            }\n' +
-            '    }'),
-        JSON.parse('{\n' +
-            '        "id": "dbid_002",\n' +
-            '        "type": "http",\n' +
-            '        "username": "user1",\n' +
-            '        "title": "short clip",\n' +
-            '        "size": "112092412",\n' +
-            '        "status": "finished",\n' +
-            '        "status_extra": null,\n' +
-            '        "additional":\n' +
-            '            {\n' +
-            '                "detail":\n' +
-            '                    {\n' +
-            '                        "connected_leechers": 0,\n' +
-            '                        "connected_seeders": 0,\n' +
-            '                        "create_time": "1356214565",\n' +
-            '                        "destination": "Download",\n' +
-            '                        "priority": "auto",\n' +
-            '                        "total_peers": 0,\n' +
-            '                        "uri": "http://mymovies.com/mv.avi"\n' +
-            '                    }\n' +
-            '            }\n' +
-            '    }'),
-        JSON.parse('{\n' +
-            '        "id": "dbid_001",\n' +
-            '        "type": "bt",\n' +
-            '        "username": "admin",\n' +
-            '        "title": "File 1",\n' +
-            '        "size": "123456",\n' +
-            '        "status": "downloading",\n' +
-            '        "status_extra": null,\n' +
-            '        "additional":\n' +
-            '            {\n' +
-            '                "transfer":\n' +
-            '                    {\n' +
-            '                        "size_downloaded": "12345",\n' +
-            '                        "size_uploaded": "1231",\n' +
-            '                        "speed_download": "256",\n' +
-            '                        "speed_upload": "0"\n' +
-            '                    }\n' +
-            '            }\n' +
-            '    }'),
-        JSON.parse('{\n' +
-            '        "id": "dbid_002",\n' +
-            '        "type": "http",\n' +
-            '        "username": "bbb",\n' +
-            '        "title": "File 2",\n' +
-            '        "size": "654321",\n' +
-            '        "status": "waiting",\n' +
-            '        "status_extra": null\n' +
-            '    }'),
-        JSON.parse('{\n' +
-            '        "id": "dbid_003",\n' +
-            '        "type": "ftp",\n' +
-            '        "username": "user1",\n' +
-            '        "title": "File 3",\n' +
-            '        "size": "654321",\n' +
-            '        "status": "finished",\n' +
-            '        "status_extra": null\n' +
-            '    }')
-    ]
+export const mockTasks: Task[] = [
+  mockDownloading,
+  mockWaiting,
+  mockPaused,
+  mockFinishing,
+  mockFinished,
+  mockHash,
+  mockSeeding,
+  mockHostingWaiting,
+  mockExtracting,
+  mockError,
+  JSON.parse(
+    '{\n' +
+      '        "id": "dbid_001",\n' +
+      '        "type": "bt",\n' +
+      '        "username": "admin",\n' +
+      '        "title": "TOP 100 MIX",\n' +
+      '        "size": "9427312332",\n' +
+      '        "status": "downloading",\n' +
+      '        "status_extra": null,\n' +
+      '        "additional":\n' +
+      '            {\n' +
+      '                "detail":\n' +
+      '                    {\n' +
+      '                        "connected_leechers": 0,\n' +
+      '                        "connected_seeders": 0,\n' +
+      '                        "create_time": "1341210005",\n' +
+      '                        "destination": "Download",\n' +
+      '                        "priority": "auto",\n' +
+      '                        "total_peers": 0,\n' +
+      '                        "uri": "http://mp3.com/mix.torrent"\n' +
+      '                    },\n' +
+      '                "file":\n' +
+      '                    [\n' +
+      '                        {\n' +
+      '                            "filename": "mix001.mp3",\n' +
+      '                            "priority": "normal",\n' +
+      '                            "size": "41835",\n' +
+      '                            "size_downloaded": "0"\n' +
+      '                        },\n' +
+      '                        {\n' +
+      '                            "filename": "mix002.mp3",\n' +
+      '                            "priority": "normal",\n' +
+      '                            "size": "31689",\n' +
+      '                            "size_downloaded": "0"\n' +
+      '                        }\n' +
+      '                    ]\n' +
+      '            }\n' +
+      '    }'
+  ),
+  JSON.parse(
+    '{\n' +
+      '        "id": "dbid_002",\n' +
+      '        "type": "http",\n' +
+      '        "username": "user1",\n' +
+      '        "title": "short clip",\n' +
+      '        "size": "112092412",\n' +
+      '        "status": "finished",\n' +
+      '        "status_extra": null,\n' +
+      '        "additional":\n' +
+      '            {\n' +
+      '                "detail":\n' +
+      '                    {\n' +
+      '                        "connected_leechers": 0,\n' +
+      '                        "connected_seeders": 0,\n' +
+      '                        "create_time": "1356214565",\n' +
+      '                        "destination": "Download",\n' +
+      '                        "priority": "auto",\n' +
+      '                        "total_peers": 0,\n' +
+      '                        "uri": "http://mymovies.com/mv.avi"\n' +
+      '                    }\n' +
+      '            }\n' +
+      '    }'
+  ),
+  JSON.parse(
+    '{\n' +
+      '        "id": "dbid_001",\n' +
+      '        "type": "bt",\n' +
+      '        "username": "admin",\n' +
+      '        "title": "File 1",\n' +
+      '        "size": "123456",\n' +
+      '        "status": "downloading",\n' +
+      '        "status_extra": null,\n' +
+      '        "additional":\n' +
+      '            {\n' +
+      '                "transfer":\n' +
+      '                    {\n' +
+      '                        "size_downloaded": "12345",\n' +
+      '                        "size_uploaded": "1231",\n' +
+      '                        "speed_download": "256",\n' +
+      '                        "speed_upload": "0"\n' +
+      '                    }\n' +
+      '            }\n' +
+      '    }'
+  ),
+  JSON.parse(
+    '{\n' +
+      '        "id": "dbid_002",\n' +
+      '        "type": "http",\n' +
+      '        "username": "bbb",\n' +
+      '        "title": "File 2",\n' +
+      '        "size": "654321",\n' +
+      '        "status": "waiting",\n' +
+      '        "status_extra": null\n' +
+      '    }'
+  ),
+  JSON.parse(
+    '{\n' +
+      '        "id": "dbid_003",\n' +
+      '        "type": "ftp",\n' +
+      '        "username": "user1",\n' +
+      '        "title": "File 3",\n' +
+      '        "size": "654321",\n' +
+      '        "status": "finished",\n' +
+      '        "status_extra": null\n' +
+      '    }'
+  ),
+];

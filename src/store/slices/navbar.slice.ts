@@ -21,6 +21,3 @@ export const navbarSlice = createSlice<NavbarSlice, NavbarReducers, 'navbar'>({
     resetNavbar: () => initialState,
   } as NavbarReducers,
 });
-
-// Action creators are generated for each case reducer function
-export const { setNavbar, resetNavbar } = navbarSlice.actions;

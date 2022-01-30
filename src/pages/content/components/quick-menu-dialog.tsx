@@ -40,7 +40,6 @@ export const QuickMenuDialog = ({ container }: React.PropsWithRef<{ container?: 
   };
 
   const open = Boolean(position || _anchor);
-  const handleRef = () => (position ? 'anchorPosition' : _anchor ? 'anchorEl' : 'none');
   const handleClose = () => {
     setAnchor(null);
     setPosition(undefined);
@@ -55,7 +54,7 @@ export const QuickMenuDialog = ({ container }: React.PropsWithRef<{ container?: 
       id="basic-menu"
       anchorEl={_anchor}
       anchorPosition={position}
-      anchorReference={handleRef()}
+      anchorReference={position ? 'anchorPosition' : 'anchorEl'}
       open={open}
       container={container}
       onClose={handleClose}
