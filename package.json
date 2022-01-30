@@ -68,6 +68,7 @@
     "fs-extra": "^10.0.0",
     "html-loader": "^3.0.0",
     "html-webpack-plugin": "^5.5.0",
+    "merge-jsons-webpack-plugin": "^2.0.1",
     "node-sass": "^6.0.1",
     "prettier": "2.5.1",
     "redux-devtools": "^3.7.0",

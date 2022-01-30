@@ -1,5 +1,6 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import React, { useEffect } from 'react';
+import { useI18n } from '../../utils';
 
 export const ConfirmationDialog = ({
   open,
@@ -14,6 +15,7 @@ export const ConfirmationDialog = ({
   onCancel?: ($event: React.MouseEvent) => void;
   onConfirm?: ($event: React.MouseEvent) => void;
 }) => {
+  const i18n = useI18n('confirmation8dialog');
   const [state, setState] = React.useState(open);
 
   useEffect(() => setState(open), [open]);
@@ -32,10 +34,10 @@ export const ConfirmationDialog = ({
       <DialogContent>{description}</DialogContent>
       <DialogActions>
         <Button variant="outlined" onClick={onCancelHandler}>
-          Cancel
+          {i18n('cancel', 'buttons')}
         </Button>
         <Button variant="outlined" color="error" onClick={onConfirmHandler} autoFocus>
-          Confirm
+          {i18n('confirm', 'buttons')}
         </Button>
       </DialogActions>
     </Dialog>

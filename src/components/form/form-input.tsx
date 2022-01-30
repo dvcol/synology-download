@@ -3,6 +3,7 @@ import { Controller, ControllerProps } from 'react-hook-form';
 import React, { useState } from 'react';
 import { FieldPath, FieldValues } from 'react-hook-form/dist/types';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { useI18n } from '../../utils';
 
 export const FormInput = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({
   controllerProps,
@@ -14,6 +15,7 @@ export const FormInput = <TFieldValues extends FieldValues = FieldValues, TName 
   textFieldProps?: TextFieldProps;
   iconProps?: SvgIconProps;
 }>) => {
+  const i18n = useI18n('form_input');
   const [showPassword, setShowPassword] = useState<boolean>();
   const render: ControllerProps['render'] = ({ field, fieldState: { invalid, error } }) => {
     const _textFieldProps: TextFieldProps = {
@@ -34,7 +36,7 @@ export const FormInput = <TFieldValues extends FieldValues = FieldValues, TName 
       _textFieldProps.InputProps = {
         endAdornment: (
           <InputAdornment position="end">
-            <IconButton aria-label="toggle password visibility" onClick={() => setShowPassword(!showPassword)} edge="end">
+            <IconButton aria-label={i18n('toggle_password_visibility')} onClick={() => setShowPassword(!showPassword)} edge="end">
               {showPassword ? <VisibilityOff {...iconProps} /> : <Visibility {...iconProps} />}
             </IconButton>
           </InputAdornment>

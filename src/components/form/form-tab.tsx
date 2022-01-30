@@ -4,6 +4,7 @@ import { ColorLevel, defaultNotifications, defaultTabs, getColorFromLevel, getLe
 import { FormCheckbox } from './form-checkbox';
 import React from 'react';
 import { UseFormReturn } from 'react-hook-form/dist/types/form';
+import { useI18n } from '../../utils';
 
 // TODO : filter destination
 export const FormTab = ({
@@ -15,6 +16,7 @@ export const FormTab = ({
   tab: Tab;
   disabled?: boolean;
 }>) => {
+  const i18n = useI18n('form_tab');
   const getTaskTab = (type?: TabType | string): TaskTab | undefined => defaultTabs.find((t) => t.name === type);
   const getTemplateStatuses = (taskTab?: TaskTab): TaskStatus[] => (taskTab?.status?.length ? taskTab?.status : status) ?? [];
 
@@ -38,9 +40,9 @@ export const FormTab = ({
   return (
     <React.Fragment>
       <CardHeader
-        title={'Base template'}
+        title={i18n('base_template_title')}
         titleTypographyProps={{ variant: 'subtitle2' }}
-        subheader={'Select a template to filter tasks status'}
+        subheader={i18n('base_template_subheader')}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
         action={
           <FormInput
@@ -63,16 +65,16 @@ export const FormTab = ({
         sx={{ p: '0.5rem 0' }}
       />
       <CardHeader
-        title={'Badge color'}
+        title={i18n('badge_color_title')}
         titleTypographyProps={{ variant: 'subtitle2' }}
-        subheader={'Change the badge color to reflect task types.'}
+        subheader={i18n('badge_color_subheader')}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
         action={
           <FormInput
             controllerProps={{ name: 'color', control }}
             textFieldProps={{
               select: true,
-              label: 'Badge color',
+              label: i18n('badge_color_title'),
               sx: { flex: '0 0 14rem', textTransform: 'capitalize' },
               color: getLevelFromColor(badgeColor),
               onChange: (e) => setBadgeColor(e.target.value),
@@ -80,22 +82,22 @@ export const FormTab = ({
               disabled,
             }}
           >
-            {Object.values(ColorLevel).map((color) => (
-              <MenuItem key={color} value={getColorFromLevel(color)} sx={{ textTransform: 'capitalize' }}>
-                {color}
+            {Object.values(ColorLevel).map((_color) => (
+              <MenuItem key={_color} value={getColorFromLevel(_color)} sx={{ textTransform: 'capitalize' }}>
+                {_color}
               </MenuItem>
             ))}
             <MenuItem key={'default'} value={defaultNotifications.count.color} sx={{ textTransform: 'capitalize' }}>
-              Chrome Default
+              {i18n('badge_color_default')}
             </MenuItem>
           </FormInput>
         }
         sx={{ p: '0.5rem 0' }}
       />
       <CardHeader
-        title={'Task statuses'}
+        title={i18n('task_status_title')}
         titleTypographyProps={{ variant: 'subtitle2' }}
-        subheader={'Select statuses to include in the selection'}
+        subheader={i18n('task_status_subheader')}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
         sx={{ p: '0.5rem 0' }}
       />

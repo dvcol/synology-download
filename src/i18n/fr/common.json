@@ -1,0 +1,14 @@
+{
+  "app_title": {
+    "message": "Synology Download Client",
+    "description": "Nom de l'extension"
+  },
+  "app_title_popup": {
+    "message": "Synology Download Client Popup",
+    "description": "Nom de la page de popup pour l'extension"
+  },
+  "app_title_options": {
+    "message": "Synology Download Client Options",
+    "description": "Nom de la page d'options pour l'extension"
+  }
+}

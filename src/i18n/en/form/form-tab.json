@@ -1,0 +1,32 @@
+{
+  "form_tab__base_template_title": {
+    "message": "Base template",
+    "description": "Title for the template field."
+  },
+  "form_tab__base_template_subheader": {
+    "message": "Select a template to filter tasks status.",
+    "description": "Sub header for the template field."
+  },
+
+  "form_tab__badge_color_title": {
+    "message": "Badge color",
+    "description": "Title for the badge color field."
+  },
+  "form_tab__badge_color_subheader": {
+    "message": "Change the badge color to reflect task types.",
+    "description": "Sub header for the badge color field."
+  },
+  "form_tab__badge_color_default": {
+    "message": "Chrome Default",
+    "description": "Chrome default color for the badge color field."
+  },
+
+  "form_tab__task_status_title": {
+    "message": "Task statuses",
+    "description": "Title for the task status field."
+  },
+  "form_tab__task_status_subheader": {
+    "message": "Select statuses to include in the selection.",
+    "description": "Sub header for the task status field."
+  }
+}
