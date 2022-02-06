@@ -28,9 +28,7 @@ export enum TabType {
   stopped = 'stopped',
 }
 
-export interface TabCount {
-  [status: string]: number;
-}
+export type TabCount = Record<string, number>;
 
 export const defaultTabs: TaskTab[] = [
   {

@@ -1,5 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { TabCount, TaskStatus } from '../../models';
+import { TaskStatus } from '@src/models';
 import { StoreState } from '../store';
 
 export const getTasks = createSelector(
@@ -39,9 +39,3 @@ export const getSortedTasks = createSelector(
 export const getFilteredTasks = createSelector(getSortedTasks, getStatuses, (tasks, statuses) =>
   statuses?.length ? tasks.filter((t) => statuses.includes(t.status)) : tasks
 );
-
-export const getTabCountByStatus = createSelector(getTasks, (tasks) => {
-  const count: TabCount = { total: tasks?.length };
-  Object.keys(TaskStatus).forEach((status) => (count[status] = tasks?.reduce((acc, t) => (t.status === status ? acc + 1 : acc), 0)));
-  return count;
-});

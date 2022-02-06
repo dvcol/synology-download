@@ -2,7 +2,7 @@ import { parse, ParsedQuery } from 'query-string';
 import { filter, map, Observable, Subject, tap } from 'rxjs';
 import { Store } from 'redux';
 import { Store as ProxyStore } from 'webext-redux';
-import { getNotificationsBannerEnabled, getNotificationsBannerLevel, getNotificationsSnack, getTasksCount, setTasksCount, store$ } from '../../store';
+import { getBadgeCount, getNotificationsBannerEnabled, getNotificationsBannerLevel, getNotificationsSnack, setTasksCount, store$ } from '../../store';
 import { bufferDebounceUnless, onMessage, sendMessage } from '../../utils';
 import {
   ChromeMessageType,
@@ -47,7 +47,7 @@ export class NotificationService {
       this.notify$.pipe(this.bufferStopStart('Notification')).subscribe();
       this.error$.pipe(this.bufferStopStart('Errors')).subscribe();
 
-      store$(this.store, getTasksCount).subscribe((count) => this.store.dispatch(setTasksCount(count)));
+      store$(this.store, getBadgeCount).subscribe((count) => this.store.dispatch(setTasksCount(count)));
 
       onMessage<ChromeNotification>([ChromeMessageType.notification], true).subscribe(({ message: { payload }, sendResponse }) => {
         this.sendOrForward(payload);

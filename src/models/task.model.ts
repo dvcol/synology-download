@@ -1,5 +1,5 @@
-import { ColorLevel } from './material-ui.model';
 import prettyBytes from 'pretty-bytes';
+import { ColorLevel, TabCount } from '@src/models';
 
 export interface TaskList {
   total: number;
@@ -202,5 +202,5 @@ export type TaskFormValid = TaskForm & { uri: string };
 export interface TaskCount {
   badge: number;
   total: number;
-  tabCounts: Record<string, number>;
+  tabs: TabCount;
 }

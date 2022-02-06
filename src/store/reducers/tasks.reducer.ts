@@ -1,13 +1,24 @@
 import { TasksReducers, tasksSlice } from '../slices';
+import { TaskCount } from '@src/models';
 
-export const setCount = (count?: number, plural = false) => {
+export const setCount = (count?: TaskCount) => {
   // TODO : move to thunk ?
-  chrome.action.setBadgeText({ text: `${count || ''}` }).then(() => console.debug('Badge changed to ', count));
-  chrome.action.setTitle({ title: `${count ?? 0} task${plural ? 's' : ''} active.` }).then();
+  if (count) {
+    chrome.action.setBadgeText({ text: `${count?.badge || ''}` }).then(() => console.debug('Badge changed to ', count?.badge));
+    let title = `Badge:  ${count.badge ?? 0} task${count.badge > 1 ? 's' : ''}`;
+    title = `${title}\nTotal:  ${count.badge ?? 0} task${count.badge > 1 ? 's' : ''}`;
+
+    Object.keys(count.tabs)?.forEach((tab) => (title = `${title}\n${tab}: ${count.tabs[tab] ?? 0} task${count.tabs[tab] > 1 ? 's' : ''}`));
+
+    chrome.action.setTitle({ title }).then();
+  } else {
+    chrome.action.setBadgeText({ text: '' }).then(() => console.debug('No count found'));
+    chrome.action.setTitle({ title: 'No tasks found or task count disabled.' }).then();
+  }
 };
 
 export const setTasksCountReducer: TasksReducers['setTasksCount'] = (state, { payload: count }) => {
-  setCount(count.badge, count.badge > 1);
+  setCount(count);
   return { ...state, count };
 };
 
