@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { CssBaseline, ThemeProvider } from '@mui/material';
-import { darkTheme } from '../themes';
+import { darkTheme } from '@src/themes';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Navbar } from './navbar/navbar';
 import { Panel } from './panel/panel';

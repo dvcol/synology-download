@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { v4 as uuid } from 'uuid';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import React from 'react';
-import { i18n } from '../../../utils';
+import { i18n } from '@src/utils';
 
 export const SettingsInterface = <T extends { id: string }>({
   title,

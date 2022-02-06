@@ -1,20 +1,10 @@
 import { Button, Card, CardHeader, Grid, MenuItem } from '@mui/material';
 import { FormInput } from './form-input';
-import {
-  ColorLevel,
-  defaultNotifications,
-  defaultTabs,
-  getColorFromLevel,
-  getLevelFromColor,
-  Tab,
-  TabType,
-  TaskStatus,
-  TaskTab,
-} from '../../../models';
+import { ColorLevel, defaultNotifications, defaultTabs, getColorFromLevel, getLevelFromColor, Tab, TabType, TaskStatus, TaskTab } from '@src/models';
 import { FormCheckbox } from './form-checkbox';
 import React from 'react';
 import { UseFormReturn } from 'react-hook-form/dist/types/form';
-import { useI18n } from '../../../utils';
+import { useI18n } from '@src/utils';
 
 // TODO : filter destination
 export const FormTab = ({

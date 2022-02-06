@@ -3,10 +3,10 @@ import React from 'react';
 import { AppBar, Tabs, Toolbar } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '@mui/icons-material/Menu';
-import { getTab, getTabs, setNavbar, setStatuses } from '../../store';
 import NavbarTab from './navbar-tab';
 import NavbarMenu from './navbar-menu';
-import { useI18n } from '../../utils';
+import { getTab, getTabs, setNavbar, setStatuses } from '@src/store';
+import { useI18n } from '@src/utils';
 
 export const Navbar = () => {
   const i18n = useI18n('navbar');

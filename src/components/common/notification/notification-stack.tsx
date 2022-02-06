@@ -1,9 +1,8 @@
 import { Slide } from '@mui/material';
 import { SnackbarKey, SnackbarProvider, SnackbarProviderProps } from 'notistack';
 import React, { useState } from 'react';
-import { SnackMessage } from '../../../models';
-import { SnackNotificationCard } from './notification-snack';
-import { Notifier } from './notification-notifier';
+import { SnackMessage } from '@src/models';
+import { Notifier, SnackNotificationCard } from '@src/components';
 
 // TODO move to custom snack for next notistack version, see https://github.com/iamhosseindhv/notistack/issues/242
 export const NotificationStack = ({ maxSnack }: Pick<SnackbarProviderProps, 'maxSnack'>) => {

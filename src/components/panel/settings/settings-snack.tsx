@@ -1,11 +1,11 @@
 import { Box, Button, Card, CardActions, CardContent, CardHeader, InputAdornment, MenuItem, Stack } from '@mui/material';
 import React from 'react';
-import { NotificationHeader, NotificationLevel, NotificationLevelKeys, Notifications, NotificationsSnack } from '../../../models';
-import { FormInput, FormSwitch } from '../../common';
+import { NotificationHeader, NotificationLevel, NotificationLevelKeys, Notifications, NotificationsSnack } from '@src/models';
+import { FormInput, FormSwitch } from '@src/components';
 import { useDispatch, useSelector } from 'react-redux';
-import { getNotifications, syncNotifications } from '../../../store';
+import { getNotifications, syncNotifications } from '@src/store';
 import { useForm } from 'react-hook-form';
-import { useI18n } from '../../../utils';
+import { useI18n } from '@src/utils';
 
 export const SettingsSnack = () => {
   const i18n = useI18n('panel', 'settings', 'snack');

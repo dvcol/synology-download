@@ -1,7 +1,7 @@
 import { Box, Card, CardContent, CardHeader, Collapse, IconButton, IconButtonProps, styled, SvgIconProps, Theme, Typography } from '@mui/material';
 import React, { forwardRef, useCallback, useEffect, useState } from 'react';
 import { SnackbarKey, useSnackbar } from 'notistack';
-import { ColorLevel, ColorLevelMap, NotificationLevel, SnackMessage } from '../../../models';
+import { ColorLevel, ColorLevelMap, NotificationLevel, SnackMessage } from '@src/models';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import BugReportOutlinedIcon from '@mui/icons-material/BugReportOutlined';

@@ -1,11 +1,11 @@
 import { AccordionDetails, Box, Button, Card, CardActions, CardHeader, ListItemIcon, ListItemText, MenuItem, Stack } from '@mui/material';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { removeQuickMenu, saveQuickMenu } from '../../../store';
-import { MaterialIcon, MaterialIconMap, QuickMenu } from '../../../models';
+import { removeQuickMenu, saveQuickMenu } from '@src/store';
+import { MaterialIcon, MaterialIconMap, QuickMenu } from '@src/models';
 import { useForm } from 'react-hook-form';
-import { FormExplorer, FormInput, FormSwitch, MuiIcon } from '../../common';
-import { useI18n } from '../../../utils';
+import { FormExplorer, FormInput, FormSwitch, MuiIcon } from '@src/components/common';
+import { useI18n } from '@src/utils';
 
 export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
   const i18n = useI18n('panel', 'settings', 'quick_menu');

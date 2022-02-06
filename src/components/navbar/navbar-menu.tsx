@@ -11,10 +11,10 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import NavbarMenuIcon from './navbar-menu-icon';
-import { getUrl, setNavbar } from '../../store';
-import { QueryService } from '../../services';
-import { ConfirmationDialog } from '../common';
-import { useI18n } from '../../utils';
+import { getUrl, setNavbar } from '@src/store';
+import { QueryService } from '@src/services';
+import { ConfirmationDialog } from '@src/components';
+import { useI18n } from '@src/utils';
 
 type NavbarMenuProps = { label: React.ReactNode };
 
@@ -33,8 +33,6 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
 
   // Dialog
   const [prompt, setPrompt] = React.useState(false);
-
-  console.log(i18n('menu_add'));
 
   return (
     <React.Fragment>

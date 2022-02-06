@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Box, Grid } from '@mui/material';
-import { ApiInfo, InfoResponse } from '../../../models';
-import { QueryService } from '../../../services';
+import { ApiInfo, InfoResponse } from '@src/models';
+import { QueryService } from '@src/services';
 import { tap } from 'rxjs';
 
 // TODO: dak info, file info, task info

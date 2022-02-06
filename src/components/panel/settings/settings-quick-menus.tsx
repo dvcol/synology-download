@@ -1,11 +1,10 @@
 import { Typography } from '@mui/material';
 import React from 'react';
-import { defaultQuickMenu, InterfaceHeader, QuickMenu } from '../../../models';
+import { defaultQuickMenu, InterfaceHeader, QuickMenu } from '@src/models';
 import { useDispatch, useSelector } from 'react-redux';
-import { getQuick, resetQuickMenus, saveQuickMenu, StoreState } from '../../../store';
-import { SettingsQuickMenu } from './settings-quick-menu';
-import { SettingsInterface } from './settings-interface';
-import { useI18n } from '../../../utils';
+import { getQuick, resetQuickMenus, saveQuickMenu, StoreState } from '@src/store';
+import { SettingsInterface, SettingsQuickMenu } from '@src/components';
+import { useI18n } from '@src/utils';
 
 export const SettingsQuickMenus = () => {
   const i18n = useI18n('panel', 'settings', 'quick_menus');

@@ -1,12 +1,12 @@
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Stack } from '@mui/material';
 import React from 'react';
-import { defaultNotifications, NotificationHeader, Notifications, NotificationsCount, Tab } from '../../../models';
+import { defaultNotifications, NotificationHeader, Notifications, NotificationsCount, Tab } from '@src/models';
 import { useDispatch, useSelector } from 'react-redux';
-import { getNotifications, syncNotifications } from '../../../store';
+import { getNotifications, syncNotifications } from '@src/store';
 import { useForm } from 'react-hook-form';
-import { FormSwitch, FormTab } from '../../common';
+import { FormSwitch, FormTab } from '@src/components';
 import { Control } from 'react-hook-form/dist/types/form';
-import { useI18n } from '../../../utils';
+import { useI18n } from '@src/utils';
 
 export const SettingsTasksCount = () => {
   const i18n = useI18n('panel', 'settings', 'tasks_count');

@@ -7,10 +7,10 @@ import LoopIcon from '@mui/icons-material/Loop';
 import DownloadDoneIcon from '@mui/icons-material/DownloadDone';
 import UploadIcon from '@mui/icons-material/Upload';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { computeEta, computeProgress, formatBytes, Task, TaskStatus, taskStatusToColor } from '../../../models';
+import { computeEta, computeProgress, formatBytes, Task, TaskStatus, taskStatusToColor } from '@src/models';
 import { blue, green, orange, purple, red } from '@mui/material/colors';
-import { ProgressBar } from '../../common';
-import { useI18n } from '../../../utils';
+import { ProgressBar } from '@src/components';
+import { useI18n } from '@src/utils';
 
 export const TaskCard = ({ task, statuses }: { task: Task; statuses?: TaskStatus[] }) => {
   const i18n = useI18n('panel', 'task', 'card');

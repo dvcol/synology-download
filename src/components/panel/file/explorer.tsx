@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
-import { File, FileList, Folder } from '../../../models';
-import { QueryService } from '../../../services';
+import { File, FileList, Folder } from '@src/models';
+import { QueryService } from '@src/services';
 import { finalize, Observable, tap } from 'rxjs';
 import { TreeView } from '@mui/lab';
 import { Container } from '@mui/material';
 import FolderIcon from '@mui/icons-material/Folder';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
-import { ExplorerBreadCrumbs } from './explorer-breadcrumb';
+import { ExplorerBreadCrumbs, ExplorerLoading } from '@src/components';
 import { ExplorerLeaf } from './explorer-leaf';
-import { ExplorerLoading } from './explorer-loading';
 
 export type ExplorerProps = {
   collapseOnSelect?: boolean;

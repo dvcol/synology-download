@@ -1,7 +1,7 @@
 import { Controller, ControllerProps } from 'react-hook-form';
 import React from 'react';
 import { FieldPath, FieldValues } from 'react-hook-form/dist/types';
-import { Explorer, ExplorerEvent, ExplorerProps } from '../../panel';
+import { Explorer, ExplorerEvent, ExplorerProps } from '@src/components';
 
 export const FormExplorer = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({
   controllerProps,

@@ -3,11 +3,11 @@ import { render } from 'react-dom';
 
 import { Provider } from 'react-redux';
 import { ThemeProvider } from '@mui/material';
-import { darkTheme } from '../../../themes';
-import { proxyStore } from '../../../store';
-import { NotificationService, QueryService } from '../../../services';
-import { ModalInstance } from '../../../models';
-import { NotificationStack } from '../../../components';
+import { darkTheme } from '@src/themes';
+import { proxyStore } from '@src/store';
+import { NotificationService, QueryService } from '@src/services';
+import { ModalInstance } from '@src/models';
+import { NotificationStack } from '@src/components';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
 import { QuickMenuDialog } from './quick-menu-dialog';

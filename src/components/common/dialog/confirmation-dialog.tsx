@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import React, { useEffect } from 'react';
-import { useI18n } from '../../../utils';
+import { useI18n } from '@src/utils';
 
 export const ConfirmationDialog = ({
   open,

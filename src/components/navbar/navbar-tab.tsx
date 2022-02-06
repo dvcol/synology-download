@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Badge, BadgeProps, styled, Tab } from '@mui/material';
-import { ColorLevel, TabType, TaskTab } from '../../models';
-import { getTabCountByStatus } from '../../store';
+import { ColorLevel, TabType, TaskTab } from '@src/models';
+import { getTabCountByStatus } from '@src/store';
 
 type NavbarTabProps = { tab: TaskTab; [key: string]: any };
 

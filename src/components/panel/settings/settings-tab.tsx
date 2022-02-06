@@ -1,12 +1,12 @@
-import { FormInput, FormTab } from '../../common';
+import { FormInput, FormTab } from '@src/components';
 import { useForm, UseFormReset } from 'react-hook-form';
-import { ColorLevel, ColorLevelMap, getColorFromLevel, getLevelFromColor, Tab, TaskTab } from '../../../models';
+import { ColorLevel, ColorLevelMap, getColorFromLevel, getLevelFromColor, Tab, TaskTab } from '@src/models';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { AccordionDetails, Button, CardActions, CardHeader, Stack } from '@mui/material';
-import { removeTaskTab, saveTaskTab } from '../../../store';
+import { removeTaskTab, saveTaskTab } from '@src/store';
 import { Control } from 'react-hook-form/dist/types/form';
-import { useI18n } from '../../../utils';
+import { useI18n } from '@src/utils';
 
 export const SettingsTab = ({ tab }: { tab: TaskTab }) => {
   const i18n = useI18n('panel', 'settings', 'tab');

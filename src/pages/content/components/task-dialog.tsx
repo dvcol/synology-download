@@ -1,10 +1,10 @@
-import { ChromeMessageType, ContextMenuOnClickPayload, TaskForm, TaskFormValid } from '../../../models';
+import { ChromeMessageType, ContextMenuOnClickPayload, TaskForm, TaskFormValid } from '@src/models';
 import { Dialog, DialogContent } from '@mui/material';
-import { TaskAdd } from '../../../components';
+import { TaskAdd } from '@src/components';
 import React, { useEffect } from 'react';
-import { onMessage } from '../../../utils';
+import { onMessage } from '@src/utils';
 import { PortalProps } from '@mui/base/Portal';
-import { NotificationService, QueryService } from '../../../services';
+import { NotificationService, QueryService } from '@src/services';
 import { taskDialog$ } from '../index';
 import { Subject, takeUntil } from 'rxjs';
 

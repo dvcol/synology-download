@@ -1,5 +1,5 @@
 import React from 'react';
-import { MaterialIcon } from '../../../models';
+import { MaterialIcon } from '@src/models';
 import { SvgIconProps } from '@mui/material';
 import { jsx } from '@emotion/react';
 

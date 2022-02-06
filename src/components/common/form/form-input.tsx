@@ -3,7 +3,7 @@ import { Controller, ControllerProps } from 'react-hook-form';
 import React, { useState } from 'react';
 import { FieldPath, FieldValues } from 'react-hook-form/dist/types';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { useI18n } from '../../../utils';
+import { useI18n } from '@src/utils';
 
 export const FormInput = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({
   controllerProps,

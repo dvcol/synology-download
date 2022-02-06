@@ -1,14 +1,14 @@
 import { Box, Button, Card, CardActions, CardContent, CardHeader, LinearProgress, MenuItem, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import { getConnection, getLogged, setConnection, syncConnection, syncRememberMe, urlReducer } from '../../../store';
+import { getConnection, getLogged, setConnection, syncConnection, syncRememberMe, urlReducer } from '@src/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { NotificationService, QueryService } from '../../../services';
+import { NotificationService, QueryService } from '@src/services';
 import { RegisterOptions, useForm } from 'react-hook-form';
-import { Connection, ConnectionHeader } from '../../../models';
+import { Connection, ConnectionHeader } from '@src/models';
 import { finalize, Observable } from 'rxjs';
-import { FormCheckbox, FormInput } from '../../common';
+import { FormCheckbox, FormInput } from '@src/components';
 import { SwitchBaseProps } from '@mui/material/internal/SwitchBase';
-import { useI18n } from '../../../utils';
+import { useI18n } from '@src/utils';
 
 // TODO : 2FA & HTTPS
 export const SettingsCredentials = () => {

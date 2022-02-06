@@ -1,9 +1,9 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { App } from '../../components';
-import { proxyStore } from '../../store';
-import { NotificationService, QueryService } from '../../services';
-import { ModalInstance } from '../../models';
+import { App } from '@src/components';
+import { proxyStore } from '@src/store';
+import { NotificationService, QueryService } from '@src/services';
+import { ModalInstance } from '@src/models';
 
 proxyStore
   .ready()

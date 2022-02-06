@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, CardProps, Grid, Stack } from '@mui/material';
 import { useForm } from 'react-hook-form';
-import { QueryService } from '../../../services';
-import { FormExplorer, FormInput, FormSwitch } from '../../common';
+import { QueryService } from '@src/services';
+import { FormExplorer, FormInput, FormSwitch } from '@src/components';
 import { firstValueFrom } from 'rxjs';
-import { TaskForm, TaskFormValid } from '../../../models';
-import { useI18n } from '../../../utils';
+import { TaskForm, TaskFormValid } from '@src/models';
+import { useI18n } from '@src/utils';
 
 export const TaskAdd = ({
   form,

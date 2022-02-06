@@ -1,17 +1,17 @@
 import React from 'react';
 import { Button, Container, Grid, ListItem, ListItemText, Stack, Typography } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import { computeProgress, formatBytes, Task, TaskStatus } from '../../../models';
+import { computeProgress, formatBytes, Task, TaskStatus } from '@src/models';
 import PauseIcon from '@mui/icons-material/Pause';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { isDarkTheme } from '../../../themes';
+import { isDarkTheme } from '@src/themes';
 import { grey } from '@mui/material/colors';
-import { ConfirmationDialog, IconLoader, ProgressBar } from '../../common';
+import { ConfirmationDialog, IconLoader, ProgressBar } from '@src/components';
 import { Observable } from 'rxjs';
-import { QueryService } from '../../../services';
+import { QueryService } from '@src/services';
 import { TaskEdit } from './task-edit';
-import { useI18n } from '../../../utils';
+import { useI18n } from '@src/utils';
 
 export const TaskDetail = ({
   task,

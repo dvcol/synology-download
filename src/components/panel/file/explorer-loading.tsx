@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
-import { useI18n } from '../../../utils';
+import { useI18n } from '@src/utils';
 
 export const ExplorerLoading = ({ loading, empty }: { loading?: boolean; empty?: boolean }) => {
   const i18n = useI18n('panel', 'file', 'explorer_loading');

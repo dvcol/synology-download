@@ -1,10 +1,10 @@
 import { Typography } from '@mui/material';
-import { getTabs, resetTaskTabs, saveTaskTab, StoreState } from '../../../store';
-import { defaultTabs, InterfaceHeader, TaskTab } from '../../../models';
+import { getTabs, resetTaskTabs, saveTaskTab, StoreState } from '@src/store';
+import { defaultTabs, InterfaceHeader, TaskTab } from '@src/models';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SettingsTab } from './settings-tab';
-import { SettingsInterface } from './settings-interface';
+import { SettingsInterface } from '@src/components';
 
 export const SettingsTabs = () => {
   const dispatch = useDispatch();

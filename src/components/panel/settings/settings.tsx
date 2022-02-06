@@ -1,18 +1,20 @@
 import React from 'react';
 import { Container, Paper, Tab, Tabs } from '@mui/material';
-import { ConnectionHeader, InterfaceHeader, NotificationHeader, SettingHeader } from '../../../models';
-import { SettingsCredentials } from './settings-credentials';
+import { ConnectionHeader, InterfaceHeader, NotificationHeader, SettingHeader } from '@src/models';
+import {
+  SettingsBanner,
+  SettingsContextMenus,
+  SettingsCredentials,
+  SettingsHeader,
+  SettingsPolling,
+  SettingsQuickMenus,
+  SettingsSnack,
+  SettingsTasksCount,
+} from '@src/components';
 import { Route, Routes } from 'react-router-dom';
 import { HashLink as Link } from 'react-router-hash-link';
-import { SettingsHeader } from './settings-header';
-import { SettingsPolling } from './settings-polling';
 import { SettingsTabs } from './settings-tabs';
-import { SettingsQuickMenus } from './settings-quick-menus';
-import { SettingsContextMenus } from './settings-context-menus';
-import { SettingsTasksCount } from './settings-tasks-count';
-import { SettingsBanner } from './settings-banner';
-import { SettingsSnack } from './settings-snack';
-import { useI18n } from '../../../utils';
+import { useI18n } from '@src/utils';
 
 export const Settings = () => {
   const i18n = useI18n('panel', 'settings');

@@ -12,6 +12,7 @@ const ASSET_PATH = process.env.ASSET_PATH || '/';
 
 const alias = {
   'react-dom': '@hot-loader/react-dom',
+  '@src': path.resolve(__dirname, 'src'),
 };
 
 // load the secrets
@@ -161,6 +162,11 @@ if (env.NODE_ENV === 'development') {
     minimizer: [
       new TerserPlugin({
         extractComments: false,
+        terserOptions: {
+          compress: {
+            drop_console: true,
+          },
+        },
       }),
     ],
   };

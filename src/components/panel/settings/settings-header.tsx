@@ -1,7 +1,7 @@
-import { SettingHeader } from '../../../models';
+import { SettingHeader } from '@src/models';
 import { Typography } from '@mui/material';
 import React from 'react';
-import { useI18n } from '../../../utils';
+import { useI18n } from '@src/utils';
 
 export const SettingsHeader = ({ label }: { label: SettingHeader }) => {
   const i18n = useI18n('panel', 'settings');
