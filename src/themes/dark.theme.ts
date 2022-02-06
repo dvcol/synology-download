@@ -1,6 +1,7 @@
 import { createTheme } from '@mui/material';
 import { Property } from 'csstype';
 
+// TODO : Fix light theme UI
 export const isDarkTheme = () => window.matchMedia('(prefers-color-scheme: dark').matches;
 
 export const darkTheme = () => {

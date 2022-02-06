@@ -83,11 +83,11 @@ export const Settings = () => {
               <React.Fragment>
                 <SettingsHeader label={SettingHeader.interface} />
                 <SettingsTabs />
-                {/* TODO: settings for task sorting */}
                 <SettingsQuickMenus />
                 <SettingsContextMenus />
                 {/* TODO: settings for folder display */}
                 {/*  TODO : settings clear/delete by tabs or global */}
+                {/* TODO: Toggle for dark theme / light theme / follow OS */}
               </React.Fragment>
             }
           />

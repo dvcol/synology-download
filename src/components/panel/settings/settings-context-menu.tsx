@@ -7,7 +7,6 @@ import { useForm } from 'react-hook-form';
 import { FormExplorer, FormInput, FormSwitch } from '@src/components/common';
 import { sendMessage, useI18n } from '@src/utils';
 
-// TODO Param when context is available
 export const SettingsContextMenu = ({ menu }: { menu: ContextMenu }) => {
   const i18n = useI18n('panel', 'settings', 'context_menu');
   const dispatch = useDispatch();
