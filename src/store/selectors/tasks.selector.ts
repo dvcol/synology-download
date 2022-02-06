@@ -24,18 +24,3 @@ export const getActiveTasksIds = createSelector(getActiveTasks, (tasks) => tasks
 export const getFinishedTasks = createSelector(getTasks, (tasks) => tasks?.filter((t) => t.status === TaskStatus.finished));
 
 export const getFinishedTasksIds = createSelector(getFinishedTasks, (tasks) => tasks?.map((t) => t.id));
-
-export const getStatuses = createSelector(
-  (state: StoreState) => state,
-  (state) => state.tasks.statuses
-);
-
-export const getSortedTasks = createSelector(
-  getTasks,
-  // TODO implement custom sorting
-  (tasks) => [...tasks].sort((a, b) => (a.additional?.detail?.create_time < b.additional?.detail?.create_time ? 1 : -1))
-);
-
-export const getFilteredTasks = createSelector(getSortedTasks, getStatuses, (tasks, statuses) =>
-  statuses?.length ? tasks.filter((t) => statuses.includes(t.status)) : tasks
-);

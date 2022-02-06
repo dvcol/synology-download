@@ -82,6 +82,7 @@ export const defaultNotifications: Notifications = {
     enabled: true,
     template: TabType.all,
     status: Object.values(TaskStatus),
+    destination: { enabled: false },
     color: '#4285f4',
   },
   snack: {

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '@mui/icons-material/Menu';
 import NavbarTab from './navbar-tab';
 import NavbarMenu from './navbar-menu';
-import { getTab, getTabs, setNavbar, setStatuses } from '@src/store';
+import { getTab, getTabs, setNavbar } from '@src/store';
 import { useI18n } from '@src/utils';
 
 export const Navbar = () => {
@@ -16,9 +16,7 @@ export const Navbar = () => {
   const tab = useSelector(getTab);
 
   const handleChange = (event: React.SyntheticEvent, index: number): void => {
-    const newTab = tabs?.length > index ? tabs[index] : undefined;
-    dispatch(setNavbar(newTab));
-    dispatch(setStatuses(newTab?.status || []));
+    dispatch(setNavbar(tabs?.length > index ? tabs[index] : undefined));
   };
 
   const getValue = (): number => {

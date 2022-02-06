@@ -81,7 +81,7 @@ export interface TaskDetail {
   destination: string;
   /** Task uri: HTTP/FTP/BT/Magnet/ED2K links */
   uri: string;
-  create_time: Date;
+  create_time: number;
   priority: 'auto' | 'low' | 'normal' | 'high';
   total_peers: number;
   connected_seeders: number;

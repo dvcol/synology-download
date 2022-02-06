@@ -5,6 +5,7 @@ import { v4 as uuid } from 'uuid';
 export interface Tab {
   template: TabType;
   status: TaskStatus[];
+  destination: { enabled: boolean; folder?: string };
   color: string;
 }
 
@@ -12,8 +13,17 @@ export interface TaskTab extends Tab {
   id: string;
   name: TabType | string;
   color: ColorLevel;
-  order?: string;
+  sort?: TaskTabSort;
   reverse?: boolean;
+}
+
+export enum TaskTabSort {
+  creation = 'creation',
+  destination = 'destination',
+  speed = 'speed',
+  size = 'size',
+  status = 'status',
+  title = 'title',
 }
 
 /**
@@ -36,6 +46,7 @@ export const defaultTabs: TaskTab[] = [
     name: TabType.all,
     template: TabType.all,
     status: Object.values(TaskStatus),
+    destination: { enabled: false },
     color: ColorLevel.primary,
   },
   {
@@ -43,6 +54,7 @@ export const defaultTabs: TaskTab[] = [
     name: TabType.downloading,
     template: TabType.downloading,
     status: [TaskStatus.downloading, TaskStatus.waiting],
+    destination: { enabled: false },
     color: ColorLevel.info,
   },
   {
@@ -50,6 +62,7 @@ export const defaultTabs: TaskTab[] = [
     name: TabType.completed,
     template: TabType.completed,
     status: [TaskStatus.finished],
+    destination: { enabled: false },
     color: ColorLevel.success,
   },
   {
@@ -57,6 +70,7 @@ export const defaultTabs: TaskTab[] = [
     name: TabType.active,
     template: TabType.active,
     status: [TaskStatus.downloading, TaskStatus.finishing, TaskStatus.hash_checking, TaskStatus.extracting, TaskStatus.seeding],
+    destination: { enabled: false },
     color: ColorLevel.secondary,
   },
   {
@@ -64,6 +78,7 @@ export const defaultTabs: TaskTab[] = [
     name: TabType.inactive,
     template: TabType.inactive,
     status: [TaskStatus.waiting, TaskStatus.filehosting_waiting, TaskStatus.paused, TaskStatus.error],
+    destination: { enabled: false },
     color: ColorLevel.warning,
   },
   {
@@ -71,6 +86,7 @@ export const defaultTabs: TaskTab[] = [
     name: TabType.stopped,
     template: TabType.stopped,
     status: [TaskStatus.paused],
+    destination: { enabled: false },
     color: ColorLevel.error,
   },
 ];

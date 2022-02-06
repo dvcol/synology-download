@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Container, Grid, ListItem, ListItemText, Stack, Typography } from '@mui/material';
+import { Box, Button, Container, Grid, ListItem, ListItemText, Stack, Typography } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { computeProgress, formatBytes, Task, TaskStatus } from '@src/models';
 import PauseIcon from '@mui/icons-material/Pause';
@@ -26,11 +26,25 @@ export const TaskDetail = ({
   const [prompt, setPrompt] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const isDisabled = () => Object.values(loading).some(Boolean);
+
+  const createdTime = task.additional?.detail?.create_time ? new Date(task.additional?.detail?.create_time * 1000) : undefined;
+  const createdAt = createdTime
+    ? i18n({
+        key: 'created_at',
+        substitutions: [
+          `${createdTime.toLocaleDateString()} ${createdTime.toLocaleTimeString(navigator.language, {
+            hour: '2-digit',
+            minute: '2-digit',
+          })}`,
+        ],
+      })
+    : '';
   return (
     <Typography component="span" variant="body2">
       <Grid container sx={{ alignItems: 'center' }}>
         <Grid item xs={4}>
-          <span>{`${i18n('destination')} ${task.additional?.detail?.destination}`}</span>
+          <Box>{`${i18n('created')}${createdAt}${i18n({ key: 'created_by', substitutions: [task.username] })}`}</Box>
+          <Box>{`${i18n('destination')}: ${task.additional?.detail?.destination}`}</Box>
         </Grid>
         <Grid item xs={8} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Stack direction="row" spacing={2}>

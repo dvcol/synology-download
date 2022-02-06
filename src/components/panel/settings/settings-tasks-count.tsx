@@ -19,7 +19,13 @@ export const SettingsTasksCount = () => {
     control,
     getValues,
     formState: { isValid, isDirty, isSubmitSuccessful },
-  } = useForm<NotificationsCount>({ mode: 'onChange', defaultValues: notifications?.count });
+  } = useForm<NotificationsCount>({
+    mode: 'onChange',
+    defaultValues: {
+      ...notifications?.count,
+      destination: { ...notifications?.count.destination, folder: notifications?.count?.destination?.folder ?? '' },
+    },
+  });
 
   const onSubmit = (count: NotificationsCount) => {
     dispatch(syncNotifications({ ...notifications, count }));
@@ -48,6 +54,7 @@ export const SettingsTasksCount = () => {
               template: notifications?.count?.template,
               color: notifications?.count?.color ?? defaultNotifications.count.color,
               status: notifications?.count?.status ?? defaultNotifications.count.status,
+              destination: notifications?.count?.destination ?? defaultNotifications.count.destination,
             }}
             disabled={!getValues()?.enabled}
           />

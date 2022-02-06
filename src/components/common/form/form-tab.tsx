@@ -5,8 +5,8 @@ import { FormCheckbox } from './form-checkbox';
 import React from 'react';
 import { UseFormReturn } from 'react-hook-form/dist/types/form';
 import { useI18n } from '@src/utils';
+import { FormExplorer, FormSwitch } from '@src/components';
 
-// TODO : filter destination
 export const FormTab = ({
   useFormProps: { control, getValues, reset },
   tab: { template, status, color },
@@ -17,14 +17,14 @@ export const FormTab = ({
   disabled?: boolean;
 }>) => {
   const i18n = useI18n('common', 'form', 'tab');
-  const getTaskTab = (type?: TabType | string): TaskTab | undefined => defaultTabs.find((t) => t.name === type);
-  const getTemplateStatuses = (taskTab?: TaskTab): TaskStatus[] => (taskTab?.status?.length ? taskTab?.status : status) ?? [];
+  const getTab = (type?: TabType | string): TaskTab | undefined => defaultTabs.find((t) => t.name === type);
+  const getTemplateStatuses = (tab?: Tab): TaskStatus[] => (tab?.status?.length ? tab?.status : status) ?? [];
 
-  const [templateStatuses, setTemplateStatuses] = React.useState<TaskStatus[]>(getTemplateStatuses(getTaskTab(template)));
-  const [badgeColor, setBadgeColor] = React.useState<string>(color);
+  const [templateStatuses, setTemplateStatuses] = React.useState<TaskStatus[]>(getTemplateStatuses(getTab(template)));
+  const [badgeColor, setBadgeColor] = React.useState<Tab['color']>(color);
 
   const onTemplateChange = (type: string) => {
-    const tab = getTaskTab(type);
+    const tab = getTab(type);
     const _status = getTemplateStatuses(tab);
     setTemplateStatuses(_status);
     const _color = getColorFromLevel(tab?.color) ?? color;
@@ -41,15 +41,15 @@ export const FormTab = ({
     <React.Fragment>
       <CardHeader
         title={i18n('base_template_title')}
-        titleTypographyProps={{ variant: 'subtitle2' }}
         subheader={i18n('base_template_subheader')}
+        titleTypographyProps={{ variant: 'subtitle2' }}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
         action={
           <FormInput
             controllerProps={{ name: 'template', control }}
             textFieldProps={{
               select: true,
-              label: 'Template',
+              label: i18n('base_template_label'),
               sx: { flex: '0 0 14rem', textTransform: 'capitalize' },
               disabled,
               onChange: (e) => onTemplateChange(e.target.value),
@@ -66,8 +66,8 @@ export const FormTab = ({
       />
       <CardHeader
         title={i18n('badge_color_title')}
-        titleTypographyProps={{ variant: 'subtitle2' }}
         subheader={i18n('badge_color_subheader')}
+        titleTypographyProps={{ variant: 'subtitle2' }}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
         action={
           <FormInput
@@ -120,6 +120,20 @@ export const FormTab = ({
             </Grid>
           ))}
         </Grid>
+      </Card>
+      <CardHeader
+        title={i18n('direction_title')}
+        subheader={i18n('direction_subheader')}
+        titleTypographyProps={{ variant: 'subtitle2' }}
+        subheaderTypographyProps={{ variant: 'subtitle2' }}
+        action={<FormSwitch controllerProps={{ name: 'destination.enabled', control }} formControlLabelProps={{ label: '' }} />}
+        sx={{ p: '0.5rem 0' }}
+      />
+      <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: '12rem' }}>
+        <FormExplorer
+          controllerProps={{ name: 'destination.folder', control }}
+          explorerProps={{ flatten: true, disabled: !getValues()?.destination?.enabled }}
+        />
       </Card>
     </React.Fragment>
   );

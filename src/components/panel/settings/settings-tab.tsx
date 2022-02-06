@@ -1,16 +1,22 @@
 import { FormInput, FormTab } from '@src/components';
 import { useForm, UseFormReset } from 'react-hook-form';
-import { ColorLevel, ColorLevelMap, getColorFromLevel, getLevelFromColor, Tab, TaskTab } from '@src/models';
+import { ColorLevel, ColorLevelMap, getColorFromLevel, getLevelFromColor, Tab, TaskTab, TaskTabSort } from '@src/models';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { AccordionDetails, Button, CardActions, CardHeader, Stack } from '@mui/material';
+import { AccordionDetails, Button, CardActions, CardHeader, MenuItem, Stack } from '@mui/material';
 import { removeTaskTab, saveTaskTab } from '@src/store';
 import { Control } from 'react-hook-form/dist/types/form';
 import { useI18n } from '@src/utils';
 
 export const SettingsTab = ({ tab }: { tab: TaskTab }) => {
   const i18n = useI18n('panel', 'settings', 'tab');
-  const formTab = { ...tab, color: getColorFromLevel(tab.color) ?? ColorLevelMap[ColorLevel.primary] };
+  const formTab = {
+    ...tab,
+    color: getColorFromLevel(tab.color) ?? ColorLevelMap[ColorLevel.primary],
+    destination: { ...tab.destination, folder: tab.destination?.folder ?? '' },
+    sort: tab?.sort ?? TaskTabSort.creation,
+    reverse: tab?.reverse ?? false,
+  };
   const dispatch = useDispatch();
   const {
     handleSubmit,
@@ -51,6 +57,54 @@ export const SettingsTab = ({ tab }: { tab: TaskTab }) => {
               sx: { flex: '0 0 14rem', textTransform: 'capitalize' },
             }}
           />
+        }
+        sx={{ p: '0.5rem 0' }}
+      />
+
+      <CardHeader
+        title={i18n('sort_title')}
+        subheader={i18n('sort_subheader')}
+        titleTypographyProps={{ variant: 'subtitle2' }}
+        subheaderTypographyProps={{ variant: 'subtitle2' }}
+        action={
+          <FormInput
+            controllerProps={{ name: 'sort', control }}
+            textFieldProps={{
+              select: true,
+              label: i18n('sort_label'),
+              sx: { flex: '0 0 14rem', textTransform: 'capitalize' },
+            }}
+          >
+            {Object.values(TaskTabSort).map((sort) => (
+              <MenuItem key={sort} value={sort} sx={{ textTransform: 'capitalize' }}>
+                {i18n(sort, 'common', 'model', 'task_tab_sort')}
+              </MenuItem>
+            ))}
+          </FormInput>
+        }
+        sx={{ p: '0.5rem 0' }}
+      />
+      <CardHeader
+        title={i18n('reverse_title')}
+        subheader={i18n('reverse_subheader')}
+        titleTypographyProps={{ variant: 'subtitle2' }}
+        subheaderTypographyProps={{ variant: 'subtitle2' }}
+        action={
+          <FormInput
+            controllerProps={{ name: 'reverse', control }}
+            textFieldProps={{
+              select: true,
+              label: i18n('reverse_label'),
+              sx: { flex: '0 0 14rem', textTransform: 'capitalize' },
+            }}
+          >
+            <MenuItem key={'ascendant'} value={false as any} sx={{ textTransform: 'capitalize' }}>
+              {i18n('reverse_ascendant')}
+            </MenuItem>
+            <MenuItem key={'descendant'} value={true as any} sx={{ textTransform: 'capitalize' }}>
+              {i18n('reverse_descendant')}
+            </MenuItem>
+          </FormInput>
         }
         sx={{ p: '0.5rem 0' }}
       />

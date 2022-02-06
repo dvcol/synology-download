@@ -2,6 +2,16 @@
   "panel__task__detail__destination": {
     "message": "Destination"
   },
+  "panel__task__detail__created": {
+    "message": "Created "
+  },
+  "panel__task__detail__created_at": {
+    "message": " at $1 "
+  },
+  "panel__task__detail__created_by": {
+    "message": " by $1"
+  },
+
   "panel__task__detail__downloaded": {
     "message": "$1 of $2 downloaded"
   },

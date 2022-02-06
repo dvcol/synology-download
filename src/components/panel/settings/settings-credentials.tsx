@@ -128,7 +128,7 @@ export const SettingsCredentials = () => {
               controllerProps={{ name: 'path', control, rules: rules.path }}
               textFieldProps={{
                 type: 'text',
-                label: 'Path',
+                label: i18n('path'),
               }}
             />
 
