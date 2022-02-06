@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Task, TasksSlice, TaskStatus } from '../../models';
+import { Task, TaskCount, TasksSlice, TaskStatus } from '../../models';
 import { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
 import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
 import { setTasksCountReducer, syncTaskReducer } from '../reducers';
@@ -8,7 +8,7 @@ export interface TasksReducers<S = TasksSlice> extends SliceCaseReducers<S> {
   setTasks: CaseReducer<S, PayloadAction<Task[]>>;
   spliceTasks: CaseReducer<S, PayloadAction<string | string[]>>;
   setStatuses: CaseReducer<S, PayloadAction<TaskStatus[]>>;
-  setTasksCount: CaseReducer<S, PayloadAction<number>>;
+  setTasksCount: CaseReducer<S, PayloadAction<TaskCount>>;
   resetTasks: CaseReducer<S>;
 }
 

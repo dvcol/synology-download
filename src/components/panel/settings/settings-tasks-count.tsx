@@ -4,10 +4,12 @@ import { defaultNotifications, NotificationHeader, Notifications, NotificationsC
 import { useDispatch, useSelector } from 'react-redux';
 import { getNotifications, syncNotifications } from '../../../store';
 import { useForm } from 'react-hook-form';
-import { FormSwitch, FormTab } from '../../form';
+import { FormSwitch, FormTab } from '../../common';
 import { Control } from 'react-hook-form/dist/types/form';
+import { useI18n } from '../../../utils';
 
 export const SettingsTasksCount = () => {
+  const i18n = useI18n('panel', 'settings', 'tasks_count');
   const dispatch = useDispatch();
   const notifications: Notifications = useSelector(getNotifications);
 
@@ -29,12 +31,11 @@ export const SettingsTasksCount = () => {
     return isSubmitSuccessful ? 'success' : 'info';
   };
 
-  const title = NotificationHeader.count;
   return (
     <Card raised={true}>
       <CardHeader
-        id={title}
-        title={title}
+        id={NotificationHeader.count}
+        title={i18n('title')}
         titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
         action={<FormSwitch controllerProps={{ name: 'enabled', control }} formControlLabelProps={{ label: '' }} />}
         sx={{ p: '1rem 1rem 0' }}
@@ -62,7 +63,7 @@ export const SettingsTasksCount = () => {
             disabled={!isValid}
             onClick={handleSubmit(onSubmit)}
           >
-            Save
+            {i18n('save', 'common', 'buttons')}
           </Button>
         </Stack>
       </CardActions>

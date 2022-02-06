@@ -14,7 +14,7 @@ export enum SettingHeader {
 export enum NotificationHeader {
   snack = 'snackbar',
   banner = 'banners',
-  count = 'tasks count',
+  count = 'tasks_count',
 }
 
 export enum ConnectionHeader {
@@ -24,8 +24,8 @@ export enum ConnectionHeader {
 
 export enum InterfaceHeader {
   tabs = 'tabs',
-  quickMenu = 'Quick Menu',
-  contextMenu = 'Context Menu',
+  quickMenu = 'quick_menu',
+  contextMenu = 'context_menu',
 }
 
 export interface Connection {

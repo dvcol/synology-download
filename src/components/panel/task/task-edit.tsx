@@ -2,9 +2,10 @@ import React, { useEffect } from 'react';
 import { Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Stack } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { QueryService } from '../../../services';
-import { FormExplorer } from '../../form';
+import { FormExplorer } from '../../common';
 import { firstValueFrom } from 'rxjs';
 import { Task } from '../../../models';
+import { useI18n } from '../../../utils';
 
 type TaskEditForm = { id: string; destination: string };
 
@@ -19,6 +20,7 @@ export const TaskEdit = ({
   onFormCancel?: (form: TaskEditForm) => void;
   onFormSubmit?: (form: TaskEditForm) => void;
 }) => {
+  const i18n = useI18n('panel', 'task', 'edit');
   const [state, setState] = React.useState(open);
   useEffect(() => setState(open), [open]);
 
@@ -55,7 +57,7 @@ export const TaskEdit = ({
 
   return (
     <Dialog open={state} onClose={() => handleSubmit(onCancel)} aria-labelledby="confirm-delete-dialog" maxWidth={'md'}>
-      <DialogTitle>Change destination folder</DialogTitle>
+      <DialogTitle>{i18n('destination_folder')}</DialogTitle>
       <DialogContent sx={{ display: 'flex', flexDirection: 'row' }}>
         <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: '50vh', width: '60vw' }}>
           <FormExplorer
@@ -67,7 +69,7 @@ export const TaskEdit = ({
       <DialogActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
         <Stack direction="row" spacing={2}>
           <Button variant="outlined" color={'secondary'} sx={{ width: '5rem' }} onClick={handleSubmit(onCancel)}>
-            Cancel
+            {i18n('cancel', 'common', 'buttons')}
           </Button>
           <Button
             variant="outlined"
@@ -77,7 +79,7 @@ export const TaskEdit = ({
             disabled={!isValid}
             onClick={handleSubmit(onSubmit)}
           >
-            Save
+            {i18n('save', 'common', 'buttons')}
           </Button>
         </Stack>
       </DialogActions>

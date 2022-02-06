@@ -6,11 +6,14 @@ import { NotificationService, QueryService } from '../../../services';
 import { RegisterOptions, useForm } from 'react-hook-form';
 import { Connection, ConnectionHeader } from '../../../models';
 import { finalize, Observable } from 'rxjs';
-import { FormCheckbox, FormInput } from '../../form';
+import { FormCheckbox, FormInput } from '../../common';
 import { SwitchBaseProps } from '@mui/material/internal/SwitchBase';
+import { useI18n } from '../../../utils';
 
 // TODO : 2FA & HTTPS
 export const SettingsCredentials = () => {
+  const i18n = useI18n('panel', 'settings', 'credentials');
+
   const dispatch = useDispatch();
   const connection = useSelector(getConnection);
   const logged = useSelector(getLogged);
@@ -87,15 +90,14 @@ export const SettingsCredentials = () => {
 
   const onRememberMeChange: SwitchBaseProps['onChange'] = (_, rememberMe) => dispatch(syncRememberMe(rememberMe));
 
-  const title = ConnectionHeader.credential;
   return (
     <Card raised={true}>
       {loading && <LinearProgress />}
       <CardHeader
-        id={title}
-        title={title}
+        id={ConnectionHeader.credential}
+        title={i18n('title')}
         titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
-        subheader={'Two-factor authentication is not currently supported.'}
+        subheader={i18n('subheader')}
         subheaderTypographyProps={{ color: 'text.secondary', gutterBottom: true }}
         sx={{ p: '1rem 1rem 0' }}
       />
@@ -106,7 +108,7 @@ export const SettingsCredentials = () => {
               controllerProps={{ name: 'protocol', control, rules: rules.protocol }}
               textFieldProps={{
                 select: true,
-                label: 'Protocol',
+                label: i18n('subheader'),
                 sx: { flex: '1 0 6rem' },
               }}
             >
@@ -138,7 +140,7 @@ export const SettingsCredentials = () => {
               controllerProps={{ name: 'port', control, rules: rules.port }}
               textFieldProps={{
                 type: 'number',
-                label: 'Port',
+                label: i18n('port'),
                 sx: { flex: '1 0 6rem' },
               }}
             />
@@ -148,7 +150,7 @@ export const SettingsCredentials = () => {
               controllerProps={{ name: 'username', control, rules: rules.username }}
               textFieldProps={{
                 type: 'text',
-                label: 'Username',
+                label: i18n('username'),
               }}
             />
 
@@ -156,7 +158,7 @@ export const SettingsCredentials = () => {
               controllerProps={{ name: 'password', control, rules: rules.password }}
               textFieldProps={{
                 type: 'password',
-                label: 'Password',
+                label: i18n('password'),
               }}
             />
           </Box>
@@ -167,12 +169,12 @@ export const SettingsCredentials = () => {
         <FormCheckbox
           controllerProps={{ name: 'rememberMe', control }}
           checkboxProps={{ onChange: onRememberMeChange }}
-          formControlLabelProps={{ label: 'Remember me' }}
+          formControlLabelProps={{ label: i18n('remember_me') }}
         />
         <Box>
           <Stack direction="row" spacing={2}>
             <Button variant="outlined" color={getColor('test')} disabled={!isValid} onClick={handleSubmit(testLogin)}>
-              Test Login
+              {i18n('login_test')}
             </Button>
             <Button
               variant="outlined"
@@ -182,7 +184,7 @@ export const SettingsCredentials = () => {
               disabled={!isValid}
               onClick={handleSubmit(loginLogout)}
             >
-              {logged ? 'Logout' : 'Login'}
+              {i18n(logged ? 'logout' : 'login')}
             </Button>
           </Stack>
         </Box>

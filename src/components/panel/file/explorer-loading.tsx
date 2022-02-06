@@ -1,8 +1,10 @@
 import React from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
+import { useI18n } from '../../../utils';
 
 export const ExplorerLoading = ({ loading, empty }: { loading?: boolean; empty?: boolean }) => {
+  const i18n = useI18n('panel', 'file', 'explorer_loading');
   return (
     <React.Fragment>
       {loading && (
@@ -10,7 +12,7 @@ export const ExplorerLoading = ({ loading, empty }: { loading?: boolean; empty?:
           <Box component={'span'} sx={{ m: '0 6px 0 12px' }}>
             <CircularProgress size={'0.6rem'} />
           </Box>
-          <span>Loading folder content</span>
+          <span>{i18n('content')}</span>
         </Typography>
       )}
       {!loading && empty && (
@@ -24,7 +26,7 @@ export const ExplorerLoading = ({ loading, empty }: { loading?: boolean; empty?:
           }}
         >
           <InfoIcon sx={{ width: '16px', height: '16px', mr: '4px' }} />
-          <span>This folder does not contain any sub-folders.</span>
+          <span>{i18n('empty')}</span>
         </Typography>
       )}
     </React.Fragment>

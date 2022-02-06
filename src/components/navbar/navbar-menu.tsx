@@ -13,11 +13,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import NavbarMenuIcon from './navbar-menu-icon';
 import { getUrl, setNavbar } from '../../store';
 import { QueryService } from '../../services';
-import { ConfirmationDialog } from '../dialog';
+import { ConfirmationDialog } from '../common';
+import { useI18n } from '../../utils';
 
 type NavbarMenuProps = { label: React.ReactNode };
 
 export const NavbarMenu = ({ label }: NavbarMenuProps) => {
+  const i18n = useI18n('navbar', 'menu');
   const dispatch = useDispatch();
   const url = useSelector(getUrl) + 'index.cgi?launchApp=SYNO.SDS.DownloadStation.Application';
 
@@ -31,6 +33,8 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
 
   // Dialog
   const [prompt, setPrompt] = React.useState(false);
+
+  console.log(i18n('menu_add'));
 
   return (
     <React.Fragment>
@@ -54,30 +58,27 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
         onClick={handleClose}
         MenuListProps={{ 'aria-labelledby': 'basic-button' }}
       >
-        <NavbarMenuIcon label="Add download task" icon={<AddLinkIcon />} component={Link} to="/add" onClick={handleTab} />
+        <NavbarMenuIcon label={i18n('menu_add')} icon={<AddLinkIcon />} component={Link} to="/add" onClick={handleTab} />
         <Divider />
-        <NavbarMenuIcon label="Clear completed items" icon={<ClearAllIcon />} onClick={() => QueryService.deleteFinishedTasks().subscribe()} />
-        <NavbarMenuIcon label="Resume all" icon={<PlayArrowIcon />} onClick={() => QueryService.resumeAllTasks().subscribe()} />
-        <NavbarMenuIcon label="Pause all" icon={<PauseIcon />} onClick={() => QueryService.pauseAllTasks().subscribe()} />
-        <NavbarMenuIcon label="Remove all" icon={<DeleteSweepIcon />} onClick={() => setPrompt(true)} />
+        {/*TODO: clear/resume/pause/remove by tabs or all*/}
+        <NavbarMenuIcon label={i18n('menu_clear')} icon={<ClearAllIcon />} onClick={() => QueryService.deleteFinishedTasks().subscribe()} />
+        <NavbarMenuIcon label={i18n('menu_resume')} icon={<PlayArrowIcon />} onClick={() => QueryService.resumeAllTasks().subscribe()} />
+        <NavbarMenuIcon label={i18n('menu_pause')} icon={<PauseIcon />} onClick={() => QueryService.pauseAllTasks().subscribe()} />
+        <NavbarMenuIcon label={i18n('menu_remove')} icon={<DeleteSweepIcon />} onClick={() => setPrompt(true)} />
         <Divider />
-        <NavbarMenuIcon label="Settings" icon={<SettingsIcon />} component={Link} to="/settings" onClick={handleTab} />
-        <NavbarMenuIcon label="Info" icon={<InfoIcon />} component={Link} to="/info" onClick={handleTab} />
-        <NavbarMenuIcon label="Open Download Station" icon={<LaunchIcon />} onClick={handleUrl} />
+        <NavbarMenuIcon label={i18n('menu_settings')} icon={<SettingsIcon />} component={Link} to="/settings" onClick={handleTab} />
+        <NavbarMenuIcon label={i18n('menu_info')} icon={<InfoIcon />} component={Link} to="/info" onClick={handleTab} />
+        <NavbarMenuIcon label={i18n('menu_open')} icon={<LaunchIcon />} onClick={handleUrl} />
       </Menu>
 
       <ConfirmationDialog
         open={prompt}
-        title={'Please confirm'}
+        title={i18n('confirmation_title')}
         description={
           <React.Fragment>
-            <DialogContentText id="alert-dialog-description">
-              This action will remove <b>all tasks</b> (active, inactive, etc.).
-            </DialogContentText>
+            <DialogContentText id="alert-dialog-description">{i18n('confirmation_line_1')}</DialogContentText>
             <br />
-            <DialogContentText id="alert-dialog-description">
-              Once deleted, you'll have to re-add all tasks manually, they can not be restored or restarted.
-            </DialogContentText>
+            <DialogContentText id="alert-dialog-description">{i18n('confirmation_line_2')}</DialogContentText>
           </React.Fragment>
         }
         onCancel={() => setPrompt(false)}

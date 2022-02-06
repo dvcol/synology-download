@@ -198,3 +198,9 @@ export type TaskForm = {
 };
 
 export type TaskFormValid = TaskForm & { uri: string };
+
+export interface TaskCount {
+  badge: number;
+  total: number;
+  tabCounts: Record<string, number>;
+}

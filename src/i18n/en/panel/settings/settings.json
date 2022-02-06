@@ -1,0 +1,37 @@
+{
+  "panel__settings__connection": {
+    "message": "connection"
+  },
+  "panel__settings__connection_credentials": {
+    "message": "credentials"
+  },
+  "panel__settings__connection_polling": {
+    "message": "polling"
+  },
+
+  "panel__settings__interface": {
+    "message": "interface"
+  },
+  "panel__settings__interface_tabs": {
+    "message": "tabs"
+  },
+  "panel__settings__interface_quick_menu": {
+    "message": "Quick Menu"
+  },
+  "panel__settings__interface_context_menu": {
+    "message": "Context Menu"
+  },
+
+  "panel__settings__notification": {
+    "message": "notification"
+  },
+  "panel__settings__notification_snack": {
+    "message": "snackbar"
+  },
+  "panel__settings__notification_banner": {
+    "message": "banners"
+  },
+  "panel__settings__notification_tasks_count": {
+    "message": "tasks_count"
+  }
+}

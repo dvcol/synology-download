@@ -12,8 +12,10 @@ import { SettingsContextMenus } from './settings-context-menus';
 import { SettingsTasksCount } from './settings-tasks-count';
 import { SettingsBanner } from './settings-banner';
 import { SettingsSnack } from './settings-snack';
+import { useI18n } from '../../../utils';
 
 export const Settings = () => {
+  const i18n = useI18n('panel', 'settings');
   // Tab highlight
   const [tab, setTab] = React.useState<string>(SettingHeader.connection);
   const handleChange = (event: React.SyntheticEvent, newValue: SettingHeader) => setTab(newValue);
@@ -32,7 +34,6 @@ export const Settings = () => {
           selectionFollowsFocus={true}
           value={tab}
           onChange={handleChange}
-          aria-label="Vertical tabs example"
           sx={{
             flex: '1 1 auto',
             '& .MuiTab-root': { alignItems: 'flex-start' },
@@ -40,7 +41,7 @@ export const Settings = () => {
         >
           {tabs.map(({ label, links }, i) => [
             <Tab
-              label={label}
+              label={i18n(label)}
               key={`${i}-${label}`}
               value={label}
               disableFocusRipple={true}
@@ -50,7 +51,7 @@ export const Settings = () => {
             />,
             ...(links?.map((l, j) => (
               <Tab
-                label={l}
+                label={i18n(`${label}_${l}`)}
                 key={`${i}-${j}-${l}`}
                 value={l}
                 disableFocusRipple={true}

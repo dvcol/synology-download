@@ -9,9 +9,11 @@ import UploadIcon from '@mui/icons-material/Upload';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { computeEta, computeProgress, formatBytes, Task, TaskStatus, taskStatusToColor } from '../../../models';
 import { blue, green, orange, purple, red } from '@mui/material/colors';
-import ProgressBar from '../../ui-element/progress-bar';
+import { ProgressBar } from '../../common';
+import { useI18n } from '../../../utils';
 
 export const TaskCard = ({ task, statuses }: { task: Task; statuses?: TaskStatus[] }) => {
+  const i18n = useI18n('panel', 'task', 'card');
   const statusIcon = (status: TaskStatus): React.ReactNode => {
     switch (status) {
       case TaskStatus.waiting:
@@ -69,7 +71,7 @@ export const TaskCard = ({ task, statuses }: { task: Task; statuses?: TaskStatus
                 )}
                 {[TaskStatus.downloading, TaskStatus.seeding].includes(task.status) && (
                   <React.Fragment>
-                    <span>{computeEta(task) ? `${computeEta(task)} remaining` : 'no estimates'}</span>
+                    <span>{computeEta(task) ? `${computeEta(task)} ${i18n('remaining')}` : i18n('no_estimates')}</span>
                     <span> – </span>
                   </React.Fragment>
                 )}

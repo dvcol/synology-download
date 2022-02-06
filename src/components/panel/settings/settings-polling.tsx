@@ -4,9 +4,11 @@ import { ConnectionHeader, Polling } from '../../../models';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPolling, syncPolling } from '../../../store';
 import { RegisterOptions, useForm } from 'react-hook-form';
-import { FormInput, FormSwitch } from '../../form';
+import { FormInput, FormSwitch } from '../../common';
+import { useI18n } from '../../../utils';
 
 export const SettingsPolling = () => {
+  const i18n = useI18n('panel', 'settings', 'polling');
   const dispatch = useDispatch();
   const polling: Polling = useSelector(getPolling);
 
@@ -32,23 +34,22 @@ export const SettingsPolling = () => {
     return isSubmitSuccessful ? 'success' : 'info';
   };
 
-  const title = ConnectionHeader.polling;
   return (
     <Card raised={true}>
       <CardHeader
-        id={title}
-        title={title}
+        id={ConnectionHeader.polling}
+        title={i18n('title')}
+        subheader={i18n('subheader')}
         titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
-        subheader={'Periodically polls the DiskStation to fetch tasks.'}
         action={<FormSwitch controllerProps={{ name: 'enabled', control }} formControlLabelProps={{ label: '' }} />}
         sx={{ p: '1rem 1rem 0' }}
       />
       <CardContent>
         <Box component="form" sx={{ '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">
           <CardHeader
-            title={'Popup'}
+            title={i18n('popup_title')}
+            subheader={i18n('popup_subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
-            subheader={'Enables or disables polling when the popup is open.'}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
             action={
               <FormSwitch
@@ -59,14 +60,14 @@ export const SettingsPolling = () => {
             sx={{ p: '0.5rem 0' }}
           />
           <CardHeader
-            title={'Background'}
-            titleTypographyProps={{ variant: 'subtitle2' }}
+            title={i18n('background_title')}
             subheader={
               <Box>
-                <Box>Enables or disables polling when the popup is open.</Box>
-                <Box>Note that background polling is necessary for notification and icon count.</Box>
+                <Box>{i18n('background_subheader_line_1')}</Box>
+                <Box>{i18n('background_subheader_line_2')}</Box>
               </Box>
             }
+            titleTypographyProps={{ variant: 'subtitle2' }}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
             action={
               <FormSwitch
@@ -77,9 +78,9 @@ export const SettingsPolling = () => {
             sx={{ p: '0.5rem 0' }}
           />
           <CardHeader
-            title={'Interval'}
+            title={i18n('interval_title')}
+            subheader={i18n('interval_subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
-            subheader={'Changes the polling interval for ask fetching.'}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
             sx={{ p: '1rem 0' }}
           />
@@ -88,7 +89,7 @@ export const SettingsPolling = () => {
               controllerProps={{ name: 'popup.interval', control, rules: rules.interval }}
               textFieldProps={{
                 type: 'number',
-                label: 'Popup interval',
+                label: i18n('interval_popup_label'),
                 InputProps: {
                   endAdornment: <InputAdornment position="end">ms</InputAdornment>,
                 },
@@ -100,7 +101,7 @@ export const SettingsPolling = () => {
               controllerProps={{ name: 'background.interval', control, rules: rules.interval }}
               textFieldProps={{
                 type: 'number',
-                label: 'Background interval',
+                label: i18n('interval_background_label'),
                 InputProps: {
                   endAdornment: <InputAdornment position="end">ms</InputAdornment>,
                 },
@@ -121,7 +122,7 @@ export const SettingsPolling = () => {
             disabled={!isValid}
             onClick={handleSubmit(onSubmit)}
           >
-            Save
+            {i18n('save', 'common', 'buttons')}
           </Button>
         </Stack>
       </CardActions>

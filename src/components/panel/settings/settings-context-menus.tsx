@@ -5,9 +5,10 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SettingsContextMenu } from './settings-context-menu';
 import { SettingsInterface } from './settings-interface';
-import { sendMessage } from '../../../utils';
+import { sendMessage, useI18n } from '../../../utils';
 
 export const SettingsContextMenus = () => {
+  const i18n = useI18n('panel', 'settings', 'context_menus');
   const dispatch = useDispatch();
   const menus = useSelector<StoreState, ContextMenu[]>(getMenus);
 
@@ -39,7 +40,7 @@ export const SettingsContextMenus = () => {
               overflow: 'hidden',
             }}
           >
-            {c.destination?.path?.replaceAll('/', ' / ') ?? 'Default folder'}
+            {c.destination?.path?.replaceAll('/', ' / ') ?? i18n('default_folder')}
           </Typography>
         </>
       )}

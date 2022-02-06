@@ -1,0 +1,39 @@
+{
+  "panel__task__add__url_required": {
+    "message": "Url is required"
+  },
+
+  "panel__task__add__title": {
+    "message": "Add custom download task"
+  },
+  "panel__task__add__subheader": {
+    "message": "Submitted tasks will be added to your download station."
+  },
+
+  "panel__task__add__source_title": {
+    "message": "Source"
+  },
+  "panel__task__add__source_subheader": {
+    "message": "Tasks may fail if submitted without the required fields."
+  },
+
+  "panel__task__add__url_label": {
+    "message": "Download url or magnet link"
+  },
+  "panel__task__add__username_label": {
+    "message": "FTP or HTTP username"
+  },
+  "panel__task__add__ftp_password_label": {
+    "message": "FTP or HTTP password"
+  },
+  "panel__task__add__zip_password_label": {
+    "message": "Unzip password"
+  },
+
+  "panel__task__add__destination_title": {
+    "message": "Destination folder"
+  },
+  "panel__task__add__destination_subheader": {
+    "message": "Change default destination folder."
+  }
+}

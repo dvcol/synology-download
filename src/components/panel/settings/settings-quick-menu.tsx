@@ -4,10 +4,11 @@ import { useDispatch } from 'react-redux';
 import { removeQuickMenu, saveQuickMenu } from '../../../store';
 import { MaterialIcon, MaterialIconMap, QuickMenu } from '../../../models';
 import { useForm } from 'react-hook-form';
-import { FormExplorer, FormInput, FormSwitch } from '../../form';
-import { MuiIcon } from '../../ui-element';
+import { FormExplorer, FormInput, FormSwitch, MuiIcon } from '../../common';
+import { useI18n } from '../../../utils';
 
 export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
+  const i18n = useI18n('panel', 'settings', 'quick_menu');
   const dispatch = useDispatch();
   const {
     handleSubmit,
@@ -37,15 +38,15 @@ export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
       }}
     >
       <CardHeader
-        title={'Quick menu name'}
+        title={i18n('name_title')}
+        subheader={i18n('name_subheader')}
         titleTypographyProps={{ variant: 'subtitle2' }}
-        subheader={'Change the name of the quick menu.'}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
         action={
           <FormInput
             controllerProps={{ name: 'title', control }}
             textFieldProps={{
-              label: 'Menu name',
+              label: i18n('name_label'),
               sx: { flex: '0 0 14rem', textTransform: 'capitalize' },
             }}
           />
@@ -53,16 +54,16 @@ export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
         sx={{ p: '0.5rem 0' }}
       />
       <CardHeader
-        title={'Menu icon'}
+        title={i18n('icon_title')}
+        subheader={i18n('icon_subheader')}
         titleTypographyProps={{ variant: 'subtitle2' }}
-        subheader={'Change the shortcut menu icon.'}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
         action={
           <FormInput
             controllerProps={{ name: 'icon', control }}
             textFieldProps={{
               select: true,
-              label: 'Icon',
+              label: i18n('icon_label'),
               sx: { flex: '1 0 8rem' },
             }}
           >
@@ -81,17 +82,17 @@ export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
         sx={{ p: '0.5rem 0' }}
       />
       <CardHeader
-        title={'Open full modal'}
+        title={i18n('modal_title')}
+        subheader={i18n('modal_subheader')}
         titleTypographyProps={{ variant: 'subtitle2' }}
-        subheader={'Toggle to open full modal instead of shortcut.'}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
         action={<FormSwitch controllerProps={{ name: 'modal', control }} formControlLabelProps={{ label: '' }} />}
         sx={{ p: '0.5rem 0' }}
       />
       <CardHeader
-        title={'Destination folder'}
+        title={i18n('destination_title')}
+        subheader={i18n('destination_subheader')}
         titleTypographyProps={{ variant: 'subtitle2' }}
-        subheader={'Change default destination folder.'}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
         action={<FormSwitch controllerProps={{ name: 'destination.custom', control }} formControlLabelProps={{ label: '' }} />}
         sx={{ p: '0.5rem 0' }}
@@ -105,7 +106,7 @@ export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Stack direction="row" spacing={2}>
           <Button variant="outlined" color="error" sx={{ width: '5rem' }} type="submit" onClick={onDelete}>
-            Delete
+            {i18n('delete', 'common', 'buttons')}
           </Button>
           <Button
             variant="outlined"
@@ -115,7 +116,7 @@ export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
             disabled={!isValid}
             onClick={handleSubmit(onSubmit)}
           >
-            Save
+            {i18n('save', 'common', 'buttons')}
           </Button>
         </Stack>
       </CardActions>

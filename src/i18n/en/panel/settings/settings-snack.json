@@ -1,0 +1,55 @@
+{
+  "panel__settings__snack__title": {
+    "message": "Snackbar"
+  },
+  "panel__settings__snack__subheader": {
+    "message": "Note that snackbar banner are dependant on content script injection into tabs."
+  },
+
+  "panel__settings__snack__position_title": {
+    "message": "Positioning"
+  },
+  "panel__settings__snack__position_subheader": {
+    "message": "Changes where the snackbar notifications are displayed from."
+  },
+  "panel__settings__snack__position_vertical_label": {
+    "message": "Vertical position"
+  },
+  "panel__settings__snack__position_horizontal_label": {
+    "message": "Horizontal position"
+  },
+
+  "panel__settings__snack__timeout_title": {
+    "message": "Notification timeout"
+  },
+  "panel__settings__snack__timeout_subheader": {
+    "message": "Define how long the notification is displayed before being dismissed."
+  },
+  "panel__settings__snack__timeout_label": {
+    "message": "Display timeout"
+  },
+
+  "panel__settings__snack__level_title": {
+    "message": "Notification level"
+  },
+  "panel__settings__snack__level_subheader": {
+    "message": "Levels are cumulative and show all notifications from a lower level."
+  },
+  "panel__settings__snack__level_label": {
+    "message": "Notification level"
+  },
+
+  "panel__settings__snack__popup_title": {
+    "message": "Popup"
+  },
+  "panel__settings__snack__popup_subheader": {
+    "message": "Enables or disables snackbar notifications within the popup."
+  },
+
+  "panel__settings__snack__tab_title": {
+    "message": "Popup"
+  },
+  "panel__settings__snack__tab_subheader": {
+    "message": "Enables or disables snackbar notifications inside active tabs."
+  }
+}

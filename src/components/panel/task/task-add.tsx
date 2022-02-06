@@ -2,9 +2,10 @@ import React, { useEffect } from 'react';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, CardProps, Grid, Stack } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import { QueryService } from '../../../services';
-import { FormExplorer, FormInput, FormSwitch } from '../../form';
+import { FormExplorer, FormInput, FormSwitch } from '../../common';
 import { firstValueFrom } from 'rxjs';
 import { TaskForm, TaskFormValid } from '../../../models';
+import { useI18n } from '../../../utils';
 
 export const TaskAdd = ({
   form,
@@ -19,6 +20,7 @@ export const TaskAdd = ({
   onFormSubmit?: (form: TaskFormValid) => void;
   cardProps?: CardProps;
 }) => {
+  const i18n = useI18n('panel', 'task', 'add');
   const [path, setPath] = React.useState<string>(form?.destination?.path ?? '');
 
   const {
@@ -71,7 +73,7 @@ export const TaskAdd = ({
         onFormSubmit && onFormSubmit(data);
       });
     } else {
-      return Promise.reject('Url is required');
+      return Promise.reject(i18n('url_required'));
     }
   };
 
@@ -83,9 +85,9 @@ export const TaskAdd = ({
   return (
     <Card raised={true} {...cardProps}>
       <CardHeader
-        title={'Add custom download task'}
+        title={i18n('title')}
+        subheader={i18n('subheader')}
         titleTypographyProps={{ variant: 'h6', color: 'text.primary', fontSize: '16px' }}
-        subheader={'Submitted tasks will be added to your download station.'}
         subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '14px' }}
         sx={{ p: '16px 16px 0', textTransform: 'capitalize' }}
       />
@@ -93,9 +95,9 @@ export const TaskAdd = ({
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <CardHeader
-              title={'Source'}
+              title={i18n('source_title')}
+              subheader={i18n('source_subheader')}
               titleTypographyProps={{ variant: 'subtitle2', fontSize: '14px' }}
-              subheader={'Tasks may fail if submitted without the required fields.'}
               subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '12px' }}
               sx={{ p: '8px 0' }}
             />
@@ -103,7 +105,7 @@ export const TaskAdd = ({
               <FormInput
                 controllerProps={{ name: 'uri', control, rules: { required: true, minLength: 1 } }}
                 textFieldProps={{
-                  label: 'Download url or magnet link',
+                  label: i18n('url_label'),
                   multiline: true,
                   rows: 4,
                   inputProps: { style: { fontSize: '14px' } },
@@ -112,7 +114,7 @@ export const TaskAdd = ({
               <FormInput
                 controllerProps={{ name: 'username', control }}
                 textFieldProps={{
-                  label: 'FTP or HTTP username',
+                  label: i18n('username_label'),
                   inputProps: { style: { fontSize: '14px' } },
                 }}
               />
@@ -120,7 +122,7 @@ export const TaskAdd = ({
                 controllerProps={{ name: 'password', control }}
                 textFieldProps={{
                   type: 'password',
-                  label: 'FTP or HTTP password',
+                  label: i18n('ftp_password_label'),
                   inputProps: { style: { fontSize: '14px' } },
                 }}
                 iconProps={{ sx: { fontSize: '20px' } }}
@@ -129,7 +131,7 @@ export const TaskAdd = ({
                 controllerProps={{ name: 'unzip', control }}
                 textFieldProps={{
                   type: 'password',
-                  label: 'Unzip password',
+                  label: i18n('zip_password_label'),
                   inputProps: { style: { fontSize: '14px' } },
                 }}
                 iconProps={{ sx: { fontSize: '20px' } }}
@@ -138,9 +140,9 @@ export const TaskAdd = ({
           </Grid>
           <Grid item xs={6}>
             <CardHeader
-              title={'Destination folder'}
+              title={i18n('destination_title')}
+              subheader={i18n('destination_subheader')}
               titleTypographyProps={{ variant: 'subtitle2', fontSize: '14px' }}
-              subheader={'Change default destination folder.'}
               subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '12px' }}
               action={<FormSwitch controllerProps={{ name: 'destination.custom', control }} formControlLabelProps={{ label: '' }} />}
               sx={{ p: '8px 0' }}
@@ -158,7 +160,7 @@ export const TaskAdd = ({
         <Stack direction="row" spacing={2}>
           {withCancel && (
             <Button variant="outlined" color={'secondary'} sx={{ width: '80px', fontSize: '12px' }} onClick={() => onCancel()}>
-              Cancel
+              {i18n('cancel', 'common', 'buttons')}
             </Button>
           )}
           <Button
@@ -169,7 +171,7 @@ export const TaskAdd = ({
             disabled={!isValid}
             onClick={handleSubmit(onSubmit)}
           >
-            Save
+            {i18n('save', 'common', 'buttons')}
           </Button>
         </Stack>
       </CardActions>

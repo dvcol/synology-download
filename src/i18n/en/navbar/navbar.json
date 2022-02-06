@@ -1,0 +1,6 @@
+{
+  "navbar__tabs_aria_label": {
+    "message": "tabs for filtered tasks",
+    "description": "Aria label for filtered tasks."
+  }
+}

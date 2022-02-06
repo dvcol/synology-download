@@ -8,10 +8,11 @@ import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import TaskDetail from './task-detail';
 import { QueryService } from '../../../services';
-import { IconLoader } from '../../ui-element';
-import { ConfirmationDialog } from '../../dialog';
+import { ConfirmationDialog, IconLoader } from '../../common';
+import { useI18n } from '../../../utils';
 
 export const TaskItem = React.forwardRef<HTMLDivElement, { task: Task; status?: TaskStatus[] }>(({ task, status }, ref) => {
+  const i18n = useI18n('panel', 'task', 'item');
   const [expanded, setExpanded] = useState(false);
   const [visible, setVisible] = useState(false);
   const [loading, setLoading] = useState<Record<string, boolean>>({});
@@ -43,8 +44,8 @@ export const TaskItem = React.forwardRef<HTMLDivElement, { task: Task; status?: 
       >
         <TaskCard task={task} statuses={status} />
         {visible && !expanded && (
-          <ButtonGroup orientation="vertical" aria-label="vertical contained button group" variant="text">
-            <Tooltip title="Delete" placement={'left'}>
+          <ButtonGroup orientation="vertical" variant="text">
+            <Tooltip title={i18n('delete', 'common', 'buttons')} placement={'left'}>
               <Button
                 key="delete"
                 sx={{ display: 'flex', flex: '1 1 auto' }}
@@ -59,8 +60,8 @@ export const TaskItem = React.forwardRef<HTMLDivElement, { task: Task; status?: 
             </Tooltip>
             <ConfirmationDialog
               open={confirm}
-              title={'Please confirm'}
-              description={'This action will permanently remove this task.'}
+              title={i18n('confirmation_title')}
+              description={i18n('confirmation_description')}
               onCancel={($event) => {
                 $event?.stopPropagation();
                 setConfirm(false);
@@ -72,7 +73,7 @@ export const TaskItem = React.forwardRef<HTMLDivElement, { task: Task; status?: 
               }}
             />
             {[TaskStatus.downloading, TaskStatus.seeding, TaskStatus.waiting].includes(task.status) ? (
-              <Tooltip title="Pause" placement={'left'}>
+              <Tooltip title={i18n('pause', 'common', 'buttons')} placement={'left'}>
                 <Button
                   key="pause"
                   sx={{ display: 'flex', flex: '1 1 auto' }}
@@ -83,7 +84,7 @@ export const TaskItem = React.forwardRef<HTMLDivElement, { task: Task; status?: 
                 </Button>
               </Tooltip>
             ) : (
-              <Tooltip title={TaskStatus.paused === task.status ? 'Play' : 'Seed'} placement={'left'}>
+              <Tooltip title={i18n(TaskStatus.paused === task.status ? 'play' : 'seed', 'common', 'buttons')} placement={'left'}>
                 <Button
                   key="play"
                   sx={{ display: 'flex', flex: '1 1 auto' }}

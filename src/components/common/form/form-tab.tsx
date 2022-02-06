@@ -1,10 +1,20 @@
 import { Button, Card, CardHeader, Grid, MenuItem } from '@mui/material';
 import { FormInput } from './form-input';
-import { ColorLevel, defaultNotifications, defaultTabs, getColorFromLevel, getLevelFromColor, Tab, TabType, TaskStatus, TaskTab } from '../../models';
+import {
+  ColorLevel,
+  defaultNotifications,
+  defaultTabs,
+  getColorFromLevel,
+  getLevelFromColor,
+  Tab,
+  TabType,
+  TaskStatus,
+  TaskTab,
+} from '../../../models';
 import { FormCheckbox } from './form-checkbox';
 import React from 'react';
 import { UseFormReturn } from 'react-hook-form/dist/types/form';
-import { useI18n } from '../../utils';
+import { useI18n } from '../../../utils';
 
 // TODO : filter destination
 export const FormTab = ({
@@ -16,7 +26,7 @@ export const FormTab = ({
   tab: Tab;
   disabled?: boolean;
 }>) => {
-  const i18n = useI18n('form_tab');
+  const i18n = useI18n('common', 'form', 'tab');
   const getTaskTab = (type?: TabType | string): TaskTab | undefined => defaultTabs.find((t) => t.name === type);
   const getTemplateStatuses = (taskTab?: TaskTab): TaskStatus[] => (taskTab?.status?.length ? taskTab?.status : status) ?? [];
 

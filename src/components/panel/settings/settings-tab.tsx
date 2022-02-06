@@ -1,4 +1,4 @@
-import { FormInput, FormTab } from '../../form';
+import { FormInput, FormTab } from '../../common';
 import { useForm, UseFormReset } from 'react-hook-form';
 import { ColorLevel, ColorLevelMap, getColorFromLevel, getLevelFromColor, Tab, TaskTab } from '../../../models';
 import React from 'react';
@@ -6,8 +6,10 @@ import { useDispatch } from 'react-redux';
 import { AccordionDetails, Button, CardActions, CardHeader, Stack } from '@mui/material';
 import { removeTaskTab, saveTaskTab } from '../../../store';
 import { Control } from 'react-hook-form/dist/types/form';
+import { useI18n } from '../../../utils';
 
 export const SettingsTab = ({ tab }: { tab: TaskTab }) => {
+  const i18n = useI18n('panel', 'settings', 'tab');
   const formTab = { ...tab, color: getColorFromLevel(tab.color) ?? ColorLevelMap[ColorLevel.primary] };
   const dispatch = useDispatch();
   const {
@@ -37,15 +39,15 @@ export const SettingsTab = ({ tab }: { tab: TaskTab }) => {
       }}
     >
       <CardHeader
-        title={'Tab name'}
+        title={i18n('name_title')}
+        subheader={i18n('name_subheader')}
         titleTypographyProps={{ variant: 'subtitle2' }}
-        subheader={'Change the name of the tab.'}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
         action={
           <FormInput
             controllerProps={{ name: 'name', control }}
             textFieldProps={{
-              label: 'Tab name',
+              label: i18n('name_label'),
               sx: { flex: '0 0 14rem', textTransform: 'capitalize' },
             }}
           />
@@ -56,7 +58,7 @@ export const SettingsTab = ({ tab }: { tab: TaskTab }) => {
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Stack direction="row" spacing={2}>
           <Button variant="outlined" color="error" sx={{ width: '5rem' }} type="submit" onClick={onDelete}>
-            Delete
+            {i18n('delete', 'common', 'buttons')}
           </Button>
           <Button
             variant="outlined"
@@ -66,7 +68,7 @@ export const SettingsTab = ({ tab }: { tab: TaskTab }) => {
             disabled={!isValid}
             onClick={handleSubmit(onSubmit)}
           >
-            Save
+            {i18n('save', 'common', 'buttons')}
           </Button>
         </Stack>
       </CardActions>

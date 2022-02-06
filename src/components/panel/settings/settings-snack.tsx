@@ -1,12 +1,14 @@
 import { Box, Button, Card, CardActions, CardContent, CardHeader, InputAdornment, MenuItem, Stack } from '@mui/material';
 import React from 'react';
 import { NotificationHeader, NotificationLevel, NotificationLevelKeys, Notifications, NotificationsSnack } from '../../../models';
-import { FormInput, FormSwitch } from '../../form';
+import { FormInput, FormSwitch } from '../../common';
 import { useDispatch, useSelector } from 'react-redux';
 import { getNotifications, syncNotifications } from '../../../store';
 import { useForm } from 'react-hook-form';
+import { useI18n } from '../../../utils';
 
 export const SettingsSnack = () => {
+  const i18n = useI18n('panel', 'settings', 'snack');
   const dispatch = useDispatch();
   const notifications: Notifications = useSelector(getNotifications);
 
@@ -28,23 +30,22 @@ export const SettingsSnack = () => {
     return isSubmitSuccessful ? 'success' : 'info';
   };
 
-  const title = NotificationHeader.snack;
   return (
     <Card raised={true}>
       <CardHeader
-        id={title}
-        title={title}
+        id={NotificationHeader.snack}
+        title={i18n('title')}
+        subheader={i18n('subheader')}
         titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
-        subheader={'Note that snackbar banner are dependant on content script injection into tabs.'}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
         action={<FormSwitch controllerProps={{ name: 'enabled', control }} formControlLabelProps={{ label: '' }} />}
         sx={{ p: '1rem 1rem 0' }}
       />
       <CardContent>
         <CardHeader
-          title={'Positioning'}
+          title={i18n('position_title')}
+          subheader={i18n('position_subheader')}
           titleTypographyProps={{ variant: 'subtitle2' }}
-          subheader={'Changes where the snackbar notifications are displayed from.'}
           subheaderTypographyProps={{ variant: 'subtitle2' }}
           sx={{ p: '0rem 0rem 1rem' }}
         />
@@ -53,7 +54,7 @@ export const SettingsSnack = () => {
             controllerProps={{ name: 'position.vertical', control }}
             textFieldProps={{
               select: true,
-              label: 'Vertical position',
+              label: i18n('position_vertical_label'),
               sx: { flex: '1 1 50%', textTransform: 'capitalize', mr: '0.25rem' },
               disabled: !getValues()?.enabled,
             }}
@@ -68,7 +69,7 @@ export const SettingsSnack = () => {
             controllerProps={{ name: 'position.horizontal', control }}
             textFieldProps={{
               select: true,
-              label: 'Horizontal position',
+              label: i18n('position_horizontal_label'),
               sx: { flex: '1 1 50%', textTransform: 'capitalize', ml: '0.25rem' },
               disabled: !getValues()?.enabled,
             }}
@@ -81,16 +82,16 @@ export const SettingsSnack = () => {
           </FormInput>
         </Box>
         <CardHeader
-          title={'Notification timeout'}
+          title={i18n('timeout_title')}
+          subheader={i18n('timeout_subheader')}
           titleTypographyProps={{ variant: 'subtitle2' }}
-          subheader={'Define how long the notification is displayed before being dismissed.'}
           subheaderTypographyProps={{ variant: 'subtitle2' }}
           action={
             <FormInput
               controllerProps={{ name: 'timeout', control, rules: { min: 500, max: 60000 } }}
               textFieldProps={{
                 type: 'number',
-                label: 'Display timeout',
+                label: i18n('timeout_label'),
                 InputProps: {
                   endAdornment: <InputAdornment position="end">ms</InputAdornment>,
                 },
@@ -102,16 +103,16 @@ export const SettingsSnack = () => {
           sx={{ p: '0.5rem 0' }}
         />
         <CardHeader
-          title={'Notification level'}
+          title={i18n('level_title')}
+          subheader={i18n('level_subheader')}
           titleTypographyProps={{ variant: 'subtitle2' }}
-          subheader="Levels are cumulative and show all notifications from a lower level."
           subheaderTypographyProps={{ variant: 'subtitle2' }}
           action={
             <FormInput
               controllerProps={{ name: 'level', control }}
               textFieldProps={{
                 select: true,
-                label: 'Notification level',
+                label: i18n('level_label'),
                 sx: { flex: '0 0 14rem', textTransform: 'capitalize', ml: '2rem' },
                 disabled: !getValues()?.enabled,
               }}
@@ -127,9 +128,9 @@ export const SettingsSnack = () => {
         />
         <Card sx={{ p: '0.5rem 1rem', m: '0.5rem 0' }}>
           <CardHeader
-            title={'Popup'}
+            title={i18n('popup_title')}
+            subheader={i18n('popup_subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
-            subheader={'Enables or disables snackbar notifications within the popup.'}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
             action={
               <FormSwitch controllerProps={{ name: 'scope.popup', control }} formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }} />
@@ -137,9 +138,9 @@ export const SettingsSnack = () => {
             sx={{ p: '0.5rem 0' }}
           />
           <CardHeader
-            title={'Tab'}
+            title={i18n('tab_title')}
+            subheader={i18n('tab_subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
-            subheader={'Enables or disables snackbar notifications inside active tabs.'}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
             action={
               <FormSwitch
@@ -161,7 +162,7 @@ export const SettingsSnack = () => {
             disabled={!isValid}
             onClick={handleSubmit(onSubmit)}
           >
-            Save
+            {i18n('save', 'common', 'buttons')}
           </Button>
         </Stack>
       </CardActions>

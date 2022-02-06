@@ -1,0 +1,9 @@
+{
+  "panel__file__explorer_loading__content": {
+    "message": "Loading folder content"
+  },
+
+  "panel__file__explorer_loading__empty": {
+    "message": "This folder does not contain any sub-folders."
+  }
+}

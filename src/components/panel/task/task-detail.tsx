@@ -7,12 +7,11 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { isDarkTheme } from '../../../themes';
 import { grey } from '@mui/material/colors';
-import ProgressBar from '../../ui-element/progress-bar';
+import { ConfirmationDialog, IconLoader, ProgressBar } from '../../common';
 import { Observable } from 'rxjs';
 import { QueryService } from '../../../services';
-import { ConfirmationDialog } from '../../dialog';
-import { IconLoader } from '../../ui-element';
 import { TaskEdit } from './task-edit';
+import { useI18n } from '../../../utils';
 
 export const TaskDetail = ({
   task,
@@ -23,6 +22,7 @@ export const TaskDetail = ({
   loading: Record<string, boolean>;
   buttonClick: (button: string, request: Observable<any>, $event?: React.MouseEvent, delay?: number) => void;
 }) => {
+  const i18n = useI18n('panel', 'task', 'detail');
   const [prompt, setPrompt] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const isDisabled = () => Object.values(loading).some(Boolean);
@@ -30,7 +30,7 @@ export const TaskDetail = ({
     <Typography component="span" variant="body2">
       <Grid container sx={{ alignItems: 'center' }}>
         <Grid item xs={4}>
-          <span>Destination: {task.additional?.detail?.destination}</span>
+          <span>{`${i18n('destination')} ${task.additional?.detail?.destination}`}</span>
         </Grid>
         <Grid item xs={8} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Stack direction="row" spacing={2}>
@@ -41,7 +41,7 @@ export const TaskDetail = ({
               onClick={() => buttonClick('play', QueryService.resumeTask(task.id))}
               disabled={isDisabled() || ![TaskStatus.paused, TaskStatus.finished].includes(task.status)}
             >
-              {TaskStatus.finished === task.status ? 'Seed' : 'Play'}
+              {i18n(TaskStatus.finished === task.status ? 'seed' : 'play', 'common', 'buttons')}
             </Button>
             <Button
               startIcon={<IconLoader icon={<PauseIcon />} loading={loading?.pause} props={{ size: '1.25rem', color: 'warning' }} />}
@@ -50,7 +50,7 @@ export const TaskDetail = ({
               onClick={() => buttonClick('pause', QueryService.pauseTask(task.id))}
               disabled={isDisabled() || ![TaskStatus.downloading, TaskStatus.seeding, TaskStatus.waiting].includes(task.status)}
             >
-              Pause
+              {i18n('pause', 'common', 'buttons')}
             </Button>
             <Button
               startIcon={<IconLoader icon={<EditIcon />} loading={loading?.edit} props={{ size: '1.25rem', color: 'secondary' }} />}
@@ -59,8 +59,8 @@ export const TaskDetail = ({
               onClick={() => setOpenEdit(true)}
               disabled={isDisabled() || ![TaskStatus.downloading, TaskStatus.waiting, TaskStatus.paused].includes(task.status)}
             >
-              Edit
-            </Button>{' '}
+              {i18n('edit', 'common', 'buttons')}
+            </Button>
             <TaskEdit open={openEdit} task={task} onFormCancel={() => setOpenEdit(false)} onFormSubmit={() => setOpenEdit(false)} />
             <Button
               startIcon={<IconLoader icon={<DeleteIcon />} loading={loading?.delete} props={{ size: '1.25rem', color: 'error' }} />}
@@ -69,12 +69,12 @@ export const TaskDetail = ({
               disabled={isDisabled()}
               onClick={() => setPrompt(true)}
             >
-              Delete
+              {i18n('delete', 'common', 'buttons')}
             </Button>
             <ConfirmationDialog
               open={prompt}
-              title={'Please confirm'}
-              description={'This action will permanently remove this task.'}
+              title={i18n('confirmation_title')}
+              description={i18n('confirmation_description')}
               onCancel={() => setPrompt(false)}
               onConfirm={() => {
                 setPrompt(false);
@@ -105,7 +105,7 @@ export const TaskDetail = ({
                       <span>{f.filename}</span>
                     </Grid>
                     <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                      {formatBytes(f.size_downloaded)} of {formatBytes(f.size)} downloaded
+                      {i18n({ key: 'downloaded', substitutions: [formatBytes(f.size_downloaded), formatBytes(f.size)] })}
                     </Grid>
                   </Grid>
                 }

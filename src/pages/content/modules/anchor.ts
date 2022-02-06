@@ -51,15 +51,6 @@ export const addAnchorClickListener = () =>
             source: document.URL,
           },
         });
-        // sendMessage<CreateTaskPayload, CreateTaskPayload>({
-        //   type: ChromeMessageType.createTask,
-        //   payload: {
-        //     uri: anchor.href,
-        //     source: document.URL,
-        //   },
-        // }).subscribe(({ uri, source }) => {
-        //   NotificationService.create(uri, source);
-        // });
         event.preventDefault();
       }
     }

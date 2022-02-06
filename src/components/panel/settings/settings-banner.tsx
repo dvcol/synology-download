@@ -1,12 +1,14 @@
 import { Button, Card, CardActions, CardContent, CardHeader, MenuItem, Stack } from '@mui/material';
 import React from 'react';
 import { NotificationHeader, NotificationLevel, NotificationLevelKeys, Notifications, NotificationsBanner } from '../../../models';
-import { FormInput, FormSwitch } from '../../form';
+import { FormInput, FormSwitch } from '../../common';
 import { useDispatch, useSelector } from 'react-redux';
 import { getNotifications, syncNotifications } from '../../../store';
 import { useForm } from 'react-hook-form';
+import { useI18n } from '../../../utils';
 
 export const SettingsBanner = () => {
+  const i18n = useI18n('panel', 'settings', 'banner');
   const dispatch = useDispatch();
   const notifications: Notifications = useSelector(getNotifications);
 
@@ -27,31 +29,29 @@ export const SettingsBanner = () => {
     if (isDirty) return 'primary';
     return isSubmitSuccessful ? 'success' : 'info';
   };
-
-  const title = NotificationHeader.banner;
   return (
     <Card raised={true}>
       <CardHeader
-        id={title}
-        title={title}
+        id={NotificationHeader.banner}
+        title={i18n('toggle_title')}
+        subheader={i18n('toggle_subheader')}
         titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
-        subheader="Note that notification banners use and are subject to specific OS APIs."
         subheaderTypographyProps={{ variant: 'subtitle2' }}
         action={<FormSwitch controllerProps={{ name: 'enabled', control }} formControlLabelProps={{ label: '' }} />}
         sx={{ p: '1rem 1rem 0' }}
       />
       <CardContent>
         <CardHeader
-          title={'Notification level'}
+          title={i18n('level_title')}
+          subheader={i18n('level_subheader')}
           titleTypographyProps={{ variant: 'subtitle2' }}
-          subheader="Levels are cumulative and show all notifications from a lower level."
           subheaderTypographyProps={{ variant: 'subtitle2' }}
           action={
             <FormInput
               controllerProps={{ name: 'level', control }}
               textFieldProps={{
                 select: true,
-                label: 'Notification level',
+                label: i18n('level_label'),
                 sx: { flex: '0 0 14rem', textTransform: 'capitalize', ml: '2rem' },
                 disabled: !getValues()?.enabled,
               }}
@@ -68,9 +68,9 @@ export const SettingsBanner = () => {
 
         <Card sx={{ p: '0.5rem 1rem', m: '0.5rem 0' }}>
           <CardHeader
-            title={'Background'}
+            title={i18n('background_title')}
+            subheader={i18n('background_subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
-            subheader={'Enables or disables background banner notifications.'}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
             action={
               <FormSwitch
@@ -81,9 +81,9 @@ export const SettingsBanner = () => {
             sx={{ p: '0.5rem 0' }}
           />
           <CardHeader
-            title={'Popup'}
+            title={i18n('popup_title')}
+            subheader={i18n('popup_subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
-            subheader={'Enables or disables banner notifications when the popup is open.'}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
             action={
               <FormSwitch controllerProps={{ name: 'scope.popup', control }} formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }} />
@@ -91,9 +91,9 @@ export const SettingsBanner = () => {
             sx={{ p: '0.5rem 0' }}
           />
           <CardHeader
-            title={'Completed tasks'}
+            title={i18n('completed_title')}
+            subheader={i18n('completed_subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
-            subheader={'Enables or disables banner for completed tasks.'}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
             action={
               <FormSwitch
@@ -104,9 +104,9 @@ export const SettingsBanner = () => {
             sx={{ p: '0.5rem 0' }}
           />
           <CardHeader
-            title={'Failed tasks'}
+            title={i18n('failed_title')}
+            subheader={i18n('failed_subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
-            subheader={'Enables or disables banner for failed tasks.'}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
             action={
               <FormSwitch
@@ -128,7 +128,7 @@ export const SettingsBanner = () => {
             disabled={!isValid}
             onClick={handleSubmit(onSubmit)}
           >
-            Save
+            {i18n('save', 'common', 'buttons')}
           </Button>
         </Stack>
       </CardActions>

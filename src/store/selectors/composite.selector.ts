@@ -17,7 +17,7 @@ export const getPollingEnabled = createSelector(
 );
 
 export const getTasksCount = createSelector(getTasks, getNotificationsCount, (tasks, { enabled, status }) =>
-  enabled ? tasks?.filter((t) => status?.includes(t?.status)).length ?? 0 : undefined
+  enabled ? { badge: tasks?.filter((t) => status?.includes(t?.status)).length ?? 0 } : undefined
 );
 
 export const getNotificationsBannerEnabled = createSelector(

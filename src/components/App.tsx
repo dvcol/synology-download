@@ -7,7 +7,7 @@ import { Navbar } from './navbar/navbar';
 import { Panel } from './panel/panel';
 import { Store } from 'redux';
 import { Store as ProxyStore } from 'webext-redux';
-import { NotificationStack } from './ui-element';
+import { NotificationStack } from './common';
 
 export const App = ({ store }: { store: Store | ProxyStore }) => {
   return (

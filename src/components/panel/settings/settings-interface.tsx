@@ -4,6 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { v4 as uuid } from 'uuid';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import React from 'react';
+import { i18n } from '../../../utils';
 
 export const SettingsInterface = <T extends { id: string }>({
   title,
@@ -51,7 +52,7 @@ export const SettingsInterface = <T extends { id: string }>({
             sx={{ borderRadius: '0' }}
             TransitionProps={{ unmountOnExit: true }}
           >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1bh-content" id="panel1bh-header" sx={{ overflow: 'hidden' }}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ overflow: 'hidden' }}>
               {summary(i)}
             </AccordionSummary>
             {detail(i)}
@@ -62,10 +63,10 @@ export const SettingsInterface = <T extends { id: string }>({
       <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
         <Stack direction="row" spacing={2} sx={{ justifyContent: 'flex-end', flex: '1 1 auto' }}>
           <Button variant="outlined" color="secondary" sx={{ flex: '0 1 8rem' }} startIcon={<SettingsBackupRestoreIcon />} onClick={_reset}>
-            Restore
+            {i18n('restore', 'common', 'buttons')}
           </Button>
           <Button variant="outlined" color="primary" sx={{ flex: '0 1 8rem' }} startIcon={<AddIcon />} onClick={_addNew}>
-            Add new
+            {i18n('add_new', 'common', 'buttons')}
           </Button>
         </Stack>
       </CardActions>

@@ -6,8 +6,10 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { getTab, getTabs, setNavbar, setStatuses } from '../../store';
 import NavbarTab from './navbar-tab';
 import NavbarMenu from './navbar-menu';
+import { useI18n } from '../../utils';
 
 export const Navbar = () => {
+  const i18n = useI18n('navbar');
   const dispatch = useDispatch();
 
   const tabs = useSelector(getTabs);
@@ -31,7 +33,7 @@ export const Navbar = () => {
     <AppBar color="inherit" position="sticky" sx={{ padding: '0 0.5rem' }}>
       <Toolbar disableGutters={true} sx={{ minHeight: 48, justifyContent: 'space-between' }}>
         <Tabs
-          aria-label="download filtered tabs"
+          aria-label={i18n('tabs_aria_label')}
           textColor="primary"
           indicatorColor="primary"
           variant="scrollable"

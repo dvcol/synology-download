@@ -10,14 +10,5 @@
   "app_title_options": {
     "message": "Synology Download Client Options",
     "description": "Options page title field."
-  },
-
-  "buttons__cancel": {
-    "message": "Cancel",
-    "description": "Generic cancel button label."
-  },
-  "buttons__confirm": {
-    "message": "Confirm",
-    "description": "Generic confirm button label."
   }
 }

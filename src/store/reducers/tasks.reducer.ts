@@ -1,13 +1,13 @@
 import { TasksReducers, tasksSlice } from '../slices';
 
-export const setCount = (count?: string, plural = false) => {
+export const setCount = (count?: number, plural = false) => {
   // TODO : move to thunk ?
-  chrome.action.setBadgeText({ text: count ?? '' }).then(() => console.debug('Badge changed to ', count));
-  chrome.action.setTitle({ title: `${count ?? 0} task${plural ? 's' : ''} currently on your Download Station` }).then();
+  chrome.action.setBadgeText({ text: `${count || ''}` }).then(() => console.debug('Badge changed to ', count));
+  chrome.action.setTitle({ title: `${count ?? 0} task${plural ? 's' : ''} active.` }).then();
 };
 
 export const setTasksCountReducer: TasksReducers['setTasksCount'] = (state, { payload: count }) => {
-  setCount(count ? count.toString() : '', count > 1);
+  setCount(count.badge, count.badge > 1);
   return { ...state, count };
 };
 
