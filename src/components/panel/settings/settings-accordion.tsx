@@ -4,9 +4,10 @@ import AddIcon from '@mui/icons-material/Add';
 import { v4 as uuid } from 'uuid';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import React from 'react';
-import { i18n } from '@src/utils';
+import { useI18n } from '@src/utils';
+import { InterfaceHeader } from '@src/models';
 
-export const SettingsInterface = <T extends { id: string }>({
+export const SettingsAccordion = <T extends { id: string }>({
   title,
   list,
   detail,
@@ -14,13 +15,14 @@ export const SettingsInterface = <T extends { id: string }>({
   addNew,
   reset,
 }: {
-  title: string;
+  title: InterfaceHeader;
   list: T[];
   summary: (item: T) => JSX.Element;
   detail: (item: T) => JSX.Element;
   addNew?: (id: string) => void;
   reset?: () => void;
 }) => {
+  const i18n = useI18n('panel', 'settings', 'accordion');
   const [expanded, setExpanded] = React.useState<string | false>(false);
 
   const handleExpand = (id: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -39,7 +41,7 @@ export const SettingsInterface = <T extends { id: string }>({
     <Card raised={true}>
       <CardHeader
         id={title}
-        title={title}
+        title={i18n(`title__${title}`)}
         titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
         sx={{ p: '1rem 1rem 0' }}
       />

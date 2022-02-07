@@ -3,7 +3,7 @@ export * from './settings-context-menu';
 export * from './settings-context-menus';
 export * from './settings-credentials';
 export * from './settings-header';
-export * from './settings-interface';
+export * from './settings-accordion';
 export * from './settings-polling';
 export * from './settings-quick-menu';
 export * from './settings-quick-menus';

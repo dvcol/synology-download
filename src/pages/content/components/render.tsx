@@ -1,17 +1,10 @@
 import React from 'react';
 import { render } from 'react-dom';
-
-import { Provider } from 'react-redux';
-import { ThemeProvider } from '@mui/material';
-import { darkTheme } from '@src/themes';
 import { proxyStore } from '@src/store';
 import { NotificationService, QueryService } from '@src/services';
 import { ModalInstance } from '@src/models';
-import { NotificationStack } from '@src/components';
 import createCache from '@emotion/cache';
-import { CacheProvider } from '@emotion/react';
-import { QuickMenuDialog } from './quick-menu-dialog';
-import { TaskDialog } from './task-dialog';
+import { ContentApp } from '@src/pages/content/components';
 
 /**
  * Open a modal popup for complex download actions
@@ -43,20 +36,5 @@ export const renderContentApp = () => {
       // Register as open
       chrome.runtime.connect({ name: ModalInstance.modal });
     })
-    .then(() =>
-      render(
-        <React.StrictMode>
-          <Provider store={proxyStore}>
-            <CacheProvider value={cache}>
-              <ThemeProvider theme={darkTheme()}>
-                <NotificationStack maxSnack={5} />
-                <QuickMenuDialog container={container} />
-                <TaskDialog container={container} />
-              </ThemeProvider>
-            </CacheProvider>
-          </Provider>
-        </React.StrictMode>,
-        app
-      )
-    );
+    .then(() => render(<ContentApp store={proxyStore} cache={cache} container={container} />, app));
 };

@@ -1,0 +1,18 @@
+{
+  "panel__settings__global__title": {
+    "message": "Global"
+  },
+  "panel__settings__global__subheader": {
+    "message": "Global settings for various interface elements."
+  },
+
+  "panel__settings__global__theme_title": {
+    "message": "Theme"
+  },
+  "panel__settings__global__theme_subheader": {
+    "message": "Select your theme, 'auto' infers theme from OS settings."
+  },
+  "panel__settings__global__theme_label": {
+    "message": "Theme"
+  }
+}

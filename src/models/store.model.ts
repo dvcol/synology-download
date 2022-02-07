@@ -1,8 +1,9 @@
 import { TaskTab } from './tab.model';
-import { Connection, Notifications, Polling } from './settings.model';
+import { Connection, Global, Notifications, Polling } from './settings.model';
 import { Task, TaskCount } from './task.model';
 import { ContextMenu, QuickMenu } from './menu.model';
-import { ThemeMode } from '@src/models/theme.model';
+import { Store } from 'redux';
+import { Store as ProxyStore } from 'webext-redux';
 
 export interface StateSlice {
   logged: boolean;
@@ -10,7 +11,6 @@ export interface StateSlice {
     popup: boolean;
     option: boolean;
   };
-  theme: ThemeMode;
 }
 
 export interface NavbarSlice {
@@ -29,6 +29,7 @@ export interface SettingsSlice {
   tabs: TaskTab[];
   menus: ContextMenu[];
   quick: QuickMenu[];
+  global: Global;
 }
 
 export interface RootSlice {
@@ -37,3 +38,5 @@ export interface RootSlice {
   tasks: TasksSlice;
   settings: SettingsSlice;
 }
+
+export type StoreOrProxy = Store | ProxyStore;

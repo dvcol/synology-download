@@ -1,7 +1,5 @@
 import { parse, ParsedQuery } from 'query-string';
 import { filter, map, Observable, Subject, tap } from 'rxjs';
-import { Store } from 'redux';
-import { Store as ProxyStore } from 'webext-redux';
 import { getCount, getNotificationsBannerEnabled, getNotificationsBannerLevel, getNotificationsSnack } from '@src/store/selectors';
 import { setTasksCount } from '@src/store/actions';
 import { store$ } from '@src/store';
@@ -14,12 +12,13 @@ import {
   NotificationType,
   SnackMessage,
   SnackNotification,
+  StoreOrProxy,
 } from '@src/models';
 import { VariantType } from 'notistack';
 
 // TODO use Mui Snackbar to do in popup & in context notifications
 export class NotificationService {
-  private static store: any | Store | ProxyStore;
+  private static store: any | StoreOrProxy;
   private static isProxy: boolean;
 
   private static readonly notify$ = new Subject<ChromeNotification>();
@@ -41,7 +40,7 @@ export class NotificationService {
         tap((n) => n && chrome.notifications.create(n))
       );
 
-  static init(store: Store | ProxyStore, isProxy = false): void {
+  static init(store: StoreOrProxy, isProxy = false): void {
     this.store = store;
     this.isProxy = isProxy;
 

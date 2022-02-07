@@ -1,19 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { CssBaseline, ThemeProvider } from '@mui/material';
-import { darkTheme } from '@src/themes';
+import { getTheme, subscribeToTheme } from '@src/themes';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Navbar } from './navbar/navbar';
 import { Panel } from './panel/panel';
-import { Store } from 'redux';
-import { Store as ProxyStore } from 'webext-redux';
 import { NotificationStack } from './common';
+import { StoreOrProxy } from '@src/models';
+import { Theme } from '@mui/material/styles/createTheme';
 
-export const App = ({ store }: { store: Store | ProxyStore }) => {
+export const App = ({ store }: { store: StoreOrProxy }) => {
+  const [theme, setTheme] = useState<Theme>(getTheme(store));
+
+  useEffect(() => {
+    const sub = subscribeToTheme(store, theme, setTheme);
+    return () => sub.unsubscribe();
+  }, []);
+
   return (
     <React.StrictMode>
       <Provider store={store}>
-        <ThemeProvider theme={darkTheme()}>
+        <ThemeProvider theme={theme}>
           <NotificationStack maxSnack={1} />
           <Router>
             <CssBaseline />

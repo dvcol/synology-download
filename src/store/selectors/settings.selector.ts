@@ -1,6 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { StoreState } from '../store';
-import { Connection } from '@src/models';
+import { Connection, ThemeMode } from '@src/models';
+import { darkTheme, lightTheme } from '@src/themes';
 
 export const getSettings = createSelector(
   (state: StoreState) => state,
@@ -39,3 +40,16 @@ export const getNotificationsSnack = createSelector(getNotifications, (notificat
 export const getNotificationsBanner = createSelector(getNotifications, (notifications) => notifications?.banner);
 
 export const getNotificationsBannerLevel = createSelector(getNotificationsBanner, (banner) => banner?.level);
+
+export const getGlobal = createSelector(getSettings, (setting) => setting?.global);
+
+export const getThemeMode = createSelector(getGlobal, ({ theme }) => {
+  switch (theme) {
+    case ThemeMode.dark:
+      return darkTheme;
+    case ThemeMode.light:
+      return lightTheme;
+    case ThemeMode.auto:
+      return null;
+  }
+});

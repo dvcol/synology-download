@@ -1,0 +1,20 @@
+{
+  "common__model__task_tab_type__all": {
+    "message": "All"
+  },
+  "common__model__task_tab_type__downloading": {
+    "message": "Downloading"
+  },
+  "common__model__task_tab_type__completed": {
+    "message": "Completed"
+  },
+  "common__model__task_tab_type__active": {
+    "message": "Active"
+  },
+  "common__model__task_tab_type__inactive": {
+    "message": "Inactive"
+  },
+  "common__model__task_tab_type__stopped": {
+    "message": "Stopped"
+  }
+}

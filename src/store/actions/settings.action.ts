@@ -19,6 +19,7 @@ const {
   saveQuickMenu,
   removeQuickMenu,
   resetQuickMenus,
+  syncInterface,
 } = settingsSlice.actions;
 
 // Export as named constants
@@ -40,4 +41,5 @@ export {
   saveQuickMenu,
   removeQuickMenu,
   resetQuickMenus,
+  syncInterface,
 };

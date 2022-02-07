@@ -15,6 +15,7 @@ import { Route, Routes } from 'react-router-dom';
 import { HashLink as Link } from 'react-router-hash-link';
 import { SettingsTabs } from './settings-tabs';
 import { useI18n } from '@src/utils';
+import { SettingsGlobal } from '@src/components/panel/settings/settings-global';
 
 export const Settings = () => {
   const i18n = useI18n('panel', 'settings');
@@ -24,7 +25,10 @@ export const Settings = () => {
 
   const tabs = [
     { label: SettingHeader.connection, links: [ConnectionHeader.credential, ConnectionHeader.polling] },
-    { label: SettingHeader.interface, links: [InterfaceHeader.tabs, InterfaceHeader.quickMenu, InterfaceHeader.contextMenu] },
+    {
+      label: SettingHeader.interface,
+      links: [InterfaceHeader.global, InterfaceHeader.tabs, InterfaceHeader.quickMenu, InterfaceHeader.contextMenu],
+    },
     { label: SettingHeader.notification, links: [NotificationHeader.count, NotificationHeader.snack, NotificationHeader.banner] },
   ];
 
@@ -82,12 +86,12 @@ export const Settings = () => {
             element={
               <React.Fragment>
                 <SettingsHeader label={SettingHeader.interface} />
+                {/*  TODO : settings clear/delete by tabs or global */}
+                <SettingsGlobal />
                 <SettingsTabs />
                 <SettingsQuickMenus />
                 <SettingsContextMenus />
                 {/* TODO: settings for folder display */}
-                {/*  TODO : settings clear/delete by tabs or global */}
-                {/* TODO: Toggle for dark theme / light theme / follow OS */}
               </React.Fragment>
             }
           />

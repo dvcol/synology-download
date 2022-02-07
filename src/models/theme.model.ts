@@ -1,4 +1,4 @@
-export const enum ThemeMode {
+export enum ThemeMode {
   light = 'light',
   dark = 'dark',
   auto = 'auto',

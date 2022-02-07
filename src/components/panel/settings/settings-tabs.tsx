@@ -6,7 +6,7 @@ import { defaultTabs, InterfaceHeader, TaskTab } from '@src/models';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SettingsTab } from './settings-tab';
-import { SettingsInterface } from '@src/components';
+import { SettingsAccordion } from '@src/components';
 
 export const SettingsTabs = () => {
   const dispatch = useDispatch();
@@ -20,7 +20,7 @@ export const SettingsTabs = () => {
   const reset = () => dispatch(resetTaskTabs());
 
   return (
-    <SettingsInterface
+    <SettingsAccordion
       title={InterfaceHeader.tabs}
       list={tabs}
       summary={(t) => (

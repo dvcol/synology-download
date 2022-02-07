@@ -57,7 +57,7 @@ export const FormTab = ({
           >
             {Object.values(TabType).map((tab) => (
               <MenuItem key={tab} value={tab} sx={{ textTransform: 'capitalize' }}>
-                {tab}
+                {i18n(tab, 'common', 'model', 'task_tab_type')}
               </MenuItem>
             ))}
           </FormInput>

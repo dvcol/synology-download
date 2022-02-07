@@ -1,19 +1,22 @@
 {
   "panel__settings__connection": {
-    "message": "connection"
+    "message": "Connection"
   },
   "panel__settings__connection_credentials": {
-    "message": "credentials"
+    "message": "Credentials"
   },
   "panel__settings__connection_polling": {
-    "message": "polling"
+    "message": "Polling"
   },
 
   "panel__settings__interface": {
-    "message": "interface"
+    "message": "Interface"
+  },
+  "panel__settings__interface_global": {
+    "message": "Global"
   },
   "panel__settings__interface_tabs": {
-    "message": "tabs"
+    "message": "Tabs"
   },
   "panel__settings__interface_quick_menu": {
     "message": "Quick Menu"
@@ -23,13 +26,13 @@
   },
 
   "panel__settings__notification": {
-    "message": "notification"
+    "message": "Notification"
   },
   "panel__settings__notification_snack": {
-    "message": "snackbar"
+    "message": "Snackbar"
   },
   "panel__settings__notification_banner": {
-    "message": "banners"
+    "message": "Banners"
   },
   "panel__settings__notification_tasks_count": {
     "message": "Tasks count"

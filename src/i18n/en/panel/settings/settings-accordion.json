@@ -1,0 +1,11 @@
+{
+  "panel__settings__accordion__title__tabs": {
+    "message": "Tabs"
+  },
+  "panel__settings__accordion__title__quickMenu": {
+    "message": "Quick menus"
+  },
+  "panel__settings__accordion__title__contextMenu": {
+    "message": "Context menus"
+  }
+}

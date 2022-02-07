@@ -4,6 +4,7 @@ import { TaskStatus } from './task.model';
 import { BannerNotificationScope, NotificationLevel, SnackNotificationScope } from './notification.model';
 import { OptionsObject } from 'notistack';
 import { defaultContextMenu, defaultQuickMenu } from './menu.model';
+import { ThemeMode } from '@src/models/theme.model';
 
 export enum SettingHeader {
   connection = 'connection',
@@ -23,6 +24,7 @@ export enum ConnectionHeader {
 }
 
 export enum InterfaceHeader {
+  global = 'global',
   tabs = 'tabs',
   quickMenu = 'quick_menu',
   contextMenu = 'context_menu',
@@ -107,6 +109,14 @@ export const defaultNotifications: Notifications = {
   },
 };
 
+export interface Global {
+  theme: ThemeMode;
+}
+
+export const defaultGlobal = {
+  theme: ThemeMode.auto,
+};
+
 export const defaultSettings: SettingsSlice = {
   notifications: defaultNotifications,
   connection: defaultConnection,
@@ -114,4 +124,5 @@ export const defaultSettings: SettingsSlice = {
   tabs: defaultTabs,
   menus: [defaultContextMenu],
   quick: [defaultQuickMenu],
+  global: defaultGlobal,
 };

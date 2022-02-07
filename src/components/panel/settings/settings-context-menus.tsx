@@ -2,10 +2,10 @@ import { Typography } from '@mui/material';
 import { resetContextMenu, saveContextMenu } from '@src/store/actions';
 import { getMenus } from '@src/store/selectors';
 import { StoreState } from '@src/store';
-import { ChromeMessageType, ContextMenu, defaultContextMenu } from '@src/models';
+import { ChromeMessageType, ContextMenu, defaultContextMenu, InterfaceHeader } from '@src/models';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SettingsContextMenu, SettingsInterface } from '@src/components';
+import { SettingsAccordion, SettingsContextMenu } from '@src/components';
 import { sendMessage, useI18n } from '@src/utils';
 
 export const SettingsContextMenus = () => {
@@ -27,8 +27,8 @@ export const SettingsContextMenus = () => {
   };
 
   return (
-    <SettingsInterface
-      title={i18n('title')}
+    <SettingsAccordion
+      title={InterfaceHeader.contextMenu}
       list={menus}
       summary={(c) => (
         <>

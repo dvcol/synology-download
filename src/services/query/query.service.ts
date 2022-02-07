@@ -12,18 +12,17 @@ import {
   FolderList,
   InfoResponse,
   LoginResponse,
+  StoreOrProxy,
   SynologyError,
   TaskList,
   TaskListOption,
 } from '@src/models';
 import { onMessage, sendMessage } from '@src/utils';
-import { Store } from 'redux';
-import { Store as ProxyStore } from 'webext-redux';
 import { EMPTY, Observable, tap } from 'rxjs';
 
 // TODO error handling
 export class QueryService {
-  private static store: any | Store | ProxyStore;
+  private static store: any | StoreOrProxy;
   private static isProxy: boolean;
 
   private static infoClient: SynologyInfoService;
@@ -33,7 +32,7 @@ export class QueryService {
 
   private static baseUrl: string;
 
-  static init(store: Store | ProxyStore, isProxy = false) {
+  static init(store: StoreOrProxy, isProxy = false) {
     this.store = store;
     this.isProxy = isProxy;
 

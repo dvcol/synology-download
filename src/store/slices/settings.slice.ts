@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Connection, ContextMenu, defaultSettings, Notifications, Polling, QuickMenu, SettingsSlice, TaskTab } from '@src/models';
+import { Connection, ContextMenu, defaultSettings, Global, Notifications, Polling, QuickMenu, SettingsSlice, TaskTab } from '@src/models';
 import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
 import { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
 import { addTo, removeFrom, setNestedReducer, setReducer, syncNestedReducer, syncReducer, syncRememberMeReducer } from '../reducers';
@@ -22,6 +22,7 @@ interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   saveQuickMenu: CaseReducer<S, PayloadAction<QuickMenu>>;
   removeQuickMenu: CaseReducer<S, PayloadAction<string>>;
   resetQuickMenus: CaseReducer<S>;
+  syncInterface: CaseReducer<S, PayloadAction<Partial<Global>>>;
 }
 
 export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'settings'>({
@@ -73,5 +74,6 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
         type: 'sync',
         payload: { quick: defaultSettings.quick },
       }),
+    syncInterface: (oldSettings, action) => syncNestedReducer<Global>(oldSettings, action, 'global'),
   } as SettingsReducers,
 });

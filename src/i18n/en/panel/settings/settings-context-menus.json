@@ -1,8 +1,4 @@
 {
-
-  "panel__settings__context_menus__title": {
-    "message": "Context menus"
-  },
   "panel__settings__context_menus__default_folder": {
     "message": "Default folder"
   }
