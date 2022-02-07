@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
-import { AuthMethod, CommonAPI, Endpoint, HttpMethod, HttpParameters, LoginResponse, SessionName } from '../../models';
-import { SynologyService } from './synology.service';
+import { AuthMethod, CommonAPI, Endpoint, HttpMethod, HttpParameters, LoginResponse, SessionName } from '@src/models';
+import { SynologyService } from '@src/services/http';
 
 // TODO : handle HTTPS & 2FA
 export class SynologyAuthService extends SynologyService {

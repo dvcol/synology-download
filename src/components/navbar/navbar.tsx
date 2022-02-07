@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '@mui/icons-material/Menu';
 import NavbarTab from './navbar-tab';
 import NavbarMenu from './navbar-menu';
-import { getTab, getTabs, setNavbar } from '@src/store';
+import { getTab, getTabs } from '@src/store/selectors';
+import { setNavbar } from '@src/store/actions';
 import { useI18n } from '@src/utils';
 
 export const Navbar = () => {

@@ -5,7 +5,8 @@ import { PortalProps } from '@mui/base/Portal';
 import { QueryService } from '@src/services';
 import { MaterialIcon, QuickMenu, TaskForm } from '@src/models';
 import { useSelector } from 'react-redux';
-import { getQuick, StoreState } from '@src/store';
+import { getQuick } from '@src/store/selectors';
+import { StoreState } from '@src/store';
 import { MuiIcon } from '@src/components';
 import { PopoverProps } from '@mui/material/Popover';
 

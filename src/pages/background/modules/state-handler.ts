@@ -1,6 +1,6 @@
-import { SettingsSlice, StateSlice } from '../../../models';
-import { stateSlice } from '../../../store';
-import { QueryService } from '../../../services';
+import { SettingsSlice, StateSlice } from '@src/models';
+import { stateSlice } from '@src/store/slices';
+import { QueryService } from '@src/services';
 
 /**
  * Restore Login state from settings

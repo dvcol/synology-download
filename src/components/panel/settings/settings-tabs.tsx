@@ -1,5 +1,7 @@
 import { Typography } from '@mui/material';
-import { getTabs, resetTaskTabs, saveTaskTab, StoreState } from '@src/store';
+import { resetTaskTabs, saveTaskTab } from '@src/store/actions';
+import { getTabs } from '@src/store/selectors';
+import { StoreState } from '@src/store';
 import { defaultTabs, InterfaceHeader, TaskTab } from '@src/models';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';

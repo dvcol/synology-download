@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Badge, BadgeProps, styled, Tab } from '@mui/material';
 import { ColorLevel, TabType, TaskTab } from '@src/models';
-import { getTaskCountByTab } from '@src/store';
+import { getTaskCountByTab } from '@src/store/selectors';
 
 type NavbarTabProps = { tab: TaskTab; [key: string]: any };
 

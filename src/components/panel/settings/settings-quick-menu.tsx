@@ -1,7 +1,7 @@
 import { AccordionDetails, Box, Button, Card, CardActions, CardHeader, ListItemIcon, ListItemText, MenuItem, Stack } from '@mui/material';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { removeQuickMenu, saveQuickMenu } from '@src/store';
+import { removeQuickMenu, saveQuickMenu } from '@src/store/actions';
 import { MaterialIcon, MaterialIconMap, QuickMenu } from '@src/models';
 import { useForm } from 'react-hook-form';
 import { FormExplorer, FormInput, FormSwitch, MuiIcon } from '@src/components/common';

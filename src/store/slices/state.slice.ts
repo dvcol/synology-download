@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { StateSlice } from '../../models';
+import { StateSlice, ThemeMode } from '@src/models';
 import { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
 import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
-import { syncLoggedReducer } from '../reducers';
+import { syncLoggedReducer } from '@src/store/reducers';
 
 export interface StateReducers<S = StateSlice> extends SliceCaseReducers<S> {
   setLogged: CaseReducer<S, PayloadAction<boolean>>;
@@ -16,6 +16,7 @@ const initialState: StateSlice = {
     popup: false,
     option: false,
   },
+  theme: ThemeMode.auto,
 };
 
 export const stateSlice = createSlice<StateSlice, StateReducers, 'state'>({

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Task, TaskCount, TasksSlice } from '../../models';
+import { Task, TaskCount, TasksSlice } from '@src/models';
 import { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
 import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
 import { setTasksCountReducer, syncTaskReducer } from '../reducers';

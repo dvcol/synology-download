@@ -1,23 +1,12 @@
-import { SynologyAuthService, SynologyDownloadService, SynologyFileService, SynologyInfoService } from '../http';
-import {
-  getActiveTasksIds,
-  getFinishedTasksIds,
-  getPassword,
-  getPausedTasksIds,
-  getTasksIds,
-  getUrl,
-  getUsername,
-  setLogged,
-  setTasks,
-  spliceTasks,
-  store$,
-} from '../../store';
-import { Store } from 'redux';
-import { Store as ProxyStore } from 'webext-redux';
-import { EMPTY, Observable, tap } from 'rxjs';
+import { SynologyAuthService, SynologyDownloadService, SynologyFileService, SynologyInfoService } from '@src/services/http';
+import { NotificationService } from '@src/services';
+import { getActiveTasksIds, getFinishedTasksIds, getPassword, getPausedTasksIds, getTasksIds, getUrl, getUsername } from '@src/store/selectors';
+import { setLogged, setTasks, spliceTasks } from '@src/store/actions';
+import { store$ } from '@src/store';
 import {
   ChromeMessageType,
   CommonResponse,
+  DownloadStationConfig,
   FileList,
   FileListOption,
   FolderList,
@@ -26,10 +15,11 @@ import {
   SynologyError,
   TaskList,
   TaskListOption,
-} from '../../models';
-import { NotificationService } from '../notification';
-import { DownloadStationConfig } from '../../models/download-station-config.model';
-import { onMessage, sendMessage } from '../../utils';
+} from '@src/models';
+import { onMessage, sendMessage } from '@src/utils';
+import { Store } from 'redux';
+import { Store as ProxyStore } from 'webext-redux';
+import { EMPTY, Observable, tap } from 'rxjs';
 
 // TODO error handling
 export class QueryService {

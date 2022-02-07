@@ -3,15 +3,15 @@ import {
   CommonResponse,
   Controller,
   DownloadStationAPI,
+  DownloadStationConfig,
   Endpoint,
   HttpMethod,
   HttpParameters,
   TaskList,
   TaskListOption,
   TaskMethod,
-} from '../../models';
-import { SynologyService } from './synology.service';
-import { DownloadStationConfig } from '../../models/download-station-config.model';
+} from '@src/models';
+import { SynologyService } from '@src/services/http';
 
 export class SynologyDownloadService extends SynologyService {
   constructor(isProxy = false, name = 'SynologyDownloadService', prefix = Controller.DownloadStation) {

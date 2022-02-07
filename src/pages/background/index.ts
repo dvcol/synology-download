@@ -1,9 +1,10 @@
 import { wrapStore } from 'webext-redux';
-import { setOption, setPopup, store } from '../../store';
-import { ChromeMessageType, ContextMenu, ModalInstance } from '../../models';
-import { buildContextMenu, NotificationService, PollingService, QueryService, removeContextMenu, saveContextMenu } from '../../services';
+import { setOption, setPopup } from '@src/store/actions';
+import { store } from '@src/store';
+import { ChromeMessageType, ContextMenu, ModalInstance } from '@src/models';
+import { buildContextMenu, NotificationService, PollingService, QueryService, removeContextMenu, saveContextMenu } from '@src/services';
 import { restoreSettings } from './modules/settings-handler';
-import { onMessage } from '../../utils';
+import { onMessage } from '@src/utils';
 import { Observable } from 'rxjs';
 import { restoreTasks } from './modules/tasks-handler';
 

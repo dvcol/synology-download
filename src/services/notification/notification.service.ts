@@ -2,8 +2,10 @@ import { parse, ParsedQuery } from 'query-string';
 import { filter, map, Observable, Subject, tap } from 'rxjs';
 import { Store } from 'redux';
 import { Store as ProxyStore } from 'webext-redux';
-import { getCount, getNotificationsBannerEnabled, getNotificationsBannerLevel, getNotificationsSnack, setTasksCount, store$ } from '../../store';
-import { bufferDebounceUnless, onMessage, sendMessage } from '../../utils';
+import { getCount, getNotificationsBannerEnabled, getNotificationsBannerLevel, getNotificationsSnack } from '@src/store/selectors';
+import { setTasksCount } from '@src/store/actions';
+import { store$ } from '@src/store';
+import { bufferDebounceUnless, onMessage, sendMessage } from '@src/utils';
 import {
   ChromeMessageType,
   ChromeNotification,
@@ -12,7 +14,7 @@ import {
   NotificationType,
   SnackMessage,
   SnackNotification,
-} from '../../models';
+} from '@src/models';
 import { VariantType } from 'notistack';
 
 // TODO use Mui Snackbar to do in popup & in context notifications

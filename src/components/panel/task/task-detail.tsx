@@ -1,12 +1,10 @@
 import React from 'react';
-import { Box, Button, Container, Grid, ListItem, ListItemText, Stack, Typography } from '@mui/material';
+import { Box, Button, Card, Grid, ListItem, ListItemText, Stack, Typography } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { computeProgress, formatBytes, Task, TaskStatus } from '@src/models';
 import PauseIcon from '@mui/icons-material/Pause';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { isDarkTheme } from '@src/themes';
-import { grey } from '@mui/material/colors';
 import { ConfirmationDialog, IconLoader, ProgressBar } from '@src/components';
 import { Observable } from 'rxjs';
 import { QueryService } from '@src/services';
@@ -99,13 +97,12 @@ export const TaskDetail = ({
         </Grid>
       </Grid>
       {!!task.additional?.file?.length && (
-        <Container
-          disableGutters
+        <Card
+          elevation={0}
           sx={{
             mt: '1rem',
             maxHeight: '20rem',
             overflow: 'auto',
-            bgcolor: isDarkTheme() ? grey[900] : grey[200],
           }}
         >
           {task.additional.file.map((f, i) => (
@@ -134,7 +131,7 @@ export const TaskDetail = ({
               />
             </ListItem>
           ))}
-        </Container>
+        </Card>
       )}
     </Typography>
   );

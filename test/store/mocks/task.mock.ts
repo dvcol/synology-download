@@ -1,4 +1,4 @@
-import { Task } from '../../../src/models';
+import { Task } from '@src/models';
 
 export const mockWaiting: Task = JSON.parse(
   '{\n' +

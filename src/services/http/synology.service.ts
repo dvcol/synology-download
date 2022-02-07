@@ -11,8 +11,8 @@ import {
   SynologyError,
   SynologyQueryArgs,
   SynologyQueryPayload,
-} from '../../models';
-import { onMessage, sendMessage, stringifyParams } from '../../utils';
+} from '@src/models';
+import { onMessage, sendMessage, stringifyParams } from '@src/utils';
 
 export class SynologyService extends BaseHttpService {
   protected sid?: string;

@@ -1,6 +1,7 @@
 import { Box, Button, Card, CardActions, CardContent, CardHeader, LinearProgress, MenuItem, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
-import { getConnection, getLogged, setConnection, syncConnection, syncRememberMe, urlReducer } from '@src/store';
+import { setConnection, syncConnection, syncRememberMe } from '@src/store/actions';
+import { getConnection, getLogged, urlReducer } from '@src/store/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { NotificationService, QueryService } from '@src/services';
 import { RegisterOptions, useForm } from 'react-hook-form';

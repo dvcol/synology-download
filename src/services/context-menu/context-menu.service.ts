@@ -1,6 +1,6 @@
-import { ChromeMessageType, ContextMenu, ContextMenuOnClickPayload } from '../../models';
+import { ChromeMessageType, ContextMenu, ContextMenuOnClickPayload } from '@src/models';
 import { EMPTY, forkJoin, Observable, Subscriber } from 'rxjs';
-import { sendTabMessage } from '../../utils';
+import { sendTabMessage } from '@src/utils';
 import OnClickData = chrome.contextMenus.OnClickData;
 import Tab = chrome.tabs.Tab;
 import UpdateProperties = chrome.contextMenus.UpdateProperties;

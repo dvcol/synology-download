@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { defaultTabs, NavbarSlice, TaskTab } from '../../models';
+import { defaultTabs, NavbarSlice, TaskTab } from '@src/models';
 import { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
 import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
 

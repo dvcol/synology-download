@@ -3,7 +3,7 @@ import { Store as ProxyStore } from 'webext-redux';
 
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { navbarSlice, settingsSlice, stateSlice, tasksSlice } from './slices';
-import { RootSlice } from '../models';
+import { RootSlice } from '@src/models';
 import { BehaviorSubject, distinctUntilChanged, finalize, map } from 'rxjs';
 
 export const proxyStore = new ProxyStore();

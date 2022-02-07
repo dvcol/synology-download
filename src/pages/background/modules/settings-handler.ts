@@ -1,7 +1,9 @@
-import { defaultSettings, SettingsSlice } from '../../../models';
-import { setNavbar, settingsSlice, store, syncSettings } from '../../../store';
-import { buildContextMenu } from '../../../services';
-import { parseJSON } from '../../../utils';
+import { defaultSettings, SettingsSlice } from '@src/models';
+import { setNavbar, syncSettings } from '@src/store/actions';
+import { settingsSlice } from '@src/store/slices';
+import { store } from '@src/store';
+import { buildContextMenu } from '@src/services';
+import { parseJSON } from '@src/utils';
 import { restoreSate } from './state-handler';
 
 /** Restore extension settings */

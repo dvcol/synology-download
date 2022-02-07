@@ -12,7 +12,7 @@ import {
   skipWhile,
   takeUntil,
 } from 'rxjs';
-import { ChromeMessage, ChromeMessageHandler, ChromeMessagePayload, ChromeMessageType, ChromeResponse } from '../models';
+import { ChromeMessage, ChromeMessageHandler, ChromeMessagePayload, ChromeMessageType, ChromeResponse } from '@src/models';
 import MessageSender = chrome.runtime.MessageSender;
 
 /**

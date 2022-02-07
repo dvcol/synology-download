@@ -4,7 +4,7 @@ import { ColorLevel, ColorLevelMap, getColorFromLevel, getLevelFromColor, Tab, T
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { AccordionDetails, Button, CardActions, CardHeader, MenuItem, Stack } from '@mui/material';
-import { removeTaskTab, saveTaskTab } from '@src/store';
+import { removeTaskTab, saveTaskTab } from '@src/store/actions';
 import { Control } from 'react-hook-form/dist/types/form';
 import { useI18n } from '@src/utils';
 

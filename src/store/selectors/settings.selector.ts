@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { StoreState } from '../store';
-import { Connection } from '../../models';
+import { Connection } from '@src/models';
 
 export const getSettings = createSelector(
   (state: StoreState) => state,

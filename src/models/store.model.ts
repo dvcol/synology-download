@@ -2,6 +2,7 @@ import { TaskTab } from './tab.model';
 import { Connection, Notifications, Polling } from './settings.model';
 import { Task, TaskCount } from './task.model';
 import { ContextMenu, QuickMenu } from './menu.model';
+import { ThemeMode } from '@src/models/theme.model';
 
 export interface StateSlice {
   logged: boolean;
@@ -9,6 +10,7 @@ export interface StateSlice {
     popup: boolean;
     option: boolean;
   };
+  theme: ThemeMode;
 }
 
 export interface NavbarSlice {

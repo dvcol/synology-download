@@ -1,6 +1,8 @@
-import { TasksSlice } from '../../../models';
-import { setTasks, store, tasksSlice } from '../../../store';
-import { parseJSON } from '../../../utils';
+import { TasksSlice } from '@src/models';
+import { setTasks } from '@src/store/actions';
+import { tasksSlice } from '@src/store/slices';
+import { store } from '@src/store';
+import { parseJSON } from '@src/utils';
 
 /** Restore extension tasks list */
 export const restoreTasks = () =>

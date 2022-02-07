@@ -1,9 +1,10 @@
 import { combineLatest, distinctUntilChanged, Subject, switchMap, timer } from 'rxjs';
 import { Store } from 'redux';
-import { getLogged, getPollingEnabled, getPollingInterval, store$ } from '../../store';
-import { defaultPolling } from '../../models';
+import { getLogged, getPollingEnabled, getPollingInterval } from '@src/store/selectors';
+import { store$ } from '@src/store';
+import { defaultPolling } from '@src/models';
 import { QueryService } from '../query';
-import { skipUntilRepeat } from '../../utils';
+import { skipUntilRepeat } from '@src/utils';
 
 export class PollingService {
   private static store: Store;

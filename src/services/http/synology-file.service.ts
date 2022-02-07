@@ -11,8 +11,8 @@ import {
   FolderSortBy,
   HttpMethod,
   HttpParameters,
-} from '../../models';
-import { SynologyService } from './synology.service';
+} from '@src/models';
+import { SynologyService } from '@src/services/http';
 
 export class SynologyFileService extends SynologyService {
   constructor(protected isProxy = false, protected name: string = 'SynologyFileService') {

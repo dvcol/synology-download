@@ -1,6 +1,8 @@
 import { Typography } from '@mui/material';
-import { getMenus, resetContextMenu, saveContextMenu, StoreState } from '@src/store';
-import { ChromeMessageType, ContextMenu, defaultContextMenu, InterfaceHeader } from '@src/models';
+import { resetContextMenu, saveContextMenu } from '@src/store/actions';
+import { getMenus } from '@src/store/selectors';
+import { StoreState } from '@src/store';
+import { ChromeMessageType, ContextMenu, defaultContextMenu } from '@src/models';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SettingsContextMenu, SettingsInterface } from '@src/components';
@@ -26,7 +28,7 @@ export const SettingsContextMenus = () => {
 
   return (
     <SettingsInterface
-      title={InterfaceHeader.contextMenu}
+      title={i18n('title')}
       list={menus}
       summary={(c) => (
         <>

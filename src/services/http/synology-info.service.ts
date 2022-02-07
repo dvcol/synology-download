@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
-import { CommonAPI, Endpoint, HttpMethod, HttpParameters, InfoMethod, InfoResponse } from '../../models';
-import { SynologyService } from './synology.service';
+import { CommonAPI, Endpoint, HttpMethod, HttpParameters, InfoMethod, InfoResponse } from '@src/models';
+import { SynologyService } from '@src/services/http';
 
 export class SynologyInfoService extends SynologyService {
   constructor(protected isProxy = false, protected name: string = 'SynologyInfoService') {
