@@ -15,6 +15,9 @@
   "navbar__menu__menu_remove": {
     "message": "Remove all"
   },
+  "navbar__menu__menu_refresh": {
+    "message": "Refresh all"
+  },
 
   "navbar__menu__menu_settings": {
     "message": "Settings"

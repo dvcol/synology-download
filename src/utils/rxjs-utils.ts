@@ -4,13 +4,17 @@ import {
   elementAt,
   filter,
   fromEventPattern,
+  MonoTypeOperatorFunction,
   Observable,
+  of,
   OperatorFunction,
   race,
   repeat,
   repeatWhen,
   skipWhile,
+  switchMap,
   takeUntil,
+  tap,
 } from 'rxjs';
 import { ChromeMessage, ChromeMessageHandler, ChromeMessagePayload, ChromeMessageType, ChromeResponse } from '@src/models';
 import MessageSender = chrome.runtime.MessageSender;
@@ -133,3 +137,20 @@ export const sendTabMessage = <M = ChromeMessagePayload, R = void>(tabId: number
       }
     });
   });
+
+/**
+ * Type for Before Operator which execute callback before observable stream subscription
+ */
+export type BeforeOperator = <T>(callback: () => void) => MonoTypeOperatorFunction<T>;
+
+/**
+ * Before Operator which execute callback before observable stream subscription
+ * @param callback the callback to execute
+ */
+export const before: BeforeOperator =
+  <T>(callback: () => void) =>
+  (source: Observable<T>) =>
+    of(null).pipe(
+      tap(callback),
+      switchMap(() => source)
+    );

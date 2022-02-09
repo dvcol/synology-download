@@ -8,6 +8,7 @@ import NavbarMenu from './navbar-menu';
 import { getTab, getTabs } from '@src/store/selectors';
 import { setNavbar } from '@src/store/actions';
 import { useI18n } from '@src/utils';
+import LoadingBar from '@src/components/navbar/loading-bar';
 
 export const Navbar = () => {
   const i18n = useI18n('navbar');
@@ -29,7 +30,8 @@ export const Navbar = () => {
     <NavbarTab tab={taskTab} value={index} component={Link} to="/" key={`${taskTab.id}-${index}`} />
   ));
   return (
-    <AppBar color="inherit" position="sticky" sx={{ padding: '0 0.5rem' }}>
+    <AppBar color="inherit" position="sticky" sx={{ mt: '-2px' }}>
+      <LoadingBar />
       <Toolbar disableGutters={true} sx={{ minHeight: 48, justifyContent: 'space-between' }}>
         <Tabs
           aria-label={i18n('tabs_aria_label')}

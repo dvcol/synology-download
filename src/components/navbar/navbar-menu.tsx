@@ -8,6 +8,7 @@ import PauseIcon from '@mui/icons-material/Pause';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LaunchIcon from '@mui/icons-material/Launch';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import NavbarMenuIcon from './navbar-menu-icon';
@@ -39,7 +40,7 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
     <React.Fragment>
       <Tooltip title="Actions and Settings">
         <IconButton
-          sx={{ ml: '0.5rem' }}
+          sx={{ m: '0 0.25rem' }}
           id="basic-button"
           aria-controls="basic-menu"
           aria-haspopup="true"
@@ -64,6 +65,7 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
         <NavbarMenuIcon label={i18n('menu_resume')} icon={<PlayArrowIcon />} onClick={() => QueryService.resumeAllTasks().subscribe()} />
         <NavbarMenuIcon label={i18n('menu_pause')} icon={<PauseIcon />} onClick={() => QueryService.pauseAllTasks().subscribe()} />
         <NavbarMenuIcon label={i18n('menu_remove')} icon={<DeleteSweepIcon />} onClick={() => setPrompt(true)} />
+        <NavbarMenuIcon label={i18n('menu_refresh')} icon={<RefreshIcon />} onClick={() => QueryService.listTasks().subscribe()} />
         <Divider />
         <NavbarMenuIcon label={i18n('menu_settings')} icon={<SettingsIcon />} component={Link} to="/settings" onClick={handleTab} />
         <NavbarMenuIcon label={i18n('menu_info')} icon={<InfoIcon />} component={Link} to="/info" onClick={handleTab} />

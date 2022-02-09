@@ -11,6 +11,7 @@ export interface StateSlice {
     popup: boolean;
     option: boolean;
   };
+  loading: number;
 }
 
 export interface NavbarSlice {

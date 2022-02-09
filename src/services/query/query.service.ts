@@ -1,7 +1,7 @@
 import { SynologyAuthService, SynologyDownloadService, SynologyFileService, SynologyInfoService } from '@src/services/http';
 import { NotificationService } from '@src/services';
 import { getActiveTasksIds, getFinishedTasksIds, getPassword, getPausedTasksIds, getTasksIds, getUrl, getUsername } from '@src/store/selectors';
-import { setLogged, setTasks, spliceTasks } from '@src/store/actions';
+import { addLoading, removeLoading, setLogged, setTasks, spliceTasks } from '@src/store/actions';
 import { store$ } from '@src/store';
 import {
   ChromeMessageType,
@@ -17,8 +17,8 @@ import {
   TaskList,
   TaskListOption,
 } from '@src/models';
-import { onMessage, sendMessage } from '@src/utils';
-import { EMPTY, Observable, tap } from 'rxjs';
+import { before, onMessage, sendMessage } from '@src/utils';
+import { EMPTY, finalize, Observable, tap } from 'rxjs';
 
 // TODO error handling
 export class QueryService {
@@ -77,15 +77,23 @@ export class QueryService {
     if (!QueryService.isReady) throw new Error('Query service is not ready');
   }
 
+  private static readyCheckOperator = <T>(source: Observable<T>) => source.pipe(before(this.readyCheck));
+
+  private static loadingOperator = <T>(source: Observable<T>) =>
+    source.pipe(
+      this.readyCheckOperator,
+      before(() => this.store.dispatch(addLoading())),
+      finalize(() => this.store.dispatch(removeLoading()))
+    );
+
   static info(): Observable<InfoResponse> {
-    this.readyCheck();
-    return this.infoClient.info();
+    return this.infoClient.info().pipe(this.loadingOperator);
   }
 
   static loginTest(username = getUsername(this.store.getState()), password = getPassword(this.store.getState())): Observable<LoginResponse> {
-    this.readyCheck();
     if (!username || !password) throw new Error(`Missing required username '${username}' or password  '${password}'`);
     return this.authClient.login(username, password).pipe(
+      this.readyCheckOperator,
       tap({
         error: (error) => {
           if (error instanceof SynologyError) {
@@ -113,8 +121,8 @@ export class QueryService {
   }
 
   static logout(): Observable<void> {
-    this.readyCheck();
     return this.authClient.logout().pipe(
+      this.readyCheckOperator,
       tap(() => {
         this.setSid();
         this.store.dispatch(setLogged(false));
@@ -123,30 +131,29 @@ export class QueryService {
   }
 
   static listFolders(readonly = true): Observable<FolderList> {
-    this.readyCheck();
-    return this.fileClient.listFolder(0, 0, readonly);
+    return this.fileClient.listFolder(0, 0, readonly).pipe(this.readyCheckOperator);
   }
 
   static listFiles(folderPath: string, filetype: 'all' | 'dir' = 'dir'): Observable<FileList> {
-    this.readyCheck();
-    return this.fileClient.listFile(folderPath, 0, 0, filetype, [FileListOption.perm]);
+    return this.fileClient.listFile(folderPath, 0, 0, filetype, [FileListOption.perm]).pipe(this.readyCheckOperator);
   }
 
   static config(): Observable<DownloadStationConfig> {
-    this.readyCheck();
-    return this.downloadClient.config();
+    return this.downloadClient.config().pipe(this.readyCheckOperator);
   }
 
   static listTasks(): Observable<TaskList> {
-    this.readyCheck();
-    return this.downloadClient
-      .listTasks(0, -1, [TaskListOption.detail, TaskListOption.file, TaskListOption.transfer])
-      .pipe(tap(({ tasks }) => this.store.dispatch(setTasks(tasks))));
+    return this.downloadClient.listTasks(0, -1, [TaskListOption.detail, TaskListOption.file, TaskListOption.transfer]).pipe(
+      this.loadingOperator,
+      tap(({ tasks }) => this.store.dispatch(setTasks(tasks)))
+    );
   }
 
   static resumeTask(id: string | string[]): Observable<CommonResponse[]> {
-    this.readyCheck();
-    return this.downloadClient.resumeTask(id).pipe(tap(() => this.listTasks().subscribe()));
+    return this.downloadClient.resumeTask(id).pipe(
+      this.loadingOperator,
+      tap(() => this.listTasks().subscribe())
+    );
   }
 
   static resumeAllTasks(ids: string[] = getPausedTasksIds(this.store.getState())): Observable<CommonResponse[]> {
@@ -154,8 +161,10 @@ export class QueryService {
   }
 
   static pauseTask(id: string | string[]): Observable<CommonResponse[]> {
-    this.readyCheck();
-    return this.downloadClient.pauseTask(id).pipe(tap(() => this.listTasks().subscribe()));
+    return this.downloadClient.pauseTask(id).pipe(
+      this.loadingOperator,
+      tap(() => this.listTasks().subscribe())
+    );
   }
 
   static pauseAllTasks(ids: string[] = getActiveTasksIds(this.store.getState())): Observable<CommonResponse[]> {
@@ -163,8 +172,8 @@ export class QueryService {
   }
 
   static createTask(uri: string, source?: string, destination?: string, username?: string, password?: string, unzip?: string): Observable<void> {
-    this.readyCheck();
     return this.downloadClient.createTask(uri, destination, username, password, unzip).pipe(
+      this.loadingOperator,
       tap({
         complete: () => {
           this.listTasks().subscribe();
@@ -179,13 +188,15 @@ export class QueryService {
   }
 
   static editTask(id: string | string[], destination: string): Observable<CommonResponse[]> {
-    this.readyCheck();
-    return this.downloadClient.editTask(id, destination).pipe(tap(() => this.listTasks().subscribe()));
+    return this.downloadClient.editTask(id, destination).pipe(
+      this.loadingOperator,
+      tap(() => this.listTasks().subscribe())
+    );
   }
 
   static deleteTask(id: string | string[], force = false): Observable<CommonResponse[]> {
-    this.readyCheck();
     return this.downloadClient.deleteTask(id, force).pipe(
+      this.loadingOperator,
       tap(() => {
         this.store.dispatch(spliceTasks(id));
         this.listTasks().subscribe();

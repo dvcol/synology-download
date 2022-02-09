@@ -1,5 +1,5 @@
 import { Box, Button, Card, CardActions, CardContent, CardHeader, LinearProgress, MenuItem, Stack, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { setConnection, syncConnection, syncRememberMe } from '@src/store/actions';
 import { getConnection, getLogged, urlReducer } from '@src/store/selectors';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +9,8 @@ import { Connection, ConnectionHeader } from '@src/models';
 import { finalize, Observable } from 'rxjs';
 import { FormCheckbox, FormInput } from '@src/components';
 import { SwitchBaseProps } from '@mui/material/internal/SwitchBase';
-import { useI18n } from '@src/utils';
+import { before, useI18n } from '@src/utils';
+import { useDebounceObservable } from '@src/utils/hooks-utils';
 
 // TODO : 2FA & HTTPS
 export const SettingsCredentials = () => {
@@ -36,7 +37,12 @@ export const SettingsCredentials = () => {
 
   type LoginError = { test?: boolean; login?: boolean };
   const [loginError, setLoginError] = useState<LoginError>({});
-  const [loading, setLoading] = useState<boolean>();
+  const [loading, setLoading] = useState<boolean>(false);
+
+  // Loading observable for debounce
+  const loading$ = useDebounceObservable<boolean>(setLoading);
+  // To avoid dangling loading events
+  useEffect(() => loading$.next(loading), [loading]);
 
   const setUrl = (data: Connection, type: keyof LoginError) => {
     try {
@@ -49,17 +55,16 @@ export const SettingsCredentials = () => {
   };
 
   const syncOnSubscribe = (data: Connection, query: (u?: string, p?: string) => Observable<unknown>, type: 'test' | 'login' | 'logout') => {
-    setUrl(data, type === 'test' ? 'test' : 'login');
-    reset(data);
-    setLoginError({});
-    const timeout = setTimeout(() => setLoading(true), 500);
     return query
       .bind(QueryService)(data?.username, data?.password)
       .pipe(
-        finalize(() => {
-          clearTimeout(timeout);
-          setLoading(false);
-        })
+        before(() => {
+          setUrl(data, type === 'test' ? 'test' : 'login');
+          reset(data);
+          setLoginError({});
+          loading$.next(true);
+        }),
+        finalize(() => setLoading(false))
       )
       .subscribe({
         complete: () => {
@@ -93,7 +98,13 @@ export const SettingsCredentials = () => {
 
   return (
     <Card raised={true}>
-      {loading && <LinearProgress />}
+      <LinearProgress
+        sx={{
+          height: '2px',
+          transition: 'opacity 0.3s linear',
+          opacity: loading ? 1 : 0,
+        }}
+      />
       <CardHeader
         id={ConnectionHeader.credential}
         title={i18n('title')}
@@ -174,7 +185,7 @@ export const SettingsCredentials = () => {
         />
         <Box>
           <Stack direction="row" spacing={2}>
-            <Button variant="outlined" color={getColor('test')} disabled={!isValid} onClick={handleSubmit(testLogin)}>
+            <Button variant="outlined" color={getColor('test')} disabled={loading || !isValid} onClick={handleSubmit(testLogin)}>
               {i18n('login_test')}
             </Button>
             <Button
@@ -182,7 +193,7 @@ export const SettingsCredentials = () => {
               color={getColor('login')}
               sx={{ width: '5rem' }}
               type="submit"
-              disabled={!isValid}
+              disabled={loading || !isValid}
               onClick={handleSubmit(loginLogout)}
             >
               {i18n(logged ? 'logout' : 'login')}
