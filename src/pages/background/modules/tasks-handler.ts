@@ -6,7 +6,7 @@ import { parseJSON } from '@src/utils';
 
 /** Restore extension tasks list */
 export const restoreTasks = () =>
-  chrome.storage.sync.get(tasksSlice.name, ({ tasks }) => {
+  chrome.storage.local.get(tasksSlice.name, ({ tasks }) => {
     console.debug('restoring tasks from chrome storage');
     const restoredTasks = parseJSON<TasksSlice['entities']>(tasks);
     // restore settings

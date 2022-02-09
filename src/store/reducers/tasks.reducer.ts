@@ -25,6 +25,6 @@ export const setTasksCountReducer: TasksReducers['setTasksCount'] = (state, { pa
 export const syncTaskReducer: TasksReducers['setTasks'] = (state, { payload: entities }) => {
   // TODO : Notification finished/error
   // TODO : move to thunk ?
-  chrome.storage.sync.set({ [tasksSlice.name]: JSON.stringify(entities) }, () => console.debug('Tasks sync success', entities));
+  chrome.storage.local.set({ [tasksSlice.name]: JSON.stringify(entities) }, () => console.debug('Tasks sync success', entities));
   return { ...state, entities };
 };

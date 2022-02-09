@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { debounceTime, Subject, tap } from 'rxjs';
+import { debounceTime, Subject } from 'rxjs';
 
 /**
  * React hook which call observer on subject inside react effect
@@ -10,12 +10,7 @@ export const useDebounceObservable = <T>(observer: (value: T) => void, timer = 2
   // Loading observable for debounce
   const [subject$] = useState(() => new Subject<T>());
   useEffect(() => {
-    const sub = subject$
-      .pipe(
-        debounceTime(timer),
-        tap((v) => console.log('observable', v))
-      )
-      .subscribe(observer);
+    const sub = subject$.pipe(debounceTime(timer)).subscribe(observer);
     return () => sub.unsubscribe();
   }, []);
 
