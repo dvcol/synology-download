@@ -1,6 +1,15 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { Tab, TabCount, Task, TaskTab, TaskTabSort } from '@src/models';
-import { getNotificationsBanner, getNotificationsCount, getPolling, getTab, getTabs, getTasks, isModalOpen } from '@src/store/selectors';
+import {
+  getNotificationsBanner,
+  getNotificationsCount,
+  getNotificationsSnack,
+  getPolling,
+  getTab,
+  getTabs,
+  getTasks,
+  isModalOpen,
+} from '@src/store/selectors';
 
 export const getTabOrFirst = createSelector(getTab, getTabs, (tab, tabs) => tab ?? (tabs?.length ? tabs[0] : tab));
 
@@ -18,6 +27,12 @@ export const getNotificationsBannerEnabled = createSelector(
   getNotificationsBanner,
   isModalOpen,
   ({ enabled, scope }, open) => enabled && (open ? scope?.popup : scope?.background)
+);
+
+export const getNotificationsSnackEnabled = createSelector(
+  getNotificationsSnack,
+  isModalOpen,
+  ({ enabled, scope }, open) => enabled && (open ? scope?.popup : scope?.content)
 );
 
 const nullSafeCompare =

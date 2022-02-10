@@ -1,6 +1,13 @@
 import { parse, ParsedQuery } from 'query-string';
 import { filter, map, Observable, Subject, tap } from 'rxjs';
-import { getCount, getNotificationsBannerEnabled, getNotificationsBannerLevel, getNotificationsSnack } from '@src/store/selectors';
+import {
+  getCount,
+  getNotificationsBannerEnabled,
+  getNotificationsBannerLevel,
+  getNotificationsSnack,
+  getNotificationsSnackEnabled,
+  getNotificationsSnackLevel,
+} from '@src/store/selectors';
 import { setTasksCount } from '@src/store/actions';
 import { store$ } from '@src/store';
 import { bufferDebounceUnless, onMessage, sendMessage } from '@src/utils';
@@ -60,8 +67,9 @@ export class NotificationService {
   static get snackNotifications$(): Observable<SnackNotification> {
     return this.snack$.pipe(
       filter(({ priority }) => {
-        const snack = getNotificationsSnack(this.store.getState());
-        return snack?.enabled && Number(priority) >= snack.level;
+        const enabled = getNotificationsSnackEnabled(this.store.getState());
+        const level = getNotificationsSnackLevel(this.store.getState());
+        return enabled && Number(priority) >= level;
       }),
       map((n) => this.handleSnackNotification(n))
     );
