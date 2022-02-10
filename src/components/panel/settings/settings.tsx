@@ -43,6 +43,7 @@ export const Settings = () => {
           sx={{
             flex: '1 1 auto',
             '& .MuiTab-root': { alignItems: 'flex-start' },
+            overflow: 'auto',
           }}
         >
           {tabs.map(({ label, links }, i) => [
@@ -53,7 +54,7 @@ export const Settings = () => {
               disableFocusRipple={true}
               component={Link}
               to={`${label}#${label}`}
-              sx={{ fontWeight: '700', fontSize: '0.75rem', backdropFilter: 'contrast(1.1)', whiteSpace: 'nowrap' }}
+              sx={{ fontWeight: '700', fontSize: '0.75rem', backdropFilter: 'contrast(1.1)', whiteSpace: 'nowrap', minHeight: '3rem' }}
             />,
             ...(links?.map((l, j) => (
               <Tab
@@ -63,7 +64,7 @@ export const Settings = () => {
                 disableFocusRipple={true}
                 component={Link}
                 to={`${label}#${l}`}
-                sx={{ backdropFilter: 'contrast(0.9)', whiteSpace: 'nowrap' }}
+                sx={{ backdropFilter: 'contrast(0.9)', whiteSpace: 'nowrap', minHeight: '2.78rem' }}
               />
             )) ?? []),
           ])}

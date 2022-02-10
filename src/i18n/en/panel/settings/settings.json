@@ -34,7 +34,7 @@
   "panel__settings__notification_banner": {
     "message": "Banners"
   },
-  "panel__settings__notification_tasks_count": {
-    "message": "Tasks count"
+  "panel__settings__notification_count": {
+    "message": "Badge count"
   }
 }

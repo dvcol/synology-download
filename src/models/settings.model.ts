@@ -13,9 +13,9 @@ export enum SettingHeader {
 }
 
 export enum NotificationHeader {
-  snack = 'snackbar',
-  banner = 'banners',
-  count = 'tasks_count',
+  snack = 'snack',
+  banner = 'banner',
+  count = 'count',
 }
 
 export enum ConnectionHeader {

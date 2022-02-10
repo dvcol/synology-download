@@ -1,4 +1,4 @@
-import { AccordionDetails, Button, Card, CardActions, CardHeader, Stack } from '@mui/material';
+import { AccordionDetails, Button, Card, CardActions, CardHeader, Collapse, Stack } from '@mui/material';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { removeContextMenu, saveContextMenu } from '@src/store/actions';
@@ -16,7 +16,14 @@ export const SettingsContextMenu = ({ menu }: { menu: ContextMenu }) => {
     control,
     getValues,
     formState: { isValid, isDirty, isSubmitSuccessful },
-  } = useForm<ContextMenu>({ mode: 'onChange', defaultValues: menu });
+  } = useForm<ContextMenu>({
+    mode: 'onChange',
+    defaultValues: {
+      ...menu,
+      modal: menu.modal ?? false,
+      destination: { custom: menu.destination?.custom ?? false, path: menu.destination?.path ?? '' },
+    },
+  });
 
   const onDelete = () => {
     sendMessage<string>({ type: ChromeMessageType.removeMenu, payload: menu.id }).subscribe(() => dispatch(removeContextMenu(menu.id)));
@@ -73,12 +80,14 @@ export const SettingsContextMenu = ({ menu }: { menu: ContextMenu }) => {
         action={<FormSwitch controllerProps={{ name: 'destination.custom', control }} formControlLabelProps={{ label: '' }} />}
         sx={{ p: '0.5rem 0' }}
       />
-      <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: '12rem' }}>
-        <FormExplorer
-          controllerProps={{ name: 'destination.path', control }}
-          explorerProps={{ flatten: true, disabled: !getValues()?.destination?.custom, startPath: menu?.destination?.path }}
-        />
-      </Card>
+      <Collapse in={getValues()?.destination?.custom}>
+        <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: '12rem' }}>
+          <FormExplorer
+            controllerProps={{ name: 'destination.path', control }}
+            explorerProps={{ flatten: true, disabled: !getValues()?.destination?.custom, startPath: menu?.destination?.path }}
+          />
+        </Card>
+      </Collapse>
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Stack direction="row" spacing={2}>
           <Button variant="outlined" color="error" sx={{ width: '5rem' }} type="submit" onClick={onDelete}>

@@ -47,7 +47,7 @@
   },
 
   "panel__settings__snack__tab_title": {
-    "message": "Popup"
+    "message": "Tab"
   },
   "panel__settings__snack__tab_subheader": {
     "message": "Enables or disables snackbar notifications inside active tabs."

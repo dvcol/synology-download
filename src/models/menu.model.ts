@@ -4,8 +4,8 @@ import { MaterialIcon } from './material-ui.model';
 export interface Menu {
   id: string;
   title: string;
-  modal?: boolean;
-  destination?: { custom?: boolean; path?: string };
+  modal: boolean;
+  destination: { custom: boolean; path?: string };
 }
 
 export interface QuickMenu extends Menu {
@@ -16,6 +16,8 @@ export const defaultQuickMenu: QuickMenu = {
   id: uuid(),
   title: 'Add to Synology Diskstation',
   icon: MaterialIcon.download,
+  modal: false,
+  destination: { custom: false },
 };
 
 export enum ContextType {
@@ -45,4 +47,6 @@ export const defaultContextMenu: ContextMenu = {
   id: uuid(),
   title: 'Add to Synology Diskstation',
   contexts: [ContextType.link, ContextType.audio, ContextType.video, ContextType.image, ContextType.selection],
+  modal: false,
+  destination: { custom: false },
 };

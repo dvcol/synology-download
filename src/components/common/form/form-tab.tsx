@@ -1,4 +1,4 @@
-import { Button, Card, CardHeader, Grid, MenuItem } from '@mui/material';
+import { Button, Card, CardHeader, Collapse, Grid, MenuItem } from '@mui/material';
 import { FormInput } from './form-input';
 import { ColorLevel, defaultNotifications, defaultTabs, getColorFromLevel, getLevelFromColor, Tab, TabType, TaskStatus, TaskTab } from '@src/models';
 import { FormCheckbox } from './form-checkbox';
@@ -129,12 +129,14 @@ export const FormTab = ({
         action={<FormSwitch controllerProps={{ name: 'destination.enabled', control }} formControlLabelProps={{ label: '' }} />}
         sx={{ p: '0.5rem 0' }}
       />
-      <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: '12rem' }}>
-        <FormExplorer
-          controllerProps={{ name: 'destination.folder', control }}
-          explorerProps={{ flatten: true, disabled: !getValues()?.destination?.enabled }}
-        />
-      </Card>
+      <Collapse in={getValues()?.destination?.enabled}>
+        <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: '12rem' }}>
+          <FormExplorer
+            controllerProps={{ name: 'destination.folder', control }}
+            explorerProps={{ flatten: true, disabled: !getValues()?.destination?.enabled }}
+          />
+        </Card>
+      </Collapse>
     </React.Fragment>
   );
 };
