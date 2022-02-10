@@ -1,6 +1,17 @@
 import { SynologyAuthService, SynologyDownloadService, SynologyFileService, SynologyInfoService } from '@src/services/http';
 import { NotificationService } from '@src/services';
-import { getActiveTasksIds, getFinishedTasksIds, getPassword, getPausedTasksIds, getTasksIds, getUrl, getUsername } from '@src/store/selectors';
+import {
+  getActiveTasksIds,
+  getErrorTasksIds,
+  getFinishedTasksIds,
+  getNotificationsBannerFailedEnabled,
+  getNotificationsBannerFinishedEnabled,
+  getPassword,
+  getPausedTasksIds,
+  getTasksIds,
+  getUrl,
+  getUsername,
+} from '@src/store/selectors';
 import { addLoading, removeLoading, setLogged, setTasks, spliceTasks } from '@src/store/actions';
 import { store$ } from '@src/store';
 import {
@@ -14,8 +25,10 @@ import {
   LoginResponse,
   StoreOrProxy,
   SynologyError,
+  Task,
   TaskList,
   TaskListOption,
+  TaskStatus,
 } from '@src/models';
 import { before, onMessage, sendMessage } from '@src/utils';
 import { EMPTY, finalize, Observable, tap } from 'rxjs';
@@ -143,10 +156,35 @@ export class QueryService {
   }
 
   static listTasks(): Observable<TaskList> {
+    // snapshot task before call
+    const extract = this.extract();
     return this.downloadClient.listTasks(0, -1, [TaskListOption.detail, TaskListOption.file, TaskListOption.transfer]).pipe(
       this.loadingOperator,
-      tap(({ tasks }) => this.store.dispatch(setTasks(tasks)))
+      tap(({ tasks }) => {
+        // notify if we have tasks
+        this.notifyTasks(extract, tasks);
+        this.store.dispatch(setTasks(tasks));
+      })
     );
+  }
+
+  private static extract(state = this.store.getState()): { finishedIds: Set<string>; errorIds: Set<string> } {
+    return { finishedIds: new Set(getFinishedTasksIds(state)), errorIds: new Set(getErrorTasksIds(state)) };
+  }
+
+  // TODO : group notifications
+  private static notifyTasks(
+    { finishedIds, errorIds }: { finishedIds: Set<string>; errorIds: Set<string> },
+    tasks: Task[],
+    state = this.store.getState()
+  ): void {
+    tasks?.forEach((t) => {
+      if (getNotificationsBannerFinishedEnabled(state) && TaskStatus.finished === t.status && !finishedIds.has(t.id)) {
+        NotificationService.taskFinished(t);
+      } else if (getNotificationsBannerFailedEnabled(state) && TaskStatus.error === t.status && !errorIds.has(t.id)) {
+        NotificationService.taskError(t);
+      }
+    });
   }
 
   static resumeTask(id: string | string[]): Observable<CommonResponse[]> {
@@ -177,7 +215,7 @@ export class QueryService {
       tap({
         complete: () => {
           this.listTasks().subscribe();
-          NotificationService.create(uri, source, destination);
+          NotificationService.taskCreated(uri, source, destination);
         },
         error: (err) => {
           console.error('task failed to create', err);

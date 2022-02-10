@@ -1,4 +1,3 @@
-import { parse, ParsedQuery } from 'query-string';
 import { filter, map, Observable, Subject, tap } from 'rxjs';
 import {
   getCount,
@@ -10,7 +9,7 @@ import {
 } from '@src/store/selectors';
 import { setTasksCount } from '@src/store/actions';
 import { store$ } from '@src/store';
-import { bufferDebounceUnless, onMessage, sendMessage } from '@src/utils';
+import { bufferDebounceUnless, onMessage, parseMagnetLink, sendMessage } from '@src/utils';
 import {
   ChromeMessageType,
   ChromeNotification,
@@ -20,6 +19,7 @@ import {
   SnackMessage,
   SnackNotification,
   StoreOrProxy,
+  Task,
 } from '@src/models';
 import { VariantType } from 'notistack';
 
@@ -152,16 +152,35 @@ export class NotificationService {
     this.buildAndSend({ ...notification, priority: NotificationLevel.error }, type);
   }
 
-  static create(uri: string, source?: string, destination?: string): void {
-    // TODO Handle more than just magnet URL
-    const parsed: ParsedQuery = parse(uri);
-    const title = typeof parsed?.dn === 'string' ? parsed?.dn : parsed?.dn?.shift() ?? uri;
+  static taskCreated(uri: string, source?: string, destination?: string): void {
     // TODO display error & delete/pause button after creation ?
     this.info({
       title: 'Task created successfully.',
-      message: `Title:\xa0${title}${destination ? '\nDestination folder: ' + destination : ''}`,
+      message: `Title:\xa0${parseMagnetLink(uri)}${destination ? '\nDestination folder: ' + destination : ''}`,
       contextMessage: source,
       success: true,
     });
+  }
+
+  static taskFinished(task: Task) {
+    this.info(
+      {
+        title: 'Task created successfully.',
+        message: `Title:\xa0${parseMagnetLink(task?.title) ?? task.id}`,
+        contextMessage: task.additional.detail.destination ? `Destination folder:\xa0${task.additional.detail.destination}` : undefined,
+      },
+      NotificationType.banner
+    );
+  }
+
+  static taskError(task: Task) {
+    this.error(
+      {
+        title: 'Task Failed.',
+        message: `Title:\xa0${parseMagnetLink(task?.title) ?? task.id}`,
+        contextMessage: task.status_extra?.error_detail ? `Error message:\xa0${task.status_extra.error_detail}` : undefined,
+      },
+      NotificationType.banner
+    );
   }
 }

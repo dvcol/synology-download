@@ -43,6 +43,10 @@ export const getNotificationsBanner = createSelector(getNotifications, (notifica
 
 export const getNotificationsBannerLevel = createSelector(getNotificationsBanner, (banner) => banner?.level);
 
+export const getNotificationsBannerFailedEnabled = createSelector(getNotifications, ({ banner }) => banner?.scope.failed);
+
+export const getNotificationsBannerFinishedEnabled = createSelector(getNotifications, ({ banner }) => banner?.scope.finished);
+
 export const getGlobal = createSelector(getSettings, (setting) => setting?.global);
 
 export const getThemeMode = createSelector(getGlobal, ({ theme }) => {

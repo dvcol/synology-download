@@ -24,3 +24,7 @@ export const getActiveTasksIds = createSelector(getActiveTasks, (tasks) => tasks
 export const getFinishedTasks = createSelector(getTasks, (tasks) => tasks?.filter((t) => t.status === TaskStatus.finished));
 
 export const getFinishedTasksIds = createSelector(getFinishedTasks, (tasks) => tasks?.map((t) => t.id));
+
+export const getErrorTasks = createSelector(getTasks, (tasks) => tasks?.filter((t) => t.status === TaskStatus.error));
+
+export const getErrorTasksIds = createSelector(getErrorTasks, (tasks) => tasks?.map((t) => t.id));

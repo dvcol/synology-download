@@ -17,7 +17,7 @@ export const TaskDialog = ({ container }: React.PropsWithRef<{ container?: Porta
     setOpen(false);
   };
   const onFormSubmit = ({ uri, source, destination }: TaskFormValid) => {
-    NotificationService.create(uri, source, destination?.path);
+    NotificationService.taskCreated(uri, source, destination?.path);
     onClose();
   };
 
