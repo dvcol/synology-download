@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Connection, ContextMenu, defaultSettings, Global, Notifications, Polling, QuickMenu, SettingsSlice, TaskTab } from '@src/models';
 import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
 import { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
-import { addTo, removeFrom, setNestedReducer, setReducer, syncNestedReducer, syncReducer, syncRememberMeReducer } from '../reducers';
+import { addTo, removeFrom, setBadgeReducer, setNestedReducer, setReducer, syncNestedReducer, syncReducer, syncRememberMeReducer } from '../reducers';
 
 interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   setSettings: CaseReducer<S, PayloadAction<S>>;
@@ -36,14 +36,7 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
     syncConnection: (oldSettings, action) => syncNestedReducer<Connection>(oldSettings, action, 'connection'),
     syncRememberMe: (oldSettings, action) => syncRememberMeReducer(oldSettings, action),
     syncPolling: (oldSettings, action) => syncNestedReducer<Polling>(oldSettings, action, 'polling'),
-    syncNotifications: (oldSettings, action) => {
-      const color = action?.payload?.count?.color;
-      // TODO : move to thunk ?
-      if (color !== oldSettings?.notifications?.count?.color) {
-        chrome.action.setBadgeBackgroundColor({ color: color ?? '' }).then(() => console.debug('Badge color changed to ', color));
-      }
-      return syncNestedReducer<Notifications>(oldSettings, action, 'notifications');
-    },
+    syncNotifications: (oldSettings, action) => setBadgeReducer(oldSettings, action),
     saveContextMenu: (oldSettings, action: PayloadAction<ContextMenu>): SettingsSlice =>
       addTo<ContextMenu, 'menus'>(oldSettings, action, 'menus', (o) => o.id === action?.payload.id),
     removeContextMenu: (oldSettings, action: PayloadAction<string>): SettingsSlice | void => {

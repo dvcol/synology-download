@@ -23,7 +23,6 @@ import {
 } from '@src/models';
 import { VariantType } from 'notistack';
 
-// TODO use Mui Snackbar to do in popup & in context notifications
 export class NotificationService {
   private static store: any | StoreOrProxy;
   private static isProxy: boolean;
@@ -154,7 +153,6 @@ export class NotificationService {
   }
 
   static taskCreated(uri: string, source?: string, destination?: string): void {
-    // TODO display error & delete/pause button after creation ?
     this.info({
       title: 'Task created successfully.',
       message: `Title:\xa0${parseMagnetLink(uri)}${destination ? '\nDestination folder: ' + destination : ''}`,

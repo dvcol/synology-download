@@ -87,7 +87,6 @@ export const Settings = () => {
             element={
               <React.Fragment>
                 <SettingsHeader label={SettingHeader.interface} />
-                {/*  TODO : settings clear/delete by tabs or global */}
                 <SettingsGlobal />
                 <SettingsTabs />
                 <SettingsQuickMenus />

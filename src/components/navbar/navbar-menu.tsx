@@ -60,7 +60,6 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
       >
         <NavbarMenuIcon label={i18n('menu_add')} icon={<AddLinkIcon />} component={Link} to="/add" onClick={handleTab} />
         <Divider />
-        {/*TODO: clear/resume/pause/remove by tabs or all*/}
         <NavbarMenuIcon label={i18n('menu_resume')} icon={<PlayArrowIcon />} onClick={() => QueryService.resumeAllTasks().subscribe()} />
         <NavbarMenuIcon label={i18n('menu_pause')} icon={<PauseIcon />} onClick={() => QueryService.pauseAllTasks().subscribe()} />
         <NavbarMenuIcon label={i18n('menu_clear')} icon={<ClearAllIcon />} onClick={() => QueryService.deleteFinishedTasks().subscribe()} />

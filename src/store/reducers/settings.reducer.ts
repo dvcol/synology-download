@@ -1,4 +1,4 @@
-import { ContextMenu, QuickMenu, SettingsSlice, TaskTab } from '@src/models';
+import { ContextMenu, Notifications, QuickMenu, SettingsSlice, TaskTab } from '@src/models';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { settingsSlice } from '../slices';
 import { parseJSON } from '@src/utils';
@@ -6,6 +6,27 @@ import { parseJSON } from '@src/utils';
 export const syncSettings = (settings: SettingsSlice): void => {
   // TODO : move to thunk ? and do notification
   chrome.storage.sync.set({ [settingsSlice.name]: JSON.stringify(settings) }, () => console.debug('Setting sync success', settings));
+};
+
+export const syncRememberMeReducer = (oldSettings: SettingsSlice, { payload: rememberMe }: PayloadAction<boolean>): SettingsSlice => {
+  const setSettings = { ...oldSettings, connection: { ...oldSettings.connection, rememberMe } };
+  // TODO : move to thunk ?
+  chrome.storage.sync.get(settingsSlice.name, ({ settings }) => {
+    const _settings = parseJSON<SettingsSlice>(settings);
+    const syncedSettings = { ..._settings, connection: { ..._settings?.connection, rememberMe } };
+    syncSettings(syncedSettings);
+  });
+
+  return setSettings;
+};
+
+export const setBadgeReducer = <T extends Notifications>(oldSettings: SettingsSlice, action: PayloadAction<Partial<T>>): SettingsSlice => {
+  const color = action?.payload?.count?.color;
+  if (color !== oldSettings?.notifications?.count?.color) {
+    // TODO : move to thunk ?
+    chrome.action.setBadgeBackgroundColor({ color: color ?? '' }).then(() => console.debug('Badge color changed to ', color));
+  }
+  return syncNestedReducer<T>(oldSettings, action, 'notifications');
 };
 
 export const setReducer = (oldSettings: SettingsSlice, action: PayloadAction<Partial<SettingsSlice>>): SettingsSlice => ({
@@ -27,18 +48,6 @@ export const syncNestedReducer = <T>(oldSettings: SettingsSlice, action: Payload
   const newSettings = setNestedReducer(oldSettings, action, name);
   syncSettings(newSettings);
   return newSettings;
-};
-
-export const syncRememberMeReducer = (oldSettings: SettingsSlice, { payload: rememberMe }: PayloadAction<boolean>): SettingsSlice => {
-  const setSettings = { ...oldSettings, connection: { ...oldSettings.connection, rememberMe } };
-  // TODO : move to thunk ?
-  chrome.storage.sync.get(settingsSlice.name, ({ settings }) => {
-    const _settings = parseJSON<SettingsSlice>(settings);
-    const syncedSettings = { ..._settings, connection: { ..._settings?.connection, rememberMe } };
-    syncSettings(syncedSettings);
-  });
-
-  return setSettings;
 };
 
 type Payloads = TaskTab | ContextMenu | QuickMenu;
