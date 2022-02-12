@@ -27,6 +27,15 @@ export const renderContentApp = () => {
   const container = shadowRoot.querySelector(`#${ModalInstance.modal}-container`) as HTMLElement;
   const cache = createCache({ key: `${ModalInstance.modal}-cache`, container });
 
+  /**
+   * TODO: Remove if/when persistent MV3 service worker are introduced
+   *
+   * Refresh connection port to service worker to keep it alive
+   * @see https://bugs.chromium.org/p/chromium/issues/detail?id=1152255
+   * @see https://stackoverflow.com/questions/66618136/persistent-service-worker-in-chrome-extension
+   */
+  const connect = () => chrome.runtime.connect({ name: ModalInstance.modal }).onDisconnect.addListener(connect);
+
   proxyStore
     .ready()
     .then(() => {
@@ -34,7 +43,7 @@ export const renderContentApp = () => {
       QueryService.init(proxyStore, true);
       NotificationService.init(proxyStore, true);
       // Register as open
-      chrome.runtime.connect({ name: ModalInstance.modal });
+      connect();
     })
     .then(() => render(<ContentApp store={proxyStore} cache={cache} container={container} />, app));
 };

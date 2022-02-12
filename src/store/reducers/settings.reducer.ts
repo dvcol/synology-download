@@ -62,7 +62,7 @@ const syncPayload = <P extends Payloads, K extends Keys>(oldSettings: SettingsSl
 
 export const addTo = <P extends Payloads, K extends Keys>(
   oldSettings: SettingsSlice,
-  { payload }: PayloadAction<P>,
+  payload: P,
   key: K,
   filter: (obj: P) => boolean
 ): SettingsSlice => {
@@ -78,7 +78,6 @@ export const addTo = <P extends Payloads, K extends Keys>(
 };
 export const removeFrom = <P extends Payloads, K extends Keys, T = string>(
   oldSettings: SettingsSlice,
-  action: PayloadAction<T>,
   key: K,
   filter: (obj: P) => boolean
 ): SettingsSlice => {

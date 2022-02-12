@@ -37,11 +37,11 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
     syncRememberMe: (oldSettings, action) => syncRememberMeReducer(oldSettings, action),
     syncPolling: (oldSettings, action) => syncNestedReducer<Polling>(oldSettings, action, 'polling'),
     syncNotifications: (oldSettings, action) => setBadgeReducer(oldSettings, action),
-    saveContextMenu: (oldSettings, action: PayloadAction<ContextMenu>): SettingsSlice =>
-      addTo<ContextMenu, 'menus'>(oldSettings, action, 'menus', (o) => o.id === action?.payload.id),
-    removeContextMenu: (oldSettings, action: PayloadAction<string>): SettingsSlice | void => {
+    saveContextMenu: (oldSettings, { payload }): SettingsSlice =>
+      addTo<ContextMenu, 'menus'>(oldSettings, payload, 'menus', (o) => o.id === payload?.id),
+    removeContextMenu: (oldSettings, { payload }): SettingsSlice | void => {
       if (oldSettings.menus?.length) {
-        return removeFrom<ContextMenu, 'menus'>(oldSettings, action, 'menus', (o) => o.id !== action?.payload);
+        return removeFrom<ContextMenu, 'menus'>(oldSettings, 'menus', (o) => o.id !== payload);
       }
     },
     resetContextMenu: (oldSettings): SettingsSlice =>
@@ -49,19 +49,15 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
         type: 'sync',
         payload: { menus: defaultSettings.menus },
       }),
-    saveTaskTab: (oldSettings, action: PayloadAction<TaskTab>): SettingsSlice =>
-      addTo<TaskTab, 'tabs'>(oldSettings, action, 'tabs', (o) => o.id === action?.payload.id),
-    removeTaskTab: (oldSettings, action: PayloadAction<string>): SettingsSlice =>
-      removeFrom<TaskTab, 'tabs'>(oldSettings, action, 'tabs', (o) => o.id !== action?.payload),
+    saveTaskTab: (oldSettings, { payload }): SettingsSlice => addTo<TaskTab, 'tabs'>(oldSettings, payload, 'tabs', (o) => o.id === payload.id),
+    removeTaskTab: (oldSettings, { payload }): SettingsSlice => removeFrom<TaskTab, 'tabs'>(oldSettings, 'tabs', (o) => o.id !== payload),
     resetTaskTabs: (oldSettings): SettingsSlice =>
       syncReducer(oldSettings, {
         type: 'sync',
         payload: { tabs: defaultSettings.tabs },
       }),
-    saveQuickMenu: (oldSettings, action: PayloadAction<QuickMenu>): SettingsSlice =>
-      addTo<QuickMenu, 'quick'>(oldSettings, action, 'quick', (o) => o.id === action?.payload.id),
-    removeQuickMenu: (oldSettings, action: PayloadAction<string>): SettingsSlice =>
-      removeFrom<QuickMenu, 'quick'>(oldSettings, action, 'quick', (o) => o.id !== action?.payload),
+    saveQuickMenu: (oldSettings, { payload }): SettingsSlice => addTo<QuickMenu, 'quick'>(oldSettings, payload, 'quick', (o) => o.id === payload?.id),
+    removeQuickMenu: (oldSettings, { payload }): SettingsSlice => removeFrom<QuickMenu, 'quick'>(oldSettings, 'quick', (o) => o.id !== payload),
     resetQuickMenus: (oldSettings): SettingsSlice =>
       syncReducer(oldSettings, {
         type: 'sync',
