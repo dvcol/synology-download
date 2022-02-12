@@ -8,7 +8,7 @@ import { onMessage } from '@src/utils';
 import { Observable } from 'rxjs';
 import { restoreTasks } from './modules/tasks-handler';
 
-console.log('This is the background page.');
+console.debug('Background service worker started.');
 
 // Wrap proxy store see https://github.com/tshaddix/webext-redux
 wrapStore(store);
@@ -45,10 +45,8 @@ chrome.runtime.onConnect.addListener((port) => {
 });
 
 // On message from chrome handle payload
-onMessage([ChromeMessageType.addMenu, ChromeMessageType.updateMenu, ChromeMessageType.removeMenu, ChromeMessageType.resetMenu], true).subscribe(
+onMessage([ChromeMessageType.addMenu, ChromeMessageType.updateMenu, ChromeMessageType.removeMenu, ChromeMessageType.resetMenu]).subscribe(
   ({ message: { type, payload }, sendResponse }) => {
-    console.log('type', type);
-
     const handle = <T>(obs$: Observable<T>) =>
       obs$.subscribe({
         next: () => {

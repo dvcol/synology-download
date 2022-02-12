@@ -23,7 +23,7 @@ export const TaskDialog = ({ container }: React.PropsWithRef<{ container?: Porta
 
   useEffect(() => {
     const abort$ = new Subject<void>();
-    onMessage<ContextMenuOnClickPayload>([ChromeMessageType.popup], true)
+    onMessage<ContextMenuOnClickPayload>([ChromeMessageType.popup])
       .pipe(takeUntil(abort$))
       .subscribe(({ message, sendResponse }) => {
         if (message?.payload) {

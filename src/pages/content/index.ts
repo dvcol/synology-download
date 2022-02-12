@@ -3,7 +3,10 @@ import { Subject } from 'rxjs';
 import { TaskForm } from '@src/models';
 import { renderContentApp } from './components';
 
-console.log('Content script works!');
+console.debug('Content script injected.');
+
+// TODO: keep MV3 alive ?
+// @see https://bugs.chromium.org/p/chromium/issues/detail?id=1152255
 
 export type AnchorPayload = { event: MouseEvent; anchor: Element | null; form: TaskForm };
 export const anchor$ = new Subject<AnchorPayload>();

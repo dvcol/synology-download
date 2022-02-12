@@ -25,7 +25,7 @@ export class SynologyService extends BaseHttpService {
   }
 
   listen(name = this.name): void {
-    onMessage<SynologyQueryPayload>([ChromeMessageType.query], true).subscribe(({ message: { payload }, sendResponse }) => {
+    onMessage<SynologyQueryPayload>([ChromeMessageType.query]).subscribe(({ message: { payload }, sendResponse }) => {
       if (payload?.id === name) {
         this.query(...payload?.args)
           .pipe(
@@ -52,7 +52,6 @@ export class SynologyService extends BaseHttpService {
     switch (method) {
       case HttpMethod.POST:
       case HttpMethod.post:
-        console.log('login', url);
         return this.post<HttpResponse<T>>(url, stringifyParams({ ...params, api, version }));
       case HttpMethod.PUT:
       case HttpMethod.put:

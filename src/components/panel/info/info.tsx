@@ -2,17 +2,13 @@ import React, { useEffect } from 'react';
 import { Box, Grid } from '@mui/material';
 import { ApiInfo, InfoResponse } from '@src/models';
 import { QueryService } from '@src/services';
-import { tap } from 'rxjs';
 
 // TODO: dak info, file info, task info
 export const Info = () => {
   const [infos, setInfos] = React.useState<InfoResponse>();
 
   useEffect(() => {
-    QueryService.isReady &&
-      QueryService.info()
-        .pipe(tap(console.log))
-        .subscribe((info) => setInfos(info));
+    QueryService.isReady && QueryService.info().subscribe((info) => setInfos(info));
   }, []);
 
   const ApiInfoDetail = ({ api }: { api: ApiInfo }) => (

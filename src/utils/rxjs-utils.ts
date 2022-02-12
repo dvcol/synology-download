@@ -86,7 +86,7 @@ export const bufferDebounceUnless: BufferDebounceUnless = (debounce, limit) => (
  * @param async if the listener waits for async response or not
  * @param types optional type filtering
  */
-export const onMessage = <M = ChromeMessagePayload, R = any>(types?: ChromeMessageType[], async = false): Observable<ChromeMessageHandler<M, R>> =>
+export const onMessage = <M = ChromeMessagePayload, R = any>(types?: ChromeMessageType[], async = true): Observable<ChromeMessageHandler<M, R>> =>
   fromEventPattern<ChromeMessageHandler<M, R>>(
     (handler) => {
       const wrapper = (message: ChromeMessage<M>, sender: MessageSender, sendResponse: (response?: ChromeResponse<R>) => void) => {
