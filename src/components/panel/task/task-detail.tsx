@@ -14,10 +14,12 @@ import { useI18n } from '@src/utils';
 export const TaskDetail = ({
   task,
   loading,
+  loadingIcon,
   buttonClick,
 }: {
   task: Task;
   loading: Record<string, boolean>;
+  loadingIcon: Record<string, boolean>;
   buttonClick: (button: string, request: Observable<any>, $event?: React.MouseEvent, delay?: number) => void;
 }) => {
   const i18n = useI18n('panel', 'task', 'detail');
@@ -47,7 +49,7 @@ export const TaskDetail = ({
         <Grid item xs={8} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Stack direction="row" spacing={2}>
             <Button
-              startIcon={<IconLoader icon={<PlayArrowIcon />} loading={loading?.play} props={{ size: '1.25rem', color: 'success' }} />}
+              startIcon={<IconLoader icon={<PlayArrowIcon />} loading={loadingIcon?.play} props={{ size: '1.25rem', color: 'success' }} />}
               variant="contained"
               color={TaskStatus.finished === task.status ? 'secondary' : 'success'}
               onClick={() => buttonClick('play', QueryService.resumeTask(task.id))}
@@ -56,7 +58,7 @@ export const TaskDetail = ({
               {i18n(TaskStatus.finished === task.status ? 'seed' : 'play', 'common', 'buttons')}
             </Button>
             <Button
-              startIcon={<IconLoader icon={<PauseIcon />} loading={loading?.pause} props={{ size: '1.25rem', color: 'warning' }} />}
+              startIcon={<IconLoader icon={<PauseIcon />} loading={loadingIcon?.pause} props={{ size: '1.25rem', color: 'warning' }} />}
               variant="contained"
               color="warning"
               onClick={() => buttonClick('pause', QueryService.pauseTask(task.id))}
@@ -65,7 +67,7 @@ export const TaskDetail = ({
               {i18n('pause', 'common', 'buttons')}
             </Button>
             <Button
-              startIcon={<IconLoader icon={<EditIcon />} loading={loading?.edit} props={{ size: '1.25rem', color: 'secondary' }} />}
+              startIcon={<IconLoader icon={<EditIcon />} loading={loadingIcon?.edit} props={{ size: '1.25rem', color: 'secondary' }} />}
               variant="outlined"
               color="secondary"
               onClick={() => setOpenEdit(true)}
@@ -75,7 +77,7 @@ export const TaskDetail = ({
             </Button>
             <TaskEdit open={openEdit} task={task} onFormCancel={() => setOpenEdit(false)} onFormSubmit={() => setOpenEdit(false)} />
             <Button
-              startIcon={<IconLoader icon={<DeleteIcon />} loading={loading?.delete} props={{ size: '1.25rem', color: 'error' }} />}
+              startIcon={<IconLoader icon={<DeleteIcon />} loading={loadingIcon?.delete} props={{ size: '1.25rem', color: 'error' }} />}
               variant="outlined"
               color="error"
               disabled={isDisabled()}

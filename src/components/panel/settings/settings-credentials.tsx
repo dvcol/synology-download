@@ -1,5 +1,5 @@
 import { Box, Button, Card, CardActions, CardContent, CardHeader, LinearProgress, MenuItem, Stack, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { setConnection, syncConnection, syncRememberMe } from '@src/store/actions';
 import { getConnection, getLogged, urlReducer } from '@src/store/selectors';
 import { useDispatch, useSelector } from 'react-redux';
@@ -38,40 +38,48 @@ export const SettingsCredentials = () => {
   type LoginError = { test?: boolean; login?: boolean };
   const [loginError, setLoginError] = useState<LoginError>({});
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingBar, setLoadingBar] = useState<boolean>(false);
 
   // Loading observable for debounce
-  const loading$ = useDebounceObservable<boolean>(setLoading);
-  // To avoid dangling loading events
-  useEffect(() => loading$.next(loading), [loading]);
+  const loadingBar$ = useDebounceObservable<boolean>(setLoadingBar);
 
-  const setUrl = (data: Connection, type: keyof LoginError) => {
+  const buildUrl = (data: Connection, type: keyof LoginError): string | undefined => {
     try {
-      QueryService.setBaseUrl(urlReducer(data));
+      return urlReducer(data);
     } catch (error) {
       setLoginError({ ...loginError, [type]: true });
-      console.debug('Failed to set url', error);
-      NotificationService.debug({ title: 'Failed to set url', message: JSON.stringify(error) });
+      console.debug('Failed to build url', error);
+      NotificationService.debug({ title: 'Failed to build url', message: JSON.stringify(error) });
     }
   };
 
-  const syncOnSubscribe = (data: Connection, query: (u?: string, p?: string) => Observable<unknown>, type: 'test' | 'login' | 'logout') => {
+  const syncOnSubscribe = (
+    data: Connection,
+    query: (u?: string, p?: string, b?: string) => Observable<unknown>,
+    type: 'test' | 'login' | 'logout'
+  ) => {
+    const baseUrl = buildUrl(data, type === 'test' ? 'test' : 'login');
+    if (!baseUrl) return;
+    reset(data); // To reset dirty tag
     return query
-      .bind(QueryService)(data?.username, data?.password)
+      .bind(QueryService)(data?.username, data?.password, baseUrl)
       .pipe(
         before(() => {
-          setUrl(data, type === 'test' ? 'test' : 'login');
-          reset(data);
           setLoginError({});
-          loading$.next(true);
+          setLoading(true);
+          loadingBar$.next(true);
         }),
-        finalize(() => setLoading(false))
+        finalize(() => {
+          setLoading(false);
+          setLoadingBar(false); // So there is no delay
+          loadingBar$.next(false); // So that observable data is not stale
+        })
       )
       .subscribe({
         complete: () => {
           // Todo logout, rework test
-          if (type === 'test') {
-            QueryService.setBaseUrl(urlReducer(connection));
-          } else {
+          if (type !== 'test') {
+            QueryService.setBaseUrl(baseUrl);
             dispatch(data?.rememberMe ? syncConnection(data) : setConnection(data));
           }
           setLoginError({ ...loginError, [type]: false });
@@ -79,7 +87,6 @@ export const SettingsCredentials = () => {
         },
         error: (error: Error) => {
           setLoginError({ ...loginError, [type]: true });
-          QueryService.setBaseUrl(urlReducer(connection));
           NotificationService.error({ title: `The ${type} has failed`, message: error?.message ?? error?.name, contextMessage: urlReducer(data) });
         },
       });
@@ -102,7 +109,7 @@ export const SettingsCredentials = () => {
         sx={{
           height: '2px',
           transition: 'opacity 0.3s linear',
-          opacity: loading ? 1 : 0,
+          opacity: loadingBar ? 1 : 0,
         }}
       />
       <CardHeader

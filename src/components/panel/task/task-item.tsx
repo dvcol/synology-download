@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { finalize, Observable } from 'rxjs';
 import { Accordion, AccordionDetails, AccordionSummary, Button, ButtonGroup, Tooltip } from '@mui/material';
 import TaskCard from './task-card';
@@ -20,20 +20,24 @@ export const TaskItem = React.forwardRef<HTMLDivElement, { task: Task; status?: 
 
   // Loading state
   const [loading, setLoading] = useState<Record<string, boolean>>({});
+  const [loadingIcon, setLoadingIcon] = useState<Record<string, boolean>>({});
 
   // Loading observable for debounce
-  const loading$ = useDebounceObservable<Record<string, boolean>>(setLoading, 300);
-  // To avoid dangling loading events
-  useEffect(() => loading$.next(loading), [loading]);
+  const loadingIcon$ = useDebounceObservable<Record<string, boolean>>(setLoadingIcon, 300);
 
   const onClick = <T,>(button: string, request: Observable<T>, $event?: React.MouseEvent, delay = 500): void => {
     request
       .pipe(
         before(() => {
           $event?.stopPropagation();
-          loading$.next({ ...loading, [button]: true });
+          setLoading({ ...loading, [button]: true });
+          loadingIcon$.next({ ...loading, [button]: true });
         }),
-        finalize(() => setLoading({ ...loading, [button]: false }))
+        finalize(() => {
+          setLoading({ ...loading, [button]: false });
+          setLoadingIcon({ ...loading, [button]: false }); // So there is no delay
+          loadingIcon$.next({ ...loading, [button]: false }); // So that observable data is not stale
+        })
       )
       .subscribe();
   };
@@ -64,7 +68,7 @@ export const TaskItem = React.forwardRef<HTMLDivElement, { task: Task; status?: 
                     setConfirm(true);
                   }}
                 >
-                  <IconLoader icon={<DeleteIcon />} loading={loading?.delete} props={{ size: '1rem', color: 'error' }} />
+                  <IconLoader icon={<DeleteIcon />} loading={loadingIcon?.delete} props={{ size: '1rem', color: 'error' }} />
                 </Button>
               </span>
             </Tooltip>
@@ -91,7 +95,7 @@ export const TaskItem = React.forwardRef<HTMLDivElement, { task: Task; status?: 
                     onClick={($event) => onClick('pause', QueryService.pauseTask(task.id), $event)}
                     disabled={isDisabled}
                   >
-                    <IconLoader icon={<PauseIcon />} loading={loading?.pause} props={{ size: '1rem', color: 'warning' }} />
+                    <IconLoader icon={<PauseIcon />} loading={loadingIcon?.pause} props={{ size: '1rem', color: 'warning' }} />
                   </Button>
                 </span>
               </Tooltip>
@@ -104,7 +108,7 @@ export const TaskItem = React.forwardRef<HTMLDivElement, { task: Task; status?: 
                     onClick={($event) => onClick(playOrSeed, QueryService.resumeTask(task.id), $event)}
                     disabled={isDisabled || ![TaskStatus.paused, TaskStatus.finished].includes(task.status)}
                   >
-                    <IconLoader icon={<PlayArrowIcon />} loading={loading?.play} props={{ size: '1rem', color: 'success' }} />
+                    <IconLoader icon={<PlayArrowIcon />} loading={loadingIcon?.play} props={{ size: '1rem', color: 'success' }} />
                   </Button>
                 </span>
               </Tooltip>
@@ -113,7 +117,7 @@ export const TaskItem = React.forwardRef<HTMLDivElement, { task: Task; status?: 
         )}
       </AccordionSummary>
       <AccordionDetails>
-        <TaskDetail task={task} loading={loading} buttonClick={onClick} />
+        <TaskDetail task={task} loading={loading} loadingIcon={loadingIcon} buttonClick={onClick} />
       </AccordionDetails>
     </Accordion>
   );

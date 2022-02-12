@@ -21,7 +21,7 @@ export const App = ({ store }: { store: StoreOrProxy }) => {
     <React.StrictMode>
       <Provider store={store}>
         <ThemeProvider theme={theme}>
-          <NotificationStack maxSnack={1} />
+          <NotificationStack maxSnack={2} />
           <Router>
             <CssBaseline />
             <Navbar />

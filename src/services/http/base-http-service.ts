@@ -9,8 +9,9 @@ export class BaseHttpService {
     this.baseUrl = baseUrl;
   }
 
-  buildUrl(url: string | URL, params?: HttpParameters): URL {
-    const builder = new URL(`${this.baseUrl}/${url}`);
+  buildUrl(url: BaseHttpRequest['url'], params?: HttpParameters): URL {
+    const _url = typeof url === 'string' || url instanceof URL ? `${this.baseUrl}/${url}` : `${url.base}/${url.path}`;
+    const builder = new URL(_url);
     if (params) {
       Object.entries(params)
         .map((e) => ({ key: e[0], value: e[1] }))
@@ -49,12 +50,12 @@ export class BaseHttpService {
     });
   }
 
-  get<T>(url: string, params?: HttpParameters, headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*' }): Observable<T> {
+  get<T>(url: BaseHttpRequest['url'], params?: HttpParameters, headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*' }): Observable<T> {
     return this.request({ url, method: HttpMethod.GET, params, headers });
   }
 
   post<T>(
-    url: string,
+    url: BaseHttpRequest['url'],
     body: Body,
     params?: HttpParameters,
     headers: HttpHeaders = {
@@ -72,7 +73,7 @@ export class BaseHttpService {
   }
 
   put<T>(
-    url: string,
+    url: BaseHttpRequest['url'],
     body: Body,
     params?: HttpParameters,
     headers: HttpHeaders = {
@@ -83,7 +84,7 @@ export class BaseHttpService {
     return this.request({ url, method: HttpMethod.PUT, params, headers, body });
   }
 
-  delete<T>(url: string, params?: HttpParameters, headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*' }): Observable<T> {
+  delete<T>(url: BaseHttpRequest['url'], params?: HttpParameters, headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*' }): Observable<T> {
     return this.request({ url, method: HttpMethod.DELETE, params, headers });
   }
 }

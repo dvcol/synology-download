@@ -25,8 +25,7 @@ export type HttpParameters = { [key: string]: string | string[] };
 
 /** Base Http request interface*/
 export interface BaseHttpRequest {
-  url: string | URL;
-  skipBase?: boolean;
+  url: string | URL | { path: string | URL; base: string | URL };
   method?: HttpMethod;
   headers?: HttpHeaders;
   params?: HttpParameters;

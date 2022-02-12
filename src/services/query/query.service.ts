@@ -104,9 +104,13 @@ export class QueryService {
     return this.infoClient.info().pipe(this.loadingOperator);
   }
 
-  static loginTest(username = getUsername(this.store.getState()), password = getPassword(this.store.getState())): Observable<LoginResponse> {
+  static loginTest(
+    username = getUsername(this.store.getState()),
+    password = getPassword(this.store.getState()),
+    baseUrl?: string
+  ): Observable<LoginResponse> {
     if (!username || !password) throw new Error(`Missing required username '${username}' or password  '${password}'`);
-    return this.authClient.login(username, password).pipe(
+    return this.authClient.login(username, password, baseUrl).pipe(
       this.readyCheckOperator,
       tap({
         error: (error) => {
@@ -120,8 +124,8 @@ export class QueryService {
     );
   }
 
-  static login(username?: string, password?: string): Observable<LoginResponse> {
-    return this.loginTest(username, password).pipe(
+  static login(username?: string, password?: string, baseUrl?: string): Observable<LoginResponse> {
+    return this.loginTest(username, password, baseUrl).pipe(
       tap({
         next: ({ sid }) => {
           this.setSid(sid);

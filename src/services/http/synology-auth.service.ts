@@ -8,13 +8,14 @@ export class SynologyAuthService extends SynologyService {
     super(isProxy, name);
   }
 
-  _do<T>(method: HttpMethod, params: HttpParameters, version = '1', api = CommonAPI.Auth, endpoint = Endpoint.Auth): Observable<T> {
-    return super.do<T>(method, params, version, api, endpoint);
+  _do<T>(method: HttpMethod, params: HttpParameters, version = '1', api = CommonAPI.Auth, endpoint = Endpoint.Auth, baseUrl?: string): Observable<T> {
+    return super.do<T>(method, params, version, api, endpoint, baseUrl);
   }
 
   login(
     account: string,
     passwd: string,
+    baseUrl?: string,
     otp_code?: string,
     deviceToken?: 'yes' | 'no',
     deviceName?: string,
@@ -29,7 +30,7 @@ export class SynologyAuthService extends SynologyService {
       passwd,
     };
     if (otp_code) params.otp_code = otp_code;
-    return this._do<LoginResponse>(HttpMethod.POST, params, '2');
+    return this._do<LoginResponse>(HttpMethod.POST, params, '2', CommonAPI.Auth, Endpoint.Auth, baseUrl);
   }
 
   logout(): Observable<void> {

@@ -9,8 +9,7 @@ export const NotificationStack = ({ maxSnack }: Pick<SnackbarProviderProps, 'max
   const [stack, setStack] = useState<Record<SnackbarKey, boolean>>({});
   const handleEntered = (node: HTMLElement, isAppearing: boolean, key: SnackbarKey) =>
     setStack((_stack) => {
-      const keys = Object.keys(_stack);
-      keys?.forEach((k) => (_stack[k] = false));
+      Object.keys(_stack)?.forEach((k) => (_stack[k] = false));
       return { ..._stack, [key]: true };
     });
   const handleExited = (node: HTMLElement, key: SnackbarKey) =>
