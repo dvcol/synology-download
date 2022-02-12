@@ -48,17 +48,16 @@ export const SettingsCredentials = () => {
       return urlReducer(data);
     } catch (error) {
       setLoginError({ ...loginError, [type]: true });
-      console.debug('Failed to build url', error);
-      NotificationService.debug({ title: 'Failed to build url', message: JSON.stringify(error) });
+      NotificationService.debug({ title: i18n('build_url__fail'), message: JSON.stringify(error) });
     }
   };
 
   const syncOnSubscribe = (
     data: Connection,
     query: (u?: string, p?: string, b?: string) => Observable<unknown>,
-    type: 'test' | 'login' | 'logout'
+    type: 'login_test' | 'login' | 'logout'
   ) => {
-    const baseUrl = buildUrl(data, type === 'test' ? 'test' : 'login');
+    const baseUrl = buildUrl(data, type === 'login_test' ? 'test' : 'login');
     if (!baseUrl) return;
     reset(data); // To reset dirty tag
     return query
@@ -77,22 +76,21 @@ export const SettingsCredentials = () => {
       )
       .subscribe({
         complete: () => {
-          // Todo logout, rework test
-          if (type !== 'test') {
+          if (type !== 'login_test') {
             QueryService.setBaseUrl(baseUrl);
             dispatch(data?.rememberMe ? syncConnection(data) : setConnection(data));
           }
           setLoginError({ ...loginError, [type]: false });
-          NotificationService.info({ title: 'Login/Logout', message: `The ${type} was successful`, contextMessage: urlReducer(data) });
+          NotificationService.info({ title: i18n(`${type}__success`), contextMessage: urlReducer(data), success: true });
         },
         error: (error: Error) => {
           setLoginError({ ...loginError, [type]: true });
-          NotificationService.error({ title: `The ${type} has failed`, message: error?.message ?? error?.name, contextMessage: urlReducer(data) });
+          NotificationService.error({ title: i18n(`${type}__fail`), message: error?.message ?? error?.name, contextMessage: urlReducer(data) });
         },
       });
   };
 
-  const testLogin = (data: Connection) => syncOnSubscribe(data, QueryService.loginTest, 'test');
+  const testLogin = (data: Connection) => syncOnSubscribe(data, QueryService.loginTest, 'login_test');
 
   const loginLogout = (data: Connection) => syncOnSubscribe(data, logged ? QueryService.logout : QueryService.login, logged ? 'logout' : 'login');
 

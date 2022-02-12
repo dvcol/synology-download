@@ -4,7 +4,7 @@ import { settingsSlice } from '../slices';
 import { parseJSON } from '@src/utils';
 
 export const syncSettings = (settings: SettingsSlice): void => {
-  // TODO : move to thunk ?
+  // TODO : move to thunk ? and do notification
   chrome.storage.sync.set({ [settingsSlice.name]: JSON.stringify(settings) }, () => console.debug('Setting sync success', settings));
 };
 

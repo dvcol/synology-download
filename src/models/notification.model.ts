@@ -38,7 +38,7 @@ export type ChromeNotification = NotificationOptions;
 
 export interface SnackMessage {
   title: string;
-  message: string;
+  message?: string;
   contextMessage?: string;
   priority?: NotificationLevel;
   success?: boolean;

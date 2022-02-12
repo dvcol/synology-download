@@ -36,5 +36,9 @@
   },
   "panel__settings__notification_count": {
     "message": "Badge count"
+  },
+
+  "panel__settings__banner__save__success": {
+    "message": "Settings saved"
   }
 }

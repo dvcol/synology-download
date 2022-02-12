@@ -75,9 +75,11 @@ export const SnackNotificationCard = forwardRef<HTMLDivElement, { id: SnackbarKe
           avatar={handleIcon({ sx: { fontSize: '18px' } })}
           action={
             <Box sx={{ marginLeft: 'auto' }}>
-              <ExpandMore expand={_expanded} onClick={handleExpandClick} aria-expanded={_expanded} aria-label="show more">
-                <ExpandMoreIcon sx={{ fontSize: '18px' }} />
-              </ExpandMore>
+              {(message || contextMessage) && (
+                <ExpandMore expand={_expanded} onClick={handleExpandClick} aria-expanded={_expanded} aria-label="show more">
+                  <ExpandMoreIcon sx={{ fontSize: '18px' }} />
+                </ExpandMore>
+              )}
               <IconButton onClick={handleDismiss}>
                 <CloseIcon sx={{ fontSize: '18px' }} />
               </IconButton>
@@ -90,20 +92,22 @@ export const SnackNotificationCard = forwardRef<HTMLDivElement, { id: SnackbarKe
           }}
           sx={{ padding: '8px 8px 8px 16px', bgcolor: handleColor() }}
         />
-        <Collapse in={_expanded} timeout="auto" unmountOnExit>
-          <CardContent sx={{ padding: '8px 8px 8px 16px !important', whiteSpace: 'pre-line' }}>
-            {message && (
-              <Typography variant={'body2'} sx={{ fontSize: '12px', overflowWrap: 'break-word' }}>
-                {message}
-              </Typography>
-            )}
-            {contextMessage && (
-              <Typography variant={'caption'} sx={{ fontSize: '10px', color: 'darkgrey', overflowWrap: 'break-word' }}>
-                {contextMessage}
-              </Typography>
-            )}
-          </CardContent>
-        </Collapse>
+        {(message || contextMessage) && (
+          <Collapse in={_expanded} timeout="auto" unmountOnExit>
+            <CardContent sx={{ padding: '8px 8px 8px 16px !important', whiteSpace: 'pre-line' }}>
+              {message && (
+                <Typography variant={'body2'} sx={{ fontSize: '12px', overflowWrap: 'break-word' }}>
+                  {message}
+                </Typography>
+              )}
+              {contextMessage && (
+                <Typography variant={'caption'} sx={{ fontSize: '10px', color: 'darkgrey', overflowWrap: 'break-word' }}>
+                  {contextMessage}
+                </Typography>
+              )}
+            </CardContent>
+          </Collapse>
+        )}
       </Card>
     );
   }
