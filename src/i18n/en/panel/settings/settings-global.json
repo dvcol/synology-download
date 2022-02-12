@@ -14,5 +14,15 @@
   },
   "panel__settings__global__theme_label": {
     "message": "Theme"
+  },
+
+  "panel__settings__global__actions_title": {
+    "message": "Menu actions"
+  },
+  "panel__settings__global__actions_subheader": {
+    "message": "Select the scope for the menu actions (clear, play, pause, ...)."
+  },
+  "panel__settings__global__actions_label": {
+    "message": "Scope"
   }
 }

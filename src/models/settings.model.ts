@@ -4,7 +4,6 @@ import { TaskStatus } from './task.model';
 import { BannerNotificationScope, NotificationLevel, SnackNotificationScope } from './notification.model';
 import { OptionsObject } from 'notistack';
 import { defaultContextMenu, defaultQuickMenu } from './menu.model';
-import { ThemeMode } from '@src/models/theme.model';
 
 export enum SettingHeader {
   connection = 'connection',
@@ -109,12 +108,25 @@ export const defaultNotifications: Notifications = {
   },
 };
 
+export enum ThemeMode {
+  light = 'light',
+  dark = 'dark',
+  auto = 'auto',
+}
+
+export enum ActionScope {
+  all = 'all',
+  tab = 'tab',
+}
+
 export interface Global {
   theme: ThemeMode;
+  actions: ActionScope;
 }
 
 export const defaultGlobal = {
   theme: ThemeMode.auto,
+  actions: ActionScope.all,
 };
 
 export const defaultSettings: SettingsSlice = {

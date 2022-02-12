@@ -49,6 +49,8 @@ export const getNotificationsBannerFinishedEnabled = createSelector(getNotificat
 
 export const getGlobal = createSelector(getSettings, (setting) => setting?.global);
 
+export const getActionScope = createSelector(getGlobal, (global) => global?.actions);
+
 export const getThemeMode = createSelector(getGlobal, ({ theme }) => {
   switch (theme) {
     case ThemeMode.dark:

@@ -50,6 +50,18 @@ export enum TaskStatus {
 }
 
 /**
+ * Enumeration for possible task types
+ */
+export enum TaskStatusType {
+  all = 'all',
+  active = 'active',
+  paused = 'paused',
+  finished = 'finished',
+  finishing = 'finishing',
+  error = 'error',
+}
+
+/**
  * Status_Extra object which provides extra information about task status.
  */
 export interface TaskStatusExtra {

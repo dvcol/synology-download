@@ -1,14 +1,14 @@
 import { SynologyAuthService, SynologyDownloadService, SynologyFileService, SynologyInfoService } from '@src/services/http';
 import { NotificationService } from '@src/services';
 import {
-  getActiveTasksIds,
-  getErrorTasksIds,
-  getFinishedTasksIds,
+  getActiveTasksIdsByActionScope,
+  geTasksIdsByStatusType,
+  getFinishedTasksIdsByActionScope,
   getNotificationsBannerFailedEnabled,
   getNotificationsBannerFinishedEnabled,
   getPassword,
-  getPausedTasksIds,
-  getTasksIds,
+  getPausedTasksIdsByActionScope,
+  getTasksIdsByActionScope,
   getUrl,
   getUsername,
 } from '@src/store/selectors';
@@ -29,6 +29,7 @@ import {
   TaskList,
   TaskListOption,
   TaskStatus,
+  TaskStatusType,
 } from '@src/models';
 import { before, onMessage, sendMessage } from '@src/utils';
 import { EMPTY, finalize, Observable, tap } from 'rxjs';
@@ -157,7 +158,7 @@ export class QueryService {
 
   static listTasks(): Observable<TaskList> {
     // snapshot task before call
-    const extract = this.extract();
+    const extract = geTasksIdsByStatusType(this.store.getState());
     return this.downloadClient.listTasks(0, -1, [TaskListOption.detail, TaskListOption.file, TaskListOption.transfer]).pipe(
       this.loadingOperator,
       tap(({ tasks }) => {
@@ -168,20 +169,11 @@ export class QueryService {
     );
   }
 
-  private static extract(state = this.store.getState()): { finishedIds: Set<string>; errorIds: Set<string> } {
-    return { finishedIds: new Set(getFinishedTasksIds(state)), errorIds: new Set(getErrorTasksIds(state)) };
-  }
-
-  // TODO : group notifications
-  private static notifyTasks(
-    { finishedIds, errorIds }: { finishedIds: Set<string>; errorIds: Set<string> },
-    tasks: Task[],
-    state = this.store.getState()
-  ): void {
+  private static notifyTasks({ finished, error }: Record<TaskStatusType, Set<Task['id']>>, tasks: Task[], state = this.store.getState()): void {
     tasks?.forEach((t) => {
-      if (getNotificationsBannerFinishedEnabled(state) && TaskStatus.finished === t.status && !finishedIds.has(t.id)) {
+      if (getNotificationsBannerFinishedEnabled(state) && TaskStatus.finished === t.status && !finished.has(t.id)) {
         NotificationService.taskFinished(t);
-      } else if (getNotificationsBannerFailedEnabled(state) && TaskStatus.error === t.status && !errorIds.has(t.id)) {
+      } else if (getNotificationsBannerFailedEnabled(state) && TaskStatus.error === t.status && !error.has(t.id)) {
         NotificationService.taskError(t);
       }
     });
@@ -194,8 +186,8 @@ export class QueryService {
     );
   }
 
-  static resumeAllTasks(ids: string[] = getPausedTasksIds(this.store.getState())): Observable<CommonResponse[]> {
-    return ids?.length ? this.resumeTask(ids.join(',')) : EMPTY;
+  static resumeAllTasks(ids: Set<Task['id']> = getPausedTasksIdsByActionScope(this.store.getState())): Observable<CommonResponse[]> {
+    return ids?.size ? this.resumeTask(Array.from(ids).join(',')) : EMPTY;
   }
 
   static pauseTask(id: string | string[]): Observable<CommonResponse[]> {
@@ -205,8 +197,8 @@ export class QueryService {
     );
   }
 
-  static pauseAllTasks(ids: string[] = getActiveTasksIds(this.store.getState())): Observable<CommonResponse[]> {
-    return ids?.length ? this.pauseTask(ids.join(',')) : EMPTY;
+  static pauseAllTasks(ids: Set<Task['id']> = getActiveTasksIdsByActionScope(this.store.getState())): Observable<CommonResponse[]> {
+    return ids?.size ? this.pauseTask(Array.from(ids).join(',')) : EMPTY;
   }
 
   static createTask(uri: string, source?: string, destination?: string, username?: string, password?: string, unzip?: string): Observable<void> {
@@ -242,11 +234,14 @@ export class QueryService {
     );
   }
 
-  static deleteAllTasks(ids: string[] = getTasksIds(this.store.getState()), force = false): Observable<CommonResponse[]> {
-    return ids?.length ? this.deleteTask(ids.join(','), force) : EMPTY;
+  static deleteAllTasks(ids: Set<Task['id']> = getTasksIdsByActionScope(this.store.getState()), force = false): Observable<CommonResponse[]> {
+    return ids?.size ? this.deleteTask(Array.from(ids).join(','), force) : EMPTY;
   }
 
-  static deleteFinishedTasks(ids: string[] = getFinishedTasksIds(this.store.getState()), force = false): Observable<CommonResponse[]> {
+  static deleteFinishedTasks(
+    ids: Set<Task['id']> = getFinishedTasksIdsByActionScope(this.store.getState()),
+    force = false
+  ): Observable<CommonResponse[]> {
     return this.deleteAllTasks(ids, force);
   }
 }

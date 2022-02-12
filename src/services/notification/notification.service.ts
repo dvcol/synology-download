@@ -77,18 +77,19 @@ export class NotificationService {
 
   private static handleBannerNotification(
     array: ChromeNotification[],
-    title: string,
-    message?: string,
-    contextMessage?: string
+    listTitle: string,
+    listMessage?: string,
+    listContextMessage?: string
   ): ChromeNotification | undefined {
     if (array?.length === 1) {
-      return array[0];
+      const { title, message, contextMessage, priority } = array[0];
+      return { title, message, contextMessage, priority, iconUrl: 'assets/icons/icon-64.png' };
     } else if (array?.length) {
       return {
         type: 'list',
-        title: Array.from(new Set(array?.map(({ title: t }) => t))).join(', ') ?? title,
-        message: message ?? '',
-        contextMessage,
+        title: Array.from(new Set(array?.map(({ title }) => title))).join(', ') ?? listTitle,
+        message: listMessage ?? '',
+        contextMessage: listContextMessage,
         iconUrl: 'assets/icons/icon-64.png',
         items: array.map(({ message: mMessage }, i) => ({ title: `${i}`, message: mMessage?.slice(0, 30) + '...' ?? '' })),
       };

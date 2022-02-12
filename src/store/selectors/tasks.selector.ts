@@ -1,5 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { TaskStatus } from '@src/models';
+import { Task, TaskStatus, TaskStatusType } from '@src/models';
 import { StoreState } from '../store';
 
 export const getTasks = createSelector(
@@ -7,24 +7,48 @@ export const getTasks = createSelector(
   (state) => state.tasks.entities
 );
 
-export const getTasksIds = createSelector(getTasks, (tasks) => tasks?.map((t) => t.id));
+export const geTasksIdsByStatusTypeReducer = (tasks: Task[]) =>
+  tasks?.reduce(
+    (map, { id, status }) => {
+      switch (status) {
+        case TaskStatus.downloading:
+        case TaskStatus.seeding:
+          map[TaskStatusType.active].add(id);
+          break;
+        case TaskStatus.paused:
+        case TaskStatus.waiting:
+        case TaskStatus.filehosting_waiting:
+          map[TaskStatusType.paused].add(id);
+          break;
+        case TaskStatus.finishing:
+        case TaskStatus.extracting:
+        case TaskStatus.hash_checking:
+          map[TaskStatusType.finishing].add(id);
+          break;
+        case TaskStatus.finished:
+          map[TaskStatusType.finished].add(id);
+          break;
+        case TaskStatus.error:
+          map[TaskStatusType.error].add(id);
+          break;
+      }
+      map[TaskStatusType.all].add(id);
+      return map;
+    },
+    Object.values(TaskStatusType).reduce((acc, type) => {
+      acc[type] = new Set<Task['id']>();
+      return acc;
+    }, {} as Record<TaskStatusType, Set<Task['id']>>)
+  );
 
-export const getPausedTasks = createSelector(getTasks, (tasks) =>
-  tasks?.filter((t) => [TaskStatus.waiting, TaskStatus.filehosting_waiting, TaskStatus.paused].includes(t.status))
-);
+export const geTasksIdsByStatusType = createSelector(getTasks, geTasksIdsByStatusTypeReducer);
 
-export const getPausedTasksIds = createSelector(getPausedTasks, (tasks) => tasks?.map((t) => t.id));
+export const getTasksIds = createSelector(geTasksIdsByStatusType, (tasksIds) => tasksIds[TaskStatusType.all]);
 
-export const getActiveTasks = createSelector(getTasks, (tasks) =>
-  tasks?.filter((t) => [TaskStatus.downloading, TaskStatus.seeding].includes(t.status))
-);
+export const getPausedTasksIds = createSelector(geTasksIdsByStatusType, (tasksIds) => tasksIds[TaskStatusType.paused]);
 
-export const getActiveTasksIds = createSelector(getActiveTasks, (tasks) => tasks?.map((t) => t.id));
+export const getActiveTasksIds = createSelector(geTasksIdsByStatusType, (tasksIds) => tasksIds[TaskStatusType.active]);
 
-export const getFinishedTasks = createSelector(getTasks, (tasks) => tasks?.filter((t) => t.status === TaskStatus.finished));
+export const getFinishedTasksIds = createSelector(geTasksIdsByStatusType, (tasksIds) => tasksIds[TaskStatusType.finished]);
 
-export const getFinishedTasksIds = createSelector(getFinishedTasks, (tasks) => tasks?.map((t) => t.id));
-
-export const getErrorTasks = createSelector(getTasks, (tasks) => tasks?.filter((t) => t.status === TaskStatus.error));
-
-export const getErrorTasksIds = createSelector(getErrorTasks, (tasks) => tasks?.map((t) => t.id));
+export const getErrorTasksIds = createSelector(geTasksIdsByStatusType, (tasksIds) => tasksIds[TaskStatusType.error]);

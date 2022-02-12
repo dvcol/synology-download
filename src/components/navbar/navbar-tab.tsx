@@ -2,12 +2,12 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Badge, BadgeProps, styled, Tab } from '@mui/material';
 import { ColorLevel, TabType, TaskTab } from '@src/models';
-import { getTaskCountByTab } from '@src/store/selectors';
+import { getTaskCountByTabId } from '@src/store/selectors';
 
 type NavbarTabProps = { tab: TaskTab; [key: string]: any };
 
 export const NavbarTab = ({ tab, ...props }: NavbarTabProps) => {
-  const count = useSelector(getTaskCountByTab)[tab.name];
+  const count = useSelector(getTaskCountByTabId)[tab.name];
 
   const a11yProps = (name: TabType | string) => ({
     id: `simple-tab-${name}`,

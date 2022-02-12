@@ -1,6 +1,6 @@
 import { Button, Card, CardActions, CardContent, CardHeader, MenuItem, Stack } from '@mui/material';
 import { getGlobal } from '@src/store/selectors';
-import { Global, InterfaceHeader, ThemeMode } from '@src/models';
+import { ActionScope, Global, InterfaceHeader, ThemeMode } from '@src/models';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormInput } from '@src/components';
@@ -19,7 +19,10 @@ export const SettingsGlobal = () => {
     reset,
     control,
     formState: { isValid, isDirty, isSubmitSuccessful },
-  } = useForm<Global>({ mode: 'onChange', defaultValues: { ...state, theme: state.theme ?? ThemeMode.auto } });
+  } = useForm<Global>({
+    mode: 'onChange',
+    defaultValues: { ...state, theme: state.theme ?? ThemeMode.auto, actions: state.actions ?? ActionScope.all },
+  });
 
   const onSubmit = (data: Global) => {
     dispatch(syncInterface(data));
@@ -43,7 +46,6 @@ export const SettingsGlobal = () => {
       />
       <CardContent>
         <CardHeader
-          id={InterfaceHeader.global}
           title={i18n('theme_title')}
           subheader={i18n('theme_subheader')}
           titleTypographyProps={{ variant: 'subtitle2' }}
@@ -60,6 +62,29 @@ export const SettingsGlobal = () => {
               {Object.values(ThemeMode).map((theme) => (
                 <MenuItem key={theme} value={theme} sx={{ textTransform: 'capitalize' }}>
                   {i18n(theme, 'common', 'model', 'theme_mode')}
+                </MenuItem>
+              ))}
+            </FormInput>
+          }
+          sx={{ p: '0.5rem 0' }}
+        />
+        <CardHeader
+          title={i18n('actions_title')}
+          subheader={i18n('actions_subheader')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          action={
+            <FormInput
+              controllerProps={{ name: 'actions', control }}
+              textFieldProps={{
+                select: true,
+                label: i18n('actions_label'),
+                sx: { flex: '0 0 10rem', textTransform: 'capitalize' },
+              }}
+            >
+              {Object.values(ActionScope).map((scope) => (
+                <MenuItem key={scope} value={scope} sx={{ textTransform: 'capitalize' }}>
+                  {i18n(scope, 'common', 'model', 'action_scope')}
                 </MenuItem>
               ))}
             </FormInput>

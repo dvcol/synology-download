@@ -1,13 +1,19 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { Tab, TabCount, Task, TaskTab, TaskTabSort } from '@src/models';
+import { ActionScope, Tab, TabCount, Task, TaskStatusType, TaskTab, TaskTabSort } from '@src/models';
 import {
+  getActionScope,
+  getActiveTasksIds,
+  geTasksIdsByStatusTypeReducer,
+  getFinishedTasksIds,
   getNotificationsBanner,
   getNotificationsCount,
   getNotificationsSnack,
+  getPausedTasksIds,
   getPolling,
   getTab,
   getTabs,
   getTasks,
+  getTasksIds,
   isModalOpen,
 } from '@src/store/selectors';
 
@@ -85,14 +91,14 @@ const doFilter = (tasks?: Task[], tab?: Tab): Task[] =>
       })
     : tasks ?? [];
 
-export const getFilteredTasks = createSelector(getTasks, getTabs, (tasks, tabs) =>
+export const getTasksByTabId = createSelector(getTasks, getTabs, (tasks, tabs) =>
   tabs?.reduce((acc, tab) => {
     acc[tab.id] = doSort(doFilter(tasks, tab), tab);
     return acc;
   }, {} as Record<string, Task[]>)
 );
 
-export const getTaskCountByTab = createSelector(getFilteredTasks, getTabs, (tasks, tabs) =>
+export const getTaskCountByTabId = createSelector(getTasksByTabId, getTabs, (tasks, tabs) =>
   tasks && tabs
     ? tabs?.reduce((acc, tab) => {
         acc[tab.name] = tasks[tab.id]?.length ?? 0;
@@ -105,6 +111,44 @@ export const getBadgeCount = createSelector(getTasks, getNotificationsCount, (ta
   tasks?.length ? doFilter(tasks, count)?.length ?? 0 : 0
 );
 
-export const getCount = createSelector(getTasks, getBadgeCount, getTaskCountByTab, getNotificationsCount, (tasks, badge, tabs, { enabled }) =>
+export const getCount = createSelector(getTasks, getBadgeCount, getTaskCountByTabId, getNotificationsCount, (tasks, badge, tabs, { enabled }) =>
   enabled ? { badge, total: tasks?.length ?? 0, tabs } : undefined
+);
+
+export const getTasksForActiveTab = createSelector(getTasksByTabId, getTab, (tasks, tab) => (tasks && tab ? tasks[tab.id] : []));
+
+export const geTasksIdsByStatusTypeForActiveTab = createSelector(getTasksForActiveTab, geTasksIdsByStatusTypeReducer);
+
+export const getTasksIdsForActiveTab = createSelector(geTasksIdsByStatusTypeForActiveTab, (tasksIds) => tasksIds[TaskStatusType.all]);
+
+export const getPausedTasksIdsForActiveTab = createSelector(geTasksIdsByStatusTypeForActiveTab, (tasksIds) => tasksIds[TaskStatusType.paused]);
+
+export const getActiveTasksIdsForActiveTab = createSelector(geTasksIdsByStatusTypeForActiveTab, (tasksIds) => tasksIds[TaskStatusType.active]);
+
+export const getFinishedTasksIdsForActiveTab = createSelector(geTasksIdsByStatusTypeForActiveTab, (tasksIds) => tasksIds[TaskStatusType.finished]);
+
+const taskIdsByActionScopeReducer = (tasks: Set<Task['id']>, activeTasks: Set<Task['id']>, scope: ActionScope) =>
+  ActionScope.all === scope ? tasks : activeTasks;
+
+export const getTasksIdsByActionScope = createSelector(getTasksIds, getTasksIdsForActiveTab, getActionScope, taskIdsByActionScopeReducer);
+
+export const getPausedTasksIdsByActionScope = createSelector(
+  getPausedTasksIds,
+  getPausedTasksIdsForActiveTab,
+  getActionScope,
+  taskIdsByActionScopeReducer
+);
+
+export const getActiveTasksIdsByActionScope = createSelector(
+  getActiveTasksIds,
+  getActiveTasksIdsForActiveTab,
+  getActionScope,
+  taskIdsByActionScopeReducer
+);
+
+export const getFinishedTasksIdsByActionScope = createSelector(
+  getFinishedTasksIds,
+  getFinishedTasksIdsForActiveTab,
+  getActionScope,
+  taskIdsByActionScopeReducer
 );
