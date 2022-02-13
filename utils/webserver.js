@@ -10,8 +10,8 @@ const WebpackDevServer = require('webpack-dev-server'),
   env = require('./env'),
   path = require('path');
 
-const options = config.chromeExtensionBoilerplate || {};
-const excludeEntriesToHotReload = options.notHotReload || [];
+const options = config.serverConfig || {};
+const excludeEntriesToHotReload = options.doNotHotReload || [];
 
 for (const entryName in config.entry) {
   if (excludeEntriesToHotReload.indexOf(entryName) === -1) {
@@ -21,7 +21,7 @@ for (const entryName in config.entry) {
 
 config.plugins = [new webpack.HotModuleReplacementPlugin()].concat(config.plugins || []);
 
-delete config.chromeExtensionBoilerplate;
+delete config.serverConfig;
 
 const compiler = webpack(config);
 

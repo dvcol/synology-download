@@ -32,8 +32,8 @@ const options = {
     background: path.join(__dirname, 'src', 'pages', 'background'),
     contentScript: path.join(__dirname, 'src', 'pages', 'content'),
   },
-  chromeExtensionBoilerplate: {
-    notHotReload: ['contentScript'],
+  serverConfig: {
+    doNotHotReload: ['contentScript'],
   },
   output: {
     path: path.resolve(__dirname, 'build'),

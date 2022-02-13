@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { proxyStore } from '@src/store';
+import { storeProxy } from '@src/store';
 import { NotificationService, QueryService } from '@src/services';
 import { ModalInstance } from '@src/models';
 import createCache from '@emotion/cache';
@@ -34,16 +34,19 @@ export const renderContentApp = () => {
    * @see https://bugs.chromium.org/p/chromium/issues/detail?id=1152255
    * @see https://stackoverflow.com/questions/66618136/persistent-service-worker-in-chrome-extension
    */
-  const connect = () => chrome.runtime.connect({ name: ModalInstance.modal }).onDisconnect.addListener(connect);
+  const connect = () => {
+    console.debug(`connecting ${ModalInstance.modal}`, new Date().toISOString());
+    chrome.runtime.connect({ name: ModalInstance.modal }).onDisconnect.addListener(connect);
+  };
 
-  proxyStore
+  storeProxy
     .ready()
     .then(() => {
       // Pass store to services and init
-      QueryService.init(proxyStore, true);
-      NotificationService.init(proxyStore, true);
+      QueryService.init(storeProxy, true);
+      NotificationService.init(storeProxy, true);
       // Register as open
       connect();
     })
-    .then(() => render(<ContentApp store={proxyStore} cache={cache} container={container} />, app));
+    .then(() => render(<ContentApp store={storeProxy} cache={cache} container={container} />, app));
 };

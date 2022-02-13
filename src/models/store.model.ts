@@ -3,7 +3,7 @@ import { Connection, Global, Notifications, Polling } from './settings.model';
 import { Task, TaskCount } from './task.model';
 import { ContextMenu, QuickMenu } from './menu.model';
 import { Store } from 'redux';
-import { Store as ProxyStore } from 'webext-redux';
+import { Store as StoreProxy } from 'webext-redux';
 
 export interface StateSlice {
   logged: boolean;
@@ -40,4 +40,4 @@ export interface RootSlice {
   settings: SettingsSlice;
 }
 
-export type StoreOrProxy = Store | ProxyStore;
+export type StoreOrProxy = Store | StoreProxy;

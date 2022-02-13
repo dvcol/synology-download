@@ -6,7 +6,6 @@ import { setOption, setPopup } from '@src/store/actions';
 export const onConnect = () => {
   // TODO: move to rxjs ?
   chrome.runtime.onConnect.addListener((port) => {
-    if (port.name) console.log(port.name);
     switch (port.name) {
       // Dropdown popup
       case ModalInstance.popup:
@@ -24,6 +23,7 @@ export const onConnect = () => {
         break;
       // Content script
       case ModalInstance.modal:
+        console.debug(`connecting ${port.name}`, new Date().toISOString());
         /**
          * TODO: Remove if/when persistent MV3 service worker are introduced
          *
@@ -31,7 +31,11 @@ export const onConnect = () => {
          * @see https://bugs.chromium.org/p/chromium/issues/detail?id=1152255
          * @see https://stackoverflow.com/questions/66618136/persistent-service-worker-in-chrome-extension
          */
-        setTimeout(() => port.disconnect(), 295e3);
+        setTimeout(() => {
+          console.debug(`disconnecting ${port.name}`, new Date().toISOString());
+          port.disconnect();
+        }, 295e3);
+
         break;
     }
   });

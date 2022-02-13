@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { getTheme, subscribeToTheme } from '@src/themes';
@@ -9,7 +9,7 @@ import { NotificationStack } from './common';
 import { StoreOrProxy } from '@src/models';
 import { Theme } from '@mui/material/styles/createTheme';
 
-export const App = ({ store }: { store: StoreOrProxy }) => {
+export const App: FC<{ store: StoreOrProxy }> = ({ store }) => {
   const [theme, setTheme] = useState<Theme>(getTheme(store));
 
   useEffect(() => {

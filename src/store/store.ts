@@ -1,12 +1,9 @@
 import { ReducersMapObject, Store } from 'redux';
-import { Store as ProxyStore } from 'webext-redux';
 
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { navbarSlice, settingsSlice, stateSlice, tasksSlice } from './slices';
 import { RootSlice, StoreOrProxy } from '@src/models';
 import { BehaviorSubject, distinctUntilChanged, finalize, map } from 'rxjs';
-
-export const proxyStore = new ProxyStore();
 
 const reducers: ReducersMapObject<RootSlice> = {
   [stateSlice.name]: stateSlice.reducer,
