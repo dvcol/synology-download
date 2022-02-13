@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Button, Card, Grid, ListItem, ListItemText, Stack, Typography } from '@mui/material';
+import { Button, Card, Grid, ListItem, ListItemText, Stack, Typography } from '@mui/material';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { computeProgress, formatBytes, Task, TaskStatus } from '@src/models';
 import PauseIcon from '@mui/icons-material/Pause';
@@ -29,24 +29,23 @@ export const TaskDetail = ({
 
   const createdTime = task.additional?.detail?.create_time ? new Date(task.additional?.detail?.create_time * 1000) : undefined;
   const createdAt = createdTime
-    ? i18n({
-        key: 'created_at',
-        substitutions: [
-          `${createdTime.toLocaleDateString()} ${createdTime.toLocaleTimeString(navigator.language, {
-            hour: '2-digit',
-            minute: '2-digit',
-          })}`,
-        ],
-      })
+    ? `${createdTime.toLocaleDateString()} ${createdTime.toLocaleTimeString(navigator.language, {
+        hour: '2-digit',
+        minute: '2-digit',
+      })}`
     : '';
   return (
     <Typography component="span" variant="body2">
       <Grid container sx={{ alignItems: 'center' }}>
-        <Grid item xs={4}>
-          <Box>{`${i18n('created')}${createdAt}${i18n({ key: 'created_by', substitutions: [task.username] })}`}</Box>
-          <Box>{`${i18n('destination')}: ${task.additional?.detail?.destination}`}</Box>
+        <Grid item xs={5}>
+          <Typography variant="caption" component="div">
+            {`${i18n('created')} :\t${createdAt}${i18n({ key: 'created_by', substitutions: [task.username] })}`}
+          </Typography>
+          <Typography variant="caption" component="div">
+            {`${i18n('destination')} :\t${task.additional?.detail?.destination}`}
+          </Typography>
         </Grid>
-        <Grid item xs={8} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Grid item xs={7} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Stack direction="row" spacing={2}>
             <Button
               startIcon={<IconLoader icon={<PlayArrowIcon />} loading={loadingIcon?.play} props={{ size: '1.25rem', color: 'success' }} />}

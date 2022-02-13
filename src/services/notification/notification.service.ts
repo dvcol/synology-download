@@ -9,7 +9,7 @@ import {
 } from '@src/store/selectors';
 import { setTasksCount } from '@src/store/actions';
 import { store$ } from '@src/store';
-import { bufferDebounceUnless, onMessage, parseMagnetLink, sendMessage } from '@src/utils';
+import { bufferDebounceUnless, onMessage, parseMagnetLink, sendMessage, useI18n as UseI18n } from '@src/utils';
 import {
   ChromeMessageType,
   ChromeNotification,
@@ -22,6 +22,8 @@ import {
   Task,
 } from '@src/models';
 import { VariantType } from 'notistack';
+
+const i18n = UseI18n('common', 'notification');
 
 export class NotificationService {
   private static store: any | StoreOrProxy;
@@ -154,8 +156,8 @@ export class NotificationService {
 
   static taskCreated(uri: string, source?: string, destination?: string): void {
     this.info({
-      title: 'Task created successfully.',
-      message: `Title:\xa0${parseMagnetLink(uri)}${destination ? '\nDestination folder: ' + destination : ''}`,
+      title: i18n('task_created'),
+      message: [`${i18n('title')}\xa0${parseMagnetLink(uri)}`, destination ? `${i18n('destination_folder')}\xa0${destination}` : ''].join('\n'),
       contextMessage: source,
       success: true,
     });
@@ -164,9 +166,9 @@ export class NotificationService {
   static taskFinished(task: Task) {
     this.info(
       {
-        title: 'Task created successfully.',
-        message: `Title:\xa0${parseMagnetLink(task?.title) ?? task.id}`,
-        contextMessage: task.additional.detail.destination ? `Destination folder:\xa0${task.additional.detail.destination}` : undefined,
+        title: i18n('task_finished'),
+        message: `${i18n('title')}\xa0${parseMagnetLink(task?.title) ?? task.id}`,
+        contextMessage: task.additional.detail.destination ? `${i18n('destination_folder')}\xa0${task.additional.detail.destination}` : undefined,
       },
       NotificationType.banner
     );
@@ -175,9 +177,9 @@ export class NotificationService {
   static taskError(task: Task) {
     this.error(
       {
-        title: 'Task Failed.',
-        message: `Title:\xa0${parseMagnetLink(task?.title) ?? task.id}`,
-        contextMessage: task.status_extra?.error_detail ? `Error message:\xa0${task.status_extra.error_detail}` : undefined,
+        title: i18n('task_error'),
+        message: `${i18n('title')}\xa0${parseMagnetLink(task?.title) ?? task.id}`,
+        contextMessage: task.status_extra?.error_detail ? `${i18n('error_message')}\xa0${task.status_extra.error_detail}` : undefined,
       },
       NotificationType.banner
     );

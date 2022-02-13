@@ -3,10 +3,7 @@
     "message": "Destination"
   },
   "panel__task__detail__created": {
-    "message": "Created "
-  },
-  "panel__task__detail__created_at": {
-    "message": " at $1 "
+    "message": "Created"
   },
   "panel__task__detail__created_by": {
     "message": " by $1"

@@ -47,6 +47,6 @@ export const defaultContextMenu: ContextMenu = {
   id: uuid(),
   title: 'Add to Synology Diskstation',
   contexts: [ContextType.link, ContextType.audio, ContextType.video, ContextType.image, ContextType.selection],
-  modal: false,
+  modal: true,
   destination: { custom: false },
 };
