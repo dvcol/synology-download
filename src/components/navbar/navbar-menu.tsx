@@ -60,11 +60,11 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
       >
         <NavbarMenuIcon label={i18n('menu_add')} icon={<AddLinkIcon />} component={Link} to="/add" onClick={handleTab} />
         <Divider />
+        <NavbarMenuIcon label={i18n('menu_refresh')} icon={<RefreshIcon />} onClick={() => QueryService.listTasks().subscribe()} />
         <NavbarMenuIcon label={i18n('menu_resume')} icon={<PlayArrowIcon />} onClick={() => QueryService.resumeAllTasks().subscribe()} />
         <NavbarMenuIcon label={i18n('menu_pause')} icon={<PauseIcon />} onClick={() => QueryService.pauseAllTasks().subscribe()} />
-        <NavbarMenuIcon label={i18n('menu_clear')} icon={<ClearAllIcon />} onClick={() => QueryService.deleteFinishedTasks().subscribe()} />
         <NavbarMenuIcon label={i18n('menu_remove')} icon={<DeleteSweepIcon />} onClick={() => setPrompt(true)} />
-        <NavbarMenuIcon label={i18n('menu_refresh')} icon={<RefreshIcon />} onClick={() => QueryService.listTasks().subscribe()} />
+        <NavbarMenuIcon label={i18n('menu_clear')} icon={<ClearAllIcon />} onClick={() => QueryService.deleteFinishedTasks().subscribe()} />
         <Divider />
         <NavbarMenuIcon label={i18n('menu_settings')} icon={<SettingsIcon />} component={Link} to="/settings" onClick={handleTab} />
         <NavbarMenuIcon label={i18n('menu_info')} icon={<InfoIcon />} component={Link} to="/info" onClick={handleTab} />

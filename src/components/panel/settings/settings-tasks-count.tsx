@@ -50,7 +50,7 @@ export const SettingsTasksCount = () => {
       <CardContent>
         <Box component="form" sx={{ '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">
           <FormTab
-            useFormProps={{ control: control as Control<Tab>, getValues, reset }}
+            useFormProps={{ control: control as unknown as Control<Tab>, getValues, reset }}
             tab={{
               template: notifications?.count?.template,
               color: notifications?.count?.color ?? defaultNotifications.count.color,

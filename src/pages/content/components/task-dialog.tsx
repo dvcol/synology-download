@@ -1,4 +1,4 @@
-import { ChromeMessageType, ContextMenuOnClickPayload, TaskForm, TaskFormValid } from '@src/models';
+import { ChromeMessageType, ContextMenuOnClickPayload, TaskForm } from '@src/models';
 import { Dialog, DialogContent } from '@mui/material';
 import { TaskAdd } from '@src/components';
 import React, { useEffect } from 'react';
@@ -7,6 +7,7 @@ import { PortalProps } from '@mui/base/Portal';
 import { NotificationService, QueryService } from '@src/services';
 import { taskDialog$ } from '../index';
 import { Subject, takeUntil } from 'rxjs';
+import { SubmitHandler } from 'react-hook-form';
 
 export const TaskDialog = ({ container }: React.PropsWithRef<{ container?: PortalProps['container'] }>) => {
   const [form, setForm] = React.useState<TaskForm>();
@@ -16,8 +17,8 @@ export const TaskDialog = ({ container }: React.PropsWithRef<{ container?: Porta
     setForm(undefined);
     setOpen(false);
   };
-  const onFormSubmit = ({ uri, source, destination }: TaskFormValid) => {
-    NotificationService.taskCreated(uri, source, destination?.path);
+  const onFormSubmit: SubmitHandler<TaskForm> = ({ uri, source, destination }) => {
+    if (uri) NotificationService.taskCreated(uri, source, destination?.path);
     onClose();
   };
 

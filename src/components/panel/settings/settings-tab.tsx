@@ -108,7 +108,7 @@ export const SettingsTab = ({ tab }: { tab: TaskTab }) => {
         }
         sx={{ p: '0.5rem 0' }}
       />
-      <FormTab useFormProps={{ control: control as Control<Tab>, getValues, reset: reset as UseFormReset<Tab> }} tab={formTab} />
+      <FormTab useFormProps={{ control: control as unknown as Control<Tab>, getValues, reset: reset as UseFormReset<Tab> }} tab={formTab} />
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Stack direction="row" spacing={2}>
           <Button variant="outlined" color="error" sx={{ width: '5rem' }} type="submit" onClick={onDelete}>

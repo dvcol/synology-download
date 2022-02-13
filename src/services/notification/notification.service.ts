@@ -23,6 +23,7 @@ import {
 } from '@src/models';
 import { VariantType } from 'notistack';
 
+// TODO:IMPORTANT issue in background chrome undefined ??
 const i18n = UseI18n('common', 'notification');
 
 export class NotificationService {

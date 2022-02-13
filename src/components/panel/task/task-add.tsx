@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, CardProps, Grid, Stack } from '@mui/material';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { QueryService } from '@src/services';
 import { FormExplorer, FormInput, FormSwitch } from '@src/components';
 import { firstValueFrom } from 'rxjs';
-import { TaskForm, TaskFormValid } from '@src/models';
+import { TaskForm } from '@src/models';
 import { useI18n } from '@src/utils';
 
 export const TaskAdd = ({
@@ -17,7 +17,7 @@ export const TaskAdd = ({
   form?: TaskForm;
   withCancel?: boolean;
   onFormCancel?: (form: TaskForm) => void;
-  onFormSubmit?: (form: TaskFormValid) => void;
+  onFormSubmit?: (form: TaskForm) => void;
   cardProps?: CardProps;
 }) => {
   const i18n = useI18n('panel', 'task', 'add');
@@ -55,7 +55,7 @@ export const TaskAdd = ({
     onFormCancel && onFormCancel(data);
   };
 
-  const onSubmit = (data: TaskFormValid) => {
+  const onSubmit: SubmitHandler<TaskForm> = (data) => {
     const { uri, source, destination, username, password, unzip } = data;
 
     if (uri?.length) {

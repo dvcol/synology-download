@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { ListItemIcon, MenuItem } from '@mui/material';
 
 type MenuItemIconProps = {
@@ -7,11 +7,7 @@ type MenuItemIconProps = {
   [key: string]: any;
 };
 
-export const NavbarMenuIcon = ({
-  label,
-  icon,
-  ...props
-}: MenuItemIconProps) => (
+export const NavbarMenuIcon: FC<MenuItemIconProps> = ({ label, icon, ...props }) => (
   <MenuItem {...props}>
     <ListItemIcon>{icon}</ListItemIcon>
     {label}
