@@ -84,8 +84,8 @@ export class NotificationService {
     listContextMessage?: string
   ): ChromeNotification | undefined {
     if (array?.length === 1) {
-      const { title, message, contextMessage, priority } = array[0];
-      return { title, message, contextMessage, priority, iconUrl: 'assets/icons/icon-64.png' };
+      const { type, title, message, contextMessage, priority } = array[0];
+      return { type, title, message, contextMessage, priority, iconUrl: 'assets/icons/icon-64.png' };
     } else if (array?.length) {
       return {
         type: 'list',
