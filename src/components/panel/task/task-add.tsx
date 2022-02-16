@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, CardProps, Grid, Stack } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { QueryService } from '@src/services';
@@ -7,19 +7,13 @@ import { firstValueFrom } from 'rxjs';
 import { TaskForm } from '@src/models';
 import { useI18n } from '@src/utils';
 
-export const TaskAdd = ({
-  form,
-  withCancel,
-  onFormCancel,
-  onFormSubmit,
-  cardProps,
-}: {
+export const TaskAdd: FC<{
   form?: TaskForm;
   withCancel?: boolean;
   onFormCancel?: (form: TaskForm) => void;
   onFormSubmit?: (form: TaskForm) => void;
   cardProps?: CardProps;
-}) => {
+}> = ({ form, withCancel, onFormCancel, onFormSubmit, cardProps }) => {
   const i18n = useI18n('panel', 'task', 'add');
   const [path, setPath] = React.useState<string>(form?.destination?.path ?? '');
 

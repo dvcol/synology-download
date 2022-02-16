@@ -4,6 +4,8 @@ import {
   Controller,
   DownloadStationAPI,
   DownloadStationConfig,
+  DownloadStationInfo,
+  DownloadStationStatistic,
   Endpoint,
   HttpMethod,
   HttpParameters,
@@ -27,7 +29,19 @@ export class SynologyDownloadService extends SynologyService {
   }
 
   setConfig(config: DownloadStationConfig): Observable<CommonResponse> {
-    return this._do(HttpMethod.POST, { method: TaskMethod.getConfig }, '1', DownloadStationAPI.Info, Endpoint.Info);
+    const _config = (Object.keys(config) as (keyof DownloadStationConfig)[]).reduce((acc, key) => {
+      if (config[key] !== undefined && config[key] !== null) acc[key] = `${config[key]}`;
+      return acc;
+    }, {} as HttpParameters);
+    return this._do(HttpMethod.POST, { method: TaskMethod.setConfig, ..._config }, '1', DownloadStationAPI.Info, Endpoint.Info);
+  }
+
+  getInfo(): Observable<DownloadStationInfo> {
+    return this._do(HttpMethod.POST, { method: TaskMethod.getInfo }, '1', DownloadStationAPI.Info, Endpoint.Info);
+  }
+
+  getStatistic(): Observable<DownloadStationStatistic> {
+    return this._do(HttpMethod.POST, { method: TaskMethod.getInfo }, '1', DownloadStationAPI.Statistic, Endpoint.Statistic);
   }
 
   /**

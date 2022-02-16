@@ -20,10 +20,10 @@
   },
 
   "navbar__menu__menu_settings": {
-    "message": "Settings"
+    "message": "Extension settings"
   },
   "navbar__menu__menu_info": {
-    "message": "Info"
+    "message": "Station configs"
   },
   "navbar__menu__menu_open": {
     "message": "Open Download Station"

@@ -12,7 +12,7 @@ export const Panel = () => {
         <Route path="*" element={<TaskPanel />} />
         <Route path="/add/*" element={<TaskAdd cardProps={{ sx: { m: '0.3rem' } }} />} />
         <Route path="/settings/*" element={<Settings />} />
-        <Route path="/info/*" element={<Config />} />
+        <Route path="/info/*" element={<Config cardProps={{ sx: { m: '0.3rem' } }} />} />
       </Routes>
     </Container>
   );

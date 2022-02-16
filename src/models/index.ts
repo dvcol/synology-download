@@ -1,5 +1,5 @@
 export * from './api-info.model';
-export * from './download-station-config.model';
+export * from './download-station.model';
 export * from './error.model';
 export * from './file.model';
 export * from './folder.model';

@@ -16,6 +16,7 @@ export enum Endpoint {
   Query = 'query.cgi',
   Task = 'task.cgi',
   Entry = 'entry.cgi',
+  Statistic = 'statistic.cgi',
 }
 
 export enum CommonAPI {
@@ -72,6 +73,7 @@ export enum TaskMethod {
   pause = 'pause',
   resume = 'resume',
   edit = 'edit',
+  getInfo = 'getinfo',
   getConfig = 'getconfig',
   setConfig = 'setserverconfig',
 }

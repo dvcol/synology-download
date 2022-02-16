@@ -18,6 +18,8 @@ import {
   ChromeMessageType,
   CommonResponse,
   DownloadStationConfig,
+  DownloadStationInfo,
+  DownloadStationStatistic,
   FileList,
   FileListOption,
   FolderList,
@@ -162,6 +164,14 @@ export class QueryService {
 
   static setConfig(config: DownloadStationConfig): Observable<CommonResponse> {
     return this.downloadClient.setConfig(config).pipe(this.readyCheckOperator);
+  }
+
+  static getInfo(): Observable<DownloadStationInfo> {
+    return this.downloadClient.getInfo().pipe(this.readyCheckOperator);
+  }
+
+  static getStatistic(): Observable<DownloadStationStatistic> {
+    return this.downloadClient.getStatistic().pipe(this.readyCheckOperator);
   }
 
   static listTasks(): Observable<TaskList> {

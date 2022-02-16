@@ -133,6 +133,13 @@ const common = {
         ol: { flexFlow: 'nowrap', minHeight: '33px' },
       },
     },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          whiteSpace: 'pre-line' as Property.WhiteSpace,
+        },
+      },
+    },
   },
 };
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import { DialogContentText, Divider, IconButton, Menu, Tooltip } from '@mui/material';
-import InfoIcon from '@mui/icons-material/Info';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
 import AddLinkIcon from '@mui/icons-material/AddLink';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -9,6 +8,7 @@ import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LaunchIcon from '@mui/icons-material/Launch';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import TuneIcon from '@mui/icons-material/Tune';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import NavbarMenuIcon from './navbar-menu-icon';
@@ -66,8 +66,8 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
         <NavbarMenuIcon label={i18n('menu_remove')} icon={<DeleteSweepIcon />} onClick={() => setPrompt(true)} />
         <NavbarMenuIcon label={i18n('menu_clear')} icon={<ClearAllIcon />} onClick={() => QueryService.deleteFinishedTasks().subscribe()} />
         <Divider />
-        <NavbarMenuIcon label={i18n('menu_settings')} icon={<SettingsIcon />} component={Link} to="/settings" onClick={handleTab} />
-        <NavbarMenuIcon label={i18n('menu_info')} icon={<InfoIcon />} component={Link} to="/info" onClick={handleTab} />
+        <NavbarMenuIcon label={i18n('menu_settings')} icon={<TuneIcon />} component={Link} to="/settings" onClick={handleTab} />
+        <NavbarMenuIcon label={i18n('menu_info')} icon={<SettingsIcon />} component={Link} to="/info" onClick={handleTab} />
         <NavbarMenuIcon label={i18n('menu_open')} icon={<LaunchIcon />} onClick={handleUrl} />
       </Menu>
 
