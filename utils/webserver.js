@@ -4,18 +4,20 @@ process.env.BABEL_ENV = 'development';
 process.env.NODE_ENV = 'development';
 process.env.ASSET_PATH = '/';
 
-const WebpackDevServer = require('webpack-dev-server'),
-  webpack = require('webpack'),
-  config = require('../webpack.config'),
-  env = require('./env'),
-  path = require('path');
+const WebpackDevServer = require('webpack-dev-server');
+const webpack = require('webpack');
+const config = require('../webpack.config');
+const env = require('./env');
+const path = require('path');
 
 const options = config.serverConfig || {};
 const excludeEntriesToHotReload = options.doNotHotReload || [];
 
 for (const entryName in config.entry) {
   if (excludeEntriesToHotReload.indexOf(entryName) === -1) {
-    config.entry[entryName] = ['webpack/hot/dev-server', `webpack-dev-server/client?hot=true&hostname=localhost&port=${env.PORT}`].concat(config.entry[entryName]);
+    config.entry[entryName] = ['webpack/hot/dev-server', `webpack-dev-server/client?hot=true&hostname=localhost&port=${env.PORT}`].concat(
+      config.entry[entryName]
+    );
   }
 }
 

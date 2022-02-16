@@ -22,8 +22,12 @@ export class SynologyDownloadService extends SynologyService {
     return super.do<T>(method, params, version, api, endpoint);
   }
 
-  config(): Observable<DownloadStationConfig> {
-    return this._do(HttpMethod.POST, { method: TaskMethod.config }, '1', DownloadStationAPI.Info, Endpoint.Info);
+  getConfig(): Observable<DownloadStationConfig> {
+    return this._do(HttpMethod.POST, { method: TaskMethod.getConfig }, '1', DownloadStationAPI.Info, Endpoint.Info);
+  }
+
+  setConfig(config: DownloadStationConfig): Observable<CommonResponse> {
+    return this._do(HttpMethod.POST, { method: TaskMethod.getConfig }, '1', DownloadStationAPI.Info, Endpoint.Info);
   }
 
   /**

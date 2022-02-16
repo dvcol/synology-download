@@ -72,7 +72,8 @@ export enum TaskMethod {
   pause = 'pause',
   resume = 'resume',
   edit = 'edit',
-  config = 'getconfig',
+  getConfig = 'getconfig',
+  setConfig = 'setserverconfig',
 }
 
 export enum FileMethod {

@@ -1,18 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AppBar, Tabs, Toolbar } from '@mui/material';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '@mui/icons-material/Menu';
 import NavbarTab from './navbar-tab';
 import NavbarMenu from './navbar-menu';
 import { getTab, getTabs } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
 import LoadingBar from '@src/components/navbar/loading-bar';
+import { setNavbar } from '@src/store/actions';
 
 export const Navbar = () => {
   const i18n = useI18n('navbar');
+  const dispatch = useDispatch();
 
   const tabs = useSelector(getTabs);
   const tab = useSelector(getTab);
+
+  useEffect(() => {
+    if (tabs?.length) dispatch(setNavbar(tabs[0]));
+  }, []);
 
   const getValue = (): number => {
     const index = tabs?.findIndex((t) => t.id === tab?.id);

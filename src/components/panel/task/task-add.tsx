@@ -44,7 +44,7 @@ export const TaskAdd = ({
   // TODO move to store init
   useEffect(() => {
     if (!path?.length && QueryService.isReady) {
-      QueryService.config().subscribe(({ default_destination: _path }) => {
+      QueryService.getConfig().subscribe(({ default_destination: _path }) => {
         reset({ ...getValues(), destination: { ...getValues()?.destination, path: _path } });
         setPath(_path);
       });

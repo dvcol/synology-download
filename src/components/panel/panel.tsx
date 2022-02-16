@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { TaskAdd, TaskPanel } from './task';
 import { Settings } from './settings';
-import { Info } from './info';
+import { Config } from './info';
 import { Container } from '@mui/material';
 
 export const Panel = () => {
@@ -12,7 +12,7 @@ export const Panel = () => {
         <Route path="*" element={<TaskPanel />} />
         <Route path="/add/*" element={<TaskAdd cardProps={{ sx: { m: '0.3rem' } }} />} />
         <Route path="/settings/*" element={<Settings />} />
-        <Route path="/info/*" element={<Info />} />
+        <Route path="/info/*" element={<Config />} />
       </Routes>
     </Container>
   );

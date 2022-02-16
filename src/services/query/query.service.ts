@@ -156,8 +156,12 @@ export class QueryService {
     return this.fileClient.listFile(folderPath, 0, 0, filetype, [FileListOption.perm]).pipe(this.readyCheckOperator);
   }
 
-  static config(): Observable<DownloadStationConfig> {
-    return this.downloadClient.config().pipe(this.readyCheckOperator);
+  static getConfig(): Observable<DownloadStationConfig> {
+    return this.downloadClient.getConfig().pipe(this.readyCheckOperator);
+  }
+
+  static setConfig(config: DownloadStationConfig): Observable<CommonResponse> {
+    return this.downloadClient.setConfig(config).pipe(this.readyCheckOperator);
   }
 
   static listTasks(): Observable<TaskList> {

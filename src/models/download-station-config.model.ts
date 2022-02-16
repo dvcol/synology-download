@@ -22,3 +22,28 @@ export interface DownloadStationConfig {
   /** Emule default destination */
   emule_default_destination: string;
 }
+
+export const defaultConfig: DownloadStationConfig = {
+  /** Max BT download speed in KB/s (“0” means unlimited) */
+  bt_max_download: 0,
+  /** Max BT upload speed in KB/s (“0” means unlimited) */
+  bt_max_upload: 0,
+  /** Max eMule download speed in KB/s (“0” means unlimited) */
+  emule_max_download: 0,
+  /** Max eMule upload speed in KB/s (“0” means unlimited) */
+  emule_max_upload: 0,
+  /** Max NZB download speed in KB/s (“0” means unlimited) */
+  nzb_max_download: 0,
+  /** Max HTTP download speed in KB/s (“0” means unlimited). For more info, please see Limitations */
+  http_max_download: 0,
+  /** Max FTP download speed in KB/s (“0” means unlimited). For more info, please see Limitations. */
+  ftp_max_download: 0,
+  /** If eMule service is enabled */
+  emule_enabled: false,
+  /** If Auto unzip service is enabled for users except admin or administrators group */
+  unzip_service_enabled: false,
+  /** Default destination */
+  default_destination: '',
+  /** Emule default destination */
+  emule_default_destination: '',
+};
