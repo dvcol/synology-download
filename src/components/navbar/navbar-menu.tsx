@@ -30,7 +30,7 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
-  const handleTab = () => dispatch(setNavbar());
+  const handleClearTab = () => dispatch(setNavbar());
   const handleUrl = () => chrome.tabs.create({ url });
 
   // Dialog
@@ -58,7 +58,7 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
         onClick={handleClose}
         MenuListProps={{ 'aria-labelledby': 'basic-button' }}
       >
-        <NavbarMenuIcon label={i18n('menu_add')} icon={<AddLinkIcon />} component={Link} to="/add" onClick={handleTab} />
+        <NavbarMenuIcon label={i18n('menu_add')} icon={<AddLinkIcon />} component={Link} to="/add" onClick={handleClearTab} />
         <Divider />
         <NavbarMenuIcon label={i18n('menu_refresh')} icon={<RefreshIcon />} onClick={() => QueryService.listTasks().subscribe()} />
         <NavbarMenuIcon label={i18n('menu_resume')} icon={<PlayArrowIcon />} onClick={() => QueryService.resumeAllTasks().subscribe()} />
@@ -66,8 +66,8 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
         <NavbarMenuIcon label={i18n('menu_remove')} icon={<DeleteSweepIcon />} onClick={() => setPrompt(true)} />
         <NavbarMenuIcon label={i18n('menu_clear')} icon={<ClearAllIcon />} onClick={() => QueryService.deleteFinishedTasks().subscribe()} />
         <Divider />
-        <NavbarMenuIcon label={i18n('menu_settings')} icon={<TuneIcon />} component={Link} to="/settings" onClick={handleTab} />
-        <NavbarMenuIcon label={i18n('menu_info')} icon={<SettingsIcon />} component={Link} to="/info" onClick={handleTab} />
+        <NavbarMenuIcon label={i18n('menu_info')} icon={<SettingsIcon />} component={Link} to="/config" onClick={handleClearTab} />
+        <NavbarMenuIcon label={i18n('menu_settings')} icon={<TuneIcon />} component={Link} to="/settings" onClick={handleClearTab} />
         <NavbarMenuIcon label={i18n('menu_open')} icon={<LaunchIcon />} onClick={handleUrl} />
       </Menu>
 

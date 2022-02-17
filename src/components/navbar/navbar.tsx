@@ -17,7 +17,7 @@ export const Navbar = () => {
   const tab = useSelector(getTab);
 
   useEffect(() => {
-    if (tabs?.length) dispatch(setNavbar(tabs[0]));
+    if (!tab && tabs?.length) dispatch(setNavbar(tabs[0]));
   }, []);
 
   const getValue = (): number => {

@@ -1,6 +1,20 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Box, Button, Card, CardActions, CardContent, CardHeader, CardProps, Container, InputAdornment, LinearProgress, Stack } from '@mui/material';
-import { defaultConfig, DownloadStationConfig, DownloadStationInfo } from '@src/models';
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  CardProps,
+  Collapse,
+  Container,
+  InputAdornment,
+  LinearProgress,
+  Stack,
+  Typography,
+} from '@mui/material';
+import { ColorLevel, ColorLevelMap, defaultConfig, DownloadStationConfig, DownloadStationInfo } from '@src/models';
 import { NotificationService, QueryService } from '@src/services';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { before, useI18n } from '@src/utils';
@@ -88,9 +102,13 @@ export const Config: FC<{
           title={i18n('title')}
           subheader={
             <Box sx={{ mt: '0.5rem' }}>
-              <Box sx={{ mb: '0.5rem' }}>{i18n('subheader_line_1')}</Box>
-              <Box sx={{ mb: '0.5rem' }}>{i18n('subheader_line_2')}</Box>
-              {!loading && !loading && <Box>{i18n('not_admin')}</Box>}
+              {!loading && !isAdmin && (
+                <Typography color={ColorLevelMap[ColorLevel.warning]} sx={{ mb: '0.5rem' }}>
+                  {i18n('not_admin')}
+                </Typography>
+              )}
+              <Typography sx={{ mb: '0.5rem' }}>{i18n('subheader_line_1')}</Typography>
+              <Typography sx={{ mb: '0.5rem' }}>{i18n('subheader_line_2')}</Typography>
             </Box>
           }
           titleTypographyProps={{ variant: 'h6', color: 'text.primary', fontSize: '16px' }}
@@ -130,48 +148,6 @@ export const Config: FC<{
                 textFieldProps={{
                   type: 'number',
                   label: i18n('bt_max_upload__label'),
-                  InputProps: {
-                    endAdornment: <InputAdornment position="end">KB/s</InputAdornment>,
-                  },
-                  disabled: !isAdmin,
-                  sx: { flex: '0 0 14rem' },
-                }}
-              />
-            }
-            sx={{ p: '0.5rem 0' }}
-          />
-          <CardHeader
-            title={i18n('emule_max_download__title')}
-            subheader={i18n('emule_max_download__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={
-              <FormInput
-                controllerProps={{ name: 'emule_max_download', control, rules: { min: 0 } }}
-                textFieldProps={{
-                  type: 'number',
-                  label: i18n('emule_max_download__label'),
-                  InputProps: {
-                    endAdornment: <InputAdornment position="end">KB/s</InputAdornment>,
-                  },
-                  disabled: !isAdmin,
-                  sx: { flex: '0 0 14rem' },
-                }}
-              />
-            }
-            sx={{ p: '0.5rem 0' }}
-          />
-          <CardHeader
-            title={i18n('emule_max_upload__title')}
-            subheader={i18n('emule_max_upload__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={
-              <FormInput
-                controllerProps={{ name: 'emule_max_upload', control, rules: { min: 0 } }}
-                textFieldProps={{
-                  type: 'number',
-                  label: i18n('emule_max_upload__label'),
                   InputProps: {
                     endAdornment: <InputAdornment position="end">KB/s</InputAdornment>,
                   },
@@ -246,14 +222,6 @@ export const Config: FC<{
             sx={{ p: '0.5rem 0' }}
           />
           <CardHeader
-            title={i18n('emule_enabled__title')}
-            subheader={i18n('emule_enabled__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={<FormSwitch controllerProps={{ name: 'emule_enabled', control }} formControlLabelProps={{ label: '' }} />}
-            sx={{ p: '0.5rem 0' }}
-          />
-          <CardHeader
             title={i18n('unzip_service_enabled__title')}
             subheader={i18n('unzip_service_enabled__subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
@@ -275,18 +243,74 @@ export const Config: FC<{
             />
           </Card>
           <CardHeader
-            title={i18n('emule_default_destination__title')}
-            subheader={i18n('emule_default_destination__subheader')}
+            title={i18n('emule_enabled__title')}
+            subheader={i18n('emule_enabled__subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
+            action={<FormSwitch controllerProps={{ name: 'emule_enabled', control }} formControlLabelProps={{ label: '' }} />}
             sx={{ p: '0.5rem 0' }}
           />
-          <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: '12rem' }}>
-            <FormExplorer
-              controllerProps={{ name: 'emule_default_destination', control }}
-              explorerProps={{ flatten: true, disabled: !isAdmin || !getValues().emule_enabled, startPath: getValues()?.emule_default_destination }}
+          <Collapse in={getValues()?.emule_enabled}>
+            <CardHeader
+              title={i18n('emule_max_download__title')}
+              subheader={i18n('emule_max_download__subheader')}
+              titleTypographyProps={{ variant: 'subtitle2' }}
+              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              action={
+                <FormInput
+                  controllerProps={{ name: 'emule_max_download', control, rules: { min: 0 } }}
+                  textFieldProps={{
+                    type: 'number',
+                    label: i18n('emule_max_download__label'),
+                    InputProps: {
+                      endAdornment: <InputAdornment position="end">KB/s</InputAdornment>,
+                    },
+                    disabled: !isAdmin || !getValues().emule_enabled,
+                    sx: { flex: '0 0 14rem' },
+                  }}
+                />
+              }
+              sx={{ p: '0.5rem 0' }}
             />
-          </Card>
+            <CardHeader
+              title={i18n('emule_max_upload__title')}
+              subheader={i18n('emule_max_upload__subheader')}
+              titleTypographyProps={{ variant: 'subtitle2' }}
+              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              action={
+                <FormInput
+                  controllerProps={{ name: 'emule_max_upload', control, rules: { min: 0 } }}
+                  textFieldProps={{
+                    type: 'number',
+                    label: i18n('emule_max_upload__label'),
+                    InputProps: {
+                      endAdornment: <InputAdornment position="end">KB/s</InputAdornment>,
+                    },
+                    disabled: !isAdmin || !getValues().emule_enabled,
+                    sx: { flex: '0 0 14rem' },
+                  }}
+                />
+              }
+              sx={{ p: '0.5rem 0' }}
+            />
+            <CardHeader
+              title={i18n('emule_default_destination__title')}
+              subheader={i18n('emule_default_destination__subheader')}
+              titleTypographyProps={{ variant: 'subtitle2' }}
+              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              sx={{ p: '0.5rem 0' }}
+            />
+            <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: '12rem' }}>
+              <FormExplorer
+                controllerProps={{ name: 'emule_default_destination', control }}
+                explorerProps={{
+                  flatten: true,
+                  disabled: !isAdmin || !getValues().emule_enabled,
+                  startPath: getValues()?.emule_default_destination,
+                }}
+              />
+            </Card>
+          </Collapse>
         </CardContent>
         <CardActions sx={{ justifyContent: 'flex-end', padding: '0 24px 24px' }}>
           <Stack direction="row" spacing={2}>
