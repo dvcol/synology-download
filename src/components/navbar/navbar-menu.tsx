@@ -40,7 +40,7 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
       } else if (error) {
         NotificationService.error({
           title: i18n(`task_${button}_fail`, 'common', 'error'),
-          message: error?.message ?? error?.name ?? error,
+          message: error?.message ?? error?.name ?? '',
         });
       }
     },

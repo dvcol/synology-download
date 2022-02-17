@@ -1,6 +1,6 @@
 import { TaskTab } from './tab.model';
 import { Connection, Global, Notifications, Polling } from './settings.model';
-import { Task, TaskCount } from './task.model';
+import { Task, TaskCount, TaskStatistics } from './task.model';
 import { ContextMenu, QuickMenu } from './menu.model';
 import { Store } from 'redux';
 import { Store as StoreProxy } from 'webext-redux';
@@ -22,6 +22,7 @@ export interface NavbarSlice {
 export interface TasksSlice {
   entities: Task[];
   count?: TaskCount;
+  stats?: TaskStatistics;
 }
 
 export interface SettingsSlice {

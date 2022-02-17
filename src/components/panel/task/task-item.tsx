@@ -46,7 +46,7 @@ export const TaskItem = React.forwardRef<HTMLDivElement, { task: Task; status?: 
           } else if (error) {
             NotificationService.error({
               title: i18n(`task_${button}_fail`, 'common', 'error'),
-              message: error?.message ?? error?.name ?? error,
+              message: error?.message ?? error?.name ?? '',
             });
           }
         },

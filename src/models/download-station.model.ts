@@ -69,8 +69,8 @@ export interface DownloadStationStatistic {
   speed_download: number;
   /**  Total upload speed except for eMule: byte/s 1 and later */
   speed_upload: number;
-  /**  Total eMule download speed: byte/s 1 and later*/
+  /**  Total eMule download speed: byte/s 1 and later */
   emule_speed_download: number;
-  /** Total eMule upload speed: byte/s*/
+  /** Total eMule upload speed: byte/s */
   emule_speed_upload: number;
 }

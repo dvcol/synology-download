@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { TaskAdd, TaskPanel } from './task';
 import { Settings } from './settings';
-import { Config } from './info';
+import { Config } from './config';
 import { Container } from '@mui/material';
 
 export const Panel = () => {

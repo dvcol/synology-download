@@ -36,7 +36,10 @@ export class PollingService {
     });
 
     if (!this.isProxy) {
-      this.timer$.subscribe(() => QueryService.listTasks().subscribe());
+      this.timer$.subscribe(() => {
+        QueryService.listTasks().subscribe();
+        QueryService.getStatistic().subscribe();
+      });
 
       store$(this.store, getPollingInterval).subscribe(() => this.change(this.interval()));
       combineLatest([store$(this.store, getPollingEnabled), store$(this.store, getLogged)]).subscribe(([enabled, logged]) =>

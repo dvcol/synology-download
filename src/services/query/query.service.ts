@@ -14,7 +14,7 @@ import {
   getUrl,
   getUsername,
 } from '@src/store/selectors';
-import { addLoading, removeLoading, setLogged, setSid, setTasks, spliceTasks } from '@src/store/actions';
+import { addLoading, removeLoading, setLogged, setSid, setTasks, setTaskStats, spliceTasks } from '@src/store/actions';
 import { store$ } from '@src/store';
 import {
   CommonResponse,
@@ -163,7 +163,12 @@ export class QueryService {
   }
 
   static getStatistic(): Observable<DownloadStationStatistic> {
-    return this.downloadClient.getStatistic().pipe(this.readyCheckOperator());
+    return this.downloadClient.getStatistic().pipe(
+      this.loadingOperator,
+      tap((stats) => {
+        this.store.dispatch(setTaskStats(stats));
+      })
+    );
   }
 
   static listTasks(): Observable<TaskList> {
@@ -222,7 +227,7 @@ export class QueryService {
         error: (error) => {
           NotificationService.error({
             title: i18n('create_task_fail'),
-            message: error?.message ?? error?.name ?? error,
+            message: error?.message ?? error?.name ?? '',
             contextMessage: source,
           });
         },

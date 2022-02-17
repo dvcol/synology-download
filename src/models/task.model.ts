@@ -1,5 +1,5 @@
 import prettyBytes from 'pretty-bytes';
-import { ColorLevel, TabCount } from '@src/models';
+import { ColorLevel, DownloadStationStatistic, TabCount } from '@src/models';
 
 export interface TaskList {
   total: number;
@@ -214,3 +214,5 @@ export interface TaskCount {
   total: number;
   tabs: TabCount;
 }
+
+export type TaskStatistics = DownloadStationStatistic;
