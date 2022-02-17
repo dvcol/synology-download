@@ -57,7 +57,7 @@ export const Config: FC<{
     );
 
   useEffect(() => {
-    if (QueryService.isReady) {
+    if (QueryService.isLoggedIn) {
       forkJoin([QueryService.getConfig(), QueryService.getInfo()])
         .pipe<[DownloadStationConfig, DownloadStationInfo]>(loadingOperator)
         .subscribe(([_config, _info]) => {
@@ -319,7 +319,7 @@ export const Config: FC<{
               color={onSubmitColor()}
               sx={{ width: '80px', fontSize: '12px' }}
               type="submit"
-              disabled={!isAdmin || !isValid || loading || !QueryService.isReady}
+              disabled={!isAdmin || !isValid || loading || !QueryService.isLoggedIn}
               onClick={handleSubmit(onSubmit)}
             >
               {i18n('save', 'common', 'buttons')}

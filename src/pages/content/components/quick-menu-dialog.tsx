@@ -36,7 +36,7 @@ export const QuickMenuDialog = ({ container }: React.PropsWithRef<{ container?: 
     if (modal) {
       taskDialog$.next({ open: true, form });
     } else if (form?.uri) {
-      QueryService.createTask(form?.uri, form?.source, form?.destination?.path).subscribe();
+      QueryService.isLoggedIn && QueryService.createTask(form?.uri, form?.source, form?.destination?.path).subscribe();
     }
   };
 

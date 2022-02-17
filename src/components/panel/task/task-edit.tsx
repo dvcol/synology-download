@@ -76,7 +76,7 @@ export const TaskEdit = ({
             color={onSubmitColor()}
             sx={{ width: '5rem' }}
             type="submit"
-            disabled={!isValid}
+            disabled={!isValid || !QueryService.isLoggedIn}
             onClick={handleSubmit(onSubmit)}
           >
             {i18n('save', 'common', 'buttons')}

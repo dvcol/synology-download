@@ -14,6 +14,8 @@ export const getOption = createSelector(getModal, (modal) => modal?.option);
 
 export const getLogged = createSelector(getState, (state) => state?.logged);
 
+export const getSid = createSelector(getState, (state) => state?.sid);
+
 export const isModalOpen = createSelector(getPopup, getOption, (popup, option) => popup || option);
 
 export const getLoading = createSelector(getState, (state) => state.loading);

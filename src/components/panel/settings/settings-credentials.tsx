@@ -85,7 +85,11 @@ export const SettingsCredentials = () => {
         },
         error: (error: Error) => {
           setLoginError({ ...loginError, [type]: true });
-          NotificationService.error({ title: i18n(`${type}__fail`), message: error?.message ?? error?.name, contextMessage: urlReducer(data) });
+          NotificationService.error({
+            title: i18n(`${type}__fail`),
+            message: error?.message ?? error?.name ?? error,
+            contextMessage: urlReducer(data),
+          });
         },
       });
   };

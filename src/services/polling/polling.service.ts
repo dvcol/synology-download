@@ -19,7 +19,7 @@ export class PollingService {
   );
 
   private static isReady(): boolean {
-    return QueryService.isReady && getLogged(this.store.getState()) && getPollingEnabled(this.store.getState());
+    return QueryService.isLoggedIn && getPollingEnabled(this.store.getState());
   }
 
   private static interval(): number {

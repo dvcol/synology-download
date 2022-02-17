@@ -37,7 +37,7 @@ export const TaskAdd: FC<{
 
   // TODO move to store init
   useEffect(() => {
-    if (!path?.length && QueryService.isReady) {
+    if (!path?.length && QueryService.isLoggedIn) {
       QueryService.getConfig().subscribe(({ default_destination: _path }) => {
         reset({ ...getValues(), destination: { ...getValues()?.destination, path: _path } });
         setPath(_path);
@@ -162,7 +162,7 @@ export const TaskAdd: FC<{
             color={onSubmitColor()}
             sx={{ width: '80px', fontSize: '12px' }}
             type="submit"
-            disabled={!isValid}
+            disabled={!isValid || !QueryService.isLoggedIn}
             onClick={handleSubmit(onSubmit)}
           >
             {i18n('save', 'common', 'buttons')}

@@ -37,7 +37,11 @@ export const TaskDialog = ({ container }: React.PropsWithRef<{ container?: Porta
             setForm({ uri, source, destination });
             setOpen(true);
           } else if (uri) {
-            QueryService.createTask(uri, source, destination?.path).subscribe();
+            if (QueryService.isLoggedIn) {
+              QueryService.createTask(uri, source, destination?.path).subscribe();
+            } else {
+              NotificationService.loginRequired();
+            }
           }
         }
         sendResponse();

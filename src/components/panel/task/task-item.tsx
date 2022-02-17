@@ -3,11 +3,11 @@ import { finalize, Observable } from 'rxjs';
 import { Accordion, AccordionDetails, AccordionSummary, Button, ButtonGroup, Tooltip } from '@mui/material';
 import TaskCard from './task-card';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Task, TaskStatus } from '@src/models';
+import { ErrorType, LoginError, Task, TaskStatus } from '@src/models';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import TaskDetail from './task-detail';
-import { QueryService } from '@src/services';
+import { NotificationService, QueryService } from '@src/services';
 import { ConfirmationDialog, IconLoader } from '@src/components';
 import { before, useI18n } from '@src/utils';
 import { useDebounceObservable } from '@src/utils/hooks-utils';
@@ -39,7 +39,18 @@ export const TaskItem = React.forwardRef<HTMLDivElement, { task: Task; status?: 
           loadingIcon$.next({ ...loading, [button]: false }); // So that observable data is not stale
         })
       )
-      .subscribe();
+      .subscribe({
+        error: (error) => {
+          if (error instanceof LoginError || error.type === ErrorType.Login) {
+            NotificationService.loginRequired();
+          } else if (error) {
+            NotificationService.error({
+              title: i18n(`task_${button}_fail`, 'common', 'error'),
+              message: error?.message ?? error?.name ?? error,
+            });
+          }
+        },
+      });
   };
 
   const isDisabled = Object.values(loading).some(Boolean);

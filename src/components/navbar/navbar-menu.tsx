@@ -14,9 +14,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import NavbarMenuIcon from './navbar-menu-icon';
 import { setNavbar } from '@src/store/actions';
 import { getUrl } from '@src/store/selectors';
-import { QueryService } from '@src/services';
+import { NotificationService, QueryService } from '@src/services';
 import { ConfirmationDialog } from '@src/components';
 import { useI18n } from '@src/utils';
+import { ErrorType, LoginError } from '@src/models';
 
 type NavbarMenuProps = { label: React.ReactNode };
 
@@ -32,6 +33,18 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
   const handleClose = () => setAnchorEl(null);
   const handleClearTab = () => dispatch(setNavbar());
   const handleUrl = () => chrome.tabs.create({ url });
+  const handleError = (button: string) => ({
+    error: (error: any) => {
+      if (error instanceof LoginError || ErrorType.Login === error?.type) {
+        NotificationService.loginRequired();
+      } else if (error) {
+        NotificationService.error({
+          title: i18n(`task_${button}_fail`, 'common', 'error'),
+          message: error?.message ?? error?.name ?? error,
+        });
+      }
+    },
+  });
 
   // Dialog
   const [prompt, setPrompt] = React.useState(false);
@@ -60,11 +73,27 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
       >
         <NavbarMenuIcon label={i18n('menu_add')} icon={<AddLinkIcon />} component={Link} to="/add" onClick={handleClearTab} />
         <Divider />
-        <NavbarMenuIcon label={i18n('menu_refresh')} icon={<RefreshIcon />} onClick={() => QueryService.listTasks().subscribe()} />
-        <NavbarMenuIcon label={i18n('menu_resume')} icon={<PlayArrowIcon />} onClick={() => QueryService.resumeAllTasks().subscribe()} />
-        <NavbarMenuIcon label={i18n('menu_pause')} icon={<PauseIcon />} onClick={() => QueryService.pauseAllTasks().subscribe()} />
+        <NavbarMenuIcon
+          label={i18n('menu_refresh')}
+          icon={<RefreshIcon />}
+          onClick={() => QueryService.listTasks().subscribe(handleError('refresh'))}
+        />
+        <NavbarMenuIcon
+          label={i18n('menu_resume')}
+          icon={<PlayArrowIcon />}
+          onClick={() => QueryService.resumeAllTasks().subscribe(handleError('resume'))}
+        />
+        <NavbarMenuIcon
+          label={i18n('menu_pause')}
+          icon={<PauseIcon />}
+          onClick={() => QueryService.pauseAllTasks().subscribe(handleError('pause'))}
+        />
         <NavbarMenuIcon label={i18n('menu_remove')} icon={<DeleteSweepIcon />} onClick={() => setPrompt(true)} />
-        <NavbarMenuIcon label={i18n('menu_clear')} icon={<ClearAllIcon />} onClick={() => QueryService.deleteFinishedTasks().subscribe()} />
+        <NavbarMenuIcon
+          label={i18n('menu_clear')}
+          icon={<ClearAllIcon />}
+          onClick={() => QueryService.deleteFinishedTasks().subscribe(handleError('clear'))}
+        />
         <Divider />
         <NavbarMenuIcon label={i18n('menu_info')} icon={<SettingsIcon />} component={Link} to="/config" onClick={handleClearTab} />
         <NavbarMenuIcon label={i18n('menu_settings')} icon={<TuneIcon />} component={Link} to="/settings" onClick={handleClearTab} />
@@ -84,7 +113,7 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
         onCancel={() => setPrompt(false)}
         onConfirm={() => {
           setPrompt(false);
-          QueryService.deleteAllTasks().subscribe();
+          QueryService.deleteAllTasks().subscribe(handleError('delete'));
         }}
       />
     </React.Fragment>

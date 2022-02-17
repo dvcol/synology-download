@@ -17,6 +17,14 @@ export const useI18n =
  */
 export const i18n = (value: string | ChromeI18nInput, ...modules: string[]): string => {
   const path: string = Array.isArray(modules) ? modules.join('__') : modules;
-  if (typeof value === 'string') return chrome?.i18n?.getMessage?.(path ? `${path}__${value}` : value) ?? value;
-  return chrome?.i18n?.getMessage?.(path ? `${path}__${value.key}` : value.key, value?.substitutions) ?? value.key;
+
+  let key: string;
+  let substitution;
+  if (typeof value === 'string') {
+    key = path ? `${path}__${value}` : value;
+  } else {
+    key = path ? `${path}__${value.key}` : value.key;
+    substitution = value?.substitutions;
+  }
+  return chrome?.i18n?.getMessage?.(key, substitution) || key;
 };

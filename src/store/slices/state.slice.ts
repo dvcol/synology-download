@@ -14,6 +14,7 @@ export interface StateReducers<S = StateSlice> extends SliceCaseReducers<S> {
 
 const initialState: StateSlice = {
   logged: false,
+  sid: undefined,
   modal: {
     popup: false,
     option: false,
@@ -26,6 +27,7 @@ export const stateSlice = createSlice<StateSlice, StateReducers, 'state'>({
   initialState,
   reducers: {
     setLogged: syncLoggedReducer,
+    setSid: (state, { payload: sid }) => ({ ...state, sid }),
     setPopup: (state, { payload: popup }) => ({ ...state, modal: { ...state.modal, popup } }),
     setOption: (state, { payload: option }) => ({ ...state, modal: { ...state.modal, option } }),
     addLoading: (state, { payload }) => ({ ...state, loading: state.loading + (payload ?? 1) }),

@@ -7,6 +7,7 @@ import { Store as StoreProxy } from 'webext-redux';
 
 export interface StateSlice {
   logged: boolean;
+  sid?: string;
   modal: {
     popup: boolean;
     option: boolean;

@@ -4,18 +4,19 @@ import {
   getActiveTasksIdsByActionScope,
   geTasksIdsByStatusType,
   getFinishedTasksIdsByActionScope,
+  getLogged,
   getNotificationsBannerFailedEnabled,
   getNotificationsBannerFinishedEnabled,
   getPassword,
   getPausedTasksIdsByActionScope,
+  getSid,
   getTasksIdsByActionScope,
   getUrl,
   getUsername,
 } from '@src/store/selectors';
-import { addLoading, removeLoading, setLogged, setTasks, spliceTasks } from '@src/store/actions';
+import { addLoading, removeLoading, setLogged, setSid, setTasks, spliceTasks } from '@src/store/actions';
 import { store$ } from '@src/store';
 import {
-  ChromeMessageType,
   CommonResponse,
   DownloadStationConfig,
   DownloadStationInfo,
@@ -24,19 +25,21 @@ import {
   FileListOption,
   FolderList,
   InfoResponse,
+  LoginError,
   LoginResponse,
+  NotReadyError,
   StoreOrProxy,
-  SynologyError,
   Task,
   TaskList,
   TaskListOption,
   TaskStatus,
   TaskStatusType,
 } from '@src/models';
-import { before, onMessage, sendMessage } from '@src/utils';
+import { before, useI18n as UseI18n } from '@src/utils';
 import { EMPTY, finalize, Observable, tap } from 'rxjs';
 
-// TODO error handling
+const i18n = UseI18n('common', 'error');
+
 export class QueryService {
   private static store: any | StoreOrProxy;
   private static isProxy: boolean;
@@ -57,25 +60,16 @@ export class QueryService {
     this.fileClient = new SynologyFileService(isProxy);
     this.downloadClient = new SynologyDownloadService(isProxy);
 
-    if (!isProxy) {
-      store$(store, getUrl).subscribe((url) => this.setBaseUrl(url));
-      onMessage<string>([ChromeMessageType.baseUrl]).subscribe(({ message: { payload }, sendResponse }) => {
-        if (payload) this.setBaseUrl(payload);
-        sendResponse();
-      });
-    }
+    store$(store, getUrl).subscribe((url) => this.setBaseUrl(url));
+    store$(store, getSid).subscribe((sid) => this.setSid(sid));
   }
 
   static setBaseUrl(baseUrl: string): void {
-    if (this.isProxy) {
-      sendMessage<string>({ type: ChromeMessageType.baseUrl, payload: baseUrl }).subscribe();
-    } else {
-      this.baseUrl = baseUrl;
-      this.infoClient.setBaseUrl(baseUrl);
-      this.authClient.setBaseUrl(baseUrl);
-      this.fileClient.setBaseUrl(baseUrl);
-      this.downloadClient.setBaseUrl(baseUrl);
-    }
+    this.baseUrl = baseUrl;
+    this.infoClient.setBaseUrl(baseUrl);
+    this.authClient.setBaseUrl(baseUrl);
+    this.fileClient.setBaseUrl(baseUrl);
+    this.downloadClient.setBaseUrl(baseUrl);
   }
 
   static setSid(sid?: string): void {
@@ -86,18 +80,26 @@ export class QueryService {
   }
 
   static get isReady() {
-    return this.isProxy || !!this.baseUrl?.length;
+    return !!this.baseUrl?.length;
   }
 
-  private static readyCheck() {
-    if (!QueryService.isReady) throw new Error('Query service is not ready');
+  static get isLoggedIn() {
+    return getLogged(this.store.getState());
   }
 
-  private static readyCheckOperator = <T>(source: Observable<T>) => source.pipe(before(this.readyCheck));
+  private static readyCheck(logged = true, ready = true) {
+    if (ready && !this.isReady) throw new NotReadyError(i18n('query_service_not_ready'));
+    if (logged && !this.isLoggedIn) throw new LoginError(i18n('query_service_not_logged_in'));
+  }
+
+  private static readyCheckOperator =
+    (logged?: boolean, ready?: boolean) =>
+    <T>(source: Observable<T>) =>
+      source.pipe(before(() => this.readyCheck(logged, ready)));
 
   private static loadingOperator = <T>(source: Observable<T>) =>
     source.pipe(
-      this.readyCheckOperator,
+      this.readyCheckOperator(),
       before(() => this.store.dispatch(addLoading())),
       finalize(() => this.store.dispatch(removeLoading()))
     );
@@ -111,29 +113,19 @@ export class QueryService {
     password = getPassword(this.store.getState()),
     baseUrl?: string
   ): Observable<LoginResponse> {
-    if (!username || !password) throw new Error(`Missing required username '${username}' or password  '${password}'`);
-    return this.authClient.login(username, password, baseUrl).pipe(
-      this.readyCheckOperator,
-      tap({
-        error: (error) => {
-          if (error instanceof SynologyError) {
-            console.error('Login failed', error?.api, error?.code, error?.message);
-          } else {
-            console.error('Login failed', error);
-          }
-        },
-      })
-    );
+    if (!username || !password) throw new Error(i18n({ key: 'login_password_required', substitutions: [username ?? '', password ?? ''] }));
+    return this.authClient.login(username, password, baseUrl).pipe(this.readyCheckOperator(false));
   }
 
   static login(username?: string, password?: string, baseUrl?: string): Observable<LoginResponse> {
     return this.loginTest(username, password, baseUrl).pipe(
       tap({
         next: ({ sid }) => {
-          this.setSid(sid);
+          this.store.dispatch(setSid(sid));
           this.store.dispatch(setLogged(true));
         },
         error: () => {
+          this.store.dispatch(setSid(undefined));
           this.store.dispatch(setLogged(false));
         },
       })
@@ -142,36 +134,36 @@ export class QueryService {
 
   static logout(): Observable<void> {
     return this.authClient.logout().pipe(
-      this.readyCheckOperator,
+      this.readyCheckOperator(),
       tap(() => {
-        this.setSid();
+        this.store.dispatch(setSid(undefined));
         this.store.dispatch(setLogged(false));
       })
     );
   }
 
   static listFolders(readonly = true): Observable<FolderList> {
-    return this.fileClient.listFolder(0, 0, readonly).pipe(this.readyCheckOperator);
+    return this.fileClient.listFolder(0, 0, readonly).pipe(this.readyCheckOperator());
   }
 
   static listFiles(folderPath: string, filetype: 'all' | 'dir' = 'dir'): Observable<FileList> {
-    return this.fileClient.listFile(folderPath, 0, 0, filetype, [FileListOption.perm]).pipe(this.readyCheckOperator);
+    return this.fileClient.listFile(folderPath, 0, 0, filetype, [FileListOption.perm]).pipe(this.readyCheckOperator());
   }
 
   static getConfig(): Observable<DownloadStationConfig> {
-    return this.downloadClient.getConfig().pipe(this.readyCheckOperator);
+    return this.downloadClient.getConfig().pipe(this.readyCheckOperator());
   }
 
   static setConfig(config: DownloadStationConfig): Observable<CommonResponse> {
-    return this.downloadClient.setConfig(config).pipe(this.readyCheckOperator);
+    return this.downloadClient.setConfig(config).pipe(this.readyCheckOperator());
   }
 
   static getInfo(): Observable<DownloadStationInfo> {
-    return this.downloadClient.getInfo().pipe(this.readyCheckOperator);
+    return this.downloadClient.getInfo().pipe(this.readyCheckOperator());
   }
 
   static getStatistic(): Observable<DownloadStationStatistic> {
-    return this.downloadClient.getStatistic().pipe(this.readyCheckOperator);
+    return this.downloadClient.getStatistic().pipe(this.readyCheckOperator());
   }
 
   static listTasks(): Observable<TaskList> {
@@ -227,9 +219,12 @@ export class QueryService {
           this.listTasks().subscribe();
           NotificationService.taskCreated(uri, source, destination);
         },
-        error: (err) => {
-          console.error('task failed to create', err);
-          NotificationService.error({ title: err, message: 'Failed to add download task', contextMessage: source });
+        error: (error) => {
+          NotificationService.error({
+            title: i18n('create_task_fail'),
+            message: error?.message ?? error?.name ?? error,
+            contextMessage: source,
+          });
         },
       })
     );

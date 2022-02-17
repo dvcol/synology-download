@@ -30,7 +30,7 @@ export const Explorer = ({ collapseOnSelect, flatten, disabled, readonly, fileTy
   const [crumbs, setCrumbs] = React.useState<string[]>([]);
 
   useEffect(() => {
-    QueryService.isReady &&
+    QueryService.isLoggedIn &&
       QueryService.listFolders(readonly ?? true).subscribe((list) => {
         setTree({ root: list?.shares ?? [] });
         setLoading({ ...loading, root: false });
