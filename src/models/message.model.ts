@@ -14,6 +14,7 @@ export enum ChromeMessageType {
   removeMenu = 'removeMenu',
   resetMenu = 'resetMenu',
   notification = 'notification',
+  polling = 'polling',
   query = 'query',
   baseUrl = 'baseUrl',
 }
@@ -26,7 +27,14 @@ export type ContextMenuOnClickPayload = {
 /**
  * Type union of possible message payloads
  */
-export type ChromeMessagePayload = string | ContextMenu | ContextMenu[] | ChromeNotification | SynologyQueryPayload | ContextMenuOnClickPayload;
+export type ChromeMessagePayload =
+  | boolean
+  | string
+  | ContextMenu
+  | ContextMenu[]
+  | ChromeNotification
+  | SynologyQueryPayload
+  | ContextMenuOnClickPayload;
 
 /**
  * Message interface for communication between content & background

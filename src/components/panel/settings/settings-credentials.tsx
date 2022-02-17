@@ -1,9 +1,9 @@
 import { Box, Button, Card, CardActions, CardContent, CardHeader, LinearProgress, MenuItem, Stack, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { setConnection, syncConnection, syncRememberMe } from '@src/store/actions';
 import { getConnection, getLogged, urlReducer } from '@src/store/selectors';
 import { useDispatch, useSelector } from 'react-redux';
-import { NotificationService, QueryService } from '@src/services';
+import { NotificationService, PollingService, QueryService } from '@src/services';
 import { RegisterOptions, useForm } from 'react-hook-form';
 import { Connection, ConnectionHeader } from '@src/models';
 import { finalize, Observable } from 'rxjs';
@@ -19,6 +19,11 @@ export const SettingsCredentials = () => {
   const dispatch = useDispatch();
   const connection = useSelector(getConnection);
   const logged = useSelector(getLogged);
+
+  useEffect(() => {
+    PollingService.stop();
+    return () => PollingService.start();
+  }, []);
 
   const {
     handleSubmit,

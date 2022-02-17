@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { storeProxy } from '@src/store';
-import { NotificationService, QueryService } from '@src/services';
+import { NotificationService, PollingService, QueryService } from '@src/services';
 import { ModalInstance } from '@src/models';
 import { App } from '@src/components';
 
@@ -12,6 +12,7 @@ storeProxy
     // Pass store to services and init
     QueryService.init(storeProxy, true);
     NotificationService.init(storeProxy, true);
+    PollingService.init(storeProxy, true);
     // Register as open
     chrome.runtime.connect({ name: ModalInstance.option });
   })

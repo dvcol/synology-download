@@ -1,13 +1,13 @@
 import { combineLatest, distinctUntilChanged, Subject, switchMap, timer } from 'rxjs';
-import { Store } from 'redux';
 import { getLogged, getPollingEnabled, getPollingInterval } from '@src/store/selectors';
 import { store$ } from '@src/store';
-import { defaultPolling } from '@src/models';
+import { ChromeMessageType, ChromeNotification, defaultPolling, StoreOrProxy } from '@src/models';
 import { QueryService } from '../query';
-import { skipUntilRepeat } from '@src/utils';
+import { onMessage, sendMessage, skipUntilRepeat } from '@src/utils';
 
 export class PollingService {
-  private static store: Store;
+  private static store: any | StoreOrProxy;
+  private static isProxy: boolean;
 
   private static readonly stop$ = new Subject<void>();
   private static readonly start$ = new Subject<void>();
@@ -26,22 +26,39 @@ export class PollingService {
     return getPollingInterval(this.store.getState()) ?? defaultPolling.background.interval;
   }
 
-  static init(store: Store): void {
+  static init(store: StoreOrProxy, isProxy = false) {
     this.store = store;
-    this.timer$.subscribe(() => QueryService.listTasks().subscribe());
+    this.isProxy = isProxy;
 
-    store$(this.store, getPollingInterval).subscribe(() => this.change(this.interval()));
-    combineLatest([store$(this.store, getPollingEnabled), store$(this.store, getLogged)]).subscribe(([enabled, logged]) =>
-      enabled && logged ? this.start() : this.stop()
-    );
+    onMessage<ChromeNotification>([ChromeMessageType.polling]).subscribe(({ message: { payload }, sendResponse }) => {
+      (payload ? this.start$ : this.stop$).next();
+      sendResponse();
+    });
+
+    if (!this.isProxy) {
+      this.timer$.subscribe(() => QueryService.listTasks().subscribe());
+
+      store$(this.store, getPollingInterval).subscribe(() => this.change(this.interval()));
+      combineLatest([store$(this.store, getPollingEnabled), store$(this.store, getLogged)]).subscribe(([enabled, logged]) =>
+        enabled && logged ? this.start() : this.stop()
+      );
+    }
   }
 
   static start(): void {
-    this.start$.next();
+    if (this.isProxy) {
+      sendMessage<boolean>({ type: ChromeMessageType.polling, payload: true }).subscribe();
+    } else {
+      this.start$.next();
+    }
   }
 
   static stop(): void {
-    this.stop$.next();
+    if (this.isProxy) {
+      sendMessage<boolean>({ type: ChromeMessageType.polling, payload: false }).subscribe();
+    } else {
+      this.stop$.next();
+    }
   }
 
   static change(interval: number): void {
