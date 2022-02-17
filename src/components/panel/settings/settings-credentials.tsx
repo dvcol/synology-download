@@ -5,7 +5,7 @@ import { getConnection, getLogged, urlReducer } from '@src/store/selectors';
 import { useDispatch, useSelector } from 'react-redux';
 import { NotificationService, PollingService, QueryService } from '@src/services';
 import { RegisterOptions, useForm } from 'react-hook-form';
-import { Connection, ConnectionHeader } from '@src/models';
+import { Connection, ConnectionHeader, ConnectionType, Protocol } from '@src/models';
 import { finalize, Observable } from 'rxjs';
 import { FormCheckbox, FormInput } from '@src/components';
 import { SwitchBaseProps } from '@mui/material/internal/SwitchBase';
@@ -29,13 +29,21 @@ export const SettingsCredentials = () => {
     handleSubmit,
     control,
     reset,
+    getValues,
+    setValue,
     formState: { isValid, isDirty },
-  } = useForm<Connection>({ mode: 'onChange', defaultValues: { protocol: '', path: '', username: '', password: '', ...connection } });
+  } = useForm<Connection>({
+    mode: 'onChange',
+    defaultValues: { type: ConnectionType.local, protocol: Protocol.http, path: '', username: '', password: '', ...connection },
+  });
+
+  const isQuickConnect = getValues().type === ConnectionType.quickConnect;
 
   const rules: Record<keyof Omit<Connection, 'logged' | 'rememberMe'>, RegisterOptions> = {
+    type: { required: true },
     protocol: { required: true },
     path: { required: true },
-    port: { required: true, min: 1025, max: 65535 },
+    port: { required: !isQuickConnect, min: 1025, max: 65535 },
     username: { required: true },
     password: { required: true },
   };
@@ -50,6 +58,7 @@ export const SettingsCredentials = () => {
 
   const buildUrl = (data: Connection, type: keyof LoginError): string | undefined => {
     try {
+      console.log('build', data, urlReducer(data));
       return urlReducer(data);
     } catch (error) {
       setLoginError({ ...loginError, [type]: true });
@@ -127,23 +136,54 @@ export const SettingsCredentials = () => {
         subheaderTypographyProps={{ color: 'text.secondary', gutterBottom: true }}
         sx={{ p: '1rem 1rem 0' }}
       />
-      <CardContent>
-        <Box component="form" sx={{ '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off" onSubmit={handleSubmit(loginLogout)}>
+      <CardContent sx={{ p: '0 1rem' }}>
+        <CardHeader
+          title={i18n('type__title')}
+          subheader={i18n('type__subheader')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          action={
+            <FormInput
+              controllerProps={{ name: 'type', control, rules: rules.protocol }}
+              textFieldProps={{
+                select: true,
+                label: i18n('type'),
+                sx: { flex: '1 0 8rem' },
+                onChange: ({ target: { name, value } }) => isQuickConnect && setValue('protocol', Protocol.https),
+              }}
+            >
+              {[ConnectionType.local, ConnectionType.twoFactor]?.map((type) => (
+                <MenuItem key={type} value={type}>
+                  {i18n(type, 'common', 'model', 'connection_type')}
+                </MenuItem>
+              ))}
+            </FormInput>
+          }
+          sx={{ p: '0.5rem 0' }}
+        />
+
+        <Card
+          component="form"
+          sx={{ p: '0.5rem', m: '0.5rem 0', '& .MuiFormControl-root': { m: '0.5rem' } }}
+          noValidate
+          autoComplete="off"
+          onSubmit={handleSubmit(loginLogout)}
+        >
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <FormInput
               controllerProps={{ name: 'protocol', control, rules: rules.protocol }}
               textFieldProps={{
                 select: true,
-                label: i18n('subheader'),
+                label: i18n('protocol'),
                 sx: { flex: '1 0 6rem' },
+                disabled: isQuickConnect,
               }}
             >
-              <MenuItem key="http" value="http">
-                http
-              </MenuItem>
-              <MenuItem key="https" value="https">
-                https
-              </MenuItem>
+              {Object.values(Protocol)?.map((type) => (
+                <MenuItem key={type} value={type}>
+                  {i18n(type, 'common', 'model', 'protocol')}
+                </MenuItem>
+              ))}
             </FormInput>
 
             <Typography id="protocol-path-slash" variant="body2" color="text.secondary">
@@ -158,18 +198,26 @@ export const SettingsCredentials = () => {
               }}
             />
 
-            <Typography id="path-port-dot" variant="body2" color="text.secondary">
-              :
-            </Typography>
+            {!isQuickConnect ? (
+              <>
+                <Typography id="path-port-dot" variant="body2" color="text.secondary">
+                  :
+                </Typography>
 
-            <FormInput
-              controllerProps={{ name: 'port', control, rules: rules.port }}
-              textFieldProps={{
-                type: 'number',
-                label: i18n('port'),
-                sx: { flex: '1 0 6rem' },
-              }}
-            />
+                <FormInput
+                  controllerProps={{ name: 'port', control, rules: rules.port }}
+                  textFieldProps={{
+                    type: 'number',
+                    label: i18n('port'),
+                    sx: { flex: '1 0 6rem' },
+                  }}
+                />
+              </>
+            ) : (
+              <Typography id="path-port-dot" variant="body2" color="text.secondary" sx={{ mr: '0.75rem' }}>
+                .quickconnect.to
+              </Typography>
+            )}
           </Box>
           <Box sx={{ display: 'flex' }}>
             <FormInput
@@ -188,7 +236,7 @@ export const SettingsCredentials = () => {
               }}
             />
           </Box>
-        </Box>
+        </Card>
       </CardContent>
 
       <CardActions sx={{ justifyContent: 'space-between', padding: '0 1.5rem 1.5rem' }}>

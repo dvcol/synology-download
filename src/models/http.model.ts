@@ -30,6 +30,7 @@ export interface BaseHttpRequest {
   headers?: HttpHeaders;
   params?: HttpParameters;
   body?: Body;
+  redirect?: RequestRedirect;
 }
 
 export interface BaseHttpResponse<T> {

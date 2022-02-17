@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { StoreState } from '../store';
-import { Connection, ThemeMode } from '@src/models';
+import { Connection, ConnectionType, ThemeMode } from '@src/models';
 import { darkTheme, lightTheme } from '@src/themes';
 
 export const getSettings = createSelector(
@@ -16,9 +16,10 @@ export const getQuick = createSelector(getSettings, (setting) => setting?.quick)
 
 export const getConnection = createSelector(getSettings, (setting) => setting?.connection);
 
-export const urlReducer = (connection: Connection) => {
-  if (connection.protocol && connection.path && connection.port) {
-    return new URL(`${connection.protocol}://${connection.path}:${connection.port}`).toString();
+export const urlReducer = ({ type, protocol, path, port }: Connection) => {
+  if (protocol && path && port) {
+    if (ConnectionType.local === type) return new URL(`${protocol}://${path}:${port}`).toString();
+    else if (ConnectionType.quickConnect === type) return new URL(`${protocol}://${path}.quickconnect.to`).toString();
   }
   return '';
 };

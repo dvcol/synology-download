@@ -4,7 +4,7 @@ import { HttpError } from './http.model';
 export enum ErrorType {
   Synology = 'synology',
   Login = 'login',
-  NotReady = 'not-ready',
+  NotReady = 'not_ready',
 }
 
 export class SynologyError extends Error {

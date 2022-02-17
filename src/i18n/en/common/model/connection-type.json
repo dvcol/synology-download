@@ -1,0 +1,11 @@
+{
+  "common__model__connection_type__local": {
+    "message": "Local"
+  },
+  "common__model__connection_type__quick_connect": {
+    "message": "Quick connect"
+  },
+  "common__model__connection_type__two_factor": {
+    "message": "Two Factor"
+  }
+}

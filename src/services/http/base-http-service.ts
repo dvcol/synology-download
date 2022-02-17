@@ -22,7 +22,7 @@ export class BaseHttpService {
     return builder;
   }
 
-  request<T>({ url, method, headers, params, body }: BaseHttpRequest): Observable<T> {
+  request<T>({ url, method, headers, params, body, redirect }: BaseHttpRequest): Observable<T> {
     let _url: string;
     try {
       _url = this.buildUrl(url, params).toString();
@@ -38,6 +38,7 @@ export class BaseHttpService {
         headers,
         body,
         signal: controller.signal,
+        redirect: redirect ?? 'follow',
       })
         .then((r: Response) => r.json())
         .then((data: T) => {

@@ -29,16 +29,28 @@ export enum InterfaceHeader {
   contextMenu = 'context_menu',
 }
 
+export enum ConnectionType {
+  local = 'local',
+  quickConnect = 'quick_connect', // No functioning API
+  twoFactor = 'two_factor',
+}
+
+export enum Protocol {
+  http = 'http',
+  https = 'https',
+}
+
 export interface Connection {
+  type?: ConnectionType;
   rememberMe?: boolean;
-  protocol?: string;
+  protocol?: Protocol;
   path?: string;
   port?: number;
   username?: string;
   password?: string;
 }
 
-export const defaultConnection: Connection = { rememberMe: true, protocol: 'http', port: 5000 };
+export const defaultConnection: Connection = { type: ConnectionType.local, rememberMe: true, protocol: Protocol.http, port: 5000 };
 
 export interface Polling {
   enabled: boolean;
