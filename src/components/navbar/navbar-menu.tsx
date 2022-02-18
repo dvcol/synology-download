@@ -1,23 +1,28 @@
-import React from 'react';
-import { DialogContentText, Divider, IconButton, Menu, Tooltip } from '@mui/material';
-import ClearAllIcon from '@mui/icons-material/ClearAll';
 import AddLinkIcon from '@mui/icons-material/AddLink';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import PauseIcon from '@mui/icons-material/Pause';
+import ClearAllIcon from '@mui/icons-material/ClearAll';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
-import SettingsIcon from '@mui/icons-material/Settings';
 import LaunchIcon from '@mui/icons-material/Launch';
+import PauseIcon from '@mui/icons-material/Pause';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import SettingsIcon from '@mui/icons-material/Settings';
 import TuneIcon from '@mui/icons-material/Tune';
-import { Link } from 'react-router-dom';
+import { DialogContentText, Divider, IconButton, Menu, Tooltip } from '@mui/material';
+
+import React from 'react';
+
 import { useDispatch, useSelector } from 'react-redux';
-import NavbarMenuIcon from './navbar-menu-icon';
+
+import { Link } from 'react-router-dom';
+
+import { ConfirmationDialog } from '@src/components';
+import { ErrorType, LoginError } from '@src/models';
+import { NotificationService, QueryService } from '@src/services';
 import { setNavbar } from '@src/store/actions';
 import { getUrl } from '@src/store/selectors';
-import { NotificationService, QueryService } from '@src/services';
-import { ConfirmationDialog } from '@src/components';
 import { createTab, useI18n } from '@src/utils';
-import { ErrorType, LoginError } from '@src/models';
+
+import NavbarMenuIcon from './navbar-menu-icon';
 
 type NavbarMenuProps = { label: React.ReactNode };
 

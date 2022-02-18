@@ -1,4 +1,5 @@
 import prettyBytes from 'pretty-bytes';
+
 import { ColorLevel, DownloadStationStatistic, TabCount } from '@src/models';
 
 export interface TaskList {

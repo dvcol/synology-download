@@ -1,5 +1,6 @@
-import NotificationOptions = chrome.notifications.NotificationOptions;
 import { OptionsObject } from 'notistack';
+
+import NotificationOptions = chrome.notifications.NotificationOptions;
 
 export enum NotificationLevel {
   trace = -2,

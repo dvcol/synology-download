@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react';
 import { LinearProgress, LinearProgressProps } from '@mui/material';
+
+import React, { useEffect, useState } from 'react';
+
 import { useSelector } from 'react-redux';
+
 import { getLoading } from '@src/store/selectors';
 import { useDebounceObservable } from '@src/utils';
 

@@ -1,17 +1,20 @@
-import React, { useEffect } from 'react';
-import { ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
-import { anchor$, taskDialog$ } from '../index';
 import { PortalProps } from '@mui/base/Portal';
-import { useSelector } from 'react-redux';
+import { ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import { PopoverProps } from '@mui/material/Popover';
 
-import { QueryService } from '@src/services';
-import { MaterialIcon, QuickMenu, TaskForm } from '@src/models';
-import { getQuick } from '@src/store/selectors';
-import { StoreState } from '@src/store';
-import { MuiIcon } from '@src/components';
+import React, { FC, useEffect } from 'react';
 
-export const QuickMenuDialog = ({ container }: React.PropsWithRef<{ container?: PortalProps['container'] }>) => {
+import { useSelector } from 'react-redux';
+
+import { MuiIcon } from '@src/components';
+import { MaterialIcon, QuickMenu, TaskForm } from '@src/models';
+import { QueryService } from '@src/services';
+import { StoreState } from '@src/store';
+import { getQuick } from '@src/store/selectors';
+
+import { anchor$, taskDialog$ } from '../index';
+
+export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ container }) => {
   const [_anchor, setAnchor] = React.useState<PopoverProps['anchorEl']>();
   const [position, setPosition] = React.useState<PopoverProps['anchorPosition'] | undefined>();
 
@@ -65,7 +68,7 @@ export const QuickMenuDialog = ({ container }: React.PropsWithRef<{ container?: 
       }}
     >
       {menus?.map((m, i) => (
-        <MenuItem key={m.id} onClick={() => handleClick(m)} autoFocus={i === 0}>
+        <MenuItem key={m.id} onClick={() => handleClick(m)}>
           <ListItemIcon>
             <MuiIcon icon={m.icon ?? MaterialIcon.download} props={{ sx: { fontSize: '18px' } }} />
           </ListItemIcon>

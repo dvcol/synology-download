@@ -1,5 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
+
 import { Task, TaskStatus, TaskStatusType } from '@src/models';
+
 import { StoreState } from '../store';
 
 export const getTasks = createSelector(

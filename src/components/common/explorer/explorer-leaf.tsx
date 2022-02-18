@@ -1,8 +1,10 @@
-import React from 'react';
-import { File, Folder } from '@src/models';
-import { TreeItem } from '@mui/lab';
-import { ExplorerLoading } from '@src/components';
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
+import { TreeItem } from '@mui/lab';
+
+import React from 'react';
+
+import { ExplorerLoading } from '@src/components';
+import { File, Folder } from '@src/models';
 
 export const ExplorerLeaf = ({
   nodeId,

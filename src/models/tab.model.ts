@@ -1,6 +1,7 @@
+import { v4 as uuid } from 'uuid';
+
 import { ColorLevel } from './material-ui.model';
 import { TaskStatus } from './task.model';
-import { v4 as uuid } from 'uuid';
 
 export interface Tab {
   template: TabType;

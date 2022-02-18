@@ -1,10 +1,14 @@
-import React, { FC } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Badge, BadgeProps, LinkProps, styled, Tab, TabProps } from '@mui/material';
-import { ColorLevel, TabType, TaskTab } from '@src/models';
-import { getTaskCountByTabId } from '@src/store/selectors';
+
+import React, { FC } from 'react';
+
+import { useDispatch, useSelector } from 'react-redux';
+
 import { Link } from 'react-router-dom';
+
+import { ColorLevel, TabType, TaskTab } from '@src/models';
 import { setNavbar } from '@src/store/actions';
+import { getTaskCountByTabId } from '@src/store/selectors';
 
 type NavbarTabProps = TabProps & LinkProps & { tab: TaskTab };
 

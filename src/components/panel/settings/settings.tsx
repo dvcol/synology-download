@@ -1,6 +1,11 @@
-import React from 'react';
 import { Container, Paper, Tab, Tabs } from '@mui/material';
-import { ConnectionHeader, InterfaceHeader, NotificationHeader, SettingHeader } from '@src/models';
+
+import React from 'react';
+
+import { Route, Routes } from 'react-router-dom';
+
+import { HashLink as Link } from 'react-router-hash-link';
+
 import {
   SettingsBanner,
   SettingsContextMenus,
@@ -11,11 +16,11 @@ import {
   SettingsSnack,
   SettingsTasksCount,
 } from '@src/components';
-import { Route, Routes } from 'react-router-dom';
-import { HashLink as Link } from 'react-router-hash-link';
-import { SettingsTabs } from './settings-tabs';
-import { useI18n } from '@src/utils';
 import { SettingsGlobal } from '@src/components/panel/settings/settings-global';
+import { ConnectionHeader, InterfaceHeader, NotificationHeader, SettingHeader } from '@src/models';
+import { useI18n } from '@src/utils';
+
+import { SettingsTabs } from './settings-tabs';
 
 export const Settings = () => {
   const i18n = useI18n('panel', 'settings');

@@ -1,5 +1,5 @@
-import { BaseHttpService } from './base-http-service';
 import { catchError, map, Observable, of } from 'rxjs';
+
 import {
   Api,
   BaseHttpRequest,
@@ -14,6 +14,8 @@ import {
   SynologyQueryPayload,
 } from '@src/models';
 import { onMessage, sendMessage, stringifyParams } from '@src/utils';
+
+import { BaseHttpService } from './base-http-service';
 
 export class SynologyService extends BaseHttpService {
   protected sid?: string;

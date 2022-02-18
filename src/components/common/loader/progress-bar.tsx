@@ -1,5 +1,5 @@
-import React from 'react';
 import { Box, LinearProgress, LinearProgressProps, Typography } from '@mui/material';
+import React from 'react';
 
 export const ProgressBar = (props: LinearProgressProps & { value: number }) => (
   <Box sx={{ display: 'flex', alignItems: 'center' }}>

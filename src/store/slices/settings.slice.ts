@@ -1,7 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Connection, ContextMenu, defaultSettings, Global, Notifications, Polling, QuickMenu, SettingsSlice, TaskTab } from '@src/models';
 import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
 import { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
+
+import { Connection, ContextMenu, defaultSettings, Global, Notifications, Polling, QuickMenu, SettingsSlice, TaskTab } from '@src/models';
+
 import { addTo, removeFrom, setBadgeReducer, setNestedReducer, setReducer, syncNestedReducer, syncReducer, syncRememberMeReducer } from '../reducers';
 
 interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {

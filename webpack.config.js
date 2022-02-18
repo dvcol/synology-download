@@ -73,6 +73,8 @@ const options = {
           },
           {
             loader: 'babel-loader',
+            /* This configuration aids babel-preset-env to disable transpiling of import or export modules to commonJS */
+            options: { presets: [['es2021', { modules: false }]] },
           },
         ],
         exclude: /node_modules/,

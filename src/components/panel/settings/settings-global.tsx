@@ -1,13 +1,17 @@
 import { Button, Card, CardActions, CardContent, CardHeader, MenuItem, Stack } from '@mui/material';
-import { getGlobal } from '@src/store/selectors';
-import { ActionScope, Global, InterfaceHeader, ThemeMode } from '@src/models';
+
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { FormInput } from '@src/components';
-import { useI18n } from '@src/utils';
+
 import { useForm } from 'react-hook-form';
+
+import { useDispatch, useSelector } from 'react-redux';
+
+import { FormInput } from '@src/components';
+import { ActionScope, Global, InterfaceHeader, ThemeMode } from '@src/models';
 import { StoreState } from '@src/store';
 import { syncInterface } from '@src/store/actions';
+import { getGlobal } from '@src/store/selectors';
+import { useI18n } from '@src/utils';
 
 export const SettingsGlobal = () => {
   const i18n = useI18n('panel', 'settings', 'global');

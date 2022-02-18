@@ -1,12 +1,16 @@
-import React, { useEffect } from 'react';
-import { File, FileList, Folder } from '@src/models';
-import { QueryService } from '@src/services';
-import { finalize, Observable, tap } from 'rxjs';
-import { TreeView } from '@mui/lab';
-import { Container } from '@mui/material';
 import FolderIcon from '@mui/icons-material/Folder';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
+import { TreeView } from '@mui/lab';
+import { Container } from '@mui/material';
+
+import React, { FC, useEffect } from 'react';
+
+import { finalize, Observable, tap } from 'rxjs';
+
 import { ExplorerBreadCrumbs, ExplorerLoading } from '@src/components';
+import { File, FileList, Folder } from '@src/models';
+import { QueryService } from '@src/services';
+
 import { ExplorerLeaf } from './explorer-leaf';
 
 export type ExplorerProps = {
@@ -22,7 +26,7 @@ export type ExplorerProps = {
 export type ExplorerEvent = { id?: string; path?: string; folder?: File | Folder };
 
 // TODO implement virtual scroll
-export const Explorer = ({ collapseOnSelect, flatten, disabled, readonly, fileType, startPath, onChange }: ExplorerProps) => {
+export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disabled, readonly, fileType, startPath, onChange }) => {
   const [tree, setTree] = React.useState<Record<string, File[] | Folder[]>>({});
   const [loading, setLoading] = React.useState<Record<string, boolean>>({ root: true });
   const [selected, setSelected] = React.useState<string>('root');
@@ -33,7 +37,7 @@ export const Explorer = ({ collapseOnSelect, flatten, disabled, readonly, fileTy
     QueryService.isLoggedIn &&
       QueryService.listFolders(readonly ?? true).subscribe((list) => {
         setTree({ root: list?.shares ?? [] });
-        setLoading({ ...loading, root: false });
+        setLoading((_loading) => ({ ..._loading, root: false }));
       });
   }, []);
 

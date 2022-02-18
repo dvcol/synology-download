@@ -1,7 +1,9 @@
+import { filter, fromEventPattern, Observable, Subscriber } from 'rxjs';
+
+import { ChromeMessage, ChromeMessageHandler, ChromeMessagePayload, ChromeMessageType, ChromeResponse } from '@src/models';
+
 import MessageSender = chrome.runtime.MessageSender;
 import Port = chrome.runtime.Port;
-import { ChromeMessage, ChromeMessageHandler, ChromeMessagePayload, ChromeMessageType, ChromeResponse } from '@src/models';
-import { filter, fromEventPattern, Observable, Subscriber } from 'rxjs';
 
 /**
  * Rxjs wrapper for chrome.runtime.onMessage event listener

@@ -1,4 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
+
 import { StoreState } from '../store';
 
 export const getState = createSelector(

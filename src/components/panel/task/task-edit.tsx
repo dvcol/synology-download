@@ -1,10 +1,14 @@
-import React, { useEffect } from 'react';
 import { Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, Stack } from '@mui/material';
+
+import React, { useEffect } from 'react';
+
 import { useForm } from 'react-hook-form';
-import { QueryService } from '@src/services';
-import { FormExplorer } from '@src/components';
+
 import { firstValueFrom } from 'rxjs';
+
+import { FormExplorer } from '@src/components';
 import { Task } from '@src/models';
+import { QueryService } from '@src/services';
 import { useI18n } from '@src/utils';
 
 type TaskEditForm = { id: string; destination: string };

@@ -1,9 +1,11 @@
 import React from 'react';
+
 import { render } from 'react-dom';
-import { storeProxy } from '@src/store';
-import { NotificationService, PollingService, QueryService } from '@src/services';
-import { ModalInstance } from '@src/models';
+
 import { App } from '@src/components';
+import { ModalInstance } from '@src/models';
+import { NotificationService, PollingService, QueryService } from '@src/services';
+import { storeProxy } from '@src/store';
 import { portConnect } from '@src/utils';
 
 // TODO custom UI for options

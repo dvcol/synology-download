@@ -1,10 +1,14 @@
 import { AccordionDetails, Button, Card, CardActions, CardHeader, Collapse, Stack } from '@mui/material';
+
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { removeContextMenu, saveContextMenu } from '@src/store/actions';
-import { ChromeMessageType, ContextMenu } from '@src/models';
+
 import { useForm } from 'react-hook-form';
+
+import { useDispatch } from 'react-redux';
+
 import { FormExplorer, FormInput, FormSwitch } from '@src/components/common';
+import { ChromeMessageType, ContextMenu } from '@src/models';
+import { removeContextMenu, saveContextMenu } from '@src/store/actions';
 import { sendMessage, useI18n } from '@src/utils';
 
 export const SettingsContextMenu = ({ menu }: { menu: ContextMenu }) => {

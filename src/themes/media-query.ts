@@ -1,10 +1,13 @@
+import { Theme } from '@mui/material/styles/createTheme';
+
+import { Dispatch, SetStateAction } from 'react';
+
 import { fromEventPattern, Subscription } from 'rxjs';
+
+import { StoreOrProxy } from '@src/models';
+import { store$ } from '@src/store';
 import { getThemeMode } from '@src/store/selectors';
 import { darkTheme, lightTheme } from '@src/themes/themes';
-import { StoreOrProxy } from '@src/models';
-import { Theme } from '@mui/material/styles/createTheme';
-import { Dispatch, SetStateAction } from 'react';
-import { store$ } from '@src/store';
 
 export const isDarkTheme = (): boolean => window.matchMedia('(prefers-color-scheme: dark').matches;
 

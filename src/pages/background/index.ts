@@ -1,6 +1,8 @@
 import { wrapStore } from 'webext-redux';
-import { store } from '@src/store';
+
 import { NotificationService, PollingService, QueryService } from '@src/services';
+import { store } from '@src/store';
+
 import { onMessageEvents, portListener, restoreSettings, restoreTasks } from './modules/';
 
 console.debug('Background service worker started.');

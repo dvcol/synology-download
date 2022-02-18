@@ -1,13 +1,15 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getTabOrFirst, getTasksForActiveTab } from '@src/store/selectors';
-import TaskItem from './task-item';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { Box, Button, Stack } from '@mui/material';
-import { useI18n } from '@src/utils';
+
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+
+import { TaskItem } from '@src/components';
 import { InterfaceHeader, SettingHeader } from '@src/models';
 import { setNavbar } from '@src/store/actions';
+import { getTabOrFirst, getTasksForActiveTab } from '@src/store/selectors';
+import { useI18n } from '@src/utils';
 
 export const TaskPanel = () => {
   const i18n = useI18n('panel', 'task');
@@ -63,5 +65,3 @@ export const TaskPanel = () => {
     </React.Fragment>
   );
 };
-
-export default TaskPanel;

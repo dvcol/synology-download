@@ -1,11 +1,14 @@
 import { Typography } from '@mui/material';
+
+import React from 'react';
+
+import { useDispatch, useSelector } from 'react-redux';
+
+import { SettingsAccordion, SettingsContextMenu } from '@src/components';
+import { ChromeMessageType, ContextMenu, defaultContextMenu, InterfaceHeader } from '@src/models';
+import { StoreState } from '@src/store';
 import { resetContextMenu, saveContextMenu } from '@src/store/actions';
 import { getMenus } from '@src/store/selectors';
-import { StoreState } from '@src/store';
-import { ChromeMessageType, ContextMenu, defaultContextMenu, InterfaceHeader } from '@src/models';
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { SettingsAccordion, SettingsContextMenu } from '@src/components';
 import { sendMessage, useI18n } from '@src/utils';
 
 export const SettingsContextMenus = () => {

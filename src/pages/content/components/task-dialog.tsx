@@ -1,16 +1,18 @@
-import { Dialog, DialogContent } from '@mui/material';
-import React, { useEffect } from 'react';
 import { PortalProps } from '@mui/base/Portal';
-import { taskDialog$ } from '../index';
-import { Subject, takeUntil } from 'rxjs';
+import { Dialog, DialogContent } from '@mui/material';
+
+import React, { FC, useEffect } from 'react';
 import { SubmitHandler } from 'react-hook-form';
+import { Subject, takeUntil } from 'rxjs';
 
-import { ChromeMessageType, ContextMenuOnClickPayload, TaskForm } from '@src/models';
-import { onMessage } from '@src/utils';
 import { TaskAdd } from '@src/components';
+import { ChromeMessageType, ContextMenuOnClickPayload, TaskForm } from '@src/models';
 import { NotificationService, QueryService } from '@src/services';
+import { onMessage } from '@src/utils';
 
-export const TaskDialog = ({ container }: React.PropsWithRef<{ container?: PortalProps['container'] }>) => {
+import { taskDialog$ } from '../index';
+
+export const TaskDialog: FC<{ container?: PortalProps['container'] }> = ({ container }) => {
   const [form, setForm] = React.useState<TaskForm>();
   const [open, setOpen] = React.useState<boolean>(false);
 

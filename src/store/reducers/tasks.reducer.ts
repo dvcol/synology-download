@@ -1,6 +1,7 @@
-import { TasksReducers, tasksSlice } from '../slices';
 import { formatBytes, Task, TaskCount, TaskStatistics } from '@src/models';
 import { localSet, setBadgeText, setTitle } from '@src/utils';
+
+import { TasksReducers, tasksSlice } from '../slices';
 
 export const setCountAndStats = (count?: TaskCount, stats?: TaskStatistics) => {
   // TODO : move to thunk ?

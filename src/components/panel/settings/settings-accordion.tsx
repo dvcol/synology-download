@@ -1,11 +1,14 @@
-import { Accordion, AccordionSummary, Button, Card, CardActions, CardContent, CardHeader, Stack } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AddIcon from '@mui/icons-material/Add';
-import { v4 as uuid } from 'uuid';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
+import { Accordion, AccordionSummary, Button, Card, CardActions, CardContent, CardHeader, Stack } from '@mui/material';
+
 import React from 'react';
-import { useI18n } from '@src/utils';
+
+import { v4 as uuid } from 'uuid';
+
 import { InterfaceHeader } from '@src/models';
+import { useI18n } from '@src/utils';
 
 export const SettingsAccordion = <T extends { id: string }>({
   title,

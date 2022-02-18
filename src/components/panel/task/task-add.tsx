@@ -1,10 +1,14 @@
-import React, { FC, useEffect } from 'react';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, CardProps, Grid, Stack } from '@mui/material';
+
+import React, { FC, useEffect } from 'react';
+
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { QueryService } from '@src/services';
-import { FormExplorer, FormInput, FormSwitch } from '@src/components';
+
 import { firstValueFrom } from 'rxjs';
+
+import { FormExplorer, FormInput, FormSwitch } from '@src/components';
 import { TaskForm } from '@src/models';
+import { QueryService } from '@src/services';
 import { useI18n } from '@src/utils';
 
 export const TaskAdd: FC<{

@@ -1,21 +1,5 @@
-import { SynologyAuthService, SynologyDownloadService, SynologyFileService, SynologyInfoService } from '@src/services/http';
-import { NotificationService } from '@src/services';
-import {
-  getActiveTasksIdsByActionScope,
-  geTasksIdsByStatusType,
-  getFinishedTasksIdsByActionScope,
-  getLogged,
-  getNotificationsBannerFailedEnabled,
-  getNotificationsBannerFinishedEnabled,
-  getPassword,
-  getPausedTasksIdsByActionScope,
-  getSid,
-  getTasksIdsByActionScope,
-  getUrl,
-  getUsername,
-} from '@src/store/selectors';
-import { addLoading, removeLoading, setLogged, setSid, setTasks, setTaskStats, spliceTasks } from '@src/store/actions';
-import { store$ } from '@src/store';
+import { EMPTY, finalize, Observable, tap } from 'rxjs';
+
 import {
   CommonResponse,
   DownloadStationConfig,
@@ -35,8 +19,25 @@ import {
   TaskStatus,
   TaskStatusType,
 } from '@src/models';
+import { NotificationService } from '@src/services';
+import { SynologyAuthService, SynologyDownloadService, SynologyFileService, SynologyInfoService } from '@src/services/http';
+import { store$ } from '@src/store';
+import { addLoading, removeLoading, setLogged, setSid, setTasks, setTaskStats, spliceTasks } from '@src/store/actions';
+import {
+  getActiveTasksIdsByActionScope,
+  geTasksIdsByStatusType,
+  getFinishedTasksIdsByActionScope,
+  getLogged,
+  getNotificationsBannerFailedEnabled,
+  getNotificationsBannerFinishedEnabled,
+  getPassword,
+  getPausedTasksIdsByActionScope,
+  getSid,
+  getTasksIdsByActionScope,
+  getUrl,
+  getUsername,
+} from '@src/store/selectors';
 import { before, useI18n as UseI18n } from '@src/utils';
-import { EMPTY, finalize, Observable, tap } from 'rxjs';
 
 const i18n = UseI18n('common', 'error');
 

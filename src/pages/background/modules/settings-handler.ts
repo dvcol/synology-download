@@ -1,8 +1,9 @@
 import { defaultSettings, SettingsSlice } from '@src/models';
+import { store } from '@src/store';
 import { setNavbar, syncSettings } from '@src/store/actions';
 import { settingsSlice } from '@src/store/slices';
-import { store } from '@src/store';
 import { buildContextMenu, setBadgeBackgroundColor, syncGet } from '@src/utils';
+
 import { restoreSate } from './state-handler';
 
 /** Restore extension settings */

@@ -1,9 +1,10 @@
-import { defaultTabs, Tab, TabType } from './tab.model';
-import { SettingsSlice } from './store.model';
-import { TaskStatus } from './task.model';
-import { BannerNotificationScope, NotificationLevel, SnackNotificationScope } from './notification.model';
 import { OptionsObject } from 'notistack';
+
 import { defaultContextMenu, defaultQuickMenu } from './menu.model';
+import { BannerNotificationScope, NotificationLevel, SnackNotificationScope } from './notification.model';
+import { SettingsSlice } from './store.model';
+import { defaultTabs, Tab, TabType } from './tab.model';
+import { TaskStatus } from './task.model';
 
 export enum SettingHeader {
   connection = 'connection',

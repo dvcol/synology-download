@@ -1,6 +1,7 @@
-import { StateReducers, stateSlice } from '../slices';
-import { syncSet } from '@src/utils';
 import { StateSlice } from '@src/models';
+import { syncSet } from '@src/utils';
+
+import { StateReducers, stateSlice } from '../slices';
 
 export const syncLoggedReducer: StateReducers['setLogged'] = (state, { payload: logged }) => {
   // TODO : move to thunk ?

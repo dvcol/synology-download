@@ -1,17 +1,22 @@
-import React, { useState } from 'react';
-import { finalize, Observable } from 'rxjs';
-import { Accordion, AccordionDetails, AccordionSummary, Button, ButtonGroup, Tooltip } from '@mui/material';
-import TaskCard from './task-card';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ErrorType, LoginError, Task, TaskStatus } from '@src/models';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import TaskDetail from './task-detail';
-import { NotificationService, QueryService } from '@src/services';
+import { Accordion, AccordionDetails, AccordionSummary, Button, ButtonGroup, Tooltip } from '@mui/material';
+
+import React, { forwardRef, ForwardRefRenderFunction, useState } from 'react';
+
+import { finalize, Observable } from 'rxjs';
+
 import { ConfirmationDialog, IconLoader } from '@src/components';
+import { ErrorType, LoginError, Task, TaskStatus } from '@src/models';
+import { NotificationService, QueryService } from '@src/services';
 import { before, useDebounceObservable, useI18n } from '@src/utils';
 
-export const TaskItem = React.forwardRef<HTMLDivElement, { task: Task; status?: TaskStatus[] }>(({ task, status }, ref) => {
+import TaskCard from './task-card';
+import TaskDetail from './task-detail';
+
+type TaskItemProps = { task: Task; status?: TaskStatus[] };
+const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps> = ({ task, status }, ref) => {
   const i18n = useI18n('panel', 'task', 'item');
   const [expanded, setExpanded] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -131,6 +136,6 @@ export const TaskItem = React.forwardRef<HTMLDivElement, { task: Task; status?: 
       </AccordionDetails>
     </Accordion>
   );
-});
+};
 
-export default TaskItem;
+export const TaskItem = forwardRef(TaskItemComponent);

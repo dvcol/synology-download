@@ -1,6 +1,6 @@
-import { Controller, ControllerProps } from 'react-hook-form';
 import { FormControl, FormControlLabel, FormControlLabelProps, FormHelperText, Switch, SwitchProps } from '@mui/material';
 import React from 'react';
+import { Controller, ControllerProps } from 'react-hook-form';
 import { FieldPath, FieldValues } from 'react-hook-form/dist/types';
 
 export const FormSwitch = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({

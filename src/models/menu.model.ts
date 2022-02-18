@@ -1,4 +1,5 @@
 import { v4 as uuid } from 'uuid';
+
 import { MaterialIcon } from './material-ui.model';
 
 export interface Menu {

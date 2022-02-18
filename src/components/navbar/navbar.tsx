@@ -1,13 +1,17 @@
-import React, { useEffect } from 'react';
-import { AppBar, Tabs, Toolbar } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
 import MenuIcon from '@mui/icons-material/Menu';
-import NavbarTab from './navbar-tab';
-import NavbarMenu from './navbar-menu';
-import { getTab, getTabs } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
+import { AppBar, Tabs, Toolbar } from '@mui/material';
+
+import React, { useEffect } from 'react';
+
+import { useDispatch, useSelector } from 'react-redux';
+
 import LoadingBar from '@src/components/navbar/loading-bar';
 import { setNavbar } from '@src/store/actions';
+import { getTab, getTabs } from '@src/store/selectors';
+import { useI18n } from '@src/utils';
+
+import NavbarMenu from './navbar-menu';
+import NavbarTab from './navbar-tab';
 
 export const Navbar = () => {
   const i18n = useI18n('navbar');

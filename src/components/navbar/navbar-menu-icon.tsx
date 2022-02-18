@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
 import { ListItemIcon, MenuItem } from '@mui/material';
+import React, { FC } from 'react';
 
 type MenuItemIconProps = {
   label: string;

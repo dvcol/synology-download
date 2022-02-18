@@ -1,15 +1,7 @@
+import { VariantType } from 'notistack';
+
 import { filter, map, Observable, Subject, tap } from 'rxjs';
-import {
-  getCount,
-  getNotificationsBannerEnabled,
-  getNotificationsBannerLevel,
-  getNotificationsSnack,
-  getNotificationsSnackEnabled,
-  getNotificationsSnackLevel,
-} from '@src/store/selectors';
-import { setTasksCount } from '@src/store/actions';
-import { store$ } from '@src/store';
-import { bufferDebounceUnless, createNotification, onMessage, parseMagnetLink, sendMessage, useI18n as UseI18n } from '@src/utils';
+
 import {
   ChromeMessageType,
   ChromeNotification,
@@ -21,7 +13,17 @@ import {
   StoreOrProxy,
   Task,
 } from '@src/models';
-import { VariantType } from 'notistack';
+import { store$ } from '@src/store';
+import { setTasksCount } from '@src/store/actions';
+import {
+  getCount,
+  getNotificationsBannerEnabled,
+  getNotificationsBannerLevel,
+  getNotificationsSnack,
+  getNotificationsSnackEnabled,
+  getNotificationsSnackLevel,
+} from '@src/store/selectors';
+import { bufferDebounceUnless, createNotification, onMessage, parseMagnetLink, sendMessage, useI18n as UseI18n } from '@src/utils';
 
 const i18n = UseI18n('common', 'notification');
 

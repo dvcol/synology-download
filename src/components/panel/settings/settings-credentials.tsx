@@ -1,14 +1,19 @@
 import { Box, Button, Card, CardActions, CardContent, CardHeader, LinearProgress, MenuItem, Stack, Typography } from '@mui/material';
+import { SwitchBaseProps } from '@mui/material/internal/SwitchBase';
+
 import React, { useEffect, useState } from 'react';
+
+import { RegisterOptions, useForm } from 'react-hook-form';
+
+import { useDispatch, useSelector } from 'react-redux';
+
+import { finalize, Observable } from 'rxjs';
+
+import { FormCheckbox, FormInput } from '@src/components';
+import { Connection, ConnectionHeader, ConnectionType, Protocol } from '@src/models';
+import { NotificationService, PollingService, QueryService } from '@src/services';
 import { setConnection, syncConnection, syncRememberMe } from '@src/store/actions';
 import { getConnection, getLogged, urlReducer } from '@src/store/selectors';
-import { useDispatch, useSelector } from 'react-redux';
-import { NotificationService, PollingService, QueryService } from '@src/services';
-import { RegisterOptions, useForm } from 'react-hook-form';
-import { Connection, ConnectionHeader, ConnectionType, Protocol } from '@src/models';
-import { finalize, Observable } from 'rxjs';
-import { FormCheckbox, FormInput } from '@src/components';
-import { SwitchBaseProps } from '@mui/material/internal/SwitchBase';
 import { before, useDebounceObservable, useI18n } from '@src/utils';
 
 // TODO : 2FA & HTTPS

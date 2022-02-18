@@ -1,9 +1,10 @@
+import { Container } from '@mui/material';
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { TaskAdd, TaskPanel } from './task';
-import { Settings } from './settings';
+
 import { Config } from './config';
-import { Container } from '@mui/material';
+import { Settings } from './settings';
+import { TaskAdd, TaskPanel } from './task';
 
 export const Panel = () => {
   return (

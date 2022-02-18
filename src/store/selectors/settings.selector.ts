@@ -1,7 +1,9 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { StoreState } from '../store';
+
 import { Connection, ConnectionType, ThemeMode } from '@src/models';
 import { darkTheme, lightTheme } from '@src/themes';
+
+import { StoreState } from '../store';
 
 export const getSettings = createSelector(
   (state: StoreState) => state,

@@ -1,15 +1,17 @@
-import React from 'react';
-import { Avatar, Grid, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
-import DownloadIcon from '@mui/icons-material/Download';
-import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import LoopIcon from '@mui/icons-material/Loop';
+import DownloadIcon from '@mui/icons-material/Download';
 import DownloadDoneIcon from '@mui/icons-material/DownloadDone';
-import UploadIcon from '@mui/icons-material/Upload';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { computeEta, computeProgress, formatBytes, Task, TaskStatus, taskStatusToColor } from '@src/models';
+import LoopIcon from '@mui/icons-material/Loop';
+import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
+import UploadIcon from '@mui/icons-material/Upload';
+import { Avatar, Grid, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 import { blue, green, orange, purple, red } from '@mui/material/colors';
+
+import React from 'react';
+
 import { ProgressBar } from '@src/components';
+import { computeEta, computeProgress, formatBytes, Task, TaskStatus, taskStatusToColor } from '@src/models';
 import { useI18n } from '@src/utils';
 
 export const TaskCard = ({ task, statuses }: { task: Task; statuses?: TaskStatus[] }) => {

@@ -1,8 +1,8 @@
-import { Controller, ControllerProps } from 'react-hook-form';
 import { Checkbox, CheckboxProps, FormControl, FormControlLabel, FormControlLabelProps, FormHelperText } from '@mui/material';
-import React from 'react';
-import { FieldPath, FieldValues } from 'react-hook-form/dist/types';
 import { DefaultComponentProps, OverridableTypeMap } from '@mui/material/OverridableComponent';
+import React from 'react';
+import { Controller, ControllerProps } from 'react-hook-form';
+import { FieldPath, FieldValues } from 'react-hook-form/dist/types';
 
 export const FormCheckbox = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({
   controllerProps,

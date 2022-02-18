@@ -1,17 +1,20 @@
-import { Controller, ControllerProps } from 'react-hook-form';
 import React from 'react';
+import { Controller, ControllerProps } from 'react-hook-form';
 import { FieldPath, FieldValues } from 'react-hook-form/dist/types';
+
 import { Explorer, ExplorerEvent, ExplorerProps } from '@src/components';
 
-export const FormExplorer = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({
+type FormExplorerProps<T extends FieldValues, N extends FieldPath<T>> = {
+  controllerProps: Omit<ControllerProps<T, N>, 'render'>;
+  explorerProps?: Omit<ExplorerProps, 'onChange'>;
+  onChange?: (event: ExplorerEvent) => void;
+};
+
+export const FormExplorer = <T extends FieldValues, N extends FieldPath<T>>({
   controllerProps,
   explorerProps,
   onChange,
-}: React.PropsWithoutRef<{
-  controllerProps: Omit<ControllerProps<TFieldValues, TName>, 'render'>;
-  explorerProps?: Omit<ExplorerProps, 'onChange'>;
-  onChange?: (event: ExplorerEvent) => void;
-}>) => {
+}: FormExplorerProps<T, N>) => {
   const render: ControllerProps['render'] = ({ field: { onChange: _onChange, value } }) => {
     return (
       <Explorer

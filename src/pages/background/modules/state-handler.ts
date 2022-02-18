@@ -1,6 +1,6 @@
 import { SettingsSlice, StateSlice } from '@src/models';
-import { stateSlice } from '@src/store/slices';
 import { QueryService } from '@src/services';
+import { stateSlice } from '@src/store/slices';
 import { syncGet } from '@src/utils';
 
 /**

@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { StateSlice } from '@src/models';
-import { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
 import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
+import { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
+
+import { StateSlice } from '@src/models';
 import { syncLoggedReducer } from '@src/store/reducers';
 
 export interface StateReducers<S = StateSlice> extends SliceCaseReducers<S> {

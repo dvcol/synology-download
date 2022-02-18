@@ -1,14 +1,17 @@
-import React from 'react';
-import { render } from 'react-dom';
-import { storeProxy } from '@src/store';
-import { NotificationService, QueryService } from '@src/services';
-import { ModalInstance } from '@src/models';
 import createCache from '@emotion/cache';
+
+import React from 'react';
+
+import { render } from 'react-dom';
+
+import { ModalInstance } from '@src/models';
 import { ContentApp } from '@src/pages/content/components';
+import { NotificationService, QueryService } from '@src/services';
+import { storeProxy } from '@src/store';
 import { portConnect } from '@src/utils';
 
 /**
- * Open a modal popup for complex download actions
+ * Open a modal popup for custom download actions
  */
 export const renderContentApp = () => {
   // Create a root element to host app

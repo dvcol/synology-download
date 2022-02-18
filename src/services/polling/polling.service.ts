@@ -1,9 +1,11 @@
 import { combineLatest, distinctUntilChanged, Subject, switchMap, timer } from 'rxjs';
-import { getLogged, getPollingEnabled, getPollingInterval } from '@src/store/selectors';
-import { store$ } from '@src/store';
+
 import { ChromeMessageType, ChromeNotification, defaultPolling, StoreOrProxy } from '@src/models';
-import { QueryService } from '../query';
+import { store$ } from '@src/store';
+import { getLogged, getPollingEnabled, getPollingInterval } from '@src/store/selectors';
 import { onMessage, sendMessage, skipUntilRepeat } from '@src/utils';
+
+import { QueryService } from '../query';
 
 export class PollingService {
   private static store: any | StoreOrProxy;

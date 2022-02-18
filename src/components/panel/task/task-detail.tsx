@@ -1,15 +1,20 @@
-import React from 'react';
-import { Button, Card, Grid, ListItem, ListItemText, Stack, Typography } from '@mui/material';
-import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import { computeProgress, formatBytes, Task, TaskStatus } from '@src/models';
-import PauseIcon from '@mui/icons-material/Pause';
-import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { ConfirmationDialog, IconLoader, ProgressBar } from '@src/components';
+import EditIcon from '@mui/icons-material/Edit';
+import PauseIcon from '@mui/icons-material/Pause';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { Button, Card, Grid, ListItem, ListItemText, Stack, Typography } from '@mui/material';
+
+import React from 'react';
+
 import { Observable } from 'rxjs';
+
+import { ConfirmationDialog, IconLoader, ProgressBar } from '@src/components';
+import { computeProgress, formatBytes, Task, TaskStatus } from '@src/models';
 import { QueryService } from '@src/services';
-import { TaskEdit } from './task-edit';
+
 import { useI18n } from '@src/utils';
+
+import { TaskEdit } from './task-edit';
 
 export const TaskDetail = ({
   task,

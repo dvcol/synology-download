@@ -1,6 +1,6 @@
 import { createTheme } from '@mui/material';
-import { Property } from 'csstype';
 import { Theme } from '@mui/material/styles/createTheme';
+import { Property } from 'csstype';
 
 const scrollbar: Record<string, any> = {
   '&::-webkit-scrollbar': {

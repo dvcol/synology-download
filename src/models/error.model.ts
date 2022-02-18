@@ -1,5 +1,5 @@
-import { Api, ErrorMap } from './synology.model';
 import { HttpError } from './http.model';
+import { Api, ErrorMap } from './synology.model';
 
 export enum ErrorType {
   Synology = 'synology',
@@ -24,16 +24,8 @@ export class SynologyError extends Error {
 
 export class LoginError extends Error {
   type = ErrorType.Login;
-
-  constructor(msg?: string) {
-    super(msg);
-  }
 }
 
 export class NotReadyError extends Error {
   type = ErrorType.NotReady;
-
-  constructor(msg?: string) {
-    super(msg);
-  }
 }

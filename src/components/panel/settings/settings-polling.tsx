@@ -1,11 +1,15 @@
 import { Box, Button, Card, CardActions, CardContent, CardHeader, InputAdornment, Stack } from '@mui/material';
+
 import React from 'react';
-import { ConnectionHeader, Polling } from '@src/models';
-import { useDispatch, useSelector } from 'react-redux';
-import { getPolling } from '@src/store/selectors';
-import { syncPolling } from '@src/store/actions';
+
 import { RegisterOptions, useForm } from 'react-hook-form';
+
+import { useDispatch, useSelector } from 'react-redux';
+
 import { FormInput, FormSwitch } from '@src/components';
+import { ConnectionHeader, Polling } from '@src/models';
+import { syncPolling } from '@src/store/actions';
+import { getPolling } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
 
 export const SettingsPolling = () => {

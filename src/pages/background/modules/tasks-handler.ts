@@ -1,7 +1,7 @@
 import { TasksSlice } from '@src/models';
+import { store } from '@src/store';
 import { setTasks } from '@src/store/actions';
 import { tasksSlice } from '@src/store/slices';
-import { store } from '@src/store';
 import { localGet, parseJSON } from '@src/utils';
 
 /** Restore extension tasks list */

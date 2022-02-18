@@ -1,7 +1,9 @@
-import { ContextMenu, Notifications, QuickMenu, SettingsSlice, TaskTab } from '@src/models';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { settingsSlice } from '../slices';
+
+import { ContextMenu, Notifications, QuickMenu, SettingsSlice, TaskTab } from '@src/models';
 import { setBadgeBackgroundColor, syncGet, syncSet } from '@src/utils';
+
+import { settingsSlice } from '../slices';
 
 export const syncSettings = (settings: SettingsSlice): void => {
   // TODO : move to thunk ? and do notification
@@ -75,10 +77,6 @@ export const addTo = <P extends Payloads, K extends Keys>(
     return [...array, payload];
   });
 };
-export const removeFrom = <P extends Payloads, K extends Keys, T = string>(
-  oldSettings: SettingsSlice,
-  key: K,
-  filter: (obj: P) => boolean
-): SettingsSlice => {
+export const removeFrom = <P extends Payloads, K extends Keys>(oldSettings: SettingsSlice, key: K, filter: (obj: P) => boolean): SettingsSlice => {
   return syncPayload<P, K>(oldSettings, key, (array) => array?.filter(filter));
 };

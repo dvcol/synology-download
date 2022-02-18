@@ -1,12 +1,16 @@
 import { Typography } from '@mui/material';
+
+import React from 'react';
+
+import { useDispatch, useSelector } from 'react-redux';
+
+import { SettingsAccordion } from '@src/components';
+import { defaultTabs, InterfaceHeader, TaskTab } from '@src/models';
+import { StoreState } from '@src/store';
 import { resetTaskTabs, saveTaskTab } from '@src/store/actions';
 import { getTabs } from '@src/store/selectors';
-import { StoreState } from '@src/store';
-import { defaultTabs, InterfaceHeader, TaskTab } from '@src/models';
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+
 import { SettingsTab } from './settings-tab';
-import { SettingsAccordion } from '@src/components';
 
 export const SettingsTabs = () => {
   const dispatch = useDispatch();

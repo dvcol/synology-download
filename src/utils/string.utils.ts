@@ -1,5 +1,6 @@
-import { HttpParameters } from '@src/models';
 import { parse, ParsedQuery } from 'query-string';
+
+import { HttpParameters } from '@src/models';
 
 export const parseJSON = <T>(json?: string | object) => (typeof json == 'string' && json?.length ? JSON.parse(json) : json) as T;
 

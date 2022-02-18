@@ -1,5 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+
 import React, { useEffect } from 'react';
+
 import { useI18n } from '@src/utils';
 
 export const ConfirmationDialog = ({
@@ -36,7 +38,7 @@ export const ConfirmationDialog = ({
         <Button variant="outlined" onClick={onCancelHandler}>
           {i18n('cancel')}
         </Button>
-        <Button variant="outlined" color="error" onClick={onConfirmHandler} autoFocus>
+        <Button variant="outlined" color="error" onClick={onConfirmHandler}>
           {i18n('confirm')}
         </Button>
       </DialogActions>

@@ -1,4 +1,3 @@
-import React, { FC, useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -14,12 +13,17 @@ import {
   Stack,
   Typography,
 } from '@mui/material';
+
+import React, { FC, useEffect, useState } from 'react';
+
+import { SubmitHandler, useForm } from 'react-hook-form';
+
+import { finalize, forkJoin, Observable } from 'rxjs';
+
+import { FormExplorer, FormInput, FormSwitch } from '@src/components';
 import { ColorLevel, ColorLevelMap, defaultConfig, DownloadStationConfig, DownloadStationInfo } from '@src/models';
 import { NotificationService, QueryService } from '@src/services';
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { before, useDebounceObservable, useI18n } from '@src/utils';
-import { finalize, forkJoin, Observable } from 'rxjs';
-import { FormExplorer, FormInput, FormSwitch } from '@src/components';
 
 export const Config: FC<{
   cardProps?: CardProps;

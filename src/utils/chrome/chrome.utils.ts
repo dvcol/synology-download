@@ -1,5 +1,7 @@
 import { Observable } from 'rxjs';
+
 import { parseJSON } from '@src/utils/string.utils';
+
 import StorageArea = chrome.storage.StorageArea;
 
 type ChromeI18nInput = { key: string; substitutions: (string | number)[] };
