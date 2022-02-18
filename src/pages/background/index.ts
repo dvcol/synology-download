@@ -1,12 +1,12 @@
 import { wrapStore } from 'webext-redux';
 import { store } from '@src/store';
 import { NotificationService, PollingService, QueryService } from '@src/services';
-import { onConnect, onMessageEvents, restoreSettings, restoreTasks } from './modules/';
+import { onMessageEvents, portListener, restoreSettings, restoreTasks } from './modules/';
 
 console.debug('Background service worker started.');
 
 // Listen to ports
-onConnect();
+portListener();
 
 // Listen to context menu events
 onMessageEvents();

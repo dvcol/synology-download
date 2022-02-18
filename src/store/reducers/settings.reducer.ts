@@ -1,19 +1,18 @@
 import { ContextMenu, Notifications, QuickMenu, SettingsSlice, TaskTab } from '@src/models';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { settingsSlice } from '../slices';
-import { parseJSON } from '@src/utils';
+import { setBadgeBackgroundColor, syncGet, syncSet } from '@src/utils';
 
 export const syncSettings = (settings: SettingsSlice): void => {
   // TODO : move to thunk ? and do notification
-  chrome.storage.sync.set({ [settingsSlice.name]: JSON.stringify(settings) }, () => console.debug('Setting sync success', settings));
+  syncSet<SettingsSlice>(settingsSlice.name, settings).subscribe(() => console.debug('Setting sync success', settings));
 };
 
 export const syncRememberMeReducer = (oldSettings: SettingsSlice, { payload: rememberMe }: PayloadAction<boolean>): SettingsSlice => {
   const setSettings = { ...oldSettings, connection: { ...oldSettings.connection, rememberMe } };
   // TODO : move to thunk ?
-  chrome.storage.sync.get(settingsSlice.name, ({ settings }) => {
-    const _settings = parseJSON<SettingsSlice>(settings);
-    const syncedSettings = { ..._settings, connection: { ..._settings?.connection, rememberMe } };
+  syncGet<SettingsSlice>(settingsSlice.name).subscribe((settings) => {
+    const syncedSettings = { ...settings, connection: { ...settings?.connection, rememberMe } };
     syncSettings(syncedSettings);
   });
 
@@ -22,9 +21,9 @@ export const syncRememberMeReducer = (oldSettings: SettingsSlice, { payload: rem
 
 export const setBadgeReducer = <T extends Notifications>(oldSettings: SettingsSlice, action: PayloadAction<Partial<T>>): SettingsSlice => {
   const color = action?.payload?.count?.color;
+  // TODO : move to thunk ?
   if (color !== oldSettings?.notifications?.count?.color) {
-    // TODO : move to thunk ?
-    chrome.action.setBadgeBackgroundColor({ color: color ?? '' }).then(() => console.debug('Badge color changed to ', color));
+    setBadgeBackgroundColor({ color: color ?? '' }).then(() => console.debug('Badge color changed to ', color));
   }
   return syncNestedReducer<T>(oldSettings, action, 'notifications');
 };

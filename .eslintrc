@@ -13,7 +13,8 @@
     "chrome": "readonly"
   },
   "rules": {
-    "prettier/prettier": "warn"
+    "prettier/prettier": "warn",
+    "@typescript-eslint/no-explicit-any": "off"
   },
   "env": {
     "jest": true

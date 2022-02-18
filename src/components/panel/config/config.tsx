@@ -17,8 +17,7 @@ import {
 import { ColorLevel, ColorLevelMap, defaultConfig, DownloadStationConfig, DownloadStationInfo } from '@src/models';
 import { NotificationService, QueryService } from '@src/services';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { before, useI18n } from '@src/utils';
-import { useDebounceObservable } from '@src/utils/hooks-utils';
+import { before, useDebounceObservable, useI18n } from '@src/utils';
 import { finalize, forkJoin, Observable } from 'rxjs';
 import { FormExplorer, FormInput, FormSwitch } from '@src/components';
 

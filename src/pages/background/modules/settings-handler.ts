@@ -2,31 +2,26 @@ import { defaultSettings, SettingsSlice } from '@src/models';
 import { setNavbar, syncSettings } from '@src/store/actions';
 import { settingsSlice } from '@src/store/slices';
 import { store } from '@src/store';
-import { buildContextMenu } from '@src/services';
-import { parseJSON } from '@src/utils';
+import { buildContextMenu, setBadgeBackgroundColor, syncGet } from '@src/utils';
 import { restoreSate } from './state-handler';
 
 /** Restore extension settings */
 export const restoreSettings = () =>
-  chrome.storage.sync.get(settingsSlice.name, ({ settings }) => {
-    console.debug('restoring settings from chrome storage');
-    const restoredSettings = parseJSON<SettingsSlice>(settings);
+  syncGet<SettingsSlice>(settingsSlice.name).subscribe((settings) => {
+    console.debug('restoring settings from chrome storage', settings);
     // restore settings
-    store.dispatch(syncSettings(restoredSettings));
+    store.dispatch(syncSettings(settings));
 
     // restore badge color
-    const color = restoredSettings?.notifications?.count?.color;
-    if (color) {
-      chrome.action.setBadgeBackgroundColor({ color }).then(() => console.debug('Badge color restored to ', color));
-    }
+    const color = settings?.notifications?.count?.color;
+    if (color) setBadgeBackgroundColor({ color }).then(() => console.debug('Badge color restored to ', color));
 
     // restore tabs
-    if (restoredSettings?.tabs?.length) {
-      store.dispatch(setNavbar(restoredSettings?.tabs[0]));
-    }
+    if (settings?.tabs?.length) store.dispatch(setNavbar(settings?.tabs[0]));
+
     // restore context menu
-    buildContextMenu(restoredSettings?.menus || defaultSettings.menus).subscribe();
+    buildContextMenu(settings?.menus || defaultSettings.menus).subscribe();
 
     // restore login state
-    restoreSate(restoredSettings);
+    restoreSate(settings);
   });

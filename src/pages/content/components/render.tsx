@@ -5,6 +5,7 @@ import { NotificationService, QueryService } from '@src/services';
 import { ModalInstance } from '@src/models';
 import createCache from '@emotion/cache';
 import { ContentApp } from '@src/pages/content/components';
+import { portConnect } from '@src/utils';
 
 /**
  * Open a modal popup for complex download actions
@@ -36,7 +37,7 @@ export const renderContentApp = () => {
    */
   const connect = () => {
     console.debug(`connecting ${ModalInstance.modal}`, new Date().toISOString());
-    chrome.runtime.connect({ name: ModalInstance.modal }).onDisconnect.addListener(connect);
+    portConnect({ name: ModalInstance.modal }).onDisconnect.addListener(connect);
   };
 
   storeProxy

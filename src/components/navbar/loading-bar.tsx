@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { LinearProgress, LinearProgressProps } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { getLoading } from '@src/store/selectors';
-import { useDebounceObservable } from '@src/utils/hooks-utils';
+import { useDebounceObservable } from '@src/utils';
 
 export const LoadingBar = (props?: LinearProgressProps) => {
   // Loading state

@@ -2,8 +2,6 @@ import {
   buffer,
   debounceTime,
   elementAt,
-  filter,
-  fromEventPattern,
   MonoTypeOperatorFunction,
   Observable,
   of,
@@ -16,8 +14,6 @@ import {
   takeUntil,
   tap,
 } from 'rxjs';
-import { ChromeMessage, ChromeMessageHandler, ChromeMessagePayload, ChromeMessageType, ChromeResponse } from '@src/models';
-import MessageSender = chrome.runtime.MessageSender;
 
 /**
  * Type signature for the rxjs operator that start emitting when skip condition is falsy, keeps emitting until stop$ emits and restart emitting if start$ emits.
@@ -80,63 +76,6 @@ export const bufferDebounceUnless: BufferDebounceUnless = (debounce, limit) => (
         complete: () => observer.complete(),
       })
   );
-
-/**
- * Rxjs wrapper for chrome.runtime.onMessage event listener
- * @param async if the listener waits for async response or not
- * @param types optional type filtering
- */
-export const onMessage = <M = ChromeMessagePayload, R = any>(types?: ChromeMessageType[], async = true): Observable<ChromeMessageHandler<M, R>> =>
-  fromEventPattern<ChromeMessageHandler<M, R>>(
-    (handler) => {
-      const wrapper = (message: ChromeMessage<M>, sender: MessageSender, sendResponse: (response?: ChromeResponse<R>) => void) => {
-        handler({ message, sender, sendResponse });
-        return async;
-      };
-      chrome.runtime.onMessage.addListener(wrapper);
-      return wrapper;
-    },
-    (handler, wrapper) => chrome.runtime.onMessage.removeListener(wrapper)
-  ).pipe(filter(({ message }) => !types?.length || !!types?.includes(message?.type)));
-
-/**
- * Rxjs wrapper for chrome.runtime.sendMessage event sender
- * @param message the ChromeMessage to send
- */
-export const sendMessage = <M = ChromeMessagePayload, R = void>(message: ChromeMessage<M>): Observable<R> =>
-  new Observable<R>((subscriber) => {
-    chrome.runtime.sendMessage(message, (response) => {
-      if (response?.success === false) {
-        subscriber.error(response?.error);
-      } else if (response?.success) {
-        subscriber.next(response?.payload);
-        subscriber.complete();
-      } else {
-        subscriber.next(response);
-        subscriber.complete();
-      }
-    });
-  });
-
-/**
- * Rxjs wrapper for chrome.tabs.sendMessage event sender
- * @param tabId the id of the target tab
- * @param message the ChromeMessage to send
- */
-export const sendTabMessage = <M = ChromeMessagePayload, R = void>(tabId: number, message: ChromeMessage<M>): Observable<R> =>
-  new Observable<R>((subscriber) => {
-    chrome.tabs.sendMessage(tabId, message, (response) => {
-      if (response?.success === false) {
-        subscriber.error(response?.error);
-      } else if (response?.success) {
-        subscriber.next(response?.payload);
-        subscriber.complete();
-      } else {
-        subscriber.next(response);
-        subscriber.complete();
-      }
-    });
-  });
 
 /**
  * Type for Before Operator which execute callback before observable stream subscription

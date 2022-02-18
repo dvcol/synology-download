@@ -9,8 +9,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import TaskDetail from './task-detail';
 import { NotificationService, QueryService } from '@src/services';
 import { ConfirmationDialog, IconLoader } from '@src/components';
-import { before, useI18n } from '@src/utils';
-import { useDebounceObservable } from '@src/utils/hooks-utils';
+import { before, useDebounceObservable, useI18n } from '@src/utils';
 
 export const TaskItem = React.forwardRef<HTMLDivElement, { task: Task; status?: TaskStatus[] }>(({ task, status }, ref) => {
   const i18n = useI18n('panel', 'task', 'item');

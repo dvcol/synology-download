@@ -4,6 +4,7 @@ import { storeProxy } from '@src/store';
 import { NotificationService, PollingService, QueryService } from '@src/services';
 import { ModalInstance } from '@src/models';
 import { App } from '@src/components';
+import { portConnect } from '@src/utils';
 
 // TODO custom UI for options
 storeProxy
@@ -14,7 +15,7 @@ storeProxy
     NotificationService.init(storeProxy, true);
     PollingService.init(storeProxy, true);
     // Register as open
-    chrome.runtime.connect({ name: ModalInstance.option });
+    portConnect({ name: ModalInstance.option });
   })
   .then(() => render(<App store={storeProxy} />, window.document.querySelector('#app-container')));
 

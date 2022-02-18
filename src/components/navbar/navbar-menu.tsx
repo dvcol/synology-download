@@ -16,7 +16,7 @@ import { setNavbar } from '@src/store/actions';
 import { getUrl } from '@src/store/selectors';
 import { NotificationService, QueryService } from '@src/services';
 import { ConfirmationDialog } from '@src/components';
-import { useI18n } from '@src/utils';
+import { createTab, useI18n } from '@src/utils';
 import { ErrorType, LoginError } from '@src/models';
 
 type NavbarMenuProps = { label: React.ReactNode };
@@ -32,7 +32,7 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
   const handleClearTab = () => dispatch(setNavbar());
-  const handleUrl = () => chrome.tabs.create({ url });
+  const handleUrl = () => createTab({ url });
   const handleError = (button: string) => ({
     error: (error: any) => {
       if (error instanceof LoginError || ErrorType.Login === error?.type) {

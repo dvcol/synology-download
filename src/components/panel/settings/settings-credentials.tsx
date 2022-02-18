@@ -9,8 +9,7 @@ import { Connection, ConnectionHeader, ConnectionType, Protocol } from '@src/mod
 import { finalize, Observable } from 'rxjs';
 import { FormCheckbox, FormInput } from '@src/components';
 import { SwitchBaseProps } from '@mui/material/internal/SwitchBase';
-import { before, useI18n } from '@src/utils';
-import { useDebounceObservable } from '@src/utils/hooks-utils';
+import { before, useDebounceObservable, useI18n } from '@src/utils';
 
 // TODO : 2FA & HTTPS
 export const SettingsCredentials = () => {

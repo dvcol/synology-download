@@ -1,5 +1,6 @@
 import { TasksReducers, tasksSlice } from '../slices';
-import { formatBytes, TaskCount, TaskStatistics } from '@src/models';
+import { formatBytes, Task, TaskCount, TaskStatistics } from '@src/models';
+import { localSet, setBadgeText, setTitle } from '@src/utils';
 
 export const setCountAndStats = (count?: TaskCount, stats?: TaskStatistics) => {
   // TODO : move to thunk ?
@@ -18,8 +19,8 @@ export const setCountAndStats = (count?: TaskCount, stats?: TaskStatistics) => {
     (Object.keys(stats) as (keyof TaskStatistics)[])?.forEach((key) => (title += `\n${key?.replaceAll('_', ' ')}: ${formatBytes(stats[key])}/s`));
   }
 
-  chrome.action.setBadgeText({ text }).then(() => console.debug('No count found'));
-  chrome.action.setTitle({ title }).then();
+  setBadgeText({ text }).then(() => console.debug('No count found'));
+  setTitle({ title }).then();
 };
 
 export const setTasksCountReducer: TasksReducers['setTasksCount'] = (state, { payload: count }) => {
@@ -31,6 +32,6 @@ export const setTasksStatsReducer: TasksReducers['setTaskStats'] = (state, { pay
 
 export const syncTaskReducer: TasksReducers['setTasks'] = (state, { payload: entities }) => {
   // TODO : move to thunk ?
-  chrome.storage.local.set({ [tasksSlice.name]: JSON.stringify(entities) }, () => console.debug('Tasks sync success', entities));
+  localSet<Task[]>(tasksSlice.name, entities).subscribe(() => console.debug('Tasks sync success', entities));
   return { ...state, entities };
 };

@@ -9,7 +9,7 @@ import {
 } from '@src/store/selectors';
 import { setTasksCount } from '@src/store/actions';
 import { store$ } from '@src/store';
-import { bufferDebounceUnless, onMessage, parseMagnetLink, sendMessage, useI18n as UseI18n } from '@src/utils';
+import { bufferDebounceUnless, createNotification, onMessage, parseMagnetLink, sendMessage, useI18n as UseI18n } from '@src/utils';
 import {
   ChromeMessageType,
   ChromeNotification,
@@ -45,7 +45,7 @@ export class NotificationService {
         }),
         bufferDebounceUnless(200, 10),
         map((n) => this.handleBannerNotification(n, title, message)),
-        tap((n) => n && chrome.notifications.create(n))
+        tap((n) => n && createNotification(n))
       );
 
   static init(store: StoreOrProxy, isProxy = false): void {

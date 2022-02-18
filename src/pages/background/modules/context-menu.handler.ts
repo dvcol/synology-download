@@ -1,7 +1,6 @@
-import { onMessage } from '@src/utils';
 import { ChromeMessageType, ContextMenu } from '@src/models';
 import { Observable } from 'rxjs';
-import { buildContextMenu, removeContextMenu, saveContextMenu } from '@src/services';
+import { buildContextMenu, onMessage, removeContextMenu, saveContextMenu } from '@src/utils';
 
 /** Listen to context menu events to create/updates menus */
 export const onMessageEvents = () => {
