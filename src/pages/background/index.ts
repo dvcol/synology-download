@@ -5,6 +5,12 @@ import { onConnect, onMessageEvents, restoreSettings, restoreTasks } from './mod
 
 console.debug('Background service worker started.');
 
+// Listen to ports
+onConnect();
+
+// Listen to context menu events
+onMessageEvents();
+
 // Wrap proxy store see https://github.com/tshaddix/webext-redux
 wrapStore(store);
 
@@ -22,9 +28,3 @@ restoreSettings();
 
 // Restore Tasks
 restoreTasks();
-
-// Listen to ports
-onConnect();
-
-// Listen to context menu events
-onMessageEvents();

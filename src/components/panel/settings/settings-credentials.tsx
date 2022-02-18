@@ -58,7 +58,6 @@ export const SettingsCredentials = () => {
 
   const buildUrl = (data: Connection, type: keyof LoginError): string | undefined => {
     try {
-      console.log('build', data, urlReducer(data));
       return urlReducer(data);
     } catch (error) {
       setLoginError({ ...loginError, [type]: true });

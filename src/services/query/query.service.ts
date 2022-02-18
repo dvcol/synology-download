@@ -114,7 +114,7 @@ export class QueryService {
     baseUrl?: string
   ): Observable<LoginResponse> {
     if (!username || !password) throw new Error(i18n({ key: 'login_password_required', substitutions: [username ?? '', password ?? ''] }));
-    return this.authClient.login(username, password, baseUrl).pipe(this.readyCheckOperator(false));
+    return this.authClient.login(username, password, baseUrl).pipe(this.readyCheckOperator(false, !baseUrl?.length));
   }
 
   static login(username?: string, password?: string, baseUrl?: string): Observable<LoginResponse> {
