@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const webpack = require('webpack');
 const path = require('path');
-const fileSystem = require('fs-extra');
-const env = require('./utils/env');
+const env = require('./webpack/env');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -15,14 +14,7 @@ const alias = {
   '@src': path.resolve(__dirname, 'src'),
 };
 
-// load the secrets
-const secretsPath = path.join(__dirname, 'secrets.' + env.NODE_ENV + '.js');
-
 const fileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'eot', 'otf', 'svg', 'ttf', 'woff', 'woff2'];
-
-if (fileSystem.existsSync(secretsPath)) {
-  alias['secrets'] = secretsPath;
-}
 
 const options = {
   mode: process.env.NODE_ENV || 'development',
@@ -32,14 +24,11 @@ const options = {
     background: path.join(__dirname, 'src', 'pages', 'background'),
     contentScript: path.join(__dirname, 'src', 'pages', 'content'),
   },
-  serverConfig: {
-    doNotHotReload: ['contentScript'],
-  },
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: '[name].bundle.js',
-    clean: true,
     publicPath: ASSET_PATH,
+    clean: true,
   },
   module: {
     rules: [
@@ -104,16 +93,15 @@ const options = {
           from: 'src/manifest.json',
           to: path.join(__dirname, 'build'),
           force: true,
-          transform: function (content, path) {
-            // generates the manifest file using the package.json informations
-            return Buffer.from(
+          // generates the manifest file using the package.json information
+          transform: (content) =>
+            Buffer.from(
               JSON.stringify({
                 description: process.env.npm_package_description,
                 version: process.env.npm_package_version,
                 ...JSON.parse(content.toString()),
               })
-            );
-          },
+            ),
         },
         {
           from: 'src/assets',
@@ -158,6 +146,7 @@ if (env.NODE_ENV === 'development') {
   options.devtool = 'cheap-module-source-map';
 } else {
   options.optimization = {
+    usedExports: true,
     minimize: true,
     minimizer: [
       new TerserPlugin({

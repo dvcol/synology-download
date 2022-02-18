@@ -10,20 +10,18 @@ const config = require('../webpack.config');
 const env = require('./env');
 const path = require('path');
 
-const options = config.serverConfig || {};
-const excludeEntriesToHotReload = options.doNotHotReload || [];
-
 for (const entryName in config.entry) {
-  if (excludeEntriesToHotReload.indexOf(entryName) === -1) {
-    config.entry[entryName] = ['webpack/hot/dev-server', `webpack-dev-server/client?hot=true&hostname=localhost&port=${env.PORT}`].concat(
-      config.entry[entryName]
-    );
+  // do not hot reload content script
+  if (entryName !== 'contentScript') {
+    config.entry[entryName] = [
+      'webpack/hot/dev-server',
+      `webpack-dev-server/client?hot=true&hostname=localhost&port=${env.PORT}`,
+      config.entry[entryName],
+    ];
   }
 }
 
-config.plugins = [new webpack.HotModuleReplacementPlugin()].concat(config.plugins || []);
-
-delete config.serverConfig;
+config.plugins = [new webpack.HotModuleReplacementPlugin(), ...(config.plugins || [])];
 
 const compiler = webpack(config);
 

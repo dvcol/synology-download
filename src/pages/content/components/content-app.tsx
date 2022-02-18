@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { CacheProvider } from '@emotion/react';
-import { ThemeProvider } from '@mui/material';
-import { NotificationStack } from '@src/components';
-import { QuickMenuDialog } from '@src/pages/content/components/quick-menu-dialog';
-import { TaskDialog } from '@src/pages/content/components/task-dialog';
 import { EmotionCache } from '@emotion/utils';
-import { StoreOrProxy } from '@src/models';
+import { ThemeProvider } from '@mui/material';
 import { Theme } from '@mui/material/styles/createTheme';
+
+import { NotificationStack } from '@src/components';
+import { QuickMenuDialog, TaskDialog } from '@src/pages/content/components';
+import { StoreOrProxy } from '@src/models/store.model';
 import { getTheme, subscribeToTheme } from '@src/themes';
 
 export const ContentApp = ({ store, cache, container }: { store: StoreOrProxy; cache: EmotionCache; container: HTMLElement }) => {

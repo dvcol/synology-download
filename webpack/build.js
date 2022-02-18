@@ -7,10 +7,8 @@ process.env.ASSET_PATH = '/';
 const webpack = require('webpack');
 const config = require('../webpack.config');
 
-delete config.serverConfig;
-
 config.mode = 'production';
 
-webpack(config, function (err) {
+webpack(config, (err) => {
   if (err) throw err;
 });

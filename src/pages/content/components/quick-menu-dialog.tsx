@@ -2,13 +2,14 @@ import React, { useEffect } from 'react';
 import { ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 import { anchor$, taskDialog$ } from '../index';
 import { PortalProps } from '@mui/base/Portal';
+import { useSelector } from 'react-redux';
+import { PopoverProps } from '@mui/material/Popover';
+
 import { QueryService } from '@src/services';
 import { MaterialIcon, QuickMenu, TaskForm } from '@src/models';
-import { useSelector } from 'react-redux';
 import { getQuick } from '@src/store/selectors';
 import { StoreState } from '@src/store';
 import { MuiIcon } from '@src/components';
-import { PopoverProps } from '@mui/material/Popover';
 
 export const QuickMenuDialog = ({ container }: React.PropsWithRef<{ container?: PortalProps['container'] }>) => {
   const [_anchor, setAnchor] = React.useState<PopoverProps['anchorEl']>();

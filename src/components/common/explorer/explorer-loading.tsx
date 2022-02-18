@@ -4,7 +4,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import { useI18n } from '@src/utils';
 
 export const ExplorerLoading = ({ loading, empty }: { loading?: boolean; empty?: boolean }) => {
-  const i18n = useI18n('panel', 'file', 'explorer_loading');
+  const i18n = useI18n('common', 'explorer', 'explorer_loading');
   return (
     <React.Fragment>
       {loading && (

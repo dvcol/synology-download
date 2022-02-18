@@ -9,8 +9,8 @@
     "url": "https://github.com/dvcol/synology-download.git"
   },
   "scripts": {
-    "build": "node utils/build.js",
-    "start": "node utils/webserver.js",
+    "build": "node webpack/build.js",
+    "start": "node webpack/webserver.js",
     "test:unit": "jest --watchAll=false",
     "test:staged": "npm run test:unit --coverage --onlyChanged",
     "prettier": "prettier --write '**/*.{js,jsx,ts,tsx,json,css,scss,md}'"
@@ -19,6 +19,7 @@
     "npm": ">=7.10.0",
     "node": ">=16.0.0"
   },
+  "sideEffects": false,
   "dependencies": {
     "@emotion/cache": "^11.7.1",
     "@emotion/react": "^11.7.1",
@@ -28,6 +29,7 @@
     "@mui/lab": "^5.0.0-alpha.68",
     "@mui/material": "^5.4.1",
     "@types/react-router-hash-link": "^2.4.5",
+    "@types/webpack": "^5.28.0",
     "notistack": "^2.0.3",
     "pretty-bytes": "^5.6.0",
     "query-string": "^7.1.1",
@@ -44,9 +46,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.17.2",
-    "@babel/plugin-proposal-class-properties": "^7.16.7",
-    "@babel/preset-env": "^7.16.11",
-    "@babel/preset-react": "^7.16.7",
     "@reduxjs/toolkit": "^1.7.2",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.2",

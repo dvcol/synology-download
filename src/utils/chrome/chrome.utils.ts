@@ -104,16 +104,16 @@ export const localGet = <R>(name: string): Observable<R> => storageGet(name, chr
 export const localSet = <R>(name: string, payload: R): Observable<R> => storageSet(name, payload, chrome.storage.local);
 
 /** @see chrome.action.setBadgeText */
-export const setBadgeText = chrome.action.setBadgeText;
+export const setBadgeText = chrome?.action?.setBadgeText;
 
 /** @see chrome.action.setTitle */
-export const setTitle = chrome.action.setTitle;
+export const setTitle = chrome?.action?.setTitle;
 
 /** @see chrome.action.setBadgeBackgroundColor */
-export const setBadgeBackgroundColor = chrome.action.setBadgeBackgroundColor;
+export const setBadgeBackgroundColor = chrome?.action?.setBadgeBackgroundColor;
 
 /** @see chrome.notifications.create */
-export const createNotification = chrome.notifications.create;
+export const createNotification = chrome?.notifications?.create;
 
 /** @see chrome.tabs.create */
-export const createTab = chrome.tabs.create;
+export const createTab = chrome?.tabs?.create;
