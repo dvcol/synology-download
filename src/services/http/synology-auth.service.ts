@@ -1,9 +1,8 @@
 import { Observable } from 'rxjs';
 
-import { AuthMethod, CommonAPI, Endpoint, HttpMethod, HttpParameters, LoginResponse, SessionName } from '@src/models';
+import { AuthMethod, CommonAPI, Endpoint, HttpMethod, HttpParameters, LoginRequest, LoginResponse, SessionName } from '@src/models';
 import { SynologyService } from '@src/services/http';
 
-// TODO : handle HTTPS & 2FA
 export class SynologyAuthService extends SynologyService {
   constructor(protected isProxy = false, protected name: string = 'SynologyAuthService') {
     super(isProxy, name);
@@ -14,24 +13,21 @@ export class SynologyAuthService extends SynologyService {
   }
 
   login(
-    account: string,
-    passwd: string,
-    baseUrl?: string,
-    otp_code?: string,
-    deviceToken?: 'yes' | 'no',
-    deviceName?: string,
-    deviceId?: number,
-    format: 'cookie' | 'sid' = 'cookie'
+    { account, passwd, baseUrl, otp_code, enable_device_token, device_name, device_id, format }: LoginRequest,
+    authVersion = '1'
   ): Observable<LoginResponse> {
     const params: HttpParameters = {
       method: AuthMethod.login,
       session: SessionName.DiskStation,
-      format,
+      format: format ?? 'cookie',
       account,
       passwd,
     };
     if (otp_code) params.otp_code = otp_code;
-    return this._do<LoginResponse>(HttpMethod.POST, params, '2', CommonAPI.Auth, Endpoint.Auth, baseUrl);
+    if (enable_device_token) params.enable_device_token = enable_device_token;
+    if (device_name) params.device_name = device_name;
+    if (device_id) params.device_id = device_id;
+    return this._do<LoginResponse>(HttpMethod.POST, params, authVersion, CommonAPI.Auth, Endpoint.Auth, baseUrl);
   }
 
   logout(): Observable<void> {

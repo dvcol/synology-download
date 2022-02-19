@@ -4,13 +4,21 @@ import { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
 
 import { Connection, ContextMenu, defaultSettings, Global, Notifications, Polling, QuickMenu, SettingsSlice, TaskTab } from '@src/models';
 
-import { addTo, removeFrom, setBadgeReducer, setNestedReducer, setReducer, syncNestedReducer, syncReducer, syncRememberMeReducer } from '../reducers';
+import {
+  addTo,
+  removeFrom,
+  setBadgeReducer,
+  setReducer,
+  syncConnectionReducer,
+  syncNestedReducer,
+  syncReducer,
+  syncRememberMeReducer,
+} from '../reducers';
 
 interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   setSettings: CaseReducer<S, PayloadAction<S>>;
   syncSettings: CaseReducer<S, PayloadAction<Partial<S>>>;
   resetSettings: CaseReducer<S>;
-  setConnection: CaseReducer<S, PayloadAction<Partial<Connection>>>;
   syncConnection: CaseReducer<S, PayloadAction<Partial<Connection>>>;
   syncRememberMe: CaseReducer<S, PayloadAction<boolean>>;
   syncPolling: CaseReducer<S, PayloadAction<Partial<Polling>>>;
@@ -34,10 +42,9 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
     setSettings: setReducer,
     syncSettings: syncReducer,
     resetSettings: (oldSettings) => syncReducer(oldSettings, { type: 'sync', payload: defaultSettings }),
-    setConnection: (oldSettings, action) => setNestedReducer<Connection>(oldSettings, action, 'connection'),
-    syncConnection: (oldSettings, action) => syncNestedReducer<Connection>(oldSettings, action, 'connection'),
+    syncConnection: syncConnectionReducer,
     syncRememberMe: (oldSettings, action) => syncRememberMeReducer(oldSettings, action),
-    syncPolling: (oldSettings, action) => syncNestedReducer<Polling>(oldSettings, action, 'polling'),
+    syncPolling: (oldSettings, { payload }) => syncNestedReducer<Polling>(oldSettings, payload, 'polling'),
     syncNotifications: (oldSettings, action) => setBadgeReducer(oldSettings, action),
     saveContextMenu: (oldSettings, { payload }): SettingsSlice =>
       addTo<ContextMenu, 'menus'>(oldSettings, payload, 'menus', (o) => o.id === payload?.id),
@@ -65,6 +72,6 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
         type: 'sync',
         payload: { quick: defaultSettings.quick },
       }),
-    syncInterface: (oldSettings, action) => syncNestedReducer<Global>(oldSettings, action, 'global'),
+    syncInterface: (oldSettings, { payload }) => syncNestedReducer<Global>(oldSettings, payload, 'global'),
   } as SettingsReducers,
 });

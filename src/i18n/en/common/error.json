@@ -8,6 +8,9 @@
   "common__error__login_password_required": {
     "message": "Missing required username '$1' or password '$2'"
   },
+  "common__error__otp_code_device_required": {
+    "message": "Missing required 2fa code '$1' or device name '$2'"
+  },
   "common__error__create_task_fail": {
     "message": "Failed to create download task"
   },

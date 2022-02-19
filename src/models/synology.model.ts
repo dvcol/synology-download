@@ -85,7 +85,6 @@ export enum FileMethod {
 
 export type SynologyMethod = InfoMethod | AuthMethod | TaskMethod | FileMethod;
 
-// TODO : Error code return handling
 export const CommonErrorCode = {
   100: 'Unknown error',
   101: 'Invalid parameter',
@@ -167,8 +166,20 @@ export interface InfoResponse {
   [key: string]: ApiInfo;
 }
 
+export interface LoginRequest {
+  account: string;
+  passwd: string;
+  baseUrl?: string;
+  otp_code?: string;
+  enable_device_token?: 'yes' | 'no';
+  device_name?: string;
+  device_id?: string;
+  format?: 'cookie' | 'sid';
+}
+
 export interface LoginResponse {
   sid: string;
+  did?: string;
 }
 
 export interface CommonResponse {

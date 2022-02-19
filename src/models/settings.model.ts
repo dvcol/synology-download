@@ -41,17 +41,31 @@ export enum Protocol {
   https = 'https',
 }
 
-export interface Connection {
+export interface Credentials {
   type?: ConnectionType;
+  authVersion?: number;
+  username?: string;
+  password?: string;
+  otp_code?: string;
+  enable_device_token?: boolean;
+  device_name?: string;
+  device_id?: string;
+}
+
+export interface Connection extends Credentials {
   rememberMe?: boolean;
   protocol?: Protocol;
   path?: string;
   port?: number;
-  username?: string;
-  password?: string;
 }
 
-export const defaultConnection: Connection = { type: ConnectionType.local, rememberMe: true, protocol: Protocol.http, port: 5000 };
+export const defaultConnection: Connection = {
+  type: ConnectionType.local,
+  authVersion: 1,
+  rememberMe: true,
+  protocol: Protocol.http,
+  port: 5000,
+};
 
 export interface Polling {
   enabled: boolean;

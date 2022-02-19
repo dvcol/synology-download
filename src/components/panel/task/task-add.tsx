@@ -39,7 +39,6 @@ export const TaskAdd: FC<{
     },
   });
 
-  // TODO move to store init
   useEffect(() => {
     if (!path?.length && QueryService.isLoggedIn) {
       QueryService.getConfig().subscribe(({ default_destination: _path }) => {

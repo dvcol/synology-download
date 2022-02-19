@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { TaskItem } from '@src/components';
-import { InterfaceHeader, SettingHeader } from '@src/models';
 import { setNavbar } from '@src/store/actions';
 import { getTabOrFirst, getTasksForActiveTab } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
@@ -48,14 +47,7 @@ export const TaskPanel = () => {
               <Button variant="outlined" color="primary" component={Link} to="/add" sx={{ fontSize: '12px' }} onClick={clearTab}>
                 {i18n('create_task')}
               </Button>
-              <Button
-                variant="outlined"
-                color="secondary"
-                component={Link}
-                to={`/settings/${SettingHeader.interface}#${InterfaceHeader.tabs}`}
-                sx={{ fontSize: '12px' }}
-                onClick={clearTab}
-              >
+              <Button variant="outlined" color="secondary" component={Link} to="/settings" sx={{ fontSize: '12px' }} onClick={clearTab}>
                 {i18n('go_to_settings')}
               </Button>
             </Stack>

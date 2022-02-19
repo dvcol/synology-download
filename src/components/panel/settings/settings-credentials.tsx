@@ -1,4 +1,4 @@
-import { Box, Button, Card, CardActions, CardContent, CardHeader, LinearProgress, MenuItem, Stack, Typography } from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, Grid, LinearProgress, MenuItem, Stack, Typography } from '@mui/material';
 import { SwitchBaseProps } from '@mui/material/internal/SwitchBase';
 
 import React, { useEffect, useState } from 'react';
@@ -10,13 +10,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { finalize, Observable } from 'rxjs';
 
 import { FormCheckbox, FormInput } from '@src/components';
-import { Connection, ConnectionHeader, ConnectionType, Protocol } from '@src/models';
+import {
+  ColorLevel,
+  ColorLevelMap,
+  CommonAPI,
+  Connection,
+  ConnectionHeader,
+  ConnectionType,
+  Credentials,
+  defaultConnection,
+  LoginResponse,
+  Protocol,
+} from '@src/models';
 import { NotificationService, PollingService, QueryService } from '@src/services';
-import { setConnection, syncConnection, syncRememberMe } from '@src/store/actions';
+import { syncConnection, syncRememberMe } from '@src/store/actions';
 import { getConnection, getLogged, urlReducer } from '@src/store/selectors';
 import { before, useDebounceObservable, useI18n } from '@src/utils';
 
-// TODO : 2FA & HTTPS
 export const SettingsCredentials = () => {
   const i18n = useI18n('panel', 'settings', 'credentials');
 
@@ -24,32 +34,43 @@ export const SettingsCredentials = () => {
   const connection = useSelector(getConnection);
   const logged = useSelector(getLogged);
 
-  useEffect(() => {
-    PollingService.stop();
-    return () => PollingService.start();
-  }, []);
-
   const {
     handleSubmit,
     control,
     reset,
-    getValues,
+    watch,
     setValue,
+    getValues,
     formState: { isValid, isDirty },
   } = useForm<Connection>({
     mode: 'onChange',
-    defaultValues: { type: ConnectionType.local, protocol: Protocol.http, path: '', username: '', password: '', ...connection },
+    defaultValues: {
+      ...defaultConnection,
+      path: '',
+      username: '',
+      password: '',
+      otp_code: '',
+      enable_device_token: false,
+      device_name: i18n('app_name', 'global'),
+      device_id: '',
+      ...connection,
+    },
   });
 
-  const isQuickConnect = getValues().type === ConnectionType.quickConnect;
+  const authVersion = watch('authVersion') ?? 1;
+  const isAuthV6 = authVersion >= 8;
+  const type = watch('type');
+  const isQC = type === ConnectionType.quickConnect;
+  const is2FA = type === ConnectionType.twoFactor;
 
-  const rules: Record<keyof Omit<Connection, 'logged' | 'rememberMe'>, RegisterOptions> = {
+  const rules: Partial<Record<keyof Omit<Connection, 'logged' | 'rememberMe'>, RegisterOptions>> = {
     type: { required: true },
     protocol: { required: true },
     path: { required: true },
-    port: { required: !isQuickConnect, min: 1025, max: 65535 },
+    port: { required: !isQC, min: 1025, max: 65535 },
     username: { required: true },
     password: { required: true },
+    otp_code: { required: is2FA },
   };
 
   type LoginError = { test?: boolean; login?: boolean };
@@ -60,50 +81,77 @@ export const SettingsCredentials = () => {
   // Loading observable for debounce
   const loadingBar$ = useDebounceObservable<boolean>(setLoadingBar);
 
-  const buildUrl = (data: Connection, type: keyof LoginError): string | undefined => {
+  const loadingOperator = (source: Observable<any>) =>
+    source.pipe(
+      before(() => {
+        setLoginError({});
+        setLoading(true);
+        loadingBar$.next(true);
+      }),
+      finalize(() => {
+        setLoading(false);
+        setLoadingBar(false); // So there is no delay
+        loadingBar$.next(false); // So that observable data is not stale
+      })
+    );
+
+  useEffect(() => {
+    PollingService.stop();
+    QueryService.info()
+      .pipe(loadingOperator)
+      .subscribe((res) => {
+        const _version = res[CommonAPI.Auth].maxVersion;
+        setValue('authVersion', _version);
+        if (_version < 6) setValue('enable_device_token', false);
+      });
+    return () => PollingService.start();
+  }, []);
+
+  const buildUrl = (data: Connection, _type: keyof LoginError): string | undefined => {
     try {
       return urlReducer(data);
     } catch (error) {
-      setLoginError({ ...loginError, [type]: true });
+      setLoginError({ ...loginError, [_type]: true });
       NotificationService.debug({ title: i18n('build_url__fail'), message: JSON.stringify(error) });
     }
   };
 
-  const syncOnSubscribe = (
+  const syncOnSubscribe = <T extends LoginResponse | void>(
     data: Connection,
-    query: (u?: string, p?: string, b?: string) => Observable<unknown>,
-    type: 'login_test' | 'login' | 'logout'
+    query: (credentials: Credentials, basUrl?: string) => Observable<unknown>,
+    _type: 'login_test' | 'login' | 'logout'
   ) => {
-    const baseUrl = buildUrl(data, type === 'login_test' ? 'test' : 'login');
+    const baseUrl = buildUrl(data, _type === 'login_test' ? 'test' : 'login');
     if (!baseUrl) return;
-    reset(data); // To reset dirty tag
     return query
-      .bind(QueryService)(data?.username, data?.password, baseUrl)
-      .pipe(
-        before(() => {
-          setLoginError({});
-          setLoading(true);
-          loadingBar$.next(true);
-        }),
-        finalize(() => {
-          setLoading(false);
-          setLoadingBar(false); // So there is no delay
-          loadingBar$.next(false); // So that observable data is not stale
-        })
-      )
+      .bind(QueryService)(data, baseUrl)
+      .pipe<T>(loadingOperator)
       .subscribe({
-        complete: () => {
-          if (type !== 'login_test') {
-            QueryService.setBaseUrl(baseUrl);
-            dispatch(data?.rememberMe ? syncConnection(data) : setConnection(data));
+        next: (res) => {
+          // Update device_id if found
+          if (_type === 'login' && res?.did) {
+            data.device_id = res.did;
           }
-          setLoginError({ ...loginError, [type]: false });
-          NotificationService.info({ title: i18n(`${type}__success`), contextMessage: urlReducer(data), success: true });
+          // Purge device_id on logout
+          else if (_type === 'logout') {
+            data.device_id = '';
+          }
+          // Clean up otp on success
+          data.otp_code = '';
+          reset(data);
+        },
+        complete: () => {
+          if (_type !== 'login_test') {
+            QueryService.setBaseUrl(baseUrl);
+            dispatch(syncConnection(data));
+          }
+          setLoginError({ ...loginError, [_type]: false });
+          NotificationService.info({ title: i18n(`${_type}__success`), contextMessage: urlReducer(data), success: true });
         },
         error: (error: Error) => {
-          setLoginError({ ...loginError, [type]: true });
+          setLoginError({ ...loginError, [_type]: true });
           NotificationService.error({
-            title: i18n(`${type}__fail`),
+            title: i18n(`${_type}__fail`),
             message: error?.message ?? error?.name ?? '',
             contextMessage: urlReducer(data),
           });
@@ -115,9 +163,9 @@ export const SettingsCredentials = () => {
 
   const loginLogout = (data: Connection) => syncOnSubscribe(data, logged ? QueryService.logout : QueryService.login, logged ? 'logout' : 'login');
 
-  const getColor = (type: keyof LoginError) => {
-    if (loginError[type] === undefined || isDirty) return 'info';
-    return loginError[type] ? 'error' : 'success';
+  const getColor = (_type: keyof LoginError) => {
+    if (loginError[_type] === undefined || isDirty) return 'info';
+    return loginError[_type] ? 'error' : 'success';
   };
 
   const onRememberMeChange: SwitchBaseProps['onChange'] = (_, rememberMe) => dispatch(syncRememberMe(rememberMe));
@@ -152,12 +200,12 @@ export const SettingsCredentials = () => {
                 select: true,
                 label: i18n('type'),
                 sx: { flex: '1 0 8rem' },
-                onChange: ({ target: { name, value } }) => isQuickConnect && setValue('protocol', Protocol.https),
+                onChange: ({ target: { value } }) => value === ConnectionType.quickConnect && setValue('protocol', Protocol.https),
               }}
             >
-              {[ConnectionType.local, ConnectionType.twoFactor]?.map((type) => (
-                <MenuItem key={type} value={type}>
-                  {i18n(type, 'common', 'model', 'connection_type')}
+              {Object.values(ConnectionType)?.map((_type) => (
+                <MenuItem key={_type} value={_type} disabled={_type === ConnectionType.quickConnect}>
+                  {i18n(_type, 'common', 'model', 'connection_type')}
                 </MenuItem>
               ))}
             </FormInput>
@@ -165,26 +213,27 @@ export const SettingsCredentials = () => {
           sx={{ p: '0.5rem 0' }}
         />
 
-        <Card
-          component="form"
-          sx={{ p: '0.5rem', m: '0.5rem 0', '& .MuiFormControl-root': { m: '0.5rem' } }}
-          noValidate
-          autoComplete="off"
-          onSubmit={handleSubmit(loginLogout)}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <CardHeader
+          title={i18n('general__title')}
+          subheader={i18n('general__subheader')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          sx={{ p: '0.5rem 0' }}
+        />
+        <Card component="form" sx={{ p: '0.5rem', '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">
+          <Grid container direction={'row'} sx={{ alignItems: 'center' }}>
             <FormInput
               controllerProps={{ name: 'protocol', control, rules: rules.protocol }}
               textFieldProps={{
                 select: true,
                 label: i18n('protocol'),
-                sx: { flex: '1 0 6rem' },
-                disabled: isQuickConnect,
+                sx: { flex: '0 0 6rem' },
+                disabled: isQC,
               }}
             >
-              {Object.values(Protocol)?.map((type) => (
-                <MenuItem key={type} value={type}>
-                  {i18n(type, 'common', 'model', 'protocol')}
+              {Object.values(Protocol)?.map((_type) => (
+                <MenuItem key={_type} value={_type}>
+                  {i18n(_type, 'common', 'model', 'protocol')}
                 </MenuItem>
               ))}
             </FormInput>
@@ -198,31 +247,33 @@ export const SettingsCredentials = () => {
               textFieldProps={{
                 type: 'text',
                 label: i18n('path'),
+                sx: { flex: '1 1 auto' },
               }}
             />
 
-            {!isQuickConnect ? (
+            {!isQC && (
               <>
                 <Typography id="path-port-dot" variant="body2" color="text.secondary">
                   :
                 </Typography>
-
                 <FormInput
                   controllerProps={{ name: 'port', control, rules: rules.port }}
                   textFieldProps={{
                     type: 'number',
                     label: i18n('port'),
-                    sx: { flex: '1 0 6rem' },
+                    sx: { flex: '0 0 6rem' },
+                    disabled: isQC,
                   }}
                 />
               </>
-            ) : (
-              <Typography id="path-port-dot" variant="body2" color="text.secondary" sx={{ mr: '0.75rem' }}>
+            )}
+            {isQC && (
+              <Typography id="path-port-dot" variant="body2" color="text.secondary" sx={{ mr: '0.75rem', flex: '0 0 0 14ch' }}>
                 .quickconnect.to
               </Typography>
             )}
-          </Box>
-          <Box sx={{ display: 'flex' }}>
+          </Grid>
+          <Grid container direction={'row'} sx={{ alignItems: 'center' }}>
             <FormInput
               controllerProps={{ name: 'username', control, rules: rules.username }}
               textFieldProps={{
@@ -238,8 +289,54 @@ export const SettingsCredentials = () => {
                 label: i18n('password'),
               }}
             />
-          </Box>
+          </Grid>
         </Card>
+
+        <Collapse in={is2FA} unmountOnExit={true}>
+          <CardHeader
+            title={i18n('2fa__title')}
+            subheader={i18n('2fa__subheader')}
+            titleTypographyProps={{ variant: 'subtitle2' }}
+            subheaderTypographyProps={{ variant: 'subtitle2' }}
+            action={
+              <FormCheckbox
+                controllerProps={{ name: 'enable_device_token', control, rules: rules.enable_device_token }}
+                formControlLabelProps={{ label: i18n('enable_device_token'), disabled: !is2FA || !isAuthV6 }}
+              />
+            }
+            sx={{ p: '0.5rem 0' }}
+          />
+          <Collapse in={is2FA && !getValues().enable_device_token} unmountOnExit={true}>
+            <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
+              {i18n('2fa__warning')}
+            </Typography>
+          </Collapse>
+          <Collapse in={is2FA && !isAuthV6} unmountOnExit={true}>
+            <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
+              {i18n('auth_v6__warning')}
+            </Typography>
+          </Collapse>
+          <Card component="form" sx={{ p: '0.5rem', '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">
+            <Grid container direction={'row'} sx={{ alignItems: 'center' }}>
+              <FormInput
+                controllerProps={{ name: 'otp_code', control, rules: rules.otp_code }}
+                textFieldProps={{
+                  type: 'text',
+                  label: i18n('otp_code'),
+                  disabled: !is2FA,
+                }}
+              />
+              <FormInput
+                controllerProps={{ name: 'device_name', control, rules: { required: is2FA && getValues().enable_device_token } }}
+                textFieldProps={{
+                  type: 'text',
+                  label: i18n('device_name'),
+                  disabled: !is2FA || !getValues().enable_device_token || !isAuthV6,
+                }}
+              />
+            </Grid>
+          </Card>
+        </Collapse>
       </CardContent>
 
       <CardActions sx={{ justifyContent: 'space-between', padding: '0 1.5rem 1.5rem' }}>

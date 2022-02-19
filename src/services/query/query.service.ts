@@ -2,6 +2,8 @@ import { EMPTY, finalize, Observable, tap } from 'rxjs';
 
 import {
   CommonResponse,
+  ConnectionType,
+  Credentials,
   DownloadStationConfig,
   DownloadStationInfo,
   DownloadStationStatistic,
@@ -10,6 +12,7 @@ import {
   FolderList,
   InfoResponse,
   LoginError,
+  LoginRequest,
   LoginResponse,
   NotReadyError,
   StoreOrProxy,
@@ -26,16 +29,15 @@ import { addLoading, removeLoading, setLogged, setSid, setTasks, setTaskStats, s
 import {
   getActiveTasksIdsByActionScope,
   geTasksIdsByStatusType,
+  getCredentials,
   getFinishedTasksIdsByActionScope,
   getLogged,
   getNotificationsBannerFailedEnabled,
   getNotificationsBannerFinishedEnabled,
-  getPassword,
   getPausedTasksIdsByActionScope,
   getSid,
   getTasksIdsByActionScope,
   getUrl,
-  getUsername,
 } from '@src/store/selectors';
 import { before, useI18n as UseI18n } from '@src/utils';
 
@@ -106,23 +108,45 @@ export class QueryService {
     );
 
   static info(): Observable<InfoResponse> {
-    return this.infoClient.info().pipe(this.loadingOperator);
+    return this.infoClient.info();
   }
 
-  static loginTest(
-    username = getUsername(this.store.getState()),
-    password = getPassword(this.store.getState()),
-    baseUrl?: string
-  ): Observable<LoginResponse> {
+  private static doLogin(credentials = getCredentials(this.store.getState()), baseUrl?: string): Observable<LoginResponse> {
+    const { username, password, authVersion } = credentials;
     if (!username || !password) throw new Error(i18n({ key: 'login_password_required', substitutions: [username ?? '', password ?? ''] }));
-    return this.authClient.login(username, password, baseUrl).pipe(this.readyCheckOperator(false, !baseUrl?.length));
+
+    let request: LoginRequest = { account: username, passwd: password, baseUrl };
+
+    if (ConnectionType.twoFactor === credentials?.type) {
+      request = this.twoFactorRequest(request, credentials);
+    }
+    return this.authClient.login(request, String(authVersion ?? 1)).pipe(this.readyCheckOperator(false, !baseUrl?.length));
   }
 
-  static login(username?: string, password?: string, baseUrl?: string): Observable<LoginResponse> {
-    return this.loginTest(username, password, baseUrl).pipe(
+  private static twoFactorRequest(request: LoginRequest, { otp_code, enable_device_token, device_name, device_id }: Credentials): LoginRequest {
+    if (!otp_code || (!!enable_device_token && !device_name)) {
+      throw new Error(i18n({ key: 'otp_code_device_required', substitutions: [otp_code ?? '', device_name ?? ''] }));
+    }
+    // If we enable remember device
+    if (enable_device_token) {
+      // If we already have token, we return omitted OTP request
+      if (device_id) return { ...request, device_id, device_name };
+      // If not we demand a device token with name and otp
+      else return { ...request, enable_device_token: 'yes', device_name, otp_code };
+    }
+    // else we just request with OTP
+    return { ...request, otp_code };
+  }
+
+  static loginTest(credentials?: Credentials, baseUrl?: string): Observable<LoginResponse> {
+    return this.doLogin({ ...credentials, enable_device_token: false }, baseUrl);
+  }
+
+  static login(credentials?: Credentials, baseUrl?: string): Observable<LoginResponse> {
+    return this.doLogin(credentials, baseUrl).pipe(
       tap({
-        next: ({ sid }) => {
-          this.store.dispatch(setSid(sid));
+        next: (res) => {
+          this.store.dispatch(setSid(res?.sid));
           this.store.dispatch(setLogged(true));
         },
         error: () => {

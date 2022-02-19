@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-import { Connection, ConnectionType, ThemeMode } from '@src/models';
+import { Connection, ConnectionType, Credentials, ThemeMode } from '@src/models';
 import { darkTheme, lightTheme } from '@src/themes';
 
 import { StoreState } from '../store';
@@ -20,17 +20,17 @@ export const getConnection = createSelector(getSettings, (setting) => setting?.c
 
 export const urlReducer = ({ type, protocol, path, port }: Connection) => {
   if (protocol && path && port) {
-    if (ConnectionType.local === type) return new URL(`${protocol}://${path}:${port}`).toString();
-    else if (ConnectionType.quickConnect === type) return new URL(`${protocol}://${path}.quickconnect.to`).toString();
+    if (ConnectionType.quickConnect === type) return new URL(`${protocol}://${path}.quickconnect.to`).toString();
+    return new URL(`${protocol}://${path}:${port}`).toString();
   }
   return '';
 };
 
 export const getUrl = createSelector(getConnection, urlReducer);
 
-export const getUsername = createSelector(getConnection, (connection) => connection?.username);
+export const getCredentials = createSelector(getConnection, ({ rememberMe, protocol, path, port, ...credentials }) => credentials as Credentials);
 
-export const getPassword = createSelector(getConnection, (connection) => connection?.password);
+export const getType = createSelector(getConnection, (connection) => connection?.type);
 
 export const getPolling = createSelector(getSettings, (setting) => setting?.polling);
 

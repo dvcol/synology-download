@@ -1,12 +1,12 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 
-import { ContextMenu, Notifications, QuickMenu, SettingsSlice, TaskTab } from '@src/models';
+import { Connection, ContextMenu, Notifications, QuickMenu, SettingsSlice, TaskTab } from '@src/models';
 import { setBadgeBackgroundColor, syncGet, syncSet } from '@src/utils';
 
 import { settingsSlice } from '../slices';
 
 export const syncSettings = (settings: SettingsSlice): void => {
-  // TODO : move to thunk ? and do notification
+  // TODO : move to thunk ?
   syncSet<SettingsSlice>(settingsSlice.name, settings).subscribe(() => console.debug('Setting sync success', settings));
 };
 
@@ -21,13 +21,13 @@ export const syncRememberMeReducer = (oldSettings: SettingsSlice, { payload: rem
   return setSettings;
 };
 
-export const setBadgeReducer = <T extends Notifications>(oldSettings: SettingsSlice, action: PayloadAction<Partial<T>>): SettingsSlice => {
-  const color = action?.payload?.count?.color;
+export const setBadgeReducer = <T extends Notifications>(oldSettings: SettingsSlice, { payload }: PayloadAction<Partial<T>>): SettingsSlice => {
+  const color = payload?.count?.color;
   // TODO : move to thunk ?
   if (color !== oldSettings?.notifications?.count?.color) {
     setBadgeBackgroundColor({ color: color ?? '' }).then(() => console.debug('Badge color changed to ', color));
   }
-  return syncNestedReducer<T>(oldSettings, action, 'notifications');
+  return syncNestedReducer<T>(oldSettings, payload, 'notifications');
 };
 
 export const setReducer = (oldSettings: SettingsSlice, action: PayloadAction<Partial<SettingsSlice>>): SettingsSlice => ({
@@ -41,14 +41,19 @@ export const syncReducer = (oldSettings: SettingsSlice, action: PayloadAction<Pa
   return newSettings;
 };
 
-export const setNestedReducer = <T>(oldSettings: SettingsSlice, action: PayloadAction<Partial<T>>, name: keyof SettingsSlice): SettingsSlice => {
-  return { ...oldSettings, [name]: { ...oldSettings[name], ...action?.payload } };
+export const setNestedReducer = <T>(oldSettings: SettingsSlice, payload: Partial<T>, name: keyof SettingsSlice): SettingsSlice => {
+  return { ...oldSettings, [name]: { ...oldSettings[name], ...payload } };
 };
 
-export const syncNestedReducer = <T>(oldSettings: SettingsSlice, action: PayloadAction<Partial<T>>, name: keyof SettingsSlice): SettingsSlice => {
-  const newSettings = setNestedReducer(oldSettings, action, name);
+export const syncNestedReducer = <T>(oldSettings: SettingsSlice, payload: Partial<T>, name: keyof SettingsSlice): SettingsSlice => {
+  const newSettings = setNestedReducer(oldSettings, payload, name);
   syncSettings(newSettings);
   return newSettings;
+};
+
+export const syncConnectionReducer = (oldSettings: SettingsSlice, { payload }: PayloadAction<Partial<Connection>>): SettingsSlice => {
+  if (payload.rememberMe) return syncNestedReducer<Connection>(oldSettings, payload, 'connection');
+  return setNestedReducer<Connection>(oldSettings, payload, 'connection');
 };
 
 type Payloads = TaskTab | ContextMenu | QuickMenu;
