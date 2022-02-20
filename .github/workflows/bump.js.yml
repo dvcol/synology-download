@@ -41,8 +41,7 @@ jobs:
           # extract commit version
           message=$(git log -1 --pretty=format:"%s")
           prefix="${message%%(*}"
-          echo "commit message prefix '$prefix' for commit '$message'"
-          echo "github var '$github.event.head_commit.message'"
+          echo "commit message prefix '$prefix' for commit '$message'"prefix=feat
 
           # Bump version depending on prefix
           if [[ $prefix == 'release' ]]
@@ -54,7 +53,8 @@ jobs:
           else
             version="${n[0]}.${n[1]}.${n[2]+1}"
           fi
-
+          echo "new version '$version'"
+          
           # Save new version to env
           echo "new_version=$version" >> $GITHUB_ENV
           echo "bumping '$old_version' to '$new_version'"
