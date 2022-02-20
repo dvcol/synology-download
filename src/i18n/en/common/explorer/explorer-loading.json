@@ -1,0 +1,9 @@
+{
+  "common__explorer__explorer_loading__content": {
+    "message": "Loading folder content"
+  },
+
+  "common__explorer__explorer_loading__empty": {
+    "message": "This folder does not contain any sub-folders."
+  }
+}

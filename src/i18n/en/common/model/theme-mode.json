@@ -1,0 +1,11 @@
+{
+  "common__model__theme_mode__light": {
+    "message": "Light"
+  },
+  "common__model__theme_mode__dark": {
+    "message": "Dark"
+  },
+  "common__model__theme_mode__auto": {
+    "message": "Auto"
+  }
+}

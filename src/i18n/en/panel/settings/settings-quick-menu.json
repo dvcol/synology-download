@@ -1,0 +1,37 @@
+{
+  "panel__settings__quick_menu__name_title": {
+    "message": "Quick menu name"
+  },
+  "panel__settings__quick_menu__name_subheader": {
+    "message": "Change the name of the quick menu."
+  },
+  "panel__settings__quick_menu__name_label": {
+    "message": "Menu name"
+  },
+
+
+  "panel__settings__quick_menu__icon_title": {
+    "message": "Menu icon"
+  },
+  "panel__settings__quick_menu__icon_subheader": {
+    "message": "Change the shortcut menu icon."
+  },
+  "panel__settings__quick_menu__icon_label": {
+    "message": "Icon"
+  },
+
+
+  "panel__settings__quick_menu__modal_title": {
+    "message": "Open full modal"
+  },
+  "panel__settings__quick_menu__modal_subheader": {
+    "message": "Toggle to open full modal instead of shortcut."
+  },
+
+  "panel__settings__quick_menu__destination_title": {
+    "message": "Destination folder"
+  },
+  "panel__settings__quick_menu__destination_subheader": {
+    "message": "Change default destination folder."
+  }
+}

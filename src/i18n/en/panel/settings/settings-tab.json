@@ -1,0 +1,38 @@
+{
+  "panel__settings__tab__name_title": {
+    "message": "Tab name"
+  },
+  "panel__settings__tab__name_subheader": {
+    "message": "Change the name of the tab."
+  },
+  "panel__settings__tab__name_label": {
+    "message": "Tab name"
+  },
+
+
+  "panel__settings__tab__sort_title": {
+    "message": "Task sorting order"
+  },
+  "panel__settings__tab__sort_subheader": {
+    "message": "Select a sorting strategy to order tasks."
+  },
+  "panel__settings__tab__sort_label": {
+    "message": "Sorting"
+  },
+
+  "panel__settings__tab__reverse_title": {
+    "message": "Sorting direction"
+  },
+  "panel__settings__tab__reverse_subheader": {
+    "message": "Select a sorting direction to order tasks."
+  },
+  "panel__settings__tab__reverse_label": {
+    "message": "Order"
+  },
+  "panel__settings__tab__reverse_ascendant": {
+    "message": "Ascendant"
+  },
+  "panel__settings__tab__reverse_descendant": {
+    "message": "Descendant"
+  }
+}

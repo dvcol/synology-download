@@ -1,0 +1,27 @@
+{
+  "common__notification__notification": {
+    "message": "Notification"
+  },
+  "common__notification__errors": {
+    "message": "Errors"
+  },
+  "common__notification__title": {
+    "message": "Title:"
+  },
+  "common__notification__destination_folder": {
+    "message": "Destination folder:"
+  },
+  "common__notification__error_message": {
+    "message": "Error message:"
+  },
+
+  "common__notification__task_created": {
+    "message": "Task created successfully."
+  },
+  "common__notification__task_finished": {
+    "message": "Task finished."
+  },
+  "common__notification__task_error": {
+    "message": "Task Failed."
+  }
+}

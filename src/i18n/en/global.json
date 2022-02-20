@@ -1,0 +1,18 @@
+{
+  "global__app_name": {
+    "message": "Download Station Client",
+    "description": "Extension name."
+  },
+  "global__app_title": {
+    "message": "Synology Download Client",
+    "description": "Extension title."
+  },
+  "global__app_title_popup": {
+    "message": "Synology Download Client Popup",
+    "description": "Popup page title field."
+  },
+  "global__app_title_options": {
+    "message": "Synology Download Client Options",
+    "description": "Options page title field."
+  }
+}

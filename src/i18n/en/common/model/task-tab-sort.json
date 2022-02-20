@@ -1,0 +1,20 @@
+{
+  "common__model__task_tab_sort__creation": {
+    "message": "creation"
+  },
+  "common__model__task_tab_sort__destination": {
+    "message": "destination"
+  },
+  "common__model__task_tab_sort__speed": {
+    "message": "speed"
+  },
+  "common__model__task_tab_sort__size": {
+    "message": "size"
+  },
+  "common__model__task_tab_sort__status": {
+    "message": "status"
+  },
+  "common__model__task_tab_sort__title": {
+    "message": "title"
+  }
+}

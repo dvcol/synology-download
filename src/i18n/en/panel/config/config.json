@@ -1,0 +1,128 @@
+{
+  "panel__config__title": {
+    "message": "Download Station settings"
+  },
+  "panel__config__subheader_line_1": {
+    "message": "Currently http_max_download and ftp_max_download share the same config value. When both parameters are requested to be set at the same time, the requested ftp_max_download rate will overwrite the requested http_max_download rate."
+  },
+  "panel__config__subheader_line_2": {
+    "message": "Considering identical rates may be simultaneously used by the other packages other than Download Station, the HTTP and FTP max download rates will not affect tasks whose current status is “downloading”. New rates will only be applied to those newly added/resumed HTTP/FTP tasks."
+  },
+  "panel__config__not_admin": {
+    "message": "Only user with admin privileges can change Download Station settings. Please log in with an account with appropriate permissions."
+  },
+
+  "panel__config__set_config__success": {
+    "message": "Settings changed successfully"
+  },
+  "panel__config__set_config__fail": {
+  "message": "Settings change failed"
+  },
+
+  "panel__config__bt_max_download__title": {
+    "message": "Max BT download"
+  },
+  "panel__config__bt_max_download__subheader": {
+    "message": "Max BT download speed in KB/s (“0” means unlimited)"
+  },
+  "panel__config__bt_max_download__label": {
+    "message": "Download speed"
+  },
+
+  "panel__config__bt_max_upload__title": {
+    "message": "Max BT upload"
+  },
+  "panel__config__bt_max_upload__subheader": {
+    "message": "Max BT upload speed in KB/s (“0” means unlimited)"
+  },
+  "panel__config__bt_max_upload__label": {
+    "message": "Upload speed"
+  },
+
+  "panel__config__emule_max_download__title": {
+    "message": "Max eMule download"
+  },
+  "panel__config__emule_max_download__subheader": {
+    "message": "Max eMule download speed in KB/s (“0” means unlimited)"
+  },
+  "panel__config__emule_max_download__label": {
+    "message": "Download speed"
+  },
+
+  "panel__config__emule_max_upload__title": {
+    "message": "Max eMule upload"
+  },
+  "panel__config__emule_max_upload__subheader": {
+    "message": "Max eMule upload speed in KB/s (“0” means unlimited)"
+  },
+  "panel__config__emule_max_upload__label": {
+    "message": "Upload speed"
+  },
+
+  "panel__config__nzb_max_download__title": {
+    "message": "Max NZB download"
+  },
+  "panel__config__nzb_max_download__subheader": {
+    "message": "Max NZB download speed in KB/s (“0” means unlimited)"
+  },
+  "panel__config__nzb_max_download__label": {
+    "message": "Download speed"
+  },
+
+  "panel__config__http_max_download__title": {
+    "message": "Max HTTP download"
+  },
+  "panel__config__http_max_download__subheader": {
+    "message": "Max HTTP download speed in KB/s (“0” means unlimited)"
+  },
+  "panel__config__http_max_download__label": {
+    "message": "Download speed"
+  },
+
+  "panel__config__ftp_max_download__title": {
+    "message": "Max FTP download"
+  },
+  "panel__config__ftp_max_download__subheader": {
+    "message": "Max FTP download speed in KB/s (“0” means unlimited)"
+  },
+  "panel__config__ftp_max_download__label": {
+    "message": "Download speed"
+  },
+
+  "panel__config__emule_enabled__title": {
+    "message": "eMule service"
+  },
+  "panel__config__emule_enabled__subheader": {
+    "message": "If eMule service is enabled"
+  },
+
+  "panel__config__unzip_service_enabled__title": {
+    "message": "Auto unzip service"
+  },
+  "panel__config__unzip_service_enabled__subheader": {
+    "message": "If Auto unzip service is enabled for users except admin or administrators group"
+  },
+
+  "panel__config__emule_enabled__title": {
+    "message": "eMule service"
+  },
+  "panel__config__emule_enabled__subheader": {
+    "message": "If eMule service is enabled"
+  },
+
+
+  "panel__config__default_destination__title": {
+    "message": "Default destination"
+  },
+  "panel__config__default_destination__subheader": {
+    "message": "Default destination for new download tasks."
+  },
+
+  "panel__config__emule_default_destination__title": {
+    "message": "eMule default destination"
+  },
+  "panel__config__emule_default_destination__subheader": {
+    "message": "Default destination for new eMule download tasks."
+  }
+}
+

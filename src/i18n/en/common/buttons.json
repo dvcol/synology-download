@@ -1,0 +1,34 @@
+{
+  "common__buttons__cancel": {
+    "message": "Cancel"
+  },
+  "common__buttons__confirm": {
+    "message": "Confirm"
+  },
+  "common__buttons__save": {
+    "message": "Save"
+  },
+  "common__buttons__delete": {
+    "message": "Delete"
+  },
+
+  "common__buttons__restore": {
+    "message": "Restore"
+  },
+  "common__buttons__add_new": {
+    "message": "Add new"
+  },
+
+  "common__buttons__seed": {
+    "message": "Seed"
+  },
+  "common__buttons__play": {
+    "message": "Play"
+  },
+  "common__buttons__pause": {
+    "message": "Pause"
+  },
+  "common__buttons__edit": {
+    "message": "Edit"
+  }
+}

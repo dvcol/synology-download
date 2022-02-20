@@ -1,0 +1,38 @@
+{
+  "panel__settings__polling__title": {
+    "message": "polling"
+  },
+  "panel__settings__polling__subheader": {
+    "message": "Periodically polls the DiskStation to fetch tasks."
+  },
+
+  "panel__settings__polling__popup_title": {
+    "message": "Popup"
+  },
+  "panel__settings__polling__popup_subheader": {
+    "message": "Enables or disables polling when the popup is open."
+  },
+
+  "panel__settings__polling__background_title": {
+    "message": "Background"
+  },
+  "panel__settings__polling__background_subheader_line_1": {
+    "message": "Enables or disables polling when the popup is open."
+  },
+  "panel__settings__polling__background_subheader_line_2": {
+    "message": "Note that background polling is necessary for notification and icon count."
+  },
+
+  "panel__settings__polling__interval_title": {
+    "message": "Interval"
+  },
+  "panel__settings__polling__interval_subheader": {
+    "message": "Changes the polling interval for ask fetching."
+  },
+  "panel__settings__polling__interval_popup_label": {
+    "message": "Popup interval"
+  },
+  "panel__settings__polling__interval_background_label": {
+    "message": "Background interval"
+  }
+}
