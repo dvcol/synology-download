@@ -4,11 +4,17 @@ process.env.BABEL_ENV = 'development';
 process.env.NODE_ENV = 'development';
 process.env.ASSET_PATH = '/';
 
-const WebpackDevServer = require('webpack-dev-server');
-const webpack = require('webpack');
-const config = require('../webpack.config');
-const env = require('./env');
 const path = require('path');
+
+const webpack = require('webpack');
+const WebpackDevServer = require('webpack-dev-server');
+
+const config = require('../webpack.config');
+
+const env = {
+  NODE_ENV: process.env.NODE_ENV || 'development',
+  PORT: process.env.PORT || 3000,
+};
 
 for (const entryName in config.entry) {
   // do not hot reload content script

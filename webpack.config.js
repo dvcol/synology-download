@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const webpack = require('webpack');
 const path = require('path');
-const env = require('./webpack/env');
+
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const webpack = require('webpack');
 
 const ASSET_PATH = process.env.ASSET_PATH || '/';
 
@@ -16,8 +16,14 @@ const alias = {
 
 const fileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'eot', 'otf', 'svg', 'ttf', 'woff', 'woff2'];
 
+// TODO: Investigate content script tree shaking issues (big bundle size)
 const options = {
   mode: process.env.NODE_ENV || 'development',
+  stats: {
+    preset: 'normal',
+    colors: true,
+    env: true,
+  },
   entry: {
     popup: path.join(__dirname, 'src', 'pages', 'popup'),
     options: path.join(__dirname, 'src', 'pages', 'options'),
@@ -144,7 +150,7 @@ const options = {
   },
 };
 
-if (env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development') {
   options.devtool = 'cheap-module-source-map';
 } else {
   options.optimization = {
