@@ -35,7 +35,7 @@ jobs:
           # extract version from package.json and assign to old_version variable
           echo "old_version=$(grep version package.json | sed 's/.*"version": "\(.*\)".*/\1/')" >> $GITHUB_ENV
 
-      - name: Bump version
+      - name: Bump version  ${{ github.event.head_commit.message }}
         run: |
           # Split version numbers
           n=( ${old_version//./ } )
