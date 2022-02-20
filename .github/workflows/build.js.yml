@@ -13,11 +13,12 @@ env:
 
 jobs:
   build:
-    name: build
+    name: Build
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout branch ${{ github.ref }}
+        uses: actions/checkout@v2
 
       - name: Setup Node.js ${{ env.node_version }}
         uses: actions/setup-node@v2
@@ -36,7 +37,15 @@ jobs:
 
       - name: Unit tests
         run: npm run test:unit
-        if: github.event_name == 'push' &&  github.ref == 'main'
+        if: github.event_name == 'push' && github.ref == 'ref/head/main'
+
+  coverage:
+    name: Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout branch ${{ github.r }}
+        uses: actions/checkout@v2
 
       - name: Unit tests (changes only)
         if: github.event_name == 'pull_request'
