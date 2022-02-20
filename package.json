@@ -11,8 +11,8 @@
   "scripts": {
     "build": "node webpack/build.js",
     "start": "node webpack/webserver.js",
-    "test:unit": "jest --watchAll=false",
-    "test:staged": "npm run test:unit --coverage --onlyChanged",
+    "test:unit": "jest --watchAll=false --coverage ",
+    "test:change": "npm run test:unit -- --onlyChanged",
     "prettier": "prettier --write '**/*.{js,jsx,ts,tsx,json,css,scss,md}'",
     "eslint": "eslint --ext .js,.jsx,.ts,.tsx src",
     "eslint:fix": "eslint --ext .js,.jsx,.ts,.tsx src --fix "

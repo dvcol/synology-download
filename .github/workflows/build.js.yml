@@ -25,10 +25,23 @@ jobs:
         node-version: ${{ env.node_version }}
         cache: 'npm'
 
-    - run: npm ci
+    - name: Clean install
+      run: npm ci
 
-    - run: npm run build
+    - name: Build
+      run: npm run build
 
-    - run: npm run test:staged
+    - name: Unit tests (changes only)
+      run: npm run test:change
+      if: github.event_name == 'pull_request'
+      uses: ArtiomTr/jest-coverage-report-action@v2.0.3
+      with:
+        package-manager: npm
+        test-script: npm run test:change
 
-    - run: npm run eslint
+    - name: Unit tests
+      run: npm run test:unit
+      if: github.event_name == 'push' &&  github.ref == 'main'
+
+    - name: Linting (eslint)
+      run: npm run eslint
