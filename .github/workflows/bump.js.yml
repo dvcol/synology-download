@@ -17,6 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      message: ${{ github.event.head_commit.message }}
       old_version: ''
       new_version: ''
 
@@ -40,7 +41,6 @@ jobs:
           n=( ${old_version//./ } )
           
           # extract commit version
-          message=$github.event.head_commit.message
           prefix="${message%%(*}"
           echo "commit message prefix '$prefix' for commit '$message'"
 
