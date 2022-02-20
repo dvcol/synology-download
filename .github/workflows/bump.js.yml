@@ -5,8 +5,7 @@ name: Bump package.json version
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
+    branches: [ develop ]
 
 env:
   node_version: 16.x
@@ -43,6 +42,7 @@ jobs:
           message=$(git log -1 --pretty=format:"%s")
           prefix="${message%%(*}"
           echo "commit message prefix '$prefix' for commit '$message'"
+          echo "github var '$github.event.head_commit.message'"
 
           # Bump version depending on prefix
           if [[ $prefix == 'release' ]]
