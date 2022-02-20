@@ -1,6 +1,6 @@
 {
   "name": "synology-download",
-  "version": "0.1.0",
+  "version": "1.2.0",
   "description": "Chrome extension for Synology Download Station",
   "manifest_version": 3,
   "default_locale": "en",
