@@ -1,0 +1,45 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["react", "react-hooks", "@typescript-eslint", "prettier", "import", "jsx-a11y"],
+  "extends": [
+    "react-app",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:prettier/recommended",
+    "plugin:jsx-a11y/recommended"
+  ],
+  "globals": {
+    "chrome": "readonly"
+  },
+  "rules": {
+    "prettier/prettier": "warn",
+    "@typescript-eslint/no-explicit-any": "off",
+    "import/no-cycle": 1,
+    "import/order": [
+      "error",
+      {
+        "alphabetize": {
+          "order": "asc"
+        },
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "object", "type"],
+        "newlines-between": "always-and-inside-groups",
+        "pathGroups": [
+          {
+            "group": "internal",
+            "pattern": "@src/**",
+            "position": "before"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["builtin"]
+      }
+    ],
+    "react-hooks/exhaustive-deps": "off"
+  },
+  "env": {
+    "jest": true
+  }
+}

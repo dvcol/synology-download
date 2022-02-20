@@ -1,0 +1,6 @@
+{
+  "common__form__input__toggle_password_visibility": {
+    "message": "toggle password visibility",
+    "description": "Aria label for password visibility toggle button."
+  }
+}

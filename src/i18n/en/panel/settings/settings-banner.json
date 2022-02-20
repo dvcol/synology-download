@@ -1,0 +1,48 @@
+{
+  "panel__settings__banner__toggle_title": {
+    "message": "Banners"
+  },
+  "panel__settings__banner__toggle_subheader": {
+    "message": "Note that notification banners use and are subject to specific OS APIs."
+  },
+
+
+  "panel__settings__banner__level_title": {
+    "message": "Notification level"
+  },
+  "panel__settings__banner__level_subheader": {
+    "message": "Levels are cumulative and show all notifications from a lower level."
+  },
+  "panel__settings__banner__level_label": {
+    "message": "Notification level"
+  },
+
+
+  "panel__settings__banner__background_title": {
+    "message": "Background"
+  },
+  "panel__settings__banner__background_subheader": {
+    "message": "Enables or disables background banner notifications."
+  },
+
+  "panel__settings__banner__popup_title": {
+    "message": "Popup"
+  },
+  "panel__settings__banner__popup_subheader": {
+    "message": "Enables or disables banner notifications when the popup is open."
+  },
+
+  "panel__settings__banner__completed_title": {
+    "message": "Completed tasks"
+  },
+  "panel__settings__banner__completed_subheader": {
+    "message": "Enables or disables banner for completed tasks."
+  },
+
+  "panel__settings__banner__failed_title": {
+    "message": "Failed tasks"
+  },
+  "panel__settings__banner__failed_subheader": {
+    "message": "Enables or disables banner for failed tasks."
+  }
+}

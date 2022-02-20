@@ -1,0 +1,25 @@
+{
+  "panel__settings__context_menu__name_title": {
+    "message": "Context menu name"
+  },
+  "panel__settings__context_menu__name_subheader": {
+    "message": "Change the name of the context menu."
+  },
+  "panel__settings__context_menu__name_label": {
+    "message": "Menu name"
+  },
+
+  "panel__settings__context_menu__modal_title": {
+    "message": "Open full modal"
+  },
+  "panel__settings__context_menu__modal_subheader": {
+    "message": "Toggle to open full modal instead of shortcut."
+  },
+
+  "panel__settings__context_menu__destination_title": {
+    "message": "Destination folder"
+  },
+  "panel__settings__context_menu__destination_subheader": {
+    "message": "Change default destination folder."
+  }
+}

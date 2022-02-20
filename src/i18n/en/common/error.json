@@ -1,0 +1,42 @@
+{
+  "common__error__query_service_not_ready": {
+    "message": "Query service is not ready (base url invalid or missing)"
+  },
+  "common__error__query_service_not_logged_in": {
+    "message": "Query service is not logged in"
+  },
+  "common__error__login_password_required": {
+    "message": "Missing required username '$1' or password '$2'"
+  },
+  "common__error__otp_code_device_required": {
+    "message": "Missing required 2fa code '$1' or device name '$2'"
+  },
+  "common__error__create_task_fail": {
+    "message": "Failed to create download task"
+  },
+  "common__error__login_required": {
+    "message": "Login required"
+  },
+  "common__error__please_login": {
+    "message": "Please log in to access this functionality."
+  },
+  "common__error__task_play_fail": {
+    "message": "Task resume failed"
+  },
+  "common__error__task_pause_fail": {
+    "message": "Task pause failed"
+  },
+  "common__error__task_delete_fail": {
+    "message": "Task delete failed"
+  },
+
+  "common__error__task_resume_fail": {
+    "message": "Tasks resume failed"
+  },
+  "common__error__task_refresh_fail": {
+    "message": "Tasks refresh failed"
+  },
+  "common__error__task_clear_fail": {
+    "message": "Finished tasks clear failed"
+  }
+}

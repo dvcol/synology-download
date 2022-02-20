@@ -1,0 +1,28 @@
+{
+  "panel__settings__global__title": {
+    "message": "Global"
+  },
+  "panel__settings__global__subheader": {
+    "message": "Global settings for various interface elements."
+  },
+
+  "panel__settings__global__theme_title": {
+    "message": "Theme"
+  },
+  "panel__settings__global__theme_subheader": {
+    "message": "Select your theme, 'auto' infers theme from OS settings."
+  },
+  "panel__settings__global__theme_label": {
+    "message": "Theme"
+  },
+
+  "panel__settings__global__actions_title": {
+    "message": "Menu actions"
+  },
+  "panel__settings__global__actions_subheader": {
+    "message": "Select the scope for the menu actions (clear, play, pause, ...)."
+  },
+  "panel__settings__global__actions_label": {
+    "message": "Scope"
+  }
+}

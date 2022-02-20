@@ -1,0 +1,44 @@
+{
+  "panel__settings__connection": {
+    "message": "Connection"
+  },
+  "panel__settings__connection_credentials": {
+    "message": "Credentials"
+  },
+  "panel__settings__connection_polling": {
+    "message": "Polling"
+  },
+
+  "panel__settings__interface": {
+    "message": "Interface"
+  },
+  "panel__settings__interface_global": {
+    "message": "Global"
+  },
+  "panel__settings__interface_tabs": {
+    "message": "Tabs"
+  },
+  "panel__settings__interface_quick_menu": {
+    "message": "Quick Menu"
+  },
+  "panel__settings__interface_context_menu": {
+    "message": "Context Menu"
+  },
+
+  "panel__settings__notification": {
+    "message": "Notification"
+  },
+  "panel__settings__notification_snack": {
+    "message": "Snackbar"
+  },
+  "panel__settings__notification_banner": {
+    "message": "Banners"
+  },
+  "panel__settings__notification_count": {
+    "message": "Badge count"
+  },
+
+  "panel__settings__banner__save__success": {
+    "message": "Settings saved"
+  }
+}

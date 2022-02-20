@@ -1,0 +1,22 @@
+{
+  "panel__task__detail__destination": {
+    "message": "Destination"
+  },
+  "panel__task__detail__created": {
+    "message": "Created"
+  },
+  "panel__task__detail__created_by": {
+    "message": " by $1"
+  },
+
+  "panel__task__detail__downloaded": {
+    "message": "$1 of $2 downloaded"
+  },
+
+  "panel__task__detail__confirmation_title": {
+    "message": "Please confirm"
+  },
+  "panel__task__detail__confirmation_description": {
+    "message": "This action will permanently remove this task."
+  }
+}

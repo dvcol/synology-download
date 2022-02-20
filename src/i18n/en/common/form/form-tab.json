@@ -1,0 +1,35 @@
+{
+  "common__form__tab__base_template_title": {
+    "message": "Base template"
+  },
+  "common__form__tab__base_template_subheader": {
+    "message": "Select a template to filter tasks status."
+  },
+  "common__form__tab__base_template_label": {
+    "message": "Template"
+  },
+
+  "common__form__tab__badge_color_title": {
+    "message": "Badge color"
+  },
+  "common__form__tab__badge_color_subheader": {
+    "message": "Change the badge color to reflect task types."
+  },
+  "common__form__tab__badge_color_default": {
+    "message": "Chrome Default"
+  },
+
+  "common__form__tab__task_status_title": {
+    "message": "Task statuses"
+  },
+  "common__form__tab__task_status_subheader": {
+    "message": "Select statuses to include in the selection."
+  },
+
+  "common__form__tab__direction_title": {
+    "message": "Direction folder"
+  },
+  "common__form__tab__direction_subheader": {
+    "message": "Select a direction folder to filter tasks."
+  }
+}
