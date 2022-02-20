@@ -33,7 +33,6 @@
     }
   ],
   "permissions": ["contextMenus", "notifications", "storage", "tabs"],
-  "host_permissions": ["<all_urls>"],
   "web_accessible_resources": [
     {
       "resources": ["*.html"],
