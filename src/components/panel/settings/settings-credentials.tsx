@@ -58,7 +58,7 @@ export const SettingsCredentials = () => {
   });
 
   const authVersion = watch('authVersion') ?? 1;
-  const isAuthV6 = authVersion >= 8;
+  const isAuthV6 = authVersion >= 6;
   const type = watch('type');
   const isQC = type === ConnectionType.quickConnect;
   const is2FA = type === ConnectionType.twoFactor;
