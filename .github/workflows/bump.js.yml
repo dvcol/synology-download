@@ -1,0 +1,74 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Bump package.json version
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+env:
+  node_version: 16.x
+
+jobs:
+  version:
+    name: build
+    runs-on: ubuntu-latest
+
+    env:
+      old_version: ''
+      new_version: ''
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js ${{ env.node_version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.node_version }}
+          cache: 'npm'
+
+      - name: Read version
+        run: |
+          # extract version from package.json and assign to old_version variable
+          echo "old_version=$(grep version package.json | sed 's/.*"version": "\(.*\)".*/\1/')" >> $GITHUB_ENV
+
+      - name: Bump version
+        run: |
+          # Split version numbers
+          n=( ${old_version//./ } 
+          
+          # extract commit version
+          message=$github.event.head_commit.message
+          prefix="${message%%(*}"
+          echo "commit message prefix '$prefix' for commit '$message'"
+
+#          # Bump version depending on prefix
+#          if [[ $prefix == 'release' ]] then
+#            version="${n[0]+1}.${n[1]}.${n[2]}"
+#          elif [[ $prefix == 'feat' ]] then
+#            version="${n[0]}.${n[1]+1}.${n[2]}"
+#          else
+#            version="${n[0]}.${n[1]}.${n[2]+1}"
+#          fi
+#
+#          # Save new version to env
+#          echo "new_version=version" >> $GITHUB_ENV
+#          echo "bumping '$old_version' to '$new_version'"
+
+#      - name: Write version to package.json
+#        run: npm -v ${{ env.new_version }}
+
+#      - name: Setup git config
+#        run: |
+#          # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
+#          git config user.name "GitHub Bump Version Bot"
+#          git config user.email "<>"
+
+#      - name: Commit files
+#        run: |
+#          # Stage the file, commit and push
+#          git add package.json, package-lock.json
+#          git commit -m "chore(version): Bumping version from ${{ env.old_version }} to ${{ env.new_version }}"
+#          git push origin main
