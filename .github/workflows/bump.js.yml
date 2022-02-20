@@ -37,25 +37,27 @@ jobs:
       - name: Bump version
         run: |
           # Split version numbers
-          n=( ${old_version//./ } 
+          n=( ${old_version//./ } )
           
           # extract commit version
           message=$github.event.head_commit.message
           prefix="${message%%(*}"
           echo "commit message prefix '$prefix' for commit '$message'"
 
-#          # Bump version depending on prefix
-#          if [[ $prefix == 'release' ]] then
-#            version="${n[0]+1}.${n[1]}.${n[2]}"
-#          elif [[ $prefix == 'feat' ]] then
-#            version="${n[0]}.${n[1]+1}.${n[2]}"
-#          else
-#            version="${n[0]}.${n[1]}.${n[2]+1}"
-#          fi
-#
-#          # Save new version to env
-#          echo "new_version=version" >> $GITHUB_ENV
-#          echo "bumping '$old_version' to '$new_version'"
+          # Bump version depending on prefix
+          if [[ $prefix == 'release' ]]
+          then
+            version="${n[0]+1}.${n[1]}.${n[2]}"
+          elif [[ $prefix == 'feat' ]]
+          then
+            version="${n[0]}.${n[1]+1}.${n[2]}"
+          else
+            version="${n[0]}.${n[1]}.${n[2]+1}"
+          fi
+
+          # Save new version to env
+          echo "new_version=version" >> $GITHUB_ENV
+          echo "bumping '$old_version' to '$new_version'"
 
 #      - name: Write version to package.json
 #        run: npm -v ${{ env.new_version }}
