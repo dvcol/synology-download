@@ -45,7 +45,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
       )
       .subscribe({
         error: (error) => {
-          if (error instanceof LoginError || error.type === ErrorType.Login) {
+          if (error instanceof LoginError || error?.type === ErrorType.Login) {
             NotificationService.loginRequired();
           } else if (error) {
             NotificationService.error({

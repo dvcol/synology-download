@@ -7,7 +7,8 @@ import { buildContextMenu, onMessage, removeContextMenu, saveContextMenu } from 
 export const onMessageEvents = () => {
   // On message from chrome handle payload
   onMessage([ChromeMessageType.addMenu, ChromeMessageType.updateMenu, ChromeMessageType.removeMenu, ChromeMessageType.resetMenu]).subscribe(
-    ({ message: { type, payload }, sendResponse }) => {
+    ({ message, sendResponse }) => {
+      const { type, payload } = message ?? { type: null, payload: null };
       const handle = <T>(obs$: Observable<T>) =>
         obs$.subscribe({
           next: () => sendResponse({ success: true, payload }),

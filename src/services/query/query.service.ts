@@ -201,7 +201,8 @@ export class QueryService {
     const extract = geTasksIdsByStatusType(this.store.getState());
     return this.downloadClient.listTasks(0, -1, [TaskListOption.detail, TaskListOption.file, TaskListOption.transfer]).pipe(
       this.loadingOperator,
-      tap(({ tasks }) => {
+      tap((res) => {
+        const tasks = res?.tasks ?? [];
         // notify if we have tasks
         this.notifyTasks(extract, tasks);
         this.store.dispatch(setTasks(tasks));
