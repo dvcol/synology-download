@@ -42,13 +42,13 @@ jobs:
   coverage:
     name: Coverage
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && ${{ github.actor != 'dependabot[bot]' }}
 
     steps:
       - name: Checkout branch ${{ github.r }}
         uses: actions/checkout@v2
 
       - name: Unit tests (changes only)
-        if: github.event_name == 'pull_request'
         uses: ArtiomTr/jest-coverage-report-action@v2.0.3
         with:
           test-script: npm run test:change
