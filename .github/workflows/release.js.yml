@@ -1,0 +1,36 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Tag and release application
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - "v*.*.*"
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+
+#  TODO: get artifact from build stage
+#  TODO: package zip / crx?
+
+
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+#  TODO: Create changelog/release
+#
+#      - name: Release
+#        uses: softprops/action-gh-release@v1
+
+  publish:
+    runs-on: ubuntu-latest
+
+#  TODO: publish to chrome store
+#
