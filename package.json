@@ -25,7 +25,7 @@
   "dependencies": {
     "@emotion/cache": "^11.7.1",
     "@emotion/react": "^11.7.1",
-    "@emotion/styled": "^11.6.0",
+    "@emotion/styled": "^11.8.1",
     "@hot-loader/react-dom": "^17.0.2",
     "@mui/icons-material": "^5.4.1",
     "@mui/lab": "^5.0.0-alpha.69",
