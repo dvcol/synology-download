@@ -42,7 +42,7 @@ jobs:
   coverage:
     name: Coverage
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && ${{ github.actor != 'dependabot[bot]' }}
+    if: github.event_name == 'pull_request' && [[ ! github.actor =~ dependabot.*\[bot\] ]]
 
     steps:
       - name: Checkout branch ${{ github.r }}
