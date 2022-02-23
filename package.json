@@ -50,7 +50,7 @@
     "@babel/core": "^7.17.5",
     "@reduxjs/toolkit": "^1.7.2",
     "@testing-library/jest-dom": "^5.16.2",
-    "@testing-library/react": "^12.1.2",
+    "@testing-library/react": "^12.1.3",
     "@types/chrome": "^0.0.161",
     "@types/jest": "^27.4.0",
     "@types/react": "^17.0.39",
