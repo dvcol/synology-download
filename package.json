@@ -15,7 +15,13 @@
     "test:change": "npm run test:unit -- --onlyChanged",
     "prettier": "prettier --write '**/*.{js,jsx,ts,tsx,json,css,scss,md}'",
     "eslint": "eslint --ext .js,.jsx,.ts,.tsx src",
-    "eslint:fix": "eslint --ext .js,.jsx,.ts,.tsx src --fix "
+    "eslint:fix": "eslint --ext .js,.jsx,.ts,.tsx src --fix",
+    "release": "standard-version"
+  },
+  "standard-version": {
+    "skip": {
+      "bump": true
+    }
   },
   "engines": {
     "npm": ">=7.10.0",
