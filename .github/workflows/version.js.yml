@@ -28,56 +28,22 @@ jobs:
           node-version: ${{ env.node_version }}
           cache: 'npm'
 
-      - name: Extract version from package.json
-        run: |
-          # extract version from package.json
-          version=$(jq -r .version package.json)
-          echo "Version extraced: '$version'"
-          
-          # assign version to old_version env variable
-          echo "old_version=$version" >> $GITHUB_ENV
-
       - name: Bump version
         run: |
-          # Split version numbers
-          n=( ${old_version//./ } )
+          # Save old version to env
+          echo "old_version=$(jq -r .version package.json)" >> $GITHUB_ENV
 
           # extract commit version
           message=$(git log -1 --pretty=format:"%s")
-          echo "commit message '$message'"
-
-          prefix="${message%%(*}"
-          echo "$message prefix '$message'"
-
-          scope="$(awk -F"[()]" '{print $2}' <<< $message)"
-          echo "$message scope '$scope'"
           
+          # install standard-version
+          npm i -g standard-version
           
-          # Bump version depending on prefix
-          if [[ $prefix == 'release' ]]
-          then
-            if [[ $scope =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]
-            then
-              version="$scope"
-            else
-              version="$((${n[0]}+1)).${n[1]}.${n[2]}"
-            fi
-          elif [[ $prefix == 'feat' ]]
-          then
-            version="${n[0]}.$((${n[1]}+1)).${n[2]}"
-          else
-            version="${n[0]}.${n[1]}.$((${n[2]}+1))"
-          fi
+          # bump version
+          npm run version
 
           # Save new version to env
-          echo "bumping '$old_version' to '$version'"
-          echo "new_version=$version" >> $GITHUB_ENV
-
-      - name: Write version to package.json
-        run: |
-          # Writing version to package.json
-          npm version --commit-hooks false --git-tag-version false ${{ env.new_version }}
-          echo "New package version '$(grep version package.json | sed 's/.*"version": "\(.*\)".*/\1/')'"
+          echo "new_version=$(jq -r .version package.json)" >> $GITHUB_ENV
 
       - name: Write version to manifest.json
         run: |
@@ -91,14 +57,12 @@ jobs:
           
           echo "Manifest version changed from '$manifest_version' to '$(jq -r .version manifest.json)'"
 
-      - name: Setup git config
+      - name: Commit files
         run: |
           # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
           git config user.name "GitHub Bump Version Bot"
           git config user.email "<>"
-
-      - name: Commit files
-        run: |
+          
           # Stage the file, commit and push
           git status
           git diff --color -U0 | cat
