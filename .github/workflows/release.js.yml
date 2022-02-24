@@ -10,8 +10,8 @@ on:
 
 jobs:
   release:
+    name: Release
     runs-on: ubuntu-latest
-    if: github.ref == 'ref/head/main'
 
     steps:
       - name: Checkout branch ${{ github.ref }}
@@ -32,14 +32,21 @@ jobs:
       - name: Zip build folder
         run: |
           # Zipping build folder for artifact upload
-          zip -r synology-download.zip ./build/
-          ls -l synology-download.zip
+          cd build;
+          zip -r synology-download.zip *
+          
+          # Check zip created
+          echo "Zip created in 'build/'"
+          ls -l  synology-download.zip
+          cd ..
 
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          body_path: ./CHANGELOG.md
-          files: ./build/synology-download.zip
+          body_path: CHANGELOG.md
+          files: build/synology-download.zip
+
+
 #  publish:
 #    runs-on: ubuntu-latest
 #    if: github.ref == 'ref/head/main'
