@@ -10,24 +10,36 @@ on:
       - "v*.*.*"
 
 jobs:
-  package:
-    runs-on: ubuntu-latest
-
-#  TODO: get artifact from build stage
-#  TODO: package zip / crx?
-
-
   release:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout branch ${{ github.ref }}
         uses: actions/checkout@v2
 
-#  TODO: Create changelog/release
-#
-#      - name: Release
-#        uses: softprops/action-gh-release@v1
+      - name: Setup Node.js ${{ env.node_version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.node_version }}
+          cache: 'npm'
+
+      - name: Clean install
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Zip build folder
+        run: |
+          # Zipping build folder for artifact upload
+          zip -r synology-download.zip ./build/
+          ls -l synology-download.zip
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: ./CHANGELOG.md
+          files: ./build/synology-download.zip
 
   publish:
     runs-on: ubuntu-latest
