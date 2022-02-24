@@ -5,13 +5,13 @@ name: Tag and release application
 
 on:
   push:
-    branches: [ main ]
     tags:
-      - "v*.*.*"
+      - 'v*.*.*'
 
 jobs:
   release:
     runs-on: ubuntu-latest
+    if: github.ref == 'ref/head/main'
 
     steps:
       - name: Checkout branch ${{ github.ref }}
@@ -40,9 +40,9 @@ jobs:
         with:
           body_path: ./CHANGELOG.md
           files: ./build/synology-download.zip
-
-  publish:
-    runs-on: ubuntu-latest
+#  publish:
+#    runs-on: ubuntu-latest
+#    if: github.ref == 'ref/head/main'
 
 #  TODO: publish to chrome store
 #

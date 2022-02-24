@@ -14,6 +14,7 @@ jobs:
   version:
     name: build
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'chore(release)')"
 
     env:
       old_version: ''
@@ -35,10 +36,10 @@ jobs:
 
           # extract commit version
           message=$(git log -1 --pretty=format:"%s")
-          
+
           # install standard-version
           npm i -g standard-version
-          
+
           # bump version
           npm run version
 
@@ -49,12 +50,12 @@ jobs:
         run: |
           # Move to src folder
           cd ./src
-          
+
           # Replace manifest version to align with package.json
           manifest_version=$(jq -r .version manifest.json)
           tmp=$(mktemp)
           jq --arg new_version "$new_version" '.version = $new_version' manifest.json > "$tmp" && mv "$tmp" manifest.json
-          
+
           echo "Manifest version changed from '$manifest_version' to '$(jq -r .version manifest.json)'"
 
       - name: Commit files
@@ -62,7 +63,7 @@ jobs:
           # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
           git config user.name "GitHub Bump Version Bot"
           git config user.email "<>"
-          
+
           # Stage the file, commit and push
           git status
           git diff --color -U0 | cat
