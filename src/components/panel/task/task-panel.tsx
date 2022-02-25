@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { TaskItem } from '@src/components';
+import { AppRoute } from '@src/models';
 import { setNavbar } from '@src/store/actions';
 import { getTabOrFirst, getTasksForActiveTab } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
@@ -44,10 +45,10 @@ export const TaskPanel = () => {
             <Box sx={{ mb: '0.25rem' }}>{i18n('no_task_found')}</Box>
             <Box sx={{ mb: '1rem' }}>{i18n('create_or_settings')}</Box>
             <Stack spacing={2} direction="row">
-              <Button variant="outlined" color="primary" component={Link} to="/add" sx={{ fontSize: '12px' }} onClick={clearTab}>
+              <Button variant="outlined" color="primary" component={Link} to={AppRoute.Add} sx={{ fontSize: '12px' }} onClick={clearTab}>
                 {i18n('create_task')}
               </Button>
-              <Button variant="outlined" color="secondary" component={Link} to="/settings" sx={{ fontSize: '12px' }} onClick={clearTab}>
+              <Button variant="outlined" color="secondary" component={Link} to={AppRoute.Settings} sx={{ fontSize: '12px' }} onClick={clearTab}>
                 {i18n('go_to_settings')}
               </Button>
             </Stack>

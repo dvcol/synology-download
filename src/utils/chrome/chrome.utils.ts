@@ -37,6 +37,18 @@ export const i18n = (value: string | ChromeI18nInput, ...modules: string[]): str
 };
 
 /**
+ * Wrap getAcceptLanguages in observable
+ * @see chrome.i18n.getAcceptLanguages
+ */
+export const getAcceptLanguages = () =>
+  new Observable<string[]>((subscriber) =>
+    chrome.i18n.getAcceptLanguages((languages) => {
+      subscriber.next(languages);
+      subscriber.complete();
+    })
+  );
+
+/**
  * Rxjs wrapper for chrome storage getter
  * @param name the key to extract from storage
  * @param storage the chrome storage object (chrome.storage.sync, chrome.storage.local, ...)
