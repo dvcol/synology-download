@@ -125,10 +125,10 @@ const options = {
             pattern: 'src/i18n/en/**/*.json',
             fileName: '_locales/en/messages.json',
           },
-          {
-            pattern: 'src/i18n/fr/**/*.json',
-            fileName: '_locales/fr/messages.json',
-          },
+          // {
+          //   pattern: 'src/i18n/fr/**/*.json',
+          //   fileName: '_locales/fr/messages.json',
+          // },
         ],
       },
     }),

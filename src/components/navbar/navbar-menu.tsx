@@ -1,6 +1,7 @@
 import AddLinkIcon from '@mui/icons-material/AddLink';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
+import InfoIcon from '@mui/icons-material/Info';
 import LaunchIcon from '@mui/icons-material/Launch';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -16,7 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import { ConfirmationDialog } from '@src/components';
-import { ErrorType, LoginError } from '@src/models';
+import { AppLinks, AppRoute, ErrorType, LoginError } from '@src/models';
 import { NotificationService, QueryService } from '@src/services';
 import { setNavbar } from '@src/store/actions';
 import { getUrl } from '@src/store/selectors';
@@ -29,7 +30,7 @@ type NavbarMenuProps = { label: React.ReactNode };
 export const NavbarMenu = ({ label }: NavbarMenuProps) => {
   const i18n = useI18n('navbar', 'menu');
   const dispatch = useDispatch();
-  const url = useSelector(getUrl) + 'index.cgi?launchApp=SYNO.SDS.DownloadStation.Application';
+  const url = useSelector(getUrl) + AppLinks.DownloadStation;
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -76,7 +77,7 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
         onClick={handleClose}
         MenuListProps={{ 'aria-labelledby': 'basic-button' }}
       >
-        <NavbarMenuIcon label={i18n('menu_add')} icon={<AddLinkIcon />} component={Link} to="/add" onClick={handleClearTab} />
+        <NavbarMenuIcon label={i18n('menu_add')} icon={<AddLinkIcon />} component={Link} to={AppRoute.Add} onClick={handleClearTab} />
         <Divider />
         <NavbarMenuIcon
           label={i18n('menu_refresh')}
@@ -100,9 +101,11 @@ export const NavbarMenu = ({ label }: NavbarMenuProps) => {
           onClick={() => QueryService.deleteFinishedTasks().subscribe(handleError('clear'))}
         />
         <Divider />
-        <NavbarMenuIcon label={i18n('menu_info')} icon={<SettingsIcon />} component={Link} to="/config" onClick={handleClearTab} />
-        <NavbarMenuIcon label={i18n('menu_settings')} icon={<TuneIcon />} component={Link} to="/settings" onClick={handleClearTab} />
+        <NavbarMenuIcon label={i18n('menu_configs')} icon={<SettingsIcon />} component={Link} to={AppRoute.Config} onClick={handleClearTab} />
+        <NavbarMenuIcon label={i18n('menu_settings')} icon={<TuneIcon />} component={Link} to={AppRoute.Settings} onClick={handleClearTab} />
         <NavbarMenuIcon label={i18n('menu_open')} icon={<LaunchIcon />} onClick={handleUrl} />
+        <Divider />
+        <NavbarMenuIcon label={i18n('menu_about')} icon={<InfoIcon />} component={Link} to={AppRoute.About} onClick={handleClearTab} />
       </Menu>
 
       <ConfirmationDialog

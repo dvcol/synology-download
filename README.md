@@ -42,8 +42,12 @@
 > * Browser notifications on task completion/error (conditional on polling behavior and extensions permissions)
 
 ## Limitation
-> Quick-connect login is not currently supported due to the lack of official API documentation
+> Quick-connect login is not currently supported due to the lack of official API documentation.
 > 
+> Currently, only magnet urls are supported for the quick action menu.
+> 
+> Note that translation on previous version of Chrome (100 and below) might have only partial support in banner notifications.
+>
 > Due to MV3 current limitation, the service-worker is maintained awake through periodic messaging on active tab, if no tab is active in the past 5 minutes, service worker and associated functionalities might suspend until wake events. 
 
 ## Prerequisites

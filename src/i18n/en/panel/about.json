@@ -1,0 +1,67 @@
+{
+  "panel__about__title": {
+    "message": "About Download Station (for Synology NAS)"
+  },
+
+  "panel__about__chip_version": {
+    "message": "version"
+  },
+  "panel__about__chip_user_languages": {
+    "message": "user languages"
+  },
+  "panel__about__chip_supported_languages": {
+    "message": "supported languages"
+  },
+
+  "panel__about__description_title": {
+    "message": "Description"
+  },
+
+  "panel__about__description_body_p1": {
+    "message": "Synology Download is a React base Chrome extension to manage Synology Download Station tasks directly from the browser. It allows for the consultation, creation, suppression, edition and suspension of download task directly from this popup. It also permits the quick creation of tasks from any magnet link or from the contextual menu inside of the browser."
+  },
+
+  "panel__about__description_body_p2": {
+    "message": "For more information on the current supported functionalities, please refer to the github page in the links below."
+  },
+
+  "panel__about__limitations_title": {
+    "message": "Limitations"
+  },
+
+  "panel__about__limitations_body_p1": {
+    "message": "Quick-connect login is not currently supported due to the lack of official API documentation."
+  },
+  "panel__about__limitations_body_p2": {
+    "message": "Currently, only magnet urls are supported for the quick action menu."
+  },
+  "panel__about__limitations_body_p3": {
+    "message": "Note that translation on previous version of Chrome (100 and below) might have only partial support in banner notifications."
+  },
+  "panel__about__limitations_body_p4": {
+    "message": "Due to MV3 current limitation, the service-worker is maintained awake through periodic messaging on active tab, if no tab is active in the past 5 minutes, service worker and associated functionalities might suspend until wake events."
+  },
+
+
+  "panel__about__contribute_title": {
+    "message": "Contribute"
+  }, "panel__about__contribute_body": {
+  "message": "If you wish to support the development of this application, you can contribute a small donation, leave a review in the webstore, contribute to the code base, report issues or or suggest new features on github with the help of the links below."
+},
+
+  "panel__about__button_donate": {
+    "message": "donate"
+  },
+  "panel__about__button_contribute": {
+    "message": "contribute"
+  },
+  "panel__about__button_support": {
+    "message": "support"
+  },
+  "panel__about__button_privacy": {
+    "message": "privacy"
+  },
+  "panel__about__button_store": {
+    "message": "store"
+  }
+}

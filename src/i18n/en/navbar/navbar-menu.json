@@ -22,11 +22,14 @@
   "navbar__menu__menu_settings": {
     "message": "Extension settings"
   },
-  "navbar__menu__menu_info": {
+  "navbar__menu__menu_configs": {
     "message": "Station configs"
   },
   "navbar__menu__menu_open": {
     "message": "Open Download Station"
+  },
+  "navbar__menu__menu_about": {
+    "message": "About"
   },
 
 
