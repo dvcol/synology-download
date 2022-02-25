@@ -1,5 +1,7 @@
 import { Observable, throwError } from 'rxjs';
 
+import { fromFetch } from 'rxjs/fetch';
+
 import { BaseHttpRequest, Body, HttpHeaders, HttpMethod, HttpParameters } from '@src/models';
 
 /** Base Http request class implementation*/
@@ -31,24 +33,12 @@ export class BaseHttpService {
       console.debug('Failed to build urp for ', this.baseUrl, url, params);
       return throwError(() => error);
     }
-    return new Observable<T>((observer) => {
-      // Controller for abort-able fetch request
-      const controller = new AbortController();
-      fetch(_url, {
-        method,
-        headers,
-        body,
-        signal: controller.signal,
-        redirect: redirect ?? 'follow',
-      })
-        .then((r: Response) => r.json())
-        .then((data: T) => {
-          observer.next(data);
-          observer.complete();
-        })
-        .catch((e: any) => observer.error(e));
-      // Abort fetch on unsubscribe
-      return () => controller.abort();
+    return fromFetch<T>(_url, {
+      method,
+      headers,
+      body,
+      redirect: redirect ?? 'follow',
+      selector: (res) => res.json(),
     });
   }
 
