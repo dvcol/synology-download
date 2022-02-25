@@ -13,11 +13,11 @@ import { FormCheckbox } from './form-checkbox';
 import { FormInput } from './form-input';
 
 export const FormTab = ({
-  useFormProps: { control, getValues, reset },
+  useFormProps: { control, getValues, setValue },
   tab: { template, status, color },
   disabled,
 }: React.PropsWithChildren<{
-  useFormProps: Pick<UseFormReturn<Tab>, 'control' | 'getValues' | 'reset'>;
+  useFormProps: Pick<UseFormReturn<Tab>, 'control' | 'getValues' | 'setValue'>;
   tab: Tab;
   disabled?: boolean;
 }>) => {
@@ -34,7 +34,8 @@ export const FormTab = ({
     setTemplateStatuses(_status);
     const _color = getColorFromLevel(tab?.color) ?? color;
     setBadgeColor(_color);
-    reset({ ...getValues(), status: _status, color: _color });
+    setValue('status', _status);
+    setValue('color', _color);
   };
 
   const getHighlightColor = (s: TaskStatus): ColorLevel => {

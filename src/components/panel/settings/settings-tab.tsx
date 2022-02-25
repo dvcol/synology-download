@@ -2,7 +2,7 @@ import { AccordionDetails, Button, CardActions, CardHeader, MenuItem, Stack } fr
 
 import React from 'react';
 
-import { useForm, UseFormReset } from 'react-hook-form';
+import { useForm, UseFormGetValues, UseFormSetValue } from 'react-hook-form';
 
 import { Control } from 'react-hook-form/dist/types/form';
 
@@ -28,19 +28,20 @@ export const SettingsTab = ({ tab }: { tab: TaskTab }) => {
     reset,
     control,
     getValues,
-    formState: { isValid, isDirty, isSubmitSuccessful },
+    setValue,
+    formState: { isValid, isDirty, isSubmitted },
   } = useForm<TaskTab>({ mode: 'onChange', defaultValues: formTab as TaskTab });
 
   const onDelete = () => dispatch(removeTaskTab(tab.id));
 
   const onSubmit = (form: TaskTab) => {
     dispatch(saveTaskTab({ ...form, color: getLevelFromColor(form.color) ?? ColorLevel.primary }));
-    reset(form);
+    reset(form, { keepIsSubmitted: true, keepSubmitCount: true });
   };
 
   const onSubmitColor = () => {
     if (isDirty) return 'primary';
-    return isSubmitSuccessful ? 'success' : 'info';
+    return isSubmitted ? 'success' : 'info';
   };
   return (
     <AccordionDetails
@@ -113,7 +114,14 @@ export const SettingsTab = ({ tab }: { tab: TaskTab }) => {
         }
         sx={{ p: '0.5rem 0' }}
       />
-      <FormTab useFormProps={{ control: control as unknown as Control<Tab>, getValues, reset: reset as UseFormReset<Tab> }} tab={formTab} />
+      <FormTab
+        useFormProps={{
+          control: control as unknown as Control<Tab>,
+          setValue: setValue as unknown as UseFormSetValue<Tab>,
+          getValues: getValues as unknown as UseFormGetValues<Tab>,
+        }}
+        tab={formTab}
+      />
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Stack direction="row" spacing={2}>
           <Button variant="outlined" color="error" sx={{ width: '5rem' }} type="submit" onClick={onDelete}>

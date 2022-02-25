@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 
 import { useForm } from 'react-hook-form';
 
-import { firstValueFrom } from 'rxjs';
+import { lastValueFrom } from 'rxjs';
 
 import { FormExplorer } from '@src/components';
 import { Task } from '@src/models';
@@ -47,7 +47,7 @@ export const TaskEdit = ({
   };
 
   const onSubmit = (data: TaskEditForm) => {
-    return firstValueFrom(QueryService.editTask(task?.id, data?.destination)).then(() => {
+    return lastValueFrom(QueryService.editTask(task?.id, data?.destination)).then(() => {
       reset(data);
       onFormSubmit && onFormSubmit(data);
       setState(false);

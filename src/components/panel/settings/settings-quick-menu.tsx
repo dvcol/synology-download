@@ -19,7 +19,7 @@ export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
     reset,
     control,
     getValues,
-    formState: { isValid, isDirty, isSubmitSuccessful },
+    formState: { isValid, isDirty, isSubmitted },
   } = useForm<QuickMenu>({
     mode: 'onChange',
     defaultValues: {
@@ -33,12 +33,12 @@ export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
 
   const onSubmit = (form: QuickMenu) => {
     dispatch(saveQuickMenu(form));
-    reset(form);
+    reset(form, { keepIsSubmitted: true, keepSubmitCount: true });
   };
 
   const onSubmitColor = () => {
     if (isDirty) return 'primary';
-    return isSubmitSuccessful ? 'success' : 'info';
+    return isSubmitted ? 'success' : 'info';
   };
 
   return (

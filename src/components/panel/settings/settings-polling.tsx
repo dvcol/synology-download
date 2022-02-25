@@ -22,7 +22,7 @@ export const SettingsPolling = () => {
     reset,
     control,
     getValues,
-    formState: { isValid, isDirty, isSubmitSuccessful },
+    formState: { isValid, isDirty, isSubmitted },
   } = useForm<Polling>({ mode: 'onChange', defaultValues: polling });
 
   const rules: Record<string, RegisterOptions> = {
@@ -31,12 +31,12 @@ export const SettingsPolling = () => {
 
   const onSubmit = (data: Polling) => {
     dispatch(syncPolling(data));
-    reset(data);
+    reset(data, { keepIsSubmitted: true, keepSubmitCount: true });
   };
 
   const onSubmitColor = () => {
     if (isDirty) return 'primary';
-    return isSubmitSuccessful ? 'success' : 'info';
+    return isSubmitted ? 'success' : 'info';
   };
 
   return (

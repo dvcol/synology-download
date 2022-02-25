@@ -22,17 +22,17 @@ export const SettingsBanner = () => {
     reset,
     control,
     getValues,
-    formState: { isValid, isDirty, isSubmitSuccessful },
+    formState: { isValid, isDirty, isSubmitted },
   } = useForm<NotificationsBanner>({ mode: 'onChange', defaultValues: notifications?.banner });
 
   const onSubmit = (banner: NotificationsBanner) => {
     dispatch(syncNotifications({ ...notifications, banner }));
-    reset(banner);
+    reset(banner, { keepIsSubmitted: true, keepSubmitCount: true });
   };
 
   const onSubmitColor = () => {
     if (isDirty) return 'primary';
-    return isSubmitSuccessful ? 'success' : 'info';
+    return isSubmitted ? 'success' : 'info';
   };
   return (
     <Card raised={true}>

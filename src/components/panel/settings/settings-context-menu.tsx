@@ -14,12 +14,13 @@ import { sendMessage, useI18n } from '@src/utils';
 export const SettingsContextMenu = ({ menu }: { menu: ContextMenu }) => {
   const i18n = useI18n('panel', 'settings', 'context_menu');
   const dispatch = useDispatch();
+  console.log('rerender');
   const {
     handleSubmit,
     reset,
     control,
     getValues,
-    formState: { isValid, isDirty, isSubmitSuccessful },
+    formState: { isValid, isDirty, isSubmitted },
   } = useForm<ContextMenu>({
     mode: 'onChange',
     defaultValues: {
@@ -36,13 +37,13 @@ export const SettingsContextMenu = ({ menu }: { menu: ContextMenu }) => {
   const onSubmit = (form: ContextMenu) => {
     sendMessage<ContextMenu>({ type: ChromeMessageType.updateMenu, payload: form }).subscribe(() => {
       dispatch(saveContextMenu(form));
-      reset(form);
+      reset(form, { keepIsSubmitted: true, keepSubmitCount: true });
     });
   };
 
   const onSubmitColor = () => {
     if (isDirty) return 'primary';
-    return isSubmitSuccessful ? 'success' : 'info';
+    return isSubmitted ? 'success' : 'info';
   };
 
   return (

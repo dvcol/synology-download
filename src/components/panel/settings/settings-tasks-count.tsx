@@ -2,7 +2,7 @@ import { Box, Button, Card, CardActions, CardContent, CardHeader, Stack } from '
 
 import React from 'react';
 
-import { useForm } from 'react-hook-form';
+import { useForm, UseFormGetValues, UseFormSetValue } from 'react-hook-form';
 
 import { Control } from 'react-hook-form/dist/types/form';
 
@@ -24,7 +24,8 @@ export const SettingsTasksCount = () => {
     reset,
     control,
     getValues,
-    formState: { isValid, isDirty, isSubmitSuccessful },
+    setValue,
+    formState: { isValid, isDirty, isSubmitted },
   } = useForm<NotificationsCount>({
     mode: 'onChange',
     defaultValues: {
@@ -35,12 +36,12 @@ export const SettingsTasksCount = () => {
 
   const onSubmit = (count: NotificationsCount) => {
     dispatch(syncNotifications({ ...notifications, count }));
-    reset(count);
+    reset(count, { keepIsSubmitted: true, keepSubmitCount: true });
   };
 
   const onSubmitColor = () => {
     if (isDirty) return 'primary';
-    return isSubmitSuccessful ? 'success' : 'info';
+    return isSubmitted ? 'success' : 'info';
   };
 
   return (
@@ -55,7 +56,11 @@ export const SettingsTasksCount = () => {
       <CardContent>
         <Box component="form" sx={{ '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">
           <FormTab
-            useFormProps={{ control: control as unknown as Control<Tab>, getValues, reset }}
+            useFormProps={{
+              control: control as unknown as Control<Tab>,
+              setValue: setValue as unknown as UseFormSetValue<Tab>,
+              getValues: getValues as unknown as UseFormGetValues<Tab>,
+            }}
             tab={{
               template: notifications?.count?.template,
               color: notifications?.count?.color ?? defaultNotifications.count.color,

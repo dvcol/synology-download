@@ -22,17 +22,17 @@ export const SettingsSnack = () => {
     reset,
     control,
     getValues,
-    formState: { isValid, isDirty, isSubmitSuccessful },
+    formState: { isValid, isDirty, isSubmitted },
   } = useForm<NotificationsSnack>({ mode: 'onChange', defaultValues: notifications?.snack });
 
   const onSubmit = (snack: NotificationsSnack) => {
     dispatch(syncNotifications({ ...notifications, snack }));
-    reset(snack);
+    reset(snack, { keepIsSubmitted: true, keepSubmitCount: true });
   };
 
   const onSubmitColor = () => {
     if (isDirty) return 'primary';
-    return isSubmitSuccessful ? 'success' : 'info';
+    return isSubmitted ? 'success' : 'info';
   };
 
   return (
