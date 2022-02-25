@@ -46,10 +46,17 @@ jobs:
           body_path: CHANGELOG.md
           files: build/synology-download.zip
 
+      - name: Publish
+        uses: Klemensas/chrome-extension-upload-action@$VERSION
+        env:
+          CLIENT_ID: ${{ secrets.CHROME_WEB_STORE_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CHROME_WEB_STORE_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.CHROME_WEB_STORE_REFRESH_TOKEN }}
+        with:
+          refresh-token: $REFRESH_TOKEN
+          client-id: $CLIENT_ID
+          client-secret: $CLIENT_SECRET
+          file-name: ./extension.zip
+          app-id: ebbdkledlkjpgbbmmopgbnnjmklnkcef
+          publish: false
 
-#  publish:
-#    runs-on: ubuntu-latest
-#    if: github.ref == 'ref/head/main'
-
-#  TODO: publish to chrome store
-#
