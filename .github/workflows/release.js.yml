@@ -47,16 +47,15 @@ jobs:
           files: build/synology-download.zip
 
       - name: Publish
-        uses: Klemensas/chrome-extension-upload-action@$VERSION
+        uses: mnao305/chrome-extension-upload@2.2.0
+        with:
+          extension-id: ebbdkledlkjpgbbmmopgbnnjmklnkcef
+          client-id:  $CLIENT_ID
+          refresh-token: $REFRESH_TOKEN
+          file-path: build/extension.zip
+          publish: false
         env:
           CLIENT_ID: ${{ secrets.CHROME_WEB_STORE_CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.CHROME_WEB_STORE_CLIENT_SECRET }}
           REFRESH_TOKEN: ${{ secrets.CHROME_WEB_STORE_REFRESH_TOKEN }}
-        with:
-          refresh-token: $REFRESH_TOKEN
-          client-id: $CLIENT_ID
-          client-secret: $CLIENT_SECRET
-          file-name: ./extension.zip
-          app-id: ebbdkledlkjpgbbmmopgbnnjmklnkcef
-          publish: false
 
