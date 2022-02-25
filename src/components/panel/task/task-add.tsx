@@ -4,7 +4,7 @@ import React, { FC, useEffect } from 'react';
 
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { firstValueFrom } from 'rxjs';
+import { lastValueFrom, tap } from 'rxjs';
 
 import { FormExplorer, FormInput, FormSwitch } from '@src/components';
 import { TaskForm } from '@src/models';
@@ -56,7 +56,7 @@ export const TaskAdd: FC<{
     const { uri, source, destination, username, password, unzip } = data;
 
     if (uri?.length) {
-      return firstValueFrom(
+      return lastValueFrom(
         QueryService.createTask(
           uri,
           source,
@@ -64,11 +64,13 @@ export const TaskAdd: FC<{
           username?.length ? username : undefined,
           password?.length ? password : undefined,
           unzip?.length ? unzip : undefined
+        ).pipe(
+          tap(() => {
+            reset(data);
+            onFormSubmit && onFormSubmit(data);
+          })
         )
-      ).then(() => {
-        reset(data);
-        onFormSubmit && onFormSubmit(data);
-      });
+      );
     } else {
       return Promise.reject(i18n('url_required'));
     }

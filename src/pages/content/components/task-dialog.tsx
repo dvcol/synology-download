@@ -2,7 +2,6 @@ import { PortalProps } from '@mui/base/Portal';
 import { Dialog, DialogContent } from '@mui/material';
 
 import React, { FC, useEffect } from 'react';
-import { SubmitHandler } from 'react-hook-form';
 import { Subject, takeUntil } from 'rxjs';
 
 import { TaskAdd } from '@src/components';
@@ -19,10 +18,6 @@ export const TaskDialog: FC<{ container?: PortalProps['container'] }> = ({ conta
   const onClose = () => {
     setForm(undefined);
     setOpen(false);
-  };
-  const onFormSubmit: SubmitHandler<TaskForm> = ({ uri, source, destination }) => {
-    if (uri) NotificationService.taskCreated(uri, source, destination?.path);
-    onClose();
   };
 
   useEffect(() => {
@@ -62,7 +57,7 @@ export const TaskDialog: FC<{ container?: PortalProps['container'] }> = ({ conta
   return (
     <Dialog open={open} container={container} fullWidth={true} onClose={onClose} maxWidth={'md'}>
       <DialogContent sx={{ p: '0' }}>
-        <TaskAdd form={form} withCancel={true} onFormCancel={onClose} onFormSubmit={onFormSubmit} />
+        <TaskAdd form={form} withCancel={true} onFormCancel={onClose} onFormSubmit={onClose} />
       </DialogContent>
     </Dialog>
   );
