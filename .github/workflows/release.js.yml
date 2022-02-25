@@ -23,10 +23,10 @@ jobs:
           node-version: ${{ env.node_version }}
           cache: 'npm'
 
-      - name: Clean install
+      - name: Clean install dependencies
         run: npm ci
 
-      - name: Build
+      - name: Build application
         run: npm run build
 
       - name: Zip build folder
@@ -40,22 +40,20 @@ jobs:
           ls -l  synology-download.zip
           cd ..
 
-      - name: Release
+      - name: Generate Release changelog
+        run: npx extract-changelog-release --yes > RELEASE.md
+
+      - name: Push Release to github
         uses: softprops/action-gh-release@v1
         with:
-          body_path: CHANGELOG.md
+          body_path: RELEASE.md
           files: build/synology-download.zip
 
-      - name: Publish
+      - name: Publish to Chrome webstore
         uses: mnao305/chrome-extension-upload@2.2.0
         with:
           extension-id: ebbdkledlkjpgbbmmopgbnnjmklnkcef
-          client-id:  $CLIENT_ID
-          refresh-token: $REFRESH_TOKEN
-          file-path: build/extension.zip
+          client-id: ${{ secrets.CHROME_WEB_STORE_CLIENT_ID }}
+          refresh-token: ${{ secrets.CHROME_WEB_STORE_REFRESH_TOKEN }}
+          file-path: build/synology-download.zip
           publish: false
-        env:
-          CLIENT_ID: ${{ secrets.CHROME_WEB_STORE_CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CHROME_WEB_STORE_CLIENT_SECRET }}
-          REFRESH_TOKEN: ${{ secrets.CHROME_WEB_STORE_REFRESH_TOKEN }}
-
