@@ -204,7 +204,7 @@ export const SettingsCredentials = () => {
               }}
             >
               {Object.values(ConnectionType)?.map((_type) => (
-                <MenuItem key={_type} value={_type} disabled={_type === ConnectionType.quickConnect}>
+                <MenuItem key={_type} value={_type}>
                   {i18n(_type, 'common', 'model', 'connection_type')}
                 </MenuItem>
               ))}
@@ -220,6 +220,14 @@ export const SettingsCredentials = () => {
           subheaderTypographyProps={{ variant: 'subtitle2' }}
           sx={{ p: '0.5rem 0' }}
         />
+        <Collapse in={isQC} unmountOnExit={true}>
+          <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
+            {i18n('quick_connect__alpha')}
+          </Typography>
+          <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
+            {i18n('quick_connect__no_auto_login')}
+          </Typography>
+        </Collapse>
         <Card component="form" sx={{ p: '0.5rem', '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">
           <Grid container direction={'row'} sx={{ alignItems: 'center' }}>
             <FormInput
