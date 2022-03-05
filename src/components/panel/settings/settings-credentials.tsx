@@ -97,13 +97,14 @@ export const SettingsCredentials = () => {
 
   useEffect(() => {
     PollingService.stop();
-    QueryService.info()
-      .pipe(loadingOperator)
-      .subscribe((res) => {
-        const _version = res[CommonAPI.Auth].maxVersion;
-        setValue('authVersion', _version);
-        if (_version < 6) setValue('enable_device_token', false);
-      });
+    QueryService.isReady &&
+      QueryService.info()
+        .pipe(loadingOperator)
+        .subscribe((res) => {
+          const _version = res[CommonAPI.Auth].maxVersion;
+          setValue('authVersion', _version);
+          if (_version < 6) setValue('enable_device_token', false);
+        });
     return () => PollingService.start();
   }, []);
 

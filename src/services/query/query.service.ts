@@ -108,7 +108,7 @@ export class QueryService {
     );
 
   static info(): Observable<InfoResponse> {
-    return this.infoClient.info();
+    return this.infoClient.info().pipe(this.readyCheckOperator(false));
   }
 
   private static doLogin(credentials = getCredentials(this.store.getState()), baseUrl?: string): Observable<LoginResponse> {
