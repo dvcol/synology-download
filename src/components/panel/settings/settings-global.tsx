@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent, CardHeader, MenuItem, Stack } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CardHeader, Collapse, InputAdornment, MenuItem, Stack } from '@mui/material';
 
 import React from 'react';
 
@@ -6,8 +6,8 @@ import { useForm } from 'react-hook-form';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { FormInput } from '@src/components';
-import { ActionScope, Global, InterfaceHeader, ThemeMode } from '@src/models';
+import { FormInput, FormSwitch } from '@src/components';
+import { ActionScope, defaultGlobal, Global, InterfaceHeader, ThemeMode } from '@src/models';
 import { StoreState } from '@src/store';
 import { syncInterface } from '@src/store/actions';
 import { getGlobal } from '@src/store/selectors';
@@ -22,10 +22,16 @@ export const SettingsGlobal = () => {
     handleSubmit,
     reset,
     control,
+    getValues,
     formState: { isValid, isDirty, isSubmitSuccessful },
   } = useForm<Global>({
     mode: 'onChange',
-    defaultValues: { ...state, theme: state.theme ?? ThemeMode.auto, actions: state.actions ?? ActionScope.all },
+    defaultValues: {
+      ...state,
+      theme: state.theme ?? defaultGlobal.theme,
+      actions: state.actions ?? defaultGlobal.actions,
+      loading: state.loading ?? defaultGlobal.loading,
+    },
   });
 
   const onSubmit = (data: Global) => {
@@ -95,6 +101,38 @@ export const SettingsGlobal = () => {
           }
           sx={{ p: '0.5rem 0' }}
         />
+        <CardHeader
+          title={i18n('loading_title')}
+          subheader={i18n('loading_subheader')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          action={<FormSwitch controllerProps={{ name: 'loading.enabled', control }} formControlLabelProps={{ label: '' }} />}
+          sx={{ p: '0.5rem 0' }}
+        />
+
+        <Collapse in={getValues()?.loading?.enabled} unmountOnExit={true}>
+          <CardHeader
+            title={i18n('loading_threshold_title')}
+            subheader={i18n('loading_threshold_subheader')}
+            titleTypographyProps={{ variant: 'subtitle2' }}
+            subheaderTypographyProps={{ variant: 'subtitle2' }}
+            action={
+              <FormInput
+                controllerProps={{ name: 'loading.threshold', control, rules: { min: 0, max: 60000 } }}
+                textFieldProps={{
+                  type: 'number',
+                  label: i18n('loading_threshold_label'),
+                  InputProps: {
+                    endAdornment: <InputAdornment position="end">ms</InputAdornment>,
+                  },
+                  disabled: !getValues()?.loading?.enabled,
+                  sx: { flex: '0 0 10rem', ml: '0.5rem' },
+                }}
+              />
+            }
+            sx={{ p: '0.5rem 0', mt: '0.5rem' }}
+          />
+        </Collapse>
       </CardContent>
 
       <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>

@@ -24,5 +24,22 @@
   },
   "panel__settings__global__actions_label": {
     "message": "Scope"
+  },
+
+  "panel__settings__global__loading_title": {
+    "message": "Loading bar"
+  },
+  "panel__settings__global__loading_subheader": {
+    "message": "Display a loading bar indicator while fetching data."
+  },
+
+  "panel__settings__global__loading_threshold_title": {
+    "message": "Loading bar threshold"
+  },
+  "panel__settings__global__loading_threshold_subheader": {
+    "message": "Set the threshold (in ms) after which the loading bar is displayed for long query."
+  },
+  "panel__settings__global__loading_threshold_label": {
+    "message": "Threshold"
   }
 }

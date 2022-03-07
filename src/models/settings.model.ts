@@ -149,11 +149,13 @@ export enum ActionScope {
 export interface Global {
   theme: ThemeMode;
   actions: ActionScope;
+  loading: { enabled: boolean; threshold: number };
 }
 
 export const defaultGlobal = {
   theme: ThemeMode.auto,
   actions: ActionScope.all,
+  loading: { enabled: true, threshold: 300 },
 };
 
 export const defaultSettings: SettingsSlice = {
