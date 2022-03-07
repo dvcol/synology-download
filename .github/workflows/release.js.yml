@@ -50,10 +50,11 @@ jobs:
           files: build/synology-download.zip
 
       - name: Publish to Chrome webstore
-        uses: mnao305/chrome-extension-upload@2.2.0
-        with:
-          extension-id: ebbdkledlkjpgbbmmopgbnnjmklnkcef
-          client-id: ${{ secrets.CHROME_WEB_STORE_CLIENT_ID }}
-          refresh-token: ${{ secrets.CHROME_WEB_STORE_REFRESH_TOKEN }}
-          file-path: build/synology-download.zip
-          publish: false
+        env:
+          CHROME_WEB_STORE_EXTENSION_ID: ebbdkledlkjpgbbmmopgbnnjmklnkcef
+          CHROME_WEB_STORE_CLIENT_ID: ${{ secrets.CHROME_WEB_STORE_CLIENT_ID }}
+          CHROME_WEB_STORE_CLIENT_SECRET: ${{ secrets.CHROME_WEB_STORE_CLIENT_SECRET }}
+          CHROME_WEB_STORE_REFRESH_TOKEN: ${{ secrets.CHROME_WEB_STORE_REFRESH_TOKEN }}
+        run: |
+          # Uploadind zip to web store
+          npx --yes chrome-webstore-upload-cli upload --source build/synology-download.zip --extension-id "$CHROME_WEB_STORE_EXTENSION_ID" --client-id "$CHROME_WEB_STORE_CLIENT_ID" --client-secret "$CHROME_WEB_STORE_CLIENT_SECRET" --refresh-token "$CHROME_WEB_STORE_REFRESH_TOKEN"
