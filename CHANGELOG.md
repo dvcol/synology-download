@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.9.2](https://github.com/dvcol/synology-download/compare/v1.9.0...v1.9.2) (2022-03-07)
+
+
+### Bug Fixes
+
+* **ci:** Fix release pipeline to publish to chrome store ([0d62d1e](https://github.com/dvcol/synology-download/commit/0d62d1e721b563fdc23c8481bcff374e8d3fb499))
+* **i18n:** Fix quick-connect translation wording ([892e20c](https://github.com/dvcol/synology-download/commit/892e20cb87ee5098ec460516c8e088e2db522131))
+
 ## [1.9.0](https://github.com/dvcol/synology-download/compare/v1.7.2...v1.9.0) (2022-03-07)
 
 
