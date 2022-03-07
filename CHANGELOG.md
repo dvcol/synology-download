@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.9.0](https://github.com/dvcol/synology-download/compare/v1.7.2...v1.9.0) (2022-03-07)
+
+
+### Features
+
+* **connection:** Added alpha support for QuickConnect ([b3b55f4](https://github.com/dvcol/synology-download/commit/b3b55f4d224b82ffa9e25ec1527ede291581fd72))
+* **popup:** Add custom settings for loading bar indicator ([#48](https://github.com/dvcol/synology-download/issues/48)) ([0bc4341](https://github.com/dvcol/synology-download/commit/0bc434157ab5a051ec31ed5a954f49e9910ed2e8))
+
+
+### Bug Fixes
+
+* **service:** Fix missing ready check in credentials ([37e8322](https://github.com/dvcol/synology-download/commit/37e83220dfc46578deb97d59a7ab437018cd8597))
+* **store:** Fixes missing nullchecking before destructuring ([#49](https://github.com/dvcol/synology-download/issues/49)) ([f04c666](https://github.com/dvcol/synology-download/commit/f04c666bba66010cc52f86afa2da5da657333b64))
+
 ### [1.7.2](https://github.com/dvcol/synology-download/compare/v1.4.0...v1.7.2) (2022-02-25)
 
 
