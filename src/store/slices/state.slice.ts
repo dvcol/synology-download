@@ -7,12 +7,12 @@ import { syncLoggedReducer } from '@src/store/reducers';
 
 export interface StateReducers<S = StateSlice> extends SliceCaseReducers<S> {
   setLogged: CaseReducer<S, PayloadAction<boolean>>;
-  setDeviceId: CaseReducer<S, PayloadAction<Partial<string | undefined>>>;
   setSid: CaseReducer<S, PayloadAction<string | undefined>>;
   setPopup: CaseReducer<S, PayloadAction<boolean>>;
   setOption: CaseReducer<S, PayloadAction<boolean>>;
   addLoading: CaseReducer<S, PayloadAction<number | undefined>>;
   removeLoading: CaseReducer<S, PayloadAction<number | undefined>>;
+  resetLoading: CaseReducer<S>;
 }
 
 const initialState: StateSlice = {
@@ -36,5 +36,6 @@ export const stateSlice = createSlice<StateSlice, StateReducers, 'state'>({
     setOption: (state, { payload: option }) => ({ ...state, modal: { ...state.modal, option } }),
     addLoading: (state, { payload }) => ({ ...state, loading: state.loading + (payload ?? 1) }),
     removeLoading: (state, { payload }) => ({ ...state, loading: state.loading - (payload ?? 1) }),
+    resetLoading: (state) => ({ ...state, loading: 0 }),
   } as StateReducers,
 });

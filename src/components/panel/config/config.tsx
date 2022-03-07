@@ -44,18 +44,18 @@ export const Config: FC<{
   const [loadingBar, setLoadingBar] = useState<boolean>(false);
 
   // Loading observable for debounce
-  const loadingBar$ = useDebounceObservable<boolean>(setLoadingBar);
+  const [, next] = useDebounceObservable<boolean>(setLoadingBar);
   const loadingOperator = <T,>(source: Observable<T>) =>
     source.pipe<T, T>(
       before(() => {
         setError(undefined);
         setLoading(true);
-        loadingBar$.next(true);
+        next(true);
       }),
       finalize(() => {
         setLoading(false);
         setLoadingBar(false); // So there is no delay
-        loadingBar$.next(false); // So that observable data is not stale
+        next(false); // So that observable data is not stale
       })
     );
 

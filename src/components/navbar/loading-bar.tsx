@@ -4,19 +4,25 @@ import React, { useEffect, useState } from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { getLoading } from '@src/store/selectors';
+import { defaultGlobal } from '@src/models';
+import { getGlobalLoading, getLoading } from '@src/store/selectors';
 import { useDebounceObservable } from '@src/utils';
 
 export const LoadingBar = (props?: LinearProgressProps) => {
+  // Loading bar settings
+  const { enabled, threshold } = useSelector(getGlobalLoading) ?? defaultGlobal.loading;
+
+  // Loading selector for refresh
+  const _loading = useSelector(getLoading);
+
   // Loading state
   const [loading, setLoading] = useState<boolean>(false);
 
   // Loading observable for debounce
-  const loading$ = useDebounceObservable<boolean>(setLoading, 300);
+  const [loading$, next] = useDebounceObservable<boolean>(setLoading, threshold);
+  useEffect(() => next(_loading > 0), [loading$, _loading]);
 
-  // Loading selector for refresh
-  const _loading = useSelector(getLoading);
-  useEffect(() => loading$.next(_loading > 0), [_loading]);
+  const show = enabled && loading && _loading > 0;
 
   return (
     <LinearProgress
@@ -24,7 +30,7 @@ export const LoadingBar = (props?: LinearProgressProps) => {
       sx={{
         height: '2px',
         transition: 'opacity 0.3s linear',
-        opacity: loading && _loading > 0 ? 1 : 0,
+        opacity: show ? 1 : 0,
       }}
     />
   );

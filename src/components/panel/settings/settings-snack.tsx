@@ -101,11 +101,11 @@ export const SettingsSnack = () => {
                   endAdornment: <InputAdornment position="end">ms</InputAdornment>,
                 },
                 disabled: !getValues()?.enabled,
-                sx: { flex: '0 0 14rem' },
+                sx: { flex: '0 0 14rem', ml: '0.5rem' },
               }}
             />
           }
-          sx={{ p: '0.5rem 0' }}
+          sx={{ p: '0.5rem 0', mt: '0.5rem' }}
         />
         <CardHeader
           title={i18n('level_title')}
