@@ -18,8 +18,9 @@ export const getQuick = createSelector(getSettings, (setting) => setting?.quick)
 
 export const getConnection = createSelector(getSettings, (setting) => setting?.connection);
 
-export const urlReducer = ({ type, protocol, path, port }: Connection) => {
-  if (protocol && path && port) {
+export const urlReducer = (connection: Connection) => {
+  if (connection?.protocol && connection?.path && connection?.port) {
+    const { type, protocol, path, port } = connection;
     if (ConnectionType.quickConnect === type) return new URL(`${protocol}://${path}.quickconnect.to`).toString();
     return new URL(`${protocol}://${path}:${port}`).toString();
   }
@@ -52,10 +53,12 @@ export const getNotificationsBannerFinishedEnabled = createSelector(getNotificat
 
 export const getGlobal = createSelector(getSettings, (setting) => setting?.global);
 
+export const getGlobalLoading = createSelector(getGlobal, (global) => global?.loading);
+
 export const getActionScope = createSelector(getGlobal, (global) => global?.actions);
 
-export const getThemeMode = createSelector(getGlobal, ({ theme }) => {
-  switch (theme) {
+export const getThemeMode = createSelector(getGlobal, (global) => {
+  switch (global?.theme) {
     case ThemeMode.dark:
       return darkTheme;
     case ThemeMode.light:

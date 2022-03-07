@@ -7,26 +7,29 @@ import { buildContextMenu, onMessage, removeContextMenu, saveContextMenu } from 
 export const onMessageEvents = () => {
   // On message from chrome handle payload
   onMessage([ChromeMessageType.addMenu, ChromeMessageType.updateMenu, ChromeMessageType.removeMenu, ChromeMessageType.resetMenu]).subscribe(
-    ({ message: { type, payload }, sendResponse }) => {
-      const handle = <T>(obs$: Observable<T>) =>
-        obs$.subscribe({
-          next: () => sendResponse({ success: true, payload }),
-          error: (error) => sendResponse({ success: false, error }),
-        });
+    ({ message, sendResponse }) => {
+      if (message) {
+        const { type, payload } = message;
+        const handle = <T>(obs$: Observable<T>) =>
+          obs$.subscribe({
+            next: () => sendResponse({ success: true, payload }),
+            error: (error) => sendResponse({ success: false, error }),
+          });
 
-      switch (type) {
-        case ChromeMessageType.addMenu:
-          handle(saveContextMenu(payload as ContextMenu));
-          break;
-        case ChromeMessageType.updateMenu:
-          handle(saveContextMenu(payload as ContextMenu, true));
-          break;
-        case ChromeMessageType.removeMenu:
-          handle(removeContextMenu(payload as string));
-          break;
-        case ChromeMessageType.resetMenu:
-          handle(buildContextMenu(payload as ContextMenu[]));
-          break;
+        switch (type) {
+          case ChromeMessageType.addMenu:
+            handle(saveContextMenu(payload as ContextMenu));
+            break;
+          case ChromeMessageType.updateMenu:
+            handle(saveContextMenu(payload as ContextMenu, true));
+            break;
+          case ChromeMessageType.removeMenu:
+            handle(removeContextMenu(payload as string));
+            break;
+          case ChromeMessageType.resetMenu:
+            handle(buildContextMenu(payload as ContextMenu[]));
+            break;
+        }
       }
     }
   );

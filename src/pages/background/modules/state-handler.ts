@@ -13,7 +13,7 @@ export const restoreSate = (settings: SettingsSlice) =>
     // If service initialized & remember me && logged
     if (!QueryService.isReady || !state?.logged || !settings?.connection?.rememberMe) return;
     // If device token for 2FA && device id saved
-    if (settings?.connection.type === ConnectionType.twoFactor && (!settings?.connection.enable_device_token || !settings?.connection.device_id))
+    if (settings?.connection?.type === ConnectionType.twoFactor && (!settings?.connection.enable_device_token || !settings?.connection.device_id))
       return;
     // Restore login
     QueryService.login().subscribe();
