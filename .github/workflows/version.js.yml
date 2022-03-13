@@ -74,3 +74,22 @@ jobs:
           git add package.json package-lock.json src/manifest.json
           git commit -m "chore(version): Bumping version from '${{ env.old_version }}' to '${{ env.new_version }}'"
           git push origin
+
+      - name: Tag release candidate
+        run: |
+          old_tag="v${{ env.old_version }}-rc"
+          new_tag="v${{ env.new_version }}-rc"
+        
+          # create new release candidate tag
+          echo "New release candidate tag $new_tag"
+          git tag "$new_tag"
+          git push origin "$new_tag"
+          
+          # delete previous release candidate tag
+          git ls-remote --exit-code -q origin "refs/tags/$old_tag"
+          if [ "$?" == 0 ]; then
+            echo "Old release candidate tag found $old_tag"
+            git push --delete origin "$old_tag"
+          else
+            echo "No tag found for $old_tag"
+          fi

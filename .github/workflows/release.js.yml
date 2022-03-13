@@ -10,7 +10,8 @@ concurrency:
 on:
   push:
     tags:
-      - 'v*.*.*'
+      # Ignore release candidates
+      - 'v[0-9]+.[0-9]+.[0-9]+'
 
 jobs:
   release:
