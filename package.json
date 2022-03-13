@@ -1,6 +1,6 @@
 {
   "name": "synology-download",
-  "version": "1.10.2",
+  "version": "1.10.3",
   "private": true,
   "description": "A basic synology download station client chrome extension",
   "license": "MIT",
