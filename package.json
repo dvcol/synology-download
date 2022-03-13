@@ -89,7 +89,7 @@
     "node-sass": "^7.0.1",
     "prettier": "2.5.1",
     "redux-devtools": "^3.7.0",
-    "sass-loader": "^12.4.0",
+    "sass-loader": "^12.6.0",
     "source-map-loader": "^3.0.1",
     "standard-version": "^9.3.2",
     "style-loader": "^3.3.1",
