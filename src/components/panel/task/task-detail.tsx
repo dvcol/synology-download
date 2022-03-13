@@ -132,7 +132,7 @@ export const TaskDetail = ({
                   color: 'text.secondary',
                   sx: { display: 'inline' },
                 }}
-                secondary={<ProgressBar variant="determinate" value={computeProgress(f.size_downloaded, f.size)} />}
+                secondary={<ProgressBar props={{ variant: 'determinate' }} value={computeProgress(f.size_downloaded, f.size)} />}
                 secondaryTypographyProps={{ component: 'span' }}
               />
             </ListItem>

@@ -14,7 +14,7 @@ import { ProgressBar } from '@src/components';
 import { computeEta, computeProgress, formatBytes, Task, TaskStatus, taskStatusToColor } from '@src/models';
 import { useI18n } from '@src/utils';
 
-export const TaskCard = ({ task, statuses }: { task: Task; statuses?: TaskStatus[] }) => {
+export const TaskCard = ({ task, statuses, expanded, visible }: { task: Task; statuses?: TaskStatus[]; expanded?: boolean; visible?: boolean }) => {
   const i18n = useI18n('panel', 'task', 'card');
   const statusIcon = (status: TaskStatus): React.ReactNode => {
     switch (status) {
@@ -60,7 +60,15 @@ export const TaskCard = ({ task, statuses }: { task: Task; statuses?: TaskStatus
       <ListItemText
         sx={{ maxWidth: '100vw', whiteSpace: 'nowrap' }}
         primary={task.title}
-        primaryTypographyProps={{ component: 'span' }}
+        primaryTypographyProps={{
+          component: 'span',
+          sx: {
+            maxWidth: expanded ? '100%' : 'calc(100vw - 136px)',
+            display: '-webkit-box',
+            WebkitLineClamp: expanded ? 'non' : '3',
+            WebkitBoxOrient: 'vertical',
+          },
+        }}
         secondary={
           <React.Fragment>
             <Grid container>
@@ -86,9 +94,12 @@ export const TaskCard = ({ task, statuses }: { task: Task; statuses?: TaskStatus
               </Grid>
             </Grid>
             <ProgressBar
-              variant={[TaskStatus.seeding, TaskStatus.extracting, TaskStatus.finishing].includes(task.status) ? 'indeterminate' : 'determinate'}
+              props={{
+                variant: [TaskStatus.seeding, TaskStatus.extracting, TaskStatus.finishing].includes(task.status) ? 'indeterminate' : 'determinate',
+                color: taskStatusToColor(task.status),
+              }}
               value={computeProgress(task.additional?.transfer?.size_downloaded, task.size)}
-              color={taskStatusToColor(task.status)}
+              percentage={expanded || !visible}
             />
           </React.Fragment>
         }
