@@ -18,7 +18,7 @@
     "eslint:fix": "eslint --ext .js,.jsx,.ts,.tsx src --fix",
     "changelog": "standard-version --skip.bump --skip.commit --skip.tag",
     "version": "standard-version --skip.changelog --skip.commit --skip.tag",
-    "release": "standard-version --skip.bump"
+    "release": "git tag -d $(git describe --tags --match \"v*-rc\" --abbrev=0) && standard-version --skip.bump"
   },
   "engines": {
     "npm": ">=7.10.0",
