@@ -43,7 +43,7 @@
     "react-hook-form": "^7.27.0",
     "react-hot-loader": "^4.13.0",
     "react-redux": "^7.2.6",
-    "react-router-dom": "^6.2.1",
+    "react-router-dom": "^6.2.2",
     "react-router-hash-link": "^2.4.3",
     "rxjs": "^7.5.4",
     "uuid": "^8.3.2",
