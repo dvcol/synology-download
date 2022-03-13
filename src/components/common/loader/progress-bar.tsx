@@ -1,7 +1,7 @@
 import { Box, LinearProgress, LinearProgressProps, Typography } from '@mui/material';
-import React from 'react';
+import React, { FC } from 'react';
 
-export const ProgressBar = ({ props, value, percentage }: { props: LinearProgressProps; value: number; percentage?: boolean }) => (
+export const ProgressBar: FC<{ props: LinearProgressProps; value: number; percentage?: boolean }> = ({ props, value, percentage }) => (
   <Box sx={{ display: 'flex', alignItems: 'center', minHeight: '18px' }}>
     <Box sx={{ width: '100%', mr: percentage ? '8px' : '3px' }}>
       <LinearProgress variant="determinate" {...{ ...props, value }} />

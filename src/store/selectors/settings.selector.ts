@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-import { Connection, ConnectionType, Credentials, ThemeMode } from '@src/models';
+import { Connection, ConnectionType, Credentials, defaultGlobal, ThemeMode } from '@src/models';
 import { darkTheme, lightTheme } from '@src/themes';
 
 import { StoreState } from '../store';
@@ -67,3 +67,5 @@ export const getThemeMode = createSelector(getGlobal, (global) => {
       return null;
   }
 });
+
+export const getGlobalTask = createSelector(getGlobal, (global) => global?.task ?? defaultGlobal.task);

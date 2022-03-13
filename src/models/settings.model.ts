@@ -150,12 +150,20 @@ export interface Global {
   theme: ThemeMode;
   actions: ActionScope;
   loading: { enabled: boolean; threshold: number };
+  task: {
+    progressBar: boolean;
+    background: boolean;
+  };
 }
 
 export const defaultGlobal = {
   theme: ThemeMode.auto,
   actions: ActionScope.all,
   loading: { enabled: true, threshold: 300 },
+  task: {
+    progressBar: true,
+    background: true,
+  },
 };
 
 export const defaultSettings: SettingsSlice = {

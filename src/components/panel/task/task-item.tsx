@@ -5,11 +5,25 @@ import { Accordion, AccordionDetails, AccordionSummary, Button, ButtonGroup, Too
 
 import React, { forwardRef, ForwardRefRenderFunction, useState } from 'react';
 
+import { useSelector } from 'react-redux';
 import { finalize, Observable } from 'rxjs';
 
-import { ConfirmationDialog, IconLoader } from '@src/components';
-import { ErrorType, LoginError, Task, TaskStatus } from '@src/models';
+import { ConfirmationDialog, IconLoader, ProgressBackground, ProgressBackgroundProps } from '@src/components';
+import {
+  ColorLevelMap,
+  computeProgress,
+  ErrorType,
+  Global,
+  LoginError,
+  Task,
+  TaskStatus,
+  taskStatusToColor,
+  TaskStatusType,
+  taskStatusTypeMap,
+} from '@src/models';
 import { NotificationService, QueryService } from '@src/services';
+import { StoreState } from '@src/store';
+import { getGlobalTask } from '@src/store/selectors';
 import { before, useDebounceObservable, useI18n } from '@src/utils';
 
 import TaskCard from './task-card';
@@ -60,15 +74,30 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
   const isDisabled = Object.values(loading).some(Boolean);
   const playOrSeed = TaskStatus.paused === task.status ? 'play' : 'seed';
 
+  const showBackground = useSelector<StoreState, Global['task']>(getGlobalTask)?.background;
+  let background: ProgressBackgroundProps = {};
+  if (showBackground) {
+    if (taskStatusTypeMap[TaskStatusType.active].includes(task?.status)) {
+      background = {
+        primary: `${ColorLevelMap[taskStatusToColor(task.status)]}${visible ? 30 : 20}`,
+        secondary: visible ? '#99999910' : 'transparent',
+        progress: computeProgress(task.additional?.transfer?.size_downloaded, task.size),
+      };
+    } else if (visible) {
+      background = { primary: `${ColorLevelMap[taskStatusToColor(task.status)]}10` };
+    }
+  }
+
   return (
     <Accordion ref={ref} onChange={(_, state) => setExpanded(state)} TransitionProps={{ unmountOnExit: true }}>
       <AccordionSummary
         aria-controls="task-content"
         id="task-header"
-        sx={{ padding: 0 }}
+        sx={{ padding: 0, position: 'relative' }}
         onMouseOver={() => setVisible(true)}
         onMouseLeave={() => setVisible(false)}
       >
+        {showBackground && <ProgressBackground primary={background?.primary} secondary={background?.secondary} progress={background?.progress} />}
         <TaskCard task={task} statuses={status} expanded={expanded} visible={visible} />
         {visible && !expanded && (
           <ButtonGroup orientation="vertical" variant="text">

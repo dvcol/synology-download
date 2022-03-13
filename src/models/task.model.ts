@@ -63,6 +63,18 @@ export enum TaskStatusType {
 }
 
 /**
+ * Enumeration for task status by task types
+ */
+export const taskStatusTypeMap: Record<TaskStatusType, TaskStatus[]> = {
+  [TaskStatusType.all]: Object.values(TaskStatus),
+  [TaskStatusType.active]: [TaskStatus.downloading, TaskStatus.seeding],
+  [TaskStatusType.paused]: [TaskStatus.paused, TaskStatus.waiting, TaskStatus.filehosting_waiting],
+  [TaskStatusType.finished]: [TaskStatus.finished],
+  [TaskStatusType.finishing]: [TaskStatus.finishing, TaskStatus.extracting, TaskStatus.hash_checking],
+  [TaskStatusType.error]: [TaskStatus.error],
+};
+
+/**
  * Status_Extra object which provides extra information about task status.
  */
 export interface TaskStatusExtra {

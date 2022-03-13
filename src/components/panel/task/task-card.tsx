@@ -10,12 +10,18 @@ import { blue, green, orange, purple, red } from '@mui/material/colors';
 
 import React from 'react';
 
+import { useSelector } from 'react-redux';
+
 import { ProgressBar } from '@src/components';
-import { computeEta, computeProgress, formatBytes, Task, TaskStatus, taskStatusToColor } from '@src/models';
+import { computeEta, computeProgress, formatBytes, Global, Task, TaskStatus, taskStatusToColor } from '@src/models';
+import { StoreState } from '@src/store';
+import { getGlobalTask } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
 
 export const TaskCard = ({ task, statuses, expanded, visible }: { task: Task; statuses?: TaskStatus[]; expanded?: boolean; visible?: boolean }) => {
   const i18n = useI18n('panel', 'task', 'card');
+  const showProgressBar = useSelector<StoreState, Global['task']>(getGlobalTask)?.progressBar;
+
   const statusIcon = (status: TaskStatus): React.ReactNode => {
     switch (status) {
       case TaskStatus.waiting:
@@ -93,14 +99,16 @@ export const TaskCard = ({ task, statuses, expanded, visible }: { task: Task; st
                 <span>{formatBytes(task.additional?.transfer?.speed_download)}/s</span>
               </Grid>
             </Grid>
-            <ProgressBar
-              props={{
-                variant: [TaskStatus.seeding, TaskStatus.extracting, TaskStatus.finishing].includes(task.status) ? 'indeterminate' : 'determinate',
-                color: taskStatusToColor(task.status),
-              }}
-              value={computeProgress(task.additional?.transfer?.size_downloaded, task.size)}
-              percentage={expanded || !visible}
-            />
+            {showProgressBar && (
+              <ProgressBar
+                props={{
+                  variant: [TaskStatus.seeding, TaskStatus.extracting, TaskStatus.finishing].includes(task.status) ? 'indeterminate' : 'determinate',
+                  color: taskStatusToColor(task.status),
+                }}
+                value={computeProgress(task.additional?.transfer?.size_downloaded, task.size)}
+                percentage={expanded || !visible}
+              />
+            )}
           </React.Fragment>
         }
         secondaryTypographyProps={{
