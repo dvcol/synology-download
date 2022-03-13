@@ -31,6 +31,10 @@ export const SettingsGlobal = () => {
       theme: state.theme ?? defaultGlobal.theme,
       actions: state.actions ?? defaultGlobal.actions,
       loading: state.loading ?? defaultGlobal.loading,
+      task: state.task ?? {
+        progressBar: true,
+        background: true,
+      },
     },
   });
 
@@ -109,7 +113,6 @@ export const SettingsGlobal = () => {
           action={<FormSwitch controllerProps={{ name: 'loading.enabled', control }} formControlLabelProps={{ label: '' }} />}
           sx={{ p: '0.5rem 0' }}
         />
-
         <Collapse in={getValues()?.loading?.enabled} unmountOnExit={true}>
           <CardHeader
             title={i18n('loading_threshold_title')}
@@ -133,6 +136,22 @@ export const SettingsGlobal = () => {
             sx={{ p: '0.5rem 0', mt: '0.5rem' }}
           />
         </Collapse>
+        <CardHeader
+          title={i18n('task__progress_bar_title')}
+          subheader={i18n('task__progress_bar_subheader')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          action={<FormSwitch controllerProps={{ name: 'task.progressBar', control }} formControlLabelProps={{ label: '' }} />}
+          sx={{ p: '0.5rem 0' }}
+        />
+        <CardHeader
+          title={i18n('task__background_title')}
+          subheader={i18n('task__background_subheader')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          action={<FormSwitch controllerProps={{ name: 'task.background', control }} formControlLabelProps={{ label: '' }} />}
+          sx={{ p: '0.5rem 0' }}
+        />
       </CardContent>
 
       <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
