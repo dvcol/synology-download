@@ -1,14 +1,16 @@
 import { Box, LinearProgress, LinearProgressProps, Typography } from '@mui/material';
 import React from 'react';
 
-export const ProgressBar = (props: LinearProgressProps & { value: number }) => (
-  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-    <Box sx={{ width: '100%', mr: 1 }}>
-      <LinearProgress variant="determinate" {...props} />
+export const ProgressBar = ({ props, value, percentage }: { props: LinearProgressProps; value: number; percentage?: boolean }) => (
+  <Box sx={{ display: 'flex', alignItems: 'center', minHeight: '18px' }}>
+    <Box sx={{ width: '100%', mr: percentage ? '8px' : '3px' }}>
+      <LinearProgress variant="determinate" {...{ ...props, value }} />
     </Box>
-    <Box sx={{ minWidth: 35, display: 'flex', justifyContent: 'end' }}>
-      <Typography variant="body2" color="text.secondary" component="span">{`${Math.round(props.value)}%`}</Typography>
-    </Box>
+    {percentage && (
+      <Box sx={{ minWidth: 35, display: 'flex', justifyContent: 'end' }}>
+        <Typography variant="body2" color="text.secondary" component="span">{`${Math.round(value)}%`}</Typography>
+      </Box>
+    )}
   </Box>
 );
 

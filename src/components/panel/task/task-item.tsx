@@ -69,7 +69,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
         onMouseOver={() => setVisible(true)}
         onMouseLeave={() => setVisible(false)}
       >
-        <TaskCard task={task} statuses={status} />
+        <TaskCard task={task} statuses={status} expanded={expanded} visible={visible} />
         {visible && !expanded && (
           <ButtonGroup orientation="vertical" variant="text">
             <Tooltip title={i18n('delete', 'common', 'buttons')} placement={'left'}>
