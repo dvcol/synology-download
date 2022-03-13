@@ -14,6 +14,7 @@ import {
   LoginError,
   LoginRequest,
   LoginResponse,
+  NewFolderList,
   NotReadyError,
   StoreOrProxy,
   Task,
@@ -172,6 +173,24 @@ export class QueryService {
 
   static listFiles(folderPath: string, filetype: 'all' | 'dir' = 'dir'): Observable<FileList> {
     return this.fileClient.listFile(folderPath, 0, 0, filetype, [FileListOption.perm]).pipe(this.readyCheckOperator());
+  }
+
+  static createFolder(
+    folderPath: string,
+    name: string,
+    forceParent = false,
+    additional: FileListOption[] = [FileListOption.perm]
+  ): Observable<NewFolderList> {
+    return this.fileClient.createFolder(folderPath, name, forceParent, additional).pipe(this.readyCheckOperator());
+  }
+
+  static renameFolder(
+    folderPath: string,
+    name: string,
+    additional: FileListOption[] = [FileListOption.perm],
+    searchTaskId?: string
+  ): Observable<FileList> {
+    return this.fileClient.renameFolder(folderPath, name, additional, searchTaskId).pipe(this.readyCheckOperator());
   }
 
   static getConfig(): Observable<DownloadStationConfig> {

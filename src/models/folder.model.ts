@@ -1,7 +1,13 @@
+import { File } from '@src/models/file.model';
+
 export interface FolderList {
   total: number;
   offset: number;
   shares?: Folder[];
+}
+
+export interface NewFolderList {
+  folders?: File[];
 }
 
 /**
