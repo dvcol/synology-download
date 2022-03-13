@@ -81,6 +81,8 @@ export enum TaskMethod {
 export enum FileMethod {
   list = 'list',
   listShare = 'list_share',
+  create = 'create',
+  rename = 'rename',
 }
 
 export type SynologyMethod = InfoMethod | AuthMethod | TaskMethod | FileMethod;
@@ -153,13 +155,16 @@ export const FileErrorCode = {
   420: 'Illegal file name on FAT file system',
   421: 'Device or resource busy',
   599: 'No such task of the file operation',
+  1100: 'Failed to create a folder. More information in <errors> object.',
+  1101: 'The number of folders to the parent folder would exceed the system limitation.',
+  1200: 'Failed to rename it. More information in <errors> object',
 };
 
 export const ErrorMap: Record<string, Record<number, string>> = {
   [CommonAPI.Info]: CommonErrorCode,
   [CommonAPI.Auth]: { ...CommonErrorCode, ...AuthErrorCode },
-  ...Object.values(DownloadStationAPI).reduce((codes, v) => ({ ...codes, [v]: { ...CommonErrorCode, TaskErrorCode } }), {}),
-  ...Object.values(FileStationAPI).reduce((codes, v) => ({ ...codes, [v]: { ...CommonErrorCode, FileErrorCode } }), {}),
+  ...Object.values(DownloadStationAPI).reduce((codes, v) => ({ ...codes, [v]: { ...CommonErrorCode, ...TaskErrorCode } }), {}),
+  ...Object.values(FileStationAPI).reduce((codes, v) => ({ ...codes, [v]: { ...CommonErrorCode, ...FileErrorCode } }), {}),
 };
 
 export interface InfoResponse {

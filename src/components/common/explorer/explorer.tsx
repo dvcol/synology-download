@@ -7,7 +7,7 @@ import React, { FC, useEffect } from 'react';
 
 import { finalize, Observable, tap } from 'rxjs';
 
-import { ExplorerBreadCrumbs, ExplorerLoading } from '@src/components';
+import { ExplorerBreadCrumbs, ExplorerLeafAdd, ExplorerLoading } from '@src/components';
 import { File, FileList, Folder } from '@src/models';
 import { QueryService } from '@src/services';
 
@@ -21,15 +21,17 @@ export type ExplorerProps = {
   fileType?: 'dir' | 'all';
   startPath?: string;
   onChange?: (event: ExplorerEvent) => void;
+  editable?: boolean;
 };
 
 export type ExplorerEvent = { id?: string; path?: string; folder?: File | Folder };
 
 // TODO implement virtual scroll
-export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disabled, readonly, fileType, startPath, onChange }) => {
+export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disabled, readonly, fileType, startPath, onChange, editable }) => {
   const [tree, setTree] = React.useState<Record<string, File[] | Folder[]>>({});
   const [loading, setLoading] = React.useState<Record<string, boolean>>({ root: true });
   const [selected, setSelected] = React.useState<string>('root');
+  const [selectedPath, setSelectedPath] = React.useState<string | undefined>(startPath);
   const [expanded, setExpanded] = React.useState<string[]>([]);
   const [crumbs, setCrumbs] = React.useState<string[]>([]);
 
@@ -42,7 +44,10 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
   }, []);
 
   useEffect(() => {
-    if (startPath?.length) setCrumbs(startPath?.includes('/') ? startPath?.split('/') : [startPath]);
+    if (startPath?.length) {
+      setCrumbs(startPath?.includes('/') ? startPath?.split('/') : [startPath]);
+      setSelectedPath(startPath);
+    }
   }, [startPath]);
 
   const listFiles = (path: string, key: string): Observable<FileList> => {
@@ -58,6 +63,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
   const onSelectChange = (id: string, path: string[], folder?: File | Folder) => {
     setSelected(id);
     setCrumbs(path);
+    setSelectedPath(path.join('/'));
     onChange && onChange({ id, path: path.join('/'), folder });
   };
 
@@ -97,6 +103,33 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
     }
   };
 
+  const spliceTree = (nodeId: string, newFolder?: Folder | File, oldFolder?: Partial<Folder | File>) => {
+    setTree((old) => {
+      const _new = { ...old };
+
+      // if renamed, remove children nodes and splice new folder
+      if (oldFolder?.name) {
+        Object.keys(old)?.forEach((key) => {
+          if (key.startsWith(nodeId)) delete _new[key];
+        });
+
+        if (newFolder) {
+          const nodePath = nodeId.split('-');
+          const index = Number(nodePath?.pop());
+
+          if (index && Number.isInteger(index)) {
+            _new[nodePath.join('-')][index] = newFolder;
+          }
+        }
+      }
+      // else juste add new folder to active node
+      else {
+        _new[nodeId].push(newFolder as File & Folder);
+      }
+      return _new;
+    });
+  };
+
   const onSelect = ($event: React.SyntheticEvent, nodeId: string) => selectNode(nodeId);
   const onExpand = ($event: React.SyntheticEvent, nodeIds: string[]) => !flatten && setExpanded(nodeIds);
   return (
@@ -117,15 +150,39 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
           height: 'calc(100% - 33px)',
         }}
       >
+        {
+          // only > 1 so that we do not allow creation of shares
+          flatten && editable && !loading[selected] && selected?.split('-')?.length > 1 && selectedPath && (
+            <ExplorerLeafAdd nodeId={selected} path={selectedPath} disabled={disabled} spliceTree={spliceTree} />
+          )
+        }
         {flatten && <ExplorerLoading loading={loading[selected]} empty={!tree[selected]?.length} />}
         {flatten &&
           !loading[selected] &&
           tree[selected]?.map((f, i) => (
-            <ExplorerLeaf key={`${i}-${disabled}`} nodeId={`${selected}-${i}`} folder={f} tree={tree} loading={loading} disabled={disabled} />
+            <ExplorerLeaf
+              key={`${i}-${disabled}`}
+              nodeId={`${selected}-${i}`}
+              folder={f}
+              tree={tree}
+              loading={loading}
+              disabled={disabled}
+              editable={editable}
+              spliceTree={spliceTree}
+            />
           ))}
         {!flatten &&
           tree?.root?.map((f, i) => (
-            <ExplorerLeaf key={`${i}-${disabled}`} nodeId={`root-${i}`} folder={f} tree={tree} loading={loading} disabled={disabled} />
+            <ExplorerLeaf
+              key={`${i}-${disabled}`}
+              nodeId={`root-${i}`}
+              folder={f}
+              tree={tree}
+              loading={loading}
+              disabled={disabled}
+              editable={editable}
+              spliceTree={spliceTree}
+            />
           ))}
       </TreeView>
     </Container>

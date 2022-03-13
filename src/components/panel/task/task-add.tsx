@@ -149,7 +149,7 @@ export const TaskAdd: FC<{
             <Card sx={{ p: '8px', m: '8px 0', height: '320px' }}>
               <FormExplorer
                 controllerProps={{ name: 'destination.path', control }}
-                explorerProps={{ flatten: true, disabled: !getValues()?.destination?.custom, startPath: path }}
+                explorerProps={{ flatten: true, disabled: !getValues()?.destination?.custom, startPath: path, editable: true }}
               />
             </Card>
           </Grid>

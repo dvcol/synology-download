@@ -14,7 +14,6 @@ import { sendMessage, useI18n } from '@src/utils';
 export const SettingsContextMenu = ({ menu }: { menu: ContextMenu }) => {
   const i18n = useI18n('panel', 'settings', 'context_menu');
   const dispatch = useDispatch();
-  console.log('rerender');
   const {
     handleSubmit,
     reset,

@@ -1,0 +1,55 @@
+import CreateNewFolderOutlinedIcon from '@mui/icons-material/CreateNewFolderOutlined';
+import { Button, ButtonProps, Stack } from '@mui/material';
+import React, { FC, useState } from 'react';
+
+import { ExplorerLeafEdit } from '@src/components';
+import { File, Folder } from '@src/models';
+
+export type ExplorerLeafAddProps = {
+  nodeId: string;
+  path: string;
+  disabled?: boolean;
+  spliceTree?: (nodeId: string, newFolder?: Folder | File, oldFolder?: Partial<Folder | File>) => void;
+};
+
+export const ExplorerLeafAdd: FC<ExplorerLeafAddProps> = ({ nodeId, path, disabled, spliceTree }) => {
+  const [editing, setEditing] = useState(false);
+
+  const onClick: ButtonProps['onClick'] = (event) => {
+    event.stopPropagation();
+    setEditing(true);
+  };
+
+  const onCancel: ButtonProps['onClick'] = (event) => {
+    event.stopPropagation();
+    setEditing(false);
+  };
+
+  return (
+    <Stack direction="row" sx={{ flex: '1 1 auto' }}>
+      {editing ? (
+        <Stack direction="row" sx={{ flex: '1 1 auto', p: '0 0.5rem', alignItems: 'center' }}>
+          <CreateNewFolderOutlinedIcon sx={{ mr: '4px', ml: '-2px' }} />
+          <ExplorerLeafEdit
+            folder={{ path }}
+            isEditing={true}
+            placeholder={'Create a new folder'}
+            disabled={disabled}
+            onChange={(...args) => spliceTree?.(nodeId, ...args)}
+            onCancel={onCancel}
+            onSave={onCancel}
+          />
+        </Stack>
+      ) : (
+        <Button
+          variant="text"
+          startIcon={<CreateNewFolderOutlinedIcon sx={{ ml: '2px', mr: '-4px' }} />}
+          sx={{ height: '1.5rem', flex: '1 1 auto', p: '0 0.5rem', justifyContent: 'flex-start', textTransform: 'none' }}
+          onClick={onClick}
+        >
+          Create a new Folder
+        </Button>
+      )}
+    </Stack>
+  );
+};

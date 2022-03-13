@@ -19,6 +19,8 @@ export class SynologyError extends Error {
     this.code = code;
     this.api = api;
     this.errors = errors;
+
+    if (errors?.length) this.errors = this.errors?.map((err) => (err.code ? { ...err, message: ErrorMap[api][err.code] } : err));
   }
 }
 
