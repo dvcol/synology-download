@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.12.1](https://github.com/dvcol/synology-download/compare/v1.9.2...v1.12.1) (2022-03-14)
+
+
+### Features
+
+* **ci:** Add codeQl setup files ([#54](https://github.com/dvcol/synology-download/issues/54)) ([d7a04dd](https://github.com/dvcol/synology-download/commit/d7a04dd813ddf2f5f7839da325d2f6565cfdab74))
+* **ci:** Update workflow names & add dependabot automerge ([28b39df](https://github.com/dvcol/synology-download/commit/28b39df26cd6b8c6ed80b1d82563fa579b020a87))
+* **popup:** Add background progress on task cards ([6a2bc24](https://github.com/dvcol/synology-download/commit/6a2bc242a18a96f107683a0b11780ec05610b960))
+
+
+### Bug Fixes
+
+* **ci:** Add release candidate tag to ci version bumping ([5aa9c48](https://github.com/dvcol/synology-download/commit/5aa9c48d1b3190ca924cf6ca7720f174786b3f21))
+* **ci:** Fix release script to ignore rc tags ([fd2452d](https://github.com/dvcol/synology-download/commit/fd2452d0671495e145d66e85a8afd66beb999003))
+* **ci:** Prevent concurrent running workflows ([80384a2](https://github.com/dvcol/synology-download/commit/80384a2edc5dc14cf67e3bb114a304fbf18ee1ed))
+* **popup:** Fix task detail layout on hover ([3144218](https://github.com/dvcol/synology-download/commit/3144218921af531f1384b752c9569d6de2e14c8c))
+* **storage:** Switch logged state from sync to local ([1602e07](https://github.com/dvcol/synology-download/commit/1602e0751c0847c1db96c730d6b50d4f6210d9dc))
+
 ### [1.9.2](https://github.com/dvcol/synology-download/compare/v1.9.0...v1.9.2) (2022-03-07)
 
 
