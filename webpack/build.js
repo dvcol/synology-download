@@ -33,4 +33,6 @@ webpack(config, (err, stats) => {
   }
 
   console.info(stats.toString(config.stats));
+
+  if (err || stats.hasErrors()) process.exit(1);
 });
