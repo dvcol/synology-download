@@ -63,7 +63,7 @@
     "@types/testing-library__react": "^10.2.0",
     "@types/uuid": "^8.3.4",
     "@types/webpack-env": "^1.16.0",
-    "@typescript-eslint/eslint-plugin": "^5.11.0",
+    "@typescript-eslint/eslint-plugin": "^5.14.0",
     "@typescript-eslint/parser": "^5.12.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.3",
