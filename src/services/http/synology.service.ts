@@ -29,7 +29,7 @@ export class SynologyService extends BaseHttpService {
   listen(name = this.name): void {
     onMessage<SynologyQueryPayload>([ChromeMessageType.query]).subscribe(({ message: { payload }, sendResponse }) => {
       if (payload?.id === name) {
-        this.query(...payload?.args)
+        this.query(...(payload?.args ?? []))
           .pipe(
             map((response) => ({ success: true, payload: response })),
             catchError((error) => of({ success: false, error }))
