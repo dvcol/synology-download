@@ -4,6 +4,7 @@
     ":preserveSemverRanges"
   ],
   "assigneesFromCodeOwners": true,
+  "rangeStrategy": "replace",
   "packageRules": [
     {
       "matchPackagePatterns": [
