@@ -27,7 +27,6 @@ import { SynologyAuthService, SynologyDownloadService, SynologyFileService, Syno
 import { store$ } from '@src/store';
 import { addLoading, removeLoading, setLogged, setSid, setTasks, setTaskStats, spliceTasks } from '@src/store/actions';
 import {
-  getActiveTasksIdsByActionScope,
   geTasksIdsByStatusType,
   getCredentials,
   getFinishedTasksIdsByActionScope,
@@ -237,7 +236,7 @@ export class QueryService {
     );
   }
 
-  static pauseAllTasks(ids: Set<Task['id']> = getActiveTasksIdsByActionScope(this.store.getState())): Observable<CommonResponse[]> {
+  static pauseAllTasks(ids: Set<Task['id']> = getTasksIdsByActionScope(this.store.getState())): Observable<CommonResponse[]> {
     return ids?.size ? this.pauseTask(Array.from(ids).join(',')) : EMPTY;
   }
 
