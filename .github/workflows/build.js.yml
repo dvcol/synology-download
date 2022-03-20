@@ -23,10 +23,10 @@ jobs:
 
     steps:
       - name: Checkout branch ${{ github.ref }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Node.js ${{ env.node_version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ env.node_version }}
           cache: 'npm'
@@ -51,7 +51,7 @@ jobs:
 
     steps:
       - name: Checkout branch ${{ github.r }}
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Unit tests (changes only)
         uses: ArtiomTr/jest-coverage-report-action@v2.0.3
