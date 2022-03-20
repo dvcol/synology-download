@@ -57,7 +57,7 @@ export const TaskDetail = ({
               variant="contained"
               color={TaskStatus.finished === task.status ? 'secondary' : 'success'}
               onClick={() => buttonClick('play', QueryService.resumeTask(task.id))}
-              disabled={isDisabled() || ![TaskStatus.paused, TaskStatus.finished].includes(task.status)}
+              disabled={isDisabled() || ![TaskStatus.paused, TaskStatus.finished, TaskStatus.error].includes(task.status)}
             >
               {i18n(TaskStatus.finished === task.status ? 'seed' : 'play', 'common', 'buttons')}
             </Button>

@@ -150,7 +150,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
                     key="play"
                     sx={{ display: 'flex', flex: '1 1 auto' }}
                     onClick={($event) => onClick(playOrSeed, QueryService.resumeTask(task.id), $event)}
-                    disabled={isDisabled || ![TaskStatus.paused, TaskStatus.finished].includes(task.status)}
+                    disabled={isDisabled || ![TaskStatus.paused, TaskStatus.finished, TaskStatus.error].includes(task.status)}
                   >
                     <IconLoader icon={<PlayArrowIcon />} loading={loadingIcon?.play} props={{ size: '1rem', color: 'success' }} />
                   </Button>
