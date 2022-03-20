@@ -38,5 +38,11 @@
   },
   "common__error__task_clear_fail": {
     "message": "Finished tasks clear failed"
+  },
+  "common__error__invalid_argument": {
+    "message": "Invalid argument"
+  },
+  "common__error": {
+    "message": "Error"
   }
 }
