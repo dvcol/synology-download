@@ -8,9 +8,11 @@ import { useSelector } from 'react-redux';
 
 import { MuiIcon } from '@src/components';
 import { MaterialIcon, QuickMenu, TaskForm } from '@src/models';
-import { QueryService } from '@src/services';
+import { NotificationService, QueryService } from '@src/services';
 import { StoreState } from '@src/store';
 import { getQuick } from '@src/store/selectors';
+
+import { i18n } from '@src/utils';
 
 import { anchor$, taskDialog$ } from '../index';
 
@@ -37,10 +39,19 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
   }, []);
 
   const createTask = (form: TaskForm, modal?: boolean) => {
-    if (modal) {
-      taskDialog$.next({ open: true, form });
+    if (form?.uri && QueryService.isLoggedIn) {
+      if (modal) {
+        taskDialog$.next({ open: true, form });
+      } else {
+        QueryService.createTask(form?.uri, form?.source, form?.destination?.path).subscribe();
+      }
     } else if (form?.uri) {
-      QueryService.isLoggedIn && QueryService.createTask(form?.uri, form?.source, form?.destination?.path).subscribe();
+      NotificationService.loginRequired();
+    } else {
+      NotificationService.error({
+        title: i18n('error', 'common'),
+        message: i18n('invalid_argument', 'common', 'error'),
+      });
     }
   };
 

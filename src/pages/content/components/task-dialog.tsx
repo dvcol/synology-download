@@ -7,7 +7,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { TaskAdd } from '@src/components';
 import { ChromeMessageType, ContextMenuOnClickPayload, TaskForm } from '@src/models';
 import { NotificationService, QueryService } from '@src/services';
-import { onMessage } from '@src/utils';
+import { i18n, onMessage } from '@src/utils';
 
 import { taskDialog$ } from '../index';
 
@@ -31,15 +31,20 @@ export const TaskDialog: FC<{ container?: PortalProps['container'] }> = ({ conta
             menu: { modal, destination },
           } = message.payload;
 
-          if (modal) {
-            setForm({ uri, source, destination });
-            setOpen(true);
-          } else if (uri) {
-            if (QueryService.isLoggedIn) {
-              QueryService.createTask(uri, source, destination?.path).subscribe();
+          if (uri && QueryService.isLoggedIn) {
+            if (modal) {
+              setForm({ uri, source, destination });
+              setOpen(true);
             } else {
-              NotificationService.loginRequired();
+              QueryService.createTask(uri, source, destination?.path).subscribe();
             }
+          } else if (uri) {
+            NotificationService.loginRequired();
+          } else {
+            NotificationService.error({
+              title: i18n('error', 'common'),
+              message: i18n('invalid_argument', 'common', 'error'),
+            });
           }
         }
         sendResponse();
