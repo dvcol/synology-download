@@ -20,7 +20,7 @@
         "dependencies"
       ],
       "automerge": true,
-      "automergeType": "branch"
+      "automergeType": "pr"
     },
     {
       "matchPackagePatterns": [
