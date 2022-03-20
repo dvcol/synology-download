@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-import { ActionScope, Tab, TabCount, Task, TaskStatusType, TaskTab, TaskTabSort } from '@src/models';
+import { ActionScope, computeProgress, Tab, TabCount, Task, TaskStatusType, TaskTab, TaskTabSort } from '@src/models';
 import {
   getActionScope,
   getActiveTasksIds,
@@ -73,6 +73,16 @@ const doSort = (tasks: Task[], tab: TaskTab): Task[] => {
       return [...tasks].sort(nullSafeCompare((a, b) => a.status?.localeCompare(b.status), tab.reverse));
     case TaskTabSort.title:
       return [...tasks].sort(nullSafeCompare((a, b) => a.title?.localeCompare(b.title), tab.reverse));
+    case TaskTabSort.progress:
+      return [...tasks].sort(
+        nullSafeCompare(
+          (a, b) =>
+            computeProgress(a.additional?.transfer?.size_downloaded, a.size) > computeProgress(b.additional?.transfer?.size_downloaded, b.size)
+              ? 1
+              : -1,
+          tab.reverse
+        )
+      );
     default:
       return tasks;
   }
