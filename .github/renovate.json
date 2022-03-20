@@ -16,11 +16,11 @@
       ],
       "groupName": "all non-major dependencies",
       "groupSlug": "all-minor-patch",
-      "automerge": true,
-      "automergeType": "branch",
       "labels": [
         "dependencies"
-      ]
+      ],
+      "automerge": true,
+      "automergeType": "branch"
     },
     {
       "matchPackagePatterns": [
@@ -29,6 +29,8 @@
       "matchUpdateTypes": [
         "major"
       ],
+      "groupName": "all major dependencies",
+      "groupSlug": "all-major",
       "labels": [
         "dependencies",
         "breaking"
