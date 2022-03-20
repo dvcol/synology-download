@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.2](https://github.com/dvcol/synology-download/compare/v1.12.1...v1.13.2) (2022-03-20)
+
+
+### Features
+
+* **explorer:** Add folder renaming & creation ([6e9cf29](https://github.com/dvcol/synology-download/commit/6e9cf2977c1e95be0cb9fb6132fa96ab790e6167))
+
+
+### Bug Fixes
+
+* **build:** Exits with code 1 when build failure ([6684210](https://github.com/dvcol/synology-download/commit/6684210747fdc416d8b45f931ff7db245377591b))
+* **content:** Display error message in-page while not logged ([ab9c471](https://github.com/dvcol/synology-download/commit/ab9c471b5b3413343e500c4951791ba94afd894f))
+* **popup:** Add progress sorting to tabs ([e6af186](https://github.com/dvcol/synology-download/commit/e6af186ab3e5296fd6a912ceac2aeb386bc74e0a))
+* **popup:** Allow resuming error tasks ([b8c80bb](https://github.com/dvcol/synology-download/commit/b8c80bbff5ae529a9c129bebc4a09453144579b9))
+* **service:** Pause all task instead of only active ones ([50cc77a](https://github.com/dvcol/synology-download/commit/50cc77a86bfd85b422921e8a1af44553f9aeaf9f))
+
 ### [1.12.1](https://github.com/dvcol/synology-download/compare/v1.9.2...v1.12.1) (2022-03-14)
 
 
