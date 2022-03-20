@@ -25,6 +25,7 @@ export enum TaskTabSort {
   size = 'size',
   status = 'status',
   title = 'title',
+  progress = 'progress',
 }
 
 /**

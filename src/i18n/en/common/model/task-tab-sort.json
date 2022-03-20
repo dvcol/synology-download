@@ -16,5 +16,8 @@
   },
   "common__model__task_tab_sort__title": {
     "message": "title"
+  },
+  "common__model__task_tab_sort__progress": {
+    "message": "progress"
   }
 }
