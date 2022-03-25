@@ -129,6 +129,7 @@ export class NotificationService {
     } else {
       this.sendOrForward({
         ...notification,
+        message: notification?.message ?? '',
         title: `[${notification.priority ? NotificationLevelKeys[notification.priority] : 'Info'}] : ${notification.title}`,
         iconUrl: 'assets/icons/icon-64.png',
         type: 'basic',

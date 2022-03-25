@@ -4,7 +4,7 @@ import { parseJSON } from '@src/utils/string.utils';
 
 import StorageArea = chrome.storage.StorageArea;
 
-type ChromeI18nInput = { key: string; substitutions: (string | number)[] };
+type ChromeI18nInput = { key: string; substitutions: string[] };
 
 /**
  * Setup i18n function with modules names

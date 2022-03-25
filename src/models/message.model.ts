@@ -48,7 +48,7 @@ export interface ChromeMessage<T extends ChromeMessagePayload = ChromeMessagePay
 /**
  * Message handler signature for Rxjs wrapping.
  */
-export type ChromeMessageHandler<M, R> = {
+export type ChromeMessageHandler<M extends ChromeMessagePayload, R> = {
   message: ChromeMessage<M>;
   sender: MessageSender;
   sendResponse: (response?: ChromeResponse<R>) => void;
