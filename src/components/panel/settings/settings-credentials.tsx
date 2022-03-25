@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { finalize, Observable } from 'rxjs';
 
-import { FormCheckbox, FormInput } from '@src/components';
+import { FormCheckbox, FormInput, FormSwitch } from '@src/components';
 import {
   ColorLevel,
   ColorLevelMap,
@@ -346,9 +346,20 @@ export const SettingsCredentials = () => {
             </Grid>
           </Card>
         </Collapse>
+
+        <CardHeader
+          title={i18n('auto_login__title')}
+          subheader={i18n('auto_login__subheader')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          action={
+            <FormSwitch controllerProps={{ name: 'autoLogin', control }} formControlLabelProps={{ label: '', disabled: !getValues().rememberMe }} />
+          }
+          sx={{ p: '0.5rem 0' }}
+        />
       </CardContent>
 
-      <CardActions sx={{ justifyContent: 'space-between', padding: '0 1.5rem 1.5rem' }}>
+      <CardActions sx={{ justifyContent: 'space-between', padding: '1rem 1.5rem' }}>
         <FormCheckbox
           controllerProps={{ name: 'rememberMe', control }}
           checkboxProps={{ onChange: onRememberMeChange }}
