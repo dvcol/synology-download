@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.3](https://github.com/dvcol/synology-download/compare/v1.13.2...v1.13.3) (2022-03-25)
+
+
+### Features
+
+* **ci:** adds husky and commitlint to enforce conventional commits ([bfa1110](https://github.com/dvcol/synology-download/commit/bfa11104b8d069156e9742174505d92d59f8ba29))
+
+
+### Bug Fixes
+
+* **auth:** adds auto-login toggle in connection settings ([7e1f1b1](https://github.com/dvcol/synology-download/commit/7e1f1b18044a8819a4a861e169ae6356ab2d0159))
+
 ### [1.13.2](https://github.com/dvcol/synology-download/compare/v1.12.1...v1.13.2) (2022-03-20)
 
 

@@ -1,3 +1,3 @@
 {
-  "releaseCommitMessageFormat": "chore(release): Release for version - {{currentTag}}"
+  "releaseCommitMessageFormat": "chore(release): release for version - {{currentTag}}"
 }
