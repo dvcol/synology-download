@@ -8,7 +8,7 @@ export class SynologyAuthService extends SynologyService {
     super(isProxy, name);
   }
 
-  _do<T>(method: HttpMethod, params: HttpParameters, version = '1', api = CommonAPI.Auth, endpoint = Endpoint.Auth, baseUrl?: string): Observable<T> {
+  _do<T>(method: HttpMethod, params: HttpParameters, baseUrl?: string, version = '1', api = CommonAPI.Auth, endpoint = Endpoint.Auth): Observable<T> {
     return super.do<T>(method, params, version, api, endpoint, baseUrl);
   }
 
@@ -27,7 +27,7 @@ export class SynologyAuthService extends SynologyService {
     if (enable_device_token) params.enable_device_token = enable_device_token;
     if (device_name) params.device_name = device_name;
     if (device_id) params.device_id = device_id;
-    return this._do<LoginResponse>(HttpMethod.POST, params, authVersion, CommonAPI.Auth, Endpoint.Auth, baseUrl);
+    return this._do<LoginResponse>(HttpMethod.POST, params, baseUrl, authVersion);
   }
 
   logout(): Observable<void> {

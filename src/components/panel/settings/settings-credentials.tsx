@@ -7,7 +7,7 @@ import { RegisterOptions, useForm } from 'react-hook-form';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { finalize, Observable } from 'rxjs';
+import { finalize, lastValueFrom, Observable } from 'rxjs';
 
 import { FormCheckbox, FormInput, FormSwitch } from '@src/components';
 import {
@@ -19,6 +19,7 @@ import {
   ConnectionType,
   Credentials,
   defaultConnection,
+  InfoResponse,
   LoginResponse,
   Protocol,
 } from '@src/models';
@@ -46,8 +47,6 @@ export const SettingsCredentials = () => {
     mode: 'onChange',
     defaultValues: {
       ...defaultConnection,
-      path: '',
-      username: '',
       password: '',
       otp_code: '',
       enable_device_token: false,
@@ -95,16 +94,19 @@ export const SettingsCredentials = () => {
       })
     );
 
+  const [hasInfo, setInfo] = useState<InfoResponse>();
+  const queryInfo = (baseUrl?: string) =>
+    lastValueFrom(QueryService.info(baseUrl).pipe(loadingOperator)).then((res) => {
+      setInfo(res);
+      const _version = res[CommonAPI.Auth].maxVersion;
+      setValue('authVersion', _version);
+      if (_version < 6) setValue('enable_device_token', false);
+      return _version;
+    });
+
   useEffect(() => {
     PollingService.stop();
-    QueryService.isReady &&
-      QueryService.info()
-        .pipe(loadingOperator)
-        .subscribe((res) => {
-          const _version = res[CommonAPI.Auth].maxVersion;
-          setValue('authVersion', _version);
-          if (_version < 6) setValue('enable_device_token', false);
-        });
+    QueryService.isReady && queryInfo();
     return () => PollingService.start();
   }, []);
 
@@ -117,13 +119,14 @@ export const SettingsCredentials = () => {
     }
   };
 
-  const syncOnSubscribe = <T extends LoginResponse | void>(
+  const syncOnSubscribe = async <T extends LoginResponse | void>(
     data: Connection,
     query: (credentials: Credentials, basUrl?: string) => Observable<unknown>,
     _type: 'login_test' | 'login' | 'logout'
   ) => {
     const baseUrl = buildUrl(data, _type === 'login_test' ? 'test' : 'login');
     if (!baseUrl) return;
+    if (!hasInfo) data.authVersion = await queryInfo(baseUrl);
     return query
       .bind(QueryService)(data, baseUrl)
       .pipe<T>(loadingOperator)

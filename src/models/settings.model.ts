@@ -52,6 +52,10 @@ export interface Credentials {
   device_id?: string;
 }
 
+export const defaultCredentials: Credentials = {
+  username: 'admin',
+};
+
 export interface Connection extends Credentials {
   rememberMe?: boolean;
   autoLogin?: boolean;
@@ -61,11 +65,13 @@ export interface Connection extends Credentials {
 }
 
 export const defaultConnection: Connection = {
+  ...defaultCredentials,
   type: ConnectionType.local,
   authVersion: 1,
   rememberMe: true,
   autoLogin: true,
   protocol: Protocol.http,
+  path: 'diskstation',
   port: 5000,
 };
 
