@@ -11,7 +11,10 @@ import Port = chrome.runtime.Port;
  * @param types optional type filtering
  * @see chrome.runtime.onMessage
  */
-export const onMessage = <M = ChromeMessagePayload, R = any>(types?: ChromeMessageType[], async = true): Observable<ChromeMessageHandler<M, R>> =>
+export const onMessage = <M extends ChromeMessagePayload = ChromeMessagePayload, R = any>(
+  types?: ChromeMessageType[],
+  async = true
+): Observable<ChromeMessageHandler<M, R>> =>
   fromEventPattern<ChromeMessageHandler<M, R>>(
     (handler) => {
       const wrapper = (message: ChromeMessage<M>, sender: MessageSender, sendResponse: (response?: ChromeResponse<R>) => void) => {
@@ -47,7 +50,7 @@ const sendMessageCallback =
  * @param message the ChromeMessage to send
  * @see chrome.runtime.sendMessage
  */
-export const sendMessage = <M = ChromeMessagePayload, R = void>(message: ChromeMessage<M>): Observable<R> =>
+export const sendMessage = <M extends ChromeMessagePayload = ChromeMessagePayload, R = void>(message: ChromeMessage<M>): Observable<R> =>
   new Observable<R>((subscriber) => chrome.runtime.sendMessage(message, sendMessageCallback<R>(subscriber)));
 
 /**
@@ -56,8 +59,10 @@ export const sendMessage = <M = ChromeMessagePayload, R = void>(message: ChromeM
  * @param message the ChromeMessage to send
  * @see chrome.tabs.sendMessage
  */
-export const sendTabMessage = <M = ChromeMessagePayload, R = void>(tabId: number, message: ChromeMessage<M>): Observable<R> =>
-  new Observable<R>((subscriber) => chrome.tabs.sendMessage(tabId, message, sendMessageCallback<R>(subscriber)));
+export const sendTabMessage = <M extends ChromeMessagePayload = ChromeMessagePayload, R = void>(
+  tabId: number,
+  message: ChromeMessage<M>
+): Observable<R> => new Observable<R>((subscriber) => chrome.tabs.sendMessage(tabId, message, sendMessageCallback<R>(subscriber)));
 
 /**
  * Rxjs wrapper for chrome.runtime.onConnect event listener
