@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.13.4](https://github.com/dvcol/synology-download/compare/v1.13.3...v1.13.4) (2022-03-25)
+
+
+### Bug Fixes
+
+* **connection:** fixes info fetching in credentials for for DSM7+ ([82fb8cb](https://github.com/dvcol/synology-download/commit/82fb8cbfe7bf2fe7c5f0cce2a4d5f035c0388741))
+
 ### [1.13.3](https://github.com/dvcol/synology-download/compare/v1.13.2...v1.13.3) (2022-03-25)
 
 
