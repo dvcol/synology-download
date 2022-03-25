@@ -54,6 +54,7 @@ export interface Credentials {
 
 export interface Connection extends Credentials {
   rememberMe?: boolean;
+  autoLogin?: boolean;
   protocol?: Protocol;
   path?: string;
   port?: number;
@@ -63,6 +64,7 @@ export const defaultConnection: Connection = {
   type: ConnectionType.local,
   authVersion: 1,
   rememberMe: true,
+  autoLogin: true,
   protocol: Protocol.http,
   port: 5000,
 };
