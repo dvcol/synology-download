@@ -1809,7 +1809,7 @@ __metadata:
     "@testing-library/jest-dom": ^5.16.2
     "@testing-library/react": ^12.1.3
     "@types/chrome": ^0.0.180
-    "@types/jest": ^27.4.0
+    "@types/jest": ^27.4.1
     "@types/react": ^17.0.39
     "@types/react-dom": ^17.0.13
     "@types/react-redux": ^7.1.22
@@ -1822,6 +1822,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.18.0
     "@typescript-eslint/parser": ^5.18.0
     babel-eslint: ^10.1.0
+    babel-jest: ^27.5.1
     babel-loader: ^8.2.3
     babel-preset-react-app: ^10.0.1
     chrome-webstore-upload-cli: ^2.0.1
@@ -1839,7 +1840,7 @@ __metadata:
     node-sass: ^7.0.1
     notistack: ^2.0.3
     prettier: ^2.6.2
-    pretty-bytes: ^6.0.0
+    pretty-bytes: ^5.6.0
     query-string: ^7.1.1
     react: ^17.0.2
     react-dom: ^17.0.2
@@ -3063,7 +3064,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:*, @types/jest@npm:^27.4.0":
+"@types/jest@npm:*, @types/jest@npm:^27.4.1":
   version: 27.4.1
   resolution: "@types/jest@npm:27.4.1"
   dependencies:
@@ -10284,8 +10285,8 @@ __metadata:
   linkType: hard
 
 "notistack@npm:^2.0.3":
-  version: 2.0.3
-  resolution: "notistack@npm:2.0.3"
+  version: 2.0.4
+  resolution: "notistack@npm:2.0.4"
   dependencies:
     clsx: ^1.1.0
     hoist-non-react-statics: ^3.3.0
@@ -10293,14 +10294,14 @@ __metadata:
     "@emotion/react": ^11.4.1
     "@emotion/styled": ^11.3.0
     "@mui/material": ^5.0.0
-    react: ^16.8.0 || ^17.0.0
-    react-dom: ^16.8.0 || ^17.0.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
   peerDependenciesMeta:
     "@emotion/react":
       optional: true
     "@emotion/styled":
       optional: true
-  checksum: a01c72d877b7636a625ac0709d4160559e2abc5882592498841e300bf0b2a88d4983884a0e00296d119d33c5c37c0df8cb89cf5fe89b696293a947e363e5c2a2
+  checksum: 11e47b3f0359847362d9a78fe5866a55080d073a8e395bc7a24c95c7c8230893510334425f143607124833c9344de08049c04a90e59d33e9dbf5c00fe6fb997e
   languageName: node
   linkType: hard
 
@@ -10963,10 +10964,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pretty-bytes@npm:^6.0.0":
-  version: 6.0.0
-  resolution: "pretty-bytes@npm:6.0.0"
-  checksum: 0bb9f95e617236404b29a8392c6efd82d65805f622f5e809ecd70068102be857d4e3276c86d2a32fa2ef851cc29472e380945dab7bec83ec79bd57a19a10faf7
+"pretty-bytes@npm:^5.6.0":
+  version: 5.6.0
+  resolution: "pretty-bytes@npm:5.6.0"
+  checksum: 9c082500d1e93434b5b291bd651662936b8bd6204ec9fa17d563116a192d6d86b98f6d328526b4e8d783c07d5499e2614a807520249692da9ec81564b2f439cd
   languageName: node
   linkType: hard
 
