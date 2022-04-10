@@ -2,17 +2,19 @@ import { Box, Button, Card, CardActions, CardContent, CardHeader, Stack } from '
 
 import React from 'react';
 
-import { useForm, UseFormGetValues, UseFormSetValue } from 'react-hook-form';
-
-import { Control } from 'react-hook-form/dist/types/form';
+import { useForm } from 'react-hook-form';
 
 import { useDispatch, useSelector } from 'react-redux';
 
 import { FormSwitch, FormTab } from '@src/components';
-import { defaultNotifications, NotificationHeader, Notifications, NotificationsCount, Tab } from '@src/models';
+import type { Notifications, NotificationsCount, Tab } from '@src/models';
+import { defaultNotifications, NotificationHeader } from '@src/models';
 import { syncNotifications } from '@src/store/actions';
 import { getNotifications } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
+
+import type { UseFormGetValues, UseFormSetValue } from 'react-hook-form';
+import type { Control } from 'react-hook-form/dist/types/form';
 
 export const SettingsTasksCount = () => {
   const i18n = useI18n('panel', 'settings', 'tasks_count');

@@ -1,7 +1,9 @@
-import { StateSlice } from '@src/models';
+import type { StateSlice } from '@src/models';
 import { localSet } from '@src/utils';
 
-import { StateReducers, stateSlice } from '../slices';
+import { stateSlice } from '../slices/state.slice';
+
+import type { StateReducers } from '../slices/state.slice';
 
 export const syncLoggedReducer: StateReducers['setLogged'] = (state, { payload: logged }) => {
   // TODO : move to thunk ?

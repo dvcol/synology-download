@@ -1,5 +1,8 @@
 import { Box } from '@mui/material';
-import React, { FC } from 'react';
+
+import React from 'react';
+
+import type { FC } from 'react';
 
 export type ProgressBackgroundProps = { primary?: string; secondary?: string; progress?: number };
 

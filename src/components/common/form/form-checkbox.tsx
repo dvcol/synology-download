@@ -1,8 +1,15 @@
-import { Checkbox, CheckboxProps, FormControl, FormControlLabel, FormControlLabelProps, FormHelperText } from '@mui/material';
-import { DefaultComponentProps, OverridableTypeMap } from '@mui/material/OverridableComponent';
+import { Checkbox, FormControl, FormControlLabel, FormHelperText } from '@mui/material';
+
 import React from 'react';
-import { Controller, ControllerProps } from 'react-hook-form';
-import { FieldPath, FieldValues } from 'react-hook-form/dist/types';
+
+import { Controller } from 'react-hook-form';
+
+import type { CheckboxProps, FormControlLabelProps } from '@mui/material';
+import type { DefaultComponentProps, OverridableTypeMap } from '@mui/material/OverridableComponent';
+
+import type { ControllerProps } from 'react-hook-form';
+
+import type { FieldPath, FieldValues } from 'react-hook-form/dist/types';
 
 export const FormCheckbox = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({
   controllerProps,
@@ -25,7 +32,7 @@ export const FormCheckbox = <TFieldValues extends FieldValues = FieldValues, TNa
             field.onChange(field.value.filter((value: string) => value !== event.target.value));
           }
         }
-      : (e) => field.onChange(e.target.checked);
+      : e => field.onChange(e.target.checked);
 
     const _checkboxProps: CheckboxProps = {
       id: `${controllerProps.name}-checkbox`,

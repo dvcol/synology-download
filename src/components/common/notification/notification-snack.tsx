@@ -5,12 +5,19 @@ import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-import { Box, Card, CardContent, CardHeader, Collapse, IconButton, IconButtonProps, styled, SvgIconProps, Theme, Typography } from '@mui/material';
 
-import { SnackbarKey, useSnackbar } from 'notistack';
-import React, { forwardRef, ForwardRefRenderFunction, useCallback, useEffect, useState } from 'react';
+import { Box, Card, CardContent, CardHeader, Collapse, IconButton, styled, Typography } from '@mui/material';
 
-import { ColorLevel, ColorLevelMap, NotificationLevel, SnackMessage } from '@src/models';
+import { useSnackbar } from 'notistack';
+
+import React, { forwardRef, useCallback, useEffect, useState } from 'react';
+
+import type { SnackMessage } from '@src/models';
+import { ColorLevel, ColorLevelMap, NotificationLevel } from '@src/models';
+
+import type { IconButtonProps, SvgIconProps, Theme } from '@mui/material';
+import type { SnackbarKey } from 'notistack';
+import type { ForwardRefRenderFunction } from 'react';
 
 const ExpandMore = styled(({ expand, ...other }: IconButtonProps & { expand: boolean }) => <IconButton {...other} />)<{
   theme?: Theme;
@@ -26,7 +33,7 @@ const ExpandMore = styled(({ expand, ...other }: IconButtonProps & { expand: boo
 type SnackNotificationCardProps = { id: SnackbarKey; notification: SnackMessage; expanded?: boolean };
 const SnackNotificationCardComponent: ForwardRefRenderFunction<HTMLDivElement, SnackNotificationCardProps> = (
   { id, notification: { title, message, contextMessage, priority, success }, expanded },
-  ref
+  ref,
 ) => {
   const { closeSnackbar } = useSnackbar();
   const [_expanded, setExpanded] = useState(expanded ?? false);
@@ -34,7 +41,7 @@ const SnackNotificationCardComponent: ForwardRefRenderFunction<HTMLDivElement, S
   useEffect(() => setExpanded(expanded ?? false), [expanded]);
 
   const handleExpandClick = useCallback(() => {
-    setExpanded((oldExpanded) => !oldExpanded);
+    setExpanded(oldExpanded => !oldExpanded);
   }, []);
 
   const handleDismiss = useCallback(() => {
@@ -56,7 +63,7 @@ const SnackNotificationCardComponent: ForwardRefRenderFunction<HTMLDivElement, S
           return success ? <CheckCircleOutlinedIcon {...props} /> : <InfoOutlinedIcon {...props} />;
       }
     },
-    [priority, success]
+    [priority, success],
   );
 
   const handleColor = useCallback((): string | undefined => {

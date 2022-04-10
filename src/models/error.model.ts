@@ -1,5 +1,7 @@
-import { HttpError } from './http.model';
-import { Api, ErrorMap } from './synology.model';
+import { ErrorMap } from './synology.model';
+
+import type { HttpError } from './http.model';
+import type { Api } from './synology.model';
 
 export enum ErrorType {
   Synology = 'synology',
@@ -20,7 +22,7 @@ export class SynologyError extends Error {
     this.api = api;
     this.errors = errors;
 
-    if (errors?.length) this.errors = this.errors?.map((err) => (err.code ? { ...err, message: ErrorMap[api][err.code] } : err));
+    if (errors?.length) this.errors = this.errors?.map(err => (err.code ? { ...err, message: ErrorMap[api][err.code] } : err));
   }
 }
 

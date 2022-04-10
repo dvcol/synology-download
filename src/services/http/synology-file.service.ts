@@ -1,20 +1,8 @@
-import { Observable } from 'rxjs';
-
-import {
-  Endpoint,
-  FileList,
-  FileListOption,
-  FileMethod,
-  FileSortBy,
-  FileStationAPI,
-  FolderList,
-  FolderListOption,
-  FolderSortBy,
-  HttpMethod,
-  HttpParameters,
-  NewFolderList,
-} from '@src/models';
+import type { FileList, FileListOption, FileSortBy, FolderList, FolderListOption, FolderSortBy, HttpParameters, NewFolderList } from '@src/models';
+import { Endpoint, FileMethod, FileStationAPI, HttpMethod } from '@src/models';
 import { SynologyService } from '@src/services/http';
+
+import type { Observable } from 'rxjs';
 
 export class SynologyFileService extends SynologyService {
   constructor(protected isProxy = false, protected name: string = 'SynologyFileService') {
@@ -41,7 +29,7 @@ export class SynologyFileService extends SynologyService {
     onlywritable?: boolean,
     sort_by?: FolderSortBy,
     sort_direction?: 'asc' | 'dsc',
-    additional?: FolderListOption[]
+    additional?: FolderListOption[],
   ): Observable<FolderList> {
     const params: HttpParameters = { method: FileMethod.listShare };
     if (offset) if (offset) params.offset = `${offset}`;
@@ -62,7 +50,7 @@ export class SynologyFileService extends SynologyService {
     sort_by?: FileSortBy,
     sort_direction?: 'asc' | 'dsc',
     pattern?: string,
-    goto_path?: string
+    goto_path?: string,
   ): Observable<FileList> {
     const params: HttpParameters = { method: FileMethod.list, folder_path };
     if (offset) if (offset) params.offset = `${offset}`;
@@ -95,11 +83,11 @@ export class SynologyFileService extends SynologyService {
     folder_path: string | string[],
     name: string | string[],
     force_parent = false,
-    additional?: FileListOption[]
+    additional?: FileListOption[],
   ): Observable<NewFolderList> {
     const params: HttpParameters = { method: FileMethod.create };
     if (folder_path) {
-      const folders = (Array.isArray(folder_path) ? folder_path : [folder_path])?.map((folder) => (folder.charAt(0) === '/' ? folder : `/${folder}`));
+      const folders = (Array.isArray(folder_path) ? folder_path : [folder_path])?.map(folder => (folder.charAt(0) === '/' ? folder : `/${folder}`));
       params.folder_path = `["${folders?.join('","')}"]`;
     }
     if (name) params.name = `["${Array.isArray(name) ? name.join('","') : name}"]`;
@@ -124,7 +112,7 @@ export class SynologyFileService extends SynologyService {
   renameFolder(path: string | string[], name: string | string[], additional?: FileListOption[], search_taskid?: string): Observable<FileList> {
     const params: HttpParameters = { method: FileMethod.rename };
     if (path) {
-      const folders = (Array.isArray(path) ? path : [path])?.map((folder) => (folder.charAt(0) === '/' ? folder : `/${folder}`));
+      const folders = (Array.isArray(path) ? path : [path])?.map(folder => (folder.charAt(0) === '/' ? folder : `/${folder}`));
       params.path = `["${folders?.join('","')}"]`;
     }
     if (name) params.name = `["${Array.isArray(name) ? name.join('","') : name}"]`;

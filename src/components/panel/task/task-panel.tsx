@@ -21,7 +21,7 @@ export const TaskPanel = () => {
 
   return (
     <React.Fragment>
-      {tasks?.map((task) => (
+      {tasks?.map(task => (
         <TaskItem key={task.id} task={task} status={tab?.status} />
       ))}
       {!tasks?.length && (

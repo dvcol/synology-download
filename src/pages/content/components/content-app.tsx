@@ -1,16 +1,18 @@
 import { CacheProvider } from '@emotion/react';
-import { EmotionCache } from '@emotion/utils';
+
 import { ThemeProvider } from '@mui/material';
-import { Theme } from '@mui/material/styles/createTheme';
 
 import React, { useEffect, useState } from 'react';
 
 import { Provider } from 'react-redux';
 
 import { NotificationStack } from '@src/components';
-import { StoreOrProxy } from '@src/models/store.model';
+import type { StoreOrProxy } from '@src/models/store.model';
 import { QuickMenuDialog, TaskDialog } from '@src/pages/content/components';
 import { getTheme, subscribeToTheme } from '@src/themes';
+
+import type { EmotionCache } from '@emotion/utils';
+import type { Theme } from '@mui/material/styles/createTheme';
 
 export const ContentApp = ({ store, cache, container }: { store: StoreOrProxy; cache: EmotionCache; container: HTMLElement }) => {
   const [theme, setTheme] = useState<Theme>(getTheme(store));

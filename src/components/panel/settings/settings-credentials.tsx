@@ -1,32 +1,24 @@
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, Grid, LinearProgress, MenuItem, Stack, Typography } from '@mui/material';
-import { SwitchBaseProps } from '@mui/material/internal/SwitchBase';
 
 import React, { useEffect, useState } from 'react';
 
-import { RegisterOptions, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { finalize, lastValueFrom, Observable } from 'rxjs';
+import { finalize, lastValueFrom } from 'rxjs';
 
 import { FormCheckbox, FormInput, FormSwitch } from '@src/components';
-import {
-  ColorLevel,
-  ColorLevelMap,
-  CommonAPI,
-  Connection,
-  ConnectionHeader,
-  ConnectionType,
-  Credentials,
-  defaultConnection,
-  InfoResponse,
-  LoginResponse,
-  Protocol,
-} from '@src/models';
+import type { Connection, Credentials, InfoResponse, LoginResponse } from '@src/models';
+import { ColorLevel, ColorLevelMap, CommonAPI, ConnectionHeader, ConnectionType, defaultConnection, Protocol } from '@src/models';
 import { NotificationService, PollingService, QueryService } from '@src/services';
 import { syncConnection, syncRememberMe } from '@src/store/actions';
 import { getConnection, getLogged, urlReducer } from '@src/store/selectors';
 import { before, useDebounceObservable, useI18n } from '@src/utils';
+
+import type { SwitchBaseProps } from '@mui/material/internal/SwitchBase';
+import type { RegisterOptions } from 'react-hook-form';
+import type { Observable } from 'rxjs';
 
 export const SettingsCredentials = () => {
   const i18n = useI18n('panel', 'settings', 'credentials');
@@ -91,12 +83,12 @@ export const SettingsCredentials = () => {
         setLoading(false);
         setLoadingBar(false); // So there is no delay
         next(false); // So that observable data is not stale
-      })
+      }),
     );
 
   const [hasInfo, setInfo] = useState<InfoResponse>();
   const queryInfo = (baseUrl?: string) =>
-    lastValueFrom(QueryService.info(baseUrl).pipe(loadingOperator)).then((res) => {
+    lastValueFrom(QueryService.info(baseUrl).pipe(loadingOperator)).then(res => {
       setInfo(res);
       const _version = res[CommonAPI.Auth].maxVersion;
       setValue('authVersion', _version);
@@ -106,7 +98,7 @@ export const SettingsCredentials = () => {
 
   useEffect(() => {
     PollingService.stop();
-    QueryService.isReady && queryInfo();
+    if (QueryService.isReady) queryInfo();
     return () => PollingService.start();
   }, []);
 
@@ -122,7 +114,7 @@ export const SettingsCredentials = () => {
   const syncOnSubscribe = async <T extends LoginResponse | void>(
     data: Connection,
     query: (credentials: Credentials, basUrl?: string) => Observable<unknown>,
-    _type: 'login_test' | 'login' | 'logout'
+    _type: 'login_test' | 'login' | 'logout',
   ) => {
     const baseUrl = buildUrl(data, _type === 'login_test' ? 'test' : 'login');
     if (!baseUrl) return;
@@ -131,7 +123,7 @@ export const SettingsCredentials = () => {
       .bind(QueryService)(data, baseUrl)
       .pipe<T>(loadingOperator)
       .subscribe({
-        next: (res) => {
+        next: res => {
           // Update device_id if found
           if (_type === 'login' && res?.did) {
             data.device_id = res.did;
@@ -150,7 +142,11 @@ export const SettingsCredentials = () => {
             dispatch(syncConnection(data));
           }
           setLoginError({ ...loginError, [_type]: false });
-          NotificationService.info({ title: i18n(`${_type}__success`), contextMessage: urlReducer(data), success: true });
+          NotificationService.info({
+            title: i18n(`${_type}__success`),
+            contextMessage: urlReducer(data),
+            success: true,
+          });
         },
         error: (error: Error) => {
           setLoginError({ ...loginError, [_type]: true });
@@ -207,7 +203,7 @@ export const SettingsCredentials = () => {
                 onChange: ({ target: { value } }) => value === ConnectionType.quickConnect && setValue('protocol', Protocol.https),
               }}
             >
-              {Object.values(ConnectionType)?.map((_type) => (
+              {Object.values(ConnectionType)?.map(_type => (
                 <MenuItem key={_type} value={_type}>
                   {i18n(_type, 'common', 'model', 'connection_type')}
                 </MenuItem>
@@ -243,7 +239,7 @@ export const SettingsCredentials = () => {
                 disabled: isQC,
               }}
             >
-              {Object.values(Protocol)?.map((_type) => (
+              {Object.values(Protocol)?.map(_type => (
                 <MenuItem key={_type} value={_type}>
                   {i18n(_type, 'common', 'model', 'protocol')}
                 </MenuItem>
@@ -339,7 +335,11 @@ export const SettingsCredentials = () => {
                 }}
               />
               <FormInput
-                controllerProps={{ name: 'device_name', control, rules: { required: is2FA && getValues().enable_device_token } }}
+                controllerProps={{
+                  name: 'device_name',
+                  control,
+                  rules: { required: is2FA && getValues().enable_device_token },
+                }}
                 textFieldProps={{
                   type: 'text',
                   label: i18n('device_name'),

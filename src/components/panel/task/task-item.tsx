@@ -3,31 +3,26 @@ import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { Accordion, AccordionDetails, AccordionSummary, Button, ButtonGroup, Tooltip } from '@mui/material';
 
-import React, { forwardRef, ForwardRefRenderFunction, useState } from 'react';
+import React, { forwardRef, useState } from 'react';
 
 import { useSelector } from 'react-redux';
-import { finalize, Observable } from 'rxjs';
 
-import { ConfirmationDialog, IconLoader, ProgressBackground, ProgressBackgroundProps } from '@src/components';
-import {
-  ColorLevelMap,
-  computeProgress,
-  ErrorType,
-  Global,
-  LoginError,
-  Task,
-  TaskStatus,
-  taskStatusToColor,
-  TaskStatusType,
-  taskStatusTypeMap,
-} from '@src/models';
+import { finalize } from 'rxjs';
+
+import type { ProgressBackgroundProps } from '@src/components';
+import { ConfirmationDialog, IconLoader, ProgressBackground } from '@src/components';
+import type { Global, Task } from '@src/models';
+import { ColorLevelMap, computeProgress, ErrorType, LoginError, TaskStatus, taskStatusToColor, TaskStatusType, taskStatusTypeMap } from '@src/models';
 import { NotificationService, QueryService } from '@src/services';
-import { StoreState } from '@src/store';
+import type { StoreState } from '@src/store';
 import { getGlobalTask } from '@src/store/selectors';
 import { before, useDebounceObservable, useI18n } from '@src/utils';
 
 import TaskCard from './task-card';
 import TaskDetail from './task-detail';
+
+import type { ForwardRefRenderFunction } from 'react';
+import type { Observable } from 'rxjs';
 
 type TaskItemProps = { task: Task; status?: TaskStatus[] };
 const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps> = ({ task, status }, ref) => {
@@ -43,7 +38,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
   // Loading observable for debounce
   const [, next] = useDebounceObservable<Record<string, boolean>>(setLoadingIcon, 300);
 
-  const onClick = <T,>(button: string, request: Observable<T>, $event?: React.MouseEvent, delay = 500): void => {
+  const onClick = <T,>(button: string, request: Observable<T>, $event?: React.MouseEvent): void => {
     request
       .pipe(
         before(() => {
@@ -55,10 +50,10 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
           setLoading({ ...loading, [button]: false });
           setLoadingIcon({ ...loading, [button]: false }); // So there is no delay
           next({ ...loading, [button]: false }); // So that observable data is not stale
-        })
+        }),
       )
       .subscribe({
-        error: (error) => {
+        error: error => {
           if (error instanceof LoginError || error.type === ErrorType.Login) {
             NotificationService.loginRequired();
           } else if (error) {
@@ -107,7 +102,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
                   key="delete"
                   sx={{ display: 'flex', flex: '1 1 auto', minHeight: '40px' }}
                   disabled={isDisabled}
-                  onClick={($event) => {
+                  onClick={$event => {
                     $event.stopPropagation();
                     setConfirm(true);
                   }}
@@ -120,14 +115,14 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
               open={confirm}
               title={i18n('confirmation_title')}
               description={i18n('confirmation_description')}
-              onCancel={($event) => {
+              onCancel={$event => {
                 $event?.stopPropagation();
                 setConfirm(false);
               }}
-              onConfirm={($event) => {
+              onConfirm={$event => {
                 $event?.stopPropagation();
                 setConfirm(false);
-                onClick('delete', QueryService.deleteTask(task.id), $event, 0);
+                onClick('delete', QueryService.deleteTask(task.id), $event);
               }}
             />
             {[TaskStatus.downloading, TaskStatus.seeding, TaskStatus.waiting].includes(task.status) ? (
@@ -136,7 +131,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
                   <Button
                     key="pause"
                     sx={{ display: 'flex', flex: '1 1 auto', minHeight: '40px' }}
-                    onClick={($event) => onClick('pause', QueryService.pauseTask(task.id), $event)}
+                    onClick={$event => onClick('pause', QueryService.pauseTask(task.id), $event)}
                     disabled={isDisabled}
                   >
                     <IconLoader icon={<PauseIcon />} loading={loadingIcon?.pause} props={{ size: '1rem', color: 'warning' }} />
@@ -149,7 +144,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
                   <Button
                     key="play"
                     sx={{ display: 'flex', flex: '1 1 auto', minHeight: '40px' }}
-                    onClick={($event) => onClick(playOrSeed, QueryService.resumeTask(task.id), $event)}
+                    onClick={$event => onClick(playOrSeed, QueryService.resumeTask(task.id), $event)}
                     disabled={isDisabled || ![TaskStatus.paused, TaskStatus.finished, TaskStatus.error].includes(task.status)}
                   >
                     <IconLoader icon={<PlayArrowIcon />} loading={loadingIcon?.play} props={{ size: '1rem', color: 'success' }} />

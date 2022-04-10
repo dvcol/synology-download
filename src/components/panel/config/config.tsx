@@ -5,7 +5,6 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  CardProps,
   Collapse,
   Container,
   InputAdornment,
@@ -14,16 +13,22 @@ import {
   Typography,
 } from '@mui/material';
 
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
-import { finalize, forkJoin, Observable } from 'rxjs';
+import { finalize, forkJoin } from 'rxjs';
 
 import { FormExplorer, FormInput, FormSwitch } from '@src/components';
-import { ColorLevel, ColorLevelMap, defaultConfig, DownloadStationConfig, DownloadStationInfo } from '@src/models';
+import type { DownloadStationConfig, DownloadStationInfo } from '@src/models';
+import { ColorLevel, ColorLevelMap, defaultConfig } from '@src/models';
 import { NotificationService, QueryService } from '@src/services';
 import { before, useDebounceObservable, useI18n } from '@src/utils';
+
+import type { CardProps } from '@mui/material';
+import type { FC } from 'react';
+import type { SubmitHandler } from 'react-hook-form';
+import type { Observable } from 'rxjs';
 
 export const Config: FC<{
   cardProps?: CardProps;
@@ -56,7 +61,7 @@ export const Config: FC<{
         setLoading(false);
         setLoadingBar(false); // So there is no delay
         next(false); // So that observable data is not stale
-      })
+      }),
     );
 
   useEffect(() => {
@@ -70,7 +75,7 @@ export const Config: FC<{
     }
   }, []);
 
-  const onSubmit: SubmitHandler<DownloadStationConfig> = (config) => {
+  const onSubmit: SubmitHandler<DownloadStationConfig> = config => {
     QueryService.setConfig(config)
       .pipe(loadingOperator)
       .subscribe({
@@ -79,7 +84,7 @@ export const Config: FC<{
           reset(config);
           NotificationService.info({ title: i18n('set_config__success'), success: true });
         },
-        error: (message) => {
+        error: message => {
           setError(true);
           NotificationService.error({ title: i18n('set_config__fail'), message });
         },

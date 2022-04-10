@@ -1,6 +1,8 @@
-import { filter, fromEventPattern, Observable, Subscriber } from 'rxjs';
+import { filter, fromEventPattern, Observable } from 'rxjs';
 
-import { ChromeMessage, ChromeMessageHandler, ChromeMessagePayload, ChromeMessageType, ChromeResponse } from '@src/models';
+import type { ChromeMessage, ChromeMessageHandler, ChromeMessagePayload, ChromeMessageType, ChromeResponse } from '@src/models';
+
+import type { Subscriber } from 'rxjs';
 
 import MessageSender = chrome.runtime.MessageSender;
 import Port = chrome.runtime.Port;
@@ -13,10 +15,10 @@ import Port = chrome.runtime.Port;
  */
 export const onMessage = <M extends ChromeMessagePayload = ChromeMessagePayload, R = any>(
   types?: ChromeMessageType[],
-  async = true
+  async = true,
 ): Observable<ChromeMessageHandler<M, R>> =>
   fromEventPattern<ChromeMessageHandler<M, R>>(
-    (handler) => {
+    handler => {
       const wrapper = (message: ChromeMessage<M>, sender: MessageSender, sendResponse: (response?: ChromeResponse<R>) => void) => {
         handler({ message, sender, sendResponse });
         return async;
@@ -24,7 +26,7 @@ export const onMessage = <M extends ChromeMessagePayload = ChromeMessagePayload,
       chrome.runtime.onMessage.addListener(wrapper);
       return wrapper;
     },
-    (handler, wrapper) => chrome.runtime.onMessage.removeListener(wrapper)
+    (handler, wrapper) => chrome.runtime.onMessage.removeListener(wrapper),
   ).pipe(filter(({ message }) => !types?.length || !!types?.includes(message?.type)));
 
 /**
@@ -51,7 +53,7 @@ const sendMessageCallback =
  * @see chrome.runtime.sendMessage
  */
 export const sendMessage = <M extends ChromeMessagePayload = ChromeMessagePayload, R = void>(message: ChromeMessage<M>): Observable<R> =>
-  new Observable<R>((subscriber) => chrome.runtime.sendMessage(message, sendMessageCallback<R>(subscriber)));
+  new Observable<R>(subscriber => chrome.runtime.sendMessage(message, sendMessageCallback<R>(subscriber)));
 
 /**
  * Rxjs wrapper for chrome.tabs.sendMessage event sender
@@ -61,8 +63,8 @@ export const sendMessage = <M extends ChromeMessagePayload = ChromeMessagePayloa
  */
 export const sendTabMessage = <M extends ChromeMessagePayload = ChromeMessagePayload, R = void>(
   tabId: number,
-  message: ChromeMessage<M>
-): Observable<R> => new Observable<R>((subscriber) => chrome.tabs.sendMessage(tabId, message, sendMessageCallback<R>(subscriber)));
+  message: ChromeMessage<M>,
+): Observable<R> => new Observable<R>(subscriber => chrome.tabs.sendMessage(tabId, message, sendMessageCallback<R>(subscriber)));
 
 /**
  * Rxjs wrapper for chrome.runtime.onConnect event listener
@@ -72,7 +74,7 @@ export const sendTabMessage = <M extends ChromeMessagePayload = ChromeMessagePay
  */
 export const onConnect = <T extends string>(types?: T[], async = true): Observable<Port> =>
   fromEventPattern<Port>(
-    (handler) => {
+    handler => {
       const wrapper = (port: Port) => {
         handler(port);
         return async;
@@ -80,7 +82,7 @@ export const onConnect = <T extends string>(types?: T[], async = true): Observab
       chrome.runtime.onConnect.addListener(wrapper);
       return wrapper;
     },
-    (handler, wrapper) => chrome.runtime.onConnect.removeListener(wrapper)
+    (handler, wrapper) => chrome.runtime.onConnect.removeListener(wrapper),
   ).pipe(filter(({ name }) => !types?.length || !!types?.map(String).includes(name)));
 
 /** @see chrome.runtime.connect */

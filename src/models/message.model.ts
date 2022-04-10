@@ -1,6 +1,6 @@
-import { ContextMenu } from './menu.model';
-import { ChromeNotification } from './notification.model';
-import { SynologyQueryPayload } from './synology.model';
+import type { ContextMenu } from './menu.model';
+import type { ChromeNotification } from './notification.model';
+import type { SynologyQueryPayload } from './synology.model';
 
 import MessageSender = chrome.runtime.MessageSender;
 import OnClickData = chrome.contextMenus.OnClickData;

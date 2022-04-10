@@ -2,7 +2,7 @@ import { Typography } from '@mui/material';
 
 import React from 'react';
 
-import { SettingHeader } from '@src/models';
+import type { SettingHeader } from '@src/models';
 import { useI18n } from '@src/utils';
 
 export const SettingsHeader = ({ label }: { label: SettingHeader }) => {

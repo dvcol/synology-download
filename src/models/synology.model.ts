@@ -1,5 +1,5 @@
-import { ApiInfo } from './api-info.model';
-import { HttpMethod, HttpParameters } from './http.model';
+import type { ApiInfo } from './api-info.model';
+import type { HttpMethod, HttpParameters } from './http.model';
 
 export enum SessionName {
   DiskStation = 'DiskStation',

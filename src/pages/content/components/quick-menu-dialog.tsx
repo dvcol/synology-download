@@ -1,20 +1,23 @@
-import { PortalProps } from '@mui/base/Portal';
 import { ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
-import { PopoverProps } from '@mui/material/Popover';
 
-import React, { FC, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 import { useSelector } from 'react-redux';
 
 import { MuiIcon } from '@src/components';
-import { MaterialIcon, QuickMenu, TaskForm } from '@src/models';
+import type { QuickMenu, TaskForm } from '@src/models';
+import { MaterialIcon } from '@src/models';
+import { anchor$ } from '@src/pages/content/service/anchor.service';
+import { taskDialog$ } from '@src/pages/content/service/dialog.service';
 import { NotificationService, QueryService } from '@src/services';
-import { StoreState } from '@src/store';
+import type { StoreState } from '@src/store';
 import { getQuick } from '@src/store/selectors';
 
 import { i18n } from '@src/utils';
 
-import { anchor$, taskDialog$ } from '../index';
+import type { PortalProps } from '@mui/base/Portal';
+import type { PopoverProps } from '@mui/material/Popover';
+import type { FC } from 'react';
 
 export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ container }) => {
   const [_anchor, setAnchor] = React.useState<PopoverProps['anchorEl']>();
@@ -22,21 +25,6 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
 
   const [_form, setForm] = React.useState<TaskForm>();
   const menus = useSelector<StoreState, QuickMenu[]>(getQuick);
-
-  useEffect(() => {
-    const sub = anchor$.subscribe(({ event, anchor, form }) => {
-      if (menus?.length > 1) {
-        setForm(form);
-        setAnchor(event ? null : anchor ?? null);
-        setPosition(event ? { top: event.clientY, left: event.clientX } : undefined);
-      } else if (menus?.length === 1) {
-        createTask({ ...form, destination: menus[0].destination }, menus[0].modal);
-      } else {
-        createTask(form);
-      }
-    });
-    return () => sub.unsubscribe();
-  }, []);
 
   const createTask = (form: TaskForm, modal?: boolean) => {
     if (form?.uri && QueryService.isLoggedIn) {
@@ -54,6 +42,21 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
       });
     }
   };
+
+  useEffect(() => {
+    const sub = anchor$.subscribe(({ event, anchor, form }) => {
+      if (menus?.length > 1) {
+        setForm(form);
+        setAnchor(event ? null : anchor ?? null);
+        setPosition(event ? { top: event.clientY, left: event.clientX } : undefined);
+      } else if (menus?.length === 1) {
+        createTask({ ...form, destination: menus[0].destination }, menus[0].modal);
+      } else {
+        createTask(form);
+      }
+    });
+    return () => sub.unsubscribe();
+  }, []);
 
   const open = Boolean(position || _anchor);
   const handleClose = () => {
@@ -78,7 +81,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
         'aria-labelledby': 'basic-button',
       }}
     >
-      {menus?.map((m, i) => (
+      {menus?.map(m => (
         <MenuItem key={m.id} onClick={() => handleClick(m)}>
           <ListItemIcon>
             <MuiIcon icon={m.icon ?? MaterialIcon.download} props={{ sx: { fontSize: '18px' } }} />

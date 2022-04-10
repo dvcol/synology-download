@@ -1,9 +1,12 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
-import { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
+import { createSlice } from '@reduxjs/toolkit';
 
-import { StateSlice } from '@src/models';
+import type { StateSlice } from '@src/models';
+
 import { syncLoggedReducer } from '@src/store/reducers';
+
+import type { PayloadAction } from '@reduxjs/toolkit';
+import type { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
+import type { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
 
 export interface StateReducers<S = StateSlice> extends SliceCaseReducers<S> {
   setLogged: CaseReducer<S, PayloadAction<boolean>>;
@@ -36,6 +39,6 @@ export const stateSlice = createSlice<StateSlice, StateReducers, 'state'>({
     setOption: (state, { payload: option }) => ({ ...state, modal: { ...state.modal, option } }),
     addLoading: (state, { payload }) => ({ ...state, loading: state.loading + (payload ?? 1) }),
     removeLoading: (state, { payload }) => ({ ...state, loading: state.loading - (payload ?? 1) }),
-    resetLoading: (state) => ({ ...state, loading: 0 }),
+    resetLoading: state => ({ ...state, loading: 0 }),
   } as StateReducers,
 });

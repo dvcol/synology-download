@@ -6,7 +6,7 @@ import { onConnect } from '@src/utils';
 /** Listen to onConnect events to handle port connections */
 export const portListener = () => {
   // Dropdown popup
-  onConnect([ModalInstance.popup]).subscribe((port) => {
+  onConnect([ModalInstance.popup]).subscribe(port => {
     store.dispatch(setPopup(true));
     console.debug(`connecting ${port.name}`, new Date().toISOString());
     port.onDisconnect.addListener(() => {
@@ -16,7 +16,7 @@ export const portListener = () => {
   });
 
   // Option page
-  onConnect([ModalInstance.option]).subscribe((port) => {
+  onConnect([ModalInstance.option]).subscribe(port => {
     store.dispatch(setOption(true));
     console.debug(`connecting ${port.name}`, new Date().toISOString());
     port.onDisconnect.addListener(() => {
@@ -26,7 +26,7 @@ export const portListener = () => {
   });
 
   // Content script
-  onConnect([ModalInstance.modal]).subscribe((port) => {
+  onConnect([ModalInstance.modal]).subscribe(port => {
     console.debug(`connecting ${port.name}`, new Date().toISOString());
     /**
      * TODO: Remove if/when persistent MV3 service worker are introduced

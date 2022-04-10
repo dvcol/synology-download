@@ -1,13 +1,18 @@
 import ClearIcon from '@mui/icons-material/Clear';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
-import { Button, ButtonProps, Stack, TextField, Tooltip, Typography } from '@mui/material';
-import { InputProps as StandardInputProps } from '@mui/material/Input/Input';
-import React, { FC, useState } from 'react';
 
-import { File, Folder } from '@src/models';
+import { Button, Stack, TextField, Tooltip, Typography } from '@mui/material';
+
+import React, { useState } from 'react';
+
+import type { File, Folder } from '@src/models';
 import { QueryService } from '@src/services';
 import { i18n } from '@src/utils';
+
+import type { ButtonProps } from '@mui/material';
+import type { InputProps as StandardInputProps } from '@mui/material/Input/Input';
+import type { FC } from 'react';
 
 export type ExplorerLeafEditProps = {
   folder: Partial<Folder | File>;
@@ -24,31 +29,31 @@ export const ExplorerLeafEdit: FC<ExplorerLeafEditProps> = ({ folder, isEditing,
   const [hover, setHover] = useState(false);
   const [name, setName] = useState(folder?.name);
 
-  const onInputChange: StandardInputProps['onChange'] = (event) => {
+  const onInputChange: StandardInputProps['onChange'] = event => {
     setName(event.target.value);
   };
 
-  const onClick: StandardInputProps['onClick'] = (event) => {
+  const onClick: StandardInputProps['onClick'] = event => {
     event.stopPropagation();
   };
 
-  const onEdit: ButtonProps['onClick'] = (event) => {
+  const onEdit: ButtonProps['onClick'] = event => {
     event.stopPropagation();
     setEditing(true);
   };
 
-  const _onCancel: ButtonProps['onClick'] = (event) => {
+  const _onCancel: ButtonProps['onClick'] = event => {
     event.stopPropagation();
     setEditing(false);
     setName(folder?.name);
     onCancel?.(event);
   };
 
-  const onCreateOrRename: ButtonProps['onClick'] = (event) => {
+  const onCreateOrRename: ButtonProps['onClick'] = event => {
     event.stopPropagation();
     if (!disabled && folder?.path && name) {
       if (folder.name) {
-        QueryService.renameFolder(folder?.path, name).subscribe((res) => {
+        QueryService.renameFolder(folder?.path, name).subscribe(res => {
           if (res.files?.length) {
             setName(res.files[0]?.name);
             onChange?.(res.files[0], folder);
@@ -56,7 +61,7 @@ export const ExplorerLeafEdit: FC<ExplorerLeafEditProps> = ({ folder, isEditing,
           setEditing(false);
         });
       } else {
-        QueryService.createFolder(folder?.path, name).subscribe((res) => {
+        QueryService.createFolder(folder?.path, name).subscribe(res => {
           if (res.folders?.length) {
             setName(res.folders[0]?.name);
             onChange?.(res.folders[0], folder);

@@ -23,11 +23,11 @@ export const ConfirmationDialog = ({
   useEffect(() => setState(open), [open]);
 
   const onCancelHandler = ($event: React.MouseEvent) => {
-    onCancel && onCancel($event);
+    onCancel?.($event);
     setState(false);
   };
   const onConfirmHandler = ($event: React.MouseEvent) => {
-    onConfirm && onConfirm($event);
+    onConfirm?.($event);
     setState(false);
   };
   return (

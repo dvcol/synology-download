@@ -1,9 +1,14 @@
 import CreateNewFolderOutlinedIcon from '@mui/icons-material/CreateNewFolderOutlined';
-import { Button, ButtonProps, Stack } from '@mui/material';
-import React, { FC, useState } from 'react';
+
+import { Button, Stack } from '@mui/material';
+
+import React, { useState } from 'react';
 
 import { ExplorerLeafEdit } from '@src/components';
-import { File, Folder } from '@src/models';
+import type { File, Folder } from '@src/models';
+
+import type { ButtonProps } from '@mui/material';
+import type { FC } from 'react';
 
 export type ExplorerLeafAddProps = {
   nodeId: string;
@@ -15,12 +20,12 @@ export type ExplorerLeafAddProps = {
 export const ExplorerLeafAdd: FC<ExplorerLeafAddProps> = ({ nodeId, path, disabled, spliceTree }) => {
   const [editing, setEditing] = useState(false);
 
-  const onClick: ButtonProps['onClick'] = (event) => {
+  const onClick: ButtonProps['onClick'] = event => {
     event.stopPropagation();
     setEditing(true);
   };
 
-  const onCancel: ButtonProps['onClick'] = (event) => {
+  const onCancel: ButtonProps['onClick'] = event => {
     event.stopPropagation();
     setEditing(false);
   };
@@ -44,7 +49,13 @@ export const ExplorerLeafAdd: FC<ExplorerLeafAddProps> = ({ nodeId, path, disabl
         <Button
           variant="text"
           startIcon={<CreateNewFolderOutlinedIcon sx={{ ml: '2px', mr: '-4px' }} />}
-          sx={{ height: '1.5rem', flex: '1 1 auto', p: '0 0.5rem', justifyContent: 'flex-start', textTransform: 'none' }}
+          sx={{
+            height: '1.5rem',
+            flex: '1 1 auto',
+            p: '0 0.5rem',
+            justifyContent: 'flex-start',
+            textTransform: 'none',
+          }}
           onClick={onClick}
         >
           Create a new Folder

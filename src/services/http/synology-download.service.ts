@@ -1,20 +1,16 @@
-import { Observable } from 'rxjs';
-
-import {
+import type {
   CommonResponse,
-  Controller,
-  DownloadStationAPI,
   DownloadStationConfig,
   DownloadStationInfo,
   DownloadStationStatistic,
-  Endpoint,
-  HttpMethod,
   HttpParameters,
   TaskList,
   TaskListOption,
-  TaskMethod,
 } from '@src/models';
+import { Controller, DownloadStationAPI, Endpoint, HttpMethod, TaskMethod } from '@src/models';
 import { SynologyService } from '@src/services/http';
+
+import type { Observable } from 'rxjs';
 
 export class SynologyDownloadService extends SynologyService {
   constructor(isProxy = false, name = 'SynologyDownloadService', prefix = Controller.DownloadStation) {
@@ -98,7 +94,7 @@ export class SynologyDownloadService extends SynologyService {
         id,
         destination,
       },
-      '2'
+      '2',
     );
   }
 }

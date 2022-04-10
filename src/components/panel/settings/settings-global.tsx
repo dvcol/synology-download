@@ -7,8 +7,9 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { FormInput, FormSwitch } from '@src/components';
-import { ActionScope, defaultGlobal, Global, InterfaceHeader, ThemeMode } from '@src/models';
-import { StoreState } from '@src/store';
+import type { Global } from '@src/models';
+import { ActionScope, defaultGlobal, InterfaceHeader, ThemeMode } from '@src/models';
+import type { StoreState } from '@src/store';
 import { syncInterface } from '@src/store/actions';
 import { getGlobal } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
@@ -73,7 +74,7 @@ export const SettingsGlobal = () => {
                 sx: { flex: '0 0 10rem', textTransform: 'capitalize' },
               }}
             >
-              {Object.values(ThemeMode).map((theme) => (
+              {Object.values(ThemeMode).map(theme => (
                 <MenuItem key={theme} value={theme} sx={{ textTransform: 'capitalize' }}>
                   {i18n(theme, 'common', 'model', 'theme_mode')}
                 </MenuItem>
@@ -96,7 +97,7 @@ export const SettingsGlobal = () => {
                 sx: { flex: '0 0 10rem', textTransform: 'capitalize' },
               }}
             >
-              {Object.values(ActionScope).map((scope) => (
+              {Object.values(ActionScope).map(scope => (
                 <MenuItem key={scope} value={scope} sx={{ textTransform: 'capitalize' }}>
                   {i18n(scope, 'common', 'model', 'action_scope')}
                 </MenuItem>

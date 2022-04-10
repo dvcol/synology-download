@@ -7,7 +7,7 @@ import React from 'react';
 
 import { v4 as uuid } from 'uuid';
 
-import { InterfaceHeader } from '@src/models';
+import type { InterfaceHeader } from '@src/models';
 import { useI18n } from '@src/utils';
 
 export const SettingsAccordion = <T extends { id: string }>({
@@ -34,7 +34,7 @@ export const SettingsAccordion = <T extends { id: string }>({
 
   const _addNew = () => {
     const id = uuid();
-    addNew && addNew(id);
+    addNew?.(id);
     setExpanded(id);
   };
 
@@ -49,7 +49,7 @@ export const SettingsAccordion = <T extends { id: string }>({
         sx={{ p: '1rem 1rem 0' }}
       />
       <CardContent>
-        {list?.map((i) => (
+        {list?.map(i => (
           <Accordion
             key={i.id}
             expanded={expanded === i.id}

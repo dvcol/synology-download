@@ -5,8 +5,9 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { SettingsAccordion, SettingsContextMenu } from '@src/components';
-import { ChromeMessageType, ContextMenu, defaultContextMenu, InterfaceHeader } from '@src/models';
-import { StoreState } from '@src/store';
+import type { ContextMenu } from '@src/models';
+import { ChromeMessageType, defaultContextMenu, InterfaceHeader } from '@src/models';
+import type { StoreState } from '@src/store';
 import { resetContextMenu, saveContextMenu } from '@src/store/actions';
 import { getMenus } from '@src/store/selectors';
 import { sendMessage, useI18n } from '@src/utils';
@@ -33,7 +34,7 @@ export const SettingsContextMenus = () => {
     <SettingsAccordion
       title={InterfaceHeader.contextMenu}
       list={menus}
-      summary={(c) => (
+      summary={c => (
         <>
           <Typography sx={{ width: '40%', flexShrink: 0 }}>{c.title}</Typography>
           <Typography
@@ -48,7 +49,7 @@ export const SettingsContextMenus = () => {
           </Typography>
         </>
       )}
-      detail={(c) => <SettingsContextMenu menu={c} />}
+      detail={c => <SettingsContextMenu menu={c} />}
       addNew={addNew}
       reset={reset}
     />

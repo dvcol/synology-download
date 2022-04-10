@@ -3,7 +3,7 @@ import { TreeItem } from '@mui/lab';
 import React from 'react';
 
 import { ExplorerLeafEdit, ExplorerLoading } from '@src/components';
-import { File, Folder } from '@src/models';
+import type { File, Folder } from '@src/models';
 
 export const ExplorerLeaf = ({
   nodeId,
@@ -22,7 +22,7 @@ export const ExplorerLeaf = ({
   flatten?: boolean;
   disabled?: boolean;
   editable?: boolean;
-  spliceTree?: (nodeId: string, newFolder?: Folder | File, oldFolder?: Partial<Folder | File>) => void;
+  spliceTree?: (_nodeId: string, newFolder?: Folder | File, oldFolder?: Partial<Folder | File>) => void;
 }) => {
   const isLoading = loading[nodeId];
   const children = tree[nodeId];

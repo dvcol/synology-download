@@ -2,16 +2,18 @@ import { AccordionDetails, Button, CardActions, CardHeader, MenuItem, Stack } fr
 
 import React from 'react';
 
-import { useForm, UseFormGetValues, UseFormSetValue } from 'react-hook-form';
-
-import { Control } from 'react-hook-form/dist/types/form';
+import { useForm } from 'react-hook-form';
 
 import { useDispatch } from 'react-redux';
 
 import { FormInput, FormTab } from '@src/components';
-import { ColorLevel, ColorLevelMap, getColorFromLevel, getLevelFromColor, Tab, TaskTab, TaskTabSort } from '@src/models';
+import type { Tab, TaskTab } from '@src/models';
+import { ColorLevel, ColorLevelMap, getColorFromLevel, getLevelFromColor, TaskTabSort } from '@src/models';
 import { removeTaskTab, saveTaskTab } from '@src/store/actions';
 import { useI18n } from '@src/utils';
+
+import type { UseFormGetValues, UseFormSetValue } from 'react-hook-form';
+import type { Control } from 'react-hook-form/dist/types/form';
 
 export const SettingsTab = ({ tab }: { tab: TaskTab }) => {
   const i18n = useI18n('panel', 'settings', 'tab');
@@ -81,7 +83,7 @@ export const SettingsTab = ({ tab }: { tab: TaskTab }) => {
               sx: { flex: '0 0 14rem', textTransform: 'capitalize' },
             }}
           >
-            {Object.values(TaskTabSort).map((sort) => (
+            {Object.values(TaskTabSort).map(sort => (
               <MenuItem key={sort} value={sort} sx={{ textTransform: 'capitalize' }}>
                 {i18n(sort, 'common', 'model', 'task_tab_sort')}
               </MenuItem>

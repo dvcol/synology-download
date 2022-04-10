@@ -7,7 +7,8 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { FormInput, FormSwitch } from '@src/components';
-import { NotificationHeader, NotificationLevel, NotificationLevelKeys, Notifications, NotificationsBanner } from '@src/models';
+import type { Notifications, NotificationsBanner } from '@src/models';
+import { NotificationHeader, NotificationLevel, NotificationLevelKeys } from '@src/models';
 import { syncNotifications } from '@src/store/actions';
 import { getNotifications } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
@@ -61,7 +62,7 @@ export const SettingsBanner = () => {
                 disabled: !getValues()?.enabled,
               }}
             >
-              {[NotificationLevel.debug, NotificationLevel.info, NotificationLevel.warn, NotificationLevel.error].map((level) => (
+              {[NotificationLevel.debug, NotificationLevel.info, NotificationLevel.warn, NotificationLevel.error].map(level => (
                 <MenuItem key={level} value={level} sx={{ textTransform: 'capitalize' }}>
                   {NotificationLevelKeys[level]}
                 </MenuItem>
