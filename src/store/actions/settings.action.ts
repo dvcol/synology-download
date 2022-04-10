@@ -1,4 +1,4 @@
-import { settingsSlice } from '../slices';
+import { settingsSlice } from '../slices/settings.slice';
 
 // Action creators are generated for each case reducer function
 const {

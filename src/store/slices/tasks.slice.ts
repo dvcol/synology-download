@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import type { Task, TaskCount, TasksSlice, TaskStatistics } from '@src/models';
 
-import { setTasksCountReducer, setTasksStatsReducer, syncTaskReducer } from '@src/store/reducers';
+import { setTasksCountReducer, setTasksStatsReducer, syncTaskReducer } from '@src/store/reducers/tasks.reducer';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { CaseReducer } from '@reduxjs/toolkit/src/createReducer';

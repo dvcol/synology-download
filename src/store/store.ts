@@ -4,7 +4,10 @@ import { BehaviorSubject, distinctUntilChanged, finalize, map } from 'rxjs';
 
 import type { RootSlice, StoreOrProxy } from '@src/models';
 
-import { navbarSlice, settingsSlice, stateSlice, tasksSlice } from './slices';
+import { navbarSlice } from './slices/navbar.slice';
+import { settingsSlice } from './slices/settings.slice';
+import { stateSlice } from './slices/state.slice';
+import { tasksSlice } from './slices/tasks.slice';
 
 import type { ReducersMapObject, Store } from 'redux';
 

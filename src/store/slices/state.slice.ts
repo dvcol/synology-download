@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import type { StateSlice } from '@src/models';
 
-import { syncLoggedReducer } from '@src/store/reducers';
+import { syncLoggedReducer } from '@src/store/reducers/state.reducer';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
