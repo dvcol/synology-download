@@ -13,6 +13,9 @@ on:
       # Ignore release candidates
       - 'v[0-9]+.[0-9]+.[0-9]+'
 
+env:
+  node_version: 16.x
+
 jobs:
   release:
     name: Release
@@ -26,13 +29,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.node_version }}
-          cache: 'npm'
+          cache: 'yarn'
 
       - name: Clean install dependencies
-        run: npm ci
+        run: yarn install
 
       - name: Build application
-        run: npm run build
+        run: yarn build
 
       - name: Zip build folder
         run: |
