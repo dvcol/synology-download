@@ -29,6 +29,7 @@ export const NotificationStack: FC<Pick<SnackbarProviderProps, 'maxSnack'>> = ({
   return (
     <>
       <style>{'.SnackbarContainer-root {z-index: 2147483647 !important;}'}</style>
+      {/* @ts-expect-error Type conflict with reaction group */}
       <SnackbarProvider
         maxSnack={maxSnack}
         content={(key, message) => <SnackNotificationCard id={key} notification={message as SnackMessage} expanded={stack[key]} />}

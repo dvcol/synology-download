@@ -13,7 +13,7 @@
     "build": "node webpack/build.js",
     "start": "node webpack/webserver.js",
     "test:unit": "jest --watchAll=false --coverage ",
-    "test:change": "npm run test:unit -- --onlyChanged",
+    "test:change": "yarn test:unit -- --onlyChanged",
     "prettier": "prettier --write '**/*.{js,jsx,ts,tsx,json,css,scss,md}'",
     "eslint": "eslint --ext .js,.jsx,.ts,.tsx src",
     "eslint:fix": "eslint --ext .js,.jsx,.ts,.tsx src --fix",
@@ -22,9 +22,10 @@
     "release": "git tag -d $(git tag -l \"v*-rc\") && standard-version --skip.bump"
   },
   "engines": {
-    "npm": ">=7.10.0",
+    "yarn": ">=3.2.0",
     "node": ">=16.0.0"
   },
+  "packageManager": "yarn@3.2.0",
   "sideEffects": false,
   "dependencies": {
     "@emotion/cache": "^11.7.1",
