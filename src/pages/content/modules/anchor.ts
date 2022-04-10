@@ -1,4 +1,4 @@
-import { anchor$ } from '../index';
+import { anchor$ } from '@src/pages/content/service/anchor.service';
 
 /**
  * List of supported protocols
@@ -13,9 +13,8 @@ const DOWNLOAD_ONLY_PROTOCOLS = ['magnet', 'thunder', 'flashget', 'qqdl', 'ed2k'
 function startsWithAnyProtocol(url: string, protocols: string | string[]) {
   if (typeof protocols === 'string') {
     return url.startsWith(`${protocols}:`);
-  } else {
-    return protocols.some((protocol) => url.startsWith(`${protocol}:`));
   }
+  return protocols.some(protocol => url.startsWith(`${protocol}:`));
 }
 
 /**
@@ -26,19 +25,20 @@ function startsWithAnyProtocol(url: string, protocols: string | string[]) {
 function recursivelyFindAnchorAncestor(e: HTMLElement | null, depth = 10): HTMLAnchorElement | undefined {
   if (e == null) {
     return undefined;
-  } else if (e instanceof HTMLAnchorElement) {
-    return e;
-  } else if (depth === 0) {
-    return undefined;
-  } else {
-    return recursivelyFindAnchorAncestor(e.parentElement, depth - 1);
   }
+  if (e instanceof HTMLAnchorElement) {
+    return e;
+  }
+  if (depth === 0) {
+    return undefined;
+  }
+  return recursivelyFindAnchorAncestor(e.parentElement, depth - 1);
 }
 
 // Inspired by https://github.com/seansfkelley/nas-download-manager/blob/master/src/content/index.ts
 // Detect if the click event is on a supported downloadable link
 export const addAnchorClickListener = () =>
-  document.addEventListener('click', async (event) => {
+  document.addEventListener('click', async event => {
     // Left clicks only
     if (event.button === 0) {
       const anchor = recursivelyFindAnchorAncestor(event.target as HTMLElement);

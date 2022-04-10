@@ -3,12 +3,17 @@ import LiveHelpIcon from '@mui/icons-material/LiveHelp';
 import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
 import SecurityIcon from '@mui/icons-material/Security';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
-import { Button, Card, CardActions, CardContent, CardHeader, CardProps, Chip, Stack, Typography } from '@mui/material';
-import React, { FC, useEffect, useState } from 'react';
+
+import { Button, Card, CardActions, CardContent, CardHeader, Chip, Stack, Typography } from '@mui/material';
+
+import React, { useEffect, useState } from 'react';
 
 import manifest from '@src/manifest.json';
 import { AppLinks } from '@src/models';
 import { createTab, getAcceptLanguages, useI18n } from '@src/utils';
+
+import type { CardProps } from '@mui/material';
+import type { FC } from 'react';
 
 export const About: FC<{
   cardProps?: CardProps;
@@ -17,7 +22,7 @@ export const About: FC<{
 
   const [languages, setLanguages] = useState<string[]>();
   useEffect(() => {
-    const sub = getAcceptLanguages().subscribe((_languages) => setLanguages(_languages));
+    const sub = getAcceptLanguages().subscribe(_languages => setLanguages(_languages));
     return () => sub.unsubscribe();
   }, []);
 
@@ -33,7 +38,7 @@ export const About: FC<{
               <Chip
                 color="secondary"
                 size="small"
-                label={`${i18n('chip_user_languages')}: ${languages.filter((lang) => !lang.includes('-')).join(', ')}`}
+                label={`${i18n('chip_user_languages')}: ${languages.filter(lang => !lang.includes('-')).join(', ')}`}
                 sx={{ height: '1.1rem' }}
               />
             )}

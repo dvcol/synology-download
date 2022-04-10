@@ -1,8 +1,12 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
-import { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
+import { createSlice } from '@reduxjs/toolkit';
 
-import { defaultTabs, NavbarSlice, TaskTab } from '@src/models';
+import type { NavbarSlice, TaskTab } from '@src/models';
+
+import { defaultTabs } from '@src/models';
+
+import type { PayloadAction } from '@reduxjs/toolkit';
+import type { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
+import type { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
 
 interface NavbarReducers<S = NavbarSlice> extends SliceCaseReducers<S> {
   setNavbar: CaseReducer<S, PayloadAction<TaskTab | undefined>>;

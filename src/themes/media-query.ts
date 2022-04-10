@@ -1,19 +1,19 @@
-import { Theme } from '@mui/material/styles/createTheme';
+import { fromEventPattern } from 'rxjs';
 
-import { Dispatch, SetStateAction } from 'react';
-
-import { fromEventPattern, Subscription } from 'rxjs';
-
-import { StoreOrProxy } from '@src/models';
+import type { StoreOrProxy } from '@src/models';
 import { store$ } from '@src/store';
 import { getThemeMode } from '@src/store/selectors';
 import { darkTheme, lightTheme } from '@src/themes/themes';
 
+import type { Theme } from '@mui/material/styles/createTheme';
+import type { Dispatch, SetStateAction } from 'react';
+import type { Subscription } from 'rxjs';
+
 export const isDarkTheme = (): boolean => window.matchMedia('(prefers-color-scheme: dark').matches;
 
 export const isDarkTheme$ = fromEventPattern<MediaQueryListEvent>(
-  (handler) => window.matchMedia('(prefers-color-scheme: dark').addEventListener('change', handler),
-  (handler) => window.matchMedia('(prefers-color-scheme: dark').removeEventListener('change', handler)
+  handler => window.matchMedia('(prefers-color-scheme: dark').addEventListener('change', handler),
+  handler => window.matchMedia('(prefers-color-scheme: dark').removeEventListener('change', handler),
 );
 
 export const getTheme = (store?: StoreOrProxy, isDark: boolean = isDarkTheme()) => {
@@ -26,7 +26,7 @@ export const subscribeToTheme = (store: StoreOrProxy, theme: Theme, setTheme: Di
   const subscription = isDarkTheme$.subscribe(({ matches }) => setTheme(getTheme(store, matches)));
 
   // On store theme change
-  subscription.add(store$(store, getThemeMode).subscribe((_theme) => setTheme(_theme ?? getTheme())));
+  subscription.add(store$(store, getThemeMode).subscribe(_theme => setTheme(_theme ?? getTheme())));
 
   return subscription;
 };

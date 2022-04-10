@@ -1,28 +1,23 @@
-import { EMPTY, finalize, Observable, tap } from 'rxjs';
+import { EMPTY, finalize, tap } from 'rxjs';
 
-import {
+import type {
   CommonResponse,
-  ConnectionType,
   Credentials,
   DownloadStationConfig,
   DownloadStationInfo,
   DownloadStationStatistic,
   FileList,
-  FileListOption,
   FolderList,
   InfoResponse,
-  LoginError,
   LoginRequest,
   LoginResponse,
   NewFolderList,
-  NotReadyError,
   StoreOrProxy,
   Task,
   TaskList,
-  TaskListOption,
-  TaskStatus,
   TaskStatusType,
 } from '@src/models';
+import { ConnectionType, FileListOption, LoginError, NotReadyError, TaskListOption, TaskStatus } from '@src/models';
 import { NotificationService } from '@src/services';
 import { SynologyAuthService, SynologyDownloadService, SynologyFileService, SynologyInfoService } from '@src/services/http';
 import { store$ } from '@src/store';
@@ -41,15 +36,21 @@ import {
 } from '@src/store/selectors';
 import { before, useI18n as UseI18n } from '@src/utils';
 
+import type { Observable } from 'rxjs';
+
 const i18n = UseI18n('common', 'error');
 
 export class QueryService {
   private static store: any | StoreOrProxy;
+
   private static isProxy: boolean;
 
   private static infoClient: SynologyInfoService;
+
   private static authClient: SynologyAuthService;
+
   private static fileClient: SynologyFileService;
+
   private static downloadClient: SynologyDownloadService;
 
   private static baseUrl: string;
@@ -63,8 +64,8 @@ export class QueryService {
     this.fileClient = new SynologyFileService(isProxy);
     this.downloadClient = new SynologyDownloadService(isProxy);
 
-    store$(store, getUrl).subscribe((url) => this.setBaseUrl(url));
-    store$(store, getSid).subscribe((sid) => this.setSid(sid));
+    store$(store, getUrl).subscribe(url => this.setBaseUrl(url));
+    store$(store, getSid).subscribe(sid => this.setSid(sid));
   }
 
   static setBaseUrl(baseUrl: string): void {
@@ -104,7 +105,7 @@ export class QueryService {
     source.pipe(
       this.readyCheckOperator(),
       before(() => this.store.dispatch(addLoading())),
-      finalize(() => this.store.dispatch(removeLoading()))
+      finalize(() => this.store.dispatch(removeLoading())),
     );
 
   static info(baseUrl?: string): Observable<InfoResponse> {
@@ -132,7 +133,7 @@ export class QueryService {
       // If we already have token, we return omitted OTP request
       if (device_id) return { ...request, device_id, device_name };
       // If not we demand a device token with name and otp
-      else return { ...request, enable_device_token: 'yes', device_name, otp_code };
+      return { ...request, enable_device_token: 'yes', device_name, otp_code };
     }
     // else we just request with OTP
     return { ...request, otp_code };
@@ -145,7 +146,7 @@ export class QueryService {
   static login(credentials?: Credentials, baseUrl?: string): Observable<LoginResponse> {
     return this.doLogin(credentials, baseUrl).pipe(
       tap({
-        next: (res) => {
+        next: res => {
           this.store.dispatch(setSid(res?.sid));
           this.store.dispatch(setLogged(true));
         },
@@ -153,7 +154,7 @@ export class QueryService {
           this.store.dispatch(setSid(undefined));
           this.store.dispatch(setLogged(false));
         },
-      })
+      }),
     );
   }
 
@@ -163,7 +164,7 @@ export class QueryService {
       tap(() => {
         this.store.dispatch(setSid(undefined));
         this.store.dispatch(setLogged(false));
-      })
+      }),
     );
   }
 
@@ -179,7 +180,7 @@ export class QueryService {
     folderPath: string,
     name: string,
     forceParent = false,
-    additional: FileListOption[] = [FileListOption.perm]
+    additional: FileListOption[] = [FileListOption.perm],
   ): Observable<NewFolderList> {
     return this.fileClient.createFolder(folderPath, name, forceParent, additional).pipe(this.readyCheckOperator());
   }
@@ -188,7 +189,7 @@ export class QueryService {
     folderPath: string,
     name: string,
     additional: FileListOption[] = [FileListOption.perm],
-    searchTaskId?: string
+    searchTaskId?: string,
   ): Observable<FileList> {
     return this.fileClient.renameFolder(folderPath, name, additional, searchTaskId).pipe(this.readyCheckOperator());
   }
@@ -208,9 +209,9 @@ export class QueryService {
   static getStatistic(): Observable<DownloadStationStatistic> {
     return this.downloadClient.getStatistic().pipe(
       this.loadingOperator,
-      tap((stats) => {
+      tap(stats => {
         this.store.dispatch(setTaskStats(stats));
-      })
+      }),
     );
   }
 
@@ -223,12 +224,12 @@ export class QueryService {
         // notify if we have tasks
         this.notifyTasks(extract, tasks);
         this.store.dispatch(setTasks(tasks));
-      })
+      }),
     );
   }
 
   private static notifyTasks({ finished, error }: Record<TaskStatusType, Set<Task['id']>>, tasks: Task[], state = this.store.getState()): void {
-    tasks?.forEach((t) => {
+    tasks?.forEach(t => {
       if (getNotificationsBannerFinishedEnabled(state) && TaskStatus.finished === t.status && !finished.has(t.id)) {
         NotificationService.taskFinished(t);
       } else if (getNotificationsBannerFailedEnabled(state) && TaskStatus.error === t.status && !error.has(t.id)) {
@@ -240,7 +241,7 @@ export class QueryService {
   static resumeTask(id: string | string[]): Observable<CommonResponse[]> {
     return this.downloadClient.resumeTask(id).pipe(
       this.loadingOperator,
-      tap(() => this.listTasks().subscribe())
+      tap(() => this.listTasks().subscribe()),
     );
   }
 
@@ -251,7 +252,7 @@ export class QueryService {
   static pauseTask(id: string | string[]): Observable<CommonResponse[]> {
     return this.downloadClient.pauseTask(id).pipe(
       this.loadingOperator,
-      tap(() => this.listTasks().subscribe())
+      tap(() => this.listTasks().subscribe()),
     );
   }
 
@@ -267,21 +268,21 @@ export class QueryService {
           this.listTasks().subscribe();
           NotificationService.taskCreated(uri, source, destination);
         },
-        error: (error) => {
+        error: error => {
           NotificationService.error({
             title: i18n('create_task_fail'),
             message: error?.message ?? error?.name ?? '',
             contextMessage: source,
           });
         },
-      })
+      }),
     );
   }
 
   static editTask(id: string | string[], destination: string): Observable<CommonResponse[]> {
     return this.downloadClient.editTask(id, destination).pipe(
       this.loadingOperator,
-      tap(() => this.listTasks().subscribe())
+      tap(() => this.listTasks().subscribe()),
     );
   }
 
@@ -291,7 +292,7 @@ export class QueryService {
       tap(() => {
         this.store.dispatch(spliceTasks(id));
         this.listTasks().subscribe();
-      })
+      }),
     );
   }
 
@@ -301,7 +302,7 @@ export class QueryService {
 
   static deleteFinishedTasks(
     ids: Set<Task['id']> = getFinishedTasksIdsByActionScope(this.store.getState()),
-    force = false
+    force = false,
   ): Observable<CommonResponse[]> {
     return this.deleteAllTasks(ids, force);
   }

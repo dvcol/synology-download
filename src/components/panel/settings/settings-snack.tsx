@@ -7,7 +7,8 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { FormInput, FormSwitch } from '@src/components';
-import { NotificationHeader, NotificationLevel, NotificationLevelKeys, Notifications, NotificationsSnack } from '@src/models';
+import type { Notifications, NotificationsSnack } from '@src/models';
+import { NotificationHeader, NotificationLevel, NotificationLevelKeys } from '@src/models';
 import { syncNotifications } from '@src/store/actions';
 import { getNotifications } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
@@ -64,7 +65,7 @@ export const SettingsSnack = () => {
               disabled: !getValues()?.enabled,
             }}
           >
-            {['top', 'bottom'].map((position) => (
+            {['top', 'bottom'].map(position => (
               <MenuItem key={position} value={position} sx={{ textTransform: 'capitalize' }}>
                 {position}
               </MenuItem>
@@ -79,7 +80,7 @@ export const SettingsSnack = () => {
               disabled: !getValues()?.enabled,
             }}
           >
-            {['left', 'center', 'right'].map((position) => (
+            {['left', 'center', 'right'].map(position => (
               <MenuItem key={position} value={position} sx={{ textTransform: 'capitalize' }}>
                 {position}
               </MenuItem>
@@ -122,7 +123,7 @@ export const SettingsSnack = () => {
                 disabled: !getValues()?.enabled,
               }}
             >
-              {[NotificationLevel.debug, NotificationLevel.info, NotificationLevel.warn, NotificationLevel.error].map((level) => (
+              {[NotificationLevel.debug, NotificationLevel.info, NotificationLevel.warn, NotificationLevel.error].map(level => (
                 <MenuItem key={level} value={level} sx={{ textTransform: 'capitalize' }}>
                   {NotificationLevelKeys[level]}
                 </MenuItem>

@@ -18,7 +18,7 @@ export const ExplorerBreadCrumbs = ({
         key={`home-${disabled}`}
         variant="text"
         sx={{ textTransform: 'none', minWidth: '0', mr: '-4px', fontSize: '12px' }}
-        onClick={($event) => onClick && onClick($event, 0)}
+        onClick={$event => onClick && onClick($event, 0)}
         disabled={disabled}
       >
         <HomeIcon sx={{ width: '15px', height: '15px', mb: '-2px' }} />
@@ -29,7 +29,7 @@ export const ExplorerBreadCrumbs = ({
           variant="text"
           startIcon={<FolderIcon sx={{ width: '15px', height: '15px', mb: '-2px', fontSize: '12px' }} />}
           sx={{ textTransform: 'none' }}
-          onClick={($event) => onClick && onClick($event, i + 1)}
+          onClick={$event => onClick && onClick($event, i + 1)}
           disabled={disabled}
         >
           <Typography component={'span'} sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '14px' }}>

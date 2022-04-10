@@ -1,5 +1,6 @@
 import { Container } from '@mui/material';
-import React, { FC, useEffect } from 'react';
+
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 
@@ -11,6 +12,8 @@ import { About } from './about';
 import { Config } from './config';
 import { Settings } from './settings';
 import { TaskAdd, TaskPanel } from './task';
+
+import type { FC } from 'react';
 
 export const Panel: FC<{ redirect?: string }> = ({ redirect }) => {
   const dispatch = useDispatch();

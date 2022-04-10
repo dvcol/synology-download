@@ -1,9 +1,12 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
-import { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
+import { createSlice } from '@reduxjs/toolkit';
 
-import { Task, TaskCount, TasksSlice, TaskStatistics } from '@src/models';
+import type { Task, TaskCount, TasksSlice, TaskStatistics } from '@src/models';
+
 import { setTasksCountReducer, setTasksStatsReducer, syncTaskReducer } from '@src/store/reducers';
+
+import type { PayloadAction } from '@reduxjs/toolkit';
+import type { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
+import type { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
 
 export interface TasksReducers<S = TasksSlice> extends SliceCaseReducers<S> {
   setTasks: CaseReducer<S, PayloadAction<Task[]>>;
@@ -26,7 +29,7 @@ export const tasksSlice = createSlice<TasksSlice, TasksReducers, 'tasks'>({
     setTasks: syncTaskReducer,
     spliceTasks: (state, { payload: ids }) => ({
       ...state,
-      entities: state.entities?.filter((e) => (Array.isArray(ids) ? !ids.includes(e.id) : e.id !== ids)),
+      entities: state.entities?.filter(e => (Array.isArray(ids) ? !ids.includes(e.id) : e.id !== ids)),
     }),
     setTasksCount: setTasksCountReducer,
     setTaskStats: setTasksStatsReducer,

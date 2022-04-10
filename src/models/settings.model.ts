@@ -1,10 +1,16 @@
-import { OptionsObject } from 'notistack';
-
 import { defaultContextMenu, defaultQuickMenu } from './menu.model';
-import { BannerNotificationScope, NotificationLevel, SnackNotificationScope } from './notification.model';
-import { SettingsSlice } from './store.model';
-import { defaultTabs, Tab, TabType } from './tab.model';
+
+import { NotificationLevel } from './notification.model';
+
+import { defaultTabs, TabType } from './tab.model';
+
 import { TaskStatus } from './task.model';
+
+import type { BannerNotificationScope, SnackNotificationScope } from './notification.model';
+import type { SettingsSlice } from './store.model';
+import type { Tab } from './tab.model';
+
+import type { OptionsObject } from 'notistack';
 
 export enum SettingHeader {
   connection = 'connection',

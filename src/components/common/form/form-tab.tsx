@@ -2,15 +2,16 @@ import { Button, Card, CardHeader, Collapse, Grid, MenuItem } from '@mui/materia
 
 import React from 'react';
 
-import { UseFormReturn } from 'react-hook-form/dist/types/form';
-
 import { FormExplorer, FormSwitch } from '@src/components';
-import { ColorLevel, defaultNotifications, defaultTabs, getColorFromLevel, getLevelFromColor, Tab, TabType, TaskStatus, TaskTab } from '@src/models';
+import type { Tab, TaskTab } from '@src/models';
+import { ColorLevel, defaultNotifications, defaultTabs, getColorFromLevel, getLevelFromColor, TabType, TaskStatus } from '@src/models';
 
 import { useI18n } from '@src/utils';
 
 import { FormCheckbox } from './form-checkbox';
 import { FormInput } from './form-input';
+
+import type { UseFormReturn } from 'react-hook-form/dist/types/form';
 
 export const FormTab = ({
   useFormProps: { control, getValues, setValue },
@@ -22,7 +23,7 @@ export const FormTab = ({
   disabled?: boolean;
 }>) => {
   const i18n = useI18n('common', 'form', 'tab');
-  const getTab = (type?: TabType | string): TaskTab | undefined => defaultTabs.find((t) => t.name === type);
+  const getTab = (type?: TabType | string): TaskTab | undefined => defaultTabs.find(t => t.name === type);
   const getTemplateStatuses = (tab?: Tab): TaskStatus[] => (tab?.status?.length ? tab?.status : status) ?? [];
 
   const [templateStatuses, setTemplateStatuses] = React.useState<TaskStatus[]>(getTemplateStatuses(getTab(template)));
@@ -58,10 +59,10 @@ export const FormTab = ({
               label: i18n('base_template_label'),
               sx: { flex: '0 0 14rem', textTransform: 'capitalize' },
               disabled,
-              onChange: (e) => onTemplateChange(e.target.value),
+              onChange: e => onTemplateChange(e.target.value),
             }}
           >
-            {Object.values(TabType).map((tab) => (
+            {Object.values(TabType).map(tab => (
               <MenuItem key={tab} value={tab} sx={{ textTransform: 'capitalize' }}>
                 {i18n(tab, 'common', 'model', 'task_tab_type')}
               </MenuItem>
@@ -83,12 +84,12 @@ export const FormTab = ({
               label: i18n('badge_color_title'),
               sx: { flex: '0 0 14rem', textTransform: 'capitalize' },
               color: getLevelFromColor(badgeColor),
-              onChange: (e) => setBadgeColor(e.target.value),
+              onChange: e => setBadgeColor(e.target.value),
               focused: true,
               disabled,
             }}
           >
-            {Object.values(ColorLevel).map((_color) => (
+            {Object.values(ColorLevel).map(_color => (
               <MenuItem key={_color} value={getColorFromLevel(_color)} sx={{ textTransform: 'capitalize' }}>
                 {_color}
               </MenuItem>
@@ -109,7 +110,7 @@ export const FormTab = ({
       />
       <Card sx={{ p: '0.5rem 1rem', m: '0.5rem 0' }}>
         <Grid container spacing={1} columnSpacing={1}>
-          {Object.values(TaskStatus).map((s) => (
+          {Object.values(TaskStatus).map(s => (
             <Grid item xs={4} lg={2} key={s}>
               <Button disableTouchRipple={true} sx={{ p: '0 0 0 0.5rem' }} color={getHighlightColor(s)} disabled={disabled}>
                 <FormCheckbox

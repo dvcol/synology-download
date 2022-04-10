@@ -25,7 +25,7 @@ export const Navbar = () => {
   }, []);
 
   const getValue = (): number => {
-    const index = tabs?.findIndex((t) => t.id === tab?.id);
+    const index = tabs?.findIndex(t => t.id === tab?.id);
     return index && index > -1 ? index : 0;
   };
 

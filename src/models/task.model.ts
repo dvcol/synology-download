@@ -1,6 +1,7 @@
 import prettyBytes from 'pretty-bytes';
 
-import { ColorLevel, DownloadStationStatistic, TabCount } from '@src/models';
+import type { DownloadStationStatistic, TabCount } from '@src/models';
+import { ColorLevel } from '@src/models';
 
 export interface TaskList {
   total: number;
@@ -183,16 +184,6 @@ export const computeProgress = (downloaded: number | any, size: number | any): n
   return 0;
 };
 
-export const computeEta = (task: Task): string | undefined => {
-  const downloaded = Number(task.additional?.transfer?.size_downloaded);
-  const speed = Number(task.additional?.transfer?.speed_download);
-  if (downloaded && Number.isFinite(downloaded) && speed && Number.isFinite(speed)) {
-    const secondsRemaining = Math.round((task.size - downloaded) / speed);
-    return Number.isFinite(secondsRemaining) ? formatTime(secondsRemaining) : undefined;
-  }
-  return undefined;
-};
-
 export const formatTime = (s: number): string => {
   const hours = Math.floor(s / (60 * 60));
   const minutes = Math.floor(s / 60) - hours * 60;
@@ -202,7 +193,17 @@ export const formatTime = (s: number): string => {
     return n > 9 ? n.toString() : `0${n.toString()}`;
   }
 
-  return `${hours ? hours + 'h ' : ''}${hours ? withZero(minutes) : minutes}m ${withZero(seconds)}s`;
+  return `${hours ? `${hours}h ` : ''}${hours ? withZero(minutes) : minutes}m ${withZero(seconds)}s`;
+};
+
+export const computeEta = (task: Task): string | undefined => {
+  const downloaded = Number(task.additional?.transfer?.size_downloaded);
+  const speed = Number(task.additional?.transfer?.speed_download);
+  if (downloaded && Number.isFinite(downloaded) && speed && Number.isFinite(speed)) {
+    const secondsRemaining = Math.round((task.size - downloaded) / speed);
+    return Number.isFinite(secondsRemaining) ? formatTime(secondsRemaining) : undefined;
+  }
+  return undefined;
 };
 
 export const formatBytes = (byte: number | any): string => {

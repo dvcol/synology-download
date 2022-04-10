@@ -7,16 +7,6 @@ import StorageArea = chrome.storage.StorageArea;
 type ChromeI18nInput = { key: string; substitutions: string[] };
 
 /**
- * Setup i18n function with modules names
- * @param roots modules names
- * @see chrome.i18n.getMessage
- */
-export const useI18n =
-  (...roots: string[]): typeof i18n =>
-  (value, ...modules): string =>
-    i18n(value, ...(modules?.length ? modules : roots));
-
-/**
  * Convert translation using chrome i18n
  * @param value key string or object to translate
  * @param modules optionals modules names
@@ -35,17 +25,26 @@ export const i18n = (value: string | ChromeI18nInput, ...modules: string[]): str
   }
   return chrome?.i18n?.getMessage?.(key, substitution) || key;
 };
+/**
+ * Setup i18n function with modules names
+ * @param roots modules names
+ * @see chrome.i18n.getMessage
+ */
+export const useI18n =
+  (...roots: string[]): typeof i18n =>
+  (value, ...modules): string =>
+    i18n(value, ...(modules?.length ? modules : roots));
 
 /**
  * Wrap getAcceptLanguages in observable
  * @see chrome.i18n.getAcceptLanguages
  */
 export const getAcceptLanguages = () =>
-  new Observable<string[]>((subscriber) =>
-    chrome.i18n.getAcceptLanguages((languages) => {
+  new Observable<string[]>(subscriber =>
+    chrome.i18n.getAcceptLanguages(languages => {
       subscriber.next(languages);
       subscriber.complete();
-    })
+    }),
   );
 
 /**
@@ -54,11 +53,11 @@ export const getAcceptLanguages = () =>
  * @param storage the chrome storage object (chrome.storage.sync, chrome.storage.local, ...)
  */
 const storageGet = <R>(name: string, storage: StorageArea): Observable<R> =>
-  new Observable<R>((subscriber) =>
-    storage.get(name, (keys) => {
+  new Observable<R>(subscriber =>
+    storage.get(name, keys => {
       subscriber.next(parseJSON<R>(keys[name]));
       subscriber.complete();
-    })
+    }),
   );
 
 /**
@@ -68,11 +67,11 @@ const storageGet = <R>(name: string, storage: StorageArea): Observable<R> =>
  * @param storage the chrome storage object (chrome.storage.sync, chrome.storage.local, ...)
  */
 const storageSet = <R>(name: string, payload: R, storage: StorageArea): Observable<R> =>
-  new Observable<R>((subscriber) =>
+  new Observable<R>(subscriber =>
     storage.set({ [name]: JSON.stringify(payload) }, () => {
       subscriber.next(payload);
       subscriber.complete();
-    })
+    }),
   );
 
 /**

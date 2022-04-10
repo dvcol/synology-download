@@ -1,12 +1,13 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-import { Task, TaskStatus, TaskStatusType } from '@src/models';
+import type { Task } from '@src/models';
+import { TaskStatus, TaskStatusType } from '@src/models';
 
-import { StoreState } from '../store';
+import type { StoreState } from '../store';
 
 export const getTasks = createSelector(
   (state: StoreState) => state,
-  (state) => state.tasks.entities
+  state => state.tasks.entities,
 );
 
 export const geTasksIdsByStatusTypeReducer = (tasks: Task[]) =>
@@ -33,6 +34,8 @@ export const geTasksIdsByStatusTypeReducer = (tasks: Task[]) =>
         case TaskStatus.error:
           map[TaskStatusType.error].add(id);
           break;
+        default:
+          console.error(`Status ${status} is not supported`);
       }
       map[TaskStatusType.all].add(id);
       return map;
@@ -40,17 +43,17 @@ export const geTasksIdsByStatusTypeReducer = (tasks: Task[]) =>
     Object.values(TaskStatusType).reduce((acc, type) => {
       acc[type] = new Set<Task['id']>();
       return acc;
-    }, {} as Record<TaskStatusType, Set<Task['id']>>)
+    }, {} as Record<TaskStatusType, Set<Task['id']>>),
   );
 
 export const geTasksIdsByStatusType = createSelector(getTasks, geTasksIdsByStatusTypeReducer);
 
-export const getTasksIds = createSelector(geTasksIdsByStatusType, (tasksIds) => tasksIds[TaskStatusType.all]);
+export const getTasksIds = createSelector(geTasksIdsByStatusType, tasksIds => tasksIds[TaskStatusType.all]);
 
-export const getPausedTasksIds = createSelector(geTasksIdsByStatusType, (tasksIds) => tasksIds[TaskStatusType.paused]);
+export const getPausedTasksIds = createSelector(geTasksIdsByStatusType, tasksIds => tasksIds[TaskStatusType.paused]);
 
-export const getActiveTasksIds = createSelector(geTasksIdsByStatusType, (tasksIds) => tasksIds[TaskStatusType.active]);
+export const getActiveTasksIds = createSelector(geTasksIdsByStatusType, tasksIds => tasksIds[TaskStatusType.active]);
 
-export const getFinishedTasksIds = createSelector(geTasksIdsByStatusType, (tasksIds) => tasksIds[TaskStatusType.finished]);
+export const getFinishedTasksIds = createSelector(geTasksIdsByStatusType, tasksIds => tasksIds[TaskStatusType.finished]);
 
-export const getErrorTasksIds = createSelector(geTasksIdsByStatusType, (tasksIds) => tasksIds[TaskStatusType.error]);
+export const getErrorTasksIds = createSelector(geTasksIdsByStatusType, tasksIds => tasksIds[TaskStatusType.error]);

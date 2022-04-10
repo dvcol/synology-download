@@ -1,7 +1,8 @@
-import { Observable } from 'rxjs';
-
-import { AuthMethod, CommonAPI, Endpoint, HttpMethod, HttpParameters, LoginRequest, LoginResponse, SessionName } from '@src/models';
+import type { HttpParameters, LoginRequest, LoginResponse } from '@src/models';
+import { AuthMethod, CommonAPI, Endpoint, HttpMethod, SessionName } from '@src/models';
 import { SynologyService } from '@src/services/http';
+
+import type { Observable } from 'rxjs';
 
 export class SynologyAuthService extends SynologyService {
   constructor(protected isProxy = false, protected name: string = 'SynologyAuthService') {
@@ -14,7 +15,7 @@ export class SynologyAuthService extends SynologyService {
 
   login(
     { account, passwd, baseUrl, otp_code, enable_device_token, device_name, device_id, format }: LoginRequest,
-    authVersion = '1'
+    authVersion = '1',
   ): Observable<LoginResponse> {
     const params: HttpParameters = {
       method: AuthMethod.login,

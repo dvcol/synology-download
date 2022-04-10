@@ -5,8 +5,9 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { SettingsAccordion, SettingsQuickMenu } from '@src/components';
-import { defaultQuickMenu, InterfaceHeader, QuickMenu } from '@src/models';
-import { StoreState } from '@src/store';
+import type { QuickMenu } from '@src/models';
+import { defaultQuickMenu, InterfaceHeader } from '@src/models';
+import type { StoreState } from '@src/store';
 import { resetQuickMenus, saveQuickMenu } from '@src/store/actions';
 import { getQuick } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
@@ -27,7 +28,7 @@ export const SettingsQuickMenus = () => {
     <SettingsAccordion
       title={InterfaceHeader.quickMenu}
       list={menus}
-      summary={(m) => (
+      summary={m => (
         <>
           <Typography sx={{ width: '40%', flexShrink: 0 }}>{m.title}</Typography>
           <Typography
@@ -42,7 +43,7 @@ export const SettingsQuickMenus = () => {
           </Typography>
         </>
       )}
-      detail={(m) => <SettingsQuickMenu menu={m} />}
+      detail={m => <SettingsQuickMenu menu={m} />}
       addNew={addNew}
       reset={reset}
     />

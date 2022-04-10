@@ -1,8 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
-import { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
+import { createSlice } from '@reduxjs/toolkit';
 
-import { Connection, ContextMenu, defaultSettings, Global, Notifications, Polling, QuickMenu, SettingsSlice, TaskTab } from '@src/models';
+import type { Connection, ContextMenu, Global, Notifications, Polling, QuickMenu, SettingsSlice, TaskTab } from '@src/models';
+import { defaultSettings, SettingsSliceName } from '@src/models';
 
 import {
   addTo,
@@ -13,7 +12,11 @@ import {
   syncNestedReducer,
   syncReducer,
   syncRememberMeReducer,
-} from '../reducers';
+} from '../reducers/settings.reducer';
+
+import type { PayloadAction } from '@reduxjs/toolkit';
+import type { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
+import type { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
 
 interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   setSettings: CaseReducer<S, PayloadAction<S>>;
@@ -36,21 +39,21 @@ interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
 }
 
 export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'settings'>({
-  name: 'settings',
+  name: SettingsSliceName,
   initialState: defaultSettings,
   reducers: {
     setSettings: setReducer,
     syncSettings: syncReducer,
-    resetSettings: (oldSettings) => syncReducer(oldSettings, { type: 'sync', payload: defaultSettings }),
+    resetSettings: oldSettings => syncReducer(oldSettings, { type: 'sync', payload: defaultSettings }),
     syncConnection: syncConnectionReducer,
     syncRememberMe: (oldSettings, action) => syncRememberMeReducer(oldSettings, action),
     syncPolling: (oldSettings, { payload }) => syncNestedReducer<Polling>(oldSettings, payload, 'polling'),
     syncNotifications: (oldSettings, action) => setBadgeReducer(oldSettings, action),
     saveContextMenu: (oldSettings, { payload }): SettingsSlice =>
-      addTo<ContextMenu, 'menus'>(oldSettings, payload, 'menus', (o) => o.id === payload?.id),
+      addTo<ContextMenu, 'menus'>(oldSettings, payload, 'menus', o => o.id === payload?.id),
     removeContextMenu: (oldSettings, { payload }): SettingsSlice | void => {
       if (oldSettings.menus?.length) {
-        return removeFrom<ContextMenu, 'menus'>(oldSettings, 'menus', (o) => o.id !== payload);
+        return removeFrom<ContextMenu, 'menus'>(oldSettings, 'menus', o => o.id !== payload);
       }
     },
     resetContextMenu: (oldSettings): SettingsSlice =>
@@ -58,15 +61,15 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
         type: 'sync',
         payload: { menus: defaultSettings.menus },
       }),
-    saveTaskTab: (oldSettings, { payload }): SettingsSlice => addTo<TaskTab, 'tabs'>(oldSettings, payload, 'tabs', (o) => o.id === payload.id),
-    removeTaskTab: (oldSettings, { payload }): SettingsSlice => removeFrom<TaskTab, 'tabs'>(oldSettings, 'tabs', (o) => o.id !== payload),
+    saveTaskTab: (oldSettings, { payload }): SettingsSlice => addTo<TaskTab, 'tabs'>(oldSettings, payload, 'tabs', o => o.id === payload.id),
+    removeTaskTab: (oldSettings, { payload }): SettingsSlice => removeFrom<TaskTab, 'tabs'>(oldSettings, 'tabs', o => o.id !== payload),
     resetTaskTabs: (oldSettings): SettingsSlice =>
       syncReducer(oldSettings, {
         type: 'sync',
         payload: { tabs: defaultSettings.tabs },
       }),
-    saveQuickMenu: (oldSettings, { payload }): SettingsSlice => addTo<QuickMenu, 'quick'>(oldSettings, payload, 'quick', (o) => o.id === payload?.id),
-    removeQuickMenu: (oldSettings, { payload }): SettingsSlice => removeFrom<QuickMenu, 'quick'>(oldSettings, 'quick', (o) => o.id !== payload),
+    saveQuickMenu: (oldSettings, { payload }): SettingsSlice => addTo<QuickMenu, 'quick'>(oldSettings, payload, 'quick', o => o.id === payload?.id),
+    removeQuickMenu: (oldSettings, { payload }): SettingsSlice => removeFrom<QuickMenu, 'quick'>(oldSettings, 'quick', o => o.id !== payload),
     resetQuickMenus: (oldSettings): SettingsSlice =>
       syncReducer(oldSettings, {
         type: 'sync',

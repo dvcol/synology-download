@@ -1,18 +1,7 @@
-import { VariantType } from 'notistack';
+import { filter, map, Subject, tap } from 'rxjs';
 
-import { filter, map, Observable, Subject, tap } from 'rxjs';
-
-import {
-  ChromeMessageType,
-  ChromeNotification,
-  NotificationLevel,
-  NotificationLevelKeys,
-  NotificationType,
-  SnackMessage,
-  SnackNotification,
-  StoreOrProxy,
-  Task,
-} from '@src/models';
+import type { ChromeNotification, SnackMessage, SnackNotification, StoreOrProxy, Task } from '@src/models';
+import { ChromeMessageType, NotificationLevel, NotificationLevelKeys, NotificationType } from '@src/models';
 import { store$ } from '@src/store';
 import { setTasksCount } from '@src/store/actions';
 import {
@@ -25,13 +14,18 @@ import {
 } from '@src/store/selectors';
 import { bufferDebounceUnless, createNotification, onMessage, parseMagnetLink, sendMessage, useI18n as UseI18n } from '@src/utils';
 
+import type { VariantType } from 'notistack';
+import type { Observable } from 'rxjs';
+
 const i18n = UseI18n('common', 'notification');
 
 export class NotificationService {
   private static store: any | StoreOrProxy;
+
   private static isProxy: boolean;
 
   private static readonly notify$ = new Subject<ChromeNotification>();
+
   private static readonly error$ = new Subject<ChromeNotification>();
 
   private static readonly snack$ = new Subject<SnackMessage>();
@@ -46,8 +40,8 @@ export class NotificationService {
           return enabled && Number(priority) >= level;
         }),
         bufferDebounceUnless(200, 10),
-        map((n) => this.handleBannerNotification(n, title, message)),
-        tap((n) => n && createNotification(n))
+        map(n => this.handleBannerNotification(n, title, message)),
+        tap(n => n && createNotification(n)),
       );
 
   static init(store: StoreOrProxy, isProxy = false): void {
@@ -58,7 +52,7 @@ export class NotificationService {
       this.notify$.pipe(this.bufferStopStart('Notification')).subscribe();
       this.error$.pipe(this.bufferStopStart('Errors')).subscribe();
 
-      store$(this.store, getCount).subscribe((count) => this.store.dispatch(setTasksCount(count)));
+      store$(this.store, getCount).subscribe(count => this.store.dispatch(setTasksCount(count)));
 
       onMessage<ChromeNotification>([ChromeMessageType.notification]).subscribe(({ message: { payload }, sendResponse }) => {
         this.sendOrForward(payload);
@@ -74,7 +68,7 @@ export class NotificationService {
         const level = getNotificationsSnackLevel(this.store.getState());
         return enabled && Number(priority) >= level;
       }),
-      map((n) => this.handleSnackNotification(n))
+      map(n => this.handleSnackNotification(n)),
     );
   }
 
@@ -82,19 +76,23 @@ export class NotificationService {
     array: ChromeNotification[],
     listTitle: string,
     listMessage?: string,
-    listContextMessage?: string
+    listContextMessage?: string,
   ): ChromeNotification | undefined {
     if (array?.length === 1) {
       const { type, title, message, contextMessage, priority } = array[0];
       return { type, title, message, contextMessage, priority, iconUrl: 'assets/icons/icon-64.png' };
-    } else if (array?.length) {
+    }
+    if (array?.length) {
       return {
         type: 'list',
         title: Array.from(new Set(array?.map(({ title }) => title))).join(', ') ?? listTitle,
         message: listMessage ?? '',
         contextMessage: listContextMessage,
         iconUrl: 'assets/icons/icon-64.png',
-        items: array.map(({ message: mMessage }, i) => ({ title: `${i}`, message: mMessage?.slice(0, 30) + '...' ?? '' })),
+        items: array.map(({ message: mMessage }, i) => ({
+          title: `${i}`,
+          message: `${mMessage?.slice(0, 30)}...` ?? '',
+        })),
       };
     }
     return undefined;
@@ -102,7 +100,7 @@ export class NotificationService {
 
   private static handleSnackNotification(
     message: SnackMessage,
-    { timeout: autoHideDuration, position: anchorOrigin } = getNotificationsSnack(this.store.getState())
+    { timeout: autoHideDuration, position: anchorOrigin } = getNotificationsSnack(this.store.getState()),
   ): SnackNotification {
     let variant: VariantType = 'default';
     if (message?.priority === NotificationLevel.info) {
@@ -112,14 +110,17 @@ export class NotificationService {
     } else if (message?.priority === NotificationLevel.error) {
       variant = 'error';
     }
-    return { message, options: { autoHideDuration, anchorOrigin, variant, preventDuplicate: true, disableWindowBlurListener: true } };
+    return {
+      message,
+      options: { autoHideDuration, anchorOrigin, variant, preventDuplicate: true, disableWindowBlurListener: true },
+    };
   }
 
   private static sendOrForward(notification?: ChromeNotification) {
     if (notification && this.isProxy) {
       sendMessage<ChromeNotification>({ type: ChromeMessageType.notification, payload: notification }).subscribe();
     } else if (notification) {
-      (notification.priority ?? 0 > NotificationLevel.info ? this.error$ : this.notify$).next(notification);
+      (notification.priority ?? NotificationLevel.info < 0 ? this.error$ : this.notify$).next(notification);
     }
   }
 
@@ -173,7 +174,7 @@ export class NotificationService {
         message: `${i18n('title')}\xa0${parseMagnetLink(task?.title) ?? task.id}`,
         contextMessage: task.additional.detail.destination ? `${i18n('destination_folder')}\xa0${task.additional.detail.destination}` : undefined,
       },
-      NotificationType.banner
+      NotificationType.banner,
     );
   }
 
@@ -184,7 +185,7 @@ export class NotificationService {
         message: `${i18n('title')}\xa0${parseMagnetLink(task?.title) ?? task.id}`,
         contextMessage: task.status_extra?.error_detail ? `${i18n('error_message')}\xa0${task.status_extra.error_detail}` : undefined,
       },
-      NotificationType.banner
+      NotificationType.banner,
     );
   }
 

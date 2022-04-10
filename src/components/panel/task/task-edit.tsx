@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { lastValueFrom } from 'rxjs';
 
 import { FormExplorer } from '@src/components';
-import { Task } from '@src/models';
+import type { Task } from '@src/models';
 import { QueryService } from '@src/services';
 import { useI18n } from '@src/utils';
 
@@ -42,14 +42,14 @@ export const TaskEdit = ({
   });
 
   const onCancel = (data: TaskEditForm) => {
-    onFormCancel && onFormCancel(data);
+    onFormCancel?.(data);
     setState(false);
   };
 
   const onSubmit = (data: TaskEditForm) => {
     return lastValueFrom(QueryService.editTask(task?.id, data?.destination)).then(() => {
       reset(data);
-      onFormSubmit && onFormSubmit(data);
+      onFormSubmit?.(data);
       setState(false);
     });
   };

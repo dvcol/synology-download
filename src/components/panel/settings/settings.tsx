@@ -34,7 +34,10 @@ export const Settings = () => {
       label: SettingHeader.interface,
       links: [InterfaceHeader.global, InterfaceHeader.tabs, InterfaceHeader.quickMenu, InterfaceHeader.contextMenu],
     },
-    { label: SettingHeader.notification, links: [NotificationHeader.count, NotificationHeader.snack, NotificationHeader.banner] },
+    {
+      label: SettingHeader.notification,
+      links: [NotificationHeader.count, NotificationHeader.snack, NotificationHeader.banner],
+    },
   ];
 
   return (
@@ -59,7 +62,13 @@ export const Settings = () => {
               disableFocusRipple={true}
               component={Link}
               to={`${label}#${label}`}
-              sx={{ fontWeight: '700', fontSize: '0.75rem', backdropFilter: 'contrast(1.1)', whiteSpace: 'nowrap', minHeight: '3rem' }}
+              sx={{
+                fontWeight: '700',
+                fontSize: '0.75rem',
+                backdropFilter: 'contrast(1.1)',
+                whiteSpace: 'nowrap',
+                minHeight: '3rem',
+              }}
             />,
             ...(links?.map((l, j) => (
               <Tab

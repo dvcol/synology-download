@@ -1,5 +1,9 @@
-import { Box, LinearProgress, LinearProgressProps, Typography } from '@mui/material';
-import React, { FC } from 'react';
+import { Box, LinearProgress, Typography } from '@mui/material';
+
+import React from 'react';
+
+import type { LinearProgressProps } from '@mui/material';
+import type { FC } from 'react';
 
 export const ProgressBar: FC<{ props: LinearProgressProps; value: number; percentage?: boolean }> = ({ props, value, percentage }) => (
   <Box sx={{ display: 'flex', alignItems: 'center', minHeight: '18px' }}>

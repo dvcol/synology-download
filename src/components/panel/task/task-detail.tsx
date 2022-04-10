@@ -6,15 +6,16 @@ import { Button, Card, Grid, ListItem, ListItemText, Stack, Typography } from '@
 
 import React from 'react';
 
-import { Observable } from 'rxjs';
-
 import { ConfirmationDialog, IconLoader, ProgressBar } from '@src/components';
-import { computeProgress, formatBytes, Task, TaskStatus } from '@src/models';
+import type { Task } from '@src/models';
+import { computeProgress, formatBytes, TaskStatus } from '@src/models';
 import { QueryService } from '@src/services';
 
 import { useI18n } from '@src/utils';
 
 import { TaskEdit } from './task-edit';
+
+import type { Observable } from 'rxjs';
 
 export const TaskDetail = ({
   task,
@@ -32,7 +33,7 @@ export const TaskDetail = ({
   const [openEdit, setOpenEdit] = React.useState(false);
   const isDisabled = () => Object.values(loading).some(Boolean);
 
-  const createdTime = task.additional?.detail?.create_time ? new Date(task.additional?.detail?.create_time * 1000) : undefined;
+  const createdTime = task.additional?.detail?.create_time ? new Date(task.additional.detail.create_time * 1000) : undefined;
   const createdAt = createdTime
     ? `${createdTime.toLocaleDateString()} ${createdTime.toLocaleTimeString(navigator.language, {
         hour: '2-digit',
@@ -122,7 +123,10 @@ export const TaskDetail = ({
                       <span>{f.filename}</span>
                     </Grid>
                     <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                      {i18n({ key: 'downloaded', substitutions: [formatBytes(f.size_downloaded), formatBytes(f.size)] })}
+                      {i18n({
+                        key: 'downloaded',
+                        substitutions: [formatBytes(f.size_downloaded), formatBytes(f.size)],
+                      })}
                     </Grid>
                   </Grid>
                 }

@@ -1,4 +1,5 @@
-import { defaultSettings, SettingsSlice } from '@src/models';
+import type { SettingsSlice } from '@src/models';
+import { defaultSettings } from '@src/models';
 import { store } from '@src/store';
 import { setNavbar, syncSettings } from '@src/store/actions';
 import { settingsSlice } from '@src/store/slices';
@@ -8,7 +9,7 @@ import { restoreSate } from './state-handler';
 
 /** Restore extension settings */
 export const restoreSettings = () =>
-  syncGet<SettingsSlice>(settingsSlice.name).subscribe((settings) => {
+  syncGet<SettingsSlice>(settingsSlice.name).subscribe(settings => {
     console.debug('restoring settings from chrome storage', settings);
     // restore settings
     store.dispatch(syncSettings(settings));

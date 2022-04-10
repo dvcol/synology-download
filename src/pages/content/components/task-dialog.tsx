@@ -1,15 +1,17 @@
-import { PortalProps } from '@mui/base/Portal';
 import { Dialog, DialogContent } from '@mui/material';
 
-import React, { FC, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Subject, takeUntil } from 'rxjs';
 
 import { TaskAdd } from '@src/components';
-import { ChromeMessageType, ContextMenuOnClickPayload, TaskForm } from '@src/models';
+import type { ContextMenuOnClickPayload, TaskForm } from '@src/models';
+import { ChromeMessageType } from '@src/models';
+import { taskDialog$ } from '@src/pages/content/service/dialog.service';
 import { NotificationService, QueryService } from '@src/services';
 import { i18n, onMessage } from '@src/utils';
 
-import { taskDialog$ } from '../index';
+import type { PortalProps } from '@mui/base/Portal';
+import type { FC } from 'react';
 
 export const TaskDialog: FC<{ container?: PortalProps['container'] }> = ({ container }) => {
   const [form, setForm] = React.useState<TaskForm>();
@@ -50,7 +52,7 @@ export const TaskDialog: FC<{ container?: PortalProps['container'] }> = ({ conta
         sendResponse();
       });
     taskDialog$.pipe(takeUntil(abort$)).subscribe(({ open: _open, form: _form }) => {
-      _form && setForm(_form);
+      if (_form) setForm(_form);
       setOpen(true);
     });
     return () => {

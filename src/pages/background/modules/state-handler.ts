@@ -1,4 +1,5 @@
-import { ConnectionType, SettingsSlice, StateSlice } from '@src/models';
+import type { SettingsSlice, StateSlice } from '@src/models';
+import { ConnectionType } from '@src/models';
 import { QueryService } from '@src/services';
 import { stateSlice } from '@src/store/slices';
 import { localGet } from '@src/utils';
@@ -8,7 +9,7 @@ import { localGet } from '@src/utils';
  * @param settings restored setting slice
  */
 export const restoreSate = (settings: SettingsSlice) =>
-  localGet<StateSlice>(stateSlice.name).subscribe((state) => {
+  localGet<StateSlice>(stateSlice.name).subscribe(state => {
     console.debug('restoring state from chrome storage', state);
     // If service initialized & remember me && logged
     if (!QueryService.isReady || !settings?.connection?.autoLogin || !settings?.connection?.rememberMe) return;

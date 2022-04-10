@@ -1,7 +1,10 @@
-import { formatBytes, Task, TaskCount, TaskStatistics } from '@src/models';
+import type { Task, TaskCount, TaskStatistics } from '@src/models';
+import { formatBytes } from '@src/models';
 import { localSet, setBadgeText, setTitle } from '@src/utils';
 
-import { TasksReducers, tasksSlice } from '../slices';
+import { tasksSlice } from '../slices/tasks.slice';
+
+import type { TasksReducers } from '../slices/tasks.slice';
 
 export const setCountAndStats = (count?: TaskCount, stats?: TaskStatistics) => {
   // TODO : move to thunk ?
@@ -12,12 +15,16 @@ export const setCountAndStats = (count?: TaskCount, stats?: TaskStatistics) => {
     title = `Badge:  ${count.badge ?? 0} task${count.badge > 1 ? 's' : ''}`;
     title += `\nTotal:  ${count.badge ?? 0} task${count.badge > 1 ? 's' : ''}\n`;
 
-    Object.keys(count.tabs)?.forEach((tab) => (title += `\n${tab}: ${count.tabs[tab] ?? 0} task${count.tabs[tab] > 1 ? 's' : ''}`));
+    Object.keys(count.tabs)?.forEach(tab => {
+      title += `\n${tab}: ${count.tabs[tab] ?? 0} task${count.tabs[tab] > 1 ? 's' : ''}`;
+    });
   }
 
   if (stats) {
     if (title) title += '\n';
-    (Object.keys(stats) as (keyof TaskStatistics)[])?.forEach((key) => (title += `\n${key?.replaceAll('_', ' ')}: ${formatBytes(stats[key])}/s`));
+    (Object.keys(stats) as (keyof TaskStatistics)[])?.forEach(key => {
+      title += `\n${key?.replaceAll('_', ' ')}: ${formatBytes(stats[key])}/s`;
+    });
   }
 
   setBadgeText({ text }).then(() => console.debug('No count found'));

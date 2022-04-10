@@ -1,4 +1,4 @@
-import { FolderAcl, FolderOwner, FolderTime } from './folder.model';
+import type { FolderAcl, FolderOwner, FolderTime } from './folder.model';
 
 export interface FileList {
   total: number;

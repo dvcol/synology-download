@@ -1,16 +1,18 @@
 import { CssBaseline, ThemeProvider } from '@mui/material';
-import { Theme } from '@mui/material/styles/createTheme';
 
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import { StoreOrProxy } from '@src/models';
+import type { StoreOrProxy } from '@src/models';
 import { getTheme, subscribeToTheme } from '@src/themes';
 
 import { NotificationStack } from './common';
 import { Navbar } from './navbar/navbar';
 import { Panel } from './panel/panel';
+
+import type { Theme } from '@mui/material/styles/createTheme';
+import type { FC } from 'react';
 
 export const App: FC<{ store: StoreOrProxy; redirect?: string }> = ({ store, redirect }) => {
   const [theme, setTheme] = useState<Theme>(getTheme(store));

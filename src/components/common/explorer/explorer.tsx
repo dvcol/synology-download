@@ -3,15 +3,18 @@ import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import { TreeView } from '@mui/lab';
 import { Container } from '@mui/material';
 
-import React, { FC, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
-import { finalize, Observable, tap } from 'rxjs';
+import { finalize, tap } from 'rxjs';
 
 import { ExplorerBreadCrumbs, ExplorerLeafAdd, ExplorerLoading } from '@src/components';
-import { File, FileList, Folder } from '@src/models';
+import type { File, FileList, Folder } from '@src/models';
 import { QueryService } from '@src/services';
 
 import { ExplorerLeaf } from './explorer-leaf';
+
+import type { FC } from 'react';
+import type { Observable } from 'rxjs';
 
 export type ExplorerProps = {
   collapseOnSelect?: boolean;
@@ -24,23 +27,30 @@ export type ExplorerProps = {
   editable?: boolean;
 };
 
-export type ExplorerEvent = { id?: string; path?: string; folder?: File | Folder };
+export type ExplorerEvent = {
+  id?: string;
+  path?: string;
+  folder?: File | Folder;
+};
 
 // TODO implement virtual scroll
 export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disabled, readonly, fileType, startPath, onChange, editable }) => {
   const [tree, setTree] = React.useState<Record<string, File[] | Folder[]>>({});
-  const [loading, setLoading] = React.useState<Record<string, boolean>>({ root: true });
+  const [loading, setLoading] = React.useState<Record<string, boolean>>({
+    root: true,
+  });
   const [selected, setSelected] = React.useState<string>('root');
   const [selectedPath, setSelectedPath] = React.useState<string | undefined>(startPath);
   const [expanded, setExpanded] = React.useState<string[]>([]);
   const [crumbs, setCrumbs] = React.useState<string[]>([]);
 
   useEffect(() => {
-    QueryService.isLoggedIn &&
-      QueryService.listFolders(readonly ?? true).subscribe((list) => {
+    if (QueryService.isLoggedIn) {
+      QueryService.listFolders(readonly ?? true).subscribe(list => {
         setTree({ root: list?.shares ?? [] });
-        setLoading((_loading) => ({ ..._loading, root: false }));
+        setLoading(_loading => ({ ..._loading, root: false }));
       });
+    }
   }, []);
 
   useEffect(() => {
@@ -56,7 +66,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
       tap((list: FileList) => setTree({ ...tree, [key]: list?.files ?? [] })),
       finalize(() => {
         setTimeout(() => setLoading({ ...loading, [key]: false }), 200);
-      })
+      }),
     );
   };
 
@@ -64,7 +74,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
     setSelected(id);
     setCrumbs(path);
     setSelectedPath(path.join('/'));
-    onChange && onChange({ id, path: path.join('/'), folder });
+    onChange?.({ id, path: path.join('/'), folder });
   };
 
   const selectNode = (nodeId: string) => {
@@ -75,7 +85,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
       const path = folder.path.split('/')?.slice(1);
 
       if (!flatten && collapseOnSelect) {
-        setExpanded([...expanded.filter((id) => nodeId.startsWith(id)), nodeId]);
+        setExpanded([...expanded.filter(id => nodeId.startsWith(id)), nodeId]);
       }
 
       if (!tree[nodeId] && flatten) {
@@ -92,7 +102,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
   const crumbSelect = (index?: number) => {
     if (index) {
       const ids = selected.split('-');
-      if (index < ids?.length - 1) {
+      if (index < (ids?.length ?? 0) - 1) {
         ids.pop();
         selectNode(ids.join('-'));
       }
@@ -104,12 +114,12 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
   };
 
   const spliceTree = (nodeId: string, newFolder?: Folder | File, oldFolder?: Partial<Folder | File>) => {
-    setTree((old) => {
+    setTree(old => {
       const _new = { ...old };
 
       // if renamed, remove children nodes and splice new folder
       if (oldFolder?.name) {
-        Object.keys(old)?.forEach((key) => {
+        Object.keys(old)?.forEach(key => {
           if (key.startsWith(nodeId)) delete _new[key];
         });
 

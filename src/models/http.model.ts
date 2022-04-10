@@ -1,5 +1,5 @@
 /** Allowed HTTP methods */
-import { URLSearchParams } from 'url';
+import type { URLSearchParams } from 'url';
 
 export enum HttpMethod {
   post = 'post',
@@ -23,7 +23,7 @@ export type HttpHeaders = Headers | string[][] | Record<string, string> | undefi
 
 export type HttpParameters = { [key: string]: string | string[] };
 
-/** Base Http request interface*/
+/** Base Http request interface */
 export interface BaseHttpRequest {
   url: string | URL | { path: string | URL; base: string | URL };
   method?: HttpMethod;

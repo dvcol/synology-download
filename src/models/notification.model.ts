@@ -1,4 +1,4 @@
-import { OptionsObject } from 'notistack';
+import type { OptionsObject } from 'notistack';
 
 import NotificationOptions = chrome.notifications.NotificationOptions;
 

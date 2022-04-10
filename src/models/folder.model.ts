@@ -1,4 +1,4 @@
-import { File } from '@src/models/file.model';
+import type { File } from '@src/models/file.model';
 
 export interface FolderList {
   total: number;
@@ -103,7 +103,7 @@ export interface FolderPermission {
 }
 
 export interface FolderPermissionAdvanced {
-  /**  If a non-administrator user can download files in this shared folder through SYNO.FileStation.Download API or not.*/
+  /**  If a non-administrator user can download files in this shared folder through SYNO.FileStation.Download API or not. */
   disable_download: boolean;
   /** If a non-administrator user can enumerate files in this shared folder though SYNO.FileStation.List API with list method or not. */
   disable_list: boolean;

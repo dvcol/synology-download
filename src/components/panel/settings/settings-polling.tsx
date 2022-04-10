@@ -2,15 +2,18 @@ import { Box, Button, Card, CardActions, CardContent, CardHeader, InputAdornment
 
 import React from 'react';
 
-import { RegisterOptions, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 import { useDispatch, useSelector } from 'react-redux';
 
 import { FormInput, FormSwitch } from '@src/components';
-import { ConnectionHeader, Polling } from '@src/models';
+import type { Polling } from '@src/models';
+import { ConnectionHeader } from '@src/models';
 import { syncPolling } from '@src/store/actions';
 import { getPolling } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
+
+import type { RegisterOptions } from 'react-hook-form';
 
 export const SettingsPolling = () => {
   const i18n = useI18n('panel', 'settings', 'polling');

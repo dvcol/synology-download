@@ -1,31 +1,45 @@
 {
   "root": true,
-  "parser": "@typescript-eslint/parser",
-  "plugins": ["react", "react-hooks", "@typescript-eslint", "prettier", "import", "jsx-a11y"],
+  "plugins": [
+    "react",
+    "react-hooks",
+    "@typescript-eslint",
+    "prettier",
+    "import",
+    "jsx-a11y",
+    "@dvcol/presets"
+  ],
   "extends": [
-    "react-app",
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
-    "plugin:@typescript-eslint/recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:prettier/recommended",
-    "plugin:jsx-a11y/recommended"
+    "plugin:@dvcol/presets/react"
   ],
   "globals": {
     "chrome": "readonly"
   },
+  "env": {
+    "webextensions": true
+  },
+  "parserOptions": {
+    "project": [
+      "tsconfig.json",
+      "tsconfig.test.json"
+    ]
+  },
   "rules": {
-    "prettier/prettier": "warn",
-    "@typescript-eslint/no-explicit-any": "off",
-    "import/no-cycle": 1,
     "import/order": [
       "error",
       {
         "alphabetize": {
           "order": "asc"
         },
-        "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "object", "type"],
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "type",
+          "object"
+        ],
         "newlines-between": "always-and-inside-groups",
         "pathGroups": [
           {
@@ -34,12 +48,11 @@
             "position": "before"
           }
         ],
-        "pathGroupsExcludedImportTypes": ["builtin"]
+        "pathGroupsExcludedImportTypes": [
+          "builtin"
+        ]
       }
     ],
     "react-hooks/exhaustive-deps": "off"
-  },
-  "env": {
-    "jest": true
   }
 }

@@ -16,5 +16,5 @@ export const useDebounceObservable = <T>(observer: (value: T) => void, threshold
     return () => sub.unsubscribe();
   }, [subject$, threshold]);
 
-  return [subject$, (v) => subject$.next(v)];
+  return [subject$, v => subject$.next(v)];
 };

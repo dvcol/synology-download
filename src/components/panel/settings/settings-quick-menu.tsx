@@ -7,7 +7,8 @@ import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { FormExplorer, FormInput, FormSwitch, MuiIcon } from '@src/components/common';
-import { MaterialIcon, MaterialIconMap, QuickMenu } from '@src/models';
+import type { QuickMenu } from '@src/models';
+import { MaterialIcon, MaterialIconMap } from '@src/models';
 import { removeQuickMenu, saveQuickMenu } from '@src/store/actions';
 import { useI18n } from '@src/utils';
 
@@ -78,7 +79,7 @@ export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
               sx: { flex: '1 0 8rem' },
             }}
           >
-            {Object.values(MaterialIcon).map((icon) => (
+            {Object.values(MaterialIcon).map(icon => (
               <MenuItem key={icon} value={icon}>
                 <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                   <ListItemIcon sx={{ alignItems: 'center', minWidth: '36px', pl: '8px' }}>
@@ -112,7 +113,11 @@ export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
         <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: '12rem' }}>
           <FormExplorer
             controllerProps={{ name: 'destination.path', control }}
-            explorerProps={{ flatten: true, disabled: !getValues()?.destination?.custom, startPath: menu?.destination?.path }}
+            explorerProps={{
+              flatten: true,
+              disabled: !getValues()?.destination?.custom,
+              startPath: menu?.destination?.path,
+            }}
           />
         </Card>
       </Collapse>

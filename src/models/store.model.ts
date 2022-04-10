@@ -1,11 +1,9 @@
-import { Store } from 'redux';
-
-import { Store as StoreProxy } from 'webext-redux';
-
-import { ContextMenu, QuickMenu } from './menu.model';
-import { Connection, Global, Notifications, Polling } from './settings.model';
-import { TaskTab } from './tab.model';
-import { Task, TaskCount, TaskStatistics } from './task.model';
+import type { ContextMenu, QuickMenu } from './menu.model';
+import type { Connection, Global, Notifications, Polling } from './settings.model';
+import type { TaskTab } from './tab.model';
+import type { Task, TaskCount, TaskStatistics } from './task.model';
+import type { Store } from 'redux';
+import type { Store as StoreProxy } from 'webext-redux';
 
 export interface StateSlice {
   logged: boolean;
@@ -26,6 +24,8 @@ export interface TasksSlice {
   count?: TaskCount;
   stats?: TaskStatistics;
 }
+
+export const SettingsSliceName = 'settings';
 
 export interface SettingsSlice {
   notifications: Notifications;

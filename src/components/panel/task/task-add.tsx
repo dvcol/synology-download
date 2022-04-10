@@ -1,15 +1,19 @@
-import { Box, Button, Card, CardActions, CardContent, CardHeader, CardProps, Grid, Stack } from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, CardHeader, Grid, Stack } from '@mui/material';
 
-import React, { FC, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 
 import { lastValueFrom, tap } from 'rxjs';
 
 import { FormExplorer, FormInput, FormSwitch } from '@src/components';
-import { TaskForm } from '@src/models';
+import type { TaskForm } from '@src/models';
 import { QueryService } from '@src/services';
 import { useI18n } from '@src/utils';
+
+import type { CardProps } from '@mui/material';
+import type { FC } from 'react';
+import type { SubmitHandler } from 'react-hook-form';
 
 export const TaskAdd: FC<{
   form?: TaskForm;
@@ -49,10 +53,10 @@ export const TaskAdd: FC<{
   }, []);
 
   const onCancel = (data: TaskForm = getValues()) => {
-    onFormCancel && onFormCancel(data);
+    onFormCancel?.(data);
   };
 
-  const onSubmit: SubmitHandler<TaskForm> = (data) => {
+  const onSubmit: SubmitHandler<TaskForm> = data => {
     const { uri, source, destination, username, password, unzip } = data;
 
     if (uri?.length) {
@@ -63,17 +67,16 @@ export const TaskAdd: FC<{
           destination?.custom ? destination?.path : undefined,
           username?.length ? username : undefined,
           password?.length ? password : undefined,
-          unzip?.length ? unzip : undefined
+          unzip?.length ? unzip : undefined,
         ).pipe(
           tap(() => {
             reset(data);
-            onFormSubmit && onFormSubmit(data);
-          })
-        )
+            onFormSubmit?.(data);
+          }),
+        ),
       );
-    } else {
-      return Promise.reject(i18n('url_required'));
     }
+    return Promise.reject(i18n('url_required'));
   };
 
   const onSubmitColor = () => {
@@ -149,7 +152,12 @@ export const TaskAdd: FC<{
             <Card sx={{ p: '8px', m: '8px 0', height: '320px' }}>
               <FormExplorer
                 controllerProps={{ name: 'destination.path', control }}
-                explorerProps={{ flatten: true, disabled: !getValues()?.destination?.custom, startPath: path, editable: true }}
+                explorerProps={{
+                  flatten: true,
+                  disabled: !getValues()?.destination?.custom,
+                  startPath: path,
+                  editable: true,
+                }}
               />
             </Card>
           </Grid>

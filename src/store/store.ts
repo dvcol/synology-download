@@ -1,11 +1,12 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-import { ReducersMapObject, Store } from 'redux';
 import { BehaviorSubject, distinctUntilChanged, finalize, map } from 'rxjs';
 
-import { RootSlice, StoreOrProxy } from '@src/models';
+import type { RootSlice, StoreOrProxy } from '@src/models';
 
 import { navbarSlice, settingsSlice, stateSlice, tasksSlice } from './slices';
+
+import type { ReducersMapObject, Store } from 'redux';
 
 const reducers: ReducersMapObject<RootSlice> = {
   [stateSlice.name]: stateSlice.reducer,

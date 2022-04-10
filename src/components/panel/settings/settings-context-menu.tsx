@@ -7,7 +7,8 @@ import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { FormExplorer, FormInput, FormSwitch } from '@src/components/common';
-import { ChromeMessageType, ContextMenu } from '@src/models';
+import type { ContextMenu } from '@src/models';
+import { ChromeMessageType } from '@src/models';
 import { removeContextMenu, saveContextMenu } from '@src/store/actions';
 import { sendMessage, useI18n } from '@src/utils';
 
@@ -88,7 +89,11 @@ export const SettingsContextMenu = ({ menu }: { menu: ContextMenu }) => {
         <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: '12rem' }}>
           <FormExplorer
             controllerProps={{ name: 'destination.path', control }}
-            explorerProps={{ flatten: true, disabled: !getValues()?.destination?.custom, startPath: menu?.destination?.path }}
+            explorerProps={{
+              flatten: true,
+              disabled: !getValues()?.destination?.custom,
+              startPath: menu?.destination?.path,
+            }}
           />
         </Card>
       </Collapse>

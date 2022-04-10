@@ -13,8 +13,9 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { ProgressBar } from '@src/components';
-import { computeEta, computeProgress, formatBytes, Global, Task, TaskStatus, taskStatusToColor } from '@src/models';
-import { StoreState } from '@src/store';
+import type { Global, Task } from '@src/models';
+import { computeEta, computeProgress, formatBytes, TaskStatus, taskStatusToColor } from '@src/models';
+import type { StoreState } from '@src/store';
 import { getGlobalTask } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
 

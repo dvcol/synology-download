@@ -1,22 +1,22 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-import { StoreState } from '../store';
+import type { StoreState } from '../store';
 
 export const getState = createSelector(
   (store: StoreState) => store,
-  (store) => store.state
+  store => store.state,
 );
 
-export const getModal = createSelector(getState, (state) => state.modal);
+export const getModal = createSelector(getState, state => state.modal);
 
-export const getPopup = createSelector(getModal, (modal) => modal?.popup);
+export const getPopup = createSelector(getModal, modal => modal?.popup);
 
-export const getOption = createSelector(getModal, (modal) => modal?.option);
+export const getOption = createSelector(getModal, modal => modal?.option);
 
-export const getLogged = createSelector(getState, (state) => state?.logged);
+export const getLogged = createSelector(getState, state => state?.logged);
 
-export const getSid = createSelector(getState, (state) => state?.sid);
+export const getSid = createSelector(getState, state => state?.sid);
 
 export const isModalOpen = createSelector(getPopup, getOption, (popup, option) => popup || option);
 
-export const getLoading = createSelector(getState, (state) => state.loading);
+export const getLoading = createSelector(getState, state => state.loading);

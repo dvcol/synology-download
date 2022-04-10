@@ -1,7 +1,8 @@
-import { Observable } from 'rxjs';
-
-import { ChromeMessageType, ContextMenu } from '@src/models';
+import type { ContextMenu } from '@src/models';
+import { ChromeMessageType } from '@src/models';
 import { buildContextMenu, onMessage, removeContextMenu, saveContextMenu } from '@src/utils';
+
+import type { Observable } from 'rxjs';
 
 /** Listen to context menu events to create/updates menus */
 export const onMessageEvents = () => {
@@ -13,7 +14,7 @@ export const onMessageEvents = () => {
         const handle = <T>(obs$: Observable<T>) =>
           obs$.subscribe({
             next: () => sendResponse({ success: true, payload }),
-            error: (error) => sendResponse({ success: false, error }),
+            error: error => sendResponse({ success: false, error }),
           });
 
         switch (type) {
@@ -29,8 +30,10 @@ export const onMessageEvents = () => {
           case ChromeMessageType.resetMenu:
             handle(buildContextMenu(payload as ContextMenu[]));
             break;
+          default:
+            console.error(`Message type '${type}' not supported`);
         }
       }
-    }
+    },
   );
 };

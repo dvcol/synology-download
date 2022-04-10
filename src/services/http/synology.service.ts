@@ -1,21 +1,12 @@
-import { catchError, map, Observable, of } from 'rxjs';
+import { catchError, map, of } from 'rxjs';
 
-import {
-  Api,
-  BaseHttpRequest,
-  ChromeMessageType,
-  Controller,
-  Endpoint,
-  HttpMethod,
-  HttpParameters,
-  HttpResponse,
-  SynologyError,
-  SynologyQueryArgs,
-  SynologyQueryPayload,
-} from '@src/models';
+import type { Api, BaseHttpRequest, Endpoint, HttpParameters, HttpResponse, SynologyQueryArgs, SynologyQueryPayload } from '@src/models';
+import { ChromeMessageType, Controller, HttpMethod, SynologyError } from '@src/models';
 import { onMessage, sendMessage, stringifyParams } from '@src/utils';
 
 import { BaseHttpService } from './base-http-service';
+
+import type { Observable } from 'rxjs';
 
 export class SynologyService extends BaseHttpService {
   protected sid?: string;
@@ -31,10 +22,10 @@ export class SynologyService extends BaseHttpService {
       if (payload?.id === name) {
         this.query(...(payload?.args ?? []))
           .pipe(
-            map((response) => ({ success: true, payload: response })),
-            catchError((error) => of({ success: false, error }))
+            map(response => ({ success: true, payload: response })),
+            catchError(error => of({ success: false, error })),
           )
-          .subscribe((response) => sendResponse(response));
+          .subscribe(response => sendResponse(response));
       }
     });
   }
@@ -76,14 +67,15 @@ export class SynologyService extends BaseHttpService {
     return (this.isProxy ? this.forward : this.query)
       .bind(this)<T>(method, params, version, api, endpoint, base)
       .pipe(
-        map((response) => {
+        map(response => {
           if (response?.success === true) {
             return response.data;
-          } else if (response?.success === false) {
+          }
+          if (response?.success === false) {
             throw new SynologyError(api, response?.error);
           }
           return response;
-        })
+        }),
       );
   }
 }

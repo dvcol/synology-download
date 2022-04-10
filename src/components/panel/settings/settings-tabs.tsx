@@ -5,8 +5,9 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { SettingsAccordion } from '@src/components';
-import { defaultTabs, InterfaceHeader, TaskTab } from '@src/models';
-import { StoreState } from '@src/store';
+import type { TaskTab } from '@src/models';
+import { defaultTabs, InterfaceHeader } from '@src/models';
+import type { StoreState } from '@src/store';
 import { resetTaskTabs, saveTaskTab } from '@src/store/actions';
 import { getTabs } from '@src/store/selectors';
 
@@ -27,7 +28,7 @@ export const SettingsTabs = () => {
     <SettingsAccordion
       title={InterfaceHeader.tabs}
       list={tabs}
-      summary={(t) => (
+      summary={t => (
         <>
           <Typography sx={{ width: '40%', flexShrink: 0, textTransform: 'capitalize' }}>{t.name}</Typography>
           <Typography
@@ -43,7 +44,7 @@ export const SettingsTabs = () => {
           </Typography>
         </>
       )}
-      detail={(t) => <SettingsTab tab={t} />}
+      detail={t => <SettingsTab tab={t} />}
       addNew={addNew}
       reset={reset}
     />
