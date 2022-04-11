@@ -9,7 +9,7 @@ concurrency:
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
 
 env:
   node_version: 16.x
@@ -31,7 +31,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.node_version }}
-          cache: 'npm'
+          cache: 'yarn'
 
       - name: Bump version
         run: |
@@ -42,10 +42,10 @@ jobs:
           message=$(git log -1 --pretty=format:"%s")
 
           # install standard-version
-          npm i -g standard-version
+          yarn add global standard-version
 
           # bump version
-          npm run version
+          yarn version
 
           # Save new version to env
           echo "new_version=$(jq -r .version package.json)" >> $GITHUB_ENV
@@ -71,7 +71,7 @@ jobs:
           # Stage the file, commit and push
           git status
           git diff --color -U0 | cat
-          git add package.json package-lock.json src/manifest.json
+          git add package.json yarn.lock src/manifest.json
           git commit -m "chore(version): Bumping version from '${{ env.old_version }}' to '${{ env.new_version }}'"
           git push origin
 
@@ -79,7 +79,7 @@ jobs:
         run: |
           old_tag="v${{ env.old_version }}-rc"
           new_tag="v${{ env.new_version }}-rc"
-        
+          
           # create new release candidate tag
           echo "New release candidate tag $new_tag"
           git tag "$new_tag"
