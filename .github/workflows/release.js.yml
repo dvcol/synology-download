@@ -49,7 +49,7 @@ jobs:
           cd ..
 
       - name: Generate Release changelog
-        run: npx extract-changelog-release --yes > RELEASE.md
+        run: yarn dlx -q extract-changelog-release > RELEASE.md
 
       - name: Push Release to github
         uses: softprops/action-gh-release@v1
@@ -65,4 +65,4 @@ jobs:
           CHROME_WEB_STORE_REFRESH_TOKEN: ${{ secrets.CHROME_WEB_STORE_REFRESH_TOKEN }}
         run: |
           # Uploadind zip to web store
-          npx --yes chrome-webstore-upload-cli upload --source build/synology-download.zip --extension-id "$CHROME_WEB_STORE_EXTENSION_ID" --client-id "$CHROME_WEB_STORE_CLIENT_ID" --client-secret "$CHROME_WEB_STORE_CLIENT_SECRET" --refresh-token "$CHROME_WEB_STORE_REFRESH_TOKEN"
+          yarn dlx -q chrome-webstore-upload-cli upload --source build/synology-download.zip --extension-id "$CHROME_WEB_STORE_EXTENSION_ID" --client-id "$CHROME_WEB_STORE_CLIENT_ID" --client-secret "$CHROME_WEB_STORE_CLIENT_SECRET" --refresh-token "$CHROME_WEB_STORE_REFRESH_TOKEN"
