@@ -15,11 +15,21 @@ A brief description of the issue.
 
 ### Affected part
 
+Which part of the application is impacted
+
+- [ ] General UI 
+- [ ] General Options/Settings
+- [ ] Connection settings
+- [ ] Task list
+- [ ] Notification
 - [ ] Pop-up
-- [ ] Options/Settings
 - [ ] Context-menu
 - [ ] Content-script (inside the page)
 - [ ] Overlay 
+
+### Screenshots or Mock up
+
+If possible provide a screenshot or a mock up of the issue.
 
 ### Steps to Reproduce the Issue
 
