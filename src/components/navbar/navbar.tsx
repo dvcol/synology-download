@@ -40,12 +40,12 @@ export const Navbar = () => {
           indicatorColor="primary"
           variant="scrollable"
           value={getValue()}
-          sx={{ height: '100%' }}
+          sx={{ height: '100%', flex: '1 1 auto' }}
           TabIndicatorProps={{ style: tab ? undefined : { display: 'none' } }}
         >
           {tabComponents}
         </Tabs>
-        <NavbarMenu label={<MenuIcon />} />
+        <NavbarMenu menuIcon={<MenuIcon />} />
       </Toolbar>
     </AppBar>
   );

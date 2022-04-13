@@ -1,0 +1,32 @@
+{
+  "common__model__navbar_button_type__add": {
+    "message": "add"
+  },
+  "common__model__navbar_button_type__refresh": {
+    "message": "refresh"
+  },
+  "common__model__navbar_button_type__resume": {
+    "message": "resume"
+  },
+  "common__model__navbar_button_type__pause": {
+    "message": "pause"
+  },
+  "common__model__navbar_button_type__remove": {
+    "message": "remove"
+  },
+  "common__model__navbar_button_type__clear": {
+    "message": "clear"
+  },
+  "common__model__navbar_button_type__configs": {
+    "message": "configs"
+  },
+  "common__model__navbar_button_type__settings": {
+    "message": "settings"
+  },
+  "common__model__navbar_button_type__open": {
+    "message": "open"
+  },
+  "common__model__navbar_button_type__about": {
+    "message": "about"
+  }
+}

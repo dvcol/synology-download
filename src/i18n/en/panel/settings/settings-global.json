@@ -5,7 +5,6 @@
   "panel__settings__global__subheader": {
     "message": "Global settings for various interface elements."
   },
-
   "panel__settings__global__theme_title": {
     "message": "Theme"
   },
@@ -15,7 +14,6 @@
   "panel__settings__global__theme_label": {
     "message": "Theme"
   },
-
   "panel__settings__global__actions_title": {
     "message": "Menu actions"
   },
@@ -25,14 +23,12 @@
   "panel__settings__global__actions_label": {
     "message": "Scope"
   },
-
   "panel__settings__global__loading_title": {
     "message": "Loading bar"
   },
   "panel__settings__global__loading_subheader": {
     "message": "Display a loading bar indicator while fetching data."
   },
-
   "panel__settings__global__loading_threshold_title": {
     "message": "Loading bar threshold"
   },
@@ -42,18 +38,22 @@
   "panel__settings__global__loading_threshold_label": {
     "message": "Threshold"
   },
-
   "panel__settings__global__task__progress_bar_title": {
     "message": "Task progress bar"
   },
   "panel__settings__global__task__progress_bar_subheader": {
     "message": "Display a progress bar indicator inside task cards."
   },
-
   "panel__settings__global__task__background_title": {
     "message": "Task background progress"
   },
   "panel__settings__global__task__background_subheader": {
     "message": "Display the progression of active download task in card background."
+  },
+  "panel__settings__global__navbar__buttons_title": {
+    "message": "Navbar buttons"
+  },
+  "panel__settings__global__navbar__buttons_subheader": {
+    "message": "Shortcut buttons to display in the navbar."
   }
 }

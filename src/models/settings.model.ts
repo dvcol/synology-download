@@ -1,3 +1,5 @@
+import { NavbarButtonType } from '@src/models/navbar.model';
+
 import { defaultContextMenu, defaultQuickMenu } from './menu.model';
 
 import { NotificationLevel } from './notification.model';
@@ -168,6 +170,7 @@ export interface Global {
     progressBar: boolean;
     background: boolean;
   };
+  navbar: { buttons: NavbarButtonType[] };
 }
 
 export const defaultGlobal = {
@@ -178,6 +181,7 @@ export const defaultGlobal = {
     progressBar: true,
     background: true,
   },
+  navbar: { buttons: [NavbarButtonType.Refresh, NavbarButtonType.Clear] },
 };
 
 export const defaultSettings: SettingsSlice = {

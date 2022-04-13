@@ -83,12 +83,4 @@ export const defaultTabs: TaskTab[] = [
     destination: { enabled: false },
     color: ColorLevel.warning,
   },
-  {
-    id: uuid(),
-    name: TabType.stopped,
-    template: TabType.stopped,
-    status: [TaskStatus.paused],
-    destination: { enabled: false },
-    color: ColorLevel.error,
-  },
 ];
