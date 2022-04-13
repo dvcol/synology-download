@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent, CardHeader, Collapse, InputAdornment, MenuItem, Stack } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CardHeader, Collapse, Grid, InputAdornment, MenuItem, Stack } from '@mui/material';
 
 import React from 'react';
 
@@ -6,9 +6,9 @@ import { useForm } from 'react-hook-form';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { FormInput, FormSwitch } from '@src/components';
+import { FormCheckbox, FormInput, FormSwitch } from '@src/components';
 import type { Global } from '@src/models';
-import { ActionScope, defaultGlobal, InterfaceHeader, ThemeMode } from '@src/models';
+import { ActionScope, defaultGlobal, InterfaceHeader, NavbarButtonType, ThemeMode } from '@src/models';
 import type { StoreState } from '@src/store';
 import { syncInterface } from '@src/store/actions';
 import { getGlobal } from '@src/store/selectors';
@@ -36,6 +36,7 @@ export const SettingsGlobal = () => {
         progressBar: true,
         background: true,
       },
+      navbar: state.navbar ?? defaultGlobal.navbar,
     },
   });
 
@@ -153,6 +154,31 @@ export const SettingsGlobal = () => {
           action={<FormSwitch controllerProps={{ name: 'task.background', control }} formControlLabelProps={{ label: '' }} />}
           sx={{ p: '0.5rem 0' }}
         />
+        <CardHeader
+          title={i18n('navbar__buttons_title')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheader={i18n('navbar__buttons_subheader')}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          sx={{ p: '0.5rem 0' }}
+        />
+        <Card sx={{ p: '0.5rem 1rem', m: '0.5rem 0' }}>
+          <Grid container spacing={1} columnSpacing={1}>
+            {Object.values(NavbarButtonType).map(t => (
+              <Grid item xs={4} lg={2} key={t}>
+                <Button disableTouchRipple={true} sx={{ p: '0 0 0 0.5rem' }}>
+                  <FormCheckbox
+                    controllerProps={{ name: 'navbar.buttons', control }}
+                    formControlLabelProps={{ label: i18n(t, 'common', 'model', 'navbar_button_type'), sx: { textTransform: 'capitalize' } }}
+                    checkboxProps={{
+                      multiple: true,
+                      value: t,
+                    }}
+                  />
+                </Button>
+              </Grid>
+            ))}
+          </Grid>
+        </Card>
       </CardContent>
 
       <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
