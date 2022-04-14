@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.14.0](https://github.com/dvcol/synology-download/compare/v1.13.4...v1.14.0) (2022-04-14)
+
+
+### Features
+
+* **popup:** adds optional navbar shortcut buttons. [#102](https://github.com/dvcol/synology-download/issues/102) ([6ccc39c](https://github.com/dvcol/synology-download/commit/6ccc39ced61aa4f3a6b9072b07f720ab81e8ad4f))
+
+
+### Bug Fixes
+
+* **build:** fixes typing following chrome types version bump ([59df047](https://github.com/dvcol/synology-download/commit/59df047137f040a7019edf730e5781a3181cb665))
+* **lint:** fixes cyclic import issues ([4862669](https://github.com/dvcol/synology-download/commit/4862669353bef4faec129d7aaaa85797bc123db4))
+* **tests:** fix tests (because of esm module breaking jest) ([31105c3](https://github.com/dvcol/synology-download/commit/31105c3456ecece158ea973ad5edb6f91cf7d8d9))
+
 ### [1.13.4](https://github.com/dvcol/synology-download/compare/v1.13.3...v1.13.4) (2022-03-25)
 
 
