@@ -1,8 +1,8 @@
 ---
-name: Bug report
-about: Report errors or unexpected issues
+name: Bug report 
+about: Report errors or unexpected issues 
 title: '[bug]: '
-labels: bug
+labels: bug 
 assignees: ''
 
 ---
@@ -17,7 +17,7 @@ A brief description of the issue.
 
 Which part of the application is impacted
 
-- [ ] General UI 
+- [ ] General UI
 - [ ] General Options/Settings
 - [ ] Connection settings
 - [ ] Task list
@@ -25,16 +25,16 @@ Which part of the application is impacted
 - [ ] Pop-up
 - [ ] Context-menu
 - [ ] Content-script (inside the page)
-- [ ] Overlay 
+- [ ] Overlay
 
 ### Screenshots or Mock up
 
-If possible provide a screenshot or a mock up of the issue.
+If possible provide a screenshot or a mock-up of the issue.
 
 ### Steps to Reproduce the Issue
 
-1. When i'm in the settings tabs and I click on the edit buttons
-2. The interfaces does something unexpected
+1. When I'm in the settings tabs, and I click on the edit buttons
+2. The interface does something unexpected
 3. And the application crashes
 
 ### Failure Logs

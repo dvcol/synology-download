@@ -1,8 +1,8 @@
 ---
-name: Feature request
-about: Suggest an improvement
+name: Feature request 
+about: Suggest an improvement 
 title: '[feature]: '
-labels: enhancement
+labels: enhancement 
 assignees: ''
 
 ---
@@ -11,13 +11,13 @@ assignees: ''
 
 ### Description
 
-A brief description of the derised functionality.
+A brief description of the proposed functionality.
 
 ### Affected part
 
 Which part of the application do you with to improve
 
-- [ ] General UI 
+- [ ] General UI
 - [ ] General Options/Settings
 - [ ] Connection settings
 - [ ] Task list
@@ -25,17 +25,16 @@ Which part of the application do you with to improve
 - [ ] Pop-up
 - [ ] Context-menu
 - [ ] Content-script (inside the page)
-- [ ] Overlay 
+- [ ] Overlay
 
 ### Screenshots or Mock up
 
-If possible provide a screenshot or a mock up of the desired functionality.
+If possible provide a screenshot or a mock-up of the desired functionality.
 
 ### Code example
 
 ```
-If you have a specific solution in mind, please document it here, or beter create a PR and link it to this issue.
+If you have a specific solution in mind, please document it here, or better create a PR and link it to this issue.
 ```
-
 
 <!-- If you are enjoying the extension, please leave a review in the extension store ! -->
