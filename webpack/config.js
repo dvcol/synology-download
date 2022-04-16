@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -11,7 +10,7 @@ const ASSET_PATH = process.env.ASSET_PATH || '/';
 
 const alias = {
   'react-dom': '@hot-loader/react-dom',
-  '@src': path.resolve(__dirname, 'src'),
+  '@src': path.resolve(__dirname, '../', 'src'),
 };
 
 const fileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'eot', 'otf', 'svg', 'ttf', 'woff', 'woff2'];
@@ -25,13 +24,13 @@ const options = {
     env: true,
   },
   entry: {
-    popup: path.join(__dirname, 'src', 'pages', 'popup'),
-    options: path.join(__dirname, 'src', 'pages', 'options'),
-    background: path.join(__dirname, 'src', 'pages', 'background'),
-    contentScript: path.join(__dirname, 'src', 'pages', 'content'),
+    popup: path.join(__dirname, '../', 'src', 'pages', 'popup'),
+    options: path.join(__dirname, '../', 'src', 'pages', 'options'),
+    background: path.join(__dirname, '../', 'src', 'pages', 'background'),
+    contentScript: path.join(__dirname, '../', 'src', 'pages', 'content'),
   },
   output: {
-    path: path.resolve(__dirname, 'build'),
+    path: path.resolve(__dirname, '../', 'build'),
     filename: '[name].bundle.js',
     publicPath: ASSET_PATH,
     clean: true,
@@ -58,7 +57,7 @@ const options = {
         ],
       },
       {
-        test: new RegExp('.(' + fileExtensions.join('|') + ')$'),
+        test: new RegExp(`.(${fileExtensions.join('|')})$`),
         loader: 'file-loader',
         options: {
           name: '[name].[ext]',
@@ -88,8 +87,8 @@ const options = {
     ],
   },
   resolve: {
-    alias: alias,
-    extensions: fileExtensions.map((extension) => '.' + extension).concat(['.js', '.jsx', '.ts', '.tsx', '.css', '.scss']),
+    alias,
+    extensions: fileExtensions.map(extension => `.${extension}`).concat(['.js', '.jsx', '.ts', '.tsx', '.css', '.scss']),
   },
   plugins: [
     new webpack.ProgressPlugin(),
@@ -99,21 +98,21 @@ const options = {
       patterns: [
         {
           from: 'src/manifest.json',
-          to: path.join(__dirname, 'build'),
+          to: path.join(__dirname, '../', 'build'),
           force: true,
           // generates the manifest file using the package.json information
-          transform: (content) =>
+          transform: content =>
             Buffer.from(
               JSON.stringify({
                 description: process.env.npm_package_description,
                 version: process.env.npm_package_version,
                 ...JSON.parse(content.toString()),
-              })
+              }),
             ),
         },
         {
           from: 'src/assets',
-          to: path.join(__dirname, 'build/assets'),
+          to: path.join(__dirname, '../', 'build/assets'),
           force: true,
         },
       ],
@@ -133,13 +132,13 @@ const options = {
       },
     }),
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'src', 'pages', 'options', 'index.html'),
+      template: path.join(__dirname, '../', 'src', 'pages', 'options', 'index.html'),
       filename: 'options.html',
       chunks: ['options'],
       cache: false,
     }),
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'src', 'pages', 'popup', 'index.html'),
+      template: path.join(__dirname, '../', 'src', 'pages', 'popup', 'index.html'),
       filename: 'popup.html',
       chunks: ['popup'],
       cache: false,

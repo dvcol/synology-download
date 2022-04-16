@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 // Do this as the first thing so that any code reading it knows the right env.
 process.env.BABEL_ENV = 'development';
 process.env.NODE_ENV = 'development';
@@ -9,14 +8,14 @@ const path = require('path');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 
-const config = require('../webpack.config');
+const config = require('./config');
 
 const env = {
   NODE_ENV: process.env.NODE_ENV || 'development',
   PORT: process.env.PORT || 3000,
 };
 
-for (const entryName in config.entry) {
+Object.keys(config.entry).forEach(entryName => {
   // do not hot reload content script
   if (entryName !== 'contentScript') {
     config.entry[entryName] = [
@@ -25,7 +24,7 @@ for (const entryName in config.entry) {
       config.entry[entryName],
     ];
   }
-}
+});
 
 config.plugins = [new webpack.HotModuleReplacementPlugin(), ...(config.plugins || [])];
 
@@ -50,7 +49,7 @@ const server = new WebpackDevServer(
     },
     allowedHosts: 'all',
   },
-  compiler
+  compiler,
 );
 
 if (process.env.NODE_ENV === 'development' && module.hot) {

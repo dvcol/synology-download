@@ -28,7 +28,9 @@
     }
   },
   "include": [
-    "src"
+    "src",
+    "webpack",
+    ".eslintrc.js"
   ],
   "exclude": [
     "**/*.spec.ts",

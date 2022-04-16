@@ -1,4 +1,4 @@
-import { Task } from '@src/models';
+import type { Task } from '@src/models';
 
 export const mockWaiting: Task = JSON.parse(
   '{\n' +
@@ -37,7 +37,7 @@ export const mockWaiting: Task = JSON.parse(
     '                                }\n' +
     '                            ]\n' +
     '                    }\n' +
-    '            }'
+    '            }',
 );
 
 export const mockDownloading: Task = JSON.parse(
@@ -69,7 +69,7 @@ export const mockDownloading: Task = JSON.parse(
     '                        "speed_upload": "0"\n' +
     '                    }\n' +
     '            }\n' +
-    '    }'
+    '    }',
 );
 
 export const mockPaused: Task = JSON.parse(
@@ -91,7 +91,7 @@ export const mockPaused: Task = JSON.parse(
     '                        "speed_upload": "0"\n' +
     '                    }\n' +
     '            }\n' +
-    '    }'
+    '    }',
 );
 
 export const mockFinishing: Task = JSON.parse(
@@ -113,7 +113,7 @@ export const mockFinishing: Task = JSON.parse(
     '                        "speed_upload": "0"\n' +
     '                    }\n' +
     '            }\n' +
-    '    }'
+    '    }',
 );
 
 export const mockFinished: Task = JSON.parse(
@@ -135,7 +135,7 @@ export const mockFinished: Task = JSON.parse(
     '                        "speed_upload": "0"\n' +
     '                    }\n' +
     '            }\n' +
-    '    }'
+    '    }',
 );
 
 export const mockHash: Task = JSON.parse(
@@ -157,7 +157,7 @@ export const mockHash: Task = JSON.parse(
     '                        "speed_upload": "0"\n' +
     '                    }\n' +
     '            }\n' +
-    '    }'
+    '    }',
 );
 
 export const mockSeeding: Task = JSON.parse(
@@ -179,7 +179,7 @@ export const mockSeeding: Task = JSON.parse(
     '                        "speed_upload": "0"\n' +
     '                    }\n' +
     '            }\n' +
-    '    }'
+    '    }',
 );
 
 export const mockHostingWaiting: Task = JSON.parse(
@@ -201,7 +201,7 @@ export const mockHostingWaiting: Task = JSON.parse(
     '                        "speed_upload": "0"\n' +
     '                    }\n' +
     '            }\n' +
-    '    }'
+    '    }',
 );
 
 export const mockExtracting: Task = JSON.parse(
@@ -223,7 +223,7 @@ export const mockExtracting: Task = JSON.parse(
     '                        "speed_upload": "0"\n' +
     '                    }\n' +
     '            }\n' +
-    '    }'
+    '    }',
 );
 export const mockError: Task = JSON.parse(
   '{\n' +
@@ -244,7 +244,7 @@ export const mockError: Task = JSON.parse(
     '                        "speed_upload": "0"\n' +
     '                    }\n' +
     '            }\n' +
-    '    }'
+    '    }',
 );
 
 export const mockTasks: Task[] = [
@@ -295,7 +295,7 @@ export const mockTasks: Task[] = [
       '                        }\n' +
       '                    ]\n' +
       '            }\n' +
-      '    }'
+      '    }',
   ),
   JSON.parse(
     '{\n' +
@@ -319,7 +319,7 @@ export const mockTasks: Task[] = [
       '                        "uri": "http://mymovies.com/mv.avi"\n' +
       '                    }\n' +
       '            }\n' +
-      '    }'
+      '    }',
   ),
   JSON.parse(
     '{\n' +
@@ -340,7 +340,7 @@ export const mockTasks: Task[] = [
       '                        "speed_upload": "0"\n' +
       '                    }\n' +
       '            }\n' +
-      '    }'
+      '    }',
   ),
   JSON.parse(
     '{\n' +
@@ -351,7 +351,7 @@ export const mockTasks: Task[] = [
       '        "size": "654321",\n' +
       '        "status": "waiting",\n' +
       '        "status_extra": null\n' +
-      '    }'
+      '    }',
   ),
   JSON.parse(
     '{\n' +
@@ -362,6 +362,6 @@ export const mockTasks: Task[] = [
       '        "size": "654321",\n' +
       '        "status": "finished",\n' +
       '        "status_extra": null\n' +
-      '    }'
+      '    }',
   ),
 ];
