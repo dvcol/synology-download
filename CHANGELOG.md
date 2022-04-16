@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.2](https://github.com/dvcol/synology-download/compare/v1.14.0...v1.14.2) (2022-04-16)
+
 ## [1.14.0](https://github.com/dvcol/synology-download/compare/v1.13.4...v1.14.0) (2022-04-14)
 
 
