@@ -4,5 +4,5 @@ export const enum AppLinks {
   Privacy = 'https://github.com/dvcol/synology-download/blob/main/PRIVACY.md',
   Issues = 'https://github.com/dvcol/synology-download/issues',
   Github = 'https://github.com/dvcol/synology-download',
-  Paypal = 'https://paypal.me/synologydownload/5',
+  Paypal = 'https://paypal.me/dvcol/5',
 }

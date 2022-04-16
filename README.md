@@ -12,7 +12,7 @@
   <a href="https://github.com/dvcol/synology-download/blob/master/LICENSE" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/github/license/dvcol/synology-download" />
   </a>
- <a href="https://paypal.me/synologydownload/5" target="_blank">
+ <a href="https://paypal.me/dvcol/5" target="_blank">
     <img alt="donate" src="https://img.shields.io/badge/Donate%20€-PayPal-brightgreen.svg" />
   </a>
 </p>
@@ -42,13 +42,14 @@
 > * Browser notifications on task completion/error (conditional on polling behavior and extensions permissions)
 
 ## Limitation
+
 > Quick-connect login is not currently supported due to the lack of official API documentation.
-> 
+>
 > Currently, only magnet urls are supported for the quick action menu.
-> 
+>
 > Note that translation on previous version of Chrome (100 and below) might have only partial support in banner notifications.
 >
-> Due to MV3 current limitation, the service-worker is maintained awake through periodic messaging on active tab, if no tab is active in the past 5 minutes, service worker and associated functionalities might suspend until wake events. 
+> Due to MV3 current limitation, the service-worker is maintained awake through periodic messaging on active tab, if no tab is active in the past 5 minutes, service worker and associated functionalities might suspend until wake events.
 
 ## Prerequisites
 
@@ -74,6 +75,7 @@ To build for production
 ```sh
 npm run build
 ```
+
 See [package.json](https://github.com/dvcol/synology-download/blob/main/package.json) for other useful scripts.
 
 ## Run tests
@@ -94,7 +96,7 @@ Contributions, issues and feature requests are welcome!<br />Feel free to check 
 
 Give a ⭐️ if this project helped you!
 
- <a href="https://paypal.me/synologydownload/5" target="_blank">
+ <a href="https://paypal.me/dvcol/5" target="_blank">
     <img alt="donate" src="https://img.shields.io/badge/Donate%20€-PayPal-brightgreen.svg" />
   </a>
 
