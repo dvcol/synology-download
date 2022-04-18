@@ -1,6 +1,6 @@
 {
   "name": "@dvcol/synology-download",
-  "version": "1.14.3",
+  "version": "1.14.4",
   "private": true,
   "description": "A basic synology download station client chrome extension",
   "license": "MIT",
