@@ -1,8 +1,9 @@
+import { localGet } from '@dvcol/web-extension-utils';
+
 import type { SettingsSlice, StateSlice } from '@src/models';
 import { ConnectionType } from '@src/models';
 import { QueryService } from '@src/services';
 import { stateSlice } from '@src/store/slices/state.slice';
-import { localGet } from '@src/utils';
 
 /**
  * Restore Login state from settings

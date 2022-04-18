@@ -4,13 +4,15 @@ import React from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
+import { useI18n } from '@dvcol/web-extension-utils';
+
 import { SettingsAccordion, SettingsContextMenu } from '@src/components';
 import type { ContextMenu } from '@src/models';
 import { ChromeMessageType, defaultContextMenu, InterfaceHeader } from '@src/models';
 import type { StoreState } from '@src/store';
 import { resetContextMenu, saveContextMenu } from '@src/store/actions';
 import { getMenus } from '@src/store/selectors';
-import { sendMessage, useI18n } from '@src/utils';
+import { sendMessage } from '@src/utils';
 
 export const SettingsContextMenus = () => {
   const i18n = useI18n('panel', 'settings', 'context_menus');

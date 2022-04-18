@@ -12,12 +12,13 @@ import React from 'react';
 
 import { useSelector } from 'react-redux';
 
+import { useI18n } from '@dvcol/web-extension-utils';
+
 import { ProgressBar } from '@src/components';
 import type { Global, Task } from '@src/models';
 import { computeEta, computeProgress, formatBytes, TaskStatus, taskStatusToColor } from '@src/models';
 import type { StoreState } from '@src/store';
 import { getGlobalTask } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
 
 export const TaskCard = ({ task, statuses, expanded, visible }: { task: Task; statuses?: TaskStatus[]; expanded?: boolean; visible?: boolean }) => {
   const i18n = useI18n('panel', 'task', 'card');

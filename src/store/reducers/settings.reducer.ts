@@ -1,6 +1,8 @@
+import { syncGet, syncSet } from '@dvcol/web-extension-utils';
+
 import type { Connection, ContextMenu, Notifications, QuickMenu, SettingsSlice, TaskTab } from '@src/models';
 import { SettingsSliceName } from '@src/models';
-import { setBadgeBackgroundColor, syncGet, syncSet } from '@src/utils';
+import { setBadgeBackgroundColor } from '@src/utils';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
 

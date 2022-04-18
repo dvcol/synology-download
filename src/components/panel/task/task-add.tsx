@@ -6,10 +6,11 @@ import { useForm } from 'react-hook-form';
 
 import { lastValueFrom, tap } from 'rxjs';
 
+import { useI18n } from '@dvcol/web-extension-utils';
+
 import { FormExplorer, FormInput, FormSwitch } from '@src/components';
 import type { TaskForm } from '@src/models';
 import { QueryService } from '@src/services';
-import { useI18n } from '@src/utils';
 
 import type { CardProps } from '@mui/material';
 import type { FC } from 'react';

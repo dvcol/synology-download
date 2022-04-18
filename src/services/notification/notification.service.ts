@@ -1,5 +1,7 @@
 import { filter, map, Subject, tap } from 'rxjs';
 
+import { useI18n } from '@dvcol/web-extension-utils';
+
 import type { ChromeNotification, SnackMessage, SnackNotification, StoreOrProxy, Task } from '@src/models';
 import { ChromeMessageType, NotificationLevel, NotificationLevelKeys, NotificationType } from '@src/models';
 import { store$ } from '@src/store';
@@ -12,12 +14,13 @@ import {
   getNotificationsSnackEnabled,
   getNotificationsSnackLevel,
 } from '@src/store/selectors';
-import { bufferDebounceUnless, createNotification, onMessage, parseMagnetLink, sendMessage, useI18n as UseI18n } from '@src/utils';
+import { bufferDebounceUnless, createNotification, onMessage, parseMagnetLink, sendMessage } from '@src/utils';
 
 import type { VariantType } from 'notistack';
 import type { Observable } from 'rxjs';
 
-const i18n = UseI18n('common', 'notification');
+// eslint-disable-next-line react-hooks/rules-of-hooks
+const i18n = useI18n('common', 'notification');
 
 export class NotificationService {
   private static store: any | StoreOrProxy;

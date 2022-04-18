@@ -1,74 +1,47 @@
-import { EMPTY, forkJoin, Observable } from 'rxjs';
+import {
+  buildContextMenu as _buildContextMenu,
+  removeContextMenu as _removeContextMenu,
+  saveContextMenu as _saveContextMenu,
+} from '@dvcol/web-extension-utils';
 
 import type { ContextMenu, ContextMenuOnClickPayload } from '@src/models';
 import { ChromeMessageType } from '@src/models';
 import { sendTabMessage } from '@src/utils';
 
-import type { Subscriber } from 'rxjs';
+import type { Observable } from 'rxjs';
 
 import OnClickData = chrome.contextMenus.OnClickData;
 import Tab = chrome.tabs.Tab;
-import UpdateProperties = chrome.contextMenus.UpdateProperties;
-
-/**
- * Update an already creation context menu
- */
-const updateContextMenu = (id: string, updates: UpdateProperties, subscriber: Subscriber<void>) =>
-  chrome.contextMenus.update(id, updates, () => {
-    console.debug('Context menu updated');
-    subscriber.next();
-    subscriber.complete();
-  });
 
 /**
  * Add or update a context menu to chrome with the given options
  */
 export function saveContextMenu(menu: ContextMenu, update?: boolean): Observable<void> {
-  return new Observable<void>(subscriber => {
-    const { destination, modal, ...option } = menu;
-    const { id, ...updates } = option;
-
-    // On click instruct content.ts to open the modal
-    const onclick = (info: OnClickData, tab?: Tab) => {
-      if (info.menuItemId === option.id && tab?.id !== undefined) {
-        sendTabMessage<ContextMenuOnClickPayload>(tab.id, {
-          type: ChromeMessageType.popup,
-          payload: { info, menu },
-        }).subscribe();
-      }
-    };
-
-    if (update) {
-      updateContextMenu(id, { ...updates, onclick }, subscriber);
-    } else {
-      chrome.contextMenus.create({ ...option, enabled: true }, () => {
-        console.debug('Context menu created');
-        updateContextMenu(id, { ...updates, onclick }, subscriber);
-      });
-    }
-  });
+  // custom fields modal from menu for type casting
+  const { modal, destination, ...create } = menu;
+  return _saveContextMenu(
+    {
+      ...create,
+      onclick: (info: OnClickData, tab?: Tab) => {
+        if (info.menuItemId === menu.id && tab?.id !== undefined) {
+          sendTabMessage<ContextMenuOnClickPayload>(tab.id, {
+            type: ChromeMessageType.popup,
+            payload: { info, menu },
+          }).subscribe();
+        }
+      },
+    },
+    update,
+  );
 }
 
 /**
  * Remove context menu from chrome corresponding to the specified id
  */
-export function removeContextMenu(id: string): Observable<void> {
-  return new Observable<void>(subscriber => {
-    console.debug('removing context menu');
-    chrome.contextMenus.remove(id, () => {
-      console.debug('Context menu removed');
-      subscriber.next();
-      subscriber.complete();
-    });
-  });
-}
+export const removeContextMenu = _removeContextMenu;
 
 /**
  * Build context menu for the menu options given
  * @param options the options
  */
-export function buildContextMenu(options: ContextMenu[] | undefined): Observable<void | void[]> {
-  chrome.contextMenus.removeAll();
-  if (options?.length) return forkJoin(options.map(o => saveContextMenu(o)));
-  return EMPTY;
-}
+export const buildContextMenu = (options: ContextMenu[] | undefined) => _buildContextMenu(options, saveContextMenu);

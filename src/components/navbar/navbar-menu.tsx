@@ -16,13 +16,15 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
 
+import { useI18n } from '@dvcol/web-extension-utils';
+
 import { ConfirmationDialog } from '@src/components';
 import type { NavbarButton } from '@src/models';
 import { AppLinks, AppRoute, ErrorType, LoginError, NavbarButtonType } from '@src/models';
 import { NotificationService, QueryService } from '@src/services';
 import { setNavbar } from '@src/store/actions';
 import { getGlobalNavbarButton, getUrl } from '@src/store/selectors';
-import { createTab, useI18n } from '@src/utils';
+import { createTab } from '@src/utils';
 
 import NavbarMenuIcon from './navbar-menu-icon';
 

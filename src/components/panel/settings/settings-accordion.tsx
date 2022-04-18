@@ -7,8 +7,9 @@ import React from 'react';
 
 import { v4 as uuid } from 'uuid';
 
+import { useI18n } from '@dvcol/web-extension-utils';
+
 import type { InterfaceHeader } from '@src/models';
-import { useI18n } from '@src/utils';
 
 export const SettingsAccordion = <T extends { id: string }>({
   title,

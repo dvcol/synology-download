@@ -6,13 +6,14 @@ import { useForm } from 'react-hook-form';
 
 import { useDispatch, useSelector } from 'react-redux';
 
+import { useI18n } from '@dvcol/web-extension-utils';
+
 import { FormCheckbox, FormInput, FormSwitch } from '@src/components';
 import type { Global } from '@src/models';
 import { ActionScope, defaultGlobal, InterfaceHeader, NavbarButtonType, ThemeMode } from '@src/models';
 import type { StoreState } from '@src/store';
 import { syncInterface } from '@src/store/actions';
 import { getGlobal } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
 
 export const SettingsGlobal = () => {
   const i18n = useI18n('panel', 'settings', 'global');

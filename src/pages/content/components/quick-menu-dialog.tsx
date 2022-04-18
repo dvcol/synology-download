@@ -1,8 +1,9 @@
 import { ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
 
 import React, { useEffect } from 'react';
-
 import { useSelector } from 'react-redux';
+
+import { i18n } from '@dvcol/web-extension-utils';
 
 import { MuiIcon } from '@src/components';
 import type { QuickMenu, TaskForm } from '@src/models';
@@ -12,8 +13,6 @@ import { taskDialog$ } from '@src/pages/content/service/dialog.service';
 import { NotificationService, QueryService } from '@src/services';
 import type { StoreState } from '@src/store';
 import { getQuick } from '@src/store/selectors';
-
-import { i18n } from '@src/utils';
 
 import type { PortalProps } from '@mui/base/Portal';
 import type { PopoverProps } from '@mui/material/Popover';

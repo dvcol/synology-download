@@ -1,5 +1,6 @@
+import { localSet } from '@dvcol/web-extension-utils';
+
 import type { StateSlice } from '@src/models';
-import { localSet } from '@src/utils';
 
 import { stateSlice } from '../slices/state.slice';
 

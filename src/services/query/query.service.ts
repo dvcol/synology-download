@@ -1,5 +1,7 @@
 import { EMPTY, finalize, tap } from 'rxjs';
 
+import { useI18n } from '@dvcol/web-extension-utils';
+
 import type {
   CommonResponse,
   Credentials,
@@ -34,25 +36,20 @@ import {
   getTasksIdsByActionScope,
   getUrl,
 } from '@src/store/selectors';
-import { before, useI18n as UseI18n } from '@src/utils';
+import { before } from '@src/utils';
 
 import type { Observable } from 'rxjs';
 
-const i18n = UseI18n('common', 'error');
+// eslint-disable-next-line react-hooks/rules-of-hooks
+const i18n = useI18n('common', 'error');
 
 export class QueryService {
   private static store: any | StoreOrProxy;
-
   private static isProxy: boolean;
-
   private static infoClient: SynologyInfoService;
-
   private static authClient: SynologyAuthService;
-
   private static fileClient: SynologyFileService;
-
   private static downloadClient: SynologyDownloadService;
-
   private static baseUrl: string;
 
   static init(store: StoreOrProxy, isProxy = false) {

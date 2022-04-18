@@ -2,7 +2,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/
 
 import React, { useEffect } from 'react';
 
-import { useI18n } from '@src/utils';
+import { useI18n } from '@dvcol/web-extension-utils';
 
 export const ConfirmationDialog = ({
   open,

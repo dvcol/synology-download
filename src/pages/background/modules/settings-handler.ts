@@ -1,9 +1,11 @@
+import { syncGet } from '@dvcol/web-extension-utils';
+
 import type { SettingsSlice } from '@src/models';
 import { defaultSettings } from '@src/models';
 import { store } from '@src/store';
 import { setNavbar, syncSettings } from '@src/store/actions';
 import { settingsSlice } from '@src/store/slices/settings.slice';
-import { buildContextMenu, setBadgeBackgroundColor, syncGet } from '@src/utils';
+import { buildContextMenu, setBadgeBackgroundColor } from '@src/utils';
 
 import { restoreSate } from './state-handler';
 

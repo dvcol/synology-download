@@ -15,9 +15,8 @@
     "test:unit": "jest --watchAll=false --coverage ",
     "test:change": "yarn test:unit -- --onlyChanged",
     "prettier": "prettier --write '**/*.{js,jsx,ts,tsx,json,css,scss,md}'",
-    "eslint": "eslint --ext .js,.jsx,.ts,.tsx src",
-    "eslint:fix": "eslint --ext .js,.jsx,.ts,.tsx src --fix",
-    "changelog": "standard-version --skip.bump --skip.commit --skip.tag",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
+    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx src --fix",
     "version": "standard-version --skip.changelog --skip.commit --skip.tag",
     "release": "git tag -d $(git tag -l \"v*-rc\") && standard-version --skip.bump",
     "changelog": "extract-changelog-release > RELEASE.md"
@@ -29,6 +28,7 @@
   "packageManager": "yarn@3.2.0",
   "sideEffects": false,
   "dependencies": {
+    "@dvcol/web-extension-utils": "^1.0.3",
     "@emotion/cache": "^11.7.1",
     "@emotion/react": "^11.8.1",
     "@emotion/styled": "^11.8.1",
@@ -48,6 +48,7 @@
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.2",
     "react-router-hash-link": "^2.4.3",
+    "redux": "^4.1.2",
     "rxjs": "^7.5.4",
     "uuid": "^8.3.2",
     "webext-redux": "^2.1.9"
@@ -56,7 +57,7 @@
     "@babel/core": "^7.17.5",
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
-    "@dvcol/eslint-plugin-presets": "^1.1.0",
+    "@dvcol/eslint-plugin-presets": "^1.1.4",
     "@redux-devtools/extension": "^3.2.2",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.3",

@@ -6,12 +6,12 @@ import { Button, Card, Grid, ListItem, ListItemText, Stack, Typography } from '@
 
 import React from 'react';
 
+import { useI18n } from '@dvcol/web-extension-utils';
+
 import { ConfirmationDialog, IconLoader, ProgressBar } from '@src/components';
 import type { Task } from '@src/models';
 import { computeProgress, formatBytes, TaskStatus } from '@src/models';
 import { QueryService } from '@src/services';
-
-import { useI18n } from '@src/utils';
 
 import { TaskEdit } from './task-edit';
 

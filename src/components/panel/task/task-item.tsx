@@ -9,6 +9,8 @@ import { useSelector } from 'react-redux';
 
 import { finalize } from 'rxjs';
 
+import { useI18n } from '@dvcol/web-extension-utils';
+
 import type { ProgressBackgroundProps } from '@src/components';
 import { ConfirmationDialog, IconLoader, ProgressBackground } from '@src/components';
 import type { Global, Task } from '@src/models';
@@ -16,7 +18,7 @@ import { ColorLevelMap, computeProgress, ErrorType, LoginError, TaskStatus, task
 import { NotificationService, QueryService } from '@src/services';
 import type { StoreState } from '@src/store';
 import { getGlobalTask } from '@src/store/selectors';
-import { before, useDebounceObservable, useI18n } from '@src/utils';
+import { before, useDebounceObservable } from '@src/utils';
 
 import TaskCard from './task-card';
 import TaskDetail from './task-detail';

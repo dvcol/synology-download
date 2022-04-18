@@ -8,9 +8,11 @@ import { Button, Card, CardActions, CardContent, CardHeader, Chip, Stack, Typogr
 
 import React, { useEffect, useState } from 'react';
 
+import { getAcceptLanguages, useI18n } from '@dvcol/web-extension-utils';
+
 import manifest from '@src/manifest.json';
 import { AppLinks } from '@src/models';
-import { createTab, getAcceptLanguages, useI18n } from '@src/utils';
+import { createTab } from '@src/utils';
 
 import type { CardProps } from '@mui/material';
 import type { FC } from 'react';

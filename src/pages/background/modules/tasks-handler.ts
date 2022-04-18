@@ -1,8 +1,10 @@
+import { localGet } from '@dvcol/web-extension-utils';
+
 import type { TasksSlice } from '@src/models';
 import { store } from '@src/store';
 import { setTasks } from '@src/store/actions';
 import { tasksSlice } from '@src/store/slices/tasks.slice';
-import { localGet, parseJSON } from '@src/utils';
+import { parseJSON } from '@src/utils';
 
 /** Restore extension tasks list */
 export const restoreTasks = () =>

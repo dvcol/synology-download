@@ -6,11 +6,13 @@ import { Button, Stack, TextField, Tooltip, Typography } from '@mui/material';
 
 import React, { useState } from 'react';
 
+import { i18n } from '@dvcol/web-extension-utils';
+
 import type { File, Folder } from '@src/models';
 import { QueryService } from '@src/services';
-import { i18n } from '@src/utils';
 
 import type { ButtonProps } from '@mui/material';
+
 import type { InputProps as StandardInputProps } from '@mui/material/Input/Input';
 import type { FC } from 'react';
 

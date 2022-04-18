@@ -6,11 +6,12 @@ import { useForm } from 'react-hook-form';
 
 import { useDispatch } from 'react-redux';
 
+import { useI18n } from '@dvcol/web-extension-utils';
+
 import { FormExplorer, FormInput, FormSwitch, MuiIcon } from '@src/components/common';
 import type { QuickMenu } from '@src/models';
 import { MaterialIcon, MaterialIconMap } from '@src/models';
 import { removeQuickMenu, saveQuickMenu } from '@src/store/actions';
-import { useI18n } from '@src/utils';
 
 export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
   const i18n = useI18n('panel', 'settings', 'quick_menu');

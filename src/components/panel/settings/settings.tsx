@@ -6,6 +6,8 @@ import { Route, Routes } from 'react-router-dom';
 
 import { HashLink as Link } from 'react-router-hash-link';
 
+import { useI18n } from '@dvcol/web-extension-utils';
+
 import {
   SettingsBanner,
   SettingsContextMenus,
@@ -18,7 +20,6 @@ import {
 } from '@src/components';
 import { SettingsGlobal } from '@src/components/panel/settings/settings-global';
 import { ConnectionHeader, InterfaceHeader, NotificationHeader, SettingHeader } from '@src/models';
-import { useI18n } from '@src/utils';
 
 import { SettingsTabs } from './settings-tabs';
 

@@ -5,11 +5,12 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import { useI18n } from '@dvcol/web-extension-utils';
+
 import { TaskItem } from '@src/components';
 import { AppRoute } from '@src/models';
 import { setNavbar } from '@src/store/actions';
 import { getTabOrFirst, getTasksForActiveTab } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
 
 export const TaskPanel = () => {
   const i18n = useI18n('panel', 'task');

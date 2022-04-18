@@ -23,6 +23,11 @@ module.exports = {
         pathGroups: [
           {
             group: 'internal',
+            pattern: '@dvcol/**',
+            position: 'before',
+          },
+          {
+            group: 'internal',
             pattern: '@src/**',
             position: 'before',
           },

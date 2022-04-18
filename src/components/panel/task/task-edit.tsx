@@ -6,10 +6,11 @@ import { useForm } from 'react-hook-form';
 
 import { lastValueFrom } from 'rxjs';
 
+import { useI18n } from '@dvcol/web-extension-utils';
+
 import { FormExplorer } from '@src/components';
 import type { Task } from '@src/models';
 import { QueryService } from '@src/services';
-import { useI18n } from '@src/utils';
 
 type TaskEditForm = { id: string; destination: string };
 

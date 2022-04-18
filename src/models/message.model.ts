@@ -2,7 +2,6 @@ import type { ContextMenu } from './menu.model';
 import type { ChromeNotification } from './notification.model';
 import type { SynologyQueryPayload } from './synology.model';
 
-import MessageSender = chrome.runtime.MessageSender;
 import OnClickData = chrome.contextMenus.OnClickData;
 
 /**
@@ -44,17 +43,3 @@ export interface ChromeMessage<T extends ChromeMessagePayload = ChromeMessagePay
   type: ChromeMessageType;
   payload?: T;
 }
-
-/**
- * Message handler signature for Rxjs wrapping.
- */
-export type ChromeMessageHandler<M extends ChromeMessagePayload, R> = {
-  message: ChromeMessage<M>;
-  sender: MessageSender;
-  sendResponse: (response?: ChromeResponse<R>) => void;
-};
-
-/**
- * Response wrapper for payload proxy
- */
-export type ChromeResponse<T = any> = { success: boolean; payload?: T; error?: Error };

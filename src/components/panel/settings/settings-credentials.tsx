@@ -8,13 +8,15 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { finalize, lastValueFrom } from 'rxjs';
 
+import { useI18n } from '@dvcol/web-extension-utils';
+
 import { FormCheckbox, FormInput, FormSwitch } from '@src/components';
 import type { Connection, Credentials, InfoResponse, LoginResponse } from '@src/models';
 import { ColorLevel, ColorLevelMap, CommonAPI, ConnectionHeader, ConnectionType, defaultConnection, Protocol } from '@src/models';
 import { NotificationService, PollingService, QueryService } from '@src/services';
 import { syncConnection, syncRememberMe } from '@src/store/actions';
 import { getConnection, getLogged, urlReducer } from '@src/store/selectors';
-import { before, useDebounceObservable, useI18n } from '@src/utils';
+import { before, useDebounceObservable } from '@src/utils';
 
 import type { SwitchBaseProps } from '@mui/material/internal/SwitchBase';
 import type { RegisterOptions } from 'react-hook-form';

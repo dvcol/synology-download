@@ -6,10 +6,11 @@ import React, { useState } from 'react';
 
 import { Controller } from 'react-hook-form';
 
-import { useI18n } from '@src/utils';
+import { useI18n } from '@dvcol/web-extension-utils';
 
 import type { SvgIconProps, TextFieldProps } from '@mui/material';
 import type { ControllerProps } from 'react-hook-form';
+
 import type { FieldPath, FieldValues } from 'react-hook-form/dist/types';
 
 export const FormInput = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({

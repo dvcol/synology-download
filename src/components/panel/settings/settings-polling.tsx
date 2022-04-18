@@ -6,12 +6,13 @@ import { useForm } from 'react-hook-form';
 
 import { useDispatch, useSelector } from 'react-redux';
 
+import { useI18n } from '@dvcol/web-extension-utils';
+
 import { FormInput, FormSwitch } from '@src/components';
 import type { Polling } from '@src/models';
 import { ConnectionHeader } from '@src/models';
 import { syncPolling } from '@src/store/actions';
 import { getPolling } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
 
 import type { RegisterOptions } from 'react-hook-form';
 

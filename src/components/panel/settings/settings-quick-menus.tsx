@@ -4,13 +4,14 @@ import React from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
+import { useI18n } from '@dvcol/web-extension-utils';
+
 import { SettingsAccordion, SettingsQuickMenu } from '@src/components';
 import type { QuickMenu } from '@src/models';
 import { defaultQuickMenu, InterfaceHeader } from '@src/models';
 import type { StoreState } from '@src/store';
 import { resetQuickMenus, saveQuickMenu } from '@src/store/actions';
 import { getQuick } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
 
 export const SettingsQuickMenus = () => {
   const i18n = useI18n('panel', 'settings', 'quick_menus');
