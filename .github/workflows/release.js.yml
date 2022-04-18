@@ -49,7 +49,7 @@ jobs:
           cd ..
 
       - name: Generate Release changelog
-        run: yarn dlx -q extract-changelog-release > RELEASE.md
+        run: yarn changelog
 
       - name: Push Release to github
         uses: softprops/action-gh-release@v1
