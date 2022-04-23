@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  plugins: ['react', 'react-hooks', '@typescript-eslint', 'prettier', 'import', 'jsx-a11y', '@dvcol/presets'],
+  plugins: ['@dvcol/presets', 'import', 'react-hooks'],
   extends: ['plugin:@dvcol/presets/react'],
   globals: {
     chrome: 'readonly',
@@ -35,12 +35,12 @@ module.exports = {
         pathGroupsExcludedImportTypes: ['builtin'],
       },
     ],
-    'react-hooks/exhaustive-deps': 'off',
     'import/no-extraneous-dependencies': [
       'error',
       {
         packageDir: __dirname,
       },
     ],
+    'react-hooks/exhaustive-deps': 'off',
   },
 };
