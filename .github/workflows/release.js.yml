@@ -39,8 +39,6 @@ jobs:
           git config user.name "GitHub Release Bot"
           git config user.email "<>"
           
-          git tag -n
-          
           # generate release
           yarn release
 

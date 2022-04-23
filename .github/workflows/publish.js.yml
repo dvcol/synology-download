@@ -12,6 +12,7 @@ on:
     tags:
       # Ignore release candidates
       - 'v[0-9]+.[0-9]+.[0-9]+'
+
   workflow_dispatch:
     inputs:
       tagName:
@@ -66,7 +67,10 @@ jobs:
       - name: Fetch latest tag
         if: ${{ github.event_name == 'workflow_run' || (github.event_name == 'workflow_dispatch' && github.event.inputs.tagName == '') }}
         id: latest-tag
-        run: echo "::set-output name=TAG_NAME::$(git describe --abbrev=0)"
+        run: |
+          tag_name=$(git describe --abbrev=0)
+          echo "Tag found: '$tag_name'"
+          echo "::set-output name=TAG_NAME::$tag_name"
 
       - name: Push Release to github
         uses: softprops/action-gh-release@v1
