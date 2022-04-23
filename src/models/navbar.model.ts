@@ -1,3 +1,5 @@
+import type { IconButtonProps } from '@mui/material/IconButton/IconButton';
+
 import type { ForwardRefExoticComponent, MouseEventHandler } from 'react';
 
 export enum NavbarButtonType {
@@ -17,6 +19,7 @@ export interface NavbarButton {
   type: NavbarButtonType;
   label: string;
   icon: JSX.Element;
+  color?: IconButtonProps['color'];
   onClick?: MouseEventHandler;
   component?: ForwardRefExoticComponent<any>;
   to?: string;

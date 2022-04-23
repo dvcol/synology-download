@@ -2,7 +2,6 @@
   "navbar__menu__menu_add": {
     "message": "Add download task"
   },
-
   "navbar__menu__menu_clear": {
     "message": "Clear completed items"
   },
@@ -18,7 +17,6 @@
   "navbar__menu__menu_refresh": {
     "message": "Refresh all"
   },
-
   "navbar__menu__menu_settings": {
     "message": "Extension settings"
   },
@@ -31,8 +29,9 @@
   "navbar__menu__menu_about": {
     "message": "About"
   },
-
-
+  "navbar__menu__menu_login": {
+    "message": "Login"
+  },
   "navbar__menu__confirmation_title": {
     "message": "Please confirm"
   },

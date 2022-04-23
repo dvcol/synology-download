@@ -5,6 +5,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import LaunchIcon from '@mui/icons-material/Launch';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PowerOffIcon from '@mui/icons-material/PowerOff';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SettingsIcon from '@mui/icons-material/Settings';
 import TuneIcon from '@mui/icons-material/Tune';
@@ -23,7 +24,7 @@ import type { NavbarButton } from '@src/models';
 import { AppLinks, AppRoute, ErrorType, LoginError, NavbarButtonType } from '@src/models';
 import { NotificationService, QueryService } from '@src/services';
 import { setNavbar } from '@src/store/actions';
-import { getGlobalNavbarButton, getUrl } from '@src/store/selectors';
+import { getGlobalNavbarButton, getLogged, getUrl } from '@src/store/selectors';
 import { createTab } from '@src/utils';
 
 import NavbarMenuIcon from './navbar-menu-icon';
@@ -35,6 +36,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
   const dispatch = useDispatch();
   const url = useSelector(getUrl) + AppLinks.DownloadStation;
   const navbarButtons = useSelector(getGlobalNavbarButton);
+  const logged = useSelector(getLogged);
 
   const [anchorEl, setAnchorEl] = React.useState<null | Element>(null);
   const open = Boolean(anchorEl);
@@ -65,6 +67,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       type: NavbarButtonType.Add,
       label: i18n('menu_add'),
       icon: <AddLinkIcon />,
+      color: 'primary',
       component: Link,
       to: AppRoute.Add,
       onClick: handleClearTab,
@@ -79,19 +82,28 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       type: NavbarButtonType.Resume,
       label: i18n('menu_resume'),
       icon: <PlayArrowIcon />,
+      color: 'success',
       onClick: () => QueryService.resumeAllTasks().subscribe(handleError('resume')),
     },
     {
       type: NavbarButtonType.Pause,
       label: i18n('menu_pause'),
       icon: <PauseIcon />,
+      color: 'warning',
       onClick: () => QueryService.pauseAllTasks().subscribe(handleError('pause')),
     },
-    { type: NavbarButtonType.Remove, label: i18n('menu_remove'), icon: <DeleteSweepIcon />, onClick: () => setPrompt(true) },
+    {
+      type: NavbarButtonType.Remove,
+      label: i18n('menu_remove'),
+      icon: <DeleteSweepIcon />,
+      color: 'error',
+      onClick: () => setPrompt(true),
+    },
     {
       type: NavbarButtonType.Clear,
       label: i18n('menu_clear'),
       icon: <ClearAllIcon />,
+      color: 'secondary',
       onClick: () => QueryService.deleteFinishedTasks().subscribe(handleError('clear')),
     },
     {
@@ -125,6 +137,21 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
             </IconButton>
           </Tooltip>
         ))}
+
+      {!logged && (
+        <Tooltip title={i18n('menu_login')} key={'login'}>
+          <IconButton
+            id={`login-pinned`}
+            aria-controls={`login-pinned-button`}
+            color={'error'}
+            component={Link}
+            to={AppRoute.Settings}
+            onClick={handleClearTab}
+          >
+            <PowerOffIcon />
+          </IconButton>
+        </Tooltip>
+      )}
 
       <Tooltip title="Actions and Settings">
         <IconButton
