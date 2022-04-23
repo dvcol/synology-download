@@ -33,6 +33,6 @@ export class SynologyAuthService extends SynologyService {
 
   logout(): Observable<void> {
     const params: HttpParameters = { method: AuthMethod.logout, session: SessionName.DiskStation };
-    return this._do<void>(HttpMethod.PUT, params);
+    return this._do<void>(HttpMethod.POST, params);
   }
 }

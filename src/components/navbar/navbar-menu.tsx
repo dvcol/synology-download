@@ -103,13 +103,14 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       type: NavbarButtonType.Clear,
       label: i18n('menu_clear'),
       icon: <ClearAllIcon />,
-      color: 'secondary',
+      color: 'primary',
       onClick: () => QueryService.deleteFinishedTasks().subscribe(handleError('clear')),
     },
     {
       type: NavbarButtonType.Configs,
       label: i18n(`menu_configs`),
       icon: <SettingsIcon />,
+      color: 'primary',
       component: Link,
       to: AppRoute.Config,
       onClick: handleClearTab,
@@ -118,25 +119,35 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       type: NavbarButtonType.Settings,
       label: i18n('menu_settings'),
       icon: <TuneIcon />,
+      color: 'primary',
       component: Link,
       to: AppRoute.Settings,
       onClick: handleClearTab,
     },
-    { type: NavbarButtonType.Open, label: i18n('menu_open'), icon: <LaunchIcon />, onClick: handleUrl },
-    { type: NavbarButtonType.About, label: i18n('menu_about'), icon: <InfoIcon />, component: Link, to: AppRoute.About, onClick: handleClearTab },
+    { type: NavbarButtonType.Open, label: i18n('menu_open'), icon: <LaunchIcon />, color: 'primary', onClick: handleUrl },
+    {
+      type: NavbarButtonType.About,
+      label: i18n('menu_about'),
+      icon: <InfoIcon />,
+      color: 'primary',
+      component: Link,
+      to: AppRoute.About,
+      onClick: handleClearTab,
+    },
   ];
 
   return (
     <React.Fragment>
-      {buttons
-        ?.filter(({ type }) => navbarButtons?.includes(type))
-        ?.map(({ type, icon, label, ..._props }) => (
-          <Tooltip title={label} key={type}>
-            <IconButton id={`${type}-pinned`} aria-controls={`${type}-pinned-button`} {..._props}>
-              {icon}
-            </IconButton>
-          </Tooltip>
-        ))}
+      {logged &&
+        buttons
+          ?.filter(({ type }) => navbarButtons?.includes(type))
+          ?.map(({ type, icon, label, ..._props }) => (
+            <Tooltip title={label} key={type}>
+              <IconButton id={`${type}-pinned`} aria-controls={`${type}-pinned-button`} {..._props}>
+                {icon}
+              </IconButton>
+            </Tooltip>
+          ))}
 
       {!logged && (
         <Tooltip title={i18n('menu_login')} key={'login'}>
