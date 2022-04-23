@@ -19,7 +19,7 @@
     "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx src --fix",
     "version": "standard-version --skip.changelog --skip.commit --skip.tag",
     "release": "git tag -d $(git tag -l \"v*-rc\") && standard-version --skip.bump",
-    "changelog": "extract-changelog-release > RELEASE.md"
+    "release:changelog": "extract-changelog-release > RELEASE.md"
   },
   "engines": {
     "yarn": ">=3.2.0",

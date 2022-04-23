@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.14.2](https://github.com/dvcol/synology-download/compare/v1.14.0...v1.14.2) (2022-04-16)
 
+### Bug Fixes
+
+* **github:** : updates sponsor links
+
 ## [1.14.0](https://github.com/dvcol/synology-download/compare/v1.13.4...v1.14.0) (2022-04-14)
 
 

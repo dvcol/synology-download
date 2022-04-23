@@ -8,10 +8,7 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  push:
-    tags:
-      # Ignore release candidates
-      - 'v[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
 
 env:
   node_version: 16.x
@@ -24,6 +21,8 @@ jobs:
     steps:
       - name: Checkout branch ${{ github.ref }}
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js ${{ env.node_version }}
         uses: actions/setup-node@v3
@@ -34,35 +33,22 @@ jobs:
       - name: Clean install dependencies
         run: yarn install
 
-      - name: Build application
-        run: yarn build
-
-      - name: Zip build folder
+      - name: Release
         run: |
-          # Zipping build folder for artifact upload
-          cd build;
-          zip -r synology-download.zip *
+          # setup git creds
+          git config user.name "GitHub Release Bot"
+          git config user.email "<>"
           
-          # Check zip created
-          echo "Zip created in 'build/'"
-          ls -l  synology-download.zip
-          cd ..
+          git tag -n
+          
+          # generate release
+          yarn release
 
-      - name: Generate Release changelog
-        run: yarn changelog
-
-      - name: Push Release to github
-        uses: softprops/action-gh-release@v1
-        with:
-          body_path: RELEASE.md
-          files: build/synology-download.zip
-
-      - name: Publish to Chrome webstore
-        env:
-          CHROME_WEB_STORE_EXTENSION_ID: ebbdkledlkjpgbbmmopgbnnjmklnkcef
-          CHROME_WEB_STORE_CLIENT_ID: ${{ secrets.CHROME_WEB_STORE_CLIENT_ID }}
-          CHROME_WEB_STORE_CLIENT_SECRET: ${{ secrets.CHROME_WEB_STORE_CLIENT_SECRET }}
-          CHROME_WEB_STORE_REFRESH_TOKEN: ${{ secrets.CHROME_WEB_STORE_REFRESH_TOKEN }}
+      - name: Push to remote
         run: |
-          # Uploadind zip to web store
-          yarn dlx -q chrome-webstore-upload-cli upload --source build/synology-download.zip --extension-id "$CHROME_WEB_STORE_EXTENSION_ID" --client-id "$CHROME_WEB_STORE_CLIENT_ID" --client-secret "$CHROME_WEB_STORE_CLIENT_SECRET" --refresh-token "$CHROME_WEB_STORE_REFRESH_TOKEN"
+          # Check status
+          git status
+          git diff --color -U0 | cat
+          
+          # push changes
+          git push origin --follow-tags
