@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.5](https://github.com/dvcol/synology-download/compare/v1.14.2...v1.14.5) (2022-04-23)
+
+
+### Features
+
+* **navbar:** add color to navbar icon and add login button ([0ccdf9f](https://github.com/dvcol/synology-download/commit/0ccdf9fdedaca03fbb05834e19587062ff119b13))
+
+
+### Bug Fixes
+
+* **build:** fix lint config and build scripts ([2260fd7](https://github.com/dvcol/synology-download/commit/2260fd7b70448b1d57ea25686224144efbd3caca))
+* **login:** fix logout not working for newer versions of dsm ([e73907f](https://github.com/dvcol/synology-download/commit/e73907f8363b5ff82d9b4284500caf6b737a2bbb))
+
 ### [1.14.2](https://github.com/dvcol/synology-download/compare/v1.14.0...v1.14.2) (2022-04-16)
 
 ### Bug Fixes
