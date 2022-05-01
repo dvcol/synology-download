@@ -1,5 +1,8 @@
-import type { HttpParameters, LoginRequest, LoginResponse } from '@src/models';
-import { AuthMethod, CommonAPI, Endpoint, HttpMethod, SessionName } from '@src/models';
+import type { HttpParameters } from '@dvcol/web-extension-utils';
+import { HttpMethod } from '@dvcol/web-extension-utils';
+
+import type { LoginRequest, LoginResponse } from '@src/models';
+import { AuthMethod, CommonAPI, Endpoint, SessionName } from '@src/models';
 import { SynologyService } from '@src/services/http';
 
 import type { Observable } from 'rxjs';

@@ -1,13 +1,8 @@
-import type {
-  CommonResponse,
-  DownloadStationConfig,
-  DownloadStationInfo,
-  DownloadStationStatistic,
-  HttpParameters,
-  TaskList,
-  TaskListOption,
-} from '@src/models';
-import { Controller, DownloadStationAPI, Endpoint, HttpMethod, TaskMethod } from '@src/models';
+import type { HttpParameters } from '@dvcol/web-extension-utils';
+import { HttpMethod } from '@dvcol/web-extension-utils';
+
+import type { CommonResponse, DownloadStationConfig, DownloadStationInfo, DownloadStationStatistic, TaskList, TaskListOption } from '@src/models';
+import { Controller, DownloadStationAPI, Endpoint, TaskMethod } from '@src/models';
 import { SynologyService } from '@src/services/http';
 
 import type { Observable } from 'rxjs';

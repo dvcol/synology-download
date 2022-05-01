@@ -1,5 +1,8 @@
-import type { FileList, FileListOption, FileSortBy, FolderList, FolderListOption, FolderSortBy, HttpParameters, NewFolderList } from '@src/models';
-import { Endpoint, FileMethod, FileStationAPI, HttpMethod } from '@src/models';
+import type { HttpParameters } from '@dvcol/web-extension-utils';
+import { HttpMethod } from '@dvcol/web-extension-utils';
+
+import type { FileList, FileListOption, FileSortBy, FolderList, FolderListOption, FolderSortBy, NewFolderList } from '@src/models';
+import { Endpoint, FileMethod, FileStationAPI } from '@src/models';
 import { SynologyService } from '@src/services/http';
 
 import type { Observable } from 'rxjs';

@@ -1,7 +1,10 @@
 import { catchError, map, of } from 'rxjs';
 
-import type { Api, BaseHttpRequest, Endpoint, HttpParameters, HttpResponse, SynologyQueryArgs, SynologyQueryPayload } from '@src/models';
-import { ChromeMessageType, Controller, HttpMethod, SynologyError } from '@src/models';
+import type { BaseHttpRequest, HttpParameters } from '@dvcol/web-extension-utils';
+import { HttpMethod } from '@dvcol/web-extension-utils';
+
+import type { Api, Endpoint, HttpResponse, SynologyQueryArgs, SynologyQueryPayload } from '@src/models';
+import { ChromeMessageType, Controller, SynologyError } from '@src/models';
 import { onMessage, sendMessage, stringifyParams } from '@src/utils';
 
 import { BaseHttpService } from './base-http-service';
@@ -11,7 +14,7 @@ import type { Observable } from 'rxjs';
 export class SynologyService extends BaseHttpService {
   protected sid?: string;
 
-  constructor(protected isProxy = false, protected name: string = 'SynologyService', protected prefix = Controller.Common) {
+  constructor(protected isProxy = false, protected name = 'SynologyService', protected prefix = Controller.Common) {
     super(prefix);
 
     if (!isProxy) this.listen();

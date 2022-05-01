@@ -1,5 +1,6 @@
+import type { HttpMethod, HttpParameters } from '@dvcol/web-extension-utils';
+
 import type { ApiInfo } from './api-info.model';
-import type { HttpMethod, HttpParameters } from './http.model';
 
 export enum SessionName {
   DiskStation = 'DiskStation',

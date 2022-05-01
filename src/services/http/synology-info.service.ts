@@ -1,5 +1,8 @@
-import type { HttpParameters, InfoResponse } from '@src/models';
-import { CommonAPI, Endpoint, HttpMethod, InfoMethod } from '@src/models';
+import type { HttpParameters } from '@dvcol/web-extension-utils';
+import { HttpMethod } from '@dvcol/web-extension-utils';
+
+import type { InfoResponse } from '@src/models';
+import { CommonAPI, Endpoint, InfoMethod } from '@src/models';
 import { SynologyService } from '@src/services/http';
 
 import type { Observable } from 'rxjs';

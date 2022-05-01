@@ -1,6 +1,6 @@
 import { parse } from 'query-string';
 
-import type { HttpParameters } from '@src/models';
+import type { HttpParameters } from '@dvcol/web-extension-utils';
 
 import type { ParsedQuery } from 'query-string';
 
