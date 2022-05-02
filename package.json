@@ -4,6 +4,8 @@
   "author": "dvcol",
   "description": "A basic synology download station client chrome extension",
   "license": "MIT",
+  "homepage": "https://github.com/dvcol/synology-download",
+  "bugs": "https://github.com/dvcol/synology-download/issues",
   "repository": {
     "type": "git",
     "url": "https://github.com/dvcol/synology-download.git"
