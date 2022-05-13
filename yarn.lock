@@ -1845,7 +1845,7 @@ __metadata:
     "@reduxjs/toolkit": ^1.7.2
     "@testing-library/jest-dom": ^5.16.2
     "@testing-library/react": ^12.1.3
-    "@types/chrome": ^0.0.184
+    "@types/chrome": ^0.0.185
     "@types/jest": ^27.4.1
     "@types/react": ^17.0.39
     "@types/react-dom": ^17.0.13
@@ -2936,13 +2936,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/chrome@npm:^0.0.184":
-  version: 0.0.184
-  resolution: "@types/chrome@npm:0.0.184"
+"@types/chrome@npm:^0.0.185":
+  version: 0.0.185
+  resolution: "@types/chrome@npm:0.0.185"
   dependencies:
     "@types/filesystem": "*"
     "@types/har-format": "*"
-  checksum: fe4afa0b4dcedde029c75d2ba31f64e1a93b5ad499cdfb48cee4017c32277ac11a6b0bde121f63d9ff6b8a333dca4d6eb446504bc4a1cd84f23552c320f2d8b1
+  checksum: ecd633a07da2b832ce91bd6e851d8cae94abe41bb5fa0ad0eb1982eef102e0f7818bc681dfa96a23ac0ac2cbd037a5c0785a7637942375380f314f5118ed6fee
   languageName: node
   linkType: hard
 
@@ -13186,7 +13186,7 @@ __metadata:
 
 "typescript@patch:typescript@^4.4.3#~builtin<compat/typescript>, typescript@patch:typescript@^4.6.2#~builtin<compat/typescript>":
   version: 4.6.3
-  resolution: "typescript@patch:typescript@npm%3A4.6.3#~builtin<compat/typescript>::version=4.6.3&hash=bda367"
+  resolution: "typescript@patch:typescript@npm%3A4.6.3#~builtin<compat/typescript>::version=4.6.3&hash=7ad353"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
