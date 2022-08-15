@@ -55,12 +55,13 @@ export const SettingsCredentials = () => {
   const type = watch('type');
   const isQC = type === ConnectionType.quickConnect;
   const is2FA = type === ConnectionType.twoFactor;
+  const port = watch('port');
 
   const rules: Partial<Record<keyof Omit<Connection, 'logged' | 'rememberMe'>, RegisterOptions>> = {
     type: { required: true },
     protocol: { required: true },
     path: { required: true },
-    port: { required: !isQC, min: 1025, max: 65535 },
+    port: { required: !isQC, min: 0, max: 65535 },
     username: { required: true },
     password: { required: true },
     otp_code: { required: is2FA },
@@ -229,6 +230,11 @@ export const SettingsCredentials = () => {
           <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
             {i18n('quick_connect__no_auto_login')}
           </Typography>
+        </Collapse>
+        <Collapse in={port < 1025} unmountOnExit={true}>
+         <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
+            {i18n('quick_connect__port_min')}
+         </Typography>
         </Collapse>
         <Card component="form" sx={{ p: '0.5rem', '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">
           <Grid container direction={'row'} sx={{ alignItems: 'center' }}>
