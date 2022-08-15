@@ -231,10 +231,10 @@ export const SettingsCredentials = () => {
             {i18n('quick_connect__no_auto_login')}
           </Typography>
         </Collapse>
-        <Collapse in={port < 1025} unmountOnExit={true}>
-         <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
+        <Collapse in={!!port && port < 1025} unmountOnExit={true}>
+          <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
             {i18n('quick_connect__port_min')}
-         </Typography>
+          </Typography>
         </Collapse>
         <Card component="form" sx={{ p: '0.5rem', '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">
           <Grid container direction={'row'} sx={{ alignItems: 'center' }}>
