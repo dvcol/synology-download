@@ -27,7 +27,7 @@
     "yarn": ">=3.2.0",
     "node": ">=16.0.0"
   },
-  "packageManager": "yarn@3.2.2",
+  "packageManager": "yarn@3.2.3",
   "sideEffects": false,
   "dependencies": {
     "@dvcol/web-extension-utils": "^1.1.1",
