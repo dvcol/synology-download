@@ -23,7 +23,7 @@ import { ConnectionType, FileListOption, LoginError, NotReadyError, TaskListOpti
 import { NotificationService } from '@src/services';
 import { SynologyAuthService, SynologyDownloadService, SynologyFileService, SynologyInfoService } from '@src/services/http';
 import { store$ } from '@src/store';
-import { addLoading, removeLoading, setLogged, setSid, setTasks, setTaskStats, spliceTasks } from '@src/store/actions';
+import { addLoading, removeLoading, resetLoading, setLogged, setSid, setTasks, setTaskStats, spliceTasks } from '@src/store/actions';
 import {
   geTasksIdsByStatusType,
   getCredentials,
@@ -63,6 +63,8 @@ export class QueryService {
 
     store$(store, getUrl).subscribe(url => this.setBaseUrl(url));
     store$(store, getSid).subscribe(sid => this.setSid(sid));
+
+    this.store.dispatch(resetLoading());
   }
 
   static setBaseUrl(baseUrl: string): void {
