@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.6](https://github.com/dvcol/synology-download/compare/v1.14.5...v1.14.6) (2022-09-24)
+
+
+### Bug Fixes
+
+* **credentials:** fix minimum port number ([fe5791a](https://github.com/dvcol/synology-download/commit/fe5791a62351855c620fc43fff3057064f5f9069))
+* **i18n:** add warning for unprivileged ports ([1bfe3a2](https://github.com/dvcol/synology-download/commit/1bfe3a2c2c3eed837d323d2b3e4752d774450724))
+* **service:** reset loading bar on init ([fd3f51e](https://github.com/dvcol/synology-download/commit/fd3f51eabb4af01394d47e9872cc70675eb6894a))
+
 ### [1.14.5](https://github.com/dvcol/synology-download/compare/v1.14.2...v1.14.5) (2022-04-23)
 
 
