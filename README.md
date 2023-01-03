@@ -97,7 +97,17 @@ Give a ⭐️ if this project helped you!
 
  <a href="https://paypal.me/dvcol/5" target="_blank">
     <img alt="donate" src="https://img.shields.io/badge/Donate%20€-PayPal-brightgreen.svg" />
-  </a>
+ </a>
+  
+## Download
+
+* [Github Releases](https://github.com/dvcol/synology-download/releases)
+* [Download Station (client for Synology NAS)](https://chrome.google.com/webstore/detail/download-station-client-f/ebbdkledlkjpgbbmmopgbnnjmklnkcef)
+
+ <a href="https://chrome.google.com/webstore/detail/download-station-client-f/ebbdkledlkjpgbbmmopgbnnjmklnkcef" target="_blank">
+    <img alt="chrome-webstore" src="https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/mPGKYBIR2uCP0ApchDXE.png" />
+ </a>
+
 
 ## 📝 License
 
