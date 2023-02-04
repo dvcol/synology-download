@@ -1845,7 +1845,7 @@ __metadata:
     "@reduxjs/toolkit": ^1.7.2
     "@testing-library/jest-dom": ^5.16.2
     "@testing-library/react": ^12.1.3
-    "@types/chrome": ^0.0.211
+    "@types/chrome": ^0.0.212
     "@types/jest": ^27.4.1
     "@types/react": ^17.0.39
     "@types/react-dom": ^17.0.13
@@ -2936,13 +2936,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/chrome@npm:^0.0.211":
-  version: 0.0.211
-  resolution: "@types/chrome@npm:0.0.211"
+"@types/chrome@npm:^0.0.212":
+  version: 0.0.212
+  resolution: "@types/chrome@npm:0.0.212"
   dependencies:
     "@types/filesystem": "*"
     "@types/har-format": "*"
-  checksum: a3a35b1be0316953e466935ea33e3fd52323179eadafb793effff12f2e7753aee6fdf0d167b65a3b3ae66cab33c02ad2f3a545dac99f0e67452303d626724466
+  checksum: 0b6082e18b8dd42c51ec788fe761b61b1a0aa9bd6111bc52f2024387bb79e7bac11670498791192b7ab85cf19ed9fdf7038c7c05332db163d4d9b638690d7746
   languageName: node
   linkType: hard
 
