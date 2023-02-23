@@ -6,7 +6,6 @@
     "message": "Note that notification banners use and are subject to specific OS APIs."
   },
 
-
   "panel__settings__banner__level_title": {
     "message": "Notification level"
   },
@@ -16,7 +15,6 @@
   "panel__settings__banner__level_label": {
     "message": "Notification level"
   },
-
 
   "panel__settings__banner__background_title": {
     "message": "Background"

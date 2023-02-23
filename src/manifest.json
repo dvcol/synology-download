@@ -28,28 +28,15 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "contentScript.bundle.js"
-      ]
+      "matches": ["<all_urls>"],
+      "js": ["contentScript.bundle.js"]
     }
   ],
-  "permissions": [
-    "contextMenus",
-    "notifications",
-    "storage",
-    "tabs"
-  ],
+  "permissions": ["contextMenus", "notifications", "storage", "tabs"],
   "web_accessible_resources": [
     {
-      "resources": [
-        "*.html"
-      ],
-      "matches": [
-        "<all_urls>"
-      ]
+      "resources": ["*.html"],
+      "matches": ["<all_urls>"]
     }
   ],
   "content_security_policy": {
