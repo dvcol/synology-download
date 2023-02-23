@@ -1,24 +1,25 @@
 {
   "name": "@dvcol/synology-download",
   "version": "1.15.0",
-  "author": "dvcol",
+  "packageManager": "yarn@3.4.1",
   "description": "A basic synology download station client chrome extension",
   "license": "MIT",
+  "author": "dvcol",
   "homepage": "https://github.com/dvcol/synology-download",
   "bugs": "https://github.com/dvcol/synology-download/issues",
   "repository": {
     "type": "git",
     "url": "https://github.com/dvcol/synology-download.git"
   },
+  "sideEffects": false,
   "scripts": {
     "prepare": "husky install",
     "build": "node webpack/build.js",
     "start": "node webpack/webserver.js",
     "test:unit": "jest --watchAll=false --coverage ",
     "test:change": "yarn test:unit -- --onlyChanged",
-    "prettier": "prettier --write '**/*.{js,jsx,ts,tsx,json,css,scss,md}'",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
-    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx src --fix",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
     "version": "standard-version --skip.changelog --skip.commit --skip.tag",
     "release": "git tag -d $(git tag -l \"v*-rc\") && standard-version --skip.bump",
     "release:changelog": "extract-changelog-release > RELEASE.md"
@@ -27,8 +28,6 @@
     "yarn": ">=3.2.0",
     "node": ">=16.0.0"
   },
-  "packageManager": "yarn@3.4.1",
-  "sideEffects": false,
   "dependencies": {
     "@dvcol/web-extension-utils": "^1.1.1",
     "@emotion/cache": "^11.7.1",
@@ -91,6 +90,7 @@
     "html-webpack-plugin": "^5.5.0",
     "husky": "^7.0.4",
     "jest": "^27.5.1",
+    "lint-staged": "^13.1.2",
     "merge-jsons-webpack-plugin": "^2.0.1",
     "prettier": "^2.6.2",
     "sass": "^1.58.0",
@@ -105,5 +105,13 @@
     "webpack": "^5.69.1",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.7.4"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,vue,svelte,json,md}": [
+      "eslint --fix"
+    ],
+    "*.{css,scss,less,vue,svelte}": [
+      "stylelint --fix"
+    ]
   }
 }

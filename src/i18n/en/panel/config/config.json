@@ -16,7 +16,7 @@
     "message": "Settings changed successfully"
   },
   "panel__config__set_config__fail": {
-  "message": "Settings change failed"
+    "message": "Settings change failed"
   },
 
   "panel__config__bt_max_download__title": {
@@ -103,14 +103,6 @@
     "message": "If Auto unzip service is enabled for users except admin or administrators group"
   },
 
-  "panel__config__emule_enabled__title": {
-    "message": "eMule service"
-  },
-  "panel__config__emule_enabled__subheader": {
-    "message": "If eMule service is enabled"
-  },
-
-
   "panel__config__default_destination__title": {
     "message": "Default destination"
   },
@@ -125,4 +117,3 @@
     "message": "Default destination for new eMule download tasks."
   }
 }
-

@@ -9,7 +9,6 @@
     "message": "Menu name"
   },
 
-
   "panel__settings__quick_menu__icon_title": {
     "message": "Menu icon"
   },
@@ -19,7 +18,6 @@
   "panel__settings__quick_menu__icon_label": {
     "message": "Icon"
   },
-
 
   "panel__settings__quick_menu__modal_title": {
     "message": "Open full modal"

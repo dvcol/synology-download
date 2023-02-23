@@ -42,12 +42,12 @@
     "message": "Due to MV3 current limitation, the service-worker is maintained awake through periodic messaging on active tab, if no tab is active in the past 5 minutes, service worker and associated functionalities might suspend until wake events."
   },
 
-
   "panel__about__contribute_title": {
     "message": "Contribute"
-  }, "panel__about__contribute_body": {
-  "message": "If you wish to support the development of this application, you can contribute a small donation, leave a review in the webstore, contribute to the code base, report issues or or suggest new features on github with the help of the links below."
-},
+  },
+  "panel__about__contribute_body": {
+    "message": "If you wish to support the development of this application, you can contribute a small donation, leave a review in the webstore, contribute to the code base, report issues or or suggest new features on github with the help of the links below."
+  },
 
   "panel__about__button_donate": {
     "message": "donate"
