@@ -23,7 +23,7 @@ import { ConfirmationDialog } from '@src/components';
 import type { NavbarButton } from '@src/models';
 import { AppLinks, AppRoute, ErrorType, LoginError, NavbarButtonType } from '@src/models';
 import { NotificationService, QueryService } from '@src/services';
-import {resetTasks, setNavbar} from '@src/store/actions';
+import { resetTasks, setNavbar } from '@src/store/actions';
 import { getGlobalNavbarButton, getLogged, getUrl } from '@src/store/selectors';
 import { createTab } from '@src/utils';
 
@@ -76,8 +76,8 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       type: NavbarButtonType.Refresh,
       label: i18n('menu_refresh'),
       icon: <RefreshIcon />,
-      onClick: ($event) => {
-        if($event.shiftKey) dispatch(resetTasks())
+      onClick: $event => {
+        if ($event.shiftKey) dispatch(resetTasks());
         QueryService.listTasks().subscribe(handleError('refresh'));
       },
     },

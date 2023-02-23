@@ -34,7 +34,7 @@ export const ExplorerLeafAdd: FC<ExplorerLeafAddProps> = ({ nodeId, path, disabl
     <Stack direction="row" sx={{ flex: '1 1 auto' }}>
       {editing ? (
         <Stack direction="row" sx={{ flex: '1 1 auto', p: '0 0.5rem', alignItems: 'center' }}>
-          <CreateNewFolderOutlinedIcon sx={{ mr: '4px', ml: '-2px' }} />
+          <CreateNewFolderOutlinedIcon sx={{ mr: '0.25rem', ml: '-0.125rem' }} />
           <ExplorerLeafEdit
             folder={{ path }}
             isEditing={true}
@@ -48,7 +48,7 @@ export const ExplorerLeafAdd: FC<ExplorerLeafAddProps> = ({ nodeId, path, disabl
       ) : (
         <Button
           variant="text"
-          startIcon={<CreateNewFolderOutlinedIcon sx={{ ml: '2px', mr: '-4px' }} />}
+          startIcon={<CreateNewFolderOutlinedIcon sx={{ ml: '0.125rem', mr: '-0.25rem' }} />}
           sx={{
             height: '1.5rem',
             flex: '1 1 auto',

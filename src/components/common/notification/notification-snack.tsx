@@ -82,38 +82,38 @@ const SnackNotificationCardComponent: ForwardRefRenderFunction<HTMLDivElement, S
   }, [priority, success]);
 
   return (
-    <Card id={`${id}`} ref={ref} sx={{ width: '344px' }}>
+    <Card id={`${id}`} ref={ref} sx={{ width: '21.5rem' }}>
       <CardHeader
-        avatar={handleIcon({ sx: { fontSize: '18px' } })}
+        avatar={handleIcon({ sx: { fontSize: '1.125rem' } })}
         action={
           <Box sx={{ marginLeft: 'auto' }}>
             {(message || contextMessage) && (
               <ExpandMore expand={_expanded} onClick={handleExpandClick} aria-expanded={_expanded} aria-label="show more">
-                <ExpandMoreIcon sx={{ fontSize: '18px' }} />
+                <ExpandMoreIcon sx={{ fontSize: '1.125rem' }} />
               </ExpandMore>
             )}
             <IconButton onClick={handleDismiss}>
-              <CloseIcon sx={{ fontSize: '18px' }} />
+              <CloseIcon sx={{ fontSize: '1.125rem' }} />
             </IconButton>
           </Box>
         }
         title={<Box sx={{ overflowWrap: 'break-word', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</Box>}
         titleTypographyProps={{
           variant: 'subtitle2',
-          sx: { fontSize: '14px', overflow: 'hidden', width: '218px' },
+          sx: { fontSize: '0.875rem', overflow: 'hidden', width: '13.625rem' },
         }}
-        sx={{ padding: '8px 8px 8px 16px', bgcolor: handleColor() }}
+        sx={{ padding: '0.5rem 0.5rem 0.5rem 1rem', bgcolor: handleColor() }}
       />
       {(message || contextMessage) && (
         <Collapse in={_expanded} timeout="auto" unmountOnExit>
-          <CardContent sx={{ padding: '8px 8px 8px 16px !important', whiteSpace: 'pre-line' }}>
+          <CardContent sx={{ padding: '0.5rem 0.5rem 0.5rem 1rem !important', whiteSpace: 'pre-line' }}>
             {message && (
-              <Typography variant={'body2'} sx={{ fontSize: '12px', overflowWrap: 'break-word' }}>
+              <Typography variant={'body2'} sx={{ fontSize: '0.75rem', overflowWrap: 'break-word' }}>
                 {message}
               </Typography>
             )}
             {contextMessage && (
-              <Typography variant={'caption'} sx={{ fontSize: '10px', color: 'darkgrey', overflowWrap: 'break-word' }}>
+              <Typography variant={'caption'} sx={{ fontSize: '0.625rem', color: 'darkgrey', overflowWrap: 'break-word' }}>
                 {contextMessage}
               </Typography>
             )}

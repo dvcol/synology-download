@@ -1,0 +1,11 @@
+{
+  "common__model__interface_size__small": {
+    "message": "small"
+  },
+  "common__model__interface_size__normal": {
+    "message": "normal"
+  },
+  "common__model__interface_size__large": {
+    "message": "large"
+  }
+}

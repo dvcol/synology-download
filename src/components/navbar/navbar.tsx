@@ -32,16 +32,16 @@ export const Navbar = () => {
 
   const tabComponents = tabs?.map((taskTab, index) => <NavbarTab tab={taskTab} value={index} key={`${taskTab.id}-${index}`} />);
   return (
-    <AppBar color="inherit" position="sticky" sx={{ mt: '-2px' }}>
+    <AppBar color="inherit" position="sticky" sx={{ mt: '-0.125rem' }}>
       <LoadingBar />
-      <Toolbar disableGutters={true} sx={{ minHeight: 48, justifyContent: 'space-between' }}>
+      <Toolbar disableGutters={true} sx={{ minHeight: '3rem', justifyContent: 'space-between' }}>
         <Tabs
           aria-label={i18n('tabs_aria_label')}
           textColor="primary"
           indicatorColor="primary"
           variant="scrollable"
           value={getValue()}
-          sx={{ height: '100%', flex: '1 1 auto' }}
+          sx={{ height: '100%', minHeight: '3rem', flex: '1 1 auto' }}
           TabIndicatorProps={{ style: tab ? undefined : { display: 'none' } }}
         >
           {tabComponents}

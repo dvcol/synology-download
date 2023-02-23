@@ -90,35 +90,35 @@ export const TaskAdd: FC<{
       <CardHeader
         title={i18n('title')}
         subheader={i18n('subheader')}
-        titleTypographyProps={{ variant: 'h6', color: 'text.primary', fontSize: '16px' }}
-        subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '14px' }}
-        sx={{ p: '16px 16px 0', textTransform: 'capitalize' }}
+        titleTypographyProps={{ variant: 'h6', color: 'text.primary', fontSize: '1rem' }}
+        subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '0.875rem' }}
+        sx={{ p: '1rem 1rem 0', textTransform: 'capitalize' }}
       />
-      <CardContent sx={{ display: 'flex', flexDirection: 'row', p: '8px 16px 16px' }}>
+      <CardContent sx={{ display: 'flex', flexDirection: 'row', p: '0.5rem 1rem 1rem' }}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <CardHeader
               title={i18n('source_title')}
               subheader={i18n('source_subheader')}
-              titleTypographyProps={{ variant: 'subtitle2', fontSize: '14px' }}
-              subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '12px' }}
-              sx={{ p: '8px 0' }}
+              titleTypographyProps={{ variant: 'subtitle2', fontSize: '0.875rem' }}
+              subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '0.75rem' }}
+              sx={{ p: '0.5rem 0' }}
             />
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px', p: '8px 0' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1rem', p: '0.5rem 0' }}>
               <FormInput
                 controllerProps={{ name: 'uri', control, rules: { required: true, minLength: 1 } }}
                 textFieldProps={{
                   label: i18n('url_label'),
                   multiline: true,
                   rows: 4,
-                  inputProps: { style: { fontSize: '14px' } },
+                  inputProps: { style: { fontSize: '0.875rem' } },
                 }}
               />
               <FormInput
                 controllerProps={{ name: 'username', control }}
                 textFieldProps={{
                   label: i18n('username_label'),
-                  inputProps: { style: { fontSize: '14px' } },
+                  inputProps: { style: { fontSize: '0.875rem' } },
                 }}
               />
               <FormInput
@@ -126,18 +126,18 @@ export const TaskAdd: FC<{
                 textFieldProps={{
                   type: 'password',
                   label: i18n('ftp_password_label'),
-                  inputProps: { style: { fontSize: '14px' } },
+                  inputProps: { style: { fontSize: '0.875rem' } },
                 }}
-                iconProps={{ sx: { fontSize: '20px' } }}
+                iconProps={{ sx: { fontSize: '1.25rem' } }}
               />
               <FormInput
                 controllerProps={{ name: 'unzip', control }}
                 textFieldProps={{
                   type: 'password',
                   label: i18n('zip_password_label'),
-                  inputProps: { style: { fontSize: '14px' } },
+                  inputProps: { style: { fontSize: '0.875rem' } },
                 }}
-                iconProps={{ sx: { fontSize: '20px' } }}
+                iconProps={{ sx: { fontSize: '1.25rem' } }}
               />
             </Box>
           </Grid>
@@ -145,12 +145,12 @@ export const TaskAdd: FC<{
             <CardHeader
               title={i18n('destination_title')}
               subheader={i18n('destination_subheader')}
-              titleTypographyProps={{ variant: 'subtitle2', fontSize: '14px' }}
-              subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '12px' }}
+              titleTypographyProps={{ variant: 'subtitle2', fontSize: '0.875rem' }}
+              subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '0.75rem' }}
               action={<FormSwitch controllerProps={{ name: 'destination.custom', control }} formControlLabelProps={{ label: '' }} />}
-              sx={{ p: '8px 0' }}
+              sx={{ p: '0.5rem 0' }}
             />
-            <Card sx={{ p: '8px', m: '8px 0', height: '320px' }}>
+            <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: '31.25rem' }}>
               <FormExplorer
                 controllerProps={{ name: 'destination.path', control }}
                 explorerProps={{
@@ -164,17 +164,17 @@ export const TaskAdd: FC<{
           </Grid>
         </Grid>
       </CardContent>
-      <CardActions sx={{ justifyContent: 'flex-end', padding: '0 24px 24px' }}>
+      <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
         <Stack direction="row" spacing={2}>
           {withCancel && (
-            <Button variant="outlined" color={'secondary'} sx={{ width: '80px', fontSize: '12px' }} onClick={() => onCancel()}>
+            <Button variant="outlined" color={'secondary'} sx={{ width: '5rem', fontSize: '0.75rem' }} onClick={() => onCancel()}>
               {i18n('cancel', 'common', 'buttons')}
             </Button>
           )}
           <Button
             variant="outlined"
             color={onSubmitColor()}
-            sx={{ width: '80px', fontSize: '12px' }}
+            sx={{ width: '5rem', fontSize: '0.75rem' }}
             type="submit"
             disabled={!isValid || !QueryService.isLoggedIn}
             onClick={handleSubmit(onSubmit)}

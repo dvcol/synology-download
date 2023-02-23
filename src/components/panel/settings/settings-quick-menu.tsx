@@ -83,10 +83,10 @@ export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
             {Object.values(MaterialIcon).map(icon => (
               <MenuItem key={icon} value={icon}>
                 <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                  <ListItemIcon sx={{ alignItems: 'center', minWidth: '36px', pl: '8px' }}>
-                    <MuiIcon icon={icon} props={{ sx: { fontSize: '18px' } }} />
+                  <ListItemIcon sx={{ alignItems: 'center', minWidth: '2.25rem', pl: '0.5rem' }}>
+                    <MuiIcon icon={icon} props={{ sx: { fontSize: '1.125rem' } }} />
                   </ListItemIcon>
-                  <ListItemText primary={MaterialIconMap[icon]} primaryTypographyProps={{ sx: { fontSize: '12px' } }} />
+                  <ListItemText primary={MaterialIconMap[icon]} primaryTypographyProps={{ sx: { fontSize: '0.75rem' } }} />
                 </Box>
               </MenuItem>
             ))}

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
+import { SettingsInjector } from '@src/components/panel';
 import type { StoreOrProxy } from '@src/models';
 import { getTheme, subscribeToTheme } from '@src/themes';
 
@@ -27,6 +28,7 @@ export const App: FC<{ store: StoreOrProxy; redirect?: string }> = ({ store, red
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <NotificationStack maxSnack={2} />
+          <SettingsInjector />
           <Router>
             <CssBaseline />
             <Navbar />

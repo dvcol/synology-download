@@ -83,9 +83,9 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
       {menus?.map(m => (
         <MenuItem key={m.id} onClick={() => handleClick(m)}>
           <ListItemIcon>
-            <MuiIcon icon={m.icon ?? MaterialIcon.download} props={{ sx: { fontSize: '18px' } }} />
+            <MuiIcon icon={m.icon ?? MaterialIcon.download} props={{ sx: { fontSize: '1.125rem' } }} />
           </ListItemIcon>
-          <ListItemText primary={m.title} primaryTypographyProps={{ sx: { fontSize: '12px' } }} />
+          <ListItemText primary={m.title} primaryTypographyProps={{ sx: { fontSize: '0.75rem' } }} />
         </MenuItem>
       ))}
     </Menu>

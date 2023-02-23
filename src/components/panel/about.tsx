@@ -47,10 +47,10 @@ export const About: FC<{
           </Stack>
         }
         titleTypographyProps={{ variant: 'h5', color: 'text.primary' }}
-        subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '14px' }}
-        sx={{ p: '16px 16px 0', textTransform: 'capitalize' }}
+        subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '0.875rem' }}
+        sx={{ p: '1rem 1rem 0', textTransform: 'capitalize' }}
       />
-      <CardContent sx={{ display: 'flex', flexDirection: 'column', p: '8px 16px 16px' }}>
+      <CardContent sx={{ display: 'flex', flexDirection: 'column', p: '0.5rem 1rem 1rem' }}>
         <Typography gutterBottom variant="h5" component="div">
           {i18n('description_title')}
         </Typography>

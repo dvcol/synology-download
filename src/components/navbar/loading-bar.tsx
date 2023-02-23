@@ -30,7 +30,7 @@ export const LoadingBar = (props?: LinearProgressProps) => {
     <LinearProgress
       {...props}
       sx={{
-        height: '2px',
+        height: '0.125rem',
         transition: 'opacity 0.3s linear',
         opacity: show ? 1 : 0,
       }}

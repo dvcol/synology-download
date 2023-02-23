@@ -162,6 +162,12 @@ export enum ActionScope {
   tab = 'tab',
 }
 
+export enum InterfaceSize {
+  small = 0.8,
+  normal = 1,
+  large = 1.2,
+}
+
 export interface Global {
   theme: ThemeMode;
   actions: ActionScope;
@@ -171,6 +177,9 @@ export interface Global {
     background: boolean;
   };
   navbar: { buttons: NavbarButtonType[] };
+  interface: {
+    size: InterfaceSize | number;
+  };
 }
 
 export const defaultGlobal = {
@@ -182,6 +191,9 @@ export const defaultGlobal = {
     background: true,
   },
   navbar: { buttons: [NavbarButtonType.Refresh, NavbarButtonType.Clear] },
+  interface: {
+    size: InterfaceSize.normal,
+  },
 };
 
 export const defaultSettings: SettingsSlice = {

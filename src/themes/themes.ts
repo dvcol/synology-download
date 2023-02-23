@@ -9,11 +9,11 @@ const scrollbar: Record<string, any> = {
     height: '0.25rem',
   },
   '&::-webkit-scrollbar-track': {
-    boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+    boxShadow: 'inset 0 0 0.375rem rgba(0,0,0,0.00)',
   },
   '&::-webkit-scrollbar-thumb': {
     backgroundColor: 'rgb(150 150 150 / 50%)',
-    boxShadow: 'inset 0 0 6px rgba(0, 0, 0, 0.1)',
+    boxShadow: 'inset 0 0 0.375rem rgba(0, 0, 0, 0.1)',
     borderRadius: '0.5rem',
   },
 };
@@ -69,15 +69,26 @@ const common = {
     MuiToolbar: {
       styleOverrides: {
         root: {
-          '@media (min-width: 600px)': {
-            minHeight: 48,
+          '@media (min-width: 0rem)': {
+            minHeight: '3rem',
+          },
+          '@media (min-width: 37.5rem)': {
+            minHeight: '3rem',
           },
         },
+      },
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: { minHeight: '1rem' },
       },
     },
     MuiTab: {
       styleOverrides: {
         root: {
+          padding: '0.75rem 1rem',
+          minHeight: '1rem',
+          minWidth: '5rem',
           textTransform: 'capitalize' as Property.TextTransform,
         },
       },
@@ -131,7 +142,7 @@ const common = {
     MuiBreadcrumbs: {
       styleOverrides: {
         root: scrollbar,
-        ol: { flexFlow: 'nowrap', minHeight: '33px' },
+        ol: { flexFlow: 'nowrap', minHeight: '2.0625rem' },
       },
     },
     MuiTypography: {

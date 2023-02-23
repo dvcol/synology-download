@@ -39,17 +39,17 @@ export const TaskPanel = () => {
               flexDirection: 'column',
               alignItems: 'center',
               flex: '1 1 auto',
-              mb: '48px',
+              mb: '3rem',
             }}
           >
             <InfoOutlinedIcon sx={{ mb: '1rem', width: '3rem', height: '3rem' }} />
             <Box sx={{ mb: '0.25rem' }}>{i18n('no_task_found')}</Box>
             <Box sx={{ mb: '1rem' }}>{i18n('create_or_settings')}</Box>
             <Stack spacing={2} direction="row">
-              <Button variant="outlined" color="primary" component={Link} to={AppRoute.Add} sx={{ fontSize: '12px' }} onClick={clearTab}>
+              <Button variant="outlined" color="primary" component={Link} to={AppRoute.Add} sx={{ fontSize: '0.75rem' }} onClick={clearTab}>
                 {i18n('create_task')}
               </Button>
-              <Button variant="outlined" color="secondary" component={Link} to={AppRoute.Settings} sx={{ fontSize: '12px' }} onClick={clearTab}>
+              <Button variant="outlined" color="secondary" component={Link} to={AppRoute.Settings} sx={{ fontSize: '0.75rem' }} onClick={clearTab}>
                 {i18n('go_to_settings')}
               </Button>
             </Stack>

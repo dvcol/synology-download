@@ -54,12 +54,12 @@ export const getNotificationsBannerFinishedEnabled = createSelector(getNotificat
 
 export const getGlobal = createSelector(getSettings, setting => setting?.global);
 
-export const getGlobalLoading = createSelector(getGlobal, global => global?.loading);
+export const getGlobalLoading = createSelector(getGlobal, _global => _global?.loading);
 
-export const getActionScope = createSelector(getGlobal, global => global?.actions);
+export const getActionScope = createSelector(getGlobal, _global => _global?.actions);
 
-export const getThemeMode = createSelector(getGlobal, global => {
-  switch (global?.theme) {
+export const getThemeMode = createSelector(getGlobal, _global => {
+  switch (_global?.theme) {
     case ThemeMode.dark:
       return darkTheme;
     case ThemeMode.light:
@@ -67,10 +67,14 @@ export const getThemeMode = createSelector(getGlobal, global => {
     case ThemeMode.auto:
       return null;
     default:
-      console.error(`Theme ${global?.theme} not supported`);
+      console.error(`Theme ${_global?.theme} not supported`);
   }
 });
 
-export const getGlobalTask = createSelector(getGlobal, global => global?.task ?? defaultGlobal.task);
+export const getGlobalTask = createSelector(getGlobal, _global => _global?.task ?? defaultGlobal.task);
 
-export const getGlobalNavbarButton = createSelector(getGlobal, global => global?.navbar?.buttons ?? defaultGlobal.navbar?.buttons);
+export const getGlobalNavbarButton = createSelector(getGlobal, _global => _global?.navbar?.buttons ?? defaultGlobal.navbar?.buttons);
+
+export const getInterface = createSelector(getGlobal, _global => _global?.interface);
+
+export const getInterfaceSize = createSelector(getInterface, _interface => _interface?.size ?? defaultGlobal.interface?.size);

@@ -102,7 +102,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
               <span>
                 <Button
                   key="delete"
-                  sx={{ display: 'flex', flex: '1 1 auto', minHeight: '40px' }}
+                  sx={{ display: 'flex', flex: '1 1 auto', minHeight: '2.5rem' }}
                   disabled={isDisabled}
                   onClick={$event => {
                     $event.stopPropagation();
@@ -132,7 +132,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
                 <span>
                   <Button
                     key="pause"
-                    sx={{ display: 'flex', flex: '1 1 auto', minHeight: '40px' }}
+                    sx={{ display: 'flex', flex: '1 1 auto', minHeight: '2.5rem' }}
                     onClick={$event => onClick('pause', QueryService.pauseTask(task.id), $event)}
                     disabled={isDisabled}
                   >
@@ -145,7 +145,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
                 <span>
                   <Button
                     key="play"
-                    sx={{ display: 'flex', flex: '1 1 auto', minHeight: '40px' }}
+                    sx={{ display: 'flex', flex: '1 1 auto', minHeight: '2.5rem' }}
                     onClick={$event => onClick(playOrSeed, QueryService.resumeTask(task.id), $event)}
                     disabled={isDisabled || ![TaskStatus.paused, TaskStatus.finished, TaskStatus.error].includes(task.status)}
                   >
