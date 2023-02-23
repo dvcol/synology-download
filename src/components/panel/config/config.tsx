@@ -99,11 +99,11 @@ export const Config: FC<{
   };
 
   return (
-    <Container disableGutters sx={{ display: 'flex', flex: '1 1 auto', height: 'calc(100vh - 48px)', overflow: 'auto' }} maxWidth={false}>
+    <Container disableGutters sx={{ display: 'flex', flex: '1 1 auto', height: 'calc(100vh - 3rem)', overflow: 'auto' }} maxWidth={false}>
       <Card raised={true} {...cardProps} sx={{ ...cardProps?.sx, height: 'fit-content' }}>
         <LinearProgress
           sx={{
-            height: '2px',
+            height: '0.125rem',
             transition: 'opacity 0.3s linear',
             opacity: loadingBar ? 1 : 0,
           }}
@@ -121,11 +121,11 @@ export const Config: FC<{
               <Typography sx={{ mb: '0.5rem' }}>{i18n('subheader_line_2')}</Typography>
             </Box>
           }
-          titleTypographyProps={{ variant: 'h6', color: 'text.primary', fontSize: '16px' }}
-          subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '14px' }}
-          sx={{ p: '16px 16px 0', textTransform: 'capitalize' }}
+          titleTypographyProps={{ variant: 'h6', color: 'text.primary', fontSize: '1rem' }}
+          subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '0.875rem' }}
+          sx={{ p: '1rem 1rem 0', textTransform: 'capitalize' }}
         />
-        <CardContent sx={{ display: 'flex', flexDirection: 'column', p: '8px 16px 16px' }}>
+        <CardContent sx={{ display: 'flex', flexDirection: 'column', p: '0.5rem 1rem 1rem' }}>
           <CardHeader
             title={i18n('bt_max_download__title')}
             subheader={i18n('bt_max_download__subheader')}
@@ -322,12 +322,12 @@ export const Config: FC<{
             </Card>
           </Collapse>
         </CardContent>
-        <CardActions sx={{ justifyContent: 'flex-end', padding: '0 24px 24px' }}>
+        <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
           <Stack direction="row" spacing={2}>
             <Button
               variant="outlined"
               color={onSubmitColor()}
-              sx={{ width: '80px', fontSize: '12px' }}
+              sx={{ width: '5rem', fontSize: '0.75rem' }}
               type="submit"
               disabled={!isAdmin || !isValid || loading || !QueryService.isLoggedIn}
               onClick={handleSubmit(onSubmit)}

@@ -62,8 +62,8 @@ export const TaskCard = ({ task, statuses, expanded, visible }: { task: Task; st
 
   return (
     <ListItem sx={{ minWidth: '40rem', padding: '0.5rem 1rem' }} dense={true}>
-      <ListItemAvatar sx={{ minWidth: 66 }}>
-        <Avatar sx={{ width: 50, height: 50, bgcolor: avatarBgColor(task.status) }}>{statusIcon(task.status)}</Avatar>
+      <ListItemAvatar sx={{ minWidth: '4.125rem' }}>
+        <Avatar sx={{ width: '3.125rem', height: '3.125rem', bgcolor: avatarBgColor(task.status) }}>{statusIcon(task.status)}</Avatar>
       </ListItemAvatar>
       <ListItemText
         sx={{ maxWidth: '100vw', whiteSpace: 'nowrap' }}
@@ -71,7 +71,7 @@ export const TaskCard = ({ task, statuses, expanded, visible }: { task: Task; st
         primaryTypographyProps={{
           component: 'span',
           sx: {
-            maxWidth: expanded ? '100%' : 'calc(100vw - 136px)',
+            maxWidth: expanded ? '100%' : 'calc(100vw - 8.5rem)',
             display: '-webkit-box',
             WebkitLineClamp: expanded ? 'non' : '3',
             WebkitBoxOrient: 'vertical',

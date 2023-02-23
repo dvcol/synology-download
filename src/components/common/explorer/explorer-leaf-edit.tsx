@@ -93,7 +93,7 @@ export const ExplorerLeafEdit: FC<ExplorerLeafEditProps> = ({ folder, isEditing,
       ) : (
         <Typography sx={{ flex: '1 1 auto', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{folder?.name}</Typography>
       )}
-      <Stack direction="row" sx={{ marginRight: editing ? '-8px' : '-4px' }}>
+      <Stack direction="row" sx={{ marginRight: editing ? '-0.5rem' : '-0.25rem' }}>
         {!editing && !disabled && hover && (
           <Tooltip title={i18n('edit', 'common', 'buttons')}>
             <span>

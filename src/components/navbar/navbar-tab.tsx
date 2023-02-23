@@ -25,16 +25,17 @@ export const NavbarTab: FC<NavbarTabProps> = ({ tab, ...props }) => {
     'aria-controls': `simple-tab-panel-${name}`,
   });
   const StyledBadge = styled(Badge)<BadgeProps>(() => ({
-    '& .MuiBadge-badge': { right: -5 },
+    '& .MuiBadge-badge': { right: '-0.5rem', padding: '0 0.5rem', height: '1.25rem', minWidth: '1.25rem' },
   }));
   return (
     <Tab
       component={Link}
       to="/"
       onClick={() => dispatch(setNavbar(tab))}
+      sx={{ overflow: 'unset' }}
       {...props}
       label={
-        <StyledBadge sx={{ padding: '0 0.5rem' }} badgeContent={count} color={tab?.color || ColorLevel.primary}>
+        <StyledBadge badgeContent={count} color={tab?.color || ColorLevel.primary}>
           {tab?.name ?? ''}
         </StyledBadge>
       }

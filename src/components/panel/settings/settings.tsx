@@ -42,8 +42,8 @@ export const Settings = () => {
   ];
 
   return (
-    <Container disableGutters sx={{ display: 'flex', flex: '1 1 auto', height: 'calc(100vh - 48px)' }} maxWidth={false}>
-      <Paper elevation={1}>
+    <Container disableGutters sx={{ display: 'flex', flex: '1 1 auto', height: 'calc(100vh - 3rem)' }} maxWidth={false}>
+      <Paper elevation={1} sx={{ overflow: 'auto' }}>
         <Tabs
           orientation="vertical"
           selectionFollowsFocus={true}
@@ -51,7 +51,10 @@ export const Settings = () => {
           onChange={handleChange}
           sx={{
             flex: '1 1 auto',
-            '& .MuiTab-root': { alignItems: 'flex-start' },
+            '& .MuiTab-root': {
+              alignItems: 'flex-start',
+              minWidth: '9rem',
+            },
             overflow: 'auto',
           }}
         >

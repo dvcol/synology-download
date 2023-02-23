@@ -13,26 +13,26 @@ export const ExplorerBreadCrumbs = ({
   disabled?: boolean;
 }) => {
   return (
-    <Breadcrumbs aria-label="breadcrumb" maxItems={3} sx={{ mb: '2px', overflow: 'auto', fontSize: '14px' }}>
+    <Breadcrumbs aria-label="breadcrumb" maxItems={3} sx={{ mb: '0.125rem', overflow: 'auto', fontSize: '0.875rem' }}>
       <Button
         key={`home-${disabled}`}
         variant="text"
-        sx={{ textTransform: 'none', minWidth: '0', mr: '-4px', fontSize: '12px' }}
+        sx={{ textTransform: 'none', minWidth: '0', mr: '-0.25rem', fontSize: '0.75rem' }}
         onClick={$event => onClick && onClick($event, 0)}
         disabled={disabled}
       >
-        <HomeIcon sx={{ width: '15px', height: '15px', mb: '-2px' }} />
+        <HomeIcon sx={{ width: '0.9375rem', height: '0.9375rem', mb: '-0.125rem' }} />
       </Button>
       {crumbs?.map((folder, i) => (
         <Button
           key={`${i}-${disabled}`}
           variant="text"
-          startIcon={<FolderIcon sx={{ width: '15px', height: '15px', mb: '-2px', fontSize: '12px' }} />}
+          startIcon={<FolderIcon sx={{ width: '0.9375rem', height: '0.9375rem', mb: '-0.125rem', fontSize: '0.75rem' }} />}
           sx={{ textTransform: 'none' }}
           onClick={$event => onClick && onClick($event, i + 1)}
           disabled={disabled}
         >
-          <Typography component={'span'} sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '14px' }}>
+          <Typography component={'span'} sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '0.875rem' }}>
             {folder}
           </Typography>
         </Button>

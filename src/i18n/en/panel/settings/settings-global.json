@@ -20,6 +20,15 @@
   "panel__settings__global__actions_subheader": {
     "message": "Select the scope for the menu actions (clear, play, pause, ...)."
   },
+  "panel__settings__global__interface_size_title": {
+    "message": "Interface size"
+  },
+  "panel__settings__global__interface_size_subheader": {
+    "message": "Select the scaling of the interface (small, medium, large)."
+  },
+  "panel__settings__global__interface_size_label": {
+    "message": "Scaling"
+  },
   "panel__settings__global__actions_label": {
     "message": "Scope"
   },

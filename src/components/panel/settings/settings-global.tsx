@@ -10,7 +10,7 @@ import { useI18n } from '@dvcol/web-extension-utils';
 
 import { FormCheckbox, FormInput, FormSwitch } from '@src/components';
 import type { Global } from '@src/models';
-import { ActionScope, defaultGlobal, InterfaceHeader, NavbarButtonType, ThemeMode } from '@src/models';
+import { ActionScope, defaultGlobal, InterfaceHeader, InterfaceSize, NavbarButtonType, ThemeMode } from '@src/models';
 import type { StoreState } from '@src/store';
 import { syncInterface } from '@src/store/actions';
 import { getGlobal } from '@src/store/selectors';
@@ -38,6 +38,7 @@ export const SettingsGlobal = () => {
         background: true,
       },
       navbar: state.navbar ?? defaultGlobal.navbar,
+      interface: state.interface ?? defaultGlobal.interface,
     },
   });
 
@@ -81,6 +82,31 @@ export const SettingsGlobal = () => {
                   {i18n(theme, 'common', 'model', 'theme_mode')}
                 </MenuItem>
               ))}
+            </FormInput>
+          }
+          sx={{ p: '0.5rem 0' }}
+        />
+        <CardHeader
+          title={i18n('interface_size_title')}
+          subheader={i18n('interface_size_subheader')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          action={
+            <FormInput
+              controllerProps={{ name: 'interface.size', control }}
+              textFieldProps={{
+                select: true,
+                label: i18n('interface_size_label'),
+                sx: { flex: '0 0 10rem', textTransform: 'capitalize' },
+              }}
+            >
+              {Object.entries(InterfaceSize)
+                .filter(([key]) => Number.isNaN(+key))
+                .map(([key, size]) => (
+                  <MenuItem key={key} value={size} sx={{ textTransform: 'capitalize' }}>
+                    {i18n(key, 'common', 'model', 'interface_size')}
+                  </MenuItem>
+                ))}
             </FormInput>
           }
           sx={{ p: '0.5rem 0' }}

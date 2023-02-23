@@ -177,7 +177,7 @@ export const SettingsCredentials = () => {
     <Card raised={true}>
       <LinearProgress
         sx={{
-          height: '2px',
+          height: '0.125rem',
           transition: 'opacity 0.3s linear',
           opacity: loadingBar ? 1 : 0,
         }}
