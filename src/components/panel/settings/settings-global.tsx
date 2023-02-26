@@ -37,6 +37,10 @@ export const SettingsGlobal = () => {
         progressBar: true,
         background: true,
       },
+      download: state.download ?? {
+        progressBar: true,
+        background: true,
+      },
       navbar: state.navbar ?? defaultGlobal.navbar,
       interface: state.interface ?? defaultGlobal.interface,
     },
@@ -179,6 +183,22 @@ export const SettingsGlobal = () => {
           titleTypographyProps={{ variant: 'subtitle2' }}
           subheaderTypographyProps={{ variant: 'subtitle2' }}
           action={<FormSwitch controllerProps={{ name: 'task.background', control }} formControlLabelProps={{ label: '' }} />}
+          sx={{ p: '0.5rem 0' }}
+        />
+        <CardHeader
+          title={i18n('download__progress_bar_title')}
+          subheader={i18n('download__progress_bar_subheader')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          action={<FormSwitch controllerProps={{ name: 'download.progressBar', control }} formControlLabelProps={{ label: '' }} />}
+          sx={{ p: '0.5rem 0' }}
+        />
+        <CardHeader
+          title={i18n('download__background_title')}
+          subheader={i18n('download__background_subheader')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          action={<FormSwitch controllerProps={{ name: 'download.background', control }} formControlLabelProps={{ label: '' }} />}
           sx={{ p: '0.5rem 0' }}
         />
         <CardHeader

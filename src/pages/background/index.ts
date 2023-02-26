@@ -1,6 +1,6 @@
 import { wrapStore } from 'webext-redux';
 
-import { NotificationService, PollingService, QueryService } from '@src/services';
+import { DownloadService, NotificationService, PollingService, QueryService } from '@src/services';
 import { store } from '@src/store';
 
 import { onMessageEvents, portListener, restoreSettings, restoreTasks } from './modules';
@@ -15,6 +15,9 @@ onMessageEvents();
 
 // Wrap proxy store see https://github.com/tshaddix/webext-redux
 wrapStore(store);
+
+// Set store to download service
+DownloadService.init(store);
 
 // Set store to query service
 QueryService.init(store);

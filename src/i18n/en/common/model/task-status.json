@@ -1,0 +1,32 @@
+{
+  "common__model__task_status__downloading": {
+    "message": "Downloading"
+  },
+  "common__model__task_status__paused": {
+    "message": "Paused"
+  },
+  "common__model__task_status__error": {
+    "message": "Error"
+  },
+  "common__model__task_status__seeding": {
+    "message": "Seeding"
+  },
+  "common__model__task_status__waiting": {
+    "message": "Waiting"
+  },
+  "common__model__task_status__extracting": {
+    "message": "Extracting"
+  },
+  "common__model__task_status__finishing": {
+    "message": "Finishing"
+  },
+  "common__model__task_status__finished": {
+    "message": "Finished"
+  },
+  "common__model__task_status__hash_checking": {
+    "message": "Hash Checking"
+  },
+  "common__model__task_status__filehosting_waiting": {
+    "message": "Filehosting Waiting"
+  }
+}

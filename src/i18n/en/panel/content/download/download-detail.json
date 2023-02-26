@@ -1,0 +1,11 @@
+{
+  "panel__content__download__detail__url": {
+    "message": "Url"
+  },
+  "panel__content__download__detail__created": {
+    "message": "Created"
+  },
+  "panel__content__download__detail__referrer": {
+    "message": "Source"
+  }
+}

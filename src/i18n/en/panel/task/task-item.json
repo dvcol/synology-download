@@ -1,8 +1,0 @@
-{
-  "panel__task__item__confirmation_title": {
-    "message": "Please confirm"
-  },
-  "panel__task__item__confirmation_description": {
-    "message": "This action will permanently remove this task."
-  }
-}

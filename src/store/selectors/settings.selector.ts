@@ -73,6 +73,7 @@ export const getThemeMode = createSelector(getGlobal, _global => {
 
 export const getGlobalTask = createSelector(getGlobal, _global => _global?.task ?? defaultGlobal.task);
 
+export const getGlobalDownload = createSelector(getGlobal, _global => _global?.download ?? defaultGlobal.download);
 export const getGlobalNavbarButton = createSelector(getGlobal, _global => _global?.navbar?.buttons ?? defaultGlobal.navbar?.buttons);
 
 export const getInterface = createSelector(getGlobal, _global => _global?.interface);

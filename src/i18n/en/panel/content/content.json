@@ -1,16 +1,16 @@
 {
-  "panel__task__no_task_found": {
+  "panel__content__no_task_found": {
     "message": "No tasks found for this tab."
   },
-  "panel__task__create_or_settings": {
+  "panel__content__create_or_settings": {
     "message": "Create a new task or change this tab settings."
   },
 
-  "panel__task__create_task": {
+  "panel__content__create_task": {
     "message": "Create task"
   },
 
-  "panel__task__go_to_settings": {
+  "panel__content__go_to_settings": {
     "message": "Go to settings"
   }
 }

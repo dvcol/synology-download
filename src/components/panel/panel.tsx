@@ -10,8 +10,8 @@ import { setNavbar } from '@src/store/actions';
 
 import { About } from './about';
 import { Config } from './config';
+import { ContentPanel, TaskAdd } from './content';
 import { Settings } from './settings';
-import { TaskAdd, TaskPanel } from './task';
 
 import type { FC } from 'react';
 
@@ -28,7 +28,7 @@ export const Panel: FC<{ redirect?: string }> = ({ redirect }) => {
   return (
     <Container disableGutters maxWidth={false} sx={{ overflow: 'auto', height: 'calc(100vh - 3rem)' }}>
       <Routes>
-        <Route path={`${AppRoute.All}`} element={<TaskPanel />} />
+        <Route path={`${AppRoute.All}`} element={<ContentPanel />} />
         <Route path={`${AppRoute.Add}/*`} element={<TaskAdd cardProps={{ sx: { m: '0.3rem' } }} />} />
         <Route path={`${AppRoute.Settings}/*`} element={<Settings />} />
         <Route path={`${AppRoute.Config}/*`} element={<Config cardProps={{ sx: { m: '0.3rem' } }} />} />

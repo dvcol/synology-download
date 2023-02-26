@@ -1,6 +1,7 @@
 import AddLinkIcon from '@mui/icons-material/AddLink';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
+import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 import InfoIcon from '@mui/icons-material/Info';
 import LaunchIcon from '@mui/icons-material/Launch';
 import PauseIcon from '@mui/icons-material/Pause';
@@ -22,8 +23,8 @@ import { useI18n } from '@dvcol/web-extension-utils';
 import { ConfirmationDialog } from '@src/components';
 import type { NavbarButton } from '@src/models';
 import { AppLinks, AppRoute, ErrorType, LoginError, NavbarButtonType } from '@src/models';
-import { NotificationService, QueryService } from '@src/services';
-import { resetTasks, setNavbar } from '@src/store/actions';
+import { DownloadService, NotificationService, QueryService } from '@src/services';
+import { resetDownloads, resetTasks, setNavbar } from '@src/store/actions';
 import { getGlobalNavbarButton, getLogged, getUrl } from '@src/store/selectors';
 import { createTab } from '@src/utils';
 
@@ -77,7 +78,11 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       label: i18n('menu_refresh'),
       icon: <RefreshIcon />,
       onClick: $event => {
-        if ($event.shiftKey) dispatch(resetTasks());
+        if ($event.shiftKey) {
+          dispatch(resetDownloads());
+          dispatch(resetTasks());
+        }
+        DownloadService.search().subscribe();
         QueryService.listTasks().subscribe(handleError('refresh'));
       },
     },
@@ -107,7 +112,11 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       label: i18n('menu_clear'),
       icon: <ClearAllIcon />,
       color: 'primary',
-      onClick: () => QueryService.deleteFinishedTasks().subscribe(handleError('clear')),
+      onClick: () => {
+        // TODO put download erase behind an option on/off and tob
+        DownloadService.erase().subscribe();
+        QueryService.deleteFinishedTasks().subscribe(handleError('clear'));
+      },
     },
     {
       type: NavbarButtonType.Configs,
@@ -127,7 +136,14 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       to: AppRoute.Settings,
       onClick: handleClearTab,
     },
-    { type: NavbarButtonType.Open, label: i18n('menu_open'), icon: <LaunchIcon />, color: 'primary', onClick: handleUrl },
+    { type: NavbarButtonType.OpenSynology, label: i18n('menu_open'), icon: <LaunchIcon />, color: 'primary', onClick: handleUrl },
+    {
+      type: NavbarButtonType.OpenDownloads,
+      label: i18n('menu_open_downloads'),
+      icon: <DriveFileMoveIcon />,
+      color: 'primary',
+      onClick: () => DownloadService.show().subscribe(),
+    },
     {
       type: NavbarButtonType.About,
       label: i18n('menu_about'),
@@ -198,8 +214,9 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
         <NavbarMenuIcon {...buttons[6]} />
         <NavbarMenuIcon {...buttons[7]} />
         <NavbarMenuIcon {...buttons[8]} />
-        <Divider />
         <NavbarMenuIcon {...buttons[9]} />
+        <Divider />
+        <NavbarMenuIcon {...buttons[10]} />
       </Menu>
 
       <ConfirmationDialog

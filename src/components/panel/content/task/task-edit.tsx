@@ -25,7 +25,7 @@ export const TaskEdit = ({
   onFormCancel?: (form: TaskEditForm) => void;
   onFormSubmit?: (form: TaskEditForm) => void;
 }) => {
-  const i18n = useI18n('panel', 'task', 'edit');
+  const i18n = useI18n('panel', 'content', 'task', 'edit');
   const [state, setState] = React.useState(open);
   useEffect(() => setState(open), [open]);
 

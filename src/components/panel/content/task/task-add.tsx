@@ -23,7 +23,7 @@ export const TaskAdd: FC<{
   onFormSubmit?: (form: TaskForm) => void;
   cardProps?: CardProps;
 }> = ({ form, withCancel, onFormCancel, onFormSubmit, cardProps }) => {
-  const i18n = useI18n('panel', 'task', 'add');
+  const i18n = useI18n('panel', 'content', 'task', 'add');
   const [path, setPath] = React.useState<string>(form?.destination?.path ?? '');
 
   const {

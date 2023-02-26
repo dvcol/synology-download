@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 
 import { App } from '@src/components';
 import { AppRoute, ModalInstance } from '@src/models';
-import { NotificationService, PollingService, QueryService } from '@src/services';
+import { DownloadService, NotificationService, PollingService, QueryService } from '@src/services';
 import { storeProxy } from '@src/store';
 import { portConnect } from '@src/utils';
 
@@ -13,6 +13,7 @@ storeProxy
   .ready()
   .then(() => {
     // Pass store to service and init
+    DownloadService.init(storeProxy, true);
     QueryService.init(storeProxy, true);
     NotificationService.init(storeProxy, true);
     PollingService.init(storeProxy, true);

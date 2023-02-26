@@ -4,6 +4,7 @@ import { BehaviorSubject, distinctUntilChanged, finalize, map } from 'rxjs';
 
 import type { RootSlice, StoreOrProxy } from '@src/models';
 
+import { downloadsSlice } from './slices/downloads.slice';
 import { navbarSlice } from './slices/navbar.slice';
 import { settingsSlice } from './slices/settings.slice';
 import { stateSlice } from './slices/state.slice';
@@ -15,6 +16,7 @@ const reducers: ReducersMapObject<RootSlice> = {
   [stateSlice.name]: stateSlice.reducer,
   [navbarSlice.name]: navbarSlice.reducer,
   [tasksSlice.name]: tasksSlice.reducer,
+  [downloadsSlice.name]: downloadsSlice.reducer,
   [settingsSlice.name]: settingsSlice.reducer,
 };
 

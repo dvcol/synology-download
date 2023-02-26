@@ -2,6 +2,7 @@ import { combineLatest, distinctUntilChanged, Subject, switchMap, timer } from '
 
 import type { ChromeNotification, StoreOrProxy } from '@src/models';
 import { ChromeMessageType, defaultPolling } from '@src/models';
+import { DownloadService } from '@src/services';
 import { store$ } from '@src/store';
 import { getLogged, getPollingEnabled, getPollingInterval } from '@src/store/selectors';
 import { onMessage, sendMessage, skipUntilRepeat } from '@src/utils';
@@ -45,6 +46,7 @@ export class PollingService {
       this.timer$.subscribe(() => {
         QueryService.listTasks().subscribe();
         QueryService.getStatistic().subscribe();
+        DownloadService.search().subscribe();
       });
 
       store$(this.store, getPollingInterval).subscribe(() => this.change(this.interval()));
