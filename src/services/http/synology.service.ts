@@ -7,7 +7,7 @@ import type { Api, Endpoint, HttpResponse, SynologyQueryArgs, SynologyQueryPaylo
 import { ChromeMessageType, Controller, SynologyError } from '@src/models';
 import { onMessage, sendMessage, stringifyParams } from '@src/utils';
 
-import { BaseHttpService } from './base-http-service';
+import { BaseHttpService } from './base-http.service';
 
 import type { Observable } from 'rxjs';
 

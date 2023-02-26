@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 
 import type { Tab, TabCount, Task, TaskTab } from '@src/models';
-import { ActionScope, computeProgress, TaskStatusType, TaskTabSort } from '@src/models';
+import { ActionScope, TaskStatusType, TaskTabSort } from '@src/models';
 import {
   getActionScope,
   getActiveTasksIds,
@@ -18,6 +18,7 @@ import {
   getTasksIds,
   isModalOpen,
 } from '@src/store/selectors';
+import { computeProgress } from '@src/utils';
 
 export const getTabOrFirst = createSelector(getTab, getTabs, (tab, tabs) => tab ?? (tabs?.length ? tabs[0] : tab));
 

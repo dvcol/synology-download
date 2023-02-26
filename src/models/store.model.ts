@@ -1,3 +1,4 @@
+import type { Download } from './download.model';
 import type { ContextMenu, QuickMenu } from './menu.model';
 import type { Connection, Global, Notifications, Polling } from './settings.model';
 import type { TaskTab } from './tab.model';
@@ -25,6 +26,11 @@ export interface TasksSlice {
   stats?: TaskStatistics;
 }
 
+export interface DownloadsSlice {
+  entities: Download[];
+  count?: TaskCount;
+}
+
 export const SettingsSliceName = 'settings';
 
 export interface SettingsSlice {
@@ -41,6 +47,7 @@ export interface RootSlice {
   state: StateSlice;
   navbar: NavbarSlice;
   tasks: TasksSlice;
+  downloads: DownloadsSlice;
   settings: SettingsSlice;
 }
 

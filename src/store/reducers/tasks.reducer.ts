@@ -1,8 +1,7 @@
 import { localSet } from '@dvcol/web-extension-utils';
 
 import type { Task, TaskCount, TaskStatistics } from '@src/models';
-import { formatBytes } from '@src/models';
-import { setBadgeText, setTitle } from '@src/utils';
+import { formatBytes, setBadgeText, setTitle } from '@src/utils';
 
 import { tasksSlice } from '../slices/tasks.slice';
 

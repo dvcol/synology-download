@@ -176,6 +176,10 @@ export interface Global {
     progressBar: boolean;
     background: boolean;
   };
+  download: {
+    progressBar: boolean;
+    background: boolean;
+  };
   navbar: { buttons: NavbarButtonType[] };
   interface: {
     size: InterfaceSize | number;
@@ -187,6 +191,10 @@ export const defaultGlobal = {
   actions: ActionScope.all,
   loading: { enabled: true, threshold: 300 },
   task: {
+    progressBar: true,
+    background: true,
+  },
+  download: {
     progressBar: true,
     background: true,
   },

@@ -59,6 +59,18 @@
   "panel__settings__global__task__background_subheader": {
     "message": "Display the progression of active download task in card background."
   },
+  "panel__settings__global__download__progress_bar_title": {
+    "message": "Download progress bar"
+  },
+  "panel__settings__global__download__progress_bar_subheader": {
+    "message": "Display a progress bar indicator inside download cards."
+  },
+  "panel__settings__global__download__background_title": {
+    "message": "Download background progress"
+  },
+  "panel__settings__global__download__background_subheader": {
+    "message": "Display the progression of active download in card background."
+  },
   "panel__settings__global__navbar__buttons_title": {
     "message": "Navbar buttons"
   },

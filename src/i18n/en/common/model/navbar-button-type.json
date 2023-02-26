@@ -23,8 +23,11 @@
   "common__model__navbar_button_type__settings": {
     "message": "settings"
   },
-  "common__model__navbar_button_type__open": {
-    "message": "open"
+  "common__model__navbar_button_type__openSynology": {
+    "message": "open Synology"
+  },
+  "common__model__navbar_button_type__openDownloads": {
+    "message": "open download"
   },
   "common__model__navbar_button_type__about": {
     "message": "about"

@@ -1,3 +1,5 @@
+import type { DownloadQueryPayload } from '@src/models/download.model';
+
 import type { ContextMenu } from './menu.model';
 import type { ChromeNotification } from './notification.model';
 import type { SynologyQueryPayload } from './synology.model';
@@ -16,6 +18,7 @@ export enum ChromeMessageType {
   notification = 'notification',
   polling = 'polling',
   query = 'query',
+  download = 'download',
   baseUrl = 'baseUrl',
 }
 
@@ -34,6 +37,7 @@ export type ChromeMessagePayload =
   | ContextMenu[]
   | ChromeNotification
   | SynologyQueryPayload
+  | DownloadQueryPayload
   | ContextMenuOnClickPayload;
 
 /**

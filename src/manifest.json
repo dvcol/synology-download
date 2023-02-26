@@ -32,7 +32,7 @@
       "js": ["contentScript.bundle.js"]
     }
   ],
-  "permissions": ["contextMenus", "notifications", "storage", "tabs"],
+  "permissions": ["contextMenus", "notifications", "storage", "tabs", "downloads", "downloads.open"],
   "web_accessible_resources": [
     {
       "resources": ["*.html"],

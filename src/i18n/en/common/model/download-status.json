@@ -1,0 +1,20 @@
+{
+  "common__model__download_status__downloading": {
+    "message": "Downloading"
+  },
+  "common__model__download_status__paused": {
+    "message": "Paused"
+  },
+  "common__model__download_status__error": {
+    "message": "Error"
+  },
+  "common__model__download_status__cancelled": {
+    "message": "Cancelled"
+  },
+  "common__model__download_status__complete": {
+    "message": "Complete"
+  },
+  "common__model__download_status__unknown": {
+    "message": "Unknown"
+  }
+}

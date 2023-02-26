@@ -11,7 +11,8 @@ export enum NavbarButtonType {
   Clear = 'clear',
   Configs = 'configs',
   Settings = 'settings',
-  Open = 'open',
+  OpenSynology = 'openSynology',
+  OpenDownloads = 'openDownloads',
   About = 'about',
 }
 

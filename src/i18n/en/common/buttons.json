@@ -30,5 +30,17 @@
   },
   "common__buttons__edit": {
     "message": "Edit"
+  },
+  "common__buttons__erase": {
+    "message": "Erase"
+  },
+  "common__buttons__retry": {
+    "message": "Retry"
+  },
+  "common__buttons__resume": {
+    "message": "Resume"
+  },
+  "common__buttons__open": {
+    "message": "Open"
   }
 }

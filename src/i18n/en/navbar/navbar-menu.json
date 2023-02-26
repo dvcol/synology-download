@@ -26,6 +26,9 @@
   "navbar__menu__menu_open": {
     "message": "Open Download Station"
   },
+  "navbar__menu__menu_open_downloads": {
+    "message": "Open Download Folder"
+  },
   "navbar__menu__menu_about": {
     "message": "About"
   },
