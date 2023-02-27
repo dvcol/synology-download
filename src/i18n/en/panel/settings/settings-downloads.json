@@ -1,0 +1,8 @@
+{
+  "panel__settings__downloads__title": {
+    "message": "Downloads"
+  },
+  "panel__settings__downloads__subheader": {
+    "message": "Enables/disabled support for local browser downloads."
+  }
+}

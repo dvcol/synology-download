@@ -33,6 +33,7 @@ export enum ConnectionHeader {
 
 export enum InterfaceHeader {
   global = 'global',
+  downloads = 'downloads',
   tabs = 'tabs',
   quickMenu = 'quick_menu',
   contextMenu = 'context_menu',
@@ -204,6 +205,14 @@ export const defaultGlobal = {
   },
 };
 
+export interface Downloads {
+  enabled: boolean;
+}
+
+export const defaultDownloads = {
+  enabled: true,
+};
+
 export const defaultSettings: SettingsSlice = {
   notifications: defaultNotifications,
   connection: defaultConnection,
@@ -212,4 +221,5 @@ export const defaultSettings: SettingsSlice = {
   menus: [defaultContextMenu],
   quick: [defaultQuickMenu],
   global: defaultGlobal,
+  downloads: defaultDownloads,
 };
