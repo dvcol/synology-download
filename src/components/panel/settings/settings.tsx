@@ -12,6 +12,7 @@ import {
   SettingsBanner,
   SettingsContextMenus,
   SettingsCredentials,
+  SettingsDownloads,
   SettingsHeader,
   SettingsPolling,
   SettingsQuickMenus,
@@ -33,7 +34,7 @@ export const Settings = () => {
     { label: SettingHeader.connection, links: [ConnectionHeader.credential, ConnectionHeader.polling] },
     {
       label: SettingHeader.interface,
-      links: [InterfaceHeader.global, InterfaceHeader.tabs, InterfaceHeader.quickMenu, InterfaceHeader.contextMenu],
+      links: [InterfaceHeader.global, InterfaceHeader.downloads, InterfaceHeader.tabs, InterfaceHeader.quickMenu, InterfaceHeader.contextMenu],
     },
     {
       label: SettingHeader.notification,
@@ -106,6 +107,7 @@ export const Settings = () => {
               <React.Fragment>
                 <SettingsHeader label={SettingHeader.interface} />
                 <SettingsGlobal />
+                <SettingsDownloads />
                 <SettingsTabs />
                 <SettingsQuickMenus />
                 <SettingsContextMenus />

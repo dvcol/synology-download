@@ -1,6 +1,6 @@
 import type { Download } from './download.model';
 import type { ContextMenu, QuickMenu } from './menu.model';
-import type { Connection, Global, Notifications, Polling } from './settings.model';
+import type { Downloads, Connection, Global, Notifications, Polling } from './settings.model';
 import type { TaskTab } from './tab.model';
 import type { Task, TaskCount, TaskStatistics } from './task.model';
 import type { Store } from 'redux';
@@ -41,6 +41,7 @@ export interface SettingsSlice {
   menus: ContextMenu[];
   quick: QuickMenu[];
   global: Global;
+  downloads: Downloads;
 }
 
 export interface RootSlice {

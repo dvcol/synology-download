@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import type { Connection, ContextMenu, Global, Notifications, Polling, QuickMenu, SettingsSlice, TaskTab } from '@src/models';
+import type { Connection, ContextMenu, Downloads, Global, Notifications, Polling, QuickMenu, SettingsSlice, TaskTab } from '@src/models';
 import { defaultSettings, SettingsSliceName } from '@src/models';
 
 import {
@@ -36,6 +36,7 @@ interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   removeQuickMenu: CaseReducer<S, PayloadAction<string>>;
   resetQuickMenus: CaseReducer<S>;
   syncInterface: CaseReducer<S, PayloadAction<Partial<Global>>>;
+  syncDownloads: CaseReducer<S, PayloadAction<Partial<Downloads>>>;
 }
 
 export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'settings'>({
@@ -76,5 +77,6 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
         payload: { quick: defaultSettings.quick },
       }),
     syncInterface: (oldSettings, { payload }) => syncNestedReducer<Global>(oldSettings, payload, 'global'),
+    syncDownloads: (oldSettings, { payload }) => syncNestedReducer<Downloads>(oldSettings, payload, 'downloads'),
   } as SettingsReducers,
 });

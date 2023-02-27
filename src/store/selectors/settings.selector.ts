@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 
 import type { Connection, Credentials } from '@src/models';
-import { ConnectionType, defaultGlobal, ThemeMode } from '@src/models';
+import { ConnectionType, defaultDownloads, defaultGlobal, ThemeMode } from '@src/models';
 import { darkTheme, lightTheme } from '@src/themes';
 
 import type { StoreState } from '../store';
@@ -79,3 +79,5 @@ export const getGlobalNavbarButton = createSelector(getGlobal, _global => _globa
 export const getInterface = createSelector(getGlobal, _global => _global?.interface);
 
 export const getInterfaceSize = createSelector(getInterface, _interface => _interface?.size ?? defaultGlobal.interface?.size);
+
+export const getSettingsDownloads = createSelector(getSettings, setting => setting?.downloads ?? defaultDownloads);

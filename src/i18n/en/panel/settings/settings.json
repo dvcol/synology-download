@@ -15,6 +15,9 @@
   "panel__settings__interface_global": {
     "message": "Global"
   },
+  "panel__settings__interface_downloads": {
+    "message": "Downloads"
+  },
   "panel__settings__interface_tabs": {
     "message": "Tabs"
   },
