@@ -1,3 +1,5 @@
+// eslint-disable-next-line import/no-extraneous-dependencies -- only added in dev mode
+import { devToolsEnhancer } from '@redux-devtools/remote';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 import { BehaviorSubject, distinctUntilChanged, finalize, map } from 'rxjs';
@@ -9,6 +11,8 @@ import { navbarSlice } from './slices/navbar.slice';
 import { settingsSlice } from './slices/settings.slice';
 import { stateSlice } from './slices/state.slice';
 import { tasksSlice } from './slices/tasks.slice';
+
+import type { ConfigureStoreOptions } from '@reduxjs/toolkit/src/configureStore';
 
 import type { ReducersMapObject, Store } from 'redux';
 
@@ -24,10 +28,14 @@ const rootReducer = combineReducers<RootSlice>(reducers);
 
 export type StoreState = ReturnType<typeof rootReducer>;
 
-export const store: Store = configureStore({
-  reducer: reducers,
-  devTools: true,
-});
+const options: ConfigureStoreOptions = { reducer: reducers, devTools: { name: 'synology-download' } };
+
+if (process.env.NODE_ENV === 'development') {
+  const devtools = { realtime: true, hostname: 'localhost', port: 8000, name: 'synology-download-remote' };
+  options.enhancers = [devToolsEnhancer(devtools)];
+  console.debug('Redux devtool exposed on', `http://${devtools.hostname}:${devtools.port}`);
+}
+export const store: Store = configureStore(options);
 
 export const store$ = (_store: StoreOrProxy, getter: (state: StoreState) => any = (state: StoreState) => state) => {
   const _store$ = new BehaviorSubject<RootSlice>(_store.getState());
