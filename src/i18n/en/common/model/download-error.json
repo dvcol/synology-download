@@ -1,0 +1,89 @@
+{
+  "common__model__download_error__file_failed": {
+    "message": "file failed"
+  },
+  "common__model__download_error__file_access_denied": {
+    "message": "file access denied"
+  },
+  "common__model__download_error__file_no_space": {
+    "message": "file no space"
+  },
+  "common__model__download_error__file_name_too_long": {
+    "message": "file name too long"
+  },
+  "common__model__download_error__file_too_large": {
+    "message": "file too large"
+  },
+  "common__model__download_error__file_virus_infected": {
+    "message": "file virus infected"
+  },
+  "common__model__download_error__file_transient_error": {
+    "message": "file transient error"
+  },
+  "common__model__download_error__file_blocked": {
+    "message": "file blocked"
+  },
+  "common__model__download_error__file_security_check_failed": {
+    "message": "file security check failed"
+  },
+  "common__model__download_error__file_too_short": {
+    "message": "file too short"
+  },
+  "common__model__download_error__file_hash_mismatch": {
+    "message": "file hash mismatch"
+  },
+  "common__model__download_error__file_same_as_source": {
+    "message": "file same as source"
+  },
+  "common__model__download_error__network_failed": {
+    "message": "network failed"
+  },
+  "common__model__download_error__network_timeout": {
+    "message": "network timeout"
+  },
+  "common__model__download_error__network_disconnected": {
+    "message": "network disconnected"
+  },
+  "common__model__download_error__network_server_down": {
+    "message": "network server down"
+  },
+  "common__model__download_error__network_invalid_request": {
+    "message": "network invalid request"
+  },
+  "common__model__download_error__network_server_failed": {
+    "message": "server failed"
+  },
+  "common__model__download_error__server_no_range": {
+    "message": "server no range"
+  },
+  "common__model__download_error__server_bad_content": {
+    "message": "server bad content"
+  },
+  "common__model__download_error__server_unauthorized": {
+    "message": "server unauthorized"
+  },
+  "common__model__download_error__server_cert_problem": {
+    "message": "server cert problem"
+  },
+  "common__model__download_error__server_forbidden": {
+    "message": "server forbidden"
+  },
+  "common__model__download_error__server_unreachable": {
+    "message": "server unreachable"
+  },
+  "common__model__download_error__server_content_length_mismatch": {
+    "message": "server content length mismatch"
+  },
+  "common__model__download_error__server_cross_origin_redirect": {
+    "message": "server cross origin redirect"
+  },
+  "common__model__download_error__user_canceled": {
+    "message": "user canceled"
+  },
+  "common__model__download_error__user_shutdown": {
+    "message": "user shutdown"
+  },
+  "common__model__download_error__crash": {
+    "message": "crash"
+  }
+}

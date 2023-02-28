@@ -1,8 +1,11 @@
+import type { ContentCount } from '@src/models/content.model';
+
 import type { Download } from './download.model';
+
 import type { ContextMenu, QuickMenu } from './menu.model';
-import type { Downloads, Connection, Global, Notifications, Polling } from './settings.model';
-import type { TaskTab } from './tab.model';
-import type { Task, TaskCount, TaskStatistics } from './task.model';
+import type { Connection, Downloads, Global, Notifications, Polling } from './settings.model';
+import type { ContentTab } from './tab.model';
+import type { Task, TaskStatistics } from './task.model';
 import type { Store } from 'redux';
 import type { Store as StoreProxy } from 'webext-redux';
 
@@ -14,21 +17,20 @@ export interface StateSlice {
     option: boolean;
   };
   loading: number;
+  badge: { count?: ContentCount; stats?: TaskStatistics };
 }
 
 export interface NavbarSlice {
-  tab?: TaskTab;
+  tab?: ContentTab;
 }
 
 export interface TasksSlice {
   entities: Task[];
-  count?: TaskCount;
   stats?: TaskStatistics;
 }
 
 export interface DownloadsSlice {
   entities: Download[];
-  count?: TaskCount;
 }
 
 export const SettingsSliceName = 'settings';
@@ -37,7 +39,7 @@ export interface SettingsSlice {
   notifications: Notifications;
   connection: Connection;
   polling: Polling;
-  tabs: TaskTab[];
+  tabs: ContentTab[];
   menus: ContextMenu[];
   quick: QuickMenu[];
   global: Global;

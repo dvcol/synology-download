@@ -19,7 +19,7 @@ import { ColorLevel, ColorLevelMap, ErrorType, LoginError, TaskStatus, taskStatu
 import { NotificationService, QueryService } from '@src/services';
 import type { StoreState } from '@src/store';
 import { getGlobalTask } from '@src/store/selectors';
-import { before, computeProgress, useDebounceObservable } from '@src/utils';
+import { before, useDebounceObservable } from '@src/utils';
 
 import { ContentItem } from '../content-item';
 
@@ -81,7 +81,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
     ? {
         primary: `${ColorLevelMap[taskStatusToColor(task.status)]}${visible ? 30 : 20}`,
         secondary: visible ? '#99999910' : 'transparent',
-        progress: computeProgress(task.additional?.transfer?.size_downloaded, task.size),
+        progress: task.progress ?? 0,
       }
     : {};
 

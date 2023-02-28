@@ -6,26 +6,26 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
 
-import type { TabType, TaskTab } from '@src/models';
+import type { ContentTab, TabTemplate } from '@src/models';
 import { ColorLevel } from '@src/models';
 import { setNavbar } from '@src/store/actions';
-import { getTaskCountByTabId } from '@src/store/selectors';
+import { getContentsCountByTabId } from '@src/store/selectors';
 
 import type { BadgeProps, LinkProps, TabProps } from '@mui/material';
 import type { FC } from 'react';
 
-type NavbarTabProps = TabProps & LinkProps & { tab: TaskTab };
+type NavbarTabProps = TabProps & LinkProps & { tab: ContentTab };
 
 export const NavbarTab: FC<NavbarTabProps> = ({ tab, ...props }) => {
-  const count = useSelector(getTaskCountByTabId)[tab.name];
+  const count = useSelector(getContentsCountByTabId)[tab.name];
   const dispatch = useDispatch();
 
-  const a11yProps = (name: TabType | string) => ({
+  const a11yProps = (name: TabTemplate | string) => ({
     id: `simple-tab-${name}`,
     'aria-controls': `simple-tab-panel-${name}`,
   });
   const StyledBadge = styled(Badge)<BadgeProps>(() => ({
-    '& .MuiBadge-badge': { right: '-0.5rem', padding: '0 0.5rem', height: '1.25rem', minWidth: '1.25rem' },
+    '& .MuiBadge-badge': { right: '-0.5rem', height: '1rem', minWidth: '1rem' },
   }));
   return (
     <Tab

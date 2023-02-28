@@ -1,7 +1,7 @@
 import { stateSlice } from '../slices/state.slice';
 
 // Action creators are generated for each case reducer function
-const { setLogged, setSid, setPopup, setOption, addLoading, removeLoading, resetLoading } = stateSlice.actions;
+const { setLogged, setSid, setPopup, setOption, addLoading, removeLoading, resetLoading, setBadge } = stateSlice.actions;
 
 // Export as named constants
-export { setLogged, setSid, setPopup, setOption, addLoading, removeLoading, resetLoading };
+export { setLogged, setSid, setPopup, setOption, addLoading, removeLoading, resetLoading, setBadge };

@@ -1,6 +1,6 @@
-import type { DownloadStationStatistic, TabCount } from '@src/models';
-import { ColorLevel } from '@src/models';
-import { formatTime } from '@src/utils';
+import type { Content, DownloadStationStatistic, TabCount } from '@src/models';
+import { ColorLevel, ContentSource } from '@src/models';
+import { computeProgress, formatTime } from '@src/utils';
 
 export interface TaskList {
   total: number;
@@ -11,7 +11,7 @@ export interface TaskList {
 /**
  * Task object for Synology Download Station
  */
-export interface Task {
+export interface Task extends Content {
   id: string;
   type: TaskType;
   username: string;
@@ -51,30 +51,6 @@ export enum TaskStatus {
 }
 
 /**
- * Enumeration for possible task types
- */
-export enum TaskStatusType {
-  all = 'all',
-  active = 'active',
-  paused = 'paused',
-  finished = 'finished',
-  finishing = 'finishing',
-  error = 'error',
-}
-
-/**
- * Enumeration for task status by task types
- */
-export const taskStatusTypeMap: Record<TaskStatusType, TaskStatus[]> = {
-  [TaskStatusType.all]: Object.values(TaskStatus),
-  [TaskStatusType.active]: [TaskStatus.downloading, TaskStatus.seeding],
-  [TaskStatusType.paused]: [TaskStatus.paused, TaskStatus.waiting, TaskStatus.filehosting_waiting],
-  [TaskStatusType.finished]: [TaskStatus.finished],
-  [TaskStatusType.finishing]: [TaskStatus.finishing, TaskStatus.extracting, TaskStatus.hash_checking],
-  [TaskStatusType.error]: [TaskStatus.error],
-};
-
-/**
  * Status_Extra object which provides extra information about task status.
  */
 export interface TaskStatusExtra {
@@ -106,14 +82,19 @@ export interface TaskDetail {
   destination: string;
   /** Task uri: HTTP/FTP/BT/Magnet/ED2K links */
   uri: string;
+  unzip_password: string;
   create_time: number;
+  completed_time: number;
   priority: 'auto' | 'low' | 'normal' | 'high';
   total_peers: number;
+  total_pieces: number;
   connected_seeders: number;
   connected_leechers: number;
+  seedelapsed: number;
 }
 
 export interface TaskTransfer {
+  downloaded_pieces: number;
   /** Task downloaded size in bytes */
   size_downloaded: string;
   /** Task uploaded size in bytes */
@@ -173,7 +154,7 @@ export const taskStatusToColor = (status: TaskStatus) => {
   }
 };
 
-export const computeEta = (task: Task): string | undefined => {
+const computeEta = (task: Task): string | undefined => {
   const downloaded = Number(task.additional?.transfer?.size_downloaded);
   const speed = Number(task.additional?.transfer?.speed_download);
   if (downloaded && Number.isFinite(downloaded) && speed && Number.isFinite(speed)) {
@@ -199,3 +180,23 @@ export interface TaskCount {
 }
 
 export type TaskStatistics = DownloadStationStatistic;
+
+export const mapToTask = (task: Task): Task => {
+  const folder = task.additional?.detail?.destination ?? undefined;
+  const received = task.additional?.transfer?.size_downloaded ?? 0;
+  const speed = task.additional?.transfer?.speed_download ?? undefined;
+  const created = task.additional?.detail?.create_time ?? 0;
+  const finished = task.additional?.detail?.completed_time ?? 0;
+  return {
+    ...task,
+    source: ContentSource.Task,
+    key: `${ContentSource.Task}-${task.id}`,
+    folder,
+    progress: computeProgress(received, task.size),
+    speed,
+    received: Number(received ?? 0),
+    eta: computeEta(task),
+    createdAt: created ? new Date(created * 1000).getTime() : undefined,
+    finishedAt: finished ? new Date(finished * 1000).getTime() : undefined,
+  };
+};

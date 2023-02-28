@@ -1,10 +1,11 @@
+import { DownloadStatus } from '@src/models/download.model';
 import { NavbarButtonType } from '@src/models/navbar.model';
 
 import { defaultContextMenu, defaultQuickMenu } from './menu.model';
 
 import { NotificationLevel } from './notification.model';
 
-import { defaultTabs, TabType } from './tab.model';
+import { defaultTabs, TabTemplate } from './tab.model';
 
 import { TaskStatus } from './task.model';
 
@@ -125,8 +126,8 @@ export interface Notifications {
 export const defaultNotifications: Notifications = {
   count: {
     enabled: true,
-    template: TabType.all,
-    status: Object.values(TaskStatus),
+    template: TabTemplate.all,
+    status: [...Object.values(TaskStatus), ...Object.values(DownloadStatus)],
     destination: { enabled: false },
     color: '#4285f4',
   },
@@ -207,10 +208,14 @@ export const defaultGlobal = {
 
 export interface Downloads {
   enabled: boolean;
+  buttons: boolean;
+  notifications: boolean;
 }
 
 export const defaultDownloads = {
   enabled: true,
+  buttons: true,
+  notifications: true,
 };
 
 export const defaultSettings: SettingsSlice = {

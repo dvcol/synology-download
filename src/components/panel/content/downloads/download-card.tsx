@@ -14,11 +14,11 @@ import { useSelector } from 'react-redux';
 import { useI18n } from '@dvcol/web-extension-utils';
 
 import type { Download, Global } from '@src/models';
-import { DownloadStatus, downloadStatusToColor, formatEstimatedTime, getEstimatedSpeed } from '@src/models';
+import { DownloadStatus, downloadStatusToColor } from '@src/models';
 
 import type { StoreState } from '@src/store';
 import { getGlobalDownload } from '@src/store/selectors';
-import { computeProgress, formatBytes } from '@src/utils';
+import { formatBytes } from '@src/utils';
 
 import { ContentCard } from '../content-card';
 
@@ -27,7 +27,6 @@ import type { FC } from 'react';
 type DownloadCardProps = { download: Download; hideStatus?: boolean; expanded?: boolean; visible?: boolean };
 export const DownloadCard: FC<DownloadCardProps> = ({ download, hideStatus, expanded, visible }) => {
   const i18n = useI18n('panel', 'content', 'download', 'card');
-  const title = download.filename?.substr(download.filename.lastIndexOf('/') + 1);
   const statusIcon = (state: DownloadStatus): JSX.Element => {
     switch (state) {
       case DownloadStatus.downloading:
@@ -65,7 +64,7 @@ export const DownloadCard: FC<DownloadCardProps> = ({ download, hideStatus, expa
   const showProgressBar = useSelector<StoreState, Global['download']>(getGlobalDownload)?.progressBar;
   return (
     <ContentCard
-      title={title}
+      title={download.title ?? download.filename}
       icon={statusIcon(download.status)}
       iconBackground={avatarBgColor(download.status)}
       iconVariant={'rounded'}
@@ -77,18 +76,24 @@ export const DownloadCard: FC<DownloadCardProps> = ({ download, hideStatus, expa
               <span> – </span>
             </React.Fragment>
           )}
+          {download.error && (
+            <React.Fragment>
+              <span>{i18n(download.error.toLowerCase(), 'common', 'model', 'download_error')}</span>
+              <span> – </span>
+            </React.Fragment>
+          )}
           {download.status === DownloadStatus.downloading && (
             <React.Fragment>
-              <span>{download.estimatedEndTime ? `${formatEstimatedTime(download)} ${i18n('remaining')}` : i18n('no_estimates')}</span>
+              <span>{download.eta ? `${download.eta} ${i18n('remaining')}` : i18n('no_estimates')}</span>
               <span> – </span>
             </React.Fragment>
           )}
           <span>
-            {formatBytes(download.bytesReceived)} of {formatBytes(download.fileSize)} downloaded
+            {formatBytes(download.received)} of {formatBytes(download.size)} downloaded
           </span>
         </>
       }
-      progress={download.estimatedEndTime ? <span>{getEstimatedSpeed(download)}/s</span> : undefined}
+      progress={download.speed ? <span>{formatBytes(download.speed)}/s</span> : undefined}
       progressBar={
         showProgressBar
           ? {
@@ -96,7 +101,7 @@ export const DownloadCard: FC<DownloadCardProps> = ({ download, hideStatus, expa
                 variant: 'determinate',
                 color: downloadStatusToColor(download.status),
               },
-              value: computeProgress(download.bytesReceived, download.fileSize),
+              value: download.progress ?? 0,
               percentage: expanded || !visible,
             }
           : undefined

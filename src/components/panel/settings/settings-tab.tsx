@@ -9,20 +9,20 @@ import { useDispatch } from 'react-redux';
 import { useI18n } from '@dvcol/web-extension-utils';
 
 import { FormInput, FormTab } from '@src/components';
-import type { Tab, TaskTab } from '@src/models';
-import { ColorLevel, ColorLevelMap, getColorFromLevel, getLevelFromColor, TaskTabSort } from '@src/models';
-import { removeTaskTab, saveTaskTab } from '@src/store/actions';
+import type { ContentTab, Tab } from '@src/models';
+import { ColorLevel, ColorLevelMap, ContentTabSort, getColorFromLevel, getLevelFromColor } from '@src/models';
+import { removeContentTab, saveContentTab } from '@src/store/actions';
 
 import type { UseFormGetValues, UseFormSetValue } from 'react-hook-form';
 import type { Control } from 'react-hook-form/dist/types/form';
 
-export const SettingsTab = ({ tab }: { tab: TaskTab }) => {
+export const SettingsTab = ({ tab }: { tab: ContentTab }) => {
   const i18n = useI18n('panel', 'settings', 'tab');
   const formTab = {
     ...tab,
     color: getColorFromLevel(tab.color) ?? ColorLevelMap[ColorLevel.primary],
     destination: { ...tab.destination, folder: tab.destination?.folder ?? '' },
-    sort: tab?.sort ?? TaskTabSort.creation,
+    sort: tab?.sort ?? ContentTabSort.creation,
     reverse: tab?.reverse ?? false,
   };
   const dispatch = useDispatch();
@@ -33,12 +33,12 @@ export const SettingsTab = ({ tab }: { tab: TaskTab }) => {
     getValues,
     setValue,
     formState: { isValid, isDirty, isSubmitted },
-  } = useForm<TaskTab>({ mode: 'onChange', defaultValues: formTab as TaskTab });
+  } = useForm<ContentTab>({ mode: 'onChange', defaultValues: formTab as ContentTab });
 
-  const onDelete = () => dispatch(removeTaskTab(tab.id));
+  const onDelete = () => dispatch(removeContentTab(tab.id));
 
-  const onSubmit = (form: TaskTab) => {
-    dispatch(saveTaskTab({ ...form, color: getLevelFromColor(form.color) ?? ColorLevel.primary }));
+  const onSubmit = (form: ContentTab) => {
+    dispatch(saveContentTab({ ...form, color: getLevelFromColor(form.color) ?? ColorLevel.primary }));
     reset(form, { keepIsSubmitted: true, keepSubmitCount: true });
   };
 
@@ -84,7 +84,7 @@ export const SettingsTab = ({ tab }: { tab: TaskTab }) => {
               sx: { flex: '0 0 14rem', textTransform: 'capitalize' },
             }}
           >
-            {Object.values(TaskTabSort).map(sort => (
+            {Object.values(ContentTabSort).map(sort => (
               <MenuItem key={sort} value={sort} sx={{ textTransform: 'capitalize' }}>
                 {i18n(sort, 'common', 'model', 'task_tab_sort')}
               </MenuItem>

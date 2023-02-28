@@ -14,11 +14,11 @@ import { useSelector } from 'react-redux';
 import { useI18n } from '@dvcol/web-extension-utils';
 
 import type { Global, Task } from '@src/models';
-import { computeEta, TaskStatus, taskStatusToColor } from '@src/models';
+import { TaskStatus, taskStatusToColor } from '@src/models';
 
 import type { StoreState } from '@src/store';
 import { getGlobalTask } from '@src/store/selectors';
-import { computeProgress, formatBytes } from '@src/utils';
+import { formatBytes } from '@src/utils';
 
 import { ContentCard } from '../content-card';
 
@@ -65,9 +65,8 @@ export const TaskCard: FC<TaskCardProps> = ({ task, hideStatus, expanded, visibl
   };
 
   const getEstimatedSpeed = (_task: Task) => {
-    const speed = task.additional?.transfer?.speed_download;
-    if (!speed) return;
-    const bytes = formatBytes(task.additional?.transfer?.speed_download);
+    if (!_task.speed) return;
+    const bytes = formatBytes(_task.speed);
     if (!bytes) return;
     return <span>{bytes}/s</span>;
   };
@@ -86,14 +85,20 @@ export const TaskCard: FC<TaskCardProps> = ({ task, hideStatus, expanded, visibl
               <span> – </span>
             </React.Fragment>
           )}
+          {task.status_extra?.error_detail && (
+            <React.Fragment>
+              <span>{i18n(task.status_extra.error_detail.toLowerCase(), 'common', 'model', 'task_error')}</span>
+              <span> – </span>
+            </React.Fragment>
+          )}
           {[TaskStatus.downloading, TaskStatus.seeding].includes(task.status) && (
             <React.Fragment>
-              <span>{computeEta(task) ? `${computeEta(task)} ${i18n('remaining')}` : i18n('no_estimates')}</span>
+              <span>{task.eta ? `${task.eta} ${i18n('remaining')}` : i18n('no_estimates')}</span>
               <span> – </span>
             </React.Fragment>
           )}
           <span>
-            {formatBytes(task.additional?.transfer?.size_downloaded)} of {formatBytes(task.size)} downloaded
+            {formatBytes(task.received)} of {formatBytes(task.size)} downloaded
           </span>
         </>
       }
@@ -105,7 +110,7 @@ export const TaskCard: FC<TaskCardProps> = ({ task, hideStatus, expanded, visibl
                 variant: [TaskStatus.seeding, TaskStatus.extracting, TaskStatus.finishing].includes(task.status) ? 'indeterminate' : 'determinate',
                 color: taskStatusToColor(task.status),
               },
-              value: computeProgress(task.additional?.transfer?.size_downloaded, task.size),
+              value: task.progress ?? 0,
               percentage: expanded || !visible,
             }
           : undefined

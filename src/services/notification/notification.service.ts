@@ -5,14 +5,14 @@ import { useI18n } from '@dvcol/web-extension-utils';
 import type { ChromeNotification, SnackMessage, SnackNotification, StoreOrProxy, Task } from '@src/models';
 import { ChromeMessageType, NotificationLevel, NotificationLevelKeys, NotificationType } from '@src/models';
 import { store$ } from '@src/store';
-import { setTasksCount } from '@src/store/actions';
+import { setBadge } from '@src/store/actions';
 import {
-  getCount,
   getNotificationsBannerEnabled,
   getNotificationsBannerLevel,
   getNotificationsSnack,
   getNotificationsSnackEnabled,
   getNotificationsSnackLevel,
+  getStateBadge,
 } from '@src/store/selectors';
 import { bufferDebounceUnless, createNotification, onMessage, parseMagnetLink, sendMessage } from '@src/utils';
 
@@ -55,7 +55,7 @@ export class NotificationService {
       this.notify$.pipe(this.bufferStopStart('Notification')).subscribe();
       this.error$.pipe(this.bufferStopStart('Errors')).subscribe();
 
-      store$(this.store, getCount).subscribe(count => this.store.dispatch(setTasksCount(count)));
+      store$(this.store, getStateBadge).subscribe(count => this.store.dispatch(setBadge(count)));
 
       onMessage<ChromeNotification>([ChromeMessageType.notification]).subscribe(({ message: { payload }, sendResponse }) => {
         this.sendOrForward(payload);
@@ -186,7 +186,9 @@ export class NotificationService {
       {
         title: i18n('task_error'),
         message: `${i18n('title')}\xa0${parseMagnetLink(task?.title) ?? task.id}`,
-        contextMessage: task.status_extra?.error_detail ? `${i18n('error_message')}\xa0${task.status_extra.error_detail}` : undefined,
+        contextMessage: task.status_extra?.error_detail
+          ? `${i18n('error_message')}\xa0${i18n(task.status_extra.error_detail, 'common', 'model', 'task_error')}`
+          : undefined,
       },
       NotificationType.banner,
     );

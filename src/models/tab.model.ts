@@ -1,24 +1,26 @@
 import { v4 as uuid } from 'uuid';
 
+import { DownloadStatus } from './download.model';
 import { ColorLevel } from './material-ui.model';
 import { TaskStatus } from './task.model';
 
+export type TabStatus = TaskStatus | DownloadStatus;
 export interface Tab {
-  template: TabType;
-  status: TaskStatus[];
+  template: TabTemplate;
+  status: TabStatus[];
   destination: { enabled: boolean; folder?: string };
   color: string;
 }
 
-export interface TaskTab extends Tab {
+export interface ContentTab extends Tab {
   id: string;
-  name: TabType | string;
+  name: TabTemplate | string;
   color: ColorLevel;
-  sort?: TaskTabSort;
+  sort?: ContentTabSort;
   reverse?: boolean;
 }
 
-export enum TaskTabSort {
+export enum ContentTabSort {
   creation = 'creation',
   destination = 'destination',
   speed = 'speed',
@@ -31,56 +33,89 @@ export enum TaskTabSort {
 /**
  * Enumeration for message types
  */
-export enum TabType {
+export enum TabTemplate {
   all = 'all',
   downloading = 'downloading',
   completed = 'completed',
   active = 'active',
   inactive = 'inactive',
   stopped = 'stopped',
+  downloads = 'downloads',
+  tasks = 'tasks',
 }
 
 export type TabCount = Record<string, number>;
 
-export const defaultTabs: TaskTab[] = [
+export const defaultTabs: ContentTab[] = [
   {
     id: uuid(),
-    name: TabType.all,
-    template: TabType.all,
-    status: Object.values(TaskStatus),
+    name: TabTemplate.all,
+    template: TabTemplate.all,
+    status: [...Object.values(TaskStatus), ...Object.values(DownloadStatus)],
     destination: { enabled: false },
     color: ColorLevel.primary,
   },
+  // {
+  //   id: uuid(),
+  //   name: TabTemplate.downloading,
+  //   template: TabTemplate.downloading,
+  //   status: [TaskStatus.downloading, TaskStatus.waiting, DownloadStatus.downloading],
+  //   destination: { enabled: false },
+  //   color: ColorLevel.info,
+  // },
   {
     id: uuid(),
-    name: TabType.downloading,
-    template: TabType.downloading,
-    status: [TaskStatus.downloading, TaskStatus.waiting],
-    destination: { enabled: false },
-    color: ColorLevel.info,
-  },
-  {
-    id: uuid(),
-    name: TabType.completed,
-    template: TabType.completed,
-    status: [TaskStatus.finished],
-    destination: { enabled: false },
-    color: ColorLevel.success,
-  },
-  {
-    id: uuid(),
-    name: TabType.active,
-    template: TabType.active,
-    status: [TaskStatus.downloading, TaskStatus.finishing, TaskStatus.hash_checking, TaskStatus.extracting, TaskStatus.seeding],
+    name: TabTemplate.active,
+    template: TabTemplate.active,
+    status: [
+      TaskStatus.downloading,
+      TaskStatus.finishing,
+      TaskStatus.hash_checking,
+      TaskStatus.extracting,
+      TaskStatus.seeding,
+      DownloadStatus.downloading,
+    ],
     destination: { enabled: false },
     color: ColorLevel.secondary,
   },
   {
     id: uuid(),
-    name: TabType.inactive,
-    template: TabType.inactive,
-    status: [TaskStatus.waiting, TaskStatus.filehosting_waiting, TaskStatus.paused, TaskStatus.error],
+    name: TabTemplate.inactive,
+    template: TabTemplate.inactive,
+    status: [TaskStatus.waiting, TaskStatus.filehosting_waiting, TaskStatus.paused, TaskStatus.error, DownloadStatus.error, DownloadStatus.paused],
     destination: { enabled: false },
     color: ColorLevel.warning,
+  },
+  {
+    id: uuid(),
+    name: TabTemplate.completed,
+    template: TabTemplate.completed,
+    status: [TaskStatus.finished, DownloadStatus.complete, DownloadStatus.cancelled],
+    destination: { enabled: false },
+    color: ColorLevel.success,
+  },
+  // {
+  //   id: uuid(),
+  //   name: TabTemplate.stopped,
+  //   template: TabTemplate.stopped,
+  //   status: [TaskStatus.paused, DownloadStatus.paused],
+  //   destination: { enabled: false },
+  //   color: ColorLevel.warning,
+  // },
+  {
+    id: uuid(),
+    name: TabTemplate.tasks,
+    template: TabTemplate.tasks,
+    status: Object.values(TaskStatus),
+    destination: { enabled: false },
+    color: ColorLevel.info,
+  },
+  {
+    id: uuid(),
+    name: TabTemplate.downloads,
+    template: TabTemplate.downloads,
+    status: Object.values(DownloadStatus),
+    destination: { enabled: false },
+    color: ColorLevel.secondary,
   },
 ];

@@ -30,7 +30,7 @@ export const Navbar = () => {
     return index && index > -1 ? index : 0;
   };
 
-  const tabComponents = tabs?.map((taskTab, index) => <NavbarTab tab={taskTab} value={index} key={`${taskTab.id}-${index}`} />);
+  const tabComponents = tabs?.map((contentTab, index) => <NavbarTab tab={contentTab} value={index} key={`${contentTab.id}-${index}`} />);
   return (
     <AppBar color="inherit" position="sticky" sx={{ mt: '-0.125rem' }}>
       <LoadingBar />

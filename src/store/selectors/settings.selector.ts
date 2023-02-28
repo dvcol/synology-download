@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-import type { Connection, Credentials } from '@src/models';
+import type { Connection, Credentials, Downloads, Global, Notifications, NotificationsBanner, NotificationsSnack, SettingsSlice } from '@src/models';
 import { ConnectionType, defaultDownloads, defaultGlobal, ThemeMode } from '@src/models';
 import { darkTheme, lightTheme } from '@src/themes';
 
@@ -11,13 +11,13 @@ export const getSettings = createSelector(
   state => state.settings,
 );
 
-export const getTabs = createSelector(getSettings, setting => setting?.tabs);
+export const getTabs = createSelector(getSettings, (setting: SettingsSlice) => setting?.tabs);
 
-export const getMenus = createSelector(getSettings, setting => setting?.menus);
+export const getMenus = createSelector(getSettings, (setting: SettingsSlice) => setting?.menus);
 
-export const getQuick = createSelector(getSettings, setting => setting?.quick);
+export const getQuick = createSelector(getSettings, (setting: SettingsSlice) => setting?.quick);
 
-export const getConnection = createSelector(getSettings, setting => setting?.connection);
+export const getConnection = createSelector(getSettings, (setting: SettingsSlice) => setting?.connection);
 
 export const urlReducer = (connection: Connection) => {
   if (connection?.protocol && connection?.path && connection?.port) {
@@ -30,35 +30,38 @@ export const urlReducer = (connection: Connection) => {
 
 export const getUrl = createSelector(getConnection, urlReducer);
 
-export const getCredentials = createSelector(getConnection, ({ rememberMe, protocol, path, port, ...credentials }) => credentials as Credentials);
+export const getCredentials = createSelector(
+  getConnection,
+  ({ rememberMe, protocol, path, port, ...credentials }: Connection) => credentials as Credentials,
+);
 
-export const getType = createSelector(getConnection, connection => connection?.type);
+export const getType = createSelector(getConnection, (connection: Connection) => connection?.type);
 
-export const getPolling = createSelector(getSettings, setting => setting?.polling);
+export const getPolling = createSelector(getSettings, (setting: SettingsSlice) => setting?.polling);
 
-export const getNotifications = createSelector(getSettings, setting => setting?.notifications);
+export const getNotifications = createSelector(getSettings, (setting: SettingsSlice) => setting?.notifications);
 
-export const getNotificationsCount = createSelector(getNotifications, notifications => notifications?.count);
+export const getNotificationsCount = createSelector(getNotifications, (notifications: Notifications) => notifications?.count);
 
-export const getNotificationsSnack = createSelector(getNotifications, notifications => notifications?.snack);
+export const getNotificationsSnack = createSelector(getNotifications, (notifications: Notifications) => notifications?.snack);
 
-export const getNotificationsSnackLevel = createSelector(getNotificationsSnack, snack => snack?.level);
+export const getNotificationsSnackLevel = createSelector(getNotificationsSnack, (snack: NotificationsSnack) => snack?.level);
 
-export const getNotificationsBanner = createSelector(getNotifications, notifications => notifications?.banner);
+export const getNotificationsBanner = createSelector(getNotifications, (notifications: Notifications) => notifications?.banner);
 
-export const getNotificationsBannerLevel = createSelector(getNotificationsBanner, banner => banner?.level);
+export const getNotificationsBannerLevel = createSelector(getNotificationsBanner, (banner: NotificationsBanner) => banner?.level);
 
-export const getNotificationsBannerFailedEnabled = createSelector(getNotifications, ({ banner }) => banner?.scope.failed);
+export const getNotificationsBannerFailedEnabled = createSelector(getNotificationsBanner, (banner: NotificationsBanner) => banner?.scope.failed);
 
-export const getNotificationsBannerFinishedEnabled = createSelector(getNotifications, ({ banner }) => banner?.scope.finished);
+export const getNotificationsBannerFinishedEnabled = createSelector(getNotificationsBanner, (banner: NotificationsBanner) => banner?.scope.finished);
 
-export const getGlobal = createSelector(getSettings, setting => setting?.global);
+export const getGlobal = createSelector(getSettings, (setting: SettingsSlice) => setting?.global);
 
-export const getGlobalLoading = createSelector(getGlobal, _global => _global?.loading);
+export const getGlobalLoading = createSelector(getGlobal, (_global: Global) => _global?.loading);
 
-export const getActionScope = createSelector(getGlobal, _global => _global?.actions);
+export const getActionScope = createSelector(getGlobal, (_global: Global) => _global?.actions);
 
-export const getThemeMode = createSelector(getGlobal, _global => {
+export const getThemeMode = createSelector(getGlobal, (_global: Global) => {
   switch (_global?.theme) {
     case ThemeMode.dark:
       return darkTheme;
@@ -71,13 +74,29 @@ export const getThemeMode = createSelector(getGlobal, _global => {
   }
 });
 
-export const getGlobalTask = createSelector(getGlobal, _global => _global?.task ?? defaultGlobal.task);
+export const getGlobalTask = createSelector(getGlobal, (_global: Global) => _global?.task ?? defaultGlobal.task);
 
-export const getGlobalDownload = createSelector(getGlobal, _global => _global?.download ?? defaultGlobal.download);
-export const getGlobalNavbarButton = createSelector(getGlobal, _global => _global?.navbar?.buttons ?? defaultGlobal.navbar?.buttons);
+export const getGlobalDownload = createSelector(getGlobal, (_global: Global) => _global?.download ?? defaultGlobal.download);
+export const getGlobalNavbarButton = createSelector(getGlobal, (_global: Global) => _global?.navbar?.buttons ?? defaultGlobal.navbar?.buttons);
 
-export const getInterface = createSelector(getGlobal, _global => _global?.interface);
+export const getInterface = createSelector(getGlobal, (_global: Global) => _global?.interface);
 
-export const getInterfaceSize = createSelector(getInterface, _interface => _interface?.size ?? defaultGlobal.interface?.size);
+export const getInterfaceSize = createSelector(getInterface, (_interface: Global['interface']) => _interface?.size ?? defaultGlobal.interface?.size);
 
-export const getSettingsDownloads = createSelector(getSettings, setting => setting?.downloads ?? defaultDownloads);
+export const getSettingsDownloads = createSelector(getSettings, (setting: SettingsSlice) => setting?.downloads ?? defaultDownloads);
+
+export const getSettingsDownloadsEnabled = createSelector(
+  getSettingsDownloads,
+  (downloads: Downloads) => downloads.enabled ?? defaultDownloads.enabled,
+);
+
+export const getSettingsDownloadsButtons = createSelector(
+  getSettingsDownloads,
+  getSettingsDownloadsEnabled,
+  (downloads: Downloads, enabled: boolean) => enabled && (downloads.buttons ?? defaultDownloads.buttons),
+);
+export const getSettingsDownloadsNotifications = createSelector(
+  getSettingsDownloads,
+  getSettingsDownloadsEnabled,
+  (downloads: Downloads, enabled: boolean) => enabled && (downloads.notifications ?? defaultDownloads.notifications),
+);

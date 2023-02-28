@@ -16,5 +16,11 @@
   },
   "common__model__task_tab_type__stopped": {
     "message": "Stopped"
+  },
+  "common__model__task_tab_type__tasks": {
+    "message": "Synology"
+  },
+  "common__model__task_tab_type__downloads": {
+    "message": "Local"
   }
 }

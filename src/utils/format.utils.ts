@@ -31,3 +31,5 @@ export const formatBytes = (byte: number | any): string => {
 export const getDateDiff = (endDate: Date, startDate = new Date()) => {
   return (endDate.getTime() - startDate.getTime()) / 1000;
 };
+
+export const dateToLocalString = (date?: number) => (date ? new Date(date).toLocaleString() : undefined);

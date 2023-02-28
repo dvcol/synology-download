@@ -7,6 +7,8 @@ import { useI18n } from '@dvcol/web-extension-utils';
 import type { DownloadItemButton } from '@src/components';
 import type { Download } from '@src/models';
 
+import { dateToLocalString } from '@src/utils';
+
 import ContentDetail from '../content-detail';
 
 import type { FC } from 'react';
@@ -30,10 +32,10 @@ export const DownloadDetail: FC<DownloadDetailProps> = ({ download, buttons, onc
       info={
         <>
           <Typography variant="caption" component="div">
-            {`${i18n('created')} :\t${new Date(download.startTime).toLocaleString()}`}
+            {`${i18n('created')} :\t${dateToLocalString(download.createdAt) ?? ''}`}
           </Typography>
           <Typography variant="caption" component="div">
-            {`${i18n('referrer')} :\t${download.referrer}`}
+            {`${i18n('destination')} :\t${download.folder}`}
           </Typography>
         </>
       }

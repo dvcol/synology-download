@@ -4,25 +4,31 @@ import React from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
+import { useI18n } from '@dvcol/web-extension-utils';
+
 import { SettingsAccordion } from '@src/components';
-import type { TaskTab } from '@src/models';
-import { defaultTabs, InterfaceHeader } from '@src/models';
+import type { ContentTab } from '@src/models';
+import { defaultTabs, InterfaceHeader, TaskStatus } from '@src/models';
 import type { StoreState } from '@src/store';
-import { resetTaskTabs, saveTaskTab } from '@src/store/actions';
+import { resetContentTabs, saveContentTab } from '@src/store/actions';
 import { getTabs } from '@src/store/selectors';
 
 import { SettingsTab } from './settings-tab';
 
+const saskStatuses = Object.values(TaskStatus).map(String);
 export const SettingsTabs = () => {
   const dispatch = useDispatch();
-  const tabs = useSelector<StoreState, TaskTab[]>(getTabs);
+  const tabs = useSelector<StoreState, ContentTab[]>(getTabs);
+  const i18n = useI18n();
 
   const addNew = (id: string) => {
     const newTab = { ...defaultTabs[0], name: 'New Tab', id };
-    dispatch(saveTaskTab(newTab));
+    dispatch(saveContentTab(newTab));
   };
 
-  const reset = () => dispatch(resetTaskTabs());
+  const reset = () => dispatch(resetContentTabs());
+
+  const translate = (status: string) => i18n(status, 'common', 'model', saskStatuses.includes(status) ? 'task_status' : 'download_status');
 
   return (
     <SettingsAccordion
@@ -40,7 +46,7 @@ export const SettingsTabs = () => {
               overflow: 'hidden',
             }}
           >
-            {t.status?.join(', ')}
+            {t.status?.map(String).map(translate).join(', ')}
           </Typography>
         </>
       )}

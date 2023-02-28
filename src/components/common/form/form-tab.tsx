@@ -5,8 +5,17 @@ import React from 'react';
 import { useI18n } from '@dvcol/web-extension-utils';
 
 import { FormExplorer, FormSwitch } from '@src/components';
-import type { Tab, TaskTab } from '@src/models';
-import { ColorLevel, defaultNotifications, defaultTabs, getColorFromLevel, getLevelFromColor, TabType, TaskStatus } from '@src/models';
+import type { ContentTab, Tab, TabStatus } from '@src/models';
+import {
+  ColorLevel,
+  defaultNotifications,
+  defaultTabs,
+  DownloadStatus,
+  getColorFromLevel,
+  getLevelFromColor,
+  TabTemplate,
+  TaskStatus,
+} from '@src/models';
 
 import { FormCheckbox } from './form-checkbox';
 import { FormInput } from './form-input';
@@ -23,10 +32,10 @@ export const FormTab = ({
   disabled?: boolean;
 }>) => {
   const i18n = useI18n('common', 'form', 'tab');
-  const getTab = (type?: TabType | string): TaskTab | undefined => defaultTabs.find(t => t.name === type);
-  const getTemplateStatuses = (tab?: Tab): TaskStatus[] => (tab?.status?.length ? tab?.status : status) ?? [];
+  const getTab = (type?: TabTemplate | string): ContentTab | undefined => defaultTabs.find(t => t.name === type);
+  const getTemplateStatuses = (tab?: Tab): TabStatus[] => (tab?.status?.length ? tab?.status : status) ?? [];
 
-  const [templateStatuses, setTemplateStatuses] = React.useState<TaskStatus[]>(getTemplateStatuses(getTab(template)));
+  const [templateStatuses, setTemplateStatuses] = React.useState<TabStatus[]>(getTemplateStatuses(getTab(template)));
   const [badgeColor, setBadgeColor] = React.useState<Tab['color']>(color);
 
   const onTemplateChange = (type: string) => {
@@ -39,7 +48,7 @@ export const FormTab = ({
     setValue('color', _color);
   };
 
-  const getHighlightColor = (s: TaskStatus): ColorLevel => {
+  const getHighlightColor = (s: TabStatus): ColorLevel => {
     const _color = getLevelFromColor(badgeColor);
     return _color && templateStatuses?.includes(s) ? _color : ColorLevel.primary;
   };
@@ -62,7 +71,7 @@ export const FormTab = ({
               onChange: e => onTemplateChange(e.target.value),
             }}
           >
-            {Object.values(TabType).map(tab => (
+            {Object.values(TabTemplate).map(tab => (
               <MenuItem key={tab} value={tab} sx={{ textTransform: 'capitalize' }}>
                 {i18n(tab, 'common', 'model', 'task_tab_type')}
               </MenuItem>
@@ -102,20 +111,52 @@ export const FormTab = ({
         sx={{ p: '0.5rem 0' }}
       />
       <CardHeader
-        title={i18n('task_status_title')}
+        title={i18n('content_status_title')}
         titleTypographyProps={{ variant: 'subtitle2' }}
-        subheader={i18n('task_status_subheader')}
+        subheader={i18n('content_status_subheader')}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
         sx={{ p: '0.5rem 0' }}
       />
       <Card sx={{ p: '0.5rem 1rem', m: '0.5rem 0' }}>
+        <Grid container spacing={1} columnSpacing={1} sx={{ justifyContent: 'center' }}>
+          <CardHeader
+            title={i18n('task_status_title')}
+            titleTypographyProps={{ variant: 'subtitle2' }}
+            sx={{ color: 'text.secondary', padding: '1rem 0 0.25rem' }}
+          />
+        </Grid>
         <Grid container spacing={1} columnSpacing={1}>
           {Object.values(TaskStatus).map(s => (
             <Grid item xs={4} lg={2} key={s}>
               <Button disableTouchRipple={true} sx={{ p: '0 0 0 0.5rem' }} color={getHighlightColor(s)} disabled={disabled}>
                 <FormCheckbox
                   controllerProps={{ name: 'status', control }}
-                  formControlLabelProps={{ label: s, sx: { textTransform: 'capitalize' } }}
+                  formControlLabelProps={{ label: i18n(s, 'common', 'model', 'task_status'), sx: { textTransform: 'capitalize' } }}
+                  checkboxProps={{
+                    multiple: true,
+                    value: s,
+                    color: getHighlightColor(s),
+                    disabled,
+                  }}
+                />
+              </Button>
+            </Grid>
+          ))}
+        </Grid>
+        <Grid container spacing={1} columnSpacing={1} sx={{ justifyContent: 'center' }}>
+          <CardHeader
+            title={i18n('download_status_title')}
+            titleTypographyProps={{ variant: 'subtitle2' }}
+            sx={{ color: 'text.secondary', padding: '1rem' }}
+          />
+        </Grid>
+        <Grid container spacing={1} columnSpacing={1}>
+          {Object.values(DownloadStatus).map(s => (
+            <Grid item xs={4} lg={2} key={s}>
+              <Button disableTouchRipple={true} sx={{ p: '0 0 0 0.5rem' }} color={getHighlightColor(s)} disabled={disabled}>
+                <FormCheckbox
+                  controllerProps={{ name: 'status', control }}
+                  formControlLabelProps={{ label: i18n(s, 'common', 'model', 'download_status'), sx: { textTransform: 'capitalize' } }}
                   checkboxProps={{
                     multiple: true,
                     value: s,
