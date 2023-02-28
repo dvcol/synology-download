@@ -4,6 +4,7 @@ import { useI18n } from '@dvcol/web-extension-utils';
 
 import type {
   CommonResponse,
+  ContentStatusTypeId,
   Credentials,
   DownloadStationConfig,
   DownloadStationInfo,
@@ -17,15 +18,13 @@ import type {
   StoreOrProxy,
   Task,
   TaskList,
-  TaskStatusType,
 } from '@src/models';
-import { ConnectionType, FileListOption, LoginError, NotReadyError, TaskListOption, TaskStatus } from '@src/models';
+import { ConnectionType, FileListOption, LoginError, mapToTask, NotReadyError, TaskListOption, TaskStatus } from '@src/models';
 import { NotificationService } from '@src/services';
 import { SynologyAuthService, SynologyDownloadService, SynologyFileService, SynologyInfoService } from '@src/services/http';
 import { store$ } from '@src/store';
 import { addLoading, removeLoading, resetLoading, setLogged, setSid, setTasks, setTaskStats, spliceTasks } from '@src/store/actions';
 import {
-  geTasksIdsByStatusType,
   getCredentials,
   getFinishedTasksIdsByActionScope,
   getLogged,
@@ -34,6 +33,7 @@ import {
   getPausedTasksIdsByActionScope,
   getSid,
   getTasksIdsByActionScope,
+  getTasksIdsByStatusType,
   getUrl,
 } from '@src/store/selectors';
 import { before } from '@src/utils';
@@ -216,18 +216,19 @@ export class QueryService {
 
   static listTasks(): Observable<TaskList> {
     // snapshot task before call
-    const extract = geTasksIdsByStatusType(this.store.getState());
+    const extract: ContentStatusTypeId<Task['id']> = getTasksIdsByStatusType(this.store.getState());
     return this.downloadClient.listTasks(0, -1, [TaskListOption.detail, TaskListOption.file, TaskListOption.transfer]).pipe(
       this.loadingOperator,
       tap(({ tasks }) => {
+        const _tasks = tasks?.map(mapToTask);
         // notify if we have tasks
-        this.notifyTasks(extract, tasks);
-        this.store.dispatch(setTasks(tasks));
+        this.notifyTasks(extract, _tasks);
+        this.store.dispatch(setTasks(_tasks));
       }),
     );
   }
 
-  private static notifyTasks({ finished, error }: Record<TaskStatusType, Set<Task['id']>>, tasks: Task[], state = this.store.getState()): void {
+  private static notifyTasks({ finished, error }: ContentStatusTypeId<Task['id']>, tasks: Task[], state = this.store.getState()): void {
     tasks?.forEach(t => {
       if (getNotificationsBannerFinishedEnabled(state) && TaskStatus.finished === t.status && !finished.has(t.id)) {
         NotificationService.taskFinished(t);

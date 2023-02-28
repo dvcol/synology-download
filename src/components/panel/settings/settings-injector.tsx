@@ -10,7 +10,6 @@ export const SettingsInjector: FC = () => {
   const size = useSelector<StoreState, number>(getInterfaceSize);
 
   useEffect(() => {
-    console.info('Size change', size);
     const html = document.querySelector<HTMLElement>('html');
     if (html) html.style.fontSize = `calc(1rem * ${size})`;
   }, [size]);

@@ -1,17 +1,17 @@
 {
-  "common__model__download_status__downloading": {
+  "common__model__download_status__downloading_in_progress": {
     "message": "Downloading"
   },
-  "common__model__download_status__paused": {
+  "common__model__download_status__paused_in_progress": {
     "message": "Paused"
   },
-  "common__model__download_status__error": {
+  "common__model__download_status__error_interrupted": {
     "message": "Error"
   },
-  "common__model__download_status__cancelled": {
+  "common__model__download_status__cancelled_interrupted": {
     "message": "Cancelled"
   },
-  "common__model__download_status__complete": {
+  "common__model__download_status__finished_complete": {
     "message": "Complete"
   },
   "common__model__download_status__unknown": {

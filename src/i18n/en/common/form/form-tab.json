@@ -19,11 +19,18 @@
     "message": "Chrome Default"
   },
 
-  "common__form__tab__task_status_title": {
-    "message": "Task statuses"
+  "common__form__tab__content_status_title": {
+    "message": "Statuses"
   },
-  "common__form__tab__task_status_subheader": {
+  "common__form__tab__content_status_subheader": {
     "message": "Select statuses to include in the selection."
+  },
+
+  "common__form__tab__task_status_title": {
+    "message": "Synology tasks statuses"
+  },
+  "common__form__tab__download_status_title": {
+    "message": "Local download statuses"
   },
 
   "common__form__tab__direction_title": {

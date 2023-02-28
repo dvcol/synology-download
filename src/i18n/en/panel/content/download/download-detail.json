@@ -5,7 +5,7 @@
   "panel__content__download__detail__created": {
     "message": "Created"
   },
-  "panel__content__download__detail__referrer": {
-    "message": "Source"
+  "panel__content__download__detail__destination": {
+    "message": "Destination"
   }
 }

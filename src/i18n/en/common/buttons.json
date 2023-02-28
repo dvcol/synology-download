@@ -42,5 +42,8 @@
   },
   "common__buttons__open": {
     "message": "Open"
+  },
+  "common__buttons__transfer": {
+    "message": "Transfer"
   }
 }

@@ -1,3 +1,4 @@
+import CloudSyncIcon from '@mui/icons-material/CloudSync';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FileDownloadOffIcon from '@mui/icons-material/FileDownloadOff';
 import LaunchIcon from '@mui/icons-material/Launch';
@@ -17,11 +18,10 @@ import type { ProgressBackgroundProps } from '@src/components';
 import type { Download, Global } from '@src/models';
 import { ColorLevel, ColorLevelMap, DownloadStatus, downloadStatusToColor } from '@src/models';
 
-import { DownloadService } from '@src/services';
+import { DownloadService, QueryService } from '@src/services';
 
 import type { StoreState } from '@src/store';
 import { getGlobalDownload } from '@src/store/selectors';
-import { computeProgress } from '@src/utils';
 
 import { ContentItem } from '../content-item';
 
@@ -31,7 +31,11 @@ import { DownloadDetail } from './download-detail';
 import type { ForwardRefRenderFunction } from 'react';
 
 type DownloadItemProps = { download: Download; hideStatus?: boolean };
-export type DownloadItemButton = { key: 'erase' | 'cancel' | 'retry' | 'pause' | 'resume' | 'open'; icon: JSX.Element; color: ColorLevel };
+export type DownloadItemButton = {
+  key: 'erase' | 'cancel' | 'retry' | 'pause' | 'resume' | 'open' | 'transfer';
+  icon: JSX.Element;
+  color: ColorLevel;
+};
 
 const ButtonStyle = { display: 'flex', flex: '1 1 auto', minHeight: '2.5rem' };
 const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadItemProps> = ({ download, hideStatus }, ref) => {
@@ -39,7 +43,7 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
   const [expanded, setExpanded] = useState(false);
   const [visible, setVisible] = useState(false);
 
-  const buttons = [];
+  const buttons: DownloadItemButton[] = [];
 
   let topButton: DownloadItemButton = { key: 'erase', icon: <DeleteIcon />, color: ColorLevel.error };
   if ([DownloadStatus.downloading, DownloadStatus.paused].includes(download.status))
@@ -61,7 +65,7 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
     ? {
         primary: `${ColorLevelMap[downloadStatusToColor(download.status)]}${visible ? 30 : 20}`,
         secondary: visible ? '#99999910' : 'transparent',
-        progress: computeProgress(download.bytesReceived, download.fileSize),
+        progress: download.progress ?? 0,
       }
     : {};
 
@@ -73,7 +77,6 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
       case 'cancel':
         return DownloadService.cancel(download.id).subscribe();
       case 'retry':
-        console.info('Retry TODO', download);
         return DownloadService.download({
           url: download.finalUrl,
         }).subscribe();
@@ -84,11 +87,15 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
       case 'open':
         if ($event.shiftKey) return DownloadService.open(download.id).subscribe();
         return DownloadService.show(download.id).subscribe();
+      case 'transfer':
+        return QueryService.createTask(download.finalUrl).subscribe();
       default:
         console.warn(`Key '${key}' is unknown`);
     }
   };
 
+  const detailsButtons = buttons.slice().reverse();
+  detailsButtons.unshift({ key: 'transfer', icon: <CloudSyncIcon />, color: ColorLevel.info });
   return (
     <ContentItem
       ref={ref}
@@ -111,7 +118,7 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
           </>
         ),
       }}
-      details={<DownloadDetail download={download} buttons={buttons.slice().reverse()} onclick={onclick} />}
+      details={<DownloadDetail download={download} buttons={detailsButtons} onclick={onclick} />}
     />
   );
 };

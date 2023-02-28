@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import type { Connection, ContextMenu, Downloads, Global, Notifications, Polling, QuickMenu, SettingsSlice, TaskTab } from '@src/models';
+import type { Connection, ContentTab, ContextMenu, Downloads, Global, Notifications, Polling, QuickMenu, SettingsSlice } from '@src/models';
 import { defaultSettings, SettingsSliceName } from '@src/models';
 
 import {
@@ -29,9 +29,9 @@ interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   saveContextMenu: CaseReducer<S, PayloadAction<ContextMenu>>;
   removeContextMenu: CaseReducer<S, PayloadAction<string>>;
   resetContextMenu: CaseReducer<S>;
-  saveTaskTab: CaseReducer<S, PayloadAction<TaskTab>>;
-  removeTaskTab: CaseReducer<S, PayloadAction<string>>;
-  resetTaskTabs: CaseReducer<S>;
+  saveContentTab: CaseReducer<S, PayloadAction<ContentTab>>;
+  removeContentTab: CaseReducer<S, PayloadAction<string>>;
+  resetContentTabs: CaseReducer<S>;
   saveQuickMenu: CaseReducer<S, PayloadAction<QuickMenu>>;
   removeQuickMenu: CaseReducer<S, PayloadAction<string>>;
   resetQuickMenus: CaseReducer<S>;
@@ -62,9 +62,9 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
         type: 'sync',
         payload: { menus: defaultSettings.menus },
       }),
-    saveTaskTab: (oldSettings, { payload }): SettingsSlice => addTo<TaskTab, 'tabs'>(oldSettings, payload, 'tabs', o => o.id === payload.id),
-    removeTaskTab: (oldSettings, { payload }): SettingsSlice => removeFrom<TaskTab, 'tabs'>(oldSettings, 'tabs', o => o.id !== payload),
-    resetTaskTabs: (oldSettings): SettingsSlice =>
+    saveContentTab: (oldSettings, { payload }): SettingsSlice => addTo<ContentTab, 'tabs'>(oldSettings, payload, 'tabs', o => o.id === payload.id),
+    removeContentTab: (oldSettings, { payload }): SettingsSlice => removeFrom<ContentTab, 'tabs'>(oldSettings, 'tabs', o => o.id !== payload),
+    resetContentTabs: (oldSettings): SettingsSlice =>
       syncReducer(oldSettings, {
         type: 'sync',
         payload: { tabs: defaultSettings.tabs },

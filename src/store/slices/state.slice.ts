@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import type { StateSlice } from '@src/models';
 
-import { syncLoggedReducer } from '@src/store/reducers/state.reducer';
+import { setBadgeReducer, syncLoggedReducer } from '@src/store/reducers/state.reducer';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
@@ -16,6 +16,7 @@ export interface StateReducers<S = StateSlice> extends SliceCaseReducers<S> {
   addLoading: CaseReducer<S, PayloadAction<number | undefined>>;
   removeLoading: CaseReducer<S, PayloadAction<number | undefined>>;
   resetLoading: CaseReducer<S>;
+  setBadge: CaseReducer<S, PayloadAction<StateSlice['badge']>>;
 }
 
 const initialState: StateSlice = {
@@ -26,6 +27,7 @@ const initialState: StateSlice = {
     option: false,
   },
   loading: 0,
+  badge: { count: undefined, stats: undefined },
 };
 
 export const stateSlice = createSlice<StateSlice, StateReducers, 'state'>({
@@ -40,5 +42,6 @@ export const stateSlice = createSlice<StateSlice, StateReducers, 'state'>({
     addLoading: (state, { payload }) => ({ ...state, loading: state.loading + (payload ?? 1) }),
     removeLoading: (state, { payload }) => ({ ...state, loading: state.loading - (payload ?? 1) }),
     resetLoading: state => ({ ...state, loading: 0 }),
+    setBadge: setBadgeReducer,
   } as StateReducers,
 });

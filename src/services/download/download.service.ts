@@ -1,8 +1,14 @@
-import { catchError, EMPTY, from, map, of, tap, throwError } from 'rxjs';
+import { catchError, EMPTY, forkJoin, from, map, of, tap, throwError } from 'rxjs';
 
 import type { Download, DownloadOptions, DownloadQuery, DownloadQueryPayload, StoreOrProxy } from '@src/models';
 import { ChromeMessageType, mapToDownload } from '@src/models';
 import { setDownloads } from '@src/store/actions';
+import {
+  getActiveDownloadIdsByActionScope,
+  getDownloadingDownloadIdsByActionScope,
+  getFinishedDownloadIdsByActionScope,
+  getPausedDownloadIdsByActionScope,
+} from '@src/store/selectors';
 import { cancel, download, erase, getFileIcon, onMessage, open, pause, resume, search, sendMessage, show, showDefaultFolder } from '@src/utils';
 
 import type { Observable } from 'rxjs';
@@ -31,7 +37,7 @@ export class DownloadService {
 
   static do(method: DownloadQueryPayload['method'], ...args: DownloadQueryPayload['args']): Observable<any> {
     if (!(method in this)) return throwError(() => new Error(`Method '${method}' is unknown.`));
-    return this[method](...args);
+    return this[method].bind(this)(...args);
   }
 
   static init(store: StoreOrProxy, isProxy = false) {
@@ -56,6 +62,14 @@ export class DownloadService {
     return from(erase(query)).pipe(tap(() => this.search().subscribe()));
   }
 
+  static eraseAll(ids: number[] = getFinishedDownloadIdsByActionScope(this.store.getState())): Observable<number[]> {
+    if (this.isProxy) return this.forward<number[]>('eraseAll', ids);
+    return forkJoin(ids.map(id => this.erase({ id }))).pipe(
+      map(results => results?.flat()),
+      tap(() => this.search().subscribe()),
+    );
+  }
+
   static download(options: DownloadOptions): Observable<number> {
     if (this.isProxy) return this.forward<number>('download', options);
     return from(download(options)).pipe(tap(() => this.search().subscribe()));
@@ -72,7 +86,6 @@ export class DownloadService {
   }
 
   static show(id?: number): Observable<void> {
-    console.info('show', { id, do: id !== undefined });
     if (this.isProxy) return this.forward<void>('show', id);
     return EMPTY.pipe(tap({ complete: () => (id !== null && id !== undefined ? show(id) : showDefaultFolder()) }));
   }
@@ -82,13 +95,37 @@ export class DownloadService {
     return from(pause(id)).pipe(tap(() => this.search().subscribe()));
   }
 
+  static pauseAll(ids: number[] = getDownloadingDownloadIdsByActionScope(this.store.getState())): Observable<number> {
+    if (this.isProxy) return this.forward<number>('pauseAll', ids);
+    return forkJoin(ids.map(this.pause.bind(this))).pipe(
+      map(results => results?.length),
+      tap(() => this.search().subscribe()),
+    );
+  }
+
   static resume(id: number): Observable<void> {
     if (this.isProxy) return this.forward<void>('resume', id);
     return from(resume(id)).pipe(tap(() => this.search().subscribe()));
   }
 
+  static resumeAll(ids: number[] = getPausedDownloadIdsByActionScope(this.store.getState())): Observable<number> {
+    if (this.isProxy) return this.forward<number>('resumeAll', ids);
+    return forkJoin(ids.map(this.resume.bind(this))).pipe(
+      map(results => results?.length),
+      tap(() => this.search().subscribe()),
+    );
+  }
+
   static cancel(id: number): Observable<void> {
     if (this.isProxy) return this.forward<void>('cancel', id);
     return from(cancel(id)).pipe(tap(() => this.search().subscribe()));
+  }
+
+  static cancelAll(ids: number[] = getActiveDownloadIdsByActionScope(this.store.getState())): Observable<number> {
+    if (this.isProxy) return this.forward<number>('cancelAll', ids);
+    return forkJoin(ids.map(this.cancel.bind(this))).pipe(
+      map(results => results?.length),
+      tap(() => this.search().subscribe()),
+    );
   }
 }

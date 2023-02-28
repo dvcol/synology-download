@@ -1,7 +1,10 @@
 import { ColorLevel } from '@src/models/material-ui.model';
 
-import { formatBytes, formatTime, getDateDiff } from '@src/utils';
+import { computeProgress, formatTime, getDateDiff } from '@src/utils';
 
+import { ContentSource } from './content.model';
+
+import type { Content } from './content.model';
 import type { TabCount } from './tab.model';
 
 export type DownloadOptions = chrome.downloads.DownloadOptions;
@@ -9,7 +12,7 @@ export type DownloadQuery = chrome.downloads.DownloadQuery;
 export type DownloadItem = chrome.downloads.DownloadItem;
 export type DownloadState = chrome.downloads.DownloadState;
 
-export interface Download extends DownloadItem {
+export interface Download extends DownloadItem, Omit<Content, 'id'> {
   status: DownloadStatus;
 }
 
@@ -17,12 +20,11 @@ export interface Download extends DownloadItem {
  * Enumeration for possible task status
  */
 export enum DownloadStatus {
-  downloading = 'downloading',
-  paused = 'paused',
-  error = 'error',
-  cancelled = 'cancelled',
-  complete = 'complete',
-  unknown = 'unknown',
+  downloading = 'downloading_in_progress',
+  paused = 'paused_in_progress',
+  error = 'error_interrupted',
+  cancelled = 'cancelled_interrupted',
+  complete = 'finished_complete',
 }
 export interface DownloadCount {
   badge: number;
@@ -34,7 +36,20 @@ export type DownloadQueryArgs = [any];
 
 export interface DownloadQueryPayload {
   id: string;
-  method: 'search' | 'pause' | 'getFileIcon' | 'resume' | 'cancel' | 'download' | 'open' | 'show' | 'erase';
+  method:
+    | 'search'
+    | 'pause'
+    | 'pauseAll'
+    | 'getFileIcon'
+    | 'resume'
+    | 'resumeAll'
+    | 'cancel'
+    | 'cancelAll'
+    | 'download'
+    | 'open'
+    | 'show'
+    | 'erase'
+    | 'eraseAll';
   args: DownloadQueryArgs;
 }
 
@@ -59,24 +74,23 @@ export const downloadStatusToColor = (state: DownloadStatus) => {
   }
 };
 
-export const getEstimatedSpeed = (download: Download) => {
+const getEstimatedSpeed = (download: DownloadItem): number | undefined => {
   if (!download.estimatedEndTime) return;
   if (download.bytesReceived > download.fileSize) return;
   const date = new Date(download.estimatedEndTime);
   const seconds = getDateDiff(date);
   const remaining = download.fileSize - download.bytesReceived;
-  const speed = remaining / seconds;
-  return formatBytes(speed);
+  return remaining / seconds;
 };
 
-export const formatEstimatedTime = (download: Download) => {
+const formatEstimatedTime = (download: DownloadItem) => {
   if (!download.estimatedEndTime) return;
   const date = new Date(download.estimatedEndTime);
   const seconds = getDateDiff(date);
   return formatTime(seconds);
 };
 
-export const mapToDownloadStatus = (download: DownloadItem): DownloadStatus => {
+const mapToDownloadStatus = (download: DownloadItem): DownloadStatus => {
   switch (download.state) {
     case 'in_progress':
       if (download.paused) return DownloadStatus.paused;
@@ -87,8 +101,25 @@ export const mapToDownloadStatus = (download: DownloadItem): DownloadStatus => {
     case 'complete':
       return DownloadStatus.complete;
     default:
-      return DownloadStatus.unknown;
+      return DownloadStatus.error;
   }
 };
 
-export const mapToDownload = (download: DownloadItem): Download => ({ ...download, status: mapToDownloadStatus(download) });
+export const mapToDownload = (item: DownloadItem): Download => {
+  const path = item.filename?.split('/');
+  return {
+    ...item,
+    source: ContentSource.Download,
+    key: `${ContentSource.Download}-${item.id}`,
+    status: mapToDownloadStatus(item),
+    title: path?.pop() ?? item.filename,
+    folder: path?.join('/'),
+    progress: computeProgress(item.bytesReceived, item.fileSize),
+    eta: formatEstimatedTime(item),
+    speed: getEstimatedSpeed(item),
+    size: item.fileSize,
+    received: item.bytesReceived,
+    createdAt: item.startTime ? new Date(item.startTime).getTime() : undefined,
+    finishedAt: item.endTime ? new Date(item.endTime).getTime() : undefined,
+  };
+};

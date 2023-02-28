@@ -1,0 +1,80 @@
+{
+  "common__model__task_error__broken_link": {
+    "message": "broken link"
+  },
+  "common__model__task_error__destination_not_exist": {
+    "message": "destination not exist"
+  },
+  "common__model__task_error__destination_denied": {
+    "message": "destination denied"
+  },
+  "common__model__task_error__disk_full": {
+    "message": "disk full"
+  },
+  "common__model__task_error__quota_reached": {
+    "message": "quota reached"
+  },
+  "common__model__task_error__timeout": {
+    "message": "timeout"
+  },
+  "common__model__task_error__exceed_max_file_system_size": {
+    "message": "exceed max file system size"
+  },
+  "common__model__task_error__exceed_max_destination_size": {
+    "message": "exceed max destination size"
+  },
+  "common__model__task_error__exceed_max_temp_size": {
+    "message": "exceed max temp size"
+  },
+  "common__model__task_error__encrypted_name_too_long": {
+    "message": "encrypted name too long"
+  },
+  "common__model__task_error__name_too_long": {
+    "message": "name too long"
+  },
+  "common__model__task_error__torrent_duplicate": {
+    "message": "torrent duplicate"
+  },
+  "common__model__task_error__file_not_exist": {
+    "message": "file not exist"
+  },
+  "common__model__task_error__required_premium_account": {
+    "message": "required premium account"
+  },
+  "common__model__task_error__not_supported_type": {
+    "message": "not supported type"
+  },
+  "common__model__task_error__try_it_later": {
+    "message": "try it later"
+  },
+  "common__model__task_error__task_encryption": {
+    "message": "task encryption"
+  },
+  "common__model__task_error__missing_python": {
+    "message": "missing python"
+  },
+  "common__model__task_error__private_video": {
+    "message": "private video"
+  },
+  "common__model__task_error__ftp_encryption_not_supported_type": {
+    "message": "ftp encryption not supported type"
+  },
+  "common__model__task_error__extract_failed": {
+    "message": "extract failed"
+  },
+  "common__model__task_error__extract_failed_wrong_password": {
+    "message": "extract failed wrong password"
+  },
+  "common__model__task_error__extract_failed_invalid_archive": {
+    "message": "extract failed invalid archive"
+  },
+  "common__model__task_error__extract_failed_quota_reached": {
+    "message": "extract failed quota reached"
+  },
+  "common__model__task_error__extract_failed_disk_full": {
+    "message": "extract failed disk full"
+  },
+  "common__model__task_error__unknown": {
+    "message": "unknown"
+  }
+}

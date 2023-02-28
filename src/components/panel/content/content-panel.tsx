@@ -8,30 +8,30 @@ import { Link } from 'react-router-dom';
 import { useI18n } from '@dvcol/web-extension-utils';
 
 import { DownloadItem, TaskItem } from '@src/components';
-import type { Download, Task } from '@src/models';
-import { AppRoute } from '@src/models';
+import type { Content, Download, Task } from '@src/models';
+import { AppRoute, ContentSource } from '@src/models';
 import type { StoreState } from '@src/store';
 import { setNavbar } from '@src/store/actions';
-import { getDownloads, getTabOrFirst, getTasksForActiveTab } from '@src/store/selectors';
+import { getContentsForActiveTab, getTabOrFirst } from '@src/store/selectors';
 
 export const ContentPanel = () => {
   const i18n = useI18n('panel', 'content');
   const tab = useSelector(getTabOrFirst);
-  const tasks = useSelector<StoreState, Task[]>(getTasksForActiveTab);
-  const downloads = useSelector<StoreState, Download[]>(getDownloads);
+  const contents = useSelector<StoreState, Content[]>(getContentsForActiveTab);
 
   const dispatch = useDispatch();
   const clearTab = () => dispatch(setNavbar());
 
   return (
     <React.Fragment>
-      {downloads?.map(download => (
-        <DownloadItem key={download.id} download={download} hideStatus={(tab?.status?.length ?? 0) > 1} />
-      ))}
-      {tasks?.map(task => (
-        <TaskItem key={task.id} task={task} hideStatus={(tab?.status?.length ?? 0) > 1} />
-      ))}
-      {!tasks?.length && (
+      {contents?.map(item =>
+        item.source === ContentSource.Download ? (
+          <DownloadItem key={item.id} download={item as Download} hideStatus={(tab?.status?.length ?? 0) <= 1} />
+        ) : (
+          <TaskItem key={item.id} task={item as Task} hideStatus={(tab?.status?.length ?? 0) <= 1} />
+        ),
+      )}
+      {!contents?.length && (
         <Box
           sx={{
             height: '100%',

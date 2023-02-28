@@ -25,7 +25,7 @@ import type { NavbarButton } from '@src/models';
 import { AppLinks, AppRoute, ErrorType, LoginError, NavbarButtonType } from '@src/models';
 import { DownloadService, NotificationService, QueryService } from '@src/services';
 import { resetDownloads, resetTasks, setNavbar } from '@src/store/actions';
-import { getGlobalNavbarButton, getLogged, getUrl } from '@src/store/selectors';
+import { getGlobalNavbarButton, getLogged, getSettingsDownloadsButtons, getSettingsDownloadsEnabled, getUrl } from '@src/store/selectors';
 import { createTab } from '@src/utils';
 
 import NavbarMenuIcon from './navbar-menu-icon';
@@ -38,6 +38,8 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
   const url = useSelector(getUrl) + AppLinks.DownloadStation;
   const navbarButtons = useSelector(getGlobalNavbarButton);
   const logged = useSelector(getLogged);
+  const downloadEnabled = useSelector(getSettingsDownloadsEnabled);
+  const downloadButtons = useSelector(getSettingsDownloadsButtons);
 
   const [anchorEl, setAnchorEl] = React.useState<null | Element>(null);
   const open = Boolean(anchorEl);
@@ -82,8 +84,8 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
           dispatch(resetDownloads());
           dispatch(resetTasks());
         }
-        DownloadService.search().subscribe();
-        QueryService.listTasks().subscribe(handleError('refresh'));
+        if (downloadButtons && !$event.altKey) DownloadService.search().subscribe();
+        if (!$event.shiftKey) QueryService.listTasks().subscribe(handleError('refresh'));
       },
     },
     {
@@ -91,14 +93,20 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       label: i18n('menu_resume'),
       icon: <PlayArrowIcon />,
       color: 'success',
-      onClick: () => QueryService.resumeAllTasks().subscribe(handleError('resume')),
+      onClick: $event => {
+        if (downloadButtons && !$event.altKey) DownloadService.resumeAll().subscribe();
+        if (!$event.shiftKey) QueryService.resumeAllTasks().subscribe(handleError('resume'));
+      },
     },
     {
       type: NavbarButtonType.Pause,
       label: i18n('menu_pause'),
       icon: <PauseIcon />,
       color: 'warning',
-      onClick: () => QueryService.pauseAllTasks().subscribe(handleError('pause')),
+      onClick: $event => {
+        if (downloadButtons && !$event.altKey) DownloadService.pauseAll().subscribe();
+        if (!$event.shiftKey) QueryService.pauseAllTasks().subscribe(handleError('pause'));
+      },
     },
     {
       type: NavbarButtonType.Remove,
@@ -112,10 +120,9 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       label: i18n('menu_clear'),
       icon: <ClearAllIcon />,
       color: 'primary',
-      onClick: () => {
-        // TODO put download erase behind an option on/off and tob
-        DownloadService.erase().subscribe();
-        QueryService.deleteFinishedTasks().subscribe(handleError('clear'));
+      onClick: $event => {
+        if (downloadButtons && !$event.altKey) DownloadService.eraseAll().subscribe();
+        if (!$event.shiftKey) QueryService.deleteFinishedTasks().subscribe(handleError('clear'));
       },
     },
     {
@@ -214,7 +221,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
         <NavbarMenuIcon {...buttons[6]} />
         <NavbarMenuIcon {...buttons[7]} />
         <NavbarMenuIcon {...buttons[8]} />
-        <NavbarMenuIcon {...buttons[9]} />
+        {downloadEnabled && <NavbarMenuIcon {...buttons[9]} />}
         <Divider />
         <NavbarMenuIcon {...buttons[10]} />
       </Menu>
@@ -230,9 +237,10 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
           </React.Fragment>
         }
         onCancel={() => setPrompt(false)}
-        onConfirm={() => {
+        onConfirm={$event => {
           setPrompt(false);
-          QueryService.deleteAllTasks().subscribe(handleError('delete'));
+          if (downloadButtons && !$event.altKey) DownloadService.cancelAll().subscribe();
+          if (!$event.shiftKey) QueryService.deleteAllTasks().subscribe(handleError('delete'));
         }}
       />
     </React.Fragment>

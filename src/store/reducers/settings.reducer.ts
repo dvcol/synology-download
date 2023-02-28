@@ -1,6 +1,6 @@
 import { syncGet, syncSet } from '@dvcol/web-extension-utils';
 
-import type { Connection, ContextMenu, Notifications, QuickMenu, SettingsSlice, TaskTab } from '@src/models';
+import type { Connection, ContentTab, ContextMenu, Notifications, QuickMenu, SettingsSlice } from '@src/models';
 import { SettingsSliceName } from '@src/models';
 import { setBadgeBackgroundColor } from '@src/utils';
 
@@ -57,7 +57,7 @@ export const syncConnectionReducer = (oldSettings: SettingsSlice, { payload }: P
   return setNestedReducer<Connection>(oldSettings, payload, 'connection');
 };
 
-type Payloads = TaskTab | ContextMenu | QuickMenu;
+type Payloads = ContentTab | ContextMenu | QuickMenu;
 type Keys = 'tabs' | 'menus' | 'quick';
 
 const syncPayload = <P extends Payloads, K extends Keys>(oldSettings: SettingsSlice, key: K, filter: (array: P[]) => P[]): SettingsSlice => {

@@ -13,7 +13,7 @@ import type { Task } from '@src/models';
 import { TaskStatus } from '@src/models';
 import { QueryService } from '@src/services';
 
-import { computeProgress, formatBytes } from '@src/utils';
+import { computeProgress, dateToLocalString, formatBytes } from '@src/utils';
 
 import ContentDetail from '../content-detail';
 
@@ -34,22 +34,15 @@ export const TaskDetail: FC<TaskDetailProps> = ({ task, loading, loadingIcon, bu
   const [openEdit, setOpenEdit] = React.useState(false);
   const isDisabled = () => Object.values(loading).some(Boolean);
 
-  const createdTime = task.additional?.detail?.create_time ? new Date(task.additional.detail.create_time * 1000) : undefined;
-  const createdAt = createdTime
-    ? `${createdTime.toLocaleDateString()} ${createdTime.toLocaleTimeString(navigator.language, {
-        hour: '2-digit',
-        minute: '2-digit',
-      })}`
-    : '';
   return (
     <ContentDetail
       info={
         <>
           <Typography variant="caption" component="div">
-            {`${i18n('created')} :\t${createdAt}${i18n({ key: 'created_by', substitutions: [task.username] })}`}
+            {`${i18n('created')} :\t${dateToLocalString(task.createdAt) ?? ''}${i18n({ key: 'created_by', substitutions: [task.username] })}`}
           </Typography>
           <Typography variant="caption" component="div">
-            {`${i18n('destination')} :\t${task.additional?.detail?.destination}`}
+            {`${i18n('destination')} :\t${task.folder}`}
           </Typography>
         </>
       }
