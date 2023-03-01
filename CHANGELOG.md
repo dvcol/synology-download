@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.16.0](https://github.com/dvcol/synology-download/compare/v1.14.6...v1.16.0) (2023-03-01)
+
+
+### Features
+
+* **download:** add support for content script download interception ([a6ab1b6](https://github.com/dvcol/synology-download/commit/a6ab1b6fb4204901dd12800b4e5d2db84e7743f1))
+* **navbar:** shift clicking the refresh button clear in memory tasks ([6d1986f](https://github.com/dvcol/synology-download/commit/6d1986f836d12748c587a46e40ad0276a4119f84))
+* **notifications:** add download notification support ([1e0ca5a](https://github.com/dvcol/synology-download/commit/1e0ca5aaa393a46fdb888a1bf2652c3a7c85481c))
+* **popup:** add download task support to popup ([f21189d](https://github.com/dvcol/synology-download/commit/f21189d79039b721aff4ba13f7a3f8db393a0ec7))
+* **readme:** adds webstore link to readme ([85be3f9](https://github.com/dvcol/synology-download/commit/85be3f9e89a3672c401e9de9ddf931db3482672b))
+* **settings:** add downloads interceptions settings ([d3af04b](https://github.com/dvcol/synology-download/commit/d3af04b75aa4686fc3a06bc93d558de386b59ebd))
+* **settings:** add Downloads settings to popup ([9a5fdf4](https://github.com/dvcol/synology-download/commit/9a5fdf4e6da371f3030352a27028a0798f565753))
+* **settings:** move to rem and add scaling option ([8b71912](https://github.com/dvcol/synology-download/commit/8b7191231e951bef67ac7d2d376a3761a36e0388))
+
 ### [1.14.6](https://github.com/dvcol/synology-download/compare/v1.14.5...v1.14.6) (2022-09-24)
 
 
