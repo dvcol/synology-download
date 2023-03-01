@@ -12,7 +12,7 @@ import { useI18n } from '@dvcol/web-extension-utils';
 import { FormCheckbox, FormSwitch } from '@src/components';
 import { SettingsDownloadsExtensions } from '@src/components/panel/settings/settings-downloads-extensions';
 import type { DownloadExtension, Downloads } from '@src/models';
-import { ColorLevel, defaultDownloads, InterfaceHeader } from '@src/models';
+import { ColorLevel, ColorLevelMap, defaultDownloads, InterfaceHeader } from '@src/models';
 import type { StoreState } from '@src/store';
 import { syncDownloads } from '@src/store/actions';
 import { getSettingsDownloads } from '@src/store/selectors';
@@ -34,6 +34,8 @@ export const SettingsDownloads = () => {
     defaultValues: {
       ...defaultDownloads,
       ...state,
+      transfer: { ...defaultDownloads.transfer, ...state.transfer },
+      intercept: { ...defaultDownloads.intercept, ...state.intercept },
     },
   });
 
@@ -66,7 +68,7 @@ export const SettingsDownloads = () => {
     });
   };
 
-  const getActiveColor = (ext: DownloadExtension) => (getValues().intercept?.active?.includes(ext) ? ColorLevel.success : undefined);
+  const getHighlightColor = (extension: DownloadExtension) => (extension?.mime ? ColorLevel.primary : ColorLevel.warning);
 
   return (
     <Card raised={true}>
@@ -113,6 +115,19 @@ export const SettingsDownloads = () => {
           sx={{ p: '0.5rem 0' }}
         />
         <CardHeader
+          title={i18n('transfer__resume__title')}
+          subheader={i18n('transfer__resume__subheader')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
+          action={
+            <FormSwitch
+              controllerProps={{ name: 'transfer.resume', control }}
+              formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
+            />
+          }
+          sx={{ p: '0.5rem 0' }}
+        />
+        <CardHeader
           title={i18n('transfer__modal__title')}
           subheader={i18n('transfer__modal__subheader')}
           titleTypographyProps={{ variant: 'subtitle2' }}
@@ -139,6 +154,9 @@ export const SettingsDownloads = () => {
           sx={{ p: '0.5rem 0' }}
         />
         <Collapse in={getValues()?.intercept?.enabled} unmountOnExit={true}>
+          <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem', maxWidth: '80%' }}>
+            {i18n('intercept__warning')}
+          </Typography>
           <CardHeader
             title={i18n('intercept__erase__title')}
             subheader={i18n('intercept__erase__subheader')}
@@ -152,6 +170,37 @@ export const SettingsDownloads = () => {
             }
             sx={{ p: '0.5rem 0' }}
           />
+          <CardHeader
+            title={i18n('intercept__resume__title')}
+            subheader={i18n('intercept__resume__subheader')}
+            titleTypographyProps={{ variant: 'subtitle2' }}
+            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
+            action={
+              <FormSwitch
+                controllerProps={{ name: 'intercept.resume', control }}
+                formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
+              />
+            }
+            sx={{ p: '0.5rem 0' }}
+          />
+          <CardHeader
+            title={i18n('intercept__modal__title')}
+            subheader={i18n('intercept__modal__subheader')}
+            titleTypographyProps={{ variant: 'subtitle2' }}
+            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
+            action={
+              <FormSwitch
+                controllerProps={{ name: 'intercept.modal', control }}
+                formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
+              />
+            }
+            sx={{ p: '0.5rem 0' }}
+          />
+          <Collapse in={getValues().intercept?.modal} unmountOnExit={true}>
+            <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
+              {i18n('intercept__modal__warning')}
+            </Typography>
+          </Collapse>
           <CardHeader
             title={i18n('intercept__all__title')}
             subheader={i18n('intercept__all__subheader')}
@@ -172,7 +221,6 @@ export const SettingsDownloads = () => {
             subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
             sx={{ p: '0.5rem 0' }}
           />
-
           <Card sx={{ p: '1.5rem 1rem 1rem', m: '0.5rem 0' }}>
             <Grid container spacing={1} columnSpacing={1}>
               {getValues().intercept?.extensions.map(extension => (
@@ -180,15 +228,19 @@ export const SettingsDownloads = () => {
                   <Button
                     disableTouchRipple={true}
                     sx={{ p: '0 0 0 0.5rem' }}
-                    color={getActiveColor(extension)}
+                    color={getHighlightColor(extension)}
                     disabled={!getValues()?.enabled || !getValues()?.intercept?.enabled}
                   >
                     <FormCheckbox
                       controllerProps={{ name: 'intercept.active', control }}
                       formControlLabelProps={{
                         label: (
-                          <Tooltip title={extension.mime ?? ''}>
-                            <Typography variant="body2" color="text.secondary" sx={{ textTransform: 'lowercase' }}>
+                          <Tooltip title={extension.mime ?? '⚠ no mime type specified'}>
+                            <Typography
+                              variant="body2"
+                              color="text.secondary"
+                              sx={{ textTransform: 'lowercase', color: getHighlightColor(extension) }}
+                            >
                               {extension.ext}
                             </Typography>
                           </Tooltip>
@@ -198,7 +250,7 @@ export const SettingsDownloads = () => {
                       checkboxProps={{
                         multiple: true,
                         value: extension,
-                        color: getActiveColor(extension),
+                        color: getHighlightColor(extension),
                         disabled: !getValues()?.enabled || !getValues()?.intercept?.enabled || getValues()?.intercept?.all,
                       }}
                     />

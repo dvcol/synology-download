@@ -1,1 +1,1 @@
-export * from './anchor';
+export * from './anchor.handler';

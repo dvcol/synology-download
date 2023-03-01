@@ -100,8 +100,12 @@ export const getSettingsDownloadsNotifications = createSelector(
   getSettingsDownloadsEnabled,
   (downloads: Downloads, enabled: boolean) => enabled && (downloads.notifications ?? defaultDownloads.notifications),
 );
-
 export const getSettingsDownloadsTransfer = createSelector(
   getSettingsDownloads,
   (downloads: Downloads) => downloads.transfer ?? defaultDownloads.transfer,
+);
+
+export const getSettingsDownloadsIntercept = createSelector(
+  getSettingsDownloads,
+  (downloads: Downloads) => downloads.intercept ?? defaultDownloads.intercept,
 );

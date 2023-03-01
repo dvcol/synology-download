@@ -14,6 +14,9 @@
   "common__model__download_status__finished_complete": {
     "message": "Complete"
   },
+  "common__model__download_status__finished_deleted": {
+    "message": "Deleted"
+  },
   "common__model__download_status__unknown": {
     "message": "Unknown"
   }

@@ -1,17 +1,12 @@
 import { ColorLevel } from '@src/models/material-ui.model';
 
+import type { DownloadItem, DownloadQuery } from '@src/utils';
 import { computeProgress, formatTime, getDateDiff } from '@src/utils';
 
 import { ContentSource } from './content.model';
 
 import type { Content } from './content.model';
 import type { TabCount } from './tab.model';
-
-export type DownloadOptions = chrome.downloads.DownloadOptions;
-export type DownloadQuery = chrome.downloads.DownloadQuery;
-export type DownloadItem = chrome.downloads.DownloadItem;
-export type DownloadState = chrome.downloads.DownloadState;
-export type DownloadDelta = chrome.downloads.DownloadDelta;
 
 export interface Download extends DownloadItem, Omit<Content, 'id'> {
   status: DownloadStatus;
@@ -26,6 +21,7 @@ export enum DownloadStatus {
   error = 'error_interrupted',
   cancelled = 'cancelled_interrupted',
   complete = 'finished_complete',
+  deleted = 'finished_deleted',
 }
 export interface DownloadCount {
   badge: number;
@@ -65,6 +61,8 @@ export const downloadStatusToColor = (state: DownloadStatus) => {
       return ColorLevel.info;
     case DownloadStatus.complete:
       return ColorLevel.success;
+    case DownloadStatus.deleted:
+      return ColorLevel.secondary;
     case DownloadStatus.paused:
       return ColorLevel.warning;
     case DownloadStatus.cancelled:
@@ -101,7 +99,8 @@ const mapToDownloadStatus = (download: DownloadItem): DownloadStatus => {
       if (download.error === 'USER_CANCELED') return DownloadStatus.cancelled;
       return DownloadStatus.error;
     case 'complete':
-      return DownloadStatus.complete;
+      if (download.exists) return DownloadStatus.complete;
+      return DownloadStatus.deleted;
     default:
       return DownloadStatus.error;
   }
@@ -114,7 +113,7 @@ export const mapToDownload = (item: DownloadItem): Download => {
     source: ContentSource.Download,
     key: `${ContentSource.Download}-${item.id}`,
     status: mapToDownloadStatus(item),
-    title: path?.pop() ?? item.filename,
+    title: path?.pop() || item.filename || item.url || 'unkown',
     folder: path?.join('/'),
     progress: computeProgress(item.bytesReceived, item.fileSize),
     eta: formatEstimatedTime(item),

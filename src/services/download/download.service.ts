@@ -1,6 +1,6 @@
 import { catchError, EMPTY, forkJoin, from, map, of, tap, throwError } from 'rxjs';
 
-import type { Download, DownloadOptions, DownloadQuery, DownloadQueryPayload, StoreOrProxy } from '@src/models';
+import type { Download, DownloadQueryPayload, StoreOrProxy } from '@src/models';
 import { ChromeMessageType, mapToDownload } from '@src/models';
 import { setDownloads } from '@src/store/actions';
 import {
@@ -9,6 +9,7 @@ import {
   getFinishedDownloadIdsByActionScope,
   getPausedDownloadIdsByActionScope,
 } from '@src/store/selectors';
+import type { DownloadOptions, DownloadQuery } from '@src/utils';
 import { cancel, download, erase, getFileIcon, onMessage, open, pause, resume, search, sendMessage, show, showDefaultFolder } from '@src/utils';
 
 import type { Observable } from 'rxjs';

@@ -2,10 +2,11 @@ import DownloadIcon from '@mui/icons-material/Download';
 import DownloadDoneIcon from '@mui/icons-material/DownloadDone';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadOffIcon from '@mui/icons-material/FileDownloadOff';
+import FolderDeleteIcon from '@mui/icons-material/FolderDelete';
 import LoopIcon from '@mui/icons-material/Loop';
 
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
-import { blue, green, orange, red } from '@mui/material/colors';
+import { blue, green, orange, purple, red } from '@mui/material/colors';
 
 import React from 'react';
 
@@ -39,6 +40,8 @@ export const DownloadCard: FC<DownloadCardProps> = ({ download, hideStatus, expa
         return <FileDownloadOffIcon />;
       case DownloadStatus.error:
         return <ErrorOutlineIcon />;
+      case DownloadStatus.deleted:
+        return <FolderDeleteIcon />;
       default:
         return <LoopIcon />;
     }
@@ -56,6 +59,8 @@ export const DownloadCard: FC<DownloadCardProps> = ({ download, hideStatus, expa
         return orange[700];
       case DownloadStatus.error:
         return red[500];
+      case DownloadStatus.deleted:
+        return purple[200];
       default:
         return blue[100];
     }
