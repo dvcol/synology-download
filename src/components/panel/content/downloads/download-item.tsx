@@ -11,6 +11,8 @@ import React, { forwardRef, useState } from 'react';
 
 import { useSelector } from 'react-redux';
 
+import { forkJoin } from 'rxjs';
+
 import { useI18n } from '@dvcol/web-extension-utils';
 
 import type { ProgressBackgroundProps } from '@src/components';
@@ -88,9 +90,7 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
       case 'cancel':
         return DownloadService.cancel(download.id).subscribe();
       case 'retry':
-        return DownloadService.download({
-          url: download.finalUrl,
-        }).subscribe();
+        return forkJoin([DownloadService.download({ url: download.finalUrl }), DownloadService.erase({ id: download.id })]).subscribe();
       case 'pause':
         return DownloadService.pause(download.id).subscribe();
       case 'resume':

@@ -84,7 +84,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
           dispatch(resetDownloads());
           dispatch(resetTasks());
         }
-        if (downloadButtons && !$event.altKey) DownloadService.search().subscribe();
+        if (downloadButtons && !$event.altKey) DownloadService.searchAll().subscribe();
         if (!$event.shiftKey) QueryService.listTasks().subscribe(handleError('refresh'));
       },
     },

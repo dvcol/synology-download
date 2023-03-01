@@ -61,8 +61,8 @@ export class QueryService {
     this.fileClient = new SynologyFileService(isProxy);
     this.downloadClient = new SynologyDownloadService(isProxy);
 
-    store$(store, getUrl).subscribe(url => this.setBaseUrl(url));
-    store$(store, getSid).subscribe(sid => this.setSid(sid));
+    store$<string>(store, getUrl).subscribe(url => this.setBaseUrl(url));
+    store$<string>(store, getSid).subscribe(sid => this.setSid(sid));
 
     this.store.dispatch(resetLoading());
   }

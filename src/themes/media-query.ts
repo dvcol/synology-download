@@ -26,7 +26,7 @@ export const subscribeToTheme = (store: StoreOrProxy, theme: Theme, setTheme: Di
   const subscription = isDarkTheme$.subscribe(({ matches }) => setTheme(getTheme(store, matches)));
 
   // On store theme change
-  subscription.add(store$(store, getThemeMode).subscribe(_theme => setTheme(_theme ?? getTheme())));
+  subscription.add(store$<Theme>(store, getThemeMode).subscribe(_theme => setTheme(_theme ?? getTheme())));
 
   return subscription;
 };

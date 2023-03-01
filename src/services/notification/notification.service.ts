@@ -2,7 +2,7 @@ import { filter, map, Subject, tap } from 'rxjs';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
-import type { ChromeNotification, SnackMessage, SnackNotification, StoreOrProxy, Task } from '@src/models';
+import type { ChromeNotification, Download, SnackMessage, SnackNotification, StoreOrProxy, Task, StateSlice } from '@src/models';
 import { ChromeMessageType, NotificationLevel, NotificationLevelKeys, NotificationType } from '@src/models';
 import { store$ } from '@src/store';
 import { setBadge } from '@src/store/actions';
@@ -55,7 +55,7 @@ export class NotificationService {
       this.notify$.pipe(this.bufferStopStart('Notification')).subscribe();
       this.error$.pipe(this.bufferStopStart('Errors')).subscribe();
 
-      store$(this.store, getStateBadge).subscribe(count => this.store.dispatch(setBadge(count)));
+      store$<StateSlice['badge']>(this.store, getStateBadge).subscribe(count => this.store.dispatch(setBadge(count)));
 
       onMessage<ChromeNotification>([ChromeMessageType.notification]).subscribe(({ message: { payload }, sendResponse }) => {
         this.sendOrForward(payload);
@@ -199,5 +199,36 @@ export class NotificationService {
       title: i18n('login_required', 'common', 'error'),
       message: i18n('please_login', 'common', 'error'),
     });
+  }
+
+  static downloadCreated(download: Download): void {
+    this.info({
+      title: i18n('download_created'),
+      message: [`${i18n('title')}\xa0${download.title}`, download?.folder ? `${i18n('destination_folder')}\xa0${download?.folder}` : ''].join('\n'),
+      contextMessage: download?.referrer,
+      success: true,
+    });
+  }
+
+  static downloadError(download: Download): void {
+    this.error(
+      {
+        title: i18n('download_error'),
+        message: `${i18n('title')}\xa0${download.title}`,
+        contextMessage: download.error ? `${i18n('error_message')}\xa0${i18n(download.error, 'common', 'model', 'download_error')}` : undefined,
+      },
+      NotificationType.banner,
+    );
+  }
+
+  static downloadFinished(download: Download): void {
+    this.info(
+      {
+        title: i18n('download_finished'),
+        message: `${i18n('title')}\xa0${download.title}`,
+        contextMessage: download.folder ? `${i18n('destination_folder')}\xa0${download.folder}` : undefined,
+      },
+      NotificationType.banner,
+    );
   }
 }

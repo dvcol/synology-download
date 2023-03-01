@@ -37,7 +37,7 @@ export class DownloadService {
 
   static do(method: DownloadQueryPayload['method'], ...args: DownloadQueryPayload['args']): Observable<any> {
     if (!(method in this)) return throwError(() => new Error(`Method '${method}' is unknown.`));
-    return this[method].bind(this)(...args);
+    return this[method].bind(this)(...(args as [any]));
   }
 
   static init(store: StoreOrProxy, isProxy = false) {
@@ -49,30 +49,33 @@ export class DownloadService {
 
   static search(query: DownloadQuery = {}): Observable<Download[]> {
     if (this.isProxy) return this.forward<Download[]>('search', query);
-    return from(search(query)).pipe(
+    return from(search(query)).pipe(map(items => items.map(mapToDownload)));
+  }
+
+  static searchAll(): Observable<Download[]> {
+    if (this.isProxy) return this.forward<Download[]>('searchAll');
+    return from(search({})).pipe(
       map(items => items.map(mapToDownload)),
-      tap(items => {
-        this.store.dispatch(setDownloads(items));
-      }),
+      tap(items => this.store.dispatch(setDownloads(items))),
     );
   }
 
   static erase(query: DownloadQuery = {}): Observable<number[]> {
     if (this.isProxy) return this.forward<number[]>('erase', query);
-    return from(erase(query)).pipe(tap(() => this.search().subscribe()));
+    return from(erase(query)).pipe(tap(() => this.searchAll().subscribe()));
   }
 
   static eraseAll(ids: number[] = getFinishedDownloadIdsByActionScope(this.store.getState())): Observable<number[]> {
     if (this.isProxy) return this.forward<number[]>('eraseAll', ids);
     return forkJoin(ids.map(id => this.erase({ id }))).pipe(
       map(results => results?.flat()),
-      tap(() => this.search().subscribe()),
+      tap(() => this.searchAll().subscribe()),
     );
   }
 
   static download(options: DownloadOptions): Observable<number> {
     if (this.isProxy) return this.forward<number>('download', options);
-    return from(download(options)).pipe(tap(() => this.search().subscribe()));
+    return from(download(options)).pipe(tap(() => this.searchAll().subscribe()));
   }
 
   static getFileIcon(id: number): Observable<string> {
@@ -92,40 +95,40 @@ export class DownloadService {
 
   static pause(id: number): Observable<void> {
     if (this.isProxy) return this.forward<void>('pause', id);
-    return from(pause(id)).pipe(tap(() => this.search().subscribe()));
+    return from(pause(id)).pipe(tap(() => this.searchAll().subscribe()));
   }
 
   static pauseAll(ids: number[] = getDownloadingDownloadIdsByActionScope(this.store.getState())): Observable<number> {
     if (this.isProxy) return this.forward<number>('pauseAll', ids);
     return forkJoin(ids.map(this.pause.bind(this))).pipe(
       map(results => results?.length),
-      tap(() => this.search().subscribe()),
+      tap(() => this.searchAll().subscribe()),
     );
   }
 
   static resume(id: number): Observable<void> {
     if (this.isProxy) return this.forward<void>('resume', id);
-    return from(resume(id)).pipe(tap(() => this.search().subscribe()));
+    return from(resume(id)).pipe(tap(() => this.searchAll().subscribe()));
   }
 
   static resumeAll(ids: number[] = getPausedDownloadIdsByActionScope(this.store.getState())): Observable<number> {
     if (this.isProxy) return this.forward<number>('resumeAll', ids);
     return forkJoin(ids.map(this.resume.bind(this))).pipe(
       map(results => results?.length),
-      tap(() => this.search().subscribe()),
+      tap(() => this.searchAll().subscribe()),
     );
   }
 
   static cancel(id: number): Observable<void> {
     if (this.isProxy) return this.forward<void>('cancel', id);
-    return from(cancel(id)).pipe(tap(() => this.search().subscribe()));
+    return from(cancel(id)).pipe(tap(() => this.searchAll().subscribe()));
   }
 
   static cancelAll(ids: number[] = getActiveDownloadIdsByActionScope(this.store.getState())): Observable<number> {
     if (this.isProxy) return this.forward<number>('cancelAll', ids);
     return forkJoin(ids.map(this.cancel.bind(this))).pipe(
       map(results => results?.length),
-      tap(() => this.search().subscribe()),
+      tap(() => this.searchAll().subscribe()),
     );
   }
 }

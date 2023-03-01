@@ -37,8 +37,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 export const store: Store = configureStore(options);
 
-export const store$ = (_store: StoreOrProxy, getter: (state: StoreState) => any = (state: StoreState) => state) => {
+export const store$ = <T>(_store: StoreOrProxy, getter: (state: StoreState) => any = (state: StoreState) => state) => {
   const _store$ = new BehaviorSubject<RootSlice>(_store.getState());
   const unsubscribe = _store.subscribe(() => _store$.next(_store.getState()));
-  return _store$.pipe(map(getter), distinctUntilChanged(), finalize(unsubscribe));
+  return _store$.pipe(map<any, T>(getter), distinctUntilChanged(), finalize(unsubscribe));
 };

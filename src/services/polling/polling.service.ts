@@ -46,10 +46,10 @@ export class PollingService {
       this.timer$.subscribe(() => {
         QueryService.listTasks().subscribe();
         QueryService.getStatistic().subscribe();
-        DownloadService.search().subscribe();
+        DownloadService.searchAll().subscribe();
       });
 
-      store$(this.store, getPollingInterval).subscribe(() => this.change(this.interval()));
+      store$<number>(this.store, getPollingInterval).subscribe(() => this.change(this.interval()));
       combineLatest([store$(this.store, getPollingEnabled), store$(this.store, getLogged)]).subscribe(([enabled, logged]) =>
         enabled && logged ? this.start() : this.stop(),
       );
