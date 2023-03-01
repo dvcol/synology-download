@@ -90,7 +90,7 @@ export const defaultTabs: ContentTab[] = [
     id: uuid(),
     name: TabTemplate.completed,
     template: TabTemplate.completed,
-    status: [TaskStatus.finished, DownloadStatus.complete, DownloadStatus.cancelled],
+    status: [TaskStatus.finished, DownloadStatus.complete, DownloadStatus.cancelled, DownloadStatus.deleted],
     destination: { enabled: false },
     color: ColorLevel.success,
   },

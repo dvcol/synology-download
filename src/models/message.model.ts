@@ -1,10 +1,12 @@
-import type { DownloadQueryPayload } from '@src/models/download.model';
+import type { OnClickData } from '@src/utils';
+
+import type { DownloadQueryPayload } from './download.model';
 
 import type { ContextMenu } from './menu.model';
-import type { ChromeNotification } from './notification.model';
-import type { SynologyQueryPayload } from './synology.model';
+import type { ChromeNotification, SnackMessage } from './notification.model';
 
-import OnClickData = chrome.contextMenus.OnClickData;
+import type { SynologyQueryPayload } from './synology.model';
+import type { TaskForm } from './task.model';
 
 /**
  * Enumeration for message types
@@ -15,12 +17,21 @@ export enum ChromeMessageType {
   updateMenu = 'updateMenu',
   removeMenu = 'removeMenu',
   resetMenu = 'resetMenu',
-  notification = 'notification',
+  notificationBanner = 'notificationBanner',
+  notificationSnack = 'notificationSnack',
   polling = 'polling',
   query = 'query',
   download = 'download',
   baseUrl = 'baseUrl',
+  intercept = 'intercept',
 }
+
+export type InterceptPayload = TaskForm;
+
+export type InterceptResponse = {
+  aborted: boolean;
+  message?: string;
+};
 
 export type ContextMenuOnClickPayload = {
   info: OnClickData;
@@ -38,7 +49,9 @@ export type ChromeMessagePayload =
   | ChromeNotification
   | SynologyQueryPayload
   | DownloadQueryPayload
-  | ContextMenuOnClickPayload;
+  | ContextMenuOnClickPayload
+  | SnackMessage
+  | InterceptPayload;
 
 /**
  * Message interface for communication between content & background

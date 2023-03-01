@@ -3,11 +3,13 @@ import { Dialog, DialogContent } from '@mui/material';
 import React, { useEffect } from 'react';
 import { Subject, takeUntil } from 'rxjs';
 
+import type { ChromeResponse } from '@dvcol/web-extension-utils';
 import { i18n } from '@dvcol/web-extension-utils';
 
 import { TaskAdd } from '@src/components';
-import type { ContextMenuOnClickPayload, TaskForm } from '@src/models';
+import type { ContextMenuOnClickPayload, TaskForm, InterceptResponse } from '@src/models';
 import { ChromeMessageType } from '@src/models';
+import type { TaskDialogIntercept } from '@src/pages/content/service/dialog.service';
 import { taskDialog$ } from '@src/pages/content/service/dialog.service';
 import { NotificationService, QueryService } from '@src/services';
 import { onMessage } from '@src/utils';
@@ -19,9 +21,18 @@ export const TaskDialog: FC<{ container?: PortalProps['container'] }> = ({ conta
   const [form, setForm] = React.useState<TaskForm>();
   const [open, setOpen] = React.useState<boolean>(false);
 
-  const onClose = () => {
+  const [intercept, setIntercept] = React.useState<TaskDialogIntercept>();
+  const onIntercept = (response: ChromeResponse<InterceptResponse>) => {
+    if (intercept?.callback) {
+      intercept.callback(response);
+      setIntercept(undefined);
+    }
+  };
+
+  const onClose = (aborted = false) => {
     setForm(undefined);
     setOpen(false);
+    onIntercept({ success: true, payload: { aborted, message: aborted ? 'Intercept aborted.' : 'Task created successfully' } });
   };
 
   useEffect(() => {
@@ -53,8 +64,9 @@ export const TaskDialog: FC<{ container?: PortalProps['container'] }> = ({ conta
         }
         sendResponse();
       });
-    taskDialog$.pipe(takeUntil(abort$)).subscribe(({ open: _open, form: _form }) => {
+    taskDialog$.pipe(takeUntil(abort$)).subscribe(({ open: _open, form: _form, intercept: _intercept }) => {
       if (_form) setForm(_form);
+      if (_intercept) setIntercept(_intercept);
       setOpen(true);
     });
     return () => {
@@ -64,9 +76,9 @@ export const TaskDialog: FC<{ container?: PortalProps['container'] }> = ({ conta
   }, []);
 
   return (
-    <Dialog open={open} container={container} fullWidth={true} onClose={onClose} maxWidth={'md'}>
+    <Dialog open={open} container={container} fullWidth={true} onClose={() => onClose(true)} maxWidth={'md'}>
       <DialogContent sx={{ p: '0' }}>
-        <TaskAdd form={form} withCancel={true} onFormCancel={onClose} onFormSubmit={onClose} />
+        <TaskAdd form={form} withCancel={true} onFormCancel={() => onClose(true)} onFormSubmit={() => onClose(false)} />
       </DialogContent>
     </Dialog>
   );

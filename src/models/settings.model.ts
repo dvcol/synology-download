@@ -211,21 +211,26 @@ export interface DownloadExtension {
   mime?: string;
 }
 
+export interface DownloadsIntercept {
+  enabled: boolean;
+  erase: boolean;
+  resume: boolean;
+  modal: boolean;
+  all: boolean;
+  extensions: DownloadExtension[];
+  active: DownloadExtension[];
+}
+
 export interface Downloads {
   enabled: boolean;
   buttons: boolean;
   notifications: boolean;
   transfer: {
     erase: boolean;
+    resume: boolean;
     modal: boolean;
   };
-  intercept: {
-    enabled: boolean;
-    erase: boolean;
-    all: boolean;
-    extensions: DownloadExtension[];
-    active: DownloadExtension[];
-  };
+  intercept: DownloadsIntercept;
 }
 
 export const defaultExtensions = [
@@ -263,11 +268,14 @@ export const defaultDownloads = {
   notifications: true,
   transfer: {
     erase: true,
+    resume: true,
     modal: true,
   },
   intercept: {
     enabled: true,
+    resume: true,
     erase: true,
+    modal: false,
     all: false,
     extensions: defaultExtensions,
     active: [{ ext: '.torrent', mime: 'application/x-bittorrent' }],

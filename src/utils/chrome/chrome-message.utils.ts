@@ -1,3 +1,5 @@
+import { switchMap, throwError } from 'rxjs';
+
 import type { ChromeMessage, ChromeMessageHandler } from '@dvcol/web-extension-utils';
 import {
   onConnect as _onConnect,
@@ -7,6 +9,8 @@ import {
 } from '@dvcol/web-extension-utils';
 
 import type { ChromeMessagePayload, ChromeMessageType } from '@src/models';
+
+import { getActiveTab } from '@src/utils';
 
 import type { Observable } from 'rxjs';
 
@@ -30,7 +34,10 @@ export const onMessage = <P extends ChromeMessagePayload = ChromeMessagePayload,
  */
 export const sendMessage = <P extends ChromeMessagePayload = ChromeMessagePayload, R = void>(
   message: ChromeMessage<ChromeMessageType, P>,
-): Observable<R> => _sendMessage<ChromeMessageType, P, R>(message);
+): Observable<R> => {
+  console.debug(`Sending '${message.type}' message`, message);
+  return _sendMessage<ChromeMessageType, P, R>(message);
+};
 
 /**
  * Rxjs wrapper for chrome.tabs.sendMessage event sender
@@ -41,7 +48,30 @@ export const sendMessage = <P extends ChromeMessagePayload = ChromeMessagePayloa
 export const sendTabMessage = <P extends ChromeMessagePayload = ChromeMessagePayload, R = void>(
   tabId: number,
   message: ChromeMessage<ChromeMessageType, P>,
-): Observable<R> => _sendTabMessage<ChromeMessageType, P, R>(tabId, message);
+): Observable<R> => {
+  console.debug(`Sending '${message.type}' message to active tab '${tabId}'`, { message, tabId });
+  return _sendTabMessage<ChromeMessageType, P, R>(tabId, message);
+};
+
+/**
+ * Rxjs wrapper for chrome.tabs.sendMessage event sender and chrome.tabs.query
+ * @param message the ChromeMessage to send
+ * @see chrome.tabs.sendMessage
+ * @see chrome.tabs.sendMessage
+ */
+export const sendActiveTabMessage = <P extends ChromeMessagePayload = ChromeMessagePayload, R = void>(
+  message: ChromeMessage<ChromeMessageType, P>,
+): Observable<R> =>
+  getActiveTab().pipe(
+    switchMap(tab => {
+      if (tab?.id) {
+        console.debug(`Sending '${message.type}' message to active tab '${tab.id}'`, { message, tab });
+        return _sendTabMessage<ChromeMessageType, P, R>(tab.id, message);
+      }
+      return throwError(() => new Error('No active tab found'));
+    }),
+  );
+
 /**
  * Rxjs wrapper for chrome.runtime.onConnect event listener
  * @param async if the listener waits for async response or not

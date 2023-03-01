@@ -21,8 +21,9 @@ import { TaskAdd } from '@src/components';
 import type { Download, Global, TaskForm } from '@src/models';
 import { ColorLevel, ColorLevelMap, DownloadStatus, downloadStatusToColor } from '@src/models';
 
-import { DownloadService, QueryService } from '@src/services';
+import { DownloadService } from '@src/services';
 
+import { InterceptService } from '@src/services/download/intercept.service';
 import type { StoreState } from '@src/store';
 import { getGlobalDownload, getSettingsDownloadsTransfer } from '@src/store/selectors';
 
@@ -49,7 +50,7 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
   // Dialog
   const [dialog, toggleDialog] = React.useState(false);
   const [form] = React.useState<TaskForm>({ uri: download.finalUrl, source: download.referrer });
-  const { erase, modal } = useSelector(getSettingsDownloadsTransfer);
+  const { erase, resume, modal } = useSelector(getSettingsDownloadsTransfer);
 
   const close = (_erase = false) => {
     toggleDialog(false);
@@ -99,10 +100,7 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
         if ($event.shiftKey) return DownloadService.open(download.id).subscribe();
         return DownloadService.show(download.id).subscribe();
       case 'transfer':
-        if ($event.shiftKey || !modal)
-          return QueryService.createTask(download.finalUrl, download.referrer).subscribe(() => {
-            if (erase) DownloadService.erase({ id: download.id }).subscribe();
-          });
+        if ($event.shiftKey || !modal) return InterceptService.transfer(download, { erase, resume });
         return toggleDialog(true);
       default:
         console.warn(`Key '${key}' is unknown`);

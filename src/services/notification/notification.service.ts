@@ -2,7 +2,7 @@ import { filter, map, Subject, tap } from 'rxjs';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
-import type { ChromeNotification, Download, SnackMessage, SnackNotification, StoreOrProxy, Task, StateSlice } from '@src/models';
+import type { ChromeNotification, Download, SnackMessage, SnackNotification, StateSlice, StoreOrProxy, Task } from '@src/models';
 import { ChromeMessageType, NotificationLevel, NotificationLevelKeys, NotificationType } from '@src/models';
 import { store$ } from '@src/store';
 import { setBadge } from '@src/store/actions';
@@ -14,7 +14,7 @@ import {
   getNotificationsSnackLevel,
   getStateBadge,
 } from '@src/store/selectors';
-import { bufferDebounceUnless, createNotification, onMessage, parseMagnetLink, sendMessage } from '@src/utils';
+import { bufferDebounceUnless, createNotification, onMessage, parseMagnetLink, sendActiveTabMessage, sendMessage } from '@src/utils';
 
 import type { VariantType } from 'notistack';
 import type { Observable } from 'rxjs';
@@ -57,8 +57,13 @@ export class NotificationService {
 
       store$<StateSlice['badge']>(this.store, getStateBadge).subscribe(count => this.store.dispatch(setBadge(count)));
 
-      onMessage<ChromeNotification>([ChromeMessageType.notification]).subscribe(({ message: { payload }, sendResponse }) => {
-        this.sendOrForward(payload);
+      onMessage<ChromeNotification>([ChromeMessageType.notificationBanner]).subscribe(({ message: { payload }, sendResponse }) => {
+        this.sendBannerOrForward(payload);
+        sendResponse();
+      });
+    } else {
+      onMessage<SnackMessage>([ChromeMessageType.notificationSnack]).subscribe(({ message: { payload }, sendResponse }) => {
+        this.sendSnackOrForward(payload);
         sendResponse();
       });
     }
@@ -119,19 +124,29 @@ export class NotificationService {
     };
   }
 
-  private static sendOrForward(notification?: ChromeNotification) {
+  private static sendBannerOrForward(notification?: ChromeNotification) {
     if (notification && this.isProxy) {
-      sendMessage<ChromeNotification>({ type: ChromeMessageType.notification, payload: notification }).subscribe();
+      sendMessage<ChromeNotification>({ type: ChromeMessageType.notificationBanner, payload: notification }).subscribe({
+        error: e => console.warn('Snack notification failed, no active tab found.', e),
+      });
     } else if (notification) {
       (notification.priority ?? NotificationLevel.info < 0 ? this.error$ : this.notify$).next(notification);
     }
   }
 
+  private static sendSnackOrForward(notification?: SnackMessage) {
+    if (notification && this.isProxy) {
+      this.snack$.next(notification);
+    } else if (notification) {
+      sendActiveTabMessage<SnackMessage>({ type: ChromeMessageType.notificationSnack, payload: notification }).subscribe();
+    }
+  }
+
   private static buildAndSend(notification: SnackMessage, type: NotificationType): void {
     if (type === NotificationType.snack) {
-      this.snack$.next(notification);
+      this.sendSnackOrForward(notification);
     } else {
-      this.sendOrForward({
+      this.sendBannerOrForward({
         ...notification,
         message: notification?.message ?? '',
         title: `[${notification.priority ? NotificationLevelKeys[notification.priority] : 'Info'}] : ${notification.title}`,

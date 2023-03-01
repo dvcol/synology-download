@@ -1,4 +1,4 @@
-import { anchor$ } from '@src/pages/content/service/anchor.service';
+import { anchor$, lastClick$ } from '@src/pages/content/service/anchor.service';
 
 /**
  * List of supported protocols
@@ -39,9 +39,10 @@ function recursivelyFindAnchorAncestor(e: HTMLElement | null, depth = 10): HTMLA
 // Detect if the click event is on a supported downloadable link
 export const addAnchorClickListener = () =>
   document.addEventListener('click', async event => {
+    const anchor = recursivelyFindAnchorAncestor(event.target as HTMLElement);
+    lastClick$.next({ event, anchor });
     // Left clicks only
     if (event.button === 0) {
-      const anchor = recursivelyFindAnchorAncestor(event.target as HTMLElement);
       if (anchor != null && anchor.href && startsWithAnyProtocol(anchor.href, DOWNLOAD_ONLY_PROTOCOLS)) {
         anchor$.next({
           event,

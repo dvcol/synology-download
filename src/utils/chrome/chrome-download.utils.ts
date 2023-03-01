@@ -1,21 +1,42 @@
 import { filter, fromEventPattern, map, merge, switchMap } from 'rxjs';
 
-import type { Download, DownloadDelta, DownloadItem, DownloadStatus } from '@src/models';
+import type { Download, DownloadStatus } from '@src/models';
 import { DownloadService } from '@src/services';
 
 import type { Observable } from 'rxjs';
 
-const { search, pause, getFileIcon, resume, cancel, download, open, show, showDefaultFolder, erase, onCreated, onChanged } = chrome.downloads;
+const { search, pause, getFileIcon, resume, cancel, download, open, show, showDefaultFolder, erase, onCreated, onChanged, onDeterminingFilename } =
+  chrome?.downloads ?? {};
 
-export { search, pause, getFileIcon, resume, cancel, download, open, show, showDefaultFolder, erase, onCreated, onChanged };
+export { search, pause, getFileIcon, resume, cancel, download, open, show, showDefaultFolder, erase, onCreated, onChanged, onDeterminingFilename };
 
-const addCreatedHandler = (handler: (downloadItem: DownloadItem) => void) => onCreated.addListener(handler);
-const removeCreatedHandler = (handler: (downloadItem: DownloadItem) => void) => onCreated.removeListener(handler);
-export const onCreated$: Observable<DownloadItem> = fromEventPattern<DownloadItem>(addCreatedHandler, removeCreatedHandler);
+export type DownloadOptions = chrome.downloads.DownloadOptions;
+export type DownloadQuery = chrome.downloads.DownloadQuery;
+export type DownloadItem = chrome.downloads.DownloadItem;
+export type DownloadState = chrome.downloads.DownloadState;
+export type DownloadDelta = chrome.downloads.DownloadDelta;
+export type DownloadFilenameSuggestion = chrome.downloads.DownloadFilenameSuggestion;
 
-const addChangedHandler = (handler: (downloadDelta: DownloadDelta) => void) => onChanged.addListener(handler);
-const removeChangedHandler = (handler: (downloadDelta: DownloadDelta) => void) => onChanged.removeListener(handler);
-export const onChanged$: Observable<DownloadDelta> = fromEventPattern<DownloadDelta>(addChangedHandler, removeChangedHandler);
+type FilenameHandler = (downloadItem: DownloadItem, suggest: (suggestion?: DownloadFilenameSuggestion) => void) => void;
+const addFilenameHandler = (handler: FilenameHandler) =>
+  onDeterminingFilename.addListener((...args) => {
+    handler(...args);
+    return true;
+  });
+const removeFilenameHandler = (handler: FilenameHandler) => onDeterminingFilename.removeListener(handler);
+export const onFilename$: Observable<[DownloadItem, (suggestion?: DownloadFilenameSuggestion) => void]> = fromEventPattern<
+  [DownloadItem, (suggestion?: DownloadFilenameSuggestion) => void]
+>(addFilenameHandler, removeFilenameHandler);
+
+type CreateHandler = (downloadItem: DownloadItem) => void;
+const addCreatedHandler = (handler: CreateHandler) => onCreated.addListener(handler);
+const removeCreatedHandler = (handler: CreateHandler) => onCreated.removeListener(handler);
+const onCreated$: Observable<DownloadItem> = fromEventPattern<DownloadItem>(addCreatedHandler, removeCreatedHandler);
+
+type ChangedHandler = (downloadDelta: DownloadDelta) => void;
+const addChangedHandler = (handler: ChangedHandler) => onChanged.addListener(handler);
+const removeChangedHandler = (handler: ChangedHandler) => onChanged.removeListener(handler);
+const onChanged$: Observable<DownloadDelta> = fromEventPattern<DownloadDelta>(addChangedHandler, removeChangedHandler);
 
 const onDownloadChange$: Observable<number> = merge(onCreated$.pipe(map(item => item.id)), onChanged$.pipe(map(item => item.id)));
 
@@ -31,5 +52,5 @@ export const onDownloadCreated$: Observable<Download> = onCreated$.pipe(
 export const onStatus$ = (...statuses: DownloadStatus[]): Observable<Download> =>
   onDownloadChange$.pipe(
     mapIdToDownload,
-    filter(item => !statuses?.length || statuses?.includes(item.status)),
+    filter(item => !statuses?.length || statuses?.includes(item?.status)),
   );

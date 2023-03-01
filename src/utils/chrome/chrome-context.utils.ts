@@ -6,12 +6,12 @@ import {
 
 import type { ContextMenu, ContextMenuOnClickPayload } from '@src/models';
 import { ChromeMessageType } from '@src/models';
+import type { Tab } from '@src/utils';
 import { sendTabMessage } from '@src/utils';
 
 import type { Observable } from 'rxjs';
 
-import OnClickData = chrome.contextMenus.OnClickData;
-import Tab = chrome.tabs.Tab;
+export type OnClickData = chrome.contextMenus.OnClickData;
 
 /**
  * Add or update a context menu to chrome with the given options
