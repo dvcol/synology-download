@@ -1,0 +1,21 @@
+{
+  "panel__settings__downloads__extensions__ext": {
+    "message": "Extension"
+  },
+  "panel__settings__downloads__extensions__mime": {
+    "message": "Media Type"
+  },
+
+  "panel__settings__downloads__extensions__required": {
+    "message": "Field is required"
+  },
+  "panel__settings__downloads__extensions__min_length": {
+    "message": "Value is too short"
+  },
+  "panel__settings__downloads__extensions__starts_with": {
+    "message": "Should start with '.'"
+  },
+  "panel__settings__downloads__extensions__duplicate": {
+    "message": "Value already exists"
+  }
+}

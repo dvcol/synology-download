@@ -128,10 +128,13 @@ export const FormTab = ({
         <Grid container spacing={1} columnSpacing={1}>
           {Object.values(TaskStatus).map(s => (
             <Grid item xs={4} lg={2} key={s}>
-              <Button disableTouchRipple={true} sx={{ p: '0 0 0 0.5rem' }} color={getHighlightColor(s)} disabled={disabled}>
+              <Button disableTouchRipple={true} sx={{ p: '0.25rem 0 0.25rem 0.5rem' }} color={getHighlightColor(s)} disabled={disabled}>
                 <FormCheckbox
                   controllerProps={{ name: 'status', control }}
-                  formControlLabelProps={{ label: i18n(s, 'common', 'model', 'task_status'), sx: { textTransform: 'capitalize' } }}
+                  formControlLabelProps={{
+                    label: i18n(s, 'common', 'model', 'task_status'),
+                    sx: { textTransform: 'capitalize', textAlign: 'start' },
+                  }}
                   checkboxProps={{
                     multiple: true,
                     value: s,
@@ -153,10 +156,13 @@ export const FormTab = ({
         <Grid container spacing={1} columnSpacing={1}>
           {Object.values(DownloadStatus).map(s => (
             <Grid item xs={4} lg={2} key={s}>
-              <Button disableTouchRipple={true} sx={{ p: '0 0 0 0.5rem' }} color={getHighlightColor(s)} disabled={disabled}>
+              <Button disableTouchRipple={true} sx={{ p: '0.25rem 0 0.25rem 0.5rem' }} color={getHighlightColor(s)} disabled={disabled}>
                 <FormCheckbox
                   controllerProps={{ name: 'status', control }}
-                  formControlLabelProps={{ label: i18n(s, 'common', 'model', 'download_status'), sx: { textTransform: 'capitalize' } }}
+                  formControlLabelProps={{
+                    label: i18n(s, 'common', 'model', 'download_status'),
+                    sx: { textTransform: 'capitalize', textAlign: 'start' },
+                  }}
                   checkboxProps={{
                     multiple: true,
                     value: s,

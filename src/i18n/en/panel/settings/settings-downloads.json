@@ -3,6 +3,62 @@
     "message": "Downloads"
   },
   "panel__settings__downloads__subheader": {
-    "message": "Enables/disabled support for local browser downloads."
+    "message": "Enables support for local browser downloads."
+  },
+
+  "panel__settings__downloads__buttons__title": {
+    "message": "Menu buttons"
+  },
+  "panel__settings__downloads__buttons__subheader": {
+    "message": "Navbar batch buttons also apply to downloads."
+  },
+
+  "panel__settings__downloads__notifications__title": {
+    "message": "Notifications"
+  },
+  "panel__settings__downloads__notifications__subheader": {
+    "message": "Enables notifications for local downloads."
+  },
+
+  "panel__settings__downloads__transfer__erase__title": {
+    "message": "Erase on transfer"
+  },
+  "panel__settings__downloads__transfer__erase__subheader": {
+    "message": "Erase transferred downloads within popup."
+  },
+
+  "panel__settings__downloads__transfer__modal__title": {
+    "message": "Open modal on transfer"
+  },
+  "panel__settings__downloads__transfer__modal__subheader": {
+    "message": "Open a task creation modal on transferred downloads within popup."
+  },
+
+  "panel__settings__downloads__intercept__enabled__title": {
+    "message": "Downloads interception"
+  },
+  "panel__settings__downloads__intercept__enabled__subheader": {
+    "message": "Intercept downloads in injected scripts (within browser tabs)."
+  },
+
+  "panel__settings__downloads__intercept__erase__title": {
+    "message": "Erase on intercept"
+  },
+  "panel__settings__downloads__intercept__erase__subheader": {
+    "message": "Erases intercepted downloads in injected scripts (within browser tabs)."
+  },
+
+  "panel__settings__downloads__intercept__all__title": {
+    "message": "Intercept all downloads."
+  },
+  "panel__settings__downloads__intercept__all__subheader": {
+    "message": "If this is enabled, extensions are ignored and all downloads are intercepted."
+  },
+
+  "panel__settings__downloads__intercept__extensions__title": {
+    "message": "File types"
+  },
+  "panel__settings__downloads__intercept__extensions__subheader": {
+    "message": "Intercepts supported extensions and mime types. When adding a new extension we recommend adding the corresponding mime type to increase safety."
   }
 }
