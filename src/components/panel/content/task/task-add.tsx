@@ -94,7 +94,7 @@ export const TaskAdd: FC<{
         subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '0.875rem' }}
         sx={{ p: '1rem 1rem 0', textTransform: 'capitalize' }}
       />
-      <CardContent sx={{ display: 'flex', flexDirection: 'row', p: '0.5rem 1rem 1rem' }}>
+      <CardContent sx={{ display: 'flex', flexDirection: 'row', p: '0.5rem 1rem 0.75rem' }}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <CardHeader
@@ -141,7 +141,7 @@ export const TaskAdd: FC<{
               />
             </Box>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column' }}>
             <CardHeader
               title={i18n('destination_title')}
               subheader={i18n('destination_subheader')}
@@ -150,7 +150,7 @@ export const TaskAdd: FC<{
               action={<FormSwitch controllerProps={{ name: 'destination.custom', control }} formControlLabelProps={{ label: '' }} />}
               sx={{ p: '0.5rem 0' }}
             />
-            <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: '31.25rem' }}>
+            <Card sx={{ p: '0.5rem', m: '0.5rem 0', flex: '1 1 auto', maxHeight: '20rem' }}>
               <FormExplorer
                 controllerProps={{ name: 'destination.path', control }}
                 explorerProps={{
@@ -164,7 +164,7 @@ export const TaskAdd: FC<{
           </Grid>
         </Grid>
       </CardContent>
-      <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
+      <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1rem' }}>
         <Stack direction="row" spacing={2}>
           {withCancel && (
             <Button variant="outlined" color={'secondary'} sx={{ width: '5rem', fontSize: '0.75rem' }} onClick={() => onCancel()}>

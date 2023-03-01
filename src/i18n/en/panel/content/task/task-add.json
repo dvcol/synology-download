@@ -14,7 +14,7 @@
     "message": "Source"
   },
   "panel__content__task__add__source_subheader": {
-    "message": "Tasks may fail if submitted without the required fields."
+    "message": "Tasks may fail without the required fields."
   },
 
   "panel__content__task__add__url_label": {

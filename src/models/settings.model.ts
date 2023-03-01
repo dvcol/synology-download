@@ -206,16 +206,72 @@ export const defaultGlobal = {
   },
 };
 
+export interface DownloadExtension {
+  ext: string;
+  mime?: string;
+}
+
 export interface Downloads {
   enabled: boolean;
   buttons: boolean;
   notifications: boolean;
+  transfer: {
+    erase: boolean;
+    modal: boolean;
+  };
+  intercept: {
+    enabled: boolean;
+    erase: boolean;
+    all: boolean;
+    extensions: DownloadExtension[];
+    active: DownloadExtension[];
+  };
 }
+
+export const defaultExtensions = [
+  // torrent
+  { ext: '.torrent', mime: 'application/x-bittorrent' },
+  // audio
+  { ext: '.flac', mime: 'audio/flac' },
+  { ext: '.wav', mime: 'audio/wav' },
+  { ext: '.mp3', mime: 'audio/mpeg' },
+  { ext: '.aac', mime: 'audio/x-aac' },
+  { ext: '.ogg', mime: 'audio/ogg' },
+  // video
+  { ext: '.mp4', mime: 'video/mp4' },
+  { ext: '.mpeg', mime: 'video/mpeg' },
+  { ext: '.mkv', mime: 'video/x-matroska' },
+  // zip
+  { ext: '.7z', mime: 'application/x-7z-compressed' },
+  { ext: '.zip', mime: 'application/zip' },
+  { ext: '.gz', mime: 'application/gzip' },
+  { ext: '.tar', mime: 'application/x-tar' },
+  // images
+  { ext: '.jpeg', mime: 'image/jpeg' },
+  { ext: '.jpg', mime: 'image/jpeg' },
+  { ext: '.png', mime: 'image/png' },
+  { ext: '.svg', mime: 'image/svg+xml' },
+  { ext: '.tif', mime: 'image/tiff' },
+  { ext: '.gif', mime: 'image/gif' },
+  // documents
+  { ext: '.pdf', mime: 'application/pdf' },
+];
 
 export const defaultDownloads = {
   enabled: true,
   buttons: true,
   notifications: true,
+  transfer: {
+    erase: true,
+    modal: true,
+  },
+  intercept: {
+    enabled: true,
+    erase: true,
+    all: false,
+    extensions: defaultExtensions,
+    active: [{ ext: '.torrent', mime: 'application/x-bittorrent' }],
+  },
 };
 
 export const defaultSettings: SettingsSlice = {

@@ -34,7 +34,7 @@ export const setCountAndStats = (count?: ContentCount, stats?: TaskStatistics) =
     });
   }
 
-  setBadgeText({ text }).then(() => console.debug('No count found'));
+  setBadgeText({ text }).then();
   setTitle({ title }).then();
 };
 

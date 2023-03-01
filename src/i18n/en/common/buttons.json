@@ -15,6 +15,9 @@
   "common__buttons__restore": {
     "message": "Restore"
   },
+  "common__buttons__add": {
+    "message": "Add"
+  },
   "common__buttons__add_new": {
     "message": "Add new"
   },
