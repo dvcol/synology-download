@@ -23,5 +23,15 @@
   },
   "common__notification__task_error": {
     "message": "Task Failed."
+  },
+
+  "common__notification__download_created": {
+    "message": "Download created successfully."
+  },
+  "common__notification__download_finished": {
+    "message": "Download finished."
+  },
+  "common__notification__download_error": {
+    "message": "Download Failed."
   }
 }

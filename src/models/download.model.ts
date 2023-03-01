@@ -11,6 +11,7 @@ export type DownloadOptions = chrome.downloads.DownloadOptions;
 export type DownloadQuery = chrome.downloads.DownloadQuery;
 export type DownloadItem = chrome.downloads.DownloadItem;
 export type DownloadState = chrome.downloads.DownloadState;
+export type DownloadDelta = chrome.downloads.DownloadDelta;
 
 export interface Download extends DownloadItem, Omit<Content, 'id'> {
   status: DownloadStatus;
@@ -32,12 +33,13 @@ export interface DownloadCount {
   tabs: TabCount;
 }
 
-export type DownloadQueryArgs = [any];
+export type DownloadQueryArgs = Array<DownloadQuery | number[] | number | undefined>;
 
 export interface DownloadQueryPayload {
   id: string;
   method:
     | 'search'
+    | 'searchAll'
     | 'pause'
     | 'pauseAll'
     | 'getFileIcon'
