@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.16.1](https://github.com/dvcol/synology-download/compare/v1.16.0...v1.16.1) (2023-03-02)
+
+
+### Bug Fixes
+
+* **build:** fixes download service sync key erasure when compressed ([da54947](https://github.com/dvcol/synology-download/commit/da5494711def7b6da48be2f943eb62b8fb534ca6))
+* **content:** force max zIndex ([4551700](https://github.com/dvcol/synology-download/commit/45517004a3166f60c462139701a36249b95412fb))
+
 ## [1.16.0](https://github.com/dvcol/synology-download/compare/v1.14.6...v1.16.0) (2023-03-01)
 
 
