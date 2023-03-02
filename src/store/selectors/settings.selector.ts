@@ -1,6 +1,16 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-import type { Connection, Credentials, Downloads, Global, Notifications, NotificationsBanner, NotificationsSnack, SettingsSlice } from '@src/models';
+import type {
+  Connection,
+  Credentials,
+  Downloads,
+  DownloadsIntercept,
+  Global,
+  Notifications,
+  NotificationsBanner,
+  NotificationsSnack,
+  SettingsSlice,
+} from '@src/models';
 import { ConnectionType, defaultDownloads, defaultGlobal, ThemeMode } from '@src/models';
 import { darkTheme, lightTheme } from '@src/themes';
 
@@ -108,4 +118,10 @@ export const getSettingsDownloadsTransfer = createSelector(
 export const getSettingsDownloadsIntercept = createSelector(
   getSettingsDownloads,
   (downloads: Downloads) => downloads.intercept ?? defaultDownloads.intercept,
+);
+
+export const getSettingsDownloadsInterceptEnabled = createSelector(
+  getSettingsDownloadsIntercept,
+  getSettingsDownloadsEnabled,
+  (intercept: DownloadsIntercept, enabled) => enabled && intercept?.enabled,
 );

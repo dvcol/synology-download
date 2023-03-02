@@ -30,6 +30,7 @@ export type InterceptPayload = TaskForm;
 
 export type InterceptResponse = {
   aborted: boolean;
+  resume?: boolean;
   message?: string;
 };
 

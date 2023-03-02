@@ -1,7 +1,7 @@
 import { DownloadStatus } from '@src/models/download.model';
 import { NavbarButtonType } from '@src/models/navbar.model';
 
-import { defaultContextMenu, defaultQuickMenu } from './menu.model';
+import { defaultContextMenu, defaultQuickMenu, defaultDownloadQuickMenu } from './menu.model';
 
 import { NotificationLevel } from './notification.model';
 
@@ -272,8 +272,8 @@ export const defaultDownloads = {
     modal: true,
   },
   intercept: {
-    enabled: true,
-    resume: true,
+    enabled: false,
+    resume: false,
     erase: true,
     modal: false,
     all: false,
@@ -288,7 +288,7 @@ export const defaultSettings: SettingsSlice = {
   polling: defaultPolling,
   tabs: defaultTabs,
   menus: [defaultContextMenu],
-  quick: [defaultQuickMenu],
+  quick: [defaultQuickMenu, defaultDownloadQuickMenu],
   global: defaultGlobal,
   downloads: defaultDownloads,
 };

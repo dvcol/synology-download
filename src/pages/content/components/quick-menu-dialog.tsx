@@ -11,7 +11,7 @@ import { i18n } from '@dvcol/web-extension-utils';
 
 import { MuiIcon } from '@src/components';
 import type { InterceptPayload, InterceptResponse, QuickMenu, TaskForm } from '@src/models';
-import { ChromeMessageType, MaterialIcon } from '@src/models';
+import { QuickMenuType, ChromeMessageType, MaterialIcon } from '@src/models';
 import { anchor$, lastClick$ } from '@src/pages/content/service/anchor.service';
 import type { TaskDialogIntercept } from '@src/pages/content/service/dialog.service';
 import { taskDialog$ } from '@src/pages/content/service/dialog.service';
@@ -33,6 +33,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
   const menus = useSelector<StoreState, QuickMenu[]>(getQuick);
 
   const [intercept, setIntercept] = React.useState<TaskDialogIntercept>();
+  const _menus = menus?.filter(m => !!intercept || m.type === QuickMenuType.Task);
 
   const onIntercept = (response: ChromeResponse<InterceptResponse>) => {
     if (intercept?.callback) {
@@ -63,13 +64,32 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
     }
   };
 
-  const onEvent = (form: TaskForm, anchor?: PopoverProps['anchorEl'], position?: PopoverProps['anchorPosition'], _menus: QuickMenu[] = menus) => {
-    if (_menus?.length > 1) {
+  const open = Boolean(_position || _anchor);
+
+  const handleClose = (response?: InterceptResponse) => {
+    setAnchor(null);
+    setPosition(undefined);
+    if (response) onIntercept({ success: true, payload: response });
+  };
+
+  const handleClick = ({ destination, modal, type, id }: QuickMenu) => {
+    if (type === QuickMenuType.Download) return handleClose({ aborted: true, resume: true, message: `Quick menu '${id}' cliked.` });
+    handleClose();
+    createTask({ ..._form, destination }, modal);
+  };
+
+  const onEvent = (
+    form: TaskForm,
+    anchor?: PopoverProps['anchorEl'],
+    position?: PopoverProps['anchorPosition'],
+    quickMenus: QuickMenu[] = _menus,
+  ) => {
+    if (quickMenus?.length > 1) {
       setForm(form);
       setAnchor(anchor ?? null);
       setPosition(position);
-    } else if (_menus?.length === 1) {
-      createTask({ ...form, destination: _menus[0].destination }, _menus[0].modal);
+    } else if (quickMenus?.length === 1) {
+      createTask({ ...form, destination: quickMenus[0].destination }, quickMenus[0].modal);
     } else {
       createTask(form);
     }
@@ -103,17 +123,6 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
     return () => subs.unsubscribe();
   }, []);
 
-  const open = Boolean(_position || _anchor);
-  const handleClose = (abort = false) => {
-    setAnchor(null);
-    setPosition(undefined);
-    if (abort) onIntercept({ success: true, payload: { aborted: true, message: 'Intercept aborted.' } });
-  };
-  const handleClick = ({ destination, modal }: QuickMenu) => {
-    handleClose();
-    createTask({ ..._form, destination }, modal);
-  };
-
   return (
     <Menu
       id="basic-menu"
@@ -122,13 +131,13 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
       anchorReference={_position ? 'anchorPosition' : 'anchorEl'}
       open={open}
       container={container}
-      onClose={() => handleClose(true)}
+      onClose={() => handleClose({ aborted: true, message: `Quick menu cancelled.` })}
       MenuListProps={{
         'aria-labelledby': 'basic-button',
       }}
       sx={{ zIndex: `${zIndexMax} !important` }}
     >
-      {menus?.map(m => (
+      {_menus?.map(m => (
         <MenuItem key={m.id} onClick={() => handleClick(m)}>
           <ListItemIcon>
             <MuiIcon icon={m.icon ?? MaterialIcon.download} props={{ sx: { fontSize: '1.125rem' } }} />

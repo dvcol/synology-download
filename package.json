@@ -15,6 +15,7 @@
   "scripts": {
     "prepare": "husky install",
     "build": "node webpack/build.js",
+    "build:debug": "DEBUG=true yarn build",
     "start": "node webpack/webserver.js",
     "devtools": "redux-devtools --hostname=localhost --port=8000",
     "test:unit": "jest --watchAll=false --coverage ",

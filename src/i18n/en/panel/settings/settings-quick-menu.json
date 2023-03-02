@@ -19,6 +19,16 @@
     "message": "Icon"
   },
 
+  "panel__settings__quick_menu__type_title": {
+    "message": "Menu type"
+  },
+  "panel__settings__quick_menu__type_subheader": {
+    "message": "Change the scope of the dropdown menu (Synology task or local download)."
+  },
+  "panel__settings__quick_menu__type_label": {
+    "message": "Type"
+  },
+
   "panel__settings__quick_menu__modal_title": {
     "message": "Open full modal"
   },

@@ -9,8 +9,14 @@ export interface Menu {
   destination: { custom: boolean; path?: string };
 }
 
+export enum QuickMenuType {
+  Task = 'task',
+  Download = 'download',
+}
+
 export interface QuickMenu extends Menu {
   icon?: MaterialIcon;
+  type: QuickMenuType;
 }
 
 export const defaultQuickMenu: QuickMenu = {
@@ -19,6 +25,16 @@ export const defaultQuickMenu: QuickMenu = {
   icon: MaterialIcon.download,
   modal: false,
   destination: { custom: false },
+  type: QuickMenuType.Task,
+};
+
+export const defaultDownloadQuickMenu: QuickMenu = {
+  id: uuid(),
+  title: 'Download to disk (local)',
+  icon: MaterialIcon.download,
+  modal: false,
+  destination: { custom: false },
+  type: QuickMenuType.Download,
 };
 
 export enum ContextType {
