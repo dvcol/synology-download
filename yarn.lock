@@ -2080,6 +2080,7 @@ __metadata:
     extract-changelog-release: ^1.0.2
     file-loader: ^6.2.0
     fs-extra: ^10.0.1
+    global: ^4.4.0
     html-loader: ^3.1.0
     html-webpack-plugin: ^5.5.0
     husky: ^7.0.4
@@ -9535,7 +9536,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"global@npm:^4.3.0":
+"global@npm:^4.3.0, global@npm:^4.4.0":
   version: 4.4.0
   resolution: "global@npm:4.4.0"
   dependencies:
