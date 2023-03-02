@@ -8,20 +8,22 @@ import React, { useEffect, useState } from 'react';
 import { SortableListItem } from './sortable-list-item';
 
 import type { DndContextProps, UniqueIdentifier } from '@dnd-kit/core';
+import type { BoxProps } from '@mui/material';
 import type { MouseEvent } from 'react';
 
 type SortableValue = { id: UniqueIdentifier; [key: string]: any };
 
 type SortableListProps<T extends SortableValue> = {
   values: T[];
-  render: (value: T) => JSX.Element;
+  render: (value: T, index: number) => JSX.Element;
   context?: DndContextProps;
+  box?: BoxProps;
   onClick?: (event: MouseEvent, value: T) => void;
   onChange?: (values: T[]) => void;
   disabled?: boolean;
 };
 
-export const SortableList = <T extends SortableValue>({ values, render, context, onClick, onChange, disabled }: SortableListProps<T>) => {
+export const SortableList = <T extends SortableValue>({ values, render, context, box, onClick, onChange, disabled }: SortableListProps<T>) => {
   const [_values, _setValues] = useState(values);
 
   useEffect(() => _setValues(values), [values]);
@@ -54,9 +56,9 @@ export const SortableList = <T extends SortableValue>({ values, render, context,
       {...context}
     >
       <SortableContext items={_values} strategy={verticalListSortingStrategy} disabled={disabled}>
-        {_values.map(value => (
-          <SortableListItem key={value.id} id={value.id} onClick={e => onClick?.(e, value)}>
-            {render(value)}
+        {_values.map((value, index) => (
+          <SortableListItem key={value.id} id={value.id} box={box} onClick={e => onClick?.(e, value)}>
+            {render(value, index)}
           </SortableListItem>
         ))}
       </SortableContext>
