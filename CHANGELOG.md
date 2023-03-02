@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.17.0](https://github.com/dvcol/synology-download/compare/v1.16.1...v1.17.0) (2023-03-02)
+
+
+### Features
+
+* **settings:** adds restore & confirm in most settings ([a56c101](https://github.com/dvcol/synology-download/commit/a56c10195f5ef916136a743e1107010c3da17dba))
+
+
+### Bug Fixes
+
+* **downloads:** fix download intercept erase/resume ([cd2f315](https://github.com/dvcol/synology-download/commit/cd2f315047aef5208eb80d087abb63d9db039aa9))
+
 ### [1.16.1](https://github.com/dvcol/synology-download/compare/v1.16.0...v1.16.1) (2023-03-02)
 
 
