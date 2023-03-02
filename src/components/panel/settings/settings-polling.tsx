@@ -1,3 +1,4 @@
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, InputAdornment, Stack } from '@mui/material';
 
 import React from 'react';
@@ -8,9 +9,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
-import { FormInput, FormSwitch } from '@src/components';
+import { ButtonWithConfirm, FormInput, FormSwitch } from '@src/components';
 import type { Polling } from '@src/models';
-import { ConnectionHeader } from '@src/models';
+import { ConnectionHeader, defaultPolling } from '@src/models';
 import { syncPolling } from '@src/store/actions';
 import { getPolling } from '@src/store/selectors';
 
@@ -27,7 +28,13 @@ export const SettingsPolling = () => {
     control,
     getValues,
     formState: { isValid, isDirty, isSubmitted },
-  } = useForm<Polling>({ mode: 'onChange', defaultValues: polling });
+  } = useForm<Polling>({
+    mode: 'onChange',
+    defaultValues: {
+      ...defaultPolling,
+      ...polling,
+    },
+  });
 
   const rules: Record<string, RegisterOptions> = {
     interval: { min: 500, max: 86400 },
@@ -123,6 +130,11 @@ export const SettingsPolling = () => {
       </CardContent>
       <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
         <Stack direction="row" spacing={2}>
+          <ButtonWithConfirm
+            buttonLabel={i18n('restore', 'common', 'buttons')}
+            buttonProps={{ variant: 'outlined', color: 'secondary', sx: { flex: '0 1 8rem' }, startIcon: <SettingsBackupRestoreIcon /> }}
+            onDialogConfirm={() => reset(defaultPolling)}
+          />
           <Button
             variant="outlined"
             color={onSubmitColor()}

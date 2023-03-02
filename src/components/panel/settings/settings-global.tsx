@@ -1,3 +1,4 @@
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Button, Card, CardActions, CardContent, CardHeader, Collapse, Grid, InputAdornment, MenuItem, Stack } from '@mui/material';
 
 import React from 'react';
@@ -8,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
-import { FormCheckbox, FormInput, FormSwitch } from '@src/components';
+import { ButtonWithConfirm, FormCheckbox, FormInput, FormSwitch } from '@src/components';
 import type { Global } from '@src/models';
 import { ActionScope, defaultGlobal, InterfaceHeader, InterfaceSize, NavbarButtonType, ThemeMode } from '@src/models';
 import type { StoreState } from '@src/store';
@@ -230,6 +231,11 @@ export const SettingsGlobal = () => {
 
       <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
         <Stack direction="row" spacing={2}>
+          <ButtonWithConfirm
+            buttonLabel={i18n('restore', 'common', 'buttons')}
+            buttonProps={{ variant: 'outlined', color: 'secondary', sx: { flex: '0 1 8rem' }, startIcon: <SettingsBackupRestoreIcon /> }}
+            onDialogConfirm={() => reset(defaultGlobal)}
+          />
           <Button
             variant="outlined"
             color={onSubmitColor()}

@@ -87,7 +87,7 @@ export const SettingsContextMenu = ({ menu }: { menu: ContextMenu }) => {
         action={<FormSwitch controllerProps={{ name: 'destination.custom', control }} formControlLabelProps={{ label: '' }} />}
         sx={{ p: '0.5rem 0' }}
       />
-      <Collapse in={getValues()?.destination?.custom}>
+      <Collapse in={getValues()?.destination?.custom} unmountOnExit>
         <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: '12rem' }}>
           <FormExplorer
             controllerProps={{ name: 'destination.path', control }}

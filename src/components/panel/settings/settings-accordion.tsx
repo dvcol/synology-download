@@ -9,6 +9,7 @@ import { v4 as uuid } from 'uuid';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
+import { ButtonWithConfirm } from '@src/components';
 import type { InterfaceHeader } from '@src/models';
 
 export const SettingsAccordion = <T extends { id: string }>({
@@ -68,9 +69,11 @@ export const SettingsAccordion = <T extends { id: string }>({
 
       <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
         <Stack direction="row" spacing={2} sx={{ justifyContent: 'flex-end', flex: '1 1 auto' }}>
-          <Button variant="outlined" color="secondary" sx={{ flex: '0 1 8rem' }} startIcon={<SettingsBackupRestoreIcon />} onClick={_reset}>
-            {i18n('restore', 'common', 'buttons')}
-          </Button>
+          <ButtonWithConfirm
+            buttonLabel={i18n('restore', 'common', 'buttons')}
+            buttonProps={{ variant: 'outlined', color: 'secondary', sx: { flex: '0 1 8rem' }, startIcon: <SettingsBackupRestoreIcon /> }}
+            onDialogConfirm={_reset}
+          />
           <Button variant="outlined" color="primary" sx={{ flex: '0 1 8rem' }} startIcon={<AddIcon />} onClick={_addNew}>
             {i18n('add_new', 'common', 'buttons')}
           </Button>

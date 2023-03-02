@@ -1,0 +1,8 @@
+{
+  "common__model__quick_menu_type__task": {
+    "message": "Task"
+  },
+  "common__model__quick_menu_type__download": {
+    "message": "Download"
+  }
+}

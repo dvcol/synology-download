@@ -1,3 +1,4 @@
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, InputAdornment, MenuItem, Stack } from '@mui/material';
 
 import React from 'react';
@@ -8,9 +9,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
-import { FormInput, FormSwitch } from '@src/components';
+import { ButtonWithConfirm, FormInput, FormSwitch } from '@src/components';
 import type { Notifications, NotificationsSnack } from '@src/models';
-import { NotificationHeader, NotificationLevel, NotificationLevelKeys } from '@src/models';
+import { defaultNotifications, NotificationHeader, NotificationLevel, NotificationLevelKeys } from '@src/models';
 import { syncNotifications } from '@src/store/actions';
 import { getNotifications } from '@src/store/selectors';
 
@@ -25,7 +26,7 @@ export const SettingsSnack = () => {
     control,
     getValues,
     formState: { isValid, isDirty, isSubmitted },
-  } = useForm<NotificationsSnack>({ mode: 'onChange', defaultValues: notifications?.snack });
+  } = useForm<NotificationsSnack>({ mode: 'onChange', defaultValues: { ...defaultNotifications.snack, ...(notifications?.snack ?? {}) } });
 
   const onSubmit = (snack: NotificationsSnack) => {
     dispatch(syncNotifications({ ...notifications, snack }));
@@ -161,6 +162,11 @@ export const SettingsSnack = () => {
       </CardContent>
       <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
         <Stack direction="row" spacing={2}>
+          <ButtonWithConfirm
+            buttonLabel={i18n('restore', 'common', 'buttons')}
+            buttonProps={{ variant: 'outlined', color: 'secondary', sx: { flex: '0 1 8rem' }, startIcon: <SettingsBackupRestoreIcon /> }}
+            onDialogConfirm={() => reset(defaultNotifications.snack)}
+          />
           <Button
             variant="outlined"
             color={onSubmitColor()}

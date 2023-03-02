@@ -260,7 +260,7 @@ export const Config: FC<{
             action={<FormSwitch controllerProps={{ name: 'emule_enabled', control }} formControlLabelProps={{ label: '' }} />}
             sx={{ p: '0.5rem 0' }}
           />
-          <Collapse in={getValues()?.emule_enabled}>
+          <Collapse in={getValues()?.emule_enabled} unmountOnExit>
             <CardHeader
               title={i18n('emule_max_download__title')}
               subheader={i18n('emule_max_download__subheader')}

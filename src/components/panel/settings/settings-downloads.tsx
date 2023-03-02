@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
-import { FormCheckbox, FormSwitch } from '@src/components';
+import { ButtonWithConfirm, FormCheckbox, FormSwitch } from '@src/components';
 import { SettingsDownloadsExtensions } from '@src/components/panel/settings/settings-downloads-extensions';
 import type { DownloadExtension, Downloads } from '@src/models';
 import { ColorLevel, ColorLevelMap, defaultDownloads, InterfaceHeader } from '@src/models';
@@ -265,9 +265,11 @@ export const SettingsDownloads = () => {
 
       <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
         <Stack direction="row" spacing={2}>
-          <Button variant="outlined" color="secondary" sx={{ flex: '0 1 8rem' }} startIcon={<SettingsBackupRestoreIcon />} onClick={onReset}>
-            {i18n('restore', 'common', 'buttons')}
-          </Button>
+          <ButtonWithConfirm
+            buttonLabel={i18n('restore', 'common', 'buttons')}
+            buttonProps={{ variant: 'outlined', color: 'secondary', sx: { flex: '0 1 8rem' }, startIcon: <SettingsBackupRestoreIcon /> }}
+            onDialogConfirm={onReset}
+          />
           <Button
             variant="outlined"
             color={onSubmitColor()}

@@ -39,7 +39,7 @@
     "message": "Please confirm"
   },
   "navbar__menu__confirmation_line_1": {
-    "message": "This action will remove <b>all tasks</b> (active, inactive, etc.)."
+    "message": "This action will remove all tasks (active, inactive, etc.)."
   },
   "navbar__menu__confirmation_line_2": {
     "message": "Once deleted, you'll have to re-add all tasks manually, they can not be restored or restarted."

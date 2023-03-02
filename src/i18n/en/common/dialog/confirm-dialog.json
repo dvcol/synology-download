@@ -1,0 +1,9 @@
+{
+  "common__dialog__confirm__title": {
+    "message": "Please confirm"
+  },
+
+  "common__dialog__confirm__description": {
+    "message": "This action requires confirmation.\n Are you sure you want to continue ?"
+  }
+}

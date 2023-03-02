@@ -183,7 +183,7 @@ export const FormTab = ({
         action={<FormSwitch controllerProps={{ name: 'destination.enabled', control }} formControlLabelProps={{ label: '' }} />}
         sx={{ p: '0.5rem 0' }}
       />
-      <Collapse in={getValues()?.destination?.enabled}>
+      <Collapse in={getValues()?.destination?.enabled} unmountOnExit>
         <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: '12rem' }}>
           <FormExplorer
             controllerProps={{ name: 'destination.folder', control }}

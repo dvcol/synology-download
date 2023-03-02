@@ -44,7 +44,6 @@ export class InterceptService {
       ),
       tap({
         next: ({ message, aborted, resume: _resume }) => {
-          console.info('return intercept', { message, aborted, resume, _resume });
           callback?.();
           if (message) console.debug(`Intercept for download ${download.id} exited with message`, message);
           if (_resume || (aborted && resume)) {

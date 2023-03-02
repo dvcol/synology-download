@@ -1,3 +1,4 @@
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Stack } from '@mui/material';
 
 import React from 'react';
@@ -8,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
-import { FormSwitch, FormTab } from '@src/components';
+import { ButtonWithConfirm, FormSwitch, FormTab } from '@src/components';
 import type { Notifications, NotificationsCount, Tab } from '@src/models';
 import { defaultNotifications, NotificationHeader } from '@src/models';
 import { syncNotifications } from '@src/store/actions';
@@ -32,6 +33,7 @@ export const SettingsTasksCount = () => {
   } = useForm<NotificationsCount>({
     mode: 'onChange',
     defaultValues: {
+      ...defaultNotifications.count,
       ...notifications?.count,
       destination: { ...notifications?.count.destination, folder: notifications?.count?.destination?.folder ?? '' },
     },
@@ -76,6 +78,11 @@ export const SettingsTasksCount = () => {
       </CardContent>
       <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
         <Stack direction="row" spacing={2}>
+          <ButtonWithConfirm
+            buttonLabel={i18n('restore', 'common', 'buttons')}
+            buttonProps={{ variant: 'outlined', color: 'secondary', sx: { flex: '0 1 8rem' }, startIcon: <SettingsBackupRestoreIcon /> }}
+            onDialogConfirm={() => reset(defaultNotifications.count)}
+          />
           <Button
             variant="outlined"
             color={onSubmitColor()}

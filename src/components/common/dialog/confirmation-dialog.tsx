@@ -1,39 +1,36 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
-export const ConfirmationDialog = ({
-  open,
-  title,
-  description,
-  onCancel,
-  onConfirm,
-}: {
+import type { ButtonProps } from '@mui/material';
+
+export type ConfirmationDialogProps = {
   open: boolean;
   title?: JSX.Element | string;
   description?: JSX.Element | string;
-  onCancel?: ($event: React.MouseEvent) => void;
-  onConfirm?: ($event: React.MouseEvent) => void;
-}) => {
+  onCancel?: ButtonProps['onClick'];
+  onConfirm?: ButtonProps['onClick'];
+};
+export const ConfirmationDialog = ({ open, title, description, onCancel, onConfirm }: ConfirmationDialogProps) => {
   const i18n = useI18n('common', 'buttons');
-  const [state, setState] = React.useState(open);
+  const [state, setState] = useState<boolean>(open);
 
   useEffect(() => setState(open), [open]);
 
-  const onCancelHandler = ($event: React.MouseEvent) => {
+  const onCancelHandler: ButtonProps['onClick'] = $event => {
     onCancel?.($event);
     setState(false);
   };
-  const onConfirmHandler = ($event: React.MouseEvent) => {
+  const onConfirmHandler: ButtonProps['onClick'] = $event => {
     onConfirm?.($event);
     setState(false);
   };
   return (
     <Dialog open={state} onClose={onCancelHandler} aria-labelledby="confirm-delete-dialog" maxWidth={'xs'}>
       <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
-      <DialogContent>{description}</DialogContent>
+      <DialogContent sx={{ whiteSpace: 'pre-line' }}>{description}</DialogContent>
       <DialogActions>
         <Button variant="outlined" onClick={onCancelHandler}>
           {i18n('cancel')}

@@ -10,7 +10,7 @@ import { useI18n } from '@dvcol/web-extension-utils';
 
 import { FormExplorer, FormInput, FormSwitch, MuiIcon } from '@src/components/common';
 import type { QuickMenu } from '@src/models';
-import { MaterialIcon, MaterialIconMap } from '@src/models';
+import { QuickMenuType, MaterialIcon, MaterialIconMap } from '@src/models';
 import { removeQuickMenu, saveQuickMenu } from '@src/store/actions';
 
 export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
@@ -28,6 +28,7 @@ export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
       ...menu,
       modal: menu.modal ?? false,
       destination: { custom: menu.destination?.custom ?? false, path: menu.destination?.path ?? '' },
+      type: menu.type ?? QuickMenuType.Download,
     },
   });
 
@@ -95,32 +96,68 @@ export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
         sx={{ p: '0.5rem 0' }}
       />
       <CardHeader
-        title={i18n('modal_title')}
-        subheader={i18n('modal_subheader')}
+        title={i18n('type_title')}
+        subheader={i18n('type_subheader')}
         titleTypographyProps={{ variant: 'subtitle2' }}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
-        action={<FormSwitch controllerProps={{ name: 'modal', control }} formControlLabelProps={{ label: '' }} />}
-        sx={{ p: '0.5rem 0' }}
-      />
-      <CardHeader
-        title={i18n('destination_title')}
-        subheader={i18n('destination_subheader')}
-        titleTypographyProps={{ variant: 'subtitle2' }}
-        subheaderTypographyProps={{ variant: 'subtitle2' }}
-        action={<FormSwitch controllerProps={{ name: 'destination.custom', control }} formControlLabelProps={{ label: '' }} />}
-        sx={{ p: '0.5rem 0' }}
-      />
-      <Collapse in={getValues()?.destination?.custom}>
-        <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: '12rem' }}>
-          <FormExplorer
-            controllerProps={{ name: 'destination.path', control }}
-            explorerProps={{
-              flatten: true,
-              disabled: !getValues()?.destination?.custom,
-              startPath: menu?.destination?.path,
+        action={
+          <FormInput
+            controllerProps={{ name: 'type', control }}
+            textFieldProps={{
+              select: true,
+              label: i18n('type_label'),
+              sx: { flex: '1 0 8rem' },
             }}
-          />
-        </Card>
+          >
+            {Object.values(QuickMenuType).map(type => (
+              <MenuItem key={type} value={type} sx={{ textTransform: 'capitalize' }}>
+                {i18n(type, 'common', 'model', 'quick_menu_type')}
+              </MenuItem>
+            ))}
+          </FormInput>
+        }
+        sx={{ p: '0.5rem 0' }}
+      />
+
+      <Collapse in={getValues()?.type === QuickMenuType.Task} unmountOnExit>
+        <CardHeader
+          title={i18n('modal_title')}
+          subheader={i18n('modal_subheader')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          action={
+            <FormSwitch
+              controllerProps={{ name: 'modal', control }}
+              formControlLabelProps={{ label: '', disabled: getValues()?.type !== QuickMenuType.Task }}
+            />
+          }
+          sx={{ p: '0.5rem 0' }}
+        />
+        <CardHeader
+          title={i18n('destination_title')}
+          subheader={i18n('destination_subheader')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          action={
+            <FormSwitch
+              controllerProps={{ name: 'destination.custom', control }}
+              formControlLabelProps={{ label: '', disabled: getValues()?.type !== QuickMenuType.Task }}
+            />
+          }
+          sx={{ p: '0.5rem 0' }}
+        />
+        <Collapse in={getValues()?.destination?.custom} unmountOnExit>
+          <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: '12rem' }}>
+            <FormExplorer
+              controllerProps={{ name: 'destination.path', control }}
+              explorerProps={{
+                flatten: true,
+                disabled: !getValues()?.destination?.custom || getValues()?.type !== QuickMenuType.Task,
+                startPath: menu?.destination?.path,
+              }}
+            />
+          </Card>
+        </Collapse>
       </Collapse>
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Stack direction="row" spacing={2}>
