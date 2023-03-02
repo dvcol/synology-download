@@ -28,7 +28,12 @@ export const onDownloadEvents = (store: StoreOrProxy) => {
     if (!enabled) return suggest();
     if (!all && !active.some(({ ext, mime }) => download.filename?.endsWith(ext) && (!mime?.length || download.mime === mime))) return suggest();
 
-    if (!modal) return InterceptService.transfer(download, { erase, resume }, suggest).subscribe();
-    InterceptService.openMenu(download, { erase, resume }, suggest).subscribe();
+    const handler = {
+      error: () => {
+        /* empty because error are logged in InterceptService */
+      },
+    };
+    if (!modal) return InterceptService.transfer(download, { erase, resume }, suggest).subscribe(handler);
+    InterceptService.openMenu(download, { erase, resume }, suggest).subscribe(handler);
   });
 };
