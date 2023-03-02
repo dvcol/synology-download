@@ -9,7 +9,7 @@ import { v4 as uuid } from 'uuid';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
-import { ButtonWithConfirm } from '@src/components';
+import { ButtonWithConfirm, SortableList } from '@src/components';
 import type { InterfaceHeader } from '@src/models';
 
 export const SettingsAccordion = <T extends { id: string }>({
@@ -19,6 +19,7 @@ export const SettingsAccordion = <T extends { id: string }>({
   summary,
   addNew,
   reset,
+  onChange,
 }: {
   title: InterfaceHeader;
   list: T[];
@@ -26,6 +27,7 @@ export const SettingsAccordion = <T extends { id: string }>({
   detail: (item: T) => JSX.Element;
   addNew?: (id: string) => void;
   reset?: () => void;
+  onChange?: (item: T[]) => void;
 }) => {
   const i18n = useI18n('panel', 'settings', 'accordion');
   const [expanded, setExpanded] = React.useState<string | false>(false);
@@ -51,20 +53,25 @@ export const SettingsAccordion = <T extends { id: string }>({
         sx={{ p: '1rem 1rem 0' }}
       />
       <CardContent>
-        {list?.map(i => (
-          <Accordion
-            key={i.id}
-            expanded={expanded === i.id}
-            onChange={handleExpand(i.id)}
-            sx={{ borderRadius: '0' }}
-            TransitionProps={{ unmountOnExit: true }}
-          >
-            <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ overflow: 'hidden' }}>
-              {summary(i)}
-            </AccordionSummary>
-            {detail(i)}
-          </Accordion>
-        ))}
+        <SortableList
+          values={list}
+          render={(i: T) => (
+            <Accordion
+              key={i.id}
+              expanded={expanded === i.id}
+              onChange={handleExpand(i.id)}
+              sx={{ borderRadius: '0' }}
+              TransitionProps={{ unmountOnExit: true }}
+            >
+              <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ overflow: 'hidden' }}>
+                {summary(i)}
+              </AccordionSummary>
+              {detail(i)}
+            </Accordion>
+          )}
+          onChange={onChange}
+          disabled={!!expanded}
+        />
       </CardContent>
 
       <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
