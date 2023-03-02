@@ -18,7 +18,11 @@ export class InterceptService {
         error: err => {
           callback?.();
           console.error(`Failed to create task for download '${download.id}'`, { err, download });
-          if (resume) DownloadService.resume(download.id).subscribe();
+          if (resume) {
+            DownloadService.resume(download.id).subscribe();
+          } else if (erase) {
+            DownloadService.erase({ id: download.id }).subscribe();
+          }
         },
         complete: () => {
           callback?.();
@@ -55,7 +59,11 @@ export class InterceptService {
         error: err => {
           callback?.();
           console.error(`Failed to send download '${download.id}' to active tab`, { err, download });
-          if (resume) DownloadService.resume(download.id).subscribe();
+          if (resume) {
+            DownloadService.resume(download.id).subscribe();
+          } else if (erase) {
+            DownloadService.erase({ id: download.id }).subscribe();
+          }
         },
       }),
     );
