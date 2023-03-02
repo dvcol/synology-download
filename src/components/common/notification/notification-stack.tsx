@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 
 import { Notifier, SnackNotificationCard } from '@src/components';
 import type { SnackMessage } from '@src/models';
+import { zIndexMax } from '@src/utils';
 
 import type { SnackbarKey, SnackbarProviderProps } from 'notistack';
 import type { FC } from 'react';
@@ -28,7 +29,7 @@ export const NotificationStack: FC<Pick<SnackbarProviderProps, 'maxSnack'>> = ({
 
   return (
     <>
-      <style>{'.SnackbarContainer-root {z-index: 2147483647 !important;}'}</style>
+      <style>{`.SnackbarContainer-root {z-index: ${zIndexMax} !important;}`}</style>
       {/* @ts-expect-error Type conflict with reaction group */}
       <SnackbarProvider
         maxSnack={maxSnack}

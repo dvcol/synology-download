@@ -19,7 +19,7 @@ import { NotificationService, QueryService } from '@src/services';
 import type { StoreState } from '@src/store';
 import { getQuick } from '@src/store/selectors';
 
-import { onMessage } from '@src/utils';
+import { onMessage, zIndexMax } from '@src/utils';
 
 import type { PortalProps } from '@mui/base/Portal';
 import type { PopoverProps } from '@mui/material/Popover';
@@ -126,6 +126,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
       MenuListProps={{
         'aria-labelledby': 'basic-button',
       }}
+      sx={{ zIndex: `${zIndexMax} !important` }}
     >
       {menus?.map(m => (
         <MenuItem key={m.id} onClick={() => handleClick(m)}>

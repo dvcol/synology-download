@@ -7,12 +7,12 @@ import type { ChromeResponse } from '@dvcol/web-extension-utils';
 import { i18n } from '@dvcol/web-extension-utils';
 
 import { TaskAdd } from '@src/components';
-import type { ContextMenuOnClickPayload, TaskForm, InterceptResponse } from '@src/models';
+import type { ContextMenuOnClickPayload, InterceptResponse, TaskForm } from '@src/models';
 import { ChromeMessageType } from '@src/models';
 import type { TaskDialogIntercept } from '@src/pages/content/service/dialog.service';
 import { taskDialog$ } from '@src/pages/content/service/dialog.service';
 import { NotificationService, QueryService } from '@src/services';
-import { onMessage } from '@src/utils';
+import { onMessage, zIndexMax } from '@src/utils';
 
 import type { PortalProps } from '@mui/base/Portal';
 import type { FC } from 'react';
@@ -76,7 +76,14 @@ export const TaskDialog: FC<{ container?: PortalProps['container'] }> = ({ conta
   }, []);
 
   return (
-    <Dialog open={open} container={container} fullWidth={true} onClose={() => onClose(true)} maxWidth={'md'}>
+    <Dialog
+      open={open}
+      container={container}
+      fullWidth={true}
+      onClose={() => onClose(true)}
+      maxWidth={'md'}
+      sx={{ zIndex: `${zIndexMax} !important` }}
+    >
       <DialogContent sx={{ p: '0' }}>
         <TaskAdd form={form} withCancel={true} onFormCancel={() => onClose(true)} onFormSubmit={() => onClose(false)} />
       </DialogContent>
