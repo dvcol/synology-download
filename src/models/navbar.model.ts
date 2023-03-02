@@ -24,4 +24,5 @@ export interface NavbarButton {
   onClick?: MouseEventHandler;
   component?: ForwardRefExoticComponent<any>;
   to?: string;
+  disabled?: boolean;
 }

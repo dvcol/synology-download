@@ -11,13 +11,13 @@ import { i18n } from '@dvcol/web-extension-utils';
 
 import { MuiIcon } from '@src/components';
 import type { InterceptPayload, InterceptResponse, QuickMenu, TaskForm } from '@src/models';
-import { QuickMenuType, ChromeMessageType, MaterialIcon } from '@src/models';
+import { ChromeMessageType, MaterialIcon, QuickMenuType } from '@src/models';
 import { anchor$, lastClick$ } from '@src/pages/content/service/anchor.service';
 import type { TaskDialogIntercept } from '@src/pages/content/service/dialog.service';
 import { taskDialog$ } from '@src/pages/content/service/dialog.service';
 import { NotificationService, QueryService } from '@src/services';
 import type { StoreState } from '@src/store';
-import { getQuick } from '@src/store/selectors';
+import { getLogged, getQuick } from '@src/store/selectors';
 
 import { onMessage, zIndexMax } from '@src/utils';
 
@@ -31,6 +31,8 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
 
   const [_form, setForm] = React.useState<TaskForm>();
   const menus = useSelector<StoreState, QuickMenu[]>(getQuick);
+
+  const isLogged = useSelector<StoreState, boolean>(getLogged);
 
   const [intercept, setIntercept] = React.useState<TaskDialogIntercept>();
   const _menus = menus?.filter(m => !!intercept || m.type !== QuickMenuType.Download);
@@ -138,7 +140,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
       sx={{ zIndex: `${zIndexMax} !important` }}
     >
       {_menus?.map(m => (
-        <MenuItem key={m.id} onClick={() => handleClick(m)}>
+        <MenuItem key={m.id} onClick={() => handleClick(m)} disabled={!isLogged && m.type !== QuickMenuType.Download}>
           <ListItemIcon>
             <MuiIcon icon={m.icon ?? MaterialIcon.download} props={{ sx: { fontSize: '1.125rem' } }} />
           </ListItemIcon>

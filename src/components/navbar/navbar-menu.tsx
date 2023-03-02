@@ -79,13 +79,14 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       type: NavbarButtonType.Refresh,
       label: i18n('menu_refresh'),
       icon: <RefreshIcon />,
+      disabled: !downloadEnabled && !logged,
       onClick: $event => {
         if ($event.shiftKey) {
           dispatch(resetDownloads());
           dispatch(resetTasks());
         }
         if (downloadButtons && !$event.altKey) DownloadService.searchAll().subscribe();
-        if (!$event.shiftKey) QueryService.listTasks().subscribe(handleError('refresh'));
+        if (logged && !$event.shiftKey) QueryService.listTasks().subscribe(handleError('refresh'));
       },
     },
     {
@@ -93,9 +94,10 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       label: i18n('menu_resume'),
       icon: <PlayArrowIcon />,
       color: 'success',
+      disabled: !downloadEnabled && !logged,
       onClick: $event => {
         if (downloadButtons && !$event.altKey) DownloadService.resumeAll().subscribe();
-        if (!$event.shiftKey) QueryService.resumeAllTasks().subscribe(handleError('resume'));
+        if (logged && !$event.shiftKey) QueryService.resumeAllTasks().subscribe(handleError('resume'));
       },
     },
     {
@@ -103,9 +105,10 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       label: i18n('menu_pause'),
       icon: <PauseIcon />,
       color: 'warning',
+      disabled: !downloadEnabled && !logged,
       onClick: $event => {
         if (downloadButtons && !$event.altKey) DownloadService.pauseAll().subscribe();
-        if (!$event.shiftKey) QueryService.pauseAllTasks().subscribe(handleError('pause'));
+        if (logged && !$event.shiftKey) QueryService.pauseAllTasks().subscribe(handleError('pause'));
       },
     },
     {
@@ -113,6 +116,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       label: i18n('menu_remove'),
       icon: <DeleteSweepIcon />,
       color: 'error',
+      disabled: !downloadEnabled && !logged,
       onClick: () => setPrompt(true),
     },
     {
@@ -120,9 +124,10 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       label: i18n('menu_clear'),
       icon: <ClearAllIcon />,
       color: 'primary',
+      disabled: !downloadEnabled && !logged,
       onClick: $event => {
         if (downloadButtons && !$event.altKey) DownloadService.eraseAll().subscribe();
-        if (!$event.shiftKey) QueryService.deleteFinishedTasks().subscribe(handleError('clear'));
+        if (logged && !$event.shiftKey) QueryService.deleteFinishedTasks().subscribe(handleError('clear'));
       },
     },
     {
@@ -164,7 +169,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
 
   return (
     <React.Fragment>
-      {logged &&
+      {(logged || downloadEnabled) &&
         buttons
           ?.filter(({ type }) => navbarButtons?.includes(type))
           ?.map(({ type, icon, label, ..._props }) => (
@@ -240,7 +245,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
         onConfirm={$event => {
           setPrompt(false);
           if (downloadButtons && !$event.altKey) DownloadService.cancelAll().subscribe();
-          if (!$event.shiftKey) QueryService.deleteAllTasks().subscribe(handleError('delete'));
+          if (logged && !$event.shiftKey) QueryService.deleteAllTasks().subscribe(handleError('delete'));
         }}
       />
     </React.Fragment>
