@@ -1,10 +1,10 @@
-import { combineLatest, distinctUntilChanged, Subject, switchMap, timer } from 'rxjs';
+import { combineLatest, distinctUntilChanged, Subject, switchMap, timer, withLatestFrom } from 'rxjs';
 
 import type { ChromeNotification, StoreOrProxy } from '@src/models';
 import { ChromeMessageType, defaultPolling } from '@src/models';
 import { DownloadService } from '@src/services';
 import { store$ } from '@src/store';
-import { getLogged, getPollingEnabled, getPollingInterval } from '@src/store/selectors';
+import { getLogged, getPollingEnabled, getPollingInterval, getSettingsDownloadsEnabled } from '@src/store/selectors';
 import { onMessage, sendMessage, skipUntilRepeat } from '@src/utils';
 
 import { QueryService } from '../query';
@@ -26,7 +26,7 @@ export class PollingService {
   );
 
   private static isReady(): boolean {
-    return QueryService.isLoggedIn && getPollingEnabled(this.store.getState());
+    return (QueryService.isLoggedIn || getSettingsDownloadsEnabled(this.store.getState())) && getPollingEnabled(this.store.getState());
   }
 
   private static interval(): number {
@@ -43,16 +43,22 @@ export class PollingService {
     });
 
     if (!this.isProxy) {
-      this.timer$.subscribe(() => {
-        QueryService.listTasks().subscribe();
-        QueryService.getStatistic().subscribe();
-        DownloadService.searchAll().subscribe();
-      });
+      this.timer$
+        .pipe(withLatestFrom(store$(this.store, getLogged), store$(this.store, getSettingsDownloadsEnabled)))
+        .subscribe(([_, logged, download]) => {
+          if (download) DownloadService.searchAll().subscribe();
+          if (logged) {
+            QueryService.listTasks().subscribe();
+            QueryService.getStatistic().subscribe();
+          }
+        });
 
       store$<number>(this.store, getPollingInterval).subscribe(() => this.change(this.interval()));
-      combineLatest([store$(this.store, getPollingEnabled), store$(this.store, getLogged)]).subscribe(([enabled, logged]) =>
-        enabled && logged ? this.start() : this.stop(),
-      );
+      combineLatest([
+        store$(this.store, getPollingEnabled),
+        store$(this.store, getLogged),
+        store$(this.store, getSettingsDownloadsEnabled),
+      ]).subscribe(([enabled, logged, download]) => (enabled && (download || logged) ? this.start() : this.stop()));
     }
   }
 
