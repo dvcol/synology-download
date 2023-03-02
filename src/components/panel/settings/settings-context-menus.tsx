@@ -10,7 +10,7 @@ import { SettingsAccordion, SettingsContextMenu } from '@src/components';
 import type { ContextMenu } from '@src/models';
 import { ChromeMessageType, defaultContextMenu, InterfaceHeader } from '@src/models';
 import type { StoreState } from '@src/store';
-import { resetContextMenu, saveContextMenu } from '@src/store/actions';
+import { resetContextMenu, saveContextMenu, setContextMenus } from '@src/store/actions';
 import { getMenus } from '@src/store/selectors';
 import { sendMessage } from '@src/utils';
 
@@ -31,6 +31,8 @@ export const SettingsContextMenus = () => {
       dispatch(resetContextMenu());
     });
   };
+
+  const onChange = (_menus: ContextMenu[]) => dispatch(setContextMenus(_menus));
 
   return (
     <SettingsAccordion
@@ -54,6 +56,7 @@ export const SettingsContextMenus = () => {
       detail={c => <SettingsContextMenu menu={c} />}
       addNew={addNew}
       reset={reset}
+      onChange={onChange}
     />
   );
 };

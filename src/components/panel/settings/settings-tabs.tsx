@@ -10,7 +10,7 @@ import { SettingsAccordion } from '@src/components';
 import type { ContentTab } from '@src/models';
 import { defaultTabs, InterfaceHeader, TaskStatus } from '@src/models';
 import type { StoreState } from '@src/store';
-import { resetContentTabs, saveContentTab } from '@src/store/actions';
+import { resetContentTabs, saveContentTab, setContentTabs } from '@src/store/actions';
 import { getTabs } from '@src/store/selectors';
 
 import { SettingsTab } from './settings-tab';
@@ -27,6 +27,8 @@ export const SettingsTabs = () => {
   };
 
   const reset = () => dispatch(resetContentTabs());
+
+  const onChange = (_tabs: ContentTab[]) => dispatch(setContentTabs(_tabs));
 
   const translate = (status: string) => i18n(status, 'common', 'model', saskStatuses.includes(status) ? 'task_status' : 'download_status');
 
@@ -53,6 +55,7 @@ export const SettingsTabs = () => {
       detail={t => <SettingsTab tab={t} />}
       addNew={addNew}
       reset={reset}
+      onChange={onChange}
     />
   );
 };

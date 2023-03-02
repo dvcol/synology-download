@@ -10,7 +10,7 @@ import { SettingsAccordion, SettingsQuickMenu } from '@src/components';
 import type { QuickMenu } from '@src/models';
 import { defaultQuickMenu, InterfaceHeader } from '@src/models';
 import type { StoreState } from '@src/store';
-import { resetQuickMenus, saveQuickMenu } from '@src/store/actions';
+import { resetQuickMenus, saveQuickMenu, setQuickMenus } from '@src/store/actions';
 import { getQuick } from '@src/store/selectors';
 
 export const SettingsQuickMenus = () => {
@@ -24,6 +24,8 @@ export const SettingsQuickMenus = () => {
   };
 
   const reset = () => dispatch(resetQuickMenus());
+
+  const onChange = (_menus: QuickMenu[]) => dispatch(setQuickMenus(_menus));
 
   return (
     <SettingsAccordion
@@ -47,6 +49,7 @@ export const SettingsQuickMenus = () => {
       detail={m => <SettingsQuickMenu menu={m} />}
       addNew={addNew}
       reset={reset}
+      onChange={onChange}
     />
   );
 };
