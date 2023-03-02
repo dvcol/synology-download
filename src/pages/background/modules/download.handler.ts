@@ -2,8 +2,7 @@ import { withLatestFrom } from 'rxjs';
 
 import type { DownloadsIntercept, StoreOrProxy } from '@src/models';
 import { DownloadStatus } from '@src/models';
-import { NotificationService } from '@src/services';
-import { InterceptService } from '@src/services/download/intercept.service';
+import { InterceptService, NotificationService } from '@src/services';
 import { store$ } from '@src/store';
 import { getSettingsDownloadsIntercept, getSettingsDownloadsNotifications } from '@src/store/selectors';
 import { onFilename$, onStatus$ } from '@src/utils';

@@ -15,10 +15,11 @@ import { cancel, download, erase, getFileIcon, onMessage, open, pause, resume, s
 import type { Observable } from 'rxjs';
 
 export class DownloadService {
+  private static key = 'DownloadService';
   private static store: any | StoreOrProxy;
   private static isProxy: boolean;
 
-  static listen(name = DownloadService.name): void {
+  static listen(name = this.key): void {
     onMessage<DownloadQueryPayload>([ChromeMessageType.download]).subscribe(({ message: { payload }, sendResponse }) => {
       if (payload?.id === name) {
         const { method, args } = payload;
@@ -29,11 +30,10 @@ export class DownloadService {
           )
           .subscribe(response => sendResponse(response));
       }
-      return true;
     });
   }
   static forward<T>(method: DownloadQueryPayload['method'], ...args: DownloadQueryPayload['args']): Observable<T> {
-    return sendMessage<DownloadQueryPayload, T>({ type: ChromeMessageType.download, payload: { id: DownloadService.name, method, args } });
+    return sendMessage<DownloadQueryPayload, T>({ type: ChromeMessageType.download, payload: { id: this.key, method, args } });
   }
 
   static do(method: DownloadQueryPayload['method'], ...args: DownloadQueryPayload['args']): Observable<any> {

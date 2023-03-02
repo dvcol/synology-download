@@ -14,7 +14,7 @@ export const ContentDetail: FC<ContentDetailProps> = ({ title, info, buttons, co
   return (
     <Typography component="span" variant="body2">
       {!!title && (
-        <Grid container sx={{ alignItems: 'center', wordBreak: 'break-all' }}>
+        <Grid container sx={{ alignItems: 'center', wordBreak: 'break-all', margin: '0 0 0.5rem' }}>
           {title}
         </Grid>
       )}

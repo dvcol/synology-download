@@ -36,6 +36,13 @@ export const TaskDetail: FC<TaskDetailProps> = ({ task, loading, loadingIcon, bu
 
   return (
     <ContentDetail
+      title={
+        task?.additional?.detail?.uri?.length ? (
+          <Typography variant="caption" component="div">
+            {`${i18n('url')} :\t${task?.additional?.detail?.uri}`}
+          </Typography>
+        ) : undefined
+      }
       info={
         <>
           <Typography variant="caption" component="div">

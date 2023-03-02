@@ -21,9 +21,8 @@ import { TaskAdd } from '@src/components';
 import type { Download, Global, TaskForm } from '@src/models';
 import { ColorLevel, ColorLevelMap, DownloadStatus, downloadStatusToColor } from '@src/models';
 
-import { DownloadService } from '@src/services';
+import { InterceptService, DownloadService } from '@src/services';
 
-import { InterceptService } from '@src/services/download/intercept.service';
 import type { StoreState } from '@src/store';
 import { getGlobalDownload, getSettingsDownloadsTransfer } from '@src/store/selectors';
 
@@ -83,7 +82,7 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
       }
     : {};
 
-  const onclick = ($event: React.MouseEvent, key: DownloadItemButton['key']) => {
+  const handleClick = ($event: React.MouseEvent, key: DownloadItemButton['key']) => {
     $event.stopPropagation();
     switch (key) {
       case 'erase':
@@ -123,7 +122,7 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
               {buttons?.map(button => (
                 <Tooltip key={button.key} title={i18n(button.key, 'common', 'buttons')} placement={'left'}>
                   <span>
-                    <Button key={button.key} sx={ButtonStyle} onClick={$event => onclick($event, button.key)} color={button.color}>
+                    <Button key={button.key} sx={ButtonStyle} onClick={$event => handleClick($event, button.key)} color={button.color}>
                       {button.icon}
                     </Button>
                   </span>
@@ -132,7 +131,7 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
             </>
           ),
         }}
-        details={<DownloadDetail download={download} buttons={detailsButtons} onclick={onclick} />}
+        details={<DownloadDetail download={download} buttons={detailsButtons} onclick={handleClick} />}
       />
       <Dialog open={dialog} fullWidth={true} onClose={() => close()} maxWidth={'md'}>
         <DialogContent sx={{ p: '0' }}>
