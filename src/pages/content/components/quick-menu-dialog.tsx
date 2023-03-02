@@ -33,7 +33,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
   const menus = useSelector<StoreState, QuickMenu[]>(getQuick);
 
   const [intercept, setIntercept] = React.useState<TaskDialogIntercept>();
-  const _menus = menus?.filter(m => !!intercept || m.type === QuickMenuType.Task);
+  const _menus = menus?.filter(m => !!intercept || m.type !== QuickMenuType.Download);
 
   const onIntercept = (response: ChromeResponse<InterceptResponse>) => {
     if (intercept?.callback) {
