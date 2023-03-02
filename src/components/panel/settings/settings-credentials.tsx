@@ -101,7 +101,7 @@ export const SettingsCredentials = () => {
 
   useEffect(() => {
     PollingService.stop();
-    if (QueryService.isReady) queryInfo();
+    if (QueryService.isReady) queryInfo().then();
     return () => PollingService.start();
   }, []);
 
