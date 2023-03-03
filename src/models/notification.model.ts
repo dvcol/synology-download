@@ -37,14 +37,20 @@ export interface SnackNotificationScope {
 
 export type ChromeNotification = NotificationOptions<true>;
 
+export interface SnackButton {
+  title: string;
+  url?: string;
+}
+
 export interface SnackMessage {
   title: string;
   message?: string;
   contextMessage?: string;
   priority?: NotificationLevel;
   success?: boolean;
+  buttons?: SnackButton[];
 }
 
 export type SnackNotification = { message: SnackMessage; options?: OptionsObject };
 
-export type NotificationServiceOptions = { type: NotificationType; options?: OptionsObject };
+export type NotificationServiceOptions = { type?: NotificationType; options?: OptionsObject };

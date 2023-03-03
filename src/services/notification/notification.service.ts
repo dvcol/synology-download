@@ -116,7 +116,7 @@ export class NotificationService {
   }
 
   private static handleSnackNotification(
-    { message }: SnackNotification,
+    { message, options }: SnackNotification,
     { timeout: autoHideDuration, position: anchorOrigin } = getNotificationsSnack(this.store.getState()),
   ): SnackNotification {
     let variant: VariantType = 'default';
@@ -129,14 +129,14 @@ export class NotificationService {
     }
     return {
       message,
-      options: { autoHideDuration, anchorOrigin, variant, preventDuplicate: true, disableWindowBlurListener: true },
+      options: { autoHideDuration, anchorOrigin, variant, preventDuplicate: true, disableWindowBlurListener: true, ...options },
     };
   }
 
   private static sendBannerOrForward(notification?: ChromeNotification) {
     if (notification && this.isProxy) {
       sendMessage<ChromeNotification>({ type: ChromeMessageType.notificationBanner, payload: notification }).subscribe({
-        error: e => console.warn('Snack notification failed, no active tab found.', e),
+        error: e => console.warn('Banner notification failed, forward ended in error.', e),
       });
     } else if (notification) {
       (notification.priority ?? NotificationLevel.info < 0 ? this.error$ : this.notify$).next(notification);
@@ -147,7 +147,9 @@ export class NotificationService {
     if (notification && this.isProxy) {
       this.snack$.next(notification);
     } else if (notification?.message) {
-      sendActiveTabMessage<SnackNotification>({ type: ChromeMessageType.notificationSnack, payload: notification }).subscribe();
+      sendActiveTabMessage<SnackNotification>({ type: ChromeMessageType.notificationSnack, payload: notification }).subscribe({
+        error: e => console.warn('Snack notification failed, no active tab found.', e),
+      });
     }
   }
 
@@ -165,24 +167,24 @@ export class NotificationService {
     }
   }
 
-  static trace(notification: SnackMessage, options: NotificationServiceOptions = { type: NotificationType.snack }) {
-    this.buildAndSend({ ...notification, priority: NotificationLevel.trace }, options);
+  static trace(notification: SnackMessage, options: NotificationServiceOptions = {}) {
+    this.buildAndSend({ ...notification, priority: NotificationLevel.trace }, { type: NotificationType.snack, ...options });
   }
 
-  static debug(notification: SnackMessage, options: NotificationServiceOptions = { type: NotificationType.snack }) {
-    this.buildAndSend({ ...notification, priority: NotificationLevel.debug }, options);
+  static debug(notification: SnackMessage, options: NotificationServiceOptions = {}) {
+    this.buildAndSend({ ...notification, priority: NotificationLevel.debug }, { type: NotificationType.snack, ...options });
   }
 
-  static info(notification: SnackMessage, options: NotificationServiceOptions = { type: NotificationType.snack }) {
-    this.buildAndSend({ ...notification, priority: NotificationLevel.info }, options);
+  static info(notification: SnackMessage, options: NotificationServiceOptions = {}) {
+    this.buildAndSend({ ...notification, priority: NotificationLevel.info }, { type: NotificationType.snack, ...options });
   }
 
-  static warn(notification: SnackMessage, options: NotificationServiceOptions = { type: NotificationType.snack }) {
-    this.buildAndSend({ ...notification, priority: NotificationLevel.warn }, options);
+  static warn(notification: SnackMessage, options: NotificationServiceOptions = {}) {
+    this.buildAndSend({ ...notification, priority: NotificationLevel.warn }, { type: NotificationType.snack, ...options });
   }
 
-  static error(notification: SnackMessage, options: NotificationServiceOptions = { type: NotificationType.snack }) {
-    this.buildAndSend({ ...notification, priority: NotificationLevel.error }, options);
+  static error(notification: SnackMessage, options: NotificationServiceOptions = {}) {
+    this.buildAndSend({ ...notification, priority: NotificationLevel.error }, { type: NotificationType.snack, ...options });
   }
 
   static taskCreated(uri: string, source?: string, destination?: string): void {

@@ -6,7 +6,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 
-import { Box, Card, CardContent, CardHeader, Collapse, IconButton, styled, Typography } from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, IconButton, styled, Typography } from '@mui/material';
 
 import { useSnackbar } from 'notistack';
 
@@ -14,6 +14,8 @@ import React, { forwardRef, useCallback, useEffect, useState } from 'react';
 
 import type { SnackMessage } from '@src/models';
 import { ColorLevel, ColorLevelMap, NotificationLevel } from '@src/models';
+
+import { createTab } from '@src/utils';
 
 import type { IconButtonProps, SvgIconProps, Theme } from '@mui/material';
 import type { SnackbarKey } from 'notistack';
@@ -32,7 +34,7 @@ const ExpandMore = styled(({ expand, ...other }: IconButtonProps & { expand: boo
 
 type SnackNotificationCardProps = { id: SnackbarKey; notification: SnackMessage; expanded?: boolean };
 const SnackNotificationCardComponent: ForwardRefRenderFunction<HTMLDivElement, SnackNotificationCardProps> = (
-  { id, notification: { title, message, contextMessage, priority, success }, expanded },
+  { id, notification: { title, message, contextMessage, priority, success, buttons }, expanded },
   ref,
 ) => {
   const { closeSnackbar } = useSnackbar();
@@ -104,7 +106,7 @@ const SnackNotificationCardComponent: ForwardRefRenderFunction<HTMLDivElement, S
         }}
         sx={{ padding: '0.5rem 0.5rem 0.5rem 1rem', bgcolor: handleColor() }}
       />
-      {(message || contextMessage) && (
+      {(message || contextMessage || buttons?.length) && (
         <Collapse in={_expanded} timeout="auto" unmountOnExit>
           <CardContent sx={{ padding: '0.5rem 0.5rem 0.5rem 1rem !important', whiteSpace: 'pre-line' }}>
             {message && (
@@ -118,6 +120,15 @@ const SnackNotificationCardComponent: ForwardRefRenderFunction<HTMLDivElement, S
               </Typography>
             )}
           </CardContent>
+          {buttons?.length && (
+            <CardActions>
+              {buttons?.map(({ title: _title, url }, index) => (
+                <Button key={index} size="small" onClick={() => createTab({ url })}>
+                  {_title}
+                </Button>
+              ))}
+            </CardActions>
+          )}
         </Collapse>
       )}
     </Card>
