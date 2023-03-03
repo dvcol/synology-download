@@ -2,7 +2,16 @@ import { filter, map, Subject, tap } from 'rxjs';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
-import type { ChromeNotification, Download, SnackMessage, SnackNotification, StateSlice, StoreOrProxy, Task } from '@src/models';
+import type {
+  ChromeNotification,
+  Download,
+  NotificationServiceOptions,
+  SnackMessage,
+  SnackNotification,
+  StateSlice,
+  StoreOrProxy,
+  Task,
+} from '@src/models';
 import { ChromeMessageType, NotificationLevel, NotificationLevelKeys, NotificationType } from '@src/models';
 import { store$ } from '@src/store';
 import { setBadge } from '@src/store/actions';
@@ -31,7 +40,7 @@ export class NotificationService {
 
   private static readonly error$ = new Subject<ChromeNotification>();
 
-  private static readonly snack$ = new Subject<SnackMessage>();
+  private static readonly snack$ = new Subject<SnackNotification>();
 
   private static bufferStopStart =
     (title: string, message?: string) =>
@@ -62,7 +71,7 @@ export class NotificationService {
         sendResponse();
       });
     } else {
-      onMessage<SnackMessage>([ChromeMessageType.notificationSnack]).subscribe(({ message: { payload }, sendResponse }) => {
+      onMessage<SnackNotification>([ChromeMessageType.notificationSnack]).subscribe(({ message: { payload }, sendResponse }) => {
         this.sendSnackOrForward(payload);
         sendResponse();
       });
@@ -71,10 +80,10 @@ export class NotificationService {
 
   static get snackNotifications$(): Observable<SnackNotification> {
     return this.snack$.pipe(
-      filter(({ priority }) => {
+      filter(({ message }) => {
         const enabled = getNotificationsSnackEnabled(this.store.getState());
         const level = getNotificationsSnackLevel(this.store.getState());
-        return enabled && Number(priority) >= level;
+        return enabled && Number(message.priority) >= level;
       }),
       map(n => this.handleSnackNotification(n)),
     );
@@ -107,7 +116,7 @@ export class NotificationService {
   }
 
   private static handleSnackNotification(
-    message: SnackMessage,
+    { message }: SnackNotification,
     { timeout: autoHideDuration, position: anchorOrigin } = getNotificationsSnack(this.store.getState()),
   ): SnackNotification {
     let variant: VariantType = 'default';
@@ -134,17 +143,17 @@ export class NotificationService {
     }
   }
 
-  private static sendSnackOrForward(notification?: SnackMessage) {
+  private static sendSnackOrForward(notification?: SnackNotification) {
     if (notification && this.isProxy) {
       this.snack$.next(notification);
-    } else if (notification) {
-      sendActiveTabMessage<SnackMessage>({ type: ChromeMessageType.notificationSnack, payload: notification }).subscribe();
+    } else if (notification?.message) {
+      sendActiveTabMessage<SnackNotification>({ type: ChromeMessageType.notificationSnack, payload: notification }).subscribe();
     }
   }
 
-  private static buildAndSend(notification: SnackMessage, type: NotificationType): void {
+  private static buildAndSend(notification: SnackMessage, { type, options }: NotificationServiceOptions): void {
     if (type === NotificationType.snack) {
-      this.sendSnackOrForward(notification);
+      this.sendSnackOrForward({ message: notification, options });
     } else {
       this.sendBannerOrForward({
         ...notification,
@@ -156,24 +165,24 @@ export class NotificationService {
     }
   }
 
-  static trace(notification: SnackMessage, type: NotificationType = NotificationType.snack) {
-    this.buildAndSend({ ...notification, priority: NotificationLevel.trace }, type);
+  static trace(notification: SnackMessage, options: NotificationServiceOptions = { type: NotificationType.snack }) {
+    this.buildAndSend({ ...notification, priority: NotificationLevel.trace }, options);
   }
 
-  static debug(notification: SnackMessage, type: NotificationType = NotificationType.snack) {
-    this.buildAndSend({ ...notification, priority: NotificationLevel.debug }, type);
+  static debug(notification: SnackMessage, options: NotificationServiceOptions = { type: NotificationType.snack }) {
+    this.buildAndSend({ ...notification, priority: NotificationLevel.debug }, options);
   }
 
-  static info(notification: SnackMessage, type: NotificationType = NotificationType.snack) {
-    this.buildAndSend({ ...notification, priority: NotificationLevel.info }, type);
+  static info(notification: SnackMessage, options: NotificationServiceOptions = { type: NotificationType.snack }) {
+    this.buildAndSend({ ...notification, priority: NotificationLevel.info }, options);
   }
 
-  static warn(notification: SnackMessage, type: NotificationType = NotificationType.snack) {
-    this.buildAndSend({ ...notification, priority: NotificationLevel.warn }, type);
+  static warn(notification: SnackMessage, options: NotificationServiceOptions = { type: NotificationType.snack }) {
+    this.buildAndSend({ ...notification, priority: NotificationLevel.warn }, options);
   }
 
-  static error(notification: SnackMessage, type: NotificationType = NotificationType.snack) {
-    this.buildAndSend({ ...notification, priority: NotificationLevel.error }, type);
+  static error(notification: SnackMessage, options: NotificationServiceOptions = { type: NotificationType.snack }) {
+    this.buildAndSend({ ...notification, priority: NotificationLevel.error }, options);
   }
 
   static taskCreated(uri: string, source?: string, destination?: string): void {
@@ -192,7 +201,7 @@ export class NotificationService {
         message: `${i18n('title')}\xa0${parseMagnetLink(task?.title) ?? task.id}`,
         contextMessage: task.additional.detail.destination ? `${i18n('destination_folder')}\xa0${task.additional.detail.destination}` : undefined,
       },
-      NotificationType.banner,
+      { type: NotificationType.banner },
     );
   }
 
@@ -205,7 +214,7 @@ export class NotificationService {
           ? `${i18n('error_message')}\xa0${i18n(task.status_extra.error_detail, 'common', 'model', 'task_error')}`
           : undefined,
       },
-      NotificationType.banner,
+      { type: NotificationType.banner },
     );
   }
 
@@ -232,7 +241,7 @@ export class NotificationService {
         message: `${i18n('title')}\xa0${download.title}`,
         contextMessage: download.error ? `${i18n('error_message')}\xa0${i18n(download.error, 'common', 'model', 'download_error')}` : undefined,
       },
-      NotificationType.banner,
+      { type: NotificationType.banner },
     );
   }
 
@@ -243,7 +252,7 @@ export class NotificationService {
         message: `${i18n('title')}\xa0${download.title}`,
         contextMessage: download.folder ? `${i18n('destination_folder')}\xa0${download.folder}` : undefined,
       },
-      NotificationType.banner,
+      { type: NotificationType.banner },
     );
   }
 }

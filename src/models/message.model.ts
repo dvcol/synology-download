@@ -3,7 +3,7 @@ import type { OnClickData } from '@src/utils';
 import type { DownloadQueryPayload } from './download.model';
 
 import type { ContextMenu } from './menu.model';
-import type { ChromeNotification, SnackMessage } from './notification.model';
+import type { SnackNotification, ChromeNotification } from './notification.model';
 
 import type { SynologyQueryPayload } from './synology.model';
 import type { TaskForm } from './task.model';
@@ -51,7 +51,7 @@ export type ChromeMessagePayload =
   | SynologyQueryPayload
   | DownloadQueryPayload
   | ContextMenuOnClickPayload
-  | SnackMessage
+  | SnackNotification
   | InterceptPayload;
 
 /**

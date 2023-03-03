@@ -29,5 +29,5 @@ export type QueryInfo = chrome.tabs.QueryInfo;
 /** @see chrome.tabs.Tab */
 export type Tab = chrome.tabs.Tab;
 
-export const getActiveTab = (queryInfo: QueryInfo = { active: true, currentWindow: true }): Observable<Tab> =>
+export const getActiveTab = (queryInfo: QueryInfo = { active: true, lastFocusedWindow: true }): Observable<Tab> =>
   from(queryTab(queryInfo)).pipe(map(([tab]) => tab));

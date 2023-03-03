@@ -45,4 +45,6 @@ export interface SnackMessage {
   success?: boolean;
 }
 
-export type SnackNotification = { message: SnackMessage; options: OptionsObject };
+export type SnackNotification = { message: SnackMessage; options?: OptionsObject };
+
+export type NotificationServiceOptions = { type: NotificationType; options?: OptionsObject };
