@@ -26,6 +26,7 @@ Which part of the application is impacted
 - [ ] Context-menu
 - [ ] Content-script (inside the page)
 - [ ] Overlay
+- [ ] Downloads
 
 ### Screenshots or Mock up
 
@@ -33,9 +34,10 @@ If possible provide a screenshot or a mock-up of the issue.
 
 ### Steps to Reproduce the Issue
 
-1. When I'm in the settings tabs, and I click on the edit buttons
-2. The interface does something unexpected
-3. And the application crashes
+1. When I'm doing this
+2. Then this
+3. While having this open
+4. This doesn't work
 
 ### Failure Logs
 

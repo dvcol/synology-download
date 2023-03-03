@@ -26,6 +26,7 @@ Which part of the application do you with to improve
 - [ ] Context-menu
 - [ ] Content-script (inside the page)
 - [ ] Overlay
+- [ ] Downloads
 
 ### Screenshots or Mock up
 
