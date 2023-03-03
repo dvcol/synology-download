@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.18.1](https://github.com/dvcol/synology-download/compare/v1.17.0...v1.18.1) (2023-03-03)
+
+
+### Features
+
+* **about:** add link to release in about page ([7ff9975](https://github.com/dvcol/synology-download/commit/7ff99755217f2bdab453e8383aab99cf1af98af9))
+* **common:** add sortable list based on [@dnd-kit](https://github.com/dnd-kit) ([0a2d08e](https://github.com/dvcol/synology-download/commit/0a2d08ed5c2e90cc2306a32deb88cdc22d9a3cb5))
+* **common:** expand sortable list customized props ([6d21012](https://github.com/dvcol/synology-download/commit/6d21012a6f8fb7d7dcb62899296974a135d0e9e8))
+* **download:** disable synology buttons when logout ([2a6fe49](https://github.com/dvcol/synology-download/commit/2a6fe49ea7502387d291eda404667bf57523bc71))
+* **notification:** add support for persistent snack notifications ([fe0449f](https://github.com/dvcol/synology-download/commit/fe0449f5c417f17228b508031ae1a00884e2d5ad))
+* **polling:** support download only or synology only polling ([33658fb](https://github.com/dvcol/synology-download/commit/33658fb6285a3cb0ab07e622616fda5bd1b9c9ff))
+* **settings:** adds drag and drop support to settings tabs ([4f4b863](https://github.com/dvcol/synology-download/commit/4f4b863b9c1f903ecb11a9dd8f5c1517492bc55a))
+
+
+### Bug Fixes
+
+* **content:** fix backward compatibility for menus ([04f3d8a](https://github.com/dvcol/synology-download/commit/04f3d8a9c53a35ada31f0f6e7dad01fd8cb8dabc))
+* **intercept:** fix error handling in failed interceptions ([48c9346](https://github.com/dvcol/synology-download/commit/48c93461ae07b652e01b74fd297adec46ece7ee3))
+
 ## [1.17.0](https://github.com/dvcol/synology-download/compare/v1.16.1...v1.17.0) (2023-03-02)
 
 
