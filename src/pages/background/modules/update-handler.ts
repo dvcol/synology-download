@@ -1,4 +1,4 @@
-import { finalize, takeWhile } from 'rxjs';
+import { combineLatest, filter, map, takeWhile } from 'rxjs';
 
 import type { ChromeMessage } from '@dvcol/web-extension-utils';
 
@@ -7,41 +7,40 @@ import type { SnackNotification, StoreOrProxy } from '@src/models';
 import { AppLinks, ChromeMessageType, NotificationLevel } from '@src/models';
 import { store$ } from '@src/store';
 import { getPopup } from '@src/store/selectors';
-import { sendMessage } from '@src/utils';
+import type { InstalledDetails } from '@src/utils';
+import { onInstalled$, sendMessage } from '@src/utils';
 
 export const onInstalledEvents = (store: StoreOrProxy) => {
-  chrome.runtime.onInstalled.addListener(details => {
-    // Ignore force update
-    if (details.previousVersion === manifest.version) return;
-
-    const notification: SnackNotification = {
-      message: {
-        title: `Updated to version ${manifest.version}`,
-        message: `The extension has been updated with potentially new features, improvements and/or bug fixes.
-        
-             Please click the button below to learn more about the latest release.`,
-        priority: NotificationLevel.info,
-        buttons: [
-          {
-            title: 'see release notes',
-            url: AppLinks.Release + (manifest.version ? `/tag/v${manifest.version}` : '/latest'),
+  // Subscribe to installed until first popup open
+  combineLatest([store$<boolean>(store, getPopup), onInstalled$])
+    .pipe(
+      // take while popup is closed and new version available
+      takeWhile(([open, { previousVersion }]) => previousVersion !== manifest.version && !open, true),
+      // only emits if popup is open and new version available
+      filter(([open, { previousVersion }]) => previousVersion !== manifest.version && open),
+      map<[boolean, InstalledDetails], ChromeMessage<ChromeMessageType, SnackNotification>>(() => ({
+        type: ChromeMessageType.notificationSnack,
+        payload: {
+          message: {
+            title: `Updated to version ${manifest.version}`,
+            message: `The extension has been updated with potentially new features, improvements and/or bug fixes.
+    
+         Please click the button below to learn more about the latest release.`,
+            priority: NotificationLevel.info,
+            buttons: [
+              {
+                title: 'see release notes',
+                url: AppLinks.Release + (manifest.version ? `/tag/v${manifest.version}` : '/latest'),
+              },
+            ],
           },
-        ],
-      },
-      options: { persist: true },
-    };
-
-    const message: ChromeMessage<ChromeMessageType, SnackNotification> = { type: ChromeMessageType.notificationSnack, payload: notification };
-
-    store$(store, getPopup)
-      .pipe(
-        takeWhile(open => !open),
-        finalize(() =>
-          sendMessage<SnackNotification>(message).subscribe({
-            error: e => console.warn('Snack notification failed to send.', e),
-          }),
-        ),
-      )
-      .subscribe();
-  });
+          options: { persist: true },
+        },
+      })),
+    )
+    .subscribe(message =>
+      sendMessage<SnackNotification>(message).subscribe({
+        error: e => console.warn('Snack notification failed to send.', e),
+      }),
+    );
 };

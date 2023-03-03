@@ -1,4 +1,4 @@
-import { switchMap, throwError } from 'rxjs';
+import { fromEventPattern, switchMap, throwError } from 'rxjs';
 
 import type { ChromeMessage, ChromeMessageHandler } from '@dvcol/web-extension-utils';
 import {
@@ -82,3 +82,9 @@ export const onConnect = <T extends string>(types?: T[], async = true): Observab
 
 /** @see chrome.runtime.connect */
 export const portConnect = chrome.runtime.connect;
+
+export type InstalledDetails = chrome.runtime.InstalledDetails;
+type InstalledHandler = (details: InstalledDetails) => void;
+const addOnInstallHandler = (handler: InstalledHandler) => chrome.runtime.onInstalled.addListener(handler);
+const removeOnInstallHandler = (handler: InstalledHandler) => chrome.runtime.onInstalled.removeListener(handler);
+export const onInstalled$: Observable<InstalledDetails> = fromEventPattern<InstalledDetails>(addOnInstallHandler, removeOnInstallHandler);
