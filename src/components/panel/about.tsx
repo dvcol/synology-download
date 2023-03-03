@@ -11,6 +11,7 @@ import React, { useEffect, useState } from 'react';
 import { getAcceptLanguages, useI18n } from '@dvcol/web-extension-utils';
 
 import manifest from '@src/manifest.json';
+
 import { AppLinks } from '@src/models';
 import { createTab } from '@src/utils';
 
@@ -34,7 +35,13 @@ export const About: FC<{
         title={i18n('title')}
         subheader={
           <Stack gap={1} direction={'row'} sx={{ m: '0.5rem 0 0.2rem' }}>
-            <Chip color="primary" size="small" label={`${i18n('chip_version')}: ${manifest.version}`} sx={{ height: '1.1rem' }} />
+            <Chip
+              color="primary"
+              size="small"
+              label={`${i18n('chip_version')}: ${manifest.version}`}
+              sx={{ height: '1.1rem' }}
+              onClick={() => createTab({ url: AppLinks.Release + (manifest.version ? `/tag/v${manifest.version}` : '/latest') })}
+            />
             <Chip color="success" size="small" label={`${i18n('chip_supported_languages')}: en`} sx={{ height: '1.1rem' }} />
             {languages && (
               <Chip
