@@ -63,6 +63,10 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
 
   // Dialog
   const [prompt, setPrompt] = React.useState(false);
+  const onErase = <T extends { altKey: boolean; shiftKey: boolean }>({ altKey, shiftKey }: T) => {
+    if (downloadButtons && !altKey) DownloadService.cancelAll().subscribe();
+    if (logged && !shiftKey) QueryService.deleteAllTasks().subscribe(handleError('delete'));
+  };
 
   // Button list
   const buttons: NavbarButton[] = [
@@ -79,7 +83,6 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       type: NavbarButtonType.Refresh,
       label: i18n('menu_refresh'),
       icon: <RefreshIcon />,
-      disabled: !downloadEnabled && !logged,
       onClick: $event => {
         if ($event.shiftKey) {
           dispatch(resetDownloads());
@@ -117,7 +120,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       icon: <DeleteSweepIcon />,
       color: 'error',
       disabled: !downloadEnabled && !logged,
-      onClick: () => setPrompt(true),
+      onClick: $event => (logged ? setPrompt(true) : onErase($event)),
     },
     {
       type: NavbarButtonType.Clear,
@@ -244,8 +247,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
         onCancel={() => setPrompt(false)}
         onConfirm={$event => {
           setPrompt(false);
-          if (downloadButtons && !$event.altKey) DownloadService.cancelAll().subscribe();
-          if (logged && !$event.shiftKey) QueryService.deleteAllTasks().subscribe(handleError('delete'));
+          onErase($event);
         }}
       />
     </React.Fragment>
