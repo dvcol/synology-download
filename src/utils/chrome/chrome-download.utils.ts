@@ -18,12 +18,16 @@ export type DownloadDelta = chrome.downloads.DownloadDelta;
 export type DownloadFilenameSuggestion = chrome.downloads.DownloadFilenameSuggestion;
 
 type FilenameHandler = (downloadItem: DownloadItem, suggest: (suggestion?: DownloadFilenameSuggestion) => void) => void;
-const addFilenameHandler = (handler: FilenameHandler) =>
-  onDeterminingFilename.addListener((...args) => {
+
+let fileNameHandler: FilenameHandler;
+const addFilenameHandler = (handler: FilenameHandler) => {
+  fileNameHandler = (...args) => {
     handler(...args);
     return true;
-  });
-const removeFilenameHandler = (handler: FilenameHandler) => onDeterminingFilename.removeListener(handler);
+  };
+  return onDeterminingFilename.addListener(fileNameHandler);
+};
+const removeFilenameHandler = (handler: FilenameHandler) => onDeterminingFilename.removeListener(fileNameHandler ?? handler);
 export const onFilename$: Observable<[DownloadItem, (suggestion?: DownloadFilenameSuggestion) => void]> = fromEventPattern<
   [DownloadItem, (suggestion?: DownloadFilenameSuggestion) => void]
 >(addFilenameHandler, removeFilenameHandler);

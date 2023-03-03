@@ -18,14 +18,14 @@ export const onInstalledEvents = (store: StoreOrProxy) => {
       takeWhile(([open, { previousVersion }]) => previousVersion !== manifest.version && !open, true),
       // only emits if popup is open and new version available
       filter(([open, { previousVersion }]) => previousVersion !== manifest.version && open),
-      map<[boolean, InstalledDetails], ChromeMessage<ChromeMessageType, SnackNotification>>(() => ({
+      map<[boolean, InstalledDetails], ChromeMessage<ChromeMessageType, SnackNotification>>(([_, { previousVersion }]) => ({
         type: ChromeMessageType.notificationSnack,
         payload: {
           message: {
             title: `Updated to version ${manifest.version}`,
-            message: `The extension has been updated with potentially new features, improvements and/or bug fixes.
+            message: `A new update has just been installed (from '${previousVersion}' to '${manifest.version}').
     
-         Please click the button below to learn more about the latest release.`,
+         To now more about the release, please click on the button below.`,
             priority: NotificationLevel.info,
             buttons: [
               {
