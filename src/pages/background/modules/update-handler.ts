@@ -16,7 +16,7 @@ export const onInstalledEvents = (store: StoreOrProxy) => {
 
     const notification: SnackNotification = {
       message: {
-        title: `Extension updated to version ${manifest.version}`,
+        title: `Updated to version ${manifest.version}`,
         message: `The extension has been updated with potentially new features, improvements and/or bug fixes.
         
              Please click the button below to learn more about the latest release.`,
