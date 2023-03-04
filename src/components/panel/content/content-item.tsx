@@ -26,15 +26,15 @@ const ContentItemComponent: ForwardRefRenderFunction<HTMLDivElement, ContentItem
   ref,
 ) => {
   const [expanded, setExpanded] = useState(false);
-  const [visible, setVisible] = useState(false);
+  const [hover, setHover] = useState(false);
 
   const onChange = (_: React.SyntheticEvent, _expanded: boolean) => {
     setExpanded(_expanded);
     onToggle(_expanded);
   };
-  const onMouseHover = (hover: boolean) => {
-    setVisible(hover);
-    onHover(visible);
+  const onMouseHover = (_hover: boolean) => {
+    onHover(_hover);
+    setHover(_hover);
   };
 
   const showBackground = useSelector<StoreState, Global['task']>(getGlobalTask)?.background;
@@ -49,7 +49,7 @@ const ContentItemComponent: ForwardRefRenderFunction<HTMLDivElement, ContentItem
       >
         {showBackground && background && <ProgressBackground {...background} />}
         {summary.card}
-        {summary.buttons && visible && !expanded && (
+        {summary.buttons && hover && !expanded && (
           <ButtonGroup orientation="vertical" variant="text">
             {summary.buttons}
           </ButtonGroup>

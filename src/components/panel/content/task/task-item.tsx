@@ -35,7 +35,7 @@ const ButtonStyle = { display: 'flex', flex: '1 1 auto', minHeight: '2.5rem' };
 const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps> = ({ task, hideStatus }, ref) => {
   const i18n = useI18n('panel', 'content', 'task', 'item');
   const [expanded, setExpanded] = useState(false);
-  const [visible, setVisible] = useState(false);
+  const [hover, setHover] = useState(false);
   const [confirm, setConfirm] = useState(false);
 
   // Loading state
@@ -79,8 +79,8 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
   const showBackground = useSelector<StoreState, Global['task']>(getGlobalTask)?.background;
   const background: ProgressBackgroundProps = showBackground
     ? {
-        primary: `${ColorLevelMap[taskStatusToColor(task.status)]}${visible ? 30 : 20}`,
-        secondary: visible ? '#99999910' : 'transparent',
+        primary: `${ColorLevelMap[taskStatusToColor(task.status)]}${hover ? 30 : 20}`,
+        secondary: hover ? '#99999910' : 'transparent',
         progress: task.progress ?? 0,
       }
     : {};
@@ -156,11 +156,11 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
   return (
     <ContentItem
       ref={ref}
-      onHover={_visible => setVisible(_visible)}
+      onHover={_visible => setHover(_visible)}
       onToggle={_expanded => setExpanded(_expanded)}
       background={background}
       summary={{
-        card: <TaskCard task={task} hideStatus={hideStatus} expanded={expanded} visible={visible} />,
+        card: <TaskCard task={task} hideStatus={hideStatus} expanded={expanded} hover={hover} />,
         buttons,
       }}
       details={<TaskDetail task={task} loading={loading} loadingIcon={loadingIcon} buttonClick={onClick} />}

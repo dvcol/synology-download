@@ -25,8 +25,8 @@ import { ContentCard } from '../content-card';
 
 import type { FC } from 'react';
 
-type DownloadCardProps = { download: Download; hideStatus?: boolean; expanded?: boolean; visible?: boolean };
-export const DownloadCard: FC<DownloadCardProps> = ({ download, hideStatus, expanded, visible }) => {
+type DownloadCardProps = { download: Download; hideStatus?: boolean; expanded?: boolean; hover?: boolean };
+export const DownloadCard: FC<DownloadCardProps> = ({ download, hideStatus, expanded, hover }) => {
   const i18n = useI18n('panel', 'content', 'download', 'card');
   const statusIcon = (state: DownloadStatus): JSX.Element => {
     switch (state) {
@@ -107,7 +107,7 @@ export const DownloadCard: FC<DownloadCardProps> = ({ download, hideStatus, expa
                 color: downloadStatusToColor(download.status),
               },
               value: download.progress ?? 0,
-              percentage: expanded || !visible,
+              percentage: expanded || !hover,
             }
           : undefined
       }

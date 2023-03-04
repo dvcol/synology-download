@@ -21,7 +21,7 @@ import { TaskAdd } from '@src/components';
 import type { Download, Global, TaskForm } from '@src/models';
 import { ColorLevel, ColorLevelMap, DownloadStatus, downloadStatusToColor } from '@src/models';
 
-import { InterceptService, DownloadService } from '@src/services';
+import { DownloadService, InterceptService } from '@src/services';
 
 import type { StoreState } from '@src/store';
 import { getGlobalDownload, getSettingsDownloadsTransfer } from '@src/store/selectors';
@@ -44,7 +44,7 @@ const ButtonStyle = { display: 'flex', flex: '1 1 auto', minHeight: '2.5rem' };
 const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadItemProps> = ({ download, hideStatus }, ref) => {
   const i18n = useI18n('panel', 'content', 'download', 'item');
   const [expanded, setExpanded] = useState(false);
-  const [visible, setVisible] = useState(false);
+  const [hover, setHover] = useState(false);
 
   // Dialog
   const [dialog, toggleDialog] = React.useState(false);
@@ -76,8 +76,7 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
   const showBackground = useSelector<StoreState, Global['download']>(getGlobalDownload)?.background;
   const background: ProgressBackgroundProps = showBackground
     ? {
-        primary: `${ColorLevelMap[downloadStatusToColor(download.status)]}${visible ? 30 : 20}`,
-        secondary: visible ? '#99999910' : 'transparent',
+        primary: `${ColorLevelMap[downloadStatusToColor(download.status)]}${hover ? 30 : 20}`,
         progress: download.progress ?? 0,
       }
     : {};
@@ -112,11 +111,11 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
     <>
       <ContentItem
         ref={ref}
-        onHover={_visible => setVisible(_visible)}
+        onHover={_visible => setHover(_visible)}
         onToggle={_expanded => setExpanded(_expanded)}
         background={background}
         summary={{
-          card: <DownloadCard download={download} hideStatus={hideStatus} expanded={expanded} visible={visible} />,
+          card: <DownloadCard download={download} hideStatus={hideStatus} expanded={expanded} hover={hover} />,
           buttons: (
             <>
               {buttons?.map(button => (

@@ -24,8 +24,8 @@ import { ContentCard } from '../content-card';
 
 import type { FC } from 'react';
 
-type TaskCardProps = { task: Task; hideStatus?: boolean; expanded?: boolean; visible?: boolean };
-export const TaskCard: FC<TaskCardProps> = ({ task, hideStatus, expanded, visible }) => {
+type TaskCardProps = { task: Task; hideStatus?: boolean; expanded?: boolean; hover?: boolean };
+export const TaskCard: FC<TaskCardProps> = ({ task, hideStatus, expanded, hover }) => {
   const i18n = useI18n('panel', 'content', 'task', 'card');
 
   const statusIcon = (status: TaskStatus): JSX.Element => {
@@ -111,7 +111,7 @@ export const TaskCard: FC<TaskCardProps> = ({ task, hideStatus, expanded, visibl
                 color: taskStatusToColor(task.status),
               },
               value: task.progress ?? 0,
-              percentage: expanded || !visible,
+              percentage: expanded || !hover,
             }
           : undefined
       }
