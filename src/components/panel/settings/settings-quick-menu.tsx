@@ -10,7 +10,7 @@ import { useI18n } from '@dvcol/web-extension-utils';
 
 import { FormExplorer, FormInput, FormSwitch, MuiIcon } from '@src/components/common';
 import type { QuickMenu } from '@src/models';
-import { QuickMenuType, MaterialIcon, MaterialIconMap } from '@src/models';
+import { MaterialIcon, MaterialIconMap, QuickMenuType } from '@src/models';
 import { removeQuickMenu, saveQuickMenu } from '@src/store/actions';
 
 export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
@@ -61,7 +61,7 @@ export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
             controllerProps={{ name: 'title', control }}
             textFieldProps={{
               label: i18n('name_label'),
-              sx: { flex: '0 0 14rem', textTransform: 'capitalize' },
+              sx: { flex: '0 0 12rem', textTransform: 'capitalize' },
             }}
           />
         }
@@ -78,7 +78,7 @@ export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
             textFieldProps={{
               select: true,
               label: i18n('icon_label'),
-              sx: { flex: '1 0 8rem' },
+              sx: { flex: '0 0 12rem' },
             }}
           >
             {Object.values(MaterialIcon).map(icon => (
@@ -106,7 +106,7 @@ export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
             textFieldProps={{
               select: true,
               label: i18n('type_label'),
-              sx: { flex: '1 0 8rem' },
+              sx: { flex: '0 0 12rem' },
             }}
           >
             {Object.values(QuickMenuType).map(type => (
@@ -118,6 +118,27 @@ export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
         }
         sx={{ p: '0.5rem 0' }}
       />
+
+      <Collapse in={getValues()?.type === QuickMenuType.Recent} unmountOnExit>
+        <CardHeader
+          title={i18n('max_title')}
+          subheader={i18n('max_subheader')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          action={
+            <FormInput
+              controllerProps={{ name: 'max', control, rules: { min: 0, max: 20 } }}
+              textFieldProps={{
+                type: 'number',
+                label: i18n('max_label'),
+                disabled: getValues()?.type !== QuickMenuType.Recent,
+                sx: { flex: '0 0 12rem', ml: '0.5rem' },
+              }}
+            />
+          }
+          sx={{ p: '0.5rem 0', mt: '0.5rem' }}
+        />
+      </Collapse>
 
       <Collapse in={getValues()?.type === QuickMenuType.Task} unmountOnExit>
         <CardHeader

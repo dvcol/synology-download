@@ -2,6 +2,8 @@ import { createSelector } from '@reduxjs/toolkit';
 
 import type { StateSlice } from '@src/models';
 
+import { initialState } from '@src/store/slices/state.slice';
+
 import type { StoreState } from '../store';
 
 export const getState = createSelector(
@@ -22,3 +24,7 @@ export const getSid = createSelector(getState, (state: StateSlice) => state?.sid
 export const isModalOpen = createSelector(getPopup, getOption, (popup: boolean, option: boolean) => popup || option);
 
 export const getLoading = createSelector(getState, (state: StateSlice) => state.loading);
+
+export const getHistory = createSelector(getState, (state: StateSlice) => state.history ?? initialState.history);
+
+export const getDestinationsHistory = createSelector(getHistory, history => history?.destinations ?? initialState.history.destinations);

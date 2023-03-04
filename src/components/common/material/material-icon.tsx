@@ -3,6 +3,7 @@ import AddIcon from '@mui/icons-material/Add';
 import DownloadIcon from '@mui/icons-material/Download';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import FolderIcon from '@mui/icons-material/Folder';
+import HistoryIcon from '@mui/icons-material/History';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import MusicNoteIcon from '@mui/icons-material/MusicNote';
@@ -49,6 +50,8 @@ export const MuiIcon = ({ icon, props }: { icon: MaterialIcon; props?: SvgIconPr
       return <StorageIcon />;
     case MaterialIcon.folder:
       return <FolderIcon />;
+    case MaterialIcon.history:
+      return <HistoryIcon />;
     case MaterialIcon.download:
       return <DownloadIcon {...props} />;
     default:

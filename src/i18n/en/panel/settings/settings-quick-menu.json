@@ -29,6 +29,16 @@
     "message": "Type"
   },
 
+  "panel__settings__quick_menu__max_title": {
+    "message": "Recent destinations"
+  },
+  "panel__settings__quick_menu__max_subheader": {
+    "message": "Set the maximum number of destination to show in dropdown (defaults to 5)."
+  },
+  "panel__settings__quick_menu__max_label": {
+    "message": "Maximum"
+  },
+
   "panel__settings__quick_menu__modal_title": {
     "message": "Open full modal"
   },
