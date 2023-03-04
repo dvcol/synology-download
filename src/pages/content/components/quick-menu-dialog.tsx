@@ -1,4 +1,4 @@
-import { ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
+import { Menu } from '@mui/material';
 
 import React, { useEffect } from 'react';
 
@@ -9,17 +9,19 @@ import { Subscription, withLatestFrom } from 'rxjs';
 import type { ChromeResponse } from '@dvcol/web-extension-utils';
 import { i18n } from '@dvcol/web-extension-utils';
 
-import { MuiIcon } from '@src/components';
 import type { InterceptPayload, InterceptResponse, QuickMenu, TaskForm } from '@src/models';
-import { ChromeMessageType, MaterialIcon, QuickMenuType } from '@src/models';
+import { ChromeMessageType, QuickMenuType } from '@src/models';
+
 import { anchor$, lastClick$ } from '@src/pages/content/service/anchor.service';
 import type { TaskDialogIntercept } from '@src/pages/content/service/dialog.service';
 import { taskDialog$ } from '@src/pages/content/service/dialog.service';
 import { NotificationService, QueryService } from '@src/services';
 import type { StoreState } from '@src/store';
-import { getLogged, getQuick } from '@src/store/selectors';
+import { getDestinationsHistory, getLogged, getQuick } from '@src/store/selectors';
 
 import { onMessage, zIndexMax } from '@src/utils';
+
+import { QuickMenuRecent } from './quick-menu-recent';
 
 import type { PortalProps } from '@mui/base/Portal';
 import type { PopoverProps } from '@mui/material/Popover';
@@ -31,6 +33,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
 
   const [_form, setForm] = React.useState<TaskForm>();
   const menus = useSelector<StoreState, QuickMenu[]>(getQuick);
+  const destinations = useSelector<StoreState, string[]>(getDestinationsHistory);
 
   const isLogged = useSelector<StoreState, boolean>(getLogged);
 
@@ -74,10 +77,11 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
     if (response) onIntercept({ success: true, payload: response });
   };
 
-  const handleClick = ({ destination, modal, type, id }: QuickMenu) => {
+  const handleClick = ({ destination, modal, type, id }: QuickMenu, path?: string) => {
     if (type === QuickMenuType.Download) return handleClose({ aborted: true, resume: true, message: `Quick menu '${id}' cliked.` });
     handleClose();
-    createTask({ ..._form, destination }, modal);
+    const _destination: QuickMenu['destination'] = path ? { custom: true, path } : destination;
+    createTask({ ..._form, destination: _destination }, modal);
   };
 
   const onEvent = (
@@ -125,6 +129,11 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
     return () => subs.unsubscribe();
   }, []);
 
+  const isDisabled = (menu: QuickMenu): boolean => {
+    if (menu.type !== QuickMenuType.Download && !isLogged) return true;
+    return menu.type === QuickMenuType.Recent && !destinations?.length;
+  };
+
   return (
     <Menu
       id="basic-menu"
@@ -140,12 +149,13 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
       sx={{ zIndex: `${zIndexMax} !important` }}
     >
       {_menus?.map(m => (
-        <MenuItem key={m.id} onClick={() => handleClick(m)} disabled={!isLogged && m.type !== QuickMenuType.Download}>
-          <ListItemIcon>
-            <MuiIcon icon={m.icon ?? MaterialIcon.download} props={{ sx: { fontSize: '1.125rem' } }} />
-          </ListItemIcon>
-          <ListItemText primary={m.title} primaryTypographyProps={{ sx: { fontSize: '0.75rem' } }} />
-        </MenuItem>
+        <QuickMenuRecent
+          key={m.id}
+          menu={m}
+          destinations={destinations}
+          onClick={(_, { menu, destination }) => handleClick(menu, destination)}
+          disabled={isDisabled(m)}
+        />
       ))}
     </Menu>
   );

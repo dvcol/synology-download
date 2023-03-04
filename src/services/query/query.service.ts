@@ -23,7 +23,17 @@ import { ConnectionType, FileListOption, LoginError, mapToTask, NotReadyError, T
 import { NotificationService } from '@src/services';
 import { SynologyAuthService, SynologyDownloadService, SynologyFileService, SynologyInfoService } from '@src/services/http';
 import { store$ } from '@src/store';
-import { addLoading, removeLoading, resetLoading, setLogged, setSid, setTasks, setTaskStats, spliceTasks } from '@src/store/actions';
+import {
+  addDestinationHistory,
+  addLoading,
+  removeLoading,
+  resetLoading,
+  setLogged,
+  setSid,
+  setTasks,
+  setTaskStats,
+  spliceTasks,
+} from '@src/store/actions';
 import {
   getCredentials,
   getFinishedTasksIdsByActionScope,
@@ -266,6 +276,7 @@ export class QueryService {
       tap({
         complete: () => {
           this.listTasks().subscribe();
+          if (destination) this.store.dispatch(addDestinationHistory(destination));
           NotificationService.taskCreated(uri, source, destination);
         },
         error: error => {

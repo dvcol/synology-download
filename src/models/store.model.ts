@@ -18,6 +18,9 @@ export interface StateSlice {
   };
   loading: number;
   badge: { count?: ContentCount; stats?: TaskStatistics };
+  history: {
+    destinations: string[];
+  };
 }
 
 export interface NavbarSlice {

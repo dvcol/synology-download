@@ -12,20 +12,43 @@ export interface Menu {
 export enum QuickMenuType {
   Task = 'task',
   Download = 'download',
+  Recent = 'recent',
 }
 
 export interface QuickMenu extends Menu {
   icon?: MaterialIcon;
+  max?: number;
   type: QuickMenuType;
 }
 
 export const defaultQuickMenu: QuickMenu = {
   id: uuid(),
-  title: 'Add to Synology Diskstation',
-  icon: MaterialIcon.download,
+  title: 'Send to Synology',
+  icon: MaterialIcon.server,
   modal: false,
   destination: { custom: false },
+  max: 5,
   type: QuickMenuType.Task,
+};
+
+export const defaultModalQuickMenu: QuickMenu = {
+  id: uuid(),
+  title: 'Open custom modal',
+  icon: MaterialIcon.server,
+  modal: true,
+  destination: { custom: false },
+  max: 5,
+  type: QuickMenuType.Task,
+};
+
+export const defaultRecentQuickMenu: QuickMenu = {
+  id: uuid(),
+  title: 'Recent destinations',
+  icon: MaterialIcon.history,
+  modal: false,
+  destination: { custom: false },
+  max: 5,
+  type: QuickMenuType.Recent,
 };
 
 export const defaultDownloadQuickMenu: QuickMenu = {
@@ -34,6 +57,7 @@ export const defaultDownloadQuickMenu: QuickMenu = {
   icon: MaterialIcon.download,
   modal: false,
   destination: { custom: false },
+  max: 5,
   type: QuickMenuType.Download,
 };
 

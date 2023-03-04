@@ -17,9 +17,12 @@ export interface StateReducers<S = StateSlice> extends SliceCaseReducers<S> {
   removeLoading: CaseReducer<S, PayloadAction<number | undefined>>;
   resetLoading: CaseReducer<S>;
   setBadge: CaseReducer<S, PayloadAction<StateSlice['badge']>>;
+  addDestinationHistory: CaseReducer<S, PayloadAction<string>>;
+  setDestinationsHistory: CaseReducer<S, PayloadAction<string[]>>;
+  resetDestinationHistory: CaseReducer<S>;
 }
 
-const initialState: StateSlice = {
+export const initialState: StateSlice = {
   logged: false,
   sid: undefined,
   modal: {
@@ -28,6 +31,9 @@ const initialState: StateSlice = {
   },
   loading: 0,
   badge: { count: undefined, stats: undefined },
+  history: {
+    destinations: [],
+  },
 };
 
 export const stateSlice = createSlice<StateSlice, StateReducers, 'state'>({
@@ -35,7 +41,6 @@ export const stateSlice = createSlice<StateSlice, StateReducers, 'state'>({
   initialState,
   reducers: {
     setLogged: syncLoggedReducer,
-
     setSid: (state, { payload: sid }) => ({ ...state, sid }),
     setPopup: (state, { payload: popup }) => ({ ...state, modal: { ...state.modal, popup } }),
     setOption: (state, { payload: option }) => ({ ...state, modal: { ...state.modal, option } }),
@@ -43,5 +48,14 @@ export const stateSlice = createSlice<StateSlice, StateReducers, 'state'>({
     removeLoading: (state, { payload }) => ({ ...state, loading: state.loading - (payload ?? 1) }),
     resetLoading: state => ({ ...state, loading: 0 }),
     setBadge: setBadgeReducer,
+    addDestinationHistory: (state, { payload: destination }) => ({
+      ...state,
+      history: { ...state.history, destinations: [...new Set([destination, ...state.history.destinations].slice(0, 20))] },
+    }),
+    setDestinationsHistory: (state, { payload: destinations }) => ({
+      ...state,
+      history: { ...state.history, destinations: [...new Set((destinations ?? initialState.history.destinations).slice(0, 20))] },
+    }),
+    resetDestinationHistory: state => ({ ...state, history: { ...state.history, destinations: initialState.history.destinations } }),
   } as StateReducers,
 });
