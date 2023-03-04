@@ -20,7 +20,7 @@ import { Link } from 'react-router-dom';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
-import { ConfirmationDialog } from '@src/components';
+import { ConfirmationDialog, TooltipHoverChange } from '@src/components';
 import type { NavbarButton } from '@src/models';
 import { AppLinks, AppRoute, ErrorType, LoginError, NavbarButtonType } from '@src/models';
 import { DownloadService, NotificationService, QueryService } from '@src/services';
@@ -64,9 +64,70 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
   // Dialog
   const [prompt, setPrompt] = React.useState(false);
   const onErase = <T extends { altKey: boolean; shiftKey: boolean }>({ altKey, shiftKey }: T) => {
-    if (downloadButtons && !altKey) DownloadService.cancelAll().subscribe();
-    if (logged && !shiftKey) QueryService.deleteAllTasks().subscribe(handleError('delete'));
+    if (downloadButtons && !altKey) return DownloadService.cancelAll().subscribe();
+    if (logged) {
+      if (altKey && shiftKey) return QueryService.deleteFinishedAndErrorTasks().subscribe(handleError('delete'));
+      if (!shiftKey) return QueryService.deleteAllTasks().subscribe(handleError('delete'));
+    }
   };
+  const onEraseTooltip: NavbarButton['hoverTooltip'] = ({ altKey, shiftKey }) => {
+    if (downloadButtons && !altKey && shiftKey) return i18n('tooltip__download');
+    if (logged) {
+      if (altKey && shiftKey) return i18n('tooltip__synology_error_finished');
+      if (altKey) return i18n('tooltip__synology');
+    }
+    if (!logged) return i18n('tooltip__download');
+    if (!downloadButtons) return i18n('tooltip__synology');
+    return i18n('tooltip__synology_download');
+  };
+
+  // buttons helpers
+  const getOnClick: <T extends () => void>(callbacks?: { both?: T; shift?: T; alt?: T }) => NavbarButton['onClick'] =
+    ({ both, shift, alt } = {}) =>
+    ({ altKey, shiftKey }) => {
+      // if both are pressed
+      if (shiftKey && altKey) both?.();
+
+      // if download disabled, but task enabled fall back and exit
+      if (!downloadButtons && logged) return alt?.();
+      // if task disabled, but download enabled fall back and exit
+      if (!logged && downloadButtons) return shift?.();
+
+      // if download enable and shift, only do download
+      if (downloadButtons && !altKey) shift?.();
+      // if task enable and alt, only do tasks
+      if (logged && !shiftKey) alt?.();
+    };
+
+  const getHoverTooltip: (tooltips?: { both?: string; shift?: string; alt?: string; none?: string }) => NavbarButton['hoverTooltip'] = (
+    tooltips = {},
+  ) => {
+    const { both, shift, alt, none } = {
+      shift: i18n('tooltip__download'),
+      alt: i18n('tooltip__synology'),
+      none: i18n('tooltip__synology_download'),
+      ...tooltips,
+    };
+    return ({ altKey, shiftKey }) => {
+      // if both are pressed and both exist
+      if (both && altKey && shiftKey) return both;
+
+      // if download disabled, but task enabled fall back
+      if (!downloadButtons && logged) return alt;
+      // if task disabled, but download enabled fall back
+      if (!logged && downloadButtons) return shift;
+
+      // if download enable and shift, only do download
+      if (downloadButtons && shiftKey && !altKey) return shift;
+      // if task enable and alt, only do tasks
+      if (logged && altKey && !shiftKey) return alt;
+
+      // else if both pressed or none
+      return none;
+    };
+  };
+
+  const hoverTooltip = getHoverTooltip();
 
   // Button list
   const buttons: NavbarButton[] = [
@@ -83,14 +144,17 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       type: NavbarButtonType.Refresh,
       label: i18n('menu_refresh'),
       icon: <RefreshIcon />,
-      onClick: $event => {
-        if ($event.shiftKey) {
+      onClick: getOnClick({
+        both: () => {
           dispatch(resetDownloads());
           dispatch(resetTasks());
-        }
-        if (downloadButtons && !$event.altKey) DownloadService.searchAll().subscribe();
-        if (logged && !$event.shiftKey) QueryService.listTasks().subscribe(handleError('refresh'));
-      },
+          if (downloadButtons) DownloadService.searchAll().subscribe();
+          if (logged) QueryService.listTasks().subscribe(handleError('refresh'));
+        },
+        shift: () => DownloadService.searchAll().subscribe(),
+        alt: () => QueryService.listTasks().subscribe(handleError('refresh')),
+      }),
+      hoverTooltip: getHoverTooltip({ both: i18n('tooltip__clean') }),
     },
     {
       type: NavbarButtonType.Resume,
@@ -98,10 +162,11 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       icon: <PlayArrowIcon />,
       color: 'success',
       disabled: !downloadEnabled && !logged,
-      onClick: $event => {
-        if (downloadButtons && !$event.altKey) DownloadService.resumeAll().subscribe();
-        if (logged && !$event.shiftKey) QueryService.resumeAllTasks().subscribe(handleError('resume'));
-      },
+      onClick: getOnClick({
+        shift: () => DownloadService.resumeAll().subscribe(),
+        alt: () => QueryService.resumeAllTasks().subscribe(handleError('resume')),
+      }),
+      hoverTooltip,
     },
     {
       type: NavbarButtonType.Pause,
@@ -109,10 +174,11 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       icon: <PauseIcon />,
       color: 'warning',
       disabled: !downloadEnabled && !logged,
-      onClick: $event => {
-        if (downloadButtons && !$event.altKey) DownloadService.pauseAll().subscribe();
-        if (logged && !$event.shiftKey) QueryService.pauseAllTasks().subscribe(handleError('pause'));
-      },
+      onClick: getOnClick({
+        shift: () => DownloadService.pauseAll().subscribe(),
+        alt: () => QueryService.pauseAllTasks().subscribe(handleError('pause')),
+      }),
+      hoverTooltip,
     },
     {
       type: NavbarButtonType.Remove,
@@ -121,6 +187,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       color: 'error',
       disabled: !downloadEnabled && !logged,
       onClick: $event => (logged ? setPrompt(true) : onErase($event)),
+      hoverTooltip: onEraseTooltip,
     },
     {
       type: NavbarButtonType.Clear,
@@ -128,10 +195,11 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       icon: <ClearAllIcon />,
       color: 'primary',
       disabled: !downloadEnabled && !logged,
-      onClick: $event => {
-        if (downloadButtons && !$event.altKey) DownloadService.eraseAll().subscribe();
-        if (logged && !$event.shiftKey) QueryService.deleteFinishedTasks().subscribe(handleError('clear'));
-      },
+      onClick: getOnClick({
+        shift: () => DownloadService.eraseAll().subscribe(),
+        alt: () => QueryService.deleteFinishedTasks().subscribe(handleError('clear')),
+      }),
+      hoverTooltip,
     },
     {
       type: NavbarButtonType.Configs,
@@ -175,12 +243,12 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       {(logged || downloadEnabled) &&
         buttons
           ?.filter(({ type }) => navbarButtons?.includes(type))
-          ?.map(({ type, icon, label, ..._props }) => (
-            <Tooltip title={label} key={type}>
+          ?.map(({ type, icon, label, hoverTooltip: bHoverTooltip, ..._props }) => (
+            <TooltipHoverChange title={label} hoverTooltip={modifiers => (bHoverTooltip ? `${label} ${bHoverTooltip(modifiers)}` : label)} key={type}>
               <IconButton id={`${type}-pinned`} aria-controls={`${type}-pinned-button`} {..._props}>
                 {icon}
               </IconButton>
-            </Tooltip>
+            </TooltipHoverChange>
           ))}
 
       {!logged && (
@@ -248,6 +316,10 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
         onConfirm={$event => {
           setPrompt(false);
           onErase($event);
+        }}
+        toolitp={{
+          hoverTooltip: modifiers => `${i18n('menu_remove')} ${onEraseTooltip(modifiers)}`,
+          boxProps: { sx: { ml: '0.5rem' } },
         }}
       />
     </React.Fragment>

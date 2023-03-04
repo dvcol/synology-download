@@ -16,12 +16,15 @@ export enum NavbarButtonType {
   About = 'about',
 }
 
+export type ModifiedEvent = Pick<MouseEvent, 'shiftKey' | 'altKey'>;
+
 export interface NavbarButton {
   type: NavbarButtonType;
   label: string;
   icon: JSX.Element;
   color?: IconButtonProps['color'];
   onClick?: MouseEventHandler;
+  hoverTooltip?: ($event: ModifiedEvent) => string | undefined;
   component?: ForwardRefExoticComponent<any>;
   to?: string;
   disabled?: boolean;

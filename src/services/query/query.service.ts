@@ -36,6 +36,7 @@ import {
 } from '@src/store/actions';
 import {
   getCredentials,
+  getFinishedAnErrorTasksIdsByActionScope,
   getFinishedTasksIdsByActionScope,
   getLogged,
   getNotificationsBannerFailedEnabled,
@@ -308,6 +309,13 @@ export class QueryService {
   }
 
   static deleteAllTasks(ids: Set<Task['id']> = getTasksIdsByActionScope(this.store.getState()), force = false): Observable<CommonResponse[]> {
+    return ids?.size ? this.deleteTask(Array.from(ids).join(','), force) : EMPTY;
+  }
+
+  static deleteFinishedAndErrorTasks(
+    ids: Set<Task['id']> = getFinishedAnErrorTasksIdsByActionScope(this.store.getState()),
+    force = false,
+  ): Observable<CommonResponse[]> {
     return ids?.size ? this.deleteTask(Array.from(ids).join(','), force) : EMPTY;
   }
 

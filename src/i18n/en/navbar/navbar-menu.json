@@ -1,9 +1,26 @@
 {
+  "navbar__menu__tooltip__download": {
+    "message": "downloads"
+  },
+  "navbar__menu__tooltip__synology": {
+    "message": "tasks"
+  },
+  "navbar__menu__tooltip__synology_download": {
+    "message": "downloads and tasks"
+  },
+
+  "navbar__menu__tooltip__synology_error_finished": {
+    "message": "tasks in error or finished"
+  },
+  "navbar__menu__tooltip__clean": {
+    "message": "items in memory"
+  },
+
   "navbar__menu__menu_add": {
     "message": "Add download task"
   },
   "navbar__menu__menu_clear": {
-    "message": "Clear completed items"
+    "message": "Clear completed"
   },
   "navbar__menu__menu_resume": {
     "message": "Resume all"

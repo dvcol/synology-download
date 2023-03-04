@@ -4,15 +4,15 @@ import type {
   Content,
   ContentCount,
   ContentTab,
+  Download,
   NotificationsBanner,
   NotificationsCount,
   NotificationsSnack,
   Polling,
   Tab,
   TabCount,
-  TaskStatistics,
-  Download,
   Task,
+  TaskStatistics,
 } from '@src/models';
 import { ActionScope, ContentStatusType, ContentTabSort } from '@src/models';
 import {
@@ -23,6 +23,7 @@ import {
   getDownloadingDownloadIds,
   getDownloads,
   getDownloadsIdsByStatusTypeReducer,
+  getErrorTasksIds,
   getFinishedDownloadIds,
   getFinishedTasksIds,
   getNotificationsBanner,
@@ -141,6 +142,7 @@ export const getContentsForActiveTab = createSelector(getContentsByTabId, getTab
 const geTasksIdsByStatusTypeForActiveTab = createSelector(getContentsForActiveTab, geTasksIdsByStatusTypeReducer);
 
 const getTasksIdsForActiveTab = createSelector(geTasksIdsByStatusTypeForActiveTab, map => map[ContentStatusType.all]);
+const getErrorTasksIdsForActiveTab = createSelector(geTasksIdsByStatusTypeForActiveTab, map => map[ContentStatusType.error]);
 const getPausedTasksIdsForActiveTab = createSelector(geTasksIdsByStatusTypeForActiveTab, map => map[ContentStatusType.paused]);
 const getActiveTasksIdsForActiveTab = createSelector(geTasksIdsByStatusTypeForActiveTab, map => map[ContentStatusType.active]);
 const getFinishedTasksIdsForActiveTab = createSelector(geTasksIdsByStatusTypeForActiveTab, map => map[ContentStatusType.finished]);
@@ -149,6 +151,8 @@ const taskActionScopeReducer = (tasks: Set<Task['id']>, activeTasks: Set<Task['i
   ActionScope.all === scope ? tasks : activeTasks;
 
 export const getTasksIdsByActionScope = createSelector(getTasksIds, getTasksIdsForActiveTab, getActionScope, taskActionScopeReducer);
+
+export const getErrorTasksIdsByActionScope = createSelector(getErrorTasksIds, getErrorTasksIdsForActiveTab, getActionScope, taskActionScopeReducer);
 
 export const getPausedTasksIdsByActionScope = createSelector(
   getPausedTasksIds,
@@ -169,6 +173,12 @@ export const getFinishedTasksIdsByActionScope = createSelector(
   getFinishedTasksIdsForActiveTab,
   getActionScope,
   taskActionScopeReducer,
+);
+
+export const getFinishedAnErrorTasksIdsByActionScope = createSelector(
+  getFinishedTasksIdsByActionScope,
+  getErrorTasksIdsByActionScope,
+  (finished, errors) => new Set([...finished, ...errors]),
 );
 
 const geDownloadsIdsByStatusTypeForActiveTab = createSelector(getContentsForActiveTab, getDownloadsIdsByStatusTypeReducer);
