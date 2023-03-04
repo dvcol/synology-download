@@ -51,10 +51,8 @@ const onDownloadEventsIntercept = (store: StoreOrProxy) => {
   let sub: Subscription;
   enabled$.subscribe(_enabled => {
     if (_enabled) {
-      console.info('======> subscribe');
       sub = subscribe();
     } else {
-      console.info('======> unsubscribe');
       sub?.unsubscribe();
     }
   });
