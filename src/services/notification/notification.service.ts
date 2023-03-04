@@ -23,7 +23,7 @@ import {
   getNotificationsSnackLevel,
   getStateBadge,
 } from '@src/store/selectors';
-import { bufferDebounceUnless, createNotification, onMessage, parseMagnetLink, sendActiveTabMessage, sendMessage } from '@src/utils';
+import { bufferDebounceUnless, createNotification, isMacOs, onMessage, parseMagnetLink, sendActiveTabMessage, sendMessage } from '@src/utils';
 
 import type { VariantType } from 'notistack';
 import type { Observable } from 'rxjs';
@@ -95,24 +95,23 @@ export class NotificationService {
     listMessage?: string,
     listContextMessage?: string,
   ): ChromeNotification | undefined {
+    if (!array?.length) return;
     if (array?.length === 1) {
       const { type, title, message, contextMessage, priority } = array[0];
       return { type, title, message, contextMessage, priority, iconUrl: 'assets/icons/icon-64.png' };
     }
-    if (array?.length) {
-      return {
-        type: 'list',
-        title: Array.from(new Set(array?.map(({ title }) => title))).join(', ') ?? listTitle,
-        message: listMessage ?? '',
-        contextMessage: listContextMessage,
-        iconUrl: 'assets/icons/icon-64.png',
-        items: array.map(({ message: mMessage }, i) => ({
-          title: `${i}`,
-          message: `${mMessage?.slice(0, 30)}...` ?? '',
-        })),
-      };
-    }
-    return undefined;
+
+    return {
+      type: 'list',
+      title: listTitle,
+      message: listMessage ?? '',
+      contextMessage: isMacOs() ? `${array?.length} new notifications` : listContextMessage,
+      iconUrl: 'assets/icons/icon-64.png',
+      items: array.map(({ message: mMessage, title: mTitle }) => ({
+        title: mTitle,
+        message: `${mMessage?.slice(0, 30)}...` ?? '',
+      })),
+    };
   }
 
   private static handleSnackNotification(
@@ -129,13 +128,23 @@ export class NotificationService {
     }
     return {
       message,
-      options: { autoHideDuration, anchorOrigin, variant, preventDuplicate: true, disableWindowBlurListener: true, ...options },
+      options: {
+        autoHideDuration,
+        anchorOrigin,
+        variant,
+        preventDuplicate: true,
+        disableWindowBlurListener: true,
+        ...options,
+      },
     };
   }
 
   private static sendBannerOrForward(notification?: ChromeNotification) {
     if (notification && this.isProxy) {
-      sendMessage<ChromeNotification>({ type: ChromeMessageType.notificationBanner, payload: notification }).subscribe({
+      sendMessage<ChromeNotification>({
+        type: ChromeMessageType.notificationBanner,
+        payload: notification,
+      }).subscribe({
         error: e => console.warn('Banner notification failed, forward ended in error.', e),
       });
     } else if (notification) {
@@ -147,7 +156,10 @@ export class NotificationService {
     if (notification && this.isProxy) {
       this.snack$.next(notification);
     } else if (notification?.message) {
-      sendActiveTabMessage<SnackNotification>({ type: ChromeMessageType.notificationSnack, payload: notification }).subscribe({
+      sendActiveTabMessage<SnackNotification>({
+        type: ChromeMessageType.notificationSnack,
+        payload: notification,
+      }).subscribe({
         error: e => console.warn('Snack notification failed, no active tab found.', e),
       });
     }
@@ -160,7 +172,7 @@ export class NotificationService {
       this.sendBannerOrForward({
         ...notification,
         message: notification?.message ?? '',
-        title: `[${notification.priority ? NotificationLevelKeys[notification.priority] : 'Info'}] : ${notification.title}`,
+        title: `${notification.priority ? NotificationLevelKeys[notification.priority] : 'Info'} - ${notification.title}`,
         iconUrl: 'assets/icons/icon-64.png',
         type: 'basic',
       });
@@ -168,23 +180,53 @@ export class NotificationService {
   }
 
   static trace(notification: SnackMessage, options: NotificationServiceOptions = {}) {
-    this.buildAndSend({ ...notification, priority: NotificationLevel.trace }, { type: NotificationType.snack, ...options });
+    this.buildAndSend(
+      {
+        ...notification,
+        priority: NotificationLevel.trace,
+      },
+      { type: NotificationType.snack, ...options },
+    );
   }
 
   static debug(notification: SnackMessage, options: NotificationServiceOptions = {}) {
-    this.buildAndSend({ ...notification, priority: NotificationLevel.debug }, { type: NotificationType.snack, ...options });
+    this.buildAndSend(
+      {
+        ...notification,
+        priority: NotificationLevel.debug,
+      },
+      { type: NotificationType.snack, ...options },
+    );
   }
 
   static info(notification: SnackMessage, options: NotificationServiceOptions = {}) {
-    this.buildAndSend({ ...notification, priority: NotificationLevel.info }, { type: NotificationType.snack, ...options });
+    this.buildAndSend(
+      {
+        ...notification,
+        priority: NotificationLevel.info,
+      },
+      { type: NotificationType.snack, ...options },
+    );
   }
 
   static warn(notification: SnackMessage, options: NotificationServiceOptions = {}) {
-    this.buildAndSend({ ...notification, priority: NotificationLevel.warn }, { type: NotificationType.snack, ...options });
+    this.buildAndSend(
+      {
+        ...notification,
+        priority: NotificationLevel.warn,
+      },
+      { type: NotificationType.snack, ...options },
+    );
   }
 
   static error(notification: SnackMessage, options: NotificationServiceOptions = {}) {
-    this.buildAndSend({ ...notification, priority: NotificationLevel.error }, { type: NotificationType.snack, ...options });
+    this.buildAndSend(
+      {
+        ...notification,
+        priority: NotificationLevel.error,
+      },
+      { type: NotificationType.snack, ...options },
+    );
   }
 
   static taskCreated(uri: string, source?: string, destination?: string): void {

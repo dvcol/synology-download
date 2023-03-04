@@ -9,7 +9,7 @@
     "message": "Title:"
   },
   "common__notification__destination_folder": {
-    "message": "Destination folder:"
+    "message": "Folder:"
   },
   "common__notification__error_message": {
     "message": "Error message:"
