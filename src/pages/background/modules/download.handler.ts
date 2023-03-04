@@ -4,12 +4,7 @@ import type { DownloadsIntercept, StoreOrProxy } from '@src/models';
 import { DownloadStatus } from '@src/models';
 import { InterceptService, NotificationService } from '@src/services';
 import { store$ } from '@src/store';
-import {
-  getSettingsDownloadsEnabled,
-  getSettingsDownloadsIntercept,
-  getSettingsDownloadsInterceptEnabled,
-  getSettingsDownloadsNotifications,
-} from '@src/store/selectors';
+import { getSettingsDownloadsIntercept, getSettingsDownloadsInterceptEnabled, getSettingsDownloadsNotifications } from '@src/store/selectors';
 import { onFilename$, onStatus$ } from '@src/utils';
 
 import type { Subscription } from 'rxjs';
@@ -30,7 +25,7 @@ const onDownloadEventsNotifications = (store: StoreOrProxy) => {
 };
 
 const onDownloadEventsIntercept = (store: StoreOrProxy) => {
-  const enabled$ = store$<boolean>(store, getSettingsDownloadsEnabled);
+  const enabled$ = store$<boolean>(store, getSettingsDownloadsInterceptEnabled);
 
   const subscribe = () =>
     onFilename$
@@ -56,8 +51,10 @@ const onDownloadEventsIntercept = (store: StoreOrProxy) => {
   let sub: Subscription;
   enabled$.subscribe(_enabled => {
     if (_enabled) {
+      console.info('======> subscribe');
       sub = subscribe();
     } else {
+      console.info('======> unsubscribe');
       sub?.unsubscribe();
     }
   });

@@ -157,6 +157,9 @@ export const SettingsDownloads = () => {
           <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem', maxWidth: '80%' }}>
             {i18n('intercept__warning')}
           </Typography>
+          <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem', maxWidth: '80%' }}>
+            {i18n('intercept__alpha__warning')}
+          </Typography>
           <CardHeader
             title={i18n('intercept__erase__title')}
             subheader={i18n('intercept__erase__subheader')}

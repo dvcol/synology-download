@@ -48,6 +48,9 @@
     "message": "Intercept downloads in injected scripts (within browser tabs)."
   },
   "panel__settings__downloads__intercept__warning": {
+    "message": "Chrome can only support interception for one extension at a time. If you use another extension please disable either one."
+  },
+  "panel__settings__downloads__intercept__alpha__warning": {
     "message": "Download interception is currently in alpha. Interception might fail or task might be incorrectly created or cancelled."
   },
 
