@@ -20,6 +20,8 @@ storeProxy
     // Register as open
     portConnect({ name: ModalInstance.option });
   })
-  .then(() => render(<App store={storeProxy} redirect={AppRoute.Settings} />, window.document.querySelector('#app-container')));
+  .then(() =>
+    render(<App store={storeProxy} redirect={AppRoute.Settings} />, window.document.querySelector('#synology-download-options-app-container')),
+  );
 
 if (module.hot) module.hot.accept();

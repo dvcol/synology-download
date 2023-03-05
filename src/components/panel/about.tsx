@@ -8,9 +8,7 @@ import { Button, Card, CardActions, CardContent, CardHeader, Chip, Stack, Typogr
 
 import React, { useEffect, useState } from 'react';
 
-import { getAcceptLanguages, useI18n } from '@dvcol/web-extension-utils';
-
-import manifest from '@src/manifest.json';
+import { getAcceptLanguages, getManifest, useI18n } from '@dvcol/web-extension-utils';
 
 import { AppLinks } from '@src/models';
 import { createTab } from '@src/utils';
@@ -22,6 +20,7 @@ export const About: FC<{
   cardProps?: CardProps;
 }> = ({ cardProps }) => {
   const i18n = useI18n('panel', 'about');
+  const manifest = getManifest();
 
   const [languages, setLanguages] = useState<string[]>();
   useEffect(() => {

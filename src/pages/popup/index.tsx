@@ -19,6 +19,6 @@ storeProxy
     // Register as open
     portConnect({ name: ModalInstance.popup });
   })
-  .then(() => render(<App store={storeProxy} />, window.document.querySelector('#app-container')));
+  .then(() => render(<App store={storeProxy} />, window.document.querySelector('#synology-download-popup-app-container')));
 
 if (module.hot) module.hot.accept();

@@ -8,7 +8,7 @@ export const portListener = () => {
   // Dropdown popup
   onConnect([ModalInstance.popup]).subscribe(port => {
     store.dispatch(setPopup(true));
-    console.debug(`connecting ${port.name}`, new Date().toISOString());
+    console.debug(`connecting ${port.name}`, { id: port?.sender?.tab?.id, timestamp: new Date().toISOString() });
     port.onDisconnect.addListener(() => {
       console.debug(`disconnecting ${port.name}`, new Date().toISOString());
       store.dispatch(setPopup(false));
@@ -18,7 +18,7 @@ export const portListener = () => {
   // Option page
   onConnect([ModalInstance.option]).subscribe(port => {
     store.dispatch(setOption(true));
-    console.debug(`connecting ${port.name}`, new Date().toISOString());
+    console.debug(`connecting ${port.name}`, { id: port?.sender?.tab?.id, timestamp: new Date().toISOString() });
     port.onDisconnect.addListener(() => {
       console.debug(`disconnecting ${port.name}`, new Date().toISOString());
       store.dispatch(setOption(false));
@@ -27,7 +27,7 @@ export const portListener = () => {
 
   // Content script
   onConnect([ModalInstance.modal]).subscribe(port => {
-    console.debug(`connecting ${port.name}`, new Date().toISOString());
+    console.debug(`connecting ${port.name}`, { id: port?.sender?.tab?.id, source: port?.sender?.origin, timestamp: new Date().toISOString() });
     /**
      * TODO: Remove if/when persistent MV3 service worker are introduced
      *
