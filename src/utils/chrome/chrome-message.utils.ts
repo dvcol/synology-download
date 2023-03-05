@@ -1,16 +1,15 @@
-import { fromEventPattern, switchMap, throwError } from 'rxjs';
-
-import type { ChromeMessage, ChromeMessageHandler } from '@dvcol/web-extension-utils';
+import type { ChromeMessage, ChromeMessageHandler, InstalledDetails } from '@dvcol/web-extension-utils';
 import {
   onConnect as _onConnect,
+  onInstalled$ as _onInstalled$,
   onMessage as _onMessage,
+  portConnect as _portConnect,
+  sendActiveTabMessage as _sendActiveTabMessage,
   sendMessage as _sendMessage,
   sendTabMessage as _sendTabMessage,
 } from '@dvcol/web-extension-utils';
 
 import type { ChromeMessagePayload, ChromeMessageType } from '@src/models';
-
-import { getActiveTab } from '@src/utils';
 
 import type { Observable } from 'rxjs';
 
@@ -61,16 +60,7 @@ export const sendTabMessage = <P extends ChromeMessagePayload = ChromeMessagePay
  */
 export const sendActiveTabMessage = <P extends ChromeMessagePayload = ChromeMessagePayload, R = void>(
   message: ChromeMessage<ChromeMessageType, P>,
-): Observable<R> =>
-  getActiveTab().pipe(
-    switchMap(tab => {
-      if (tab?.id) {
-        console.debug(`Sending '${message.type}' message to active tab '${tab.id}'`, { message, tab });
-        return _sendTabMessage<ChromeMessageType, P, R>(tab.id, message);
-      }
-      return throwError(() => new Error('No active tab found'));
-    }),
-  );
+): Observable<R> => _sendActiveTabMessage(message);
 
 /**
  * Rxjs wrapper for chrome.runtime.onConnect event listener
@@ -81,10 +71,6 @@ export const sendActiveTabMessage = <P extends ChromeMessagePayload = ChromeMess
 export const onConnect = <T extends string>(types?: T[], async = true): Observable<Port> => _onConnect<T>(types, async);
 
 /** @see chrome.runtime.connect */
-export const portConnect = chrome.runtime.connect;
+export const portConnect = _portConnect;
 
-export type InstalledDetails = chrome.runtime.InstalledDetails;
-type InstalledHandler = (details: InstalledDetails) => void;
-const addOnInstallHandler = (handler: InstalledHandler) => chrome.runtime.onInstalled.addListener(handler);
-const removeOnInstallHandler = (handler: InstalledHandler) => chrome.runtime.onInstalled.removeListener(handler);
-export const onInstalled$: Observable<InstalledDetails> = fromEventPattern<InstalledDetails>(addOnInstallHandler, removeOnInstallHandler);
+export const onInstalled$: Observable<InstalledDetails> = _onInstalled$;

@@ -1,7 +1,3 @@
-import { from, map } from 'rxjs';
-
-import type { Observable } from 'rxjs';
-
 /** @see chrome.notifications.NotificationOptions */
 export type NotificationOptions<T extends boolean = false> = chrome.notifications.NotificationOptions<T>;
 
@@ -28,6 +24,3 @@ export type QueryInfo = chrome.tabs.QueryInfo;
 
 /** @see chrome.tabs.Tab */
 export type Tab = chrome.tabs.Tab;
-
-export const getActiveTab = (queryInfo: QueryInfo = { active: true, lastFocusedWindow: true }): Observable<Tab> =>
-  from(queryTab(queryInfo)).pipe(map(([tab]) => tab));
