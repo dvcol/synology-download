@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.21.0](https://github.com/dvcol/synology-download/compare/v1.18.2...v1.21.0) (2023-03-05)
+
+
+### Features
+
+* **content-script:** re-inject content-script on extension update ([3438de2](https://github.com/dvcol/synology-download/commit/3438de2d9170a758c677d8ed2aa3d2e289fb8c75))
+* **content:** broadcast content modal/menu open/close ([32d4e88](https://github.com/dvcol/synology-download/commit/32d4e88fe890c8a539c4ac07b4ac2360d6300a0c))
+* **history:** sync history to local storage ([5dd948e](https://github.com/dvcol/synology-download/commit/5dd948e848c4862d37a9183dc03ff6eb7d83ea7f))
+* **menus:** adds support to recent custom destinations ([ad8fb9f](https://github.com/dvcol/synology-download/commit/ad8fb9fdaefe20e5f678e983a7c8087f51899475))
+* **navbar:** adds scope specific modifier keys (shift/alt) ([44bb35d](https://github.com/dvcol/synology-download/commit/44bb35d8da7c46a0b3d62f7a310582df44a796df))
+
+
+### Bug Fixes
+
+* **content:** fix button offset ([1cc3265](https://github.com/dvcol/synology-download/commit/1cc3265433dabf3e613af932b0fc2018dbe81c98))
+* **downloads:** update warning and change interception switch in handler ([2e8a6a9](https://github.com/dvcol/synology-download/commit/2e8a6a945d40dba7619da91682181418794053e8))
+* **notifications:** fix list notification on macos ([34cec8d](https://github.com/dvcol/synology-download/commit/34cec8d215c3975680818f6acb5f95e9ccefe863))
+* **popup:** fix hover ui glitch in cards ([16cfb19](https://github.com/dvcol/synology-download/commit/16cfb19543ae8d846e1588974f65a6c65e424599))
+* **tasks:** fix pause all tasks ([e076263](https://github.com/dvcol/synology-download/commit/e076263801c995f72077ed59903ca1edd6162978))
+
 ### [1.18.2](https://github.com/dvcol/synology-download/compare/v1.18.1...v1.18.2) (2023-03-03)
 
 
