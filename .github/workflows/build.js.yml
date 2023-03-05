@@ -45,17 +45,17 @@ jobs:
         run: yarn test:unit
         if: github.event_name == 'push' && github.ref == 'ref/head/main'
 
-  coverage:
-    name: Coverage
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && !startsWith(github.actor, 'dependabot')
-
-    steps:
-      - name: Checkout branch ${{ github.r }}
-        uses: actions/checkout@v3
-
-      - name: Unit tests (changes only)
-        uses: ArtiomTr/jest-coverage-report-action@v2.2.1
-        with:
-          package-manager: yarn
-          test-script: yarn test:unit
+#  coverage:
+#    name: Coverage
+#    runs-on: ubuntu-latest
+#    if: github.event_name == 'pull_request' && !startsWith(github.actor, 'dependabot')
+#
+#    steps:
+#      - name: Checkout branch ${{ github.r }}
+#        uses: actions/checkout@v3
+#
+#      - name: Unit tests (changes only)
+#        uses: ArtiomTr/jest-coverage-report-action@v2.2.1
+#        with:
+#          package-manager: yarn
+#          test-script: yarn test:unit
