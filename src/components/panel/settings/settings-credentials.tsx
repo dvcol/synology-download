@@ -36,7 +36,7 @@ export const SettingsCredentials = () => {
     watch,
     setValue,
     getValues,
-    formState: { isValid, isDirty },
+    formState: { isValid, isDirty, isSubmitted },
   } = useForm<Connection>({
     mode: 'onChange',
     defaultValues: {
@@ -172,6 +172,16 @@ export const SettingsCredentials = () => {
   };
 
   const onRememberMeChange: SwitchBaseProps['onChange'] = (_, rememberMe) => dispatch(syncRememberMe(rememberMe));
+
+  const onSave = (data: Connection) => {
+    dispatch(syncConnection(data));
+    reset(data, { keepIsSubmitted: true, keepSubmitCount: true });
+  };
+
+  const onSubmitColor = () => {
+    if (isDirty) return 'primary';
+    return isSubmitted ? 'success' : 'info';
+  };
 
   return (
     <Card raised={true}>
@@ -390,6 +400,16 @@ export const SettingsCredentials = () => {
               onClick={handleSubmit(loginLogout)}
             >
               {i18n(logged ? 'logout' : 'login')}
+            </Button>
+            <Button
+              variant="outlined"
+              color={onSubmitColor()}
+              sx={{ width: '5rem' }}
+              type="submit"
+              disabled={!isValid}
+              onClick={handleSubmit(onSave)}
+            >
+              {i18n('save', 'common', 'buttons')}
             </Button>
           </Stack>
         </Box>

@@ -15,12 +15,22 @@ import type { Store } from 'redux';
 export const restoreLoginSate = (settings: SettingsSlice) =>
   localGet<StateSlice>(stateSlice.name).subscribe(state => {
     console.debug('restoring logged state from chrome storage', state);
-    // If service initialized & remember me && logged
-    if (!QueryService.isReady || !settings?.connection?.autoLogin || !settings?.connection?.rememberMe) return;
-    // If device token for 2FA && device id saved
+    // If service is not initialized with url
+    if (!QueryService.isReady) return;
+    // If remember me is not enabled
+    if (!settings?.connection?.rememberMe) return;
+    // If no auto-login and no previous logged state
+    if (!state?.logged && !settings?.connection?.autoLogin) return;
+    // If device token for 2FA && no device id saved
     if (settings?.connection?.type === ConnectionType.twoFactor && (!settings?.connection.enable_device_token || !settings?.connection.device_id))
       return;
-    // Restore login
+
+    // If missing username
+    if (!settings?.connection?.username) return;
+    // If missing password
+    if (!settings?.connection?.password) return;
+
+    // Attempt to Restore login
     QueryService.login().subscribe();
   });
 
