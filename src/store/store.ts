@@ -31,9 +31,13 @@ export type StoreState = ReturnType<typeof rootReducer>;
 const options: ConfigureStoreOptions = { reducer: reducers, devTools: { name: 'synology-download' } };
 
 if (process.env.NODE_ENV === 'development') {
-  const devtools = { realtime: true, hostname: 'localhost', port: 8000, name: 'synology-download-remote' };
-  options.enhancers = [devToolsEnhancer(devtools)];
-  console.debug('Redux devtool exposed on', `http://${devtools.hostname}:${devtools.port}`);
+  const context = global?.document?.querySelector<HTMLDivElement>("[id^='synology-download-']")?.dataset?.context;
+  if (!global?.document || context === 'popup') {
+    const name = `synology-download-remote-${context ?? 'background'}`;
+    const devtools = { realtime: true, hostname: 'localhost', port: 8000, name };
+    options.enhancers = [devToolsEnhancer(devtools)];
+    console.info('Redux devtool exposed on', `http://${devtools.hostname}:${devtools.port}`, name);
+  }
 }
 export const store: Store = configureStore(options);
 
