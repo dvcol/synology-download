@@ -14,6 +14,8 @@ export interface StateReducers<S = StateSlice> extends SliceCaseReducers<S> {
   setSid: CaseReducer<S, PayloadAction<string | undefined>>;
   setPopup: CaseReducer<S, PayloadAction<boolean>>;
   setOption: CaseReducer<S, PayloadAction<boolean>>;
+  setContentMenu: CaseReducer<S, PayloadAction<boolean>>;
+  setContentDialog: CaseReducer<S, PayloadAction<boolean>>;
   addLoading: CaseReducer<S, PayloadAction<number | undefined>>;
   removeLoading: CaseReducer<S, PayloadAction<number | undefined>>;
   resetLoading: CaseReducer<S>;
@@ -28,6 +30,10 @@ export const initialState: StateSlice = {
   modal: {
     popup: false,
     option: false,
+  },
+  content: {
+    menu: false,
+    dialog: false,
   },
   loading: 0,
   badge: { count: undefined, stats: undefined },
@@ -46,6 +52,8 @@ export const stateSlice = createSlice<StateSlice, StateReducers, 'state'>({
     setSid: (state, { payload: sid }) => ({ ...state, sid }),
     setPopup: (state, { payload: popup }) => ({ ...state, modal: { ...state.modal, popup } }),
     setOption: (state, { payload: option }) => ({ ...state, modal: { ...state.modal, option } }),
+    setContentMenu: (state, { payload: menu }) => ({ ...state, content: { ...state.content, menu } }),
+    setContentDialog: (state, { payload: dialog }) => ({ ...state, content: { ...state.content, dialog } }),
     addLoading: (state, { payload }) => ({ ...state, loading: state.loading + (payload ?? 1) }),
     removeLoading: (state, { payload }) => ({ ...state, loading: state.loading - (payload ?? 1) }),
     resetLoading: state => ({ ...state, loading: 0 }),

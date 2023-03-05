@@ -12,7 +12,7 @@ import { ChromeMessageType } from '@src/models';
 import type { TaskDialogIntercept } from '@src/pages/content/service/dialog.service';
 import { taskDialog$ } from '@src/pages/content/service/dialog.service';
 import { NotificationService, QueryService } from '@src/services';
-import { onMessage, zIndexMax } from '@src/utils';
+import { onMessage, sendMessage, zIndexMax } from '@src/utils';
 
 import type { PortalProps } from '@mui/base/Portal';
 import type { FC } from 'react';
@@ -29,9 +29,16 @@ export const TaskDialog: FC<{ container?: PortalProps['container'] }> = ({ conta
     }
   };
 
+  const _setOpen = (_open: boolean) => {
+    setOpen(_open);
+    sendMessage<boolean>({ type: ChromeMessageType.contentDialogOpen, payload: _open }).subscribe({
+      error: e => console.warn('Intercept menu open failed to send.', e),
+    });
+  };
+
   const onClose = (aborted = false) => {
     setForm(undefined);
-    setOpen(false);
+    _setOpen(false);
     onIntercept({ success: true, payload: { aborted, message: aborted ? 'Intercept aborted.' : 'Task created successfully' } });
   };
 
@@ -49,7 +56,7 @@ export const TaskDialog: FC<{ container?: PortalProps['container'] }> = ({ conta
           if (uri && QueryService.isLoggedIn) {
             if (modal) {
               setForm({ uri, source, destination });
-              setOpen(true);
+              _setOpen(true);
             } else {
               QueryService.createTask(uri, source, destination?.path).subscribe();
             }
@@ -64,11 +71,13 @@ export const TaskDialog: FC<{ container?: PortalProps['container'] }> = ({ conta
         }
         sendResponse();
       });
+
     taskDialog$.pipe(takeUntil(abort$)).subscribe(({ open: _open, form: _form, intercept: _intercept }) => {
       if (_form) setForm(_form);
       if (_intercept) setIntercept(_intercept);
-      setOpen(true);
+      _setOpen(true);
     });
+
     return () => {
       abort$.next();
       abort$.complete();

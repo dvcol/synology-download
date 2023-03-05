@@ -1,10 +1,11 @@
-import { ModalInstance } from '@src/models';
-import { store } from '@src/store';
-import { setOption, setPopup } from '@src/store/actions';
-import { onConnect } from '@src/utils';
+import { ChromeMessageType, ModalInstance } from '@src/models';
+import { setContentDialog, setContentMenu, setOption, setPopup } from '@src/store/actions';
+import { onConnect, onMessage } from '@src/utils';
+
+import type { Store } from 'redux';
 
 /** Listen to onConnect events to handle port connections */
-export const portListener = () => {
+export const onPortEvents = (store: Store) => {
   // Dropdown popup
   onConnect([ModalInstance.popup]).subscribe(port => {
     store.dispatch(setPopup(true));
@@ -39,5 +40,16 @@ export const portListener = () => {
       console.debug(`disconnecting ${port.name}`, new Date().toISOString());
       port.disconnect();
     }, 295e3);
+  });
+};
+
+export const onContentEvents = (store: Store) => {
+  onMessage<boolean>([ChromeMessageType.contentMenuOpen]).subscribe(({ message: { payload } }) => {
+    console.debug('Content menu open', payload);
+    store.dispatch(setContentMenu(!!payload));
+  });
+  onMessage<boolean>([ChromeMessageType.contentDialogOpen]).subscribe(({ message: { payload } }) => {
+    console.debug('Content dialog open', payload);
+    store.dispatch(setContentDialog(!!payload));
   });
 };

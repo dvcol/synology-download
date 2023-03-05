@@ -3,7 +3,7 @@ import type { OnClickData } from '@src/utils';
 import type { DownloadQueryPayload } from './download.model';
 
 import type { ContextMenu } from './menu.model';
-import type { SnackNotification, ChromeNotification } from './notification.model';
+import type { ChromeNotification, SnackNotification } from './notification.model';
 
 import type { SynologyQueryPayload } from './synology.model';
 import type { TaskForm } from './task.model';
@@ -22,8 +22,9 @@ export enum ChromeMessageType {
   polling = 'polling',
   query = 'query',
   download = 'download',
-  baseUrl = 'baseUrl',
   intercept = 'intercept',
+  contentMenuOpen = 'contentMenuOpen',
+  contentDialogOpen = 'contentDialogOpen',
 }
 
 export type InterceptPayload = TaskForm;

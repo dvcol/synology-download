@@ -16,6 +16,10 @@ export interface StateSlice {
     popup: boolean;
     option: boolean;
   };
+  content: {
+    menu: boolean;
+    dialog: boolean;
+  };
   loading: number;
   badge: { count?: ContentCount; stats?: TaskStatistics };
   history: {

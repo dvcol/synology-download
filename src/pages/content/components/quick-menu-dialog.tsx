@@ -19,7 +19,7 @@ import { NotificationService, QueryService } from '@src/services';
 import type { StoreState } from '@src/store';
 import { getDestinationsHistory, getLogged, getQuick } from '@src/store/selectors';
 
-import { onMessage, zIndexMax } from '@src/utils';
+import { onMessage, sendMessage, zIndexMax } from '@src/utils';
 
 import { QuickMenuRecent } from './quick-menu-recent';
 
@@ -30,6 +30,16 @@ import type { FC } from 'react';
 export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ container }) => {
   const [_anchor, setAnchor] = React.useState<PopoverProps['anchorEl']>();
   const [_position, setPosition] = React.useState<PopoverProps['anchorPosition'] | undefined>();
+
+  const open = Boolean(_position || _anchor);
+
+  const setState = (anchor?: PopoverProps['anchorEl'], position?: PopoverProps['anchorPosition']) => {
+    setAnchor(anchor ?? null);
+    setPosition(position);
+    sendMessage<boolean>({ type: ChromeMessageType.contentMenuOpen, payload: Boolean(position || anchor) }).subscribe({
+      error: e => console.warn('Intercept menu open failed to send.', e),
+    });
+  };
 
   const [_form, setForm] = React.useState<TaskForm>();
   const menus = useSelector<StoreState, QuickMenu[]>(getQuick);
@@ -69,11 +79,8 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
     }
   };
 
-  const open = Boolean(_position || _anchor);
-
   const handleClose = (response?: InterceptResponse) => {
-    setAnchor(null);
-    setPosition(undefined);
+    setState(null, undefined);
     if (response) onIntercept({ success: true, payload: response });
   };
 
@@ -92,8 +99,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
   ) => {
     if (quickMenus?.length > 1) {
       setForm(form);
-      setAnchor(anchor ?? null);
-      setPosition(position);
+      setState(anchor ?? null, position);
     } else if (quickMenus?.length === 1) {
       createTask({ ...form, destination: quickMenus[0].destination }, quickMenus[0].modal);
     } else {
