@@ -34,7 +34,7 @@ export const ContentCard: FC<ContentCardProps> = ({ title, icon, iconBackground,
         primaryTypographyProps={{
           component: 'span',
           sx: {
-            maxWidth: expanded ? '100%' : 'calc(100vw - 8.5rem)',
+            maxWidth: expanded ? '100%' : 'calc(100vw - 9rem)',
             display: '-webkit-box',
             WebkitLineClamp: expanded ? 'non' : '3',
             WebkitBoxOrient: 'vertical',
