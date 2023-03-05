@@ -6,7 +6,7 @@ import { setNavbar, syncSettings } from '@src/store/actions';
 import { settingsSlice } from '@src/store/slices/settings.slice';
 import { buildContextMenu, setBadgeBackgroundColor } from '@src/utils';
 
-import { restoreSate } from './state-handler';
+import { restoreLoginSate } from './state-handler';
 
 import type { Store } from 'redux';
 
@@ -28,5 +28,5 @@ export const restoreSettings = (store: Store) =>
     buildContextMenu(settings?.menus || defaultSettings.menus).subscribe();
 
     // restore login state
-    restoreSate(settings);
+    restoreLoginSate(settings);
   });

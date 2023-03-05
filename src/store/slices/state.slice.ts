@@ -2,13 +2,14 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import type { StateSlice } from '@src/models';
 
-import { setBadgeReducer, syncLoggedReducer } from '@src/store/reducers/state.reducer';
+import { setBadgeReducer, syncDestinationsHistoryReducer, syncFoldersHistoryReducer, syncLoggedReducer } from '@src/store/reducers/state.reducer';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
 import type { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
 
 export interface StateReducers<S = StateSlice> extends SliceCaseReducers<S> {
+  restoreState: CaseReducer<S, PayloadAction<Partial<S>>>;
   setLogged: CaseReducer<S, PayloadAction<boolean>>;
   setSid: CaseReducer<S, PayloadAction<string | undefined>>;
   setPopup: CaseReducer<S, PayloadAction<boolean>>;
@@ -18,8 +19,7 @@ export interface StateReducers<S = StateSlice> extends SliceCaseReducers<S> {
   resetLoading: CaseReducer<S>;
   setBadge: CaseReducer<S, PayloadAction<StateSlice['badge']>>;
   addDestinationHistory: CaseReducer<S, PayloadAction<string>>;
-  setDestinationsHistory: CaseReducer<S, PayloadAction<string[]>>;
-  resetDestinationHistory: CaseReducer<S>;
+  addFolderHistory: CaseReducer<S, PayloadAction<string>>;
 }
 
 export const initialState: StateSlice = {
@@ -33,6 +33,7 @@ export const initialState: StateSlice = {
   badge: { count: undefined, stats: undefined },
   history: {
     destinations: [],
+    folders: [],
   },
 };
 
@@ -40,6 +41,7 @@ export const stateSlice = createSlice<StateSlice, StateReducers, 'state'>({
   name: 'state',
   initialState,
   reducers: {
+    restoreState: (state, { payload }) => ({ ...state, ...payload }),
     setLogged: syncLoggedReducer,
     setSid: (state, { payload: sid }) => ({ ...state, sid }),
     setPopup: (state, { payload: popup }) => ({ ...state, modal: { ...state.modal, popup } }),
@@ -48,14 +50,12 @@ export const stateSlice = createSlice<StateSlice, StateReducers, 'state'>({
     removeLoading: (state, { payload }) => ({ ...state, loading: state.loading - (payload ?? 1) }),
     resetLoading: state => ({ ...state, loading: 0 }),
     setBadge: setBadgeReducer,
-    addDestinationHistory: (state, { payload: destination }) => ({
-      ...state,
-      history: { ...state.history, destinations: [...new Set([destination, ...state.history.destinations].slice(0, 20))] },
-    }),
-    setDestinationsHistory: (state, { payload: destinations }) => ({
-      ...state,
-      history: { ...state.history, destinations: [...new Set((destinations ?? initialState.history.destinations).slice(0, 20))] },
-    }),
-    resetDestinationHistory: state => ({ ...state, history: { ...state.history, destinations: initialState.history.destinations } }),
+    addDestinationHistory: (state, action) =>
+      syncDestinationsHistoryReducer(state, {
+        ...action,
+        payload: [action.payload, ...(state.history?.destinations ?? initialState.history.destinations)],
+      }),
+    addFolderHistory: (state, action) =>
+      syncFoldersHistoryReducer(state, { ...action, payload: [action.payload, ...(state.history?.folders ?? initialState.history.folders)] }),
   } as StateReducers,
 });

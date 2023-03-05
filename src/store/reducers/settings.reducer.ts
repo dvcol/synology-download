@@ -8,7 +8,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 
 export const syncSettings = (settings: SettingsSlice): void => {
   // TODO : move to thunk ?
-  syncSet<SettingsSlice>(SettingsSliceName, settings).subscribe(() => console.debug('Setting sync success', settings));
+  syncSet<SettingsSlice>(SettingsSliceName, settings).subscribe(() => console.debug('Setting chrome sync success', settings));
 };
 
 export const setNestedReducer = <T>(oldSettings: SettingsSlice, payload: Partial<T>, name: keyof SettingsSlice): SettingsSlice => {

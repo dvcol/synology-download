@@ -3,15 +3,18 @@ import { localGet } from '@dvcol/web-extension-utils';
 import type { SettingsSlice, StateSlice } from '@src/models';
 import { ConnectionType } from '@src/models';
 import { QueryService } from '@src/services';
+import { restoreState } from '@src/store/actions';
 import { stateSlice } from '@src/store/slices/state.slice';
+
+import type { Store } from 'redux';
 
 /**
  * Restore Login state from settings
  * @param settings restored setting slice
  */
-export const restoreSate = (settings: SettingsSlice) =>
+export const restoreLoginSate = (settings: SettingsSlice) =>
   localGet<StateSlice>(stateSlice.name).subscribe(state => {
-    console.debug('restoring state from chrome storage', state);
+    console.debug('restoring logged state from chrome storage', state);
     // If service initialized & remember me && logged
     if (!QueryService.isReady || !settings?.connection?.autoLogin || !settings?.connection?.rememberMe) return;
     // If device token for 2FA && device id saved
@@ -19,4 +22,15 @@ export const restoreSate = (settings: SettingsSlice) =>
       return;
     // Restore login
     QueryService.login().subscribe();
+  });
+
+/**
+ * Restore state from local storage
+ * @param store redux store instance
+ */
+export const restoreLocalSate = (store: Store) =>
+  localGet<StateSlice>(stateSlice.name).subscribe(state => {
+    console.debug('restoring state from chrome storage', state);
+    // restore saved state
+    store.dispatch(restoreState(state));
   });

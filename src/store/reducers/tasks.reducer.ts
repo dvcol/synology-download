@@ -10,6 +10,6 @@ export const setTasksStatsReducer: TasksReducers['setTaskStats'] = (state, { pay
 
 export const syncTaskReducer: TasksReducers['setTasks'] = (state, { payload: entities }) => {
   // TODO : move to thunk ?
-  localSet<Task[]>(tasksSlice.name, entities).subscribe(() => console.debug('Tasks sync success', entities));
+  localSet<Task[]>(tasksSlice.name, entities).subscribe(() => console.debug('Tasks local sync success', entities));
   return { ...state, entities };
 };

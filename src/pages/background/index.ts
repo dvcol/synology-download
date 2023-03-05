@@ -3,7 +3,7 @@ import { wrapStore } from 'webext-redux';
 import { DownloadService, NotificationService, PollingService, QueryService } from '@src/services';
 import { store } from '@src/store';
 
-import { onDownloadEvents, onInstalledEvents, onMessageEvents, portListener, restoreSettings, restoreTasks } from './modules';
+import { onDownloadEvents, onInstalledEvents, onMessageEvents, portListener, restoreLocalSate, restoreSettings, restoreTasks } from './modules';
 
 console.debug('Background service worker started.');
 
@@ -30,6 +30,9 @@ PollingService.init(store);
 
 // Restore settings & polling
 restoreSettings(store);
+
+// Restore State
+restoreLocalSate(store);
 
 // Restore Tasks
 restoreTasks(store);

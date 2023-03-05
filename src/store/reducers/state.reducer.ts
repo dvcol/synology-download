@@ -6,12 +6,8 @@ import { formatBytes, setBadgeText, setTitle } from '@src/utils';
 import { stateSlice } from '../slices/state.slice';
 
 import type { StateReducers } from '../slices/state.slice';
-
-export const syncLoggedReducer: StateReducers['setLogged'] = (state, { payload: logged }) => {
-  // TODO : move to thunk ?
-  localSet<Pick<StateSlice, 'logged'>>(stateSlice.name, { logged }).subscribe(() => console.debug('State sync success', state));
-  return { ...state, logged };
-};
+import type { PayloadAction } from '@reduxjs/toolkit';
+import type { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
 
 export const setCountAndStats = (count?: ContentCount, stats?: TaskStatistics) => {
   // TODO : move to thunk ?
@@ -41,4 +37,24 @@ export const setCountAndStats = (count?: ContentCount, stats?: TaskStatistics) =
 export const setBadgeReducer: StateReducers['setBadge'] = (state, { payload: { count, stats } }) => {
   setCountAndStats(count, stats);
   return { ...state, count };
+};
+
+type PartialState = Pick<StateSlice, 'logged' | 'history'>;
+export const syncStateReducer = (state: StateSlice): StateSlice => {
+  const { logged, history } = state;
+  // TODO : move to thunk ?
+  localSet<PartialState>(stateSlice.name, { logged, history }).subscribe(_state => console.debug('State local sync success', _state));
+  return state;
+};
+
+export const syncLoggedReducer: StateReducers['setLogged'] = (state, { payload: logged }) => {
+  return syncStateReducer({ ...state, logged });
+};
+
+export const syncDestinationsHistoryReducer: CaseReducer<StateSlice, PayloadAction<string[]>> = (state, { payload: destinations }) => {
+  return syncStateReducer({ ...state, history: { ...state.history, destinations: [...new Set(destinations.slice(0, 20))] } });
+};
+
+export const syncFoldersHistoryReducer: CaseReducer<StateSlice, PayloadAction<string[]>> = (state, { payload: folders }) => {
+  return syncStateReducer({ ...state, history: { ...state.history, folders: [...new Set(folders.slice(0, 20))] } });
 };

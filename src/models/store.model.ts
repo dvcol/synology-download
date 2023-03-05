@@ -20,6 +20,7 @@ export interface StateSlice {
   badge: { count?: ContentCount; stats?: TaskStatistics };
   history: {
     destinations: string[];
+    folders: string[];
   };
 }
 
