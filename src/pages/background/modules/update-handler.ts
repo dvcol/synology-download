@@ -1,6 +1,7 @@
 import { combineLatest, filter, map, takeWhile } from 'rxjs';
 
 import type { ChromeMessage } from '@dvcol/web-extension-utils';
+import { injectContentScripts } from '@dvcol/web-extension-utils';
 
 import manifest from '@src/manifest.json';
 import type { SnackNotification, StoreOrProxy } from '@src/models';
@@ -11,6 +12,9 @@ import type { InstalledDetails } from '@src/utils';
 import { onInstalled$, sendMessage } from '@src/utils';
 
 export const onInstalledEvents = (store: StoreOrProxy) => {
+  // re-inject content scripts in open tabs
+  injectContentScripts();
+
   // Subscribe to installed until first popup open
   combineLatest([store$<boolean>(store, getPopup), onInstalled$])
     .pipe(

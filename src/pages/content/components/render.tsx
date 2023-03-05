@@ -4,19 +4,42 @@ import React from 'react';
 
 import { render } from 'react-dom';
 
+import { getManifest } from '@dvcol/web-extension-utils';
+
 import { ModalInstance } from '@src/models';
 import { ContentApp } from '@src/pages/content/components';
+import { onClickEventListener } from '@src/pages/content/modules';
 import { NotificationService, QueryService } from '@src/services';
 import { storeProxy } from '@src/store';
 import { portConnect } from '@src/utils';
+
+const { name, version } = getManifest();
+const injection = new Date().toISOString();
+
+console.debug('Content script injected.', { name, version, injection });
+
+const rootContainerId = `${ModalInstance.modal}-root`;
+const destroyEvent = 'onDestroy';
 
 /**
  * Open a modal popup for custom download actions
  */
 export const renderContentApp = () => {
+  const previous = document.body.querySelectorAll(`#${rootContainerId}`);
+  if (previous?.length) {
+    console.debug(`Found exiting instance of '${rootContainerId}'`, previous);
+    previous?.forEach(el => {
+      el.dispatchEvent(new CustomEvent(destroyEvent));
+      document.body.removeChild(el);
+    });
+  }
+
   // Create a root element to host app
   const root = document.createElement('div');
-  root.id = `${ModalInstance.modal}-root`;
+  root.id = rootContainerId;
+  root.dataset.version = version;
+  root.dataset.injection = injection;
+  root.dataset.context = 'content-script';
   root.style.all = 'initial';
   document.body.appendChild(root);
 
@@ -53,4 +76,12 @@ export const renderContentApp = () => {
       connect();
     })
     .then(() => render(<ContentApp store={storeProxy} cache={cache} container={container} />, app));
+
+  // Attach click listener
+  const sub = onClickEventListener();
+
+  root.addEventListener(destroyEvent, () => {
+    console.debug(`Unsubscribing to events from '${rootContainerId}'`, { version, injection });
+    sub.unsubscribe();
+  });
 };

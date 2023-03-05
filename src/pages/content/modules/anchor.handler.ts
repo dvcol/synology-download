@@ -1,4 +1,8 @@
+import { fromEventPattern } from 'rxjs';
+
 import { anchor$, lastClick$ } from '@src/pages/content/service/anchor.service';
+
+import type { Subscription } from 'rxjs';
 
 /**
  * List of supported protocols
@@ -35,24 +39,33 @@ function recursivelyFindAnchorAncestor(e: HTMLElement | null, depth = 10): HTMLA
   return recursivelyFindAnchorAncestor(e.parentElement, depth - 1);
 }
 
-// Inspired by https://github.com/seansfkelley/nas-download-manager/blob/master/src/content/index.ts
-// Detect if the click event is on a supported downloadable link
-export const addAnchorClickListener = () =>
-  document.addEventListener('click', async event => {
-    const anchor = recursivelyFindAnchorAncestor(event.target as HTMLElement);
-    lastClick$.next({ event, anchor });
-    // Left clicks only
-    if (event.button === 0) {
-      if (anchor != null && anchor.href && startsWithAnyProtocol(anchor.href, DOWNLOAD_ONLY_PROTOCOLS)) {
-        anchor$.next({
-          event,
-          anchor,
-          form: {
-            uri: anchor.href,
-            source: document.URL,
-          },
-        });
-        event.preventDefault();
-      }
+/**
+ * Inspired by https://github.com/seansfkelley/nas-download-manager/blob/master/src/content/index.ts
+ * Detect if the click event is on a supported downloadable link
+ * @param event mouse event
+ */
+const listener = async (event: MouseEvent) => {
+  const anchor = recursivelyFindAnchorAncestor(event.target as HTMLElement);
+  lastClick$.next({ event, anchor });
+  // Left clicks only
+  if (event.button === 0) {
+    if (anchor != null && anchor.href && startsWithAnyProtocol(anchor.href, DOWNLOAD_ONLY_PROTOCOLS)) {
+      anchor$.next({
+        event,
+        anchor,
+        form: {
+          uri: anchor.href,
+          source: document.URL,
+        },
+      });
+      event.preventDefault();
     }
-  });
+  }
+};
+
+const addAnchorClickListener = () => document.addEventListener('click', listener);
+const removeAnchorClickListener = () => document.removeEventListener('click', listener);
+
+const clickListener$ = fromEventPattern(addAnchorClickListener, removeAnchorClickListener);
+
+export const onClickEventListener = (): Subscription => clickListener$.subscribe();
