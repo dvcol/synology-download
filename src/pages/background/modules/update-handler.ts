@@ -21,7 +21,7 @@ export const onInstalledEvents = (store: StoreOrProxy) => {
       // take while popup is closed and new version available
       takeWhile(([open, { previousVersion }]) => previousVersion !== manifest.version && !open, true),
       // only emits if popup is open and new version available
-      filter(([open, { previousVersion }]) => previousVersion !== manifest.version && open),
+      filter(([open, { previousVersion }]) => !!previousVersion && previousVersion !== manifest.version && open),
       map<[boolean, InstalledDetails], ChromeMessage<ChromeMessageType, SnackNotification>>(() => ({
         type: ChromeMessageType.notificationSnack,
         payload: {
