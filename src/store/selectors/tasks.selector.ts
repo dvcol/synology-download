@@ -27,9 +27,11 @@ export const geTasksIdsByStatusTypeReducer = (items: Content[]) =>
             map[ContentStatusType.active].add(id);
             break;
           case TaskStatus.paused:
+            map[ContentStatusType.paused].add(id);
+            break;
           case TaskStatus.waiting:
           case TaskStatus.filehosting_waiting:
-            map[ContentStatusType.paused].add(id);
+            map[ContentStatusType.waiting].add(id);
             break;
           case TaskStatus.finishing:
           case TaskStatus.extracting:

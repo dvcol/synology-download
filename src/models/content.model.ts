@@ -29,6 +29,7 @@ export enum ContentStatusType {
   active = 'active',
   downloading = 'downloading',
   paused = 'paused',
+  waiting = 'waiting',
   finished = 'finished',
   finishing = 'finishing',
   error = 'error',
