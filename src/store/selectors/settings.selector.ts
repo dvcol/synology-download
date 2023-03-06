@@ -80,7 +80,8 @@ export const getThemeMode = createSelector(getGlobal, (_global: Global) => {
     case ThemeMode.auto:
       return null;
     default:
-      console.error(`Theme ${_global?.theme} not supported`);
+      console.warn(`Theme '${_global?.theme}' not supported, falling back to ${ThemeMode.auto}`);
+      return null;
   }
 });
 
