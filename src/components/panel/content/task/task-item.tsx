@@ -1,6 +1,7 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import ReplayIcon from '@mui/icons-material/Replay';
 import { Button, Tooltip } from '@mui/material';
 
 import React, { forwardRef, useState } from 'react';
@@ -74,7 +75,9 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
   };
 
   const isDisabled = Object.values(loading).some(Boolean);
-  const playOrSeed = TaskStatus.paused === task.status ? 'play' : 'seed';
+  let playOrSeedOrRetry: 'play' | 'seed' | 'retry' = 'play';
+  if (TaskStatus.finished === task.status) playOrSeedOrRetry = 'seed';
+  if (TaskStatus.error === task.status) playOrSeedOrRetry = 'retry';
 
   const showBackground = useSelector<StoreState, Global['task']>(getGlobalTask)?.background;
   const background: ProgressBackgroundProps = showBackground
@@ -117,7 +120,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
           onClick('delete', QueryService.deleteTask(task.id), $event);
         }}
       />
-      {[TaskStatus.downloading, TaskStatus.seeding, TaskStatus.waiting].includes(task.status) ? (
+      {![TaskStatus.paused, TaskStatus.finished, TaskStatus.error].includes(task.status) ? (
         <Tooltip title={i18n('pause', 'common', 'buttons')} placement={'left'}>
           <span>
             <Button
@@ -132,19 +135,19 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
           </span>
         </Tooltip>
       ) : (
-        <Tooltip title={i18n(playOrSeed, 'common', 'buttons')} placement={'left'}>
+        <Tooltip title={i18n(playOrSeedOrRetry, 'common', 'buttons')} placement={'left'}>
           <span>
             <Button
-              key={playOrSeed}
+              key={playOrSeedOrRetry}
               sx={ButtonStyle}
-              color={playOrSeed === 'play' ? ColorLevel.success : ColorLevel.secondary}
-              onClick={$event => onClick(playOrSeed, QueryService.resumeTask(task.id), $event)}
+              color={playOrSeedOrRetry === 'play' ? ColorLevel.success : ColorLevel.secondary}
+              onClick={$event => onClick(playOrSeedOrRetry, QueryService.resumeTask(task.id), $event)}
               disabled={isDisabled || ![TaskStatus.paused, TaskStatus.finished, TaskStatus.error].includes(task.status)}
             >
               <IconLoader
-                icon={<PlayArrowIcon />}
+                icon={playOrSeedOrRetry === 'retry' ? <ReplayIcon /> : <PlayArrowIcon />}
                 loading={loadingIcon?.play}
-                props={{ size: '1rem', color: playOrSeed === 'play' ? ColorLevel.success : ColorLevel.secondary }}
+                props={{ size: '1rem', color: playOrSeedOrRetry === 'play' ? ColorLevel.success : ColorLevel.secondary }}
               />
             </Button>
           </span>

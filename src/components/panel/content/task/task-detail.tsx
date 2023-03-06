@@ -2,6 +2,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import ReplayIcon from '@mui/icons-material/Replay';
 import { Button, Card, Grid, ListItem, ListItemText, Typography } from '@mui/material';
 
 import React from 'react';
@@ -34,6 +35,10 @@ export const TaskDetail: FC<TaskDetailProps> = ({ task, loading, loadingIcon, bu
   const [openEdit, setOpenEdit] = React.useState(false);
   const isDisabled = () => Object.values(loading).some(Boolean);
 
+  let playOrSeedOrRetry: 'play' | 'seed' | 'retry' = 'play';
+  if (TaskStatus.finished === task.status) playOrSeedOrRetry = 'seed';
+  if (TaskStatus.error === task.status) playOrSeedOrRetry = 'retry';
+
   return (
     <ContentDetail
       title={
@@ -57,13 +62,19 @@ export const TaskDetail: FC<TaskDetailProps> = ({ task, loading, loadingIcon, bu
         <>
           {[TaskStatus.paused, TaskStatus.finished, TaskStatus.error].includes(task.status) && (
             <Button
-              startIcon={<IconLoader icon={<PlayArrowIcon />} loading={loadingIcon?.play} props={{ size: '1.25rem', color: 'success' }} />}
+              startIcon={
+                <IconLoader
+                  icon={playOrSeedOrRetry === 'retry' ? <ReplayIcon /> : <PlayArrowIcon />}
+                  loading={loadingIcon?.play}
+                  props={{ size: '1.25rem', color: 'success' }}
+                />
+              }
               variant="contained"
-              color={TaskStatus.finished === task.status ? 'secondary' : 'success'}
+              color={playOrSeedOrRetry === 'play' ? 'success' : 'secondary'}
               onClick={() => buttonClick('play', QueryService.resumeTask(task.id))}
               disabled={isDisabled()}
             >
-              {i18n(TaskStatus.finished === task.status ? 'seed' : 'play', 'common', 'buttons')}
+              {i18n(playOrSeedOrRetry, 'common', 'buttons')}
             </Button>
           )}
           {[TaskStatus.downloading, TaskStatus.seeding, TaskStatus.waiting].includes(task.status) && (
