@@ -8,6 +8,21 @@ import { SynologyService } from '@src/services/http';
 import type { Observable } from 'rxjs';
 
 export class SynologyDownloadService extends SynologyService {
+  /**
+   * Synology uses comma in a non standardized way to delimit array payload in the API.
+   * This makes urls containing un-encoded commas though technically non-malformed, invalid for the API.
+   *
+   * To palliate this, we substitute comma with it's unicode equivalent before encoding parameters
+   *
+   * @param url the url to sanitize
+   * @private
+   *
+   * @see https://global.download.synology.com/download/Document/Software/DeveloperGuide/Package/DownloadStation/All/enu/Synology_Download_Station_Web_API.pdf
+   */
+  private static _sanitizeUrl(url: string): URL {
+    return new URL(url.toString().replace(/,/g, '%2C'));
+  }
+
   constructor(isProxy = false, name = 'SynologyDownloadService', prefix = Controller.DownloadStation) {
     super(isProxy, name, prefix);
   }
@@ -51,7 +66,7 @@ export class SynologyDownloadService extends SynologyService {
   }
 
   createTask(uri: string, destination?: string, username?: string, password?: string, unzip?: string): Observable<void> {
-    const params: HttpParameters = { method: TaskMethod.create, uri };
+    const params: HttpParameters = { method: TaskMethod.create, uri: SynologyDownloadService._sanitizeUrl(uri).toString() };
     if (destination) params.destination = destination;
     if (username) params.username = username;
     if (password) params.password = password;
