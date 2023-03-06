@@ -1,3 +1,3 @@
 import { renderContentApp } from './components/render';
 
-renderContentApp();
+renderContentApp().then(() => console.debug('Content script component rendered.'));

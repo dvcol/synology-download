@@ -19,20 +19,42 @@ const injection = new Date().toISOString();
 console.debug('Content script injected.', { name, version, injection });
 
 const rootContainerId = `${ModalInstance.modal}-root`;
-const destroyEvent = 'onDestroy';
+const onDestroyEvent = 'onDestroy';
+const destroyedEvent = 'destroyed';
+
+/**
+ * Emits 'onDestroy' event on component and await 'destroyed 'callback before resolving
+ * @param el the element on which to call 'onDestroy'
+ */
+const waitDestroyed = (el: Element): Promise<void> => {
+  let resolve: () => void;
+  const promise = new Promise<void>(_resolve => {
+    resolve = () => _resolve();
+  });
+  el.addEventListener(destroyedEvent, () => resolve());
+  el.dispatchEvent(new CustomEvent(onDestroyEvent));
+  el.parentElement?.removeChild(el);
+  return promise;
+};
+
+/**
+ * Remove old instances of the component and trigger destroy lifecycle
+ */
+export const removeOldInstances = (): Promise<void | void[]> => {
+  const previous = document.body.querySelectorAll(`#${rootContainerId}`);
+  if (previous?.length) {
+    console.debug(`Found exiting instance of '${rootContainerId}'`, previous);
+    return Promise.all([...previous]?.map(el => waitDestroyed(el)));
+  }
+  return Promise.resolve();
+};
 
 /**
  * Open a modal popup for custom download actions
  */
-export const renderContentApp = () => {
-  const previous = document.body.querySelectorAll(`#${rootContainerId}`);
-  if (previous?.length) {
-    console.debug(`Found exiting instance of '${rootContainerId}'`, previous);
-    previous?.forEach(el => {
-      el.dispatchEvent(new CustomEvent(destroyEvent));
-      document.body.removeChild(el);
-    });
-  }
+export const renderContentApp = async (): Promise<void> => {
+  // purging old instances
+  await removeOldInstances();
 
   // Create a root element to host app
   const root = document.createElement('div');
@@ -54,6 +76,14 @@ export const renderContentApp = () => {
   const container = shadowRoot.querySelector(`#${ModalInstance.modal}-container`) as HTMLElement;
   const cache = createCache({ key: `${ModalInstance.modal}-cache`, container });
 
+  // Attach click listener
+  const sub = onClickEventListener();
+  root.addEventListener(onDestroyEvent, () => {
+    console.debug(`Unsubscribing to events from '${rootContainerId}'.`, { version, injection });
+    sub.unsubscribe();
+    root.dispatchEvent(new CustomEvent(destroyedEvent));
+  });
+
   /**
    * TODO: Remove if/when persistent MV3 service worker are introduced
    *
@@ -66,7 +96,7 @@ export const renderContentApp = () => {
     portConnect({ name: ModalInstance.modal }).onDisconnect.addListener(connect);
   };
 
-  storeProxy
+  return storeProxy
     .ready()
     .then(() => {
       // Pass store to services and init
@@ -76,12 +106,4 @@ export const renderContentApp = () => {
       connect();
     })
     .then(() => render(<ContentApp store={storeProxy} cache={cache} container={container} />, app));
-
-  // Attach click listener
-  const sub = onClickEventListener();
-
-  root.addEventListener(destroyEvent, () => {
-    console.debug(`Unsubscribing to events from '${rootContainerId}'`, { version, injection });
-    sub.unsubscribe();
-  });
 };
