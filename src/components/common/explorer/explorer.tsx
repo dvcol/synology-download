@@ -157,7 +157,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
         disableSelection={disabled}
         sx={{
           overflow: 'auto',
-          height: 'calc(100% - 2.0625rem)',
+          height: 'calc(100% - 2.0625em)',
         }}
       >
         {

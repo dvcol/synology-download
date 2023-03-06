@@ -44,7 +44,12 @@ export const FormInput = <TFieldValues extends FieldValues = FieldValues, TName 
       _textFieldProps.InputProps = {
         endAdornment: (
           <InputAdornment position="end">
-            <IconButton aria-label={i18n('toggle_password_visibility')} onClick={() => setShowPassword(!showPassword)} edge="end">
+            <IconButton
+              aria-label={i18n('toggle_password_visibility')}
+              onClick={() => setShowPassword(!showPassword)}
+              edge="end"
+              sx={{ fontSize: '1.25em' }}
+            >
               {showPassword ? <VisibilityOff {...iconProps} /> : <Visibility {...iconProps} />}
             </IconButton>
           </InputAdornment>

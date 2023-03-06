@@ -1,7 +1,7 @@
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import FolderIcon from '@mui/icons-material/Folder';
-import { Collapse, ListItemIcon, ListItemText, MenuItem } from '@mui/material';
+import { Collapse, ListItemText, MenuItem } from '@mui/material';
 
 import React from 'react';
 
@@ -27,20 +27,16 @@ export const QuickMenuRecent: FC<QuickMenuRecentProps> = ({ menu, destinations, 
   const ExpandIcon = expand ? <ExpandLess /> : <ExpandMore />;
   return (
     <>
-      <MenuItem onClick={_onClick} disabled={disabled}>
-        <ListItemIcon>
-          <MuiIcon icon={menu.icon ?? MaterialIcon.download} props={{ sx: { fontSize: '1.125rem' } }} />
-        </ListItemIcon>
-        <ListItemText primary={menu.title} primaryTypographyProps={{ sx: { fontSize: '0.75rem' } }} />
+      <MenuItem onClick={_onClick} disabled={disabled} sx={{ fontSize: '1em' }}>
+        <MuiIcon icon={menu.icon ?? MaterialIcon.download} props={{ sx: { fontSize: '0.875em', width: '1.25em', height: '1.25em' } }} />
+        <ListItemText primary={menu.title} primaryTypographyProps={{ sx: { fontSize: '0.75em', ml: '0.75em' } }} />
         {isRecent && ExpandIcon}
       </MenuItem>
       <Collapse in={expand} timeout="auto" unmountOnExit>
         {destinations?.slice(0, menu?.max ?? 5)?.map((destination, i) => (
-          <MenuItem key={i} sx={{ pl: '1.5rem' }} onClick={$event => onClick($event, { menu, destination })}>
-            <ListItemIcon>
-              <FolderIcon />
-            </ListItemIcon>
-            <ListItemText primary={destination} />
+          <MenuItem key={i} sx={{ pl: '1.5em', fontSize: '1em' }} onClick={$event => onClick($event, { menu, destination })}>
+            <FolderIcon sx={{ fontSize: '0.875em', width: '1.25em', height: '1.25em' }} />
+            <ListItemText primary={destination} primaryTypographyProps={{ sx: { fontSize: '0.75em', ml: '1em' } }} />
           </MenuItem>
         ))}
       </Collapse>

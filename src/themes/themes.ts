@@ -5,16 +5,16 @@ import type { Property } from 'csstype';
 
 const scrollbar: Record<string, any> = {
   '&::-webkit-scrollbar': {
-    width: '0.25rem',
-    height: '0.25rem',
+    width: '0.25em',
+    height: '0.25em',
   },
   '&::-webkit-scrollbar-track': {
-    boxShadow: 'inset 0 0 0.375rem rgba(0,0,0,0.00)',
+    boxShadow: 'inset 0 0 0.375em rgba(0,0,0,0.00)',
   },
   '&::-webkit-scrollbar-thumb': {
     backgroundColor: 'rgb(150 150 150 / 50%)',
-    boxShadow: 'inset 0 0 0.375rem rgba(0, 0, 0, 0.1)',
-    borderRadius: '0.5rem',
+    boxShadow: 'inset 0 0 0.375em rgba(0, 0, 0, 0.1)',
+    borderRadius: '0.5em',
   },
 };
 
@@ -142,7 +142,7 @@ const common = {
     MuiBreadcrumbs: {
       styleOverrides: {
         root: scrollbar,
-        ol: { flexFlow: 'nowrap', minHeight: '2.0625rem' },
+        ol: { flexFlow: 'nowrap', minHeight: '2.0625em' },
       },
     },
     MuiTypography: {

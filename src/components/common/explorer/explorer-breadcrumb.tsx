@@ -13,26 +13,28 @@ export const ExplorerBreadCrumbs = ({
   disabled?: boolean;
 }) => {
   return (
-    <Breadcrumbs aria-label="breadcrumb" maxItems={3} sx={{ mb: '0.125rem', overflow: 'auto', fontSize: '0.875rem' }}>
+    <Breadcrumbs aria-label="breadcrumb" maxItems={3} sx={{ mb: '0.125em', overflow: 'auto', fontSize: '0.875em', minHeight: '2em' }}>
       <Button
         key={`home-${disabled}`}
         variant="text"
-        sx={{ textTransform: 'none', minWidth: '0', mr: '-0.25rem', fontSize: '0.75rem' }}
+        startIcon={<HomeIcon sx={{ width: '0.9375em', height: '0.9375em', mb: '-0.125em', mr: '-0.5em' }} />}
+        sx={{ textTransform: 'none', minWidth: '0', mr: '-0.25em', fontSize: '1em' }}
         onClick={$event => onClick && onClick($event, 0)}
         disabled={disabled}
-      >
-        <HomeIcon sx={{ width: '0.9375rem', height: '0.9375rem', mb: '-0.125rem' }} />
-      </Button>
+      />
       {crumbs?.map((folder, i) => (
         <Button
           key={`${i}-${disabled}`}
           variant="text"
-          startIcon={<FolderIcon sx={{ width: '0.9375rem', height: '0.9375rem', mb: '-0.125rem', fontSize: '0.75rem' }} />}
-          sx={{ textTransform: 'none' }}
+          startIcon={<FolderIcon sx={{ width: '0.9375em', height: '0.9375em', mb: '-0.125em' }} />}
+          sx={{ textTransform: 'none', fontSize: '1em' }}
           onClick={$event => onClick && onClick($event, i + 1)}
           disabled={disabled}
         >
-          <Typography component={'span'} sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '0.875rem' }}>
+          <Typography
+            component={'span'}
+            sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '0.875em', mt: '0.4em' }}
+          >
             {folder}
           </Typography>
         </Button>

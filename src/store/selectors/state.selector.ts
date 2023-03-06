@@ -25,6 +25,6 @@ export const isModalOpen = createSelector(getPopup, getOption, (popup: boolean, 
 
 export const getLoading = createSelector(getState, (state: StateSlice) => state.loading);
 
-export const getHistory = createSelector(getState, (state: StateSlice) => state.history ?? initialState.history);
+export const getHistory = createSelector(getState, (state: StateSlice) => state?.history ?? initialState.history);
 
 export const getDestinationsHistory = createSelector(getHistory, history => history?.destinations ?? initialState.history.destinations);

@@ -25,33 +25,33 @@ import JSX = jsx.JSX;
 export const MuiIcon = ({ icon, props }: { icon: MaterialIcon; props?: SvgIconProps }): JSX.Element => {
   switch (icon) {
     case MaterialIcon.add:
-      return <AddIcon />;
+      return <AddIcon {...props} />;
     case MaterialIcon.music:
-      return <MusicNoteIcon />;
+      return <MusicNoteIcon {...props} />;
     case MaterialIcon.musicLibrary:
-      return <LibraryMusicIcon />;
+      return <LibraryMusicIcon {...props} />;
     case MaterialIcon.video:
-      return <SmartDisplayIcon />;
+      return <SmartDisplayIcon {...props} />;
     case MaterialIcon.videoLibrary:
-      return <LibraryMusicIcon />;
+      return <LibraryMusicIcon {...props} />;
     case MaterialIcon.photo:
-      return <InsertPhotoIcon />;
+      return <InsertPhotoIcon {...props} />;
     case MaterialIcon.photoLibrary:
-      return <PhotoLibraryIcon />;
+      return <PhotoLibraryIcon {...props} />;
     case MaterialIcon.document:
-      return <FileCopyIcon />;
+      return <FileCopyIcon {...props} />;
     case MaterialIcon.game:
-      return <VideogameAssetIcon />;
+      return <VideogameAssetIcon {...props} />;
     case MaterialIcon.secure:
-      return <VpnKeyIcon />;
+      return <VpnKeyIcon {...props} />;
     case MaterialIcon.private:
-      return <VisibilityOffIcon />;
+      return <VisibilityOffIcon {...props} />;
     case MaterialIcon.server:
-      return <StorageIcon />;
+      return <StorageIcon {...props} />;
     case MaterialIcon.folder:
-      return <FolderIcon />;
+      return <FolderIcon {...props} />;
     case MaterialIcon.history:
-      return <HistoryIcon />;
+      return <HistoryIcon {...props} />;
     case MaterialIcon.download:
       return <DownloadIcon {...props} />;
     default:

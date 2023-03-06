@@ -29,7 +29,7 @@ export const Panel: FC<{ redirect?: string }> = ({ redirect }) => {
     <Container disableGutters maxWidth={false} sx={{ overflow: 'auto', height: 'calc(100vh - 3rem)' }}>
       <Routes>
         <Route path={`${AppRoute.All}`} element={<ContentPanel />} />
-        <Route path={`${AppRoute.Add}/*`} element={<TaskAdd cardProps={{ sx: { m: '0.55rem' } }} />} />
+        <Route path={`${AppRoute.Add}/*`} element={<TaskAdd cardProps={{ sx: { m: '0.50rem', fontSize: '1rem' } }} />} />
         <Route path={`${AppRoute.Settings}/*`} element={<Settings />} />
         <Route path={`${AppRoute.Config}/*`} element={<Config cardProps={{ sx: { m: '0.3rem' } }} />} />
         <Route path={`${AppRoute.About}/*`} element={<About cardProps={{ sx: { m: '0.3rem' } }} />} />

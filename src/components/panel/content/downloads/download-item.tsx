@@ -133,7 +133,7 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
         details={<DownloadDetail download={download} buttons={detailsButtons} onclick={handleClick} />}
       />
       <Dialog open={dialog} fullWidth={true} onClose={() => close()} maxWidth={'md'}>
-        <DialogContent sx={{ p: '0' }}>
+        <DialogContent sx={{ p: '0', fontSize: '1rem' }}>
           <TaskAdd form={form} withCancel={true} onFormCancel={() => close()} onFormSubmit={() => close(erase)} />
         </DialogContent>
       </Dialog>

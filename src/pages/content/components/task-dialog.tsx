@@ -91,7 +91,7 @@ export const TaskDialog: FC<{ container?: PortalProps['container'] }> = ({ conta
       fullWidth={true}
       onClose={() => onClose(true)}
       maxWidth={'md'}
-      sx={{ zIndex: `${zIndexMax} !important` }}
+      sx={{ zIndex: `${zIndexMax} !important`, fontSize: '16px' }}
     >
       <DialogContent sx={{ p: '0' }}>
         <TaskAdd form={form} withCancel={true} onFormCancel={() => onClose(true)} onFormSubmit={() => onClose(false)} />
