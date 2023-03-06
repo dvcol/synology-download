@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.21.1](https://github.com/dvcol/synology-download/compare/v1.21.0...v1.21.1) (2023-03-06)
+
+
+### Bug Fixes
+
+* **connection:** fix auto-login ([2ba8bef](https://github.com/dvcol/synology-download/commit/2ba8bef397c49cc4d40e743e2fed2f52cceece4b))
+* **content:** switch to em for relative sizing of injected components ([cd884d1](https://github.com/dvcol/synology-download/commit/cd884d1d03a2ef4d7fa5a7ec011ca0f4784c3abe))
+* **update:** fix update handler for first install ([77a81d2](https://github.com/dvcol/synology-download/commit/77a81d2a9b89a1591210a62e076dcb7dac648afd))
+
 ## [1.21.0](https://github.com/dvcol/synology-download/compare/v1.18.2...v1.21.0) (2023-03-05)
 
 
