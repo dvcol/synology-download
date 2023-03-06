@@ -6,7 +6,7 @@ import { App } from '@src/components';
 import { ModalInstance } from '@src/models';
 import { DownloadService, NotificationService, PollingService, QueryService } from '@src/services';
 import { storeProxy } from '@src/store';
-import { portConnect } from '@src/utils';
+import { portConnect, purgeEmotionContext } from '@src/utils';
 
 storeProxy
   .ready()
@@ -16,8 +16,12 @@ storeProxy
     QueryService.init(storeProxy, true);
     NotificationService.init(storeProxy, true);
     PollingService.init(storeProxy, true);
+
     // Register as open
     portConnect({ name: ModalInstance.popup });
+
+    // purge emotion if we are in hot reload
+    purgeEmotionContext();
   })
   .then(() => render(<App store={storeProxy} />, window.document.querySelector('#synology-download-popup-app-container')));
 

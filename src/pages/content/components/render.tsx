@@ -11,7 +11,7 @@ import { ContentApp } from '@src/pages/content/components';
 import { onClickEventListener } from '@src/pages/content/modules';
 import { NotificationService, QueryService } from '@src/services';
 import { storeProxy } from '@src/store';
-import { portConnect } from '@src/utils';
+import { portConnect, purgeEmotionContext } from '@src/utils';
 
 const { name, version } = getManifest();
 const injection = new Date().toISOString();
@@ -81,6 +81,7 @@ export const renderContentApp = async (): Promise<void> => {
   root.addEventListener(onDestroyEvent, () => {
     console.debug(`Unsubscribing to events from '${rootContainerId}'.`, { version, injection });
     sub.unsubscribe();
+    purgeEmotionContext();
     root.dispatchEvent(new CustomEvent(destroyedEvent));
   });
 

@@ -1,4 +1,5 @@
 export * from './compare.utils';
+export * from './dev.utils';
 export * from './format.utils';
 export * from './chrome';
 export * from './hooks.utils';
