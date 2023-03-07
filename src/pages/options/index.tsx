@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 
 import { App } from '@src/components';
 import { AppRoute, ModalInstance } from '@src/models';
-import { DownloadService, NotificationService, PollingService, QueryService } from '@src/services';
+import { DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { store$, storeProxy } from '@src/store';
 import { getOption } from '@src/store/selectors';
 import { portConnect } from '@src/utils';
@@ -14,6 +14,7 @@ const initOptionsApp = async () => {
   await storeProxy.ready();
 
   // Pass store to service and init
+  LoggerService.init(storeProxy);
   DownloadService.init(storeProxy, true);
   QueryService.init(storeProxy, true);
   NotificationService.init(storeProxy, true);

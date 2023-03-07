@@ -9,8 +9,8 @@ import { getManifest } from '@dvcol/web-extension-utils';
 import { ModalInstance } from '@src/models';
 import { ContentApp } from '@src/pages/content/components';
 import { onClickEventListener } from '@src/pages/content/modules';
-import { NotificationService, QueryService } from '@src/services';
-import { storeProxy } from '@src/store';
+import { LoggerService, NotificationService, QueryService } from '@src/services';
+import { store, storeProxy } from '@src/store';
 import { portConnect } from '@src/utils';
 
 const { name, version } = getManifest();
@@ -100,6 +100,7 @@ export const renderContentApp = async (): Promise<void> => {
     .ready()
     .then(() => {
       // Pass store to services and init
+      LoggerService.init(store);
       QueryService.init(storeProxy, true);
       NotificationService.init(storeProxy, true);
       // Register as open

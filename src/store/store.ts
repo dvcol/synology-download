@@ -41,8 +41,8 @@ if (process.env.NODE_ENV === 'development' || process.env.DEVTOOL === 'true') {
 }
 export const store: Store = configureStore(options);
 
-export const store$ = <T>(_store: StoreOrProxy, getter: (state: StoreState) => any = (state: StoreState) => state) => {
-  const _store$ = new BehaviorSubject<RootSlice>(_store.getState());
+export const store$ = <R, T = RootSlice>(_store: StoreOrProxy, getter: (state: T) => R) => {
+  const _store$ = new BehaviorSubject<T>(_store.getState());
   const unsubscribe = _store.subscribe(() => _store$.next(_store.getState()));
-  return _store$.pipe(map<any, T>(getter), distinctUntilChanged(), finalize(unsubscribe));
+  return _store$.pipe(map<T, R>(getter), distinctUntilChanged(), finalize(unsubscribe));
 };
