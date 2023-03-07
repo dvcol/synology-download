@@ -30,11 +30,15 @@ export const Settings = () => {
   const [tab, setTab] = React.useState<string>(SettingHeader.connection);
   const handleChange = (event: React.SyntheticEvent, newValue: SettingHeader) => setTab(newValue);
 
-  const tabs = [
+  const tabs: { label: SettingHeader; anchor?: string; links: string[] }[] = [
     { label: SettingHeader.connection, links: [ConnectionHeader.credential, ConnectionHeader.polling] },
     {
+      label: SettingHeader.downloads,
+      links: [InterfaceHeader.downloads],
+    },
+    {
       label: SettingHeader.interface,
-      links: [InterfaceHeader.global, InterfaceHeader.downloads, InterfaceHeader.tabs, InterfaceHeader.quickMenu, InterfaceHeader.contextMenu],
+      links: [InterfaceHeader.global, InterfaceHeader.tabs, InterfaceHeader.quickMenu, InterfaceHeader.contextMenu],
     },
     {
       label: SettingHeader.notification,
@@ -59,14 +63,14 @@ export const Settings = () => {
             overflow: 'auto',
           }}
         >
-          {tabs.map(({ label, links }, i) => [
+          {tabs.map(({ label, anchor, links }, i) => [
             <Tab
               label={i18n(label)}
               key={`${i}-${label}`}
               value={label}
               disableFocusRipple={true}
               component={Link}
-              to={`${label}#${label}`}
+              to={`${label}#${anchor ?? label}`}
               sx={{
                 fontWeight: '700',
                 fontSize: '0.75rem',
@@ -102,12 +106,20 @@ export const Settings = () => {
             }
           />
           <Route
+            path={SettingHeader.downloads}
+            element={
+              <React.Fragment>
+                <SettingsHeader label={SettingHeader.downloads} />
+                <SettingsDownloads />
+              </React.Fragment>
+            }
+          />
+          <Route
             path={SettingHeader.interface}
             element={
               <React.Fragment>
                 <SettingsHeader label={SettingHeader.interface} />
                 <SettingsGlobal />
-                <SettingsDownloads />
                 <SettingsTabs />
                 <SettingsQuickMenus />
                 <SettingsContextMenus />

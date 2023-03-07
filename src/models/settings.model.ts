@@ -17,6 +17,7 @@ import type { OptionsObject } from 'notistack';
 
 export enum SettingHeader {
   connection = 'connection',
+  downloads = 'downloads',
   interface = 'interface',
   notification = 'notification',
 }

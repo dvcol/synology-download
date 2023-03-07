@@ -9,6 +9,13 @@
     "message": "Polling"
   },
 
+  "panel__settings__downloads": {
+    "message": "Downloads"
+  },
+  "panel__settings__downloads_downloads": {
+    "message": "Downloads"
+  },
+
   "panel__settings__interface": {
     "message": "Interface"
   },
