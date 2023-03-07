@@ -36,7 +36,7 @@ export const SettingsCredentials = () => {
     watch,
     setValue,
     getValues,
-    formState: { isValid, isDirty, isSubmitted },
+    formState: { isValid, isDirty, isSubmitted, dirtyFields },
   } = useForm<Connection>({
     mode: 'onChange',
     defaultValues: {
@@ -213,12 +213,14 @@ export const SettingsCredentials = () => {
           subheaderTypographyProps={{ variant: 'subtitle2' }}
           action={
             <FormInput
-              controllerProps={{ name: 'type', control, rules: rules.protocol }}
+              controllerProps={{ name: 'type', control, rules: rules.type }}
               textFieldProps={{
                 select: true,
                 label: i18n('type'),
                 sx: { flex: '1 0 8rem' },
-                onChange: ({ target: { value } }) => value === ConnectionType.quickConnect && setValue('protocol', Protocol.https),
+                onChange: ({ target: { value } }) => {
+                  if (value === ConnectionType.quickConnect) setValue('protocol', Protocol.https);
+                },
               }}
             >
               {Object.values(ConnectionType)?.map(_type => (
@@ -260,6 +262,9 @@ export const SettingsCredentials = () => {
                 label: i18n('protocol'),
                 sx: { flex: '0 0 6rem' },
                 disabled: isQC,
+                onChange: ({ target: { value } }) => {
+                  if (!dirtyFields.port) setValue('port', value === Protocol.http ? 5000 : 5001);
+                },
               }}
             >
               {Object.values(Protocol)?.map(_type => (

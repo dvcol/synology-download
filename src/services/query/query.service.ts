@@ -233,9 +233,9 @@ export class QueryService {
     // Attempt to Restore login
     return QueryService.login().pipe(
       tap({
-        next: () => console.debug('Auto-login attempts successful'),
+        next: () => console.debug('Auto-login attempt successful'),
         error: err => {
-          console.error('Auto-login failed.', err);
+          console.warn('Auto-login failed.', err);
 
           if (notify) {
             NotificationService.error({
