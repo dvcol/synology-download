@@ -119,12 +119,14 @@ export class QueryService {
     <T>(source: Observable<T>) =>
       source.pipe(before(() => this.readyCheck(logged, ready)));
 
-  private static loadingOperator = <T>(source: Observable<T>) =>
-    source.pipe(
-      this.readyCheckOperator(),
-      before(() => this.store.dispatch(addLoading())),
-      finalize(() => this.store.dispatch(removeLoading())),
-    );
+  private static loadingOperator =
+    (logged?: boolean, ready?: boolean) =>
+    <T>(source: Observable<T>) =>
+      source.pipe(
+        this.readyCheckOperator(logged, ready),
+        before(() => this.store.dispatch(addLoading())),
+        finalize(() => this.store.dispatch(removeLoading())),
+      );
 
   static info(baseUrl?: string, doNotProxy?: boolean): Observable<InfoResponse> {
     return this.infoClient.info(baseUrl, { doNotProxy }).pipe(this.readyCheckOperator(false, !baseUrl?.length));
@@ -232,6 +234,7 @@ export class QueryService {
 
     // Attempt to Restore login
     return QueryService.login().pipe(
+      this.loadingOperator(false, true),
       tap({
         next: () => console.debug('Auto-login attempt successful'),
         error: err => {
@@ -289,7 +292,7 @@ export class QueryService {
 
   static getStatistic(): Observable<DownloadStationStatistic> {
     return this.downloadClient.getStatistic().pipe(
-      this.loadingOperator,
+      this.loadingOperator(),
       tap(stats => {
         this.store.dispatch(setTaskStats(stats));
       }),
@@ -300,7 +303,7 @@ export class QueryService {
     // snapshot task before call
     const extract: ContentStatusTypeId<Task['id']> = getTasksIdsByStatusType(this.store.getState());
     return this.downloadClient.listTasks(0, -1, [TaskListOption.detail, TaskListOption.file, TaskListOption.transfer]).pipe(
-      this.loadingOperator,
+      this.loadingOperator(),
       tap(({ tasks }) => {
         const _tasks = tasks?.map(mapToTask);
         // notify if we have tasks
@@ -322,7 +325,7 @@ export class QueryService {
 
   static resumeTask(id: string | string[]): Observable<CommonResponse[]> {
     return this.downloadClient.resumeTask(id).pipe(
-      this.loadingOperator,
+      this.loadingOperator(),
       tap(() => this.listTasks().subscribe()),
     );
   }
@@ -333,7 +336,7 @@ export class QueryService {
 
   static pauseTask(id: string | string[]): Observable<CommonResponse[]> {
     return this.downloadClient.pauseTask(id).pipe(
-      this.loadingOperator,
+      this.loadingOperator(),
       tap(() => this.listTasks().subscribe()),
     );
   }
@@ -344,7 +347,7 @@ export class QueryService {
 
   static createTask(uri: string, source?: string, destination?: string, username?: string, password?: string, unzip?: string): Observable<void> {
     return this.downloadClient.createTask(uri, destination, username, password, unzip).pipe(
-      this.loadingOperator,
+      this.loadingOperator(),
       tap({
         complete: () => {
           this.listTasks().subscribe();
@@ -364,14 +367,14 @@ export class QueryService {
 
   static editTask(id: string | string[], destination: string): Observable<CommonResponse[]> {
     return this.downloadClient.editTask(id, destination).pipe(
-      this.loadingOperator,
+      this.loadingOperator(),
       tap(() => this.listTasks().subscribe()),
     );
   }
 
   static deleteTask(id: string | string[], force = false): Observable<CommonResponse[]> {
     return this.downloadClient.deleteTask(id, force).pipe(
-      this.loadingOperator,
+      this.loadingOperator(),
       tap(() => {
         this.store.dispatch(spliceTasks(id));
         this.listTasks().subscribe();
