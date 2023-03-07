@@ -6,4 +6,5 @@ export const enum AppLinks {
   Issues = 'https://github.com/dvcol/synology-download/issues',
   Github = 'https://github.com/dvcol/synology-download',
   Paypal = 'https://paypal.me/dvcol/5',
+  HowToCertificate = 'https://kb.synology.com/en-my/DSM/tutorial/Why_did_I_see_a_not_secure_warning_in_the_browser_when_connecting_to_my_Synology_product',
 }

@@ -13,11 +13,11 @@ import { useI18n } from '@dvcol/web-extension-utils';
 
 import { ButtonWithConfirm, FormCheckbox, FormInput, FormSwitch } from '@src/components';
 import type { Connection, Credentials, InfoResponse, LoginResponse } from '@src/models';
-import { ColorLevel, ColorLevelMap, CommonAPI, ConnectionHeader, ConnectionType, defaultConnection, Protocol } from '@src/models';
+import { AppLinks, ColorLevel, ColorLevelMap, CommonAPI, ConnectionHeader, ConnectionType, defaultConnection, Protocol } from '@src/models';
 import { NotificationService, PollingService, QueryService } from '@src/services';
 import { syncConnection } from '@src/store/actions';
 import { getConnection, getLogged, urlReducer } from '@src/store/selectors';
-import { before, useDebounceObservable } from '@src/utils';
+import { before, createTab, useDebounceObservable } from '@src/utils';
 
 import type { RegisterOptions } from 'react-hook-form';
 import type { Observable } from 'rxjs';
@@ -56,6 +56,7 @@ export const SettingsCredentials = () => {
   const isQC = type === ConnectionType.quickConnect;
   const is2FA = type === ConnectionType.twoFactor;
   const port = watch('port');
+  const protocol = watch('protocol');
 
   const rules: Partial<Record<keyof Omit<Connection, 'logged' | 'rememberMe'>, RegisterOptions>> = {
     type: { required: { value: true, message: i18n('required', 'common', 'error') } },
@@ -322,11 +323,40 @@ export const SettingsCredentials = () => {
           </Grid>
         </Card>
 
+        <Collapse in={protocol === Protocol.https} unmountOnExit={true}>
+          <Typography color={ColorLevelMap[ColorLevel.primary]} variant={'subtitle2'} sx={{ m: '0', fontSize: '0.7rem' }}>
+            {i18n('https_certificate')}
+          </Typography>
+
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{
+              flex: '1 1 auto',
+              justifyContent: 'space-around',
+              p: '1rem',
+            }}
+          >
+            <Button variant="outlined" color={ColorLevel.primary} onClick={() => createTab({ url: AppLinks.HowToCertificate })}>
+              {i18n('https_how_to')}
+            </Button>
+            <Button variant="outlined" color={ColorLevel.warning} onClick={() => createTab({ url: urlReducer(getValues()) })}>
+              {i18n('https_link')}
+            </Button>
+          </Stack>
+
+          <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
+            {i18n('https_override')}
+          </Typography>
+          <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
+            {i18n('https_auto_login')}
+          </Typography>
+        </Collapse>
         <Collapse in={is2FA} unmountOnExit={true}>
           <CardHeader
             title={i18n('2fa__title')}
             subheader={i18n('2fa__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
+            titleTypographyProps={{ variant: 'subtitle2', mb: '0.75rem' }}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
             action={
               <FormCheckbox
