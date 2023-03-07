@@ -137,6 +137,9 @@ const common = {
           alignSelf: 'center',
           display: 'contents',
         },
+        root: {
+          justifyContent: 'space-between',
+        },
       },
     },
     MuiBreadcrumbs: {

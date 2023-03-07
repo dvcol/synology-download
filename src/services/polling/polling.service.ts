@@ -60,6 +60,8 @@ export class PollingService {
         store$(this.store, getSettingsDownloadsEnabled),
       ]).subscribe(([enabled, logged, download]) => (enabled && (download || logged) ? this.start() : this.stop()));
     }
+
+    console.debug('Polling service initialized', { isProxy });
   }
 
   static start(): void {

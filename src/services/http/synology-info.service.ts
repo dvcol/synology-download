@@ -15,16 +15,21 @@ export class SynologyInfoService extends SynologyService {
   _do<T>(
     method: HttpMethod,
     params: HttpParameters,
-    baseUrl?: string,
-    version = '1',
-    api = CommonAPI.Info,
-    endpoint = Endpoint.Query,
+    options: { baseUrl?: string; version?: string; api?: CommonAPI; endpoint?: Endpoint; doNotProxy?: boolean } = {},
   ): Observable<T> {
-    return super.do<T>(method, params, version, api, endpoint, baseUrl);
+    const { baseUrl, version, api, endpoint, doNotProxy } = {
+      version: '1',
+      api: CommonAPI.Info,
+      endpoint: Endpoint.Query,
+      doNotProxy: false,
+      ...options,
+    };
+    return super.do<T>(method, params, version, api, endpoint, baseUrl, doNotProxy);
   }
 
-  info(baseUrl?: string, query: string[] = ['ALL']): Observable<InfoResponse> {
+  info(baseUrl?: string, options: { query?: string[]; doNotProxy?: boolean } = {}): Observable<InfoResponse> {
+    const { query, doNotProxy } = { query: ['ALL'], doNotProxy: false, ...options };
     const params: HttpParameters = { method: InfoMethod.query, query: query?.join(',') };
-    return this._do<InfoResponse>(HttpMethod.GET, params, baseUrl);
+    return this._do<InfoResponse>(HttpMethod.GET, params, { baseUrl, doNotProxy });
   }
 }

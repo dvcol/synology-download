@@ -114,10 +114,15 @@ export const CommonErrorCode = {
 
 export const AuthErrorCode = {
   400: 'No such account or incorrect password',
-  401: 'Account disabled',
-  402: 'Permission denied',
-  403: '2-step verification code required',
-  404: 'Failed to authenticate 2-step verification code',
+  401: 'Account disabled.',
+  402: 'Permission denied.',
+  403: '2-step verification code required.',
+  404: 'Failed to authenticate 2-step verification code.',
+  406: 'Enforce to authenticate with 2-factor authentication code.',
+  407: 'Blocked IP source.',
+  408: 'Expired password cannot change.',
+  409: 'Expired password.',
+  410: 'Password must be changed.',
 };
 
 export const TaskErrorCode = {
@@ -186,6 +191,10 @@ export interface LoginRequest {
 export interface LoginResponse {
   sid: string;
   did?: string;
+  device_id?: string;
+  ik_message?: string;
+  is_portal_port?: boolean;
+  synotoken?: string;
 }
 
 export interface CommonResponse {

@@ -3,16 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { Connection, ContentTab, ContextMenu, Downloads, Global, Notifications, Polling, QuickMenu, SettingsSlice } from '@src/models';
 import { defaultSettings, SettingsSliceName } from '@src/models';
 
-import {
-  addTo,
-  removeFrom,
-  setBadgeReducer,
-  setReducer,
-  syncConnectionReducer,
-  syncNestedReducer,
-  syncReducer,
-  syncRememberMeReducer,
-} from '../reducers/settings.reducer';
+import { addTo, removeFrom, setBadgeReducer, setReducer, syncConnectionReducer, syncNestedReducer, syncReducer } from '../reducers/settings.reducer';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
@@ -23,7 +14,6 @@ interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   syncSettings: CaseReducer<S, PayloadAction<Partial<S>>>;
   resetSettings: CaseReducer<S>;
   syncConnection: CaseReducer<S, PayloadAction<Partial<Connection>>>;
-  syncRememberMe: CaseReducer<S, PayloadAction<boolean>>;
   syncPolling: CaseReducer<S, PayloadAction<Partial<Polling>>>;
   syncNotifications: CaseReducer<S, PayloadAction<Partial<Notifications>>>;
   setContextMenus: CaseReducer<S, PayloadAction<ContextMenu[]>>;
@@ -50,7 +40,6 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
     syncSettings: syncReducer,
     resetSettings: oldSettings => syncReducer(oldSettings, { type: 'sync', payload: defaultSettings }),
     syncConnection: syncConnectionReducer,
-    syncRememberMe: (oldSettings, action) => syncRememberMeReducer(oldSettings, action),
     syncPolling: (oldSettings, { payload }) => syncNestedReducer<Polling>(oldSettings, payload, 'polling'),
     syncNotifications: (oldSettings, action) => setBadgeReducer(oldSettings, action),
     setContextMenus: (oldSettings, { payload: menus }): SettingsSlice =>

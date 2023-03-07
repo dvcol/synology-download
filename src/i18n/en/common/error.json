@@ -44,5 +44,27 @@
   },
   "common__error": {
     "message": "Error"
+  },
+  "common__error__manual_login_required": {
+    "message": "Manual login is required."
+  },
+  "common__error__auto_login": {
+    "message": "Auto-login failed with error:\n $1"
+  },
+
+  "common__error__required": {
+    "message": "Required value missing"
+  },
+  "common__error__min": {
+    "message": "Minimum value is $1"
+  },
+  "common__error__max": {
+    "message": "Maximum value is $1"
+  },
+  "common__error__min_short": {
+    "message": "min is $1"
+  },
+  "common__error__max_short": {
+    "message": "max is $1"
   }
 }

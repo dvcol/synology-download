@@ -26,7 +26,10 @@ export class SynologyService extends BaseHttpService {
         this.query(...(payload?.args ?? []))
           .pipe(
             map(response => ({ success: true, payload: response })),
-            catchError(error => of({ success: false, error })),
+            catchError(error => {
+              console.error('Forwarded method failed.', { payload, error });
+              return of({ success: false, error: error?.toString() });
+            }),
           )
           .subscribe(response => sendResponse(response));
       }
@@ -66,8 +69,16 @@ export class SynologyService extends BaseHttpService {
     return sendMessage<SynologyQueryPayload, T>({ type: ChromeMessageType.query, payload: { id: this.name, args } });
   }
 
-  do<T>(method: HttpMethod, params: HttpParameters, version: string, api: Api, endpoint: Endpoint, base?: string): Observable<T> {
-    return (this.isProxy ? this.forward : this.query)
+  do<T>(
+    method: HttpMethod,
+    params: HttpParameters,
+    version: string,
+    api: Api,
+    endpoint: Endpoint,
+    base?: string,
+    doNotProxy?: boolean,
+  ): Observable<T> {
+    return (!doNotProxy && this.isProxy ? this.forward : this.query)
       .bind(this)<T>(method, params, version, api, endpoint, base)
       .pipe(
         map(response => {
