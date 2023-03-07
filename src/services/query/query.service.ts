@@ -1,4 +1,4 @@
-import { EMPTY, finalize, tap } from 'rxjs';
+import { catchError, EMPTY, finalize, NEVER, tap } from 'rxjs';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
@@ -15,6 +15,8 @@ import type {
   LoginRequest,
   LoginResponse,
   NewFolderList,
+  SettingsSlice,
+  StateSlice,
   StoreOrProxy,
   Task,
   TaskList,
@@ -43,10 +45,13 @@ import {
   getNotificationsBannerFailedEnabled,
   getNotificationsBannerFinishedEnabled,
   getPausedTasksIdsByActionScope,
+  getSettings,
   getSid,
+  getState,
   getTasksIdsByActionScope,
   getTasksIdsByStatusType,
   getUrl,
+  urlReducer,
 } from '@src/store/selectors';
 import { before } from '@src/utils';
 
@@ -77,6 +82,8 @@ export class QueryService {
     store$<string>(store, getSid).subscribe(sid => this.setSid(sid));
 
     this.store.dispatch(resetLoading());
+
+    console.debug('Query service initialized', { isProxy });
   }
 
   static setBaseUrl(baseUrl: string): void {
@@ -119,11 +126,14 @@ export class QueryService {
       finalize(() => this.store.dispatch(removeLoading())),
     );
 
-  static info(baseUrl?: string): Observable<InfoResponse> {
-    return this.infoClient.info(baseUrl).pipe(this.readyCheckOperator(false, !baseUrl?.length));
+  static info(baseUrl?: string, doNotProxy?: boolean): Observable<InfoResponse> {
+    return this.infoClient.info(baseUrl, { doNotProxy }).pipe(this.readyCheckOperator(false, !baseUrl?.length));
   }
 
-  private static doLogin(credentials = getCredentials(this.store.getState()), baseUrl?: string): Observable<LoginResponse> {
+  private static doLogin(
+    credentials = getCredentials(this.store.getState()),
+    { baseUrl, doNotProxy }: { baseUrl?: string; doNotProxy?: boolean },
+  ): Observable<LoginResponse> {
     const { username, password, authVersion } = credentials;
     if (!username || !password) throw new Error(i18n({ key: 'login_password_required', substitutions: [username ?? '', password ?? ''] }));
 
@@ -132,11 +142,11 @@ export class QueryService {
     if (ConnectionType.twoFactor === credentials?.type) {
       request = this.twoFactorRequest(request, credentials);
     }
-    return this.authClient.login(request, String(authVersion ?? 1)).pipe(this.readyCheckOperator(false, !baseUrl?.length));
+    return this.authClient.login(request, authVersion?.toString(), doNotProxy).pipe(this.readyCheckOperator(false, !baseUrl?.length));
   }
 
   private static twoFactorRequest(request: LoginRequest, { otp_code, enable_device_token, device_name, device_id }: Credentials): LoginRequest {
-    if (!otp_code || (!!enable_device_token && !device_name)) {
+    if ((!enable_device_token && !otp_code) || (!!enable_device_token && !device_name)) {
       throw new Error(i18n({ key: 'otp_code_device_required', substitutions: [otp_code ?? '', device_name ?? ''] }));
     }
     // If we enable remember device
@@ -150,12 +160,12 @@ export class QueryService {
     return { ...request, otp_code };
   }
 
-  static loginTest(credentials?: Credentials, baseUrl?: string): Observable<LoginResponse> {
-    return this.doLogin({ ...credentials, enable_device_token: false }, baseUrl);
+  static loginTest(credentials?: Credentials, baseUrl?: string, doNotProxy = true): Observable<LoginResponse> {
+    return this.doLogin({ ...credentials, enable_device_token: false }, { baseUrl, doNotProxy });
   }
 
-  static login(credentials?: Credentials, baseUrl?: string): Observable<LoginResponse> {
-    return this.doLogin(credentials, baseUrl).pipe(
+  static login(credentials?: Credentials, baseUrl?: string, doNotProxy = true): Observable<LoginResponse> {
+    return this.doLogin(credentials, { baseUrl, doNotProxy }).pipe(
       tap({
         next: res => {
           this.store.dispatch(setSid(res?.sid));
@@ -175,6 +185,65 @@ export class QueryService {
       tap(() => {
         this.store.dispatch(setSid(undefined));
         this.store.dispatch(setLogged(false));
+      }),
+    );
+  }
+
+  /**
+   * Returns true if we should attempt an auto-login
+   * @param state the state slice
+   * @param settings the settings slice
+   */
+  private static shouldAutoLogin = (state: StateSlice, settings: SettingsSlice) => {
+    // If missing username
+    if (!settings?.connection?.username) return false;
+    // If missing password
+    if (!settings?.connection?.password) return false;
+    // If remember me is not enabled
+    if (!settings?.connection?.rememberMe) return false;
+    // If no auto-login and no previous logged state
+    if (!settings?.connection?.autoLogin) return false;
+    // If device token for 2FA && no device id saved
+    return !(
+      settings?.connection?.type === ConnectionType.twoFactor &&
+      (!settings?.connection.enable_device_token || !settings?.connection?.device_id)
+    );
+  };
+
+  /**
+   * If the application is not currently logged-in and we have the appropriate settings, we attempt a login.
+   * If any condition is not respected, we return an empty observable that completes without emitting
+   *
+   * @param state an optional state slice
+   * @param settings an optional settings slice
+   * @param notify if we should dispatch a notification or not
+   */
+  static autoLogin(
+    state: StateSlice = getState(this.store.getState()),
+    settings: SettingsSlice = getSettings(this.store.getState()),
+    notify = true,
+  ): Observable<LoginResponse | void> {
+    // If we are already logged-in we ignore
+    if (state?.logged) return NEVER;
+
+    // If remember me is not enabled
+    if (!this.shouldAutoLogin(state, settings)) return NEVER;
+
+    // Attempt to Restore login
+    console.debug('Attempting re-login', state);
+    return QueryService.login().pipe(
+      catchError(err => {
+        console.error('Auto-login failed.', err);
+
+        if (notify) {
+          NotificationService.error({
+            title: i18n('manual_login_required'),
+            message: i18n({ key: `auto_login`, substitutions: [err?.message ?? err?.name ?? ''] }),
+            contextMessage: urlReducer(settings.connection),
+          });
+        }
+
+        throw err;
       }),
     );
   }
@@ -283,7 +352,7 @@ export class QueryService {
         },
         error: error => {
           NotificationService.error({
-            title: i18n('create_task_fail'),
+            title: i18n('auto-login'),
             message: error?.message ?? error?.name ?? '',
             contextMessage: source,
           });

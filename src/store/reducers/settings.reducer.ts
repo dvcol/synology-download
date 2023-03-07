@@ -1,7 +1,7 @@
-import { syncGet, syncSet } from '@dvcol/web-extension-utils';
+import { syncSet } from '@dvcol/web-extension-utils';
 
 import type { Connection, ContentTab, ContextMenu, Notifications, QuickMenu, SettingsSlice } from '@src/models';
-import { SettingsSliceName } from '@src/models';
+import { defaultConnection, SettingsSliceName } from '@src/models';
 import { setBadgeBackgroundColor } from '@src/utils';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
@@ -19,17 +19,6 @@ export const syncNestedReducer = <T>(oldSettings: SettingsSlice, payload: Partia
   const newSettings = setNestedReducer(oldSettings, payload, name);
   syncSettings(newSettings);
   return newSettings;
-};
-
-export const syncRememberMeReducer = (oldSettings: SettingsSlice, { payload: rememberMe }: PayloadAction<boolean>): SettingsSlice => {
-  const setSettings = { ...oldSettings, connection: { ...oldSettings.connection, rememberMe } };
-  // TODO : move to thunk ?
-  syncGet<SettingsSlice>(SettingsSliceName).subscribe(settings => {
-    const syncedSettings = { ...settings, connection: { ...settings?.connection, rememberMe } };
-    syncSettings(syncedSettings);
-  });
-
-  return setSettings;
 };
 
 export const setBadgeReducer = <T extends Notifications>(oldSettings: SettingsSlice, { payload }: PayloadAction<Partial<T>>): SettingsSlice => {
@@ -53,8 +42,9 @@ export const syncReducer = (oldSettings: SettingsSlice, action: PayloadAction<Pa
 };
 
 export const syncConnectionReducer = (oldSettings: SettingsSlice, { payload }: PayloadAction<Partial<Connection>>): SettingsSlice => {
-  if (payload.rememberMe) return syncNestedReducer<Connection>(oldSettings, payload, 'connection');
-  return setNestedReducer<Connection>(oldSettings, payload, 'connection');
+  const newSettings = setNestedReducer(oldSettings, payload, 'connection');
+  syncSettings(payload?.rememberMe ? newSettings : { ...newSettings, connection: { ...defaultConnection, rememberMe: payload?.rememberMe } });
+  return newSettings;
 };
 
 type Payloads = ContentTab | ContextMenu | QuickMenu;

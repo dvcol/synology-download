@@ -9,19 +9,27 @@ import { storeProxy } from '@src/store';
 import { portConnect } from '@src/utils';
 
 // TODO custom UI for options
-storeProxy
-  .ready()
-  .then(() => {
-    // Pass store to service and init
-    DownloadService.init(storeProxy, true);
-    QueryService.init(storeProxy, true);
-    NotificationService.init(storeProxy, true);
-    PollingService.init(storeProxy, true);
-    // Register as open
-    portConnect({ name: ModalInstance.option });
-  })
-  .then(() =>
-    render(<App store={storeProxy} redirect={AppRoute.Settings} />, window.document.querySelector('#synology-download-options-app-container')),
-  );
+const initOptionsApp = async () => {
+  await storeProxy.ready();
+
+  // Pass store to service and init
+  DownloadService.init(storeProxy, true);
+  QueryService.init(storeProxy, true);
+  NotificationService.init(storeProxy, true);
+  PollingService.init(storeProxy, true);
+
+  // Register as open
+  portConnect({ name: ModalInstance.option });
+
+  // If service is not initialized with url
+  if (QueryService.isReady) QueryService.autoLogin().subscribe();
+
+  // Render the app
+  render(<App store={storeProxy} redirect={AppRoute.Settings} />, window.document.querySelector('#synology-download-options-app-container'));
+};
+
+initOptionsApp()
+  .then(() => console.debug('Options app initialised.'))
+  .catch(err => console.debug('Options app failed to initialised.', err));
 
 if (module.hot) module.hot.accept();

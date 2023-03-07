@@ -1,7 +1,8 @@
+import { catchError, NEVER, switchMap, tap } from 'rxjs';
+
 import { localGet } from '@dvcol/web-extension-utils';
 
 import type { SettingsSlice, StateSlice } from '@src/models';
-import { ConnectionType } from '@src/models';
 import { QueryService } from '@src/services';
 import { restoreState } from '@src/store/actions';
 import { stateSlice } from '@src/store/slices/state.slice';
@@ -10,37 +11,38 @@ import type { Store } from 'redux';
 
 /**
  * Restore Login state from settings
- * @param settings restored setting slice
+ * @param state the restored state slice
+ * @param settings the restored settings slice
  */
-export const restoreLoginSate = (settings: SettingsSlice) =>
-  localGet<StateSlice>(stateSlice.name).subscribe(state => {
-    console.debug('restoring logged state from chrome storage', state);
-    // If service is not initialized with url
-    if (!QueryService.isReady) return;
-    // If remember me is not enabled
-    if (!settings?.connection?.rememberMe) return;
-    // If no auto-login and no previous logged state
-    if (!state?.logged && !settings?.connection?.autoLogin) return;
-    // If device token for 2FA && no device id saved
-    if (settings?.connection?.type === ConnectionType.twoFactor && (!settings?.connection.enable_device_token || !settings?.connection.device_id))
-      return;
+export const restoreLoginSate = (state?: StateSlice, settings?: SettingsSlice) => {
+  // If service is not initialized with url
+  if (!QueryService.isReady) return NEVER;
 
-    // If missing username
-    if (!settings?.connection?.username) return;
-    // If missing password
-    if (!settings?.connection?.password) return;
-
-    // Attempt to Restore login
-    QueryService.login().subscribe();
-  });
+  // Attempt to Restore login
+  return QueryService.autoLogin(state, settings, false).pipe(
+    tap(() => console.debug('Login state restored.')),
+    catchError(() => NEVER),
+  );
+};
 
 /**
  * Restore state from local storage
  * @param store redux store instance
  */
 export const restoreLocalSate = (store: Store) =>
-  localGet<StateSlice>(stateSlice.name).subscribe(state => {
-    console.debug('restoring state from chrome storage', state);
-    // restore saved state
-    store.dispatch(restoreState(state));
-  });
+  localGet<StateSlice>(stateSlice.name).pipe(
+    switchMap(state => {
+      console.debug('restoring state from chrome storage', state);
+
+      // restore saved state while removing logged state
+      store.dispatch(restoreState({ ...state, logged: false }));
+
+      // restore login state based on settings
+      return restoreLoginSate();
+    }),
+    tap(() => console.debug('Local state restored.')),
+    catchError(err => {
+      console.error('local state failed to restore.', err);
+      return NEVER;
+    }),
+  );

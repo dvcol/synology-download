@@ -63,7 +63,14 @@ export interface Credentials {
 }
 
 export const defaultCredentials: Credentials = {
+  type: ConnectionType.local,
+  authVersion: 3,
   username: 'admin',
+  password: '',
+  otp_code: '',
+  enable_device_token: false,
+  device_name: 'Download Station Client',
+  device_id: '',
 };
 
 export interface Connection extends Credentials {
@@ -76,8 +83,6 @@ export interface Connection extends Credentials {
 
 export const defaultConnection: Connection = {
   ...defaultCredentials,
-  type: ConnectionType.local,
-  authVersion: 1,
   rememberMe: true,
   autoLogin: true,
   protocol: Protocol.http,

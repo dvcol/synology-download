@@ -1,4 +1,5 @@
-import { Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, Grid, LinearProgress, MenuItem, Stack, Typography } from '@mui/material';
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
+import { Button, Card, CardActions, CardContent, CardHeader, Collapse, Grid, LinearProgress, MenuItem, Stack, Typography } from '@mui/material';
 
 import React, { useEffect, useState } from 'react';
 
@@ -10,15 +11,14 @@ import { finalize, lastValueFrom } from 'rxjs';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
-import { FormCheckbox, FormInput, FormSwitch } from '@src/components';
+import { ButtonWithConfirm, FormCheckbox, FormInput, FormSwitch } from '@src/components';
 import type { Connection, Credentials, InfoResponse, LoginResponse } from '@src/models';
 import { ColorLevel, ColorLevelMap, CommonAPI, ConnectionHeader, ConnectionType, defaultConnection, Protocol } from '@src/models';
 import { NotificationService, PollingService, QueryService } from '@src/services';
-import { syncConnection, syncRememberMe } from '@src/store/actions';
+import { syncConnection } from '@src/store/actions';
 import { getConnection, getLogged, urlReducer } from '@src/store/selectors';
 import { before, useDebounceObservable } from '@src/utils';
 
-import type { SwitchBaseProps } from '@mui/material/internal/SwitchBase';
 import type { RegisterOptions } from 'react-hook-form';
 import type { Observable } from 'rxjs';
 
@@ -42,15 +42,15 @@ export const SettingsCredentials = () => {
     defaultValues: {
       ...defaultConnection,
       password: '',
-      otp_code: '',
       enable_device_token: false,
       device_name: i18n('app_name', 'global'),
       device_id: '',
       ...connection,
+      otp_code: '',
     },
   });
 
-  const authVersion = watch('authVersion') ?? 1;
+  const authVersion = watch('authVersion') ?? defaultConnection.authVersion ?? 3;
   const isAuthV6 = authVersion >= 6;
   const type = watch('type');
   const isQC = type === ConnectionType.quickConnect;
@@ -58,13 +58,18 @@ export const SettingsCredentials = () => {
   const port = watch('port');
 
   const rules: Partial<Record<keyof Omit<Connection, 'logged' | 'rememberMe'>, RegisterOptions>> = {
-    type: { required: true },
-    protocol: { required: true },
-    path: { required: true },
-    port: { required: !isQC, min: 0, max: 65535 },
-    username: { required: true },
-    password: { required: true },
-    otp_code: { required: is2FA },
+    type: { required: { value: true, message: i18n('required', 'common', 'error') } },
+    protocol: { required: { value: true, message: i18n('required', 'common', 'error') } },
+    path: { required: { value: true, message: i18n('required', 'common', 'error') } },
+    port: {
+      required: { value: !isQC, message: i18n('required', 'common', 'error') },
+      min: { value: 0, message: i18n({ key: 'min_short', substitutions: ['0'] }, 'common', 'error') },
+      max: { value: 65535, message: i18n({ key: 'max_short', substitutions: ['65535'] }, 'common', 'error') },
+    },
+    username: { required: { value: true, message: i18n('required', 'common', 'error') } },
+    password: { required: { value: true, message: i18n('required', 'common', 'error') } },
+    otp_code: { required: { value: is2FA, message: i18n('required', 'common', 'error') } },
+    device_name: { required: { value: !!(is2FA && getValues().enable_device_token), message: i18n('required', 'common', 'error') } },
   };
 
   type LoginError = { test?: boolean; login?: boolean };
@@ -91,13 +96,15 @@ export const SettingsCredentials = () => {
 
   const [hasInfo, setInfo] = useState<InfoResponse>();
   const queryInfo = (baseUrl?: string) =>
-    lastValueFrom(QueryService.info(baseUrl).pipe(loadingOperator)).then(res => {
-      setInfo(res);
-      const _version = res[CommonAPI.Auth].maxVersion;
-      setValue('authVersion', _version);
-      if (_version < 6) setValue('enable_device_token', false);
-      return _version;
-    });
+    lastValueFrom(QueryService.info(baseUrl, true).pipe(loadingOperator))
+      .then(res => {
+        setInfo(res);
+        const _version = res[CommonAPI.Auth].maxVersion;
+        setValue('authVersion', _version);
+        if (_version < 6) setValue('enable_device_token', false);
+        return _version;
+      })
+      .catch(err => console.error('Failed to query info', err));
 
   useEffect(() => {
     PollingService.stop();
@@ -128,15 +135,13 @@ export const SettingsCredentials = () => {
       .subscribe({
         next: res => {
           // Update device_id if found
-          if (_type === 'login' && res?.did) {
-            data.device_id = res.did;
+          if (_type === 'login' && (res?.did || res?.device_id)) {
+            data.device_id = res.did ?? res?.device_id;
           }
           // Purge device_id on logout
           else if (_type === 'logout') {
             data.device_id = '';
           }
-          // Clean up otp on success
-          data.otp_code = '';
           reset(data);
         },
         complete: () => {
@@ -152,6 +157,7 @@ export const SettingsCredentials = () => {
           });
         },
         error: (error: Error) => {
+          console.error('Failed to login', error);
           setLoginError({ ...loginError, [_type]: true });
           NotificationService.error({
             title: i18n(`${_type}__fail`),
@@ -170,8 +176,6 @@ export const SettingsCredentials = () => {
     if (loginError[_type] === undefined || isDirty) return 'info';
     return loginError[_type] ? 'error' : 'success';
   };
-
-  const onRememberMeChange: SwitchBaseProps['onChange'] = (_, rememberMe) => dispatch(syncRememberMe(rememberMe));
 
   const onSave = (data: Connection) => {
     dispatch(syncConnection(data));
@@ -345,6 +349,16 @@ export const SettingsCredentials = () => {
           <Card component="form" sx={{ p: '0.5rem', '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">
             <Grid container direction={'row'} sx={{ alignItems: 'center' }}>
               <FormInput
+                controllerProps={{ name: 'device_id', control }}
+                textFieldProps={{
+                  type: 'text',
+                  label: i18n('device_id'),
+                  disabled: true,
+                }}
+              />
+            </Grid>
+            <Grid container direction={'row'} sx={{ alignItems: 'center' }}>
+              <FormInput
                 controllerProps={{ name: 'otp_code', control, rules: rules.otp_code }}
                 textFieldProps={{
                   type: 'text',
@@ -356,7 +370,7 @@ export const SettingsCredentials = () => {
                 controllerProps={{
                   name: 'device_name',
                   control,
-                  rules: { required: is2FA && getValues().enable_device_token },
+                  rules: rules.device_name,
                 }}
                 textFieldProps={{
                   type: 'text',
@@ -369,6 +383,14 @@ export const SettingsCredentials = () => {
         </Collapse>
 
         <CardHeader
+          title={i18n('remember_me__title')}
+          subheader={i18n('remember_me__subheader')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          action={<FormSwitch controllerProps={{ name: 'rememberMe', control }} formControlLabelProps={{ label: '' }} />}
+          sx={{ p: '0.5rem 0' }}
+        />
+        <CardHeader
           title={i18n('auto_login__title')}
           subheader={i18n('auto_login__subheader')}
           titleTypographyProps={{ variant: 'subtitle2' }}
@@ -379,40 +401,46 @@ export const SettingsCredentials = () => {
           sx={{ p: '0.5rem 0' }}
         />
       </CardContent>
-
-      <CardActions sx={{ justifyContent: 'space-between', padding: '1rem 1.5rem' }}>
-        <FormCheckbox
-          controllerProps={{ name: 'rememberMe', control }}
-          checkboxProps={{ onChange: onRememberMeChange }}
-          formControlLabelProps={{ label: i18n('remember_me') }}
-        />
-        <Box>
-          <Stack direction="row" spacing={2}>
-            <Button variant="outlined" color={getColor('test')} disabled={loading || !isValid} onClick={handleSubmit(testLogin)}>
-              {i18n('login_test')}
-            </Button>
-            <Button
-              variant="outlined"
-              color={getColor('login')}
-              sx={{ width: '5rem' }}
-              type="submit"
-              disabled={loading || !isValid}
-              onClick={handleSubmit(loginLogout)}
-            >
-              {i18n(logged ? 'logout' : 'login')}
-            </Button>
-            <Button
-              variant="outlined"
-              color={onSubmitColor()}
-              sx={{ width: '5rem' }}
-              type="submit"
-              disabled={!isValid}
-              onClick={handleSubmit(onSave)}
-            >
-              {i18n('save', 'common', 'buttons')}
-            </Button>
-          </Stack>
-        </Box>
+      <CardActions sx={{ justifyContent: 'space-between', padding: '1rem 1rem 1.5rem' }}>
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{
+            flex: '1 1 auto',
+            justifyContent: 'flex-start',
+          }}
+        >
+          <Button variant="outlined" color={getColor('test')} disabled={loading || !isValid} onClick={handleSubmit(testLogin)}>
+            {i18n('login_test')}
+          </Button>
+          <Button
+            variant="outlined"
+            color={getColor('login')}
+            sx={{ width: '5rem' }}
+            type="submit"
+            disabled={loading || !isValid}
+            onClick={handleSubmit(loginLogout)}
+          >
+            {i18n(logged ? 'logout' : 'login')}
+          </Button>
+        </Stack>
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{
+            flex: '1 1 auto',
+            justifyContent: 'flex-end',
+          }}
+        >
+          <ButtonWithConfirm
+            buttonLabel={i18n('restore', 'common', 'buttons')}
+            buttonProps={{ variant: 'outlined', color: 'secondary', sx: { flex: '0 1 8rem' }, startIcon: <SettingsBackupRestoreIcon /> }}
+            onDialogConfirm={() => reset(defaultConnection)}
+          />
+          <Button variant="outlined" color={onSubmitColor()} sx={{ width: '5rem' }} type="submit" onClick={() => onSave(getValues())}>
+            {i18n('save', 'common', 'buttons')}
+          </Button>
+        </Stack>
       </CardActions>
     </Card>
   );

@@ -11,7 +11,7 @@ import type {
   NotificationsSnack,
   SettingsSlice,
 } from '@src/models';
-import { ConnectionType, defaultDownloads, defaultGlobal, ThemeMode } from '@src/models';
+import { ConnectionType, defaultConnection, defaultDownloads, defaultGlobal, ThemeMode } from '@src/models';
 import { darkTheme, lightTheme } from '@src/themes';
 
 import type { StoreState } from '../store';
@@ -27,7 +27,7 @@ export const getMenus = createSelector(getSettings, (setting: SettingsSlice) => 
 
 export const getQuick = createSelector(getSettings, (setting: SettingsSlice) => setting?.quick);
 
-export const getConnection = createSelector(getSettings, (setting: SettingsSlice) => setting?.connection);
+export const getConnection = createSelector(getSettings, (setting: SettingsSlice) => setting?.connection ?? defaultConnection);
 
 export const urlReducer = (connection: Connection) => {
   if (connection?.protocol && connection?.path && connection?.port) {

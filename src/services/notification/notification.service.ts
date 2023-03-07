@@ -76,6 +76,8 @@ export class NotificationService {
         sendResponse();
       });
     }
+
+    console.debug('Notification service initialized', { isProxy });
   }
 
   static get snackNotifications$(): Observable<SnackNotification> {

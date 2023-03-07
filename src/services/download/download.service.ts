@@ -46,6 +46,8 @@ export class DownloadService {
     this.isProxy = isProxy;
 
     if (!isProxy) this.listen();
+
+    console.debug('Download service initialized', { isProxy });
   }
 
   static search(query: DownloadQuery = {}): Observable<Download[]> {

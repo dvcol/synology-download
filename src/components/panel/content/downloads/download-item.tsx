@@ -98,7 +98,7 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
         if ($event.shiftKey) return DownloadService.open(download.id).subscribe();
         return DownloadService.show(download.id).subscribe();
       case 'transfer':
-        if ($event.shiftKey || !modal) return InterceptService.transfer(download, { erase, resume });
+        if ($event.shiftKey || !modal) return InterceptService.transfer(download, { erase, resume }).subscribe();
         return toggleDialog(true);
       default:
         console.warn(`Key '${key}' is unknown`);
