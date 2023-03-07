@@ -1,0 +1,19 @@
+{
+  "panel__content__empty__no_task_found": {
+    "message": "No tasks found for this tab."
+  },
+  "panel__content__empty__create_or_settings": {
+    "message": "Create a new task or change this tab settings."
+  },
+  "panel__content__empty__please_login": {
+    "message": "Please login to manage tasks."
+  },
+
+  "panel__content__empty__create_task": {
+    "message": "Create task"
+  },
+
+  "panel__content__empty__go_to_settings": {
+    "message": "Go to settings"
+  }
+}
