@@ -37,7 +37,10 @@ export const SettingsPolling = () => {
   });
 
   const rules: Record<string, RegisterOptions> = {
-    interval: { min: 500, max: 86400 },
+    interval: {
+      min: { value: 500, message: i18n({ key: 'min', substitutions: ['500'] }, 'common', 'error') },
+      max: { value: 86400, message: i18n({ key: 'max', substitutions: ['86400'] }, 'common', 'error') },
+    },
   };
 
   const onSubmit = (data: Polling) => {

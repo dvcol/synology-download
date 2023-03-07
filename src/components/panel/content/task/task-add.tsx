@@ -106,7 +106,14 @@ export const TaskAdd: FC<{
             />
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1.25em', p: '0.5em 0', fontSize: '0.9em' }}>
               <FormInput
-                controllerProps={{ name: 'uri', control, rules: { required: true, minLength: 1 } }}
+                controllerProps={{
+                  name: 'uri',
+                  control,
+                  rules: {
+                    required: { value: true, message: i18n('required', 'common', 'error') },
+                    minLength: { value: 1, message: i18n('required', 'common', 'error') },
+                  },
+                }}
                 textFieldProps={{
                   label: i18n('url_label'),
                   multiline: true,

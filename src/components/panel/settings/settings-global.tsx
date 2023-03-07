@@ -155,7 +155,14 @@ export const SettingsGlobal = () => {
             subheaderTypographyProps={{ variant: 'subtitle2' }}
             action={
               <FormInput
-                controllerProps={{ name: 'loading.threshold', control, rules: { min: 0, max: 60000 } }}
+                controllerProps={{
+                  name: 'loading.threshold',
+                  control,
+                  rules: {
+                    min: { value: 0, message: i18n({ key: 'min', substitutions: ['0'] }, 'common', 'error') },
+                    max: { value: 60000, message: i18n({ key: 'max', substitutions: ['60000'] }, 'common', 'error') },
+                  },
+                }}
                 textFieldProps={{
                   type: 'number',
                   label: i18n('loading_threshold_label'),

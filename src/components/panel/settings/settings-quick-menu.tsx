@@ -127,7 +127,14 @@ export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
           subheaderTypographyProps={{ variant: 'subtitle2' }}
           action={
             <FormInput
-              controllerProps={{ name: 'max', control, rules: { min: 0, max: 20 } }}
+              controllerProps={{
+                name: 'max',
+                control,
+                rules: {
+                  min: { value: 0, message: i18n({ key: 'min', substitutions: ['0'] }, 'common', 'error') },
+                  max: { value: 20, message: i18n({ key: 'max', substitutions: ['20'] }, 'common', 'error') },
+                },
+              }}
               textFieldProps={{
                 type: 'number',
                 label: i18n('max_label'),

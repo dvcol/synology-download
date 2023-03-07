@@ -96,7 +96,14 @@ export const SettingsSnack = () => {
           subheaderTypographyProps={{ variant: 'subtitle2' }}
           action={
             <FormInput
-              controllerProps={{ name: 'timeout', control, rules: { min: 500, max: 60000 } }}
+              controllerProps={{
+                name: 'timeout',
+                control,
+                rules: {
+                  min: { value: 500, message: i18n({ key: 'min', substitutions: ['500'] }, 'common', 'error') },
+                  max: { value: 60000, message: i18n({ key: 'max', substitutions: ['60000'] }, 'common', 'error') },
+                },
+              }}
               textFieldProps={{
                 type: 'number',
                 label: i18n('timeout_label'),

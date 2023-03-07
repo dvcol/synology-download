@@ -44,6 +44,13 @@ export const Config: FC<{
     formState: { isValid, isDirty },
   } = useForm<DownloadStationConfig>({ mode: 'onChange', defaultValues: defaultConfig });
 
+  const rules = {
+    min: {
+      value: 0,
+      message: i18n({ key: 'min', substitutions: ['0'] }, 'common', 'error'),
+    },
+  };
+
   const [isAdmin, setAdmin] = useState<boolean>(false);
 
   const [error, setError] = useState<boolean | undefined>(undefined);
@@ -133,7 +140,7 @@ export const Config: FC<{
             subheaderTypographyProps={{ variant: 'subtitle2' }}
             action={
               <FormInput
-                controllerProps={{ name: 'bt_max_download', control, rules: { min: 0 } }}
+                controllerProps={{ name: 'bt_max_download', control, rules }}
                 textFieldProps={{
                   type: 'number',
                   label: i18n('bt_max_download__label'),
@@ -154,7 +161,7 @@ export const Config: FC<{
             subheaderTypographyProps={{ variant: 'subtitle2' }}
             action={
               <FormInput
-                controllerProps={{ name: 'bt_max_upload', control, rules: { min: 0 } }}
+                controllerProps={{ name: 'bt_max_upload', control, rules }}
                 textFieldProps={{
                   type: 'number',
                   label: i18n('bt_max_upload__label'),
@@ -175,7 +182,7 @@ export const Config: FC<{
             subheaderTypographyProps={{ variant: 'subtitle2' }}
             action={
               <FormInput
-                controllerProps={{ name: 'nzb_max_download', control, rules: { min: 0 } }}
+                controllerProps={{ name: 'nzb_max_download', control, rules }}
                 textFieldProps={{
                   type: 'number',
                   label: i18n('nzb_max_download__label'),
@@ -196,7 +203,7 @@ export const Config: FC<{
             subheaderTypographyProps={{ variant: 'subtitle2' }}
             action={
               <FormInput
-                controllerProps={{ name: 'http_max_download', control, rules: { min: 0 } }}
+                controllerProps={{ name: 'http_max_download', control, rules }}
                 textFieldProps={{
                   type: 'number',
                   label: i18n('http_max_download__label'),
@@ -217,7 +224,7 @@ export const Config: FC<{
             subheaderTypographyProps={{ variant: 'subtitle2' }}
             action={
               <FormInput
-                controllerProps={{ name: 'ftp_max_download', control, rules: { min: 0 } }}
+                controllerProps={{ name: 'ftp_max_download', control, rules }}
                 textFieldProps={{
                   type: 'number',
                   label: i18n('ftp_max_download__label'),
@@ -268,7 +275,7 @@ export const Config: FC<{
               subheaderTypographyProps={{ variant: 'subtitle2' }}
               action={
                 <FormInput
-                  controllerProps={{ name: 'emule_max_download', control, rules: { min: 0 } }}
+                  controllerProps={{ name: 'emule_max_download', control, rules }}
                   textFieldProps={{
                     type: 'number',
                     label: i18n('emule_max_download__label'),
@@ -289,7 +296,7 @@ export const Config: FC<{
               subheaderTypographyProps={{ variant: 'subtitle2' }}
               action={
                 <FormInput
-                  controllerProps={{ name: 'emule_max_upload', control, rules: { min: 0 } }}
+                  controllerProps={{ name: 'emule_max_upload', control, rules }}
                   textFieldProps={{
                     type: 'number',
                     label: i18n('emule_max_upload__label'),
