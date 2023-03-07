@@ -23,6 +23,7 @@ const {
   resetQuickMenus,
   syncInterface,
   syncDownloads,
+  syncDownloadsIntercept,
 } = settingsSlice.actions;
 
 // Export as named constants
@@ -48,4 +49,5 @@ export {
   resetQuickMenus,
   syncInterface,
   syncDownloads,
+  syncDownloadsIntercept,
 };

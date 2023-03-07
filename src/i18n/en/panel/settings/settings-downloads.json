@@ -39,55 +39,5 @@
   },
   "panel__settings__downloads__transfer__modal__subheader": {
     "message": "Open a task creation modal on transferred downloads within popup."
-  },
-
-  "panel__settings__downloads__intercept__enabled__title": {
-    "message": "Downloads interception"
-  },
-  "panel__settings__downloads__intercept__enabled__subheader": {
-    "message": "Intercept downloads in injected scripts (within browser tabs)."
-  },
-  "panel__settings__downloads__intercept__warning": {
-    "message": "Chrome can only support interception for one extension at a time. If you use another extension please disable either one."
-  },
-  "panel__settings__downloads__intercept__alpha__warning": {
-    "message": "Download interception is currently in alpha. Interception might fail or task might be incorrectly created or cancelled."
-  },
-
-  "panel__settings__downloads__intercept__erase__title": {
-    "message": "Erase on intercept"
-  },
-  "panel__settings__downloads__intercept__erase__subheader": {
-    "message": "Erases intercepted downloads in injected scripts (within browser tabs)."
-  },
-  "panel__settings__downloads__intercept__modal__title": {
-    "message": "Dropdown and modal"
-  },
-  "panel__settings__downloads__intercept__modal__subheader": {
-    "message": "Enabled dropdown and/or modal for interception."
-  },
-  "panel__settings__downloads__intercept__modal__warning": {
-    "message": "Note that modal and dropdown support is experimental. Interception might fail."
-  },
-
-  "panel__settings__downloads__intercept__resume__title": {
-    "message": "Resume on intercept error"
-  },
-  "panel__settings__downloads__intercept__resume__subheader": {
-    "message": "Resume download for failed (or cancelled) transfers in injected scripts (within browser tabs)."
-  },
-
-  "panel__settings__downloads__intercept__all__title": {
-    "message": "Intercept all downloads"
-  },
-  "panel__settings__downloads__intercept__all__subheader": {
-    "message": "If this is enabled, extensions are ignored and all downloads are intercepted."
-  },
-
-  "panel__settings__downloads__intercept__extensions__title": {
-    "message": "File types"
-  },
-  "panel__settings__downloads__intercept__extensions__subheader": {
-    "message": "Intercepts supported extensions and mime types. When adding a new extension we recommend adding the corresponding mime type to increase safety."
   }
 }

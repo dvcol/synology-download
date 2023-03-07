@@ -1,5 +1,5 @@
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
-import { Button, Card, CardActions, CardContent, CardHeader, Collapse, Grid, Stack, Tooltip, Typography } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CardHeader, Stack } from '@mui/material';
 
 import React from 'react';
 
@@ -9,10 +9,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
-import { ButtonWithConfirm, FormCheckbox, FormSwitch } from '@src/components';
-import { SettingsDownloadsExtensions } from '@src/components/panel/settings/settings-downloads-extensions';
-import type { DownloadExtension, Downloads } from '@src/models';
-import { ColorLevel, ColorLevelMap, defaultDownloads, InterfaceHeader } from '@src/models';
+import { ButtonWithConfirm, FormSwitch } from '@src/components';
+import type { Downloads } from '@src/models';
+import { defaultDownloads, DownloadsHeader } from '@src/models';
 import type { StoreState } from '@src/store';
 import { syncDownloads } from '@src/store/actions';
 import { getSettingsDownloads } from '@src/store/selectors';
@@ -27,7 +26,6 @@ export const SettingsDownloads = () => {
     reset,
     control,
     getValues,
-    setValue,
     formState: { isValid, isDirty, isSubmitSuccessful },
   } = useForm<Downloads>({
     mode: 'onChange',
@@ -53,27 +51,10 @@ export const SettingsDownloads = () => {
     dispatch(syncDownloads(defaultDownloads));
     reset(defaultDownloads);
   };
-
-  const addExtension = (extension: DownloadExtension) => {
-    const extensions = getValues().intercept?.extensions ?? [];
-    if (extensions.map(e => JSON.stringify(e)).includes(JSON.stringify(extension))) return;
-    setValue('intercept.extensions', [...extensions, extension], {
-      shouldValidate: true,
-      shouldDirty: true,
-    });
-    reset(getValues(), {
-      keepErrors: true,
-      keepDirty: true,
-      keepTouched: true,
-    });
-  };
-
-  const getHighlightColor = (extension: DownloadExtension) => (extension?.mime ? ColorLevel.primary : ColorLevel.warning);
-
   return (
     <Card raised={true}>
       <CardHeader
-        id={InterfaceHeader.downloads}
+        id={DownloadsHeader.general}
         title={i18n('title')}
         subheader={i18n('subheader')}
         titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
@@ -140,130 +121,6 @@ export const SettingsDownloads = () => {
           }
           sx={{ p: '0.5rem 0' }}
         />
-        <CardHeader
-          title={i18n('intercept__enabled__title')}
-          subheader={i18n('intercept__enabled__subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
-          action={
-            <FormSwitch
-              controllerProps={{ name: 'intercept.enabled', control }}
-              formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
-            />
-          }
-          sx={{ p: '0.5rem 0' }}
-        />
-        <Collapse in={getValues()?.intercept?.enabled} unmountOnExit={true}>
-          <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem', maxWidth: '80%' }}>
-            {i18n('intercept__warning')}
-          </Typography>
-          <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem', maxWidth: '80%' }}>
-            {i18n('intercept__alpha__warning')}
-          </Typography>
-          <CardHeader
-            title={i18n('intercept__erase__title')}
-            subheader={i18n('intercept__erase__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
-            action={
-              <FormSwitch
-                controllerProps={{ name: 'intercept.erase', control }}
-                formControlLabelProps={{ label: '', disabled: !getValues()?.enabled || !getValues()?.intercept?.enabled }}
-              />
-            }
-            sx={{ p: '0.5rem 0' }}
-          />
-          <CardHeader
-            title={i18n('intercept__resume__title')}
-            subheader={i18n('intercept__resume__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
-            action={
-              <FormSwitch
-                controllerProps={{ name: 'intercept.resume', control }}
-                formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
-              />
-            }
-            sx={{ p: '0.5rem 0' }}
-          />
-          <CardHeader
-            title={i18n('intercept__modal__title')}
-            subheader={i18n('intercept__modal__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
-            action={
-              <FormSwitch
-                controllerProps={{ name: 'intercept.modal', control }}
-                formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
-              />
-            }
-            sx={{ p: '0.5rem 0' }}
-          />
-          <Collapse in={getValues().intercept?.modal} unmountOnExit={true}>
-            <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
-              {i18n('intercept__modal__warning')}
-            </Typography>
-          </Collapse>
-          <CardHeader
-            title={i18n('intercept__all__title')}
-            subheader={i18n('intercept__all__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
-            action={
-              <FormSwitch
-                controllerProps={{ name: 'intercept.all', control }}
-                formControlLabelProps={{ label: '', disabled: !getValues()?.enabled || !getValues()?.intercept?.enabled }}
-              />
-            }
-            sx={{ p: '0.5rem 0' }}
-          />
-          <CardHeader
-            title={i18n('intercept__extensions__title')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheader={i18n('intercept__extensions__subheader')}
-            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
-            sx={{ p: '0.5rem 0' }}
-          />
-          <Card sx={{ p: '1.5rem 1rem 1rem', m: '0.5rem 0' }}>
-            <Grid container spacing={1} columnSpacing={1}>
-              {getValues().intercept?.extensions.map(extension => (
-                <Grid item xs={3} lg={2} key={`${extension.ext}-${extension.mime}`}>
-                  <Button
-                    disableTouchRipple={true}
-                    sx={{ p: '0 0 0 0.5rem' }}
-                    color={getHighlightColor(extension)}
-                    disabled={!getValues()?.enabled || !getValues()?.intercept?.enabled}
-                  >
-                    <FormCheckbox
-                      controllerProps={{ name: 'intercept.active', control }}
-                      formControlLabelProps={{
-                        label: (
-                          <Tooltip title={extension.mime ?? '⚠ no mime type specified'}>
-                            <Typography
-                              variant="body2"
-                              color="text.secondary"
-                              sx={{ textTransform: 'lowercase', color: getHighlightColor(extension) }}
-                            >
-                              {extension.ext}
-                            </Typography>
-                          </Tooltip>
-                        ),
-                        sx: { textTransform: 'capitalize', textAlign: 'start' },
-                      }}
-                      checkboxProps={{
-                        multiple: true,
-                        value: extension,
-                        color: getHighlightColor(extension),
-                        disabled: !getValues()?.enabled || !getValues()?.intercept?.enabled || getValues()?.intercept?.all,
-                      }}
-                    />
-                  </Button>
-                </Grid>
-              ))}
-            </Grid>
-            <SettingsDownloadsExtensions extensions={getValues().intercept?.extensions} addExtension={addExtension} />
-          </Card>
-        </Collapse>
       </CardContent>
 
       <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>

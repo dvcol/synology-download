@@ -12,8 +12,11 @@
   "panel__settings__downloads": {
     "message": "Downloads"
   },
-  "panel__settings__downloads_downloads": {
-    "message": "Downloads"
+  "panel__settings__downloads_general": {
+    "message": "General"
+  },
+  "panel__settings__downloads_intercept": {
+    "message": "Intercept"
   },
 
   "panel__settings__interface": {
@@ -21,9 +24,6 @@
   },
   "panel__settings__interface_global": {
     "message": "Global"
-  },
-  "panel__settings__interface_downloads": {
-    "message": "Downloads"
   },
   "panel__settings__interface_tabs": {
     "message": "Tabs"
@@ -50,5 +50,18 @@
 
   "panel__settings__banner__save__success": {
     "message": "Settings saved"
+  },
+
+  "panel__settings__advanced": {
+    "message": "Advanced"
+  },
+  "panel__settings__advanced_logging": {
+    "message": "Logging"
+  },
+  "panel__settings__advanced_redux": {
+    "message": "Redux"
+  },
+  "panel__settings__advanced_sync": {
+    "message": "Sync"
   }
 }

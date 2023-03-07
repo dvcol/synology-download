@@ -20,6 +20,13 @@ export enum SettingHeader {
   downloads = 'downloads',
   interface = 'interface',
   notification = 'notification',
+  advanced = 'advanced',
+}
+
+export interface SettingsPanelTab {
+  label: SettingHeader;
+  anchor?: string;
+  links: string[];
 }
 
 export enum NotificationHeader {
@@ -33,12 +40,22 @@ export enum ConnectionHeader {
   polling = 'polling',
 }
 
+export enum DownloadsHeader {
+  general = 'general',
+  intercept = 'intercept',
+}
+
 export enum InterfaceHeader {
   global = 'global',
-  downloads = 'downloads',
   tabs = 'tabs',
   quickMenu = 'quick_menu',
   contextMenu = 'context_menu',
+}
+
+export enum AdvancedHeader {
+  logging = 'logging',
+  redux = 'redux',
+  sync = 'sync',
 }
 
 export enum ConnectionType {

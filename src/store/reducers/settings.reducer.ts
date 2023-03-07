@@ -1,7 +1,7 @@
 import { syncSet } from '@dvcol/web-extension-utils';
 
-import type { Connection, ContentTab, ContextMenu, Notifications, QuickMenu, SettingsSlice } from '@src/models';
-import { defaultConnection, SettingsSliceName } from '@src/models';
+import type { Connection, ContentTab, ContextMenu, Downloads, DownloadsIntercept, Notifications, QuickMenu, SettingsSlice } from '@src/models';
+import { defaultConnection, defaultDownloads, SettingsSliceName } from '@src/models';
 import { setBadgeBackgroundColor } from '@src/utils';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
@@ -18,6 +18,16 @@ export const setNestedReducer = <T>(oldSettings: SettingsSlice, payload: Partial
 export const syncNestedReducer = <T>(oldSettings: SettingsSlice, payload: Partial<T>, name: keyof SettingsSlice): SettingsSlice => {
   const newSettings = setNestedReducer(oldSettings, payload, name);
   syncSettings(newSettings);
+  return newSettings;
+};
+
+export const syncInterceptReducer = (oldSettings: SettingsSlice, { payload }: PayloadAction<Partial<DownloadsIntercept>>): SettingsSlice => {
+  const newSettings = setNestedReducer(
+    oldSettings,
+    { ...(oldSettings.downloads ?? defaultDownloads), intercept: payload ?? defaultDownloads.intercept },
+    'downloads',
+  );
+  syncNestedReducer<Downloads>(newSettings, newSettings.downloads, 'downloads');
   return newSettings;
 };
 
