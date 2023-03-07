@@ -1,0 +1,8 @@
+{
+  "panel__settings__tasks_count__title": {
+    "message": "Badge count"
+  },
+  "panel__settings__tasks_count__subheader": {
+    "message": "Settings for the badge notification in chrome's menu bar."
+  }
+}

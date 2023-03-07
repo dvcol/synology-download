@@ -1,5 +1,5 @@
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
-import { Button, Card, CardActions, CardContent, CardHeader, Stack } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CardHeader, Collapse, Stack } from '@mui/material';
 
 import React from 'react';
 
@@ -62,65 +62,70 @@ export const SettingsDownloads = () => {
         sx={{ p: '1rem 1rem 0' }}
       />
       <CardContent>
-        <CardHeader
-          title={i18n('buttons__title')}
-          subheader={i18n('buttons__subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
-          action={
-            <FormSwitch controllerProps={{ name: 'buttons', control }} formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }} />
-          }
-          sx={{ p: '0.5rem 0' }}
-        />
-        <CardHeader
-          title={i18n('notifications__title')}
-          subheader={i18n('notifications__subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
-          action={
-            <FormSwitch controllerProps={{ name: 'notifications', control }} formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }} />
-          }
-          sx={{ p: '0.5rem 0' }}
-        />
-        <CardHeader
-          title={i18n('transfer__erase__title')}
-          subheader={i18n('transfer__erase__subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
-          action={
-            <FormSwitch
-              controllerProps={{ name: 'transfer.erase', control }}
-              formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
-            />
-          }
-          sx={{ p: '0.5rem 0' }}
-        />
-        <CardHeader
-          title={i18n('transfer__resume__title')}
-          subheader={i18n('transfer__resume__subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
-          action={
-            <FormSwitch
-              controllerProps={{ name: 'transfer.resume', control }}
-              formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
-            />
-          }
-          sx={{ p: '0.5rem 0' }}
-        />
-        <CardHeader
-          title={i18n('transfer__modal__title')}
-          subheader={i18n('transfer__modal__subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
-          action={
-            <FormSwitch
-              controllerProps={{ name: 'transfer.modal', control }}
-              formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
-            />
-          }
-          sx={{ p: '0.5rem 0' }}
-        />
+        <Collapse in={getValues()?.enabled} unmountOnExit>
+          <CardHeader
+            title={i18n('buttons__title')}
+            subheader={i18n('buttons__subheader')}
+            titleTypographyProps={{ variant: 'subtitle2' }}
+            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
+            action={
+              <FormSwitch controllerProps={{ name: 'buttons', control }} formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }} />
+            }
+            sx={{ p: '0.5rem 0' }}
+          />
+          <CardHeader
+            title={i18n('notifications__title')}
+            subheader={i18n('notifications__subheader')}
+            titleTypographyProps={{ variant: 'subtitle2' }}
+            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
+            action={
+              <FormSwitch
+                controllerProps={{ name: 'notifications', control }}
+                formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
+              />
+            }
+            sx={{ p: '0.5rem 0' }}
+          />
+          <CardHeader
+            title={i18n('transfer__erase__title')}
+            subheader={i18n('transfer__erase__subheader')}
+            titleTypographyProps={{ variant: 'subtitle2' }}
+            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
+            action={
+              <FormSwitch
+                controllerProps={{ name: 'transfer.erase', control }}
+                formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
+              />
+            }
+            sx={{ p: '0.5rem 0' }}
+          />
+          <CardHeader
+            title={i18n('transfer__resume__title')}
+            subheader={i18n('transfer__resume__subheader')}
+            titleTypographyProps={{ variant: 'subtitle2' }}
+            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
+            action={
+              <FormSwitch
+                controllerProps={{ name: 'transfer.resume', control }}
+                formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
+              />
+            }
+            sx={{ p: '0.5rem 0' }}
+          />
+          <CardHeader
+            title={i18n('transfer__modal__title')}
+            subheader={i18n('transfer__modal__subheader')}
+            titleTypographyProps={{ variant: 'subtitle2' }}
+            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
+            action={
+              <FormSwitch
+                controllerProps={{ name: 'transfer.modal', control }}
+                formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
+              />
+            }
+            sx={{ p: '0.5rem 0' }}
+          />
+        </Collapse>
       </CardContent>
 
       <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>

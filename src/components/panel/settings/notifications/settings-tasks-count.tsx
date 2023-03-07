@@ -1,5 +1,5 @@
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
-import { Box, Button, Card, CardActions, CardContent, CardHeader, Stack } from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, Stack } from '@mui/material';
 
 import React from 'react';
 
@@ -54,27 +54,30 @@ export const SettingsTasksCount = () => {
       <CardHeader
         id={NotificationHeader.count}
         title={i18n('title')}
+        subheader={i18n('subheader')}
         titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
         action={<FormSwitch controllerProps={{ name: 'enabled', control }} formControlLabelProps={{ label: '' }} />}
         sx={{ p: '1rem 1rem 0' }}
       />
       <CardContent>
-        <Box component="form" sx={{ '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">
-          <FormTab
-            useFormProps={{
-              control: control as unknown as Control<Tab>,
-              setValue: setValue as unknown as UseFormSetValue<Tab>,
-              getValues: getValues as unknown as UseFormGetValues<Tab>,
-            }}
-            tab={{
-              template: notifications?.count?.template,
-              color: notifications?.count?.color ?? defaultNotifications.count.color,
-              status: notifications?.count?.status ?? defaultNotifications.count.status,
-              destination: notifications?.count?.destination ?? defaultNotifications.count.destination,
-            }}
-            disabled={!getValues()?.enabled}
-          />
-        </Box>
+        <Collapse in={getValues()?.enabled} unmountOnExit>
+          <Box component="form" sx={{ '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">
+            <FormTab
+              useFormProps={{
+                control: control as unknown as Control<Tab>,
+                setValue: setValue as unknown as UseFormSetValue<Tab>,
+                getValues: getValues as unknown as UseFormGetValues<Tab>,
+              }}
+              tab={{
+                template: notifications?.count?.template,
+                color: notifications?.count?.color ?? defaultNotifications.count.color,
+                status: notifications?.count?.status ?? defaultNotifications.count.status,
+                destination: notifications?.count?.destination ?? defaultNotifications.count.destination,
+              }}
+              disabled={!getValues()?.enabled}
+            />
+          </Box>
+        </Collapse>
       </CardContent>
       <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
         <Stack direction="row" spacing={2}>

@@ -1,5 +1,5 @@
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
-import { Box, Button, Card, CardActions, CardContent, CardHeader, InputAdornment, Stack } from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, InputAdornment, Stack } from '@mui/material';
 
 import React from 'react';
 
@@ -64,72 +64,74 @@ export const SettingsPolling = () => {
         sx={{ p: '1rem 1rem 0' }}
       />
       <CardContent>
-        <Box component="form" sx={{ '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">
-          <CardHeader
-            title={i18n('popup_title')}
-            subheader={i18n('popup_subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={
-              <FormSwitch
-                controllerProps={{ name: 'popup.enabled', control }}
-                formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
-              />
-            }
-            sx={{ p: '0.5rem 0' }}
-          />
-          <CardHeader
-            title={i18n('background_title')}
-            subheader={
-              <Box>
-                <Box>{i18n('background_subheader_line_1')}</Box>
-                <Box>{i18n('background_subheader_line_2')}</Box>
-              </Box>
-            }
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={
-              <FormSwitch
-                controllerProps={{ name: 'background.enabled', control }}
-                formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
-              />
-            }
-            sx={{ p: '0.5rem 0' }}
-          />
-          <CardHeader
-            title={i18n('interval_title')}
-            subheader={i18n('interval_subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
-            sx={{ p: '1rem 0' }}
-          />
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <FormInput
-              controllerProps={{ name: 'popup.interval', control, rules: rules.interval }}
-              textFieldProps={{
-                type: 'number',
-                label: i18n('interval_popup_label'),
-                InputProps: {
-                  endAdornment: <InputAdornment position="end">ms</InputAdornment>,
-                },
-                disabled: !getValues()?.enabled || !getValues()?.popup?.enabled,
-                sx: { flex: '1 1 30ch' },
-              }}
+        <Collapse in={getValues()?.enabled} unmountOnExit>
+          <Box component="form" sx={{ '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">
+            <CardHeader
+              title={i18n('popup_title')}
+              subheader={i18n('popup_subheader')}
+              titleTypographyProps={{ variant: 'subtitle2' }}
+              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              action={
+                <FormSwitch
+                  controllerProps={{ name: 'popup.enabled', control }}
+                  formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
+                />
+              }
+              sx={{ p: '0.5rem 0' }}
             />
-            <FormInput
-              controllerProps={{ name: 'background.interval', control, rules: rules.interval }}
-              textFieldProps={{
-                type: 'number',
-                label: i18n('interval_background_label'),
-                InputProps: {
-                  endAdornment: <InputAdornment position="end">ms</InputAdornment>,
-                },
-                disabled: !getValues()?.enabled || !getValues()?.background?.enabled,
-                sx: { flex: '1 1 30ch' },
-              }}
+            <CardHeader
+              title={i18n('background_title')}
+              subheader={
+                <Box>
+                  <Box>{i18n('background_subheader_line_1')}</Box>
+                  <Box>{i18n('background_subheader_line_2')}</Box>
+                </Box>
+              }
+              titleTypographyProps={{ variant: 'subtitle2' }}
+              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              action={
+                <FormSwitch
+                  controllerProps={{ name: 'background.enabled', control }}
+                  formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
+                />
+              }
+              sx={{ p: '0.5rem 0' }}
             />
+            <CardHeader
+              title={i18n('interval_title')}
+              subheader={i18n('interval_subheader')}
+              titleTypographyProps={{ variant: 'subtitle2' }}
+              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              sx={{ p: '1rem 0' }}
+            />
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <FormInput
+                controllerProps={{ name: 'popup.interval', control, rules: rules.interval }}
+                textFieldProps={{
+                  type: 'number',
+                  label: i18n('interval_popup_label'),
+                  InputProps: {
+                    endAdornment: <InputAdornment position="end">ms</InputAdornment>,
+                  },
+                  disabled: !getValues()?.enabled || !getValues()?.popup?.enabled,
+                  sx: { flex: '1 1 30ch' },
+                }}
+              />
+              <FormInput
+                controllerProps={{ name: 'background.interval', control, rules: rules.interval }}
+                textFieldProps={{
+                  type: 'number',
+                  label: i18n('interval_background_label'),
+                  InputProps: {
+                    endAdornment: <InputAdornment position="end">ms</InputAdornment>,
+                  },
+                  disabled: !getValues()?.enabled || !getValues()?.background?.enabled,
+                  sx: { flex: '1 1 30ch' },
+                }}
+              />
+            </Box>
           </Box>
-        </Box>
+        </Collapse>
       </CardContent>
       <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
         <Stack direction="row" spacing={2}>

@@ -1,5 +1,5 @@
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
-import { Button, Card, CardActions, CardContent, CardHeader, MenuItem, Stack } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CardHeader, Collapse, MenuItem, Stack } from '@mui/material';
 
 import React from 'react';
 
@@ -49,82 +49,87 @@ export const SettingsBanner = () => {
         sx={{ p: '1rem 1rem 0' }}
       />
       <CardContent>
-        <CardHeader
-          title={i18n('level_title')}
-          subheader={i18n('level_subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
-          action={
-            <FormInput
-              controllerProps={{ name: 'level', control }}
-              textFieldProps={{
-                select: true,
-                label: i18n('level_label'),
-                sx: { flex: '0 0 14rem', textTransform: 'capitalize', ml: '2rem' },
-                disabled: !getValues()?.enabled,
-              }}
-            >
-              {[NotificationLevel.debug, NotificationLevel.info, NotificationLevel.warn, NotificationLevel.error].map(level => (
-                <MenuItem key={level} value={level} sx={{ textTransform: 'capitalize' }}>
-                  {NotificationLevelKeys[level]}
-                </MenuItem>
-              ))}
-            </FormInput>
-          }
-          sx={{ p: '0.5rem 0' }}
-        />
+        <Collapse in={getValues()?.enabled} unmountOnExit>
+          <CardHeader
+            title={i18n('level_title')}
+            subheader={i18n('level_subheader')}
+            titleTypographyProps={{ variant: 'subtitle2' }}
+            subheaderTypographyProps={{ variant: 'subtitle2' }}
+            action={
+              <FormInput
+                controllerProps={{ name: 'level', control }}
+                textFieldProps={{
+                  select: true,
+                  label: i18n('level_label'),
+                  sx: { flex: '0 0 14rem', textTransform: 'capitalize', ml: '2rem' },
+                  disabled: !getValues()?.enabled,
+                }}
+              >
+                {[NotificationLevel.debug, NotificationLevel.info, NotificationLevel.warn, NotificationLevel.error].map(level => (
+                  <MenuItem key={level} value={level} sx={{ textTransform: 'capitalize' }}>
+                    {NotificationLevelKeys[level]}
+                  </MenuItem>
+                ))}
+              </FormInput>
+            }
+            sx={{ p: '0.5rem 0' }}
+          />
 
-        <Card sx={{ p: '0.5rem 1rem', m: '0.5rem 0' }}>
-          <CardHeader
-            title={i18n('background_title')}
-            subheader={i18n('background_subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={
-              <FormSwitch
-                controllerProps={{ name: 'scope.background', control }}
-                formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
-              />
-            }
-            sx={{ p: '0.5rem 0' }}
-          />
-          <CardHeader
-            title={i18n('popup_title')}
-            subheader={i18n('popup_subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={
-              <FormSwitch controllerProps={{ name: 'scope.popup', control }} formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }} />
-            }
-            sx={{ p: '0.5rem 0' }}
-          />
-          <CardHeader
-            title={i18n('completed_title')}
-            subheader={i18n('completed_subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={
-              <FormSwitch
-                controllerProps={{ name: 'scope.finished', control }}
-                formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
-              />
-            }
-            sx={{ p: '0.5rem 0' }}
-          />
-          <CardHeader
-            title={i18n('failed_title')}
-            subheader={i18n('failed_subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={
-              <FormSwitch
-                controllerProps={{ name: 'scope.failed', control }}
-                formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
-              />
-            }
-            sx={{ p: '0.5rem 0' }}
-          />
-        </Card>
+          <Card sx={{ p: '0.5rem 1rem', m: '0.5rem 0' }}>
+            <CardHeader
+              title={i18n('background_title')}
+              subheader={i18n('background_subheader')}
+              titleTypographyProps={{ variant: 'subtitle2' }}
+              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              action={
+                <FormSwitch
+                  controllerProps={{ name: 'scope.background', control }}
+                  formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
+                />
+              }
+              sx={{ p: '0.5rem 0' }}
+            />
+            <CardHeader
+              title={i18n('popup_title')}
+              subheader={i18n('popup_subheader')}
+              titleTypographyProps={{ variant: 'subtitle2' }}
+              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              action={
+                <FormSwitch
+                  controllerProps={{ name: 'scope.popup', control }}
+                  formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
+                />
+              }
+              sx={{ p: '0.5rem 0' }}
+            />
+            <CardHeader
+              title={i18n('completed_title')}
+              subheader={i18n('completed_subheader')}
+              titleTypographyProps={{ variant: 'subtitle2' }}
+              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              action={
+                <FormSwitch
+                  controllerProps={{ name: 'scope.finished', control }}
+                  formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
+                />
+              }
+              sx={{ p: '0.5rem 0' }}
+            />
+            <CardHeader
+              title={i18n('failed_title')}
+              subheader={i18n('failed_subheader')}
+              titleTypographyProps={{ variant: 'subtitle2' }}
+              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              action={
+                <FormSwitch
+                  controllerProps={{ name: 'scope.failed', control }}
+                  formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
+                />
+              }
+              sx={{ p: '0.5rem 0' }}
+            />
+          </Card>
+        </Collapse>
       </CardContent>
       <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
         <Stack direction="row" spacing={2}>
