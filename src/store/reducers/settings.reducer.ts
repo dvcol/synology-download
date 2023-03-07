@@ -1,7 +1,18 @@
 import { syncSet } from '@dvcol/web-extension-utils';
 
-import type { Connection, ContentTab, ContextMenu, Downloads, DownloadsIntercept, Notifications, QuickMenu, SettingsSlice } from '@src/models';
-import { defaultConnection, defaultDownloads, SettingsSliceName } from '@src/models';
+import type {
+  AdvancedLogging,
+  AdvancedSettings,
+  Connection,
+  ContentTab,
+  ContextMenu,
+  Downloads,
+  DownloadsIntercept,
+  Notifications,
+  QuickMenu,
+  SettingsSlice,
+} from '@src/models';
+import { defaultAdvancedLogging, defaultAdvancedSettings, defaultConnection, defaultDownloads, SettingsSliceName } from '@src/models';
 import { setBadgeBackgroundColor } from '@src/utils';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
@@ -21,13 +32,17 @@ export const syncNestedReducer = <T>(oldSettings: SettingsSlice, payload: Partia
   return newSettings;
 };
 
-export const syncInterceptReducer = (oldSettings: SettingsSlice, { payload }: PayloadAction<Partial<DownloadsIntercept>>): SettingsSlice => {
-  const newSettings = setNestedReducer(
-    oldSettings,
-    { ...(oldSettings.downloads ?? defaultDownloads), intercept: payload ?? defaultDownloads.intercept },
-    'downloads',
-  );
-  syncNestedReducer<Downloads>(newSettings, newSettings.downloads, 'downloads');
+export const syncInterceptReducer = (oldSettings: SettingsSlice, { payload }: PayloadAction<DownloadsIntercept>): SettingsSlice => {
+  const newDownloads: Downloads = { ...(oldSettings.downloads ?? defaultDownloads), intercept: payload ?? defaultDownloads.intercept };
+  const newSettings = setNestedReducer(oldSettings, newDownloads, 'downloads');
+  syncNestedReducer<Downloads>(newSettings, newDownloads, 'downloads');
+  return newSettings;
+};
+
+export const syncAdvancedLoggingReducer = (oldSettings: SettingsSlice, { payload }: PayloadAction<Partial<AdvancedLogging>>): SettingsSlice => {
+  const newAdvanced: AdvancedSettings = { ...(oldSettings?.advanced ?? defaultAdvancedSettings), logging: payload ?? defaultAdvancedLogging };
+  const newSettings = setNestedReducer(oldSettings, newAdvanced, 'advanced');
+  syncNestedReducer<AdvancedSettings>(newSettings, newAdvanced, 'advanced');
   return newSettings;
 };
 

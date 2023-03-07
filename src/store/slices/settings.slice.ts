@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import type {
+  AdvancedLogging,
   AdvancedSettings,
   Connection,
   ContentTab,
@@ -20,6 +21,7 @@ import {
   removeFrom,
   setBadgeReducer,
   setReducer,
+  syncAdvancedLoggingReducer,
   syncConnectionReducer,
   syncInterceptReducer,
   syncNestedReducer,
@@ -53,6 +55,7 @@ interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   syncDownloads: CaseReducer<S, PayloadAction<Partial<Downloads>>>;
   syncDownloadsIntercept: CaseReducer<S, PayloadAction<DownloadsIntercept>>;
   syncAdvanced: CaseReducer<S, PayloadAction<AdvancedSettings>>;
+  syncAdvancedLogging: CaseReducer<S, PayloadAction<AdvancedLogging>>;
 }
 
 export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'settings'>({
@@ -110,5 +113,6 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
     syncDownloads: (oldSettings, { payload }) => syncNestedReducer<Downloads>(oldSettings, payload, 'downloads'),
     syncDownloadsIntercept: syncInterceptReducer,
     syncAdvanced: (oldSettings, { payload }) => syncNestedReducer<AdvancedSettings>(oldSettings, payload, 'advanced'),
+    syncAdvancedLogging: syncAdvancedLoggingReducer,
   } as SettingsReducers,
 });

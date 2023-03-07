@@ -301,16 +301,24 @@ export const LoggingLevelLevelKeys = {
   [LoggingLevel.error]: 'error',
 };
 
-export interface AdvancedSettings {
+export interface AdvancedLogging {
   enabled?: boolean;
   level?: LoggingLevel;
   history?: boolean;
 }
 
-export const defaultAdvancedSettings = {
+export interface AdvancedSettings {
+  logging: AdvancedLogging;
+}
+
+export const defaultAdvancedLogging = {
   enabled: true,
   level: LoggingLevel.error,
   history: false,
+};
+
+export const defaultAdvancedSettings = {
+  logging: defaultAdvancedLogging,
 };
 
 export const defaultDownloads = {

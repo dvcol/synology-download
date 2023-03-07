@@ -1,7 +1,7 @@
 import { lastValueFrom } from 'rxjs';
 import { wrapStore } from 'webext-redux';
 
-import { DownloadService, NotificationService, PollingService, QueryService } from '@src/services';
+import { DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { store } from '@src/store';
 
 import {
@@ -16,11 +16,14 @@ import {
 } from './modules';
 
 export const initServiceWorker = async () => {
-  // Listen to context menu events (first because it is required for setting restore)
-  onMessageEvents();
-
   // Wrap proxy store see https://github.com/tshaddix/webext-redux
   wrapStore(store);
+
+  // initialize logger
+  LoggerService.init(store);
+
+  // Listen to context menu events (first because it is required for setting restore)
+  onMessageEvents();
 
   // Restore settings & polling
   await lastValueFrom(restoreSettings(store));

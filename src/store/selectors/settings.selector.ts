@@ -1,6 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 
 import type {
+  AdvancedSettings,
   Connection,
   Credentials,
   Downloads,
@@ -128,3 +129,8 @@ export const getSettingsDownloadsInterceptEnabled = createSelector(
 );
 
 export const getAdvancedSettings = createSelector(getSettings, (settings: SettingsSlice) => settings?.advanced ?? defaultAdvancedSettings);
+
+export const getAdvancedSettingsLogging = createSelector(
+  getAdvancedSettings,
+  (settings: AdvancedSettings) => settings?.logging ?? defaultAdvancedSettings.logging,
+);

@@ -11,15 +11,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useI18n } from '@dvcol/web-extension-utils';
 
 import { ButtonWithConfirm, FormInput, FormSwitch } from '@src/components';
-import type { AdvancedSettings } from '@src/models';
-import { AdvancedHeader, ColorLevel, defaultAdvancedSettings, LoggingLevel, LoggingLevelLevelKeys } from '@src/models';
-import { syncAdvanced } from '@src/store/actions';
-import { getAdvancedSettings } from '@src/store/selectors';
+import type { AdvancedLogging, RootSlice } from '@src/models';
+import { AdvancedHeader, ColorLevel, defaultAdvancedLogging, defaultAdvancedSettings, LoggingLevel, LoggingLevelLevelKeys } from '@src/models';
+import { syncAdvancedLogging } from '@src/store/actions';
+import { getAdvancedSettingsLogging } from '@src/store/selectors';
 
 export const SettingsLogging = () => {
   const i18n = useI18n('panel', 'settings', 'advanced', 'logging');
   const dispatch = useDispatch();
-  const advancedSettings: AdvancedSettings = useSelector(getAdvancedSettings);
+  const advancedSettings = useSelector<RootSlice, AdvancedLogging>(getAdvancedSettingsLogging);
 
   const {
     handleSubmit,
@@ -27,7 +27,7 @@ export const SettingsLogging = () => {
     control,
     getValues,
     formState: { isValid, isDirty, isSubmitted },
-  } = useForm<AdvancedSettings>({
+  } = useForm<AdvancedLogging>({
     mode: 'onChange',
     defaultValues: {
       ...defaultAdvancedSettings,
@@ -35,8 +35,8 @@ export const SettingsLogging = () => {
     },
   });
 
-  const onSubmit = (data: AdvancedSettings) => {
-    dispatch(syncAdvanced(data));
+  const onSubmit = (data: AdvancedLogging) => {
+    dispatch(syncAdvancedLogging(data));
     reset(data, { keepIsSubmitted: true, keepSubmitCount: true });
   };
 
@@ -114,7 +114,7 @@ export const SettingsLogging = () => {
           <ButtonWithConfirm
             buttonLabel={i18n('restore', 'common', 'buttons')}
             buttonProps={{ variant: 'outlined', color: 'secondary', sx: { flex: '0 1 8rem' }, startIcon: <SettingsBackupRestoreIcon /> }}
-            onDialogConfirm={() => reset(defaultAdvancedSettings)}
+            onDialogConfirm={() => reset(defaultAdvancedLogging)}
           />
           <Button
             variant="outlined"
