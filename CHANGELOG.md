@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.22.0](https://github.com/dvcol/synology-download/compare/v1.21.4...v1.22.0) (2023-03-07)
+
+
+### Features
+
+* **login:** adds loading/login indicator in popup ([8f6c8cd](https://github.com/dvcol/synology-download/commit/8f6c8cd456b41e4f7ad7b87b1940cd05f2b4ed83))
+
+
+### Bug Fixes
+
+* **auto-login:** fixes auto login on modal popup ([3bffe06](https://github.com/dvcol/synology-download/commit/3bffe0635ad8dea7fc917f7d5456902f4391a477))
+* **credentials:** auto switch default port when protocol change ([6b5f319](https://github.com/dvcol/synology-download/commit/6b5f3197e14c3a5dd63f9cf775e6dabcddc9242a))
+* **doc:** adds more information on enabling https ([ac52660](https://github.com/dvcol/synology-download/commit/ac5266085a6d0d46c8ead6a7a2abd9f88fb272ef))
+* **forms:** add missing error message in form validation ([4ef0b54](https://github.com/dvcol/synology-download/commit/4ef0b5462c8250bdbe940d0ec6784aee18763e1b))
+* **login:** adds loading indicator for auto-login ([444b3f6](https://github.com/dvcol/synology-download/commit/444b3f6aa39477375d84a6591c5eda55a517f712))
+
 ### [1.21.4](https://github.com/dvcol/synology-download/compare/v1.21.1...v1.21.4) (2023-03-07)
 
 
