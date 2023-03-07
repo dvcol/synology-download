@@ -12,6 +12,8 @@ import type { InstalledDetails } from '@src/utils';
 import { onInstalled$, sendMessage } from '@src/utils';
 
 export const onInstalledEvents = (store: StoreOrProxy) => {
+  console.debug('Subscribing to install events.');
+
   // re-inject content scripts in open tabs
   injectContentScripts();
 

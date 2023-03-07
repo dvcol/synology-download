@@ -1,4 +1,4 @@
-import { catchError, NEVER, switchMap, tap } from 'rxjs';
+import { catchError, of, switchMap, tap } from 'rxjs';
 
 import { localGet } from '@dvcol/web-extension-utils';
 
@@ -16,12 +16,12 @@ import type { Store } from 'redux';
  */
 export const restoreLoginSate = (state?: StateSlice, settings?: SettingsSlice) => {
   // If service is not initialized with url
-  if (!QueryService.isReady) return NEVER;
+  if (!QueryService.isReady) return of(null);
 
   // Attempt to Restore login
   return QueryService.autoLogin(state, settings, false).pipe(
     tap(() => console.debug('Login state restored.')),
-    catchError(() => NEVER),
+    catchError(() => of(null)),
   );
 };
 
@@ -43,6 +43,6 @@ export const restoreLocalSate = (store: Store) =>
     tap(() => console.debug('Local state restored.')),
     catchError(err => {
       console.error('local state failed to restore.', err);
-      return NEVER;
+      return of(null);
     }),
   );

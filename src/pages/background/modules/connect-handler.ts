@@ -1,30 +1,38 @@
+import { tap } from 'rxjs';
+
 import { ChromeMessageType, ModalInstance } from '@src/models';
 import { setContentDialog, setContentMenu, setOption, setPopup } from '@src/store/actions';
 import { onConnect, onMessage } from '@src/utils';
 
 import type { Store } from 'redux';
 
+const onAppConnect = (store: Store, instance: ModalInstance, dispatch: typeof setOption | typeof setPopup) =>
+  onConnect([instance]).pipe(
+    tap(port => {
+      console.debug(`connecting ${port.name}`, { id: port?.sender?.tab?.id, timestamp: new Date().toISOString() });
+
+      // dispatch connect
+      store.dispatch(dispatch(true));
+
+      // disconnect listener
+      port.onDisconnect.addListener(() => {
+        console.debug(`disconnecting ${port.name}`, new Date().toISOString());
+
+        // dispatch disconnect
+        store.dispatch(dispatch(false));
+      });
+    }),
+  );
+
 /** Listen to onConnect events to handle port connections */
 export const onPortEvents = (store: Store) => {
+  console.debug('Subscribing to ports events.');
+
   // Dropdown popup
-  onConnect([ModalInstance.popup]).subscribe(port => {
-    store.dispatch(setPopup(true));
-    console.debug(`connecting ${port.name}`, { id: port?.sender?.tab?.id, timestamp: new Date().toISOString() });
-    port.onDisconnect.addListener(() => {
-      console.debug(`disconnecting ${port.name}`, new Date().toISOString());
-      store.dispatch(setPopup(false));
-    });
-  });
+  onAppConnect(store, ModalInstance.popup, setPopup).subscribe();
 
   // Option page
-  onConnect([ModalInstance.option]).subscribe(port => {
-    store.dispatch(setOption(true));
-    console.debug(`connecting ${port.name}`, { id: port?.sender?.tab?.id, timestamp: new Date().toISOString() });
-    port.onDisconnect.addListener(() => {
-      console.debug(`disconnecting ${port.name}`, new Date().toISOString());
-      store.dispatch(setOption(false));
-    });
-  });
+  onAppConnect(store, ModalInstance.option, setOption).subscribe();
 
   // Content script
   onConnect([ModalInstance.modal]).subscribe(port => {
@@ -44,6 +52,8 @@ export const onPortEvents = (store: Store) => {
 };
 
 export const onContentEvents = (store: Store) => {
+  console.debug('Subscribing to content menu events.');
+
   onMessage<boolean>([ChromeMessageType.contentMenuOpen]).subscribe(({ message: { payload } }) => {
     console.debug('Content menu open', payload);
     store.dispatch(setContentMenu(!!payload));

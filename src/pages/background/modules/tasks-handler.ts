@@ -1,4 +1,4 @@
-import { catchError, map, NEVER, tap } from 'rxjs';
+import { catchError, map, of, tap } from 'rxjs';
 
 import { localGet } from '@dvcol/web-extension-utils';
 
@@ -22,6 +22,6 @@ export const restoreTasks = (store: Store) =>
     tap(() => console.debug('Task slice restored.')),
     catchError(err => {
       console.error('tasks slice failed to restore.', err);
-      return NEVER;
+      return of(null);
     }),
   );

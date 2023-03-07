@@ -1,4 +1,4 @@
-import { catchError, NEVER, switchMap, tap } from 'rxjs';
+import { catchError, of, switchMap, tap } from 'rxjs';
 
 import { syncGet } from '@dvcol/web-extension-utils';
 
@@ -34,6 +34,6 @@ export const restoreSettings = (store: Store) =>
     tap(() => console.debug('Settings restored.')),
     catchError(err => {
       console.error('setting slice failed to restore.', err);
-      return NEVER;
+      return of(null);
     }),
   );

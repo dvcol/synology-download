@@ -6,6 +6,8 @@ import type { Observable } from 'rxjs';
 
 /** Listen to context menu events to create/updates menus */
 export const onMessageEvents = () => {
+  console.debug('Subscribing to context menu events.');
+
   // On message from chrome handle payload
   onMessage([ChromeMessageType.addMenu, ChromeMessageType.updateMenu, ChromeMessageType.removeMenu, ChromeMessageType.resetMenu]).subscribe(
     ({ message, sendResponse }) => {

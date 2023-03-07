@@ -28,34 +28,16 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "contentScript.bundle.js"
-      ]
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["contentScript.bundle.js"]
     }
   ],
-  "permissions": [
-    "scripting",
-    "contextMenus",
-    "notifications",
-    "storage",
-    "tabs",
-    "downloads",
-    "downloads.open"
-  ],
-  "host_permissions": [
-    "<all_urls>"
-  ],
+  "permissions": ["scripting", "contextMenus", "notifications", "storage", "tabs", "downloads", "downloads.open"],
+  "host_permissions": ["http://*/*", "https://*/*"],
   "web_accessible_resources": [
     {
-      "resources": [
-        "*.html"
-      ],
-      "matches": [
-        "<all_urls>"
-      ]
+      "resources": ["*.html"],
+      "matches": ["<all_urls>"]
     }
   ],
   "content_security_policy": {

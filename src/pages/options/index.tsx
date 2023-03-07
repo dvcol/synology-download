@@ -5,7 +5,8 @@ import { render } from 'react-dom';
 import { App } from '@src/components';
 import { AppRoute, ModalInstance } from '@src/models';
 import { DownloadService, NotificationService, PollingService, QueryService } from '@src/services';
-import { storeProxy } from '@src/store';
+import { store$, storeProxy } from '@src/store';
+import { getOption } from '@src/store/selectors';
 import { portConnect } from '@src/utils';
 
 // TODO custom UI for options
@@ -21,8 +22,10 @@ const initOptionsApp = async () => {
   // Register as open
   portConnect({ name: ModalInstance.option });
 
-  // If service is not initialized with url
-  if (QueryService.isReady) QueryService.autoLogin().subscribe();
+  // attempt auto-login on open
+  store$<boolean>(storeProxy, getOption).subscribe(open => {
+    if (open && QueryService.isReady) QueryService.autoLogin().subscribe();
+  });
 
   // Render the app
   render(<App store={storeProxy} redirect={AppRoute.Settings} />, window.document.querySelector('#synology-download-options-app-container'));

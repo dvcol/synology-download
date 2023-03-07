@@ -1,4 +1,4 @@
-import { catchError, EMPTY, finalize, NEVER, tap } from 'rxjs';
+import { EMPTY, finalize, of, tap } from 'rxjs';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
@@ -221,28 +221,30 @@ export class QueryService {
     state: StateSlice = getState(this.store.getState()),
     settings: SettingsSlice = getSettings(this.store.getState()),
     notify = true,
-  ): Observable<LoginResponse | void> {
+  ): Observable<LoginResponse | null> {
+    console.debug('Attempting auto-login', { state, settings });
+
     // If we are already logged-in we ignore
-    if (state?.logged) return NEVER;
+    if (state?.logged) return of(null);
 
     // If remember me is not enabled
-    if (!this.shouldAutoLogin(state, settings)) return NEVER;
+    if (!this.shouldAutoLogin(state, settings)) return of(null);
 
     // Attempt to Restore login
-    console.debug('Attempting re-login', state);
     return QueryService.login().pipe(
-      catchError(err => {
-        console.error('Auto-login failed.', err);
+      tap({
+        next: () => console.debug('Auto-login attempts successful'),
+        error: err => {
+          console.error('Auto-login failed.', err);
 
-        if (notify) {
-          NotificationService.error({
-            title: i18n('manual_login_required'),
-            message: i18n({ key: `auto_login`, substitutions: [err?.message ?? err?.name ?? ''] }),
-            contextMessage: urlReducer(settings.connection),
-          });
-        }
-
-        throw err;
+          if (notify) {
+            NotificationService.error({
+              title: i18n('manual_login_required'),
+              message: i18n({ key: `auto_login`, substitutions: [err?.message ?? err?.name ?? ''] }),
+              contextMessage: urlReducer(settings.connection),
+            });
+          }
+        },
       }),
     );
   }
