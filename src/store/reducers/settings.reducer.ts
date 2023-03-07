@@ -43,7 +43,11 @@ export const syncReducer = (oldSettings: SettingsSlice, action: PayloadAction<Pa
 
 export const syncConnectionReducer = (oldSettings: SettingsSlice, { payload }: PayloadAction<Partial<Connection>>): SettingsSlice => {
   const newSettings = setNestedReducer(oldSettings, payload, 'connection');
-  syncSettings(payload?.rememberMe ? newSettings : { ...newSettings, connection: { ...defaultConnection, rememberMe: payload?.rememberMe } });
+  syncSettings(
+    payload?.rememberMe
+      ? { ...newSettings, connection: { ...newSettings.connection, otp_code: '' } }
+      : { ...newSettings, connection: { ...defaultConnection, rememberMe: payload?.rememberMe } },
+  );
   return newSettings;
 };
 

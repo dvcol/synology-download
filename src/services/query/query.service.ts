@@ -203,11 +203,10 @@ export class QueryService {
     if (!settings?.connection?.rememberMe) return false;
     // If no auto-login and no previous logged state
     if (!settings?.connection?.autoLogin) return false;
-    // If device token for 2FA && no device id saved
-    return !(
-      settings?.connection?.type === ConnectionType.twoFactor &&
-      (!settings?.connection.enable_device_token || !settings?.connection?.device_id)
-    );
+    // If 2FA but no device token enabled
+    if (settings?.connection?.type === ConnectionType.twoFactor && !settings?.connection?.enable_device_token) return false;
+    // If device token for 2FA but no device id saved
+    return !(settings?.connection?.type === ConnectionType.twoFactor && !settings?.connection?.device_id);
   };
 
   /**
