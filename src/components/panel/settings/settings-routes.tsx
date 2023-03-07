@@ -4,21 +4,15 @@ import React from 'react';
 
 import { Route, Routes } from 'react-router-dom';
 
-import {
-  SettingsBanner,
-  SettingsContextMenus,
-  SettingsCredentials,
-  SettingsDownloads,
-  SettingsHeader,
-  SettingsPolling,
-  SettingsQuickMenus,
-  SettingsSnack,
-  SettingsTabs,
-  SettingsTasksCount,
-} from '@src/components';
-import { SettingsDownloadsIntercept } from '@src/components/panel/settings/settings-downloads-intercept';
-import { SettingsGlobal } from '@src/components/panel/settings/settings-global';
 import { SettingHeader } from '@src/models';
+
+import { SettingsCredentials, SettingsPolling } from './connection';
+
+import { SettingsDownloads, SettingsDownloadsIntercept } from './downloads';
+import { SettingsContextMenus, SettingsGlobal, SettingsQuickMenus, SettingsTabs } from './interface';
+import { SettingsBanner, SettingsSnack, SettingsTasksCount } from './notifications';
+
+import { SettingsHeader } from './settings-header';
 
 import type { FC } from 'react';
 import type { PathRouteProps } from 'react-router/lib/components';

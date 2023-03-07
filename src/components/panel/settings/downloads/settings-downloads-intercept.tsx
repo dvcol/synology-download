@@ -10,12 +10,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useI18n } from '@dvcol/web-extension-utils';
 
 import { ButtonWithConfirm, FormCheckbox, FormSwitch } from '@src/components';
-import { SettingsDownloadsExtensions } from '@src/components/panel/settings/settings-downloads-extensions';
+
 import type { DownloadExtension, DownloadsIntercept } from '@src/models';
 import { ColorLevel, ColorLevelMap, defaultDownloads, DownloadsHeader } from '@src/models';
 import type { StoreState } from '@src/store';
 import { syncDownloadsIntercept } from '@src/store/actions';
 import { getSettingsDownloadsEnabled, getSettingsDownloadsIntercept } from '@src/store/selectors';
+
+import { SettingsDownloadsExtensions } from './settings-downloads-extensions';
 
 export const SettingsDownloadsIntercept = () => {
   const i18n = useI18n('panel', 'settings', 'downloads', 'intercept');
