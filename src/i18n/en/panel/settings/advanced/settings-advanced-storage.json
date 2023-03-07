@@ -1,0 +1,12 @@
+{
+  "panel__settings__advanced__storage__title": {
+    "message": "Chrome storage snapshot"
+  },
+  "panel__settings__advanced__storage__subheader": {
+    "message": "This is an advanced settings, it is purely technical and does not impact features."
+  },
+
+  "panel__settings__advanced__storage__export": {
+    "message": "Export snapshot"
+  }
+}

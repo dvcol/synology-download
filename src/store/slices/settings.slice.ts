@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import type {
+  AdvancedSettings,
   Connection,
   ContentTab,
   ContextMenu,
@@ -51,6 +52,7 @@ interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   syncInterface: CaseReducer<S, PayloadAction<Partial<Global>>>;
   syncDownloads: CaseReducer<S, PayloadAction<Partial<Downloads>>>;
   syncDownloadsIntercept: CaseReducer<S, PayloadAction<DownloadsIntercept>>;
+  syncAdvanced: CaseReducer<S, PayloadAction<AdvancedSettings>>;
 }
 
 export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'settings'>({
@@ -107,5 +109,6 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
     syncInterface: (oldSettings, { payload }) => syncNestedReducer<Global>(oldSettings, payload, 'global'),
     syncDownloads: (oldSettings, { payload }) => syncNestedReducer<Downloads>(oldSettings, payload, 'downloads'),
     syncDownloadsIntercept: syncInterceptReducer,
+    syncAdvanced: (oldSettings, { payload }) => syncNestedReducer<AdvancedSettings>(oldSettings, payload, 'advanced'),
   } as SettingsReducers,
 });

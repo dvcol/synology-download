@@ -1,0 +1,17 @@
+{
+  "common__model__logging__level__trace": {
+    "message": "Trace"
+  },
+  "common__model__logging__level__debug": {
+    "message": "Debug"
+  },
+  "common__model__logging__level__info": {
+    "message": "Info"
+  },
+  "common__model__logging__level__warn": {
+    "message": "Warn"
+  },
+  "common__model__logging__level__error": {
+    "message": "Error"
+  }
+}

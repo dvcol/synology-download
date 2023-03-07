@@ -61,7 +61,7 @@
   "panel__settings__advanced_redux": {
     "message": "Redux"
   },
-  "panel__settings__advanced_sync": {
-    "message": "Sync"
+  "panel__settings__advanced_storage": {
+    "message": "Storage"
   }
 }

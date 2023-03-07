@@ -25,7 +25,7 @@ export const Settings = () => {
     },
     {
       label: SettingHeader.advanced,
-      links: [AdvancedHeader.logging, AdvancedHeader.redux, AdvancedHeader.sync],
+      links: [AdvancedHeader.logging, AdvancedHeader.redux, AdvancedHeader.storage],
     },
   ];
 

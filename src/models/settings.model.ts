@@ -55,7 +55,7 @@ export enum InterfaceHeader {
 export enum AdvancedHeader {
   logging = 'logging',
   redux = 'redux',
-  sync = 'sync',
+  storage = 'storage',
 }
 
 export enum ConnectionType {
@@ -285,6 +285,34 @@ export const defaultExtensions = [
   { ext: '.pdf', mime: 'application/pdf' },
 ];
 
+export enum LoggingLevel {
+  trace = 0,
+  debug = 1,
+  info = 2,
+  warn = 3,
+  error = 4,
+}
+
+export const LoggingLevelLevelKeys = {
+  [LoggingLevel.trace]: 'trace',
+  [LoggingLevel.debug]: 'debug',
+  [LoggingLevel.info]: 'info',
+  [LoggingLevel.warn]: 'warn',
+  [LoggingLevel.error]: 'error',
+};
+
+export interface AdvancedSettings {
+  enabled?: boolean;
+  level?: LoggingLevel;
+  history?: boolean;
+}
+
+export const defaultAdvancedSettings = {
+  enabled: true,
+  level: LoggingLevel.error,
+  history: false,
+};
+
 export const defaultDownloads = {
   enabled: true,
   buttons: true,
@@ -314,4 +342,5 @@ export const defaultSettings: SettingsSlice = {
   quick: [defaultQuickMenu, defaultModalQuickMenu, defaultRecentQuickMenu, defaultDownloadQuickMenu],
   global: defaultGlobal,
   downloads: defaultDownloads,
+  advanced: defaultAdvancedSettings,
 };

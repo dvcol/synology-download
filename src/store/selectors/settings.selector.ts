@@ -11,7 +11,7 @@ import type {
   NotificationsSnack,
   SettingsSlice,
 } from '@src/models';
-import { ConnectionType, defaultConnection, defaultDownloads, defaultGlobal, ThemeMode } from '@src/models';
+import { ConnectionType, defaultAdvancedSettings, defaultConnection, defaultDownloads, defaultGlobal, ThemeMode } from '@src/models';
 import { darkTheme, lightTheme } from '@src/themes';
 
 import type { StoreState } from '../store';
@@ -126,3 +126,5 @@ export const getSettingsDownloadsInterceptEnabled = createSelector(
   getSettingsDownloadsEnabled,
   (intercept: DownloadsIntercept, enabled) => enabled && intercept?.enabled,
 );
+
+export const getAdvancedSettings = createSelector(getSettings, (settings: SettingsSlice) => settings?.advanced ?? defaultAdvancedSettings);

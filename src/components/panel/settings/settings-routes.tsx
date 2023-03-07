@@ -4,6 +4,7 @@ import React from 'react';
 
 import { Route, Routes } from 'react-router-dom';
 
+import { SettingsChromeStorage, SettingsLogging, SettingsRedux } from '@src/components/panel/settings/advanced';
 import { SettingHeader } from '@src/models';
 
 import { SettingsCredentials, SettingsPolling } from './connection';
@@ -68,9 +69,9 @@ export const SettingsRoutes: FC = () => {
       element: (
         <React.Fragment>
           <SettingsHeader label={SettingHeader.advanced} />
-          {/*  TODO logging */}
-          {/*  TODO redux */}
-          {/*  TODO sync */}
+          <SettingsLogging />
+          <SettingsRedux />
+          <SettingsChromeStorage />
         </React.Fragment>
       ),
     },

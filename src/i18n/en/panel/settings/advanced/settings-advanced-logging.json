@@ -1,0 +1,29 @@
+{
+  "panel__settings__advanced__logging__title": {
+    "message": "Enables console logging for the extension."
+  },
+  "panel__settings__advanced__logging__subheader": {
+    "message": "This is an advanced settings, it is purely technical and does not impact features."
+  },
+
+  "panel__settings__advanced__logging__level__title": {
+    "message": "Logging level"
+  },
+  "panel__settings__advanced__logging__level__subheader": {
+    "message": "The cumulative level of logging (defaults to error)."
+  },
+  "panel__settings__advanced__logging__level__label": {
+    "message": "Logging level"
+  },
+
+  "panel__settings__advanced__logging__history__title": {
+    "message": "Keep history"
+  },
+  "panel__settings__advanced__logging__history__subheader": {
+    "message": "Keep logging history in memory."
+  },
+
+  "panel__settings__advanced__logging__history__export": {
+    "message": "Export log history"
+  }
+}
