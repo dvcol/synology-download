@@ -104,6 +104,8 @@ export const renderContentApp = async (): Promise<void> => {
       NotificationService.init(storeProxy, true);
       // Register as open
       connect();
+      // Attempts auto-login
+      if (QueryService.isReady) QueryService.autoLogin().subscribe();
     })
     .then(() => render(<ContentApp store={storeProxy} cache={cache} container={container} />, app));
 };
