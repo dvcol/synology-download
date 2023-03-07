@@ -30,7 +30,7 @@ export type StoreState = ReturnType<typeof rootReducer>;
 
 const options: ConfigureStoreOptions = { reducer: reducers, devTools: { name: 'synology-download' } };
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development' || process.env.DEVTOOL === 'true') {
   const context = global?.document?.querySelector<HTMLDivElement>("[id^='synology-download-']")?.dataset?.context;
   if (!global?.document || context === 'popup') {
     const name = `synology-download-remote-${context ?? 'background'}`;

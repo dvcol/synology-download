@@ -6,6 +6,9 @@ const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const webpack = require('webpack');
 
+process.env.DEBUG = process.env.DEBUG ?? process.env.NODE_ENV === 'development';
+process.env.DEVTOOL = process.env.DEVTOOL ?? process.env.NODE_ENV === 'development';
+
 const ASSET_PATH = process.env.ASSET_PATH || '/';
 
 const alias = {
@@ -93,7 +96,7 @@ const options = {
   plugins: [
     new webpack.ProgressPlugin(),
     // expose and write the allowed env vars on the compiled bundle
-    new webpack.EnvironmentPlugin(['NODE_ENV']),
+    new webpack.EnvironmentPlugin(['NODE_ENV', 'DEBUG', 'DEVTOOL']),
     new CopyWebpackPlugin({
       patterns: [
         {
