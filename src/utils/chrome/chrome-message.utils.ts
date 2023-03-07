@@ -11,6 +11,8 @@ import {
 
 import type { ChromeMessagePayload, ChromeMessageType } from '@src/models';
 
+import { LoggerService } from '@src/services';
+
 import type { Observable } from 'rxjs';
 
 import Port = chrome.runtime.Port;
@@ -34,7 +36,7 @@ export const onMessage = <P extends ChromeMessagePayload = ChromeMessagePayload,
 export const sendMessage = <P extends ChromeMessagePayload = ChromeMessagePayload, R = void>(
   message: ChromeMessage<ChromeMessageType, P>,
 ): Observable<R> => {
-  console.debug(`Sending '${message.type}' message`, message);
+  LoggerService.debug(`Sending '${message.type}' message`, message);
   return _sendMessage<ChromeMessageType, P, R>(message);
 };
 
@@ -48,7 +50,7 @@ export const sendTabMessage = <P extends ChromeMessagePayload = ChromeMessagePay
   tabId: number,
   message: ChromeMessage<ChromeMessageType, P>,
 ): Observable<R> => {
-  console.debug(`Sending '${message.type}' message to active tab '${tabId}'`, { message, tabId });
+  LoggerService.debug(`Sending '${message.type}' message to active tab '${tabId}'`, { message, tabId });
   return _sendTabMessage<ChromeMessageType, P, R>(tabId, message);
 };
 

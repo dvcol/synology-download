@@ -4,6 +4,7 @@ import { syncGet } from '@dvcol/web-extension-utils';
 
 import type { SettingsSlice } from '@src/models';
 import { defaultSettings } from '@src/models';
+import { LoggerService } from '@src/services';
 import { setNavbar, syncSettings } from '@src/store/actions';
 import { settingsSlice } from '@src/store/slices/settings.slice';
 import { buildContextMenu, setBadgeBackgroundColor } from '@src/utils';
@@ -14,7 +15,7 @@ import type { Store } from 'redux';
 export const restoreSettings = (store: Store) =>
   syncGet<SettingsSlice>(settingsSlice.name).pipe(
     switchMap(async settings => {
-      console.debug('restoring settings from chrome storage', settings);
+      LoggerService.debug('restoring settings from chrome storage', settings);
       // restore settings
       store.dispatch(syncSettings(settings));
 
@@ -22,7 +23,7 @@ export const restoreSettings = (store: Store) =>
       const color = settings?.notifications?.count?.color;
       if (color) {
         await setBadgeBackgroundColor({ color });
-        console.debug('Badge color restored to ', color);
+        LoggerService.debug('Badge color restored to ', color);
       }
 
       // restore tabs
@@ -31,9 +32,9 @@ export const restoreSettings = (store: Store) =>
       // restore context menu
       return buildContextMenu(settings?.menus || defaultSettings.menus);
     }),
-    tap(() => console.debug('Settings restored.')),
+    tap(() => LoggerService.debug('Settings restored.')),
     catchError(err => {
-      console.error('setting slice failed to restore.', err);
+      LoggerService.error('setting slice failed to restore.', err);
       return of(null);
     }),
   );

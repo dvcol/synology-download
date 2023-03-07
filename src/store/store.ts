@@ -2,9 +2,9 @@
 import { devToolsEnhancer } from '@redux-devtools/remote';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-import { BehaviorSubject, distinctUntilChanged, finalize, map } from 'rxjs';
+import type { RootSlice } from '@src/models';
 
-import type { RootSlice, StoreOrProxy } from '@src/models';
+import { LoggerService } from '@src/services';
 
 import { downloadsSlice } from './slices/downloads.slice';
 import { navbarSlice } from './slices/navbar.slice';
@@ -36,13 +36,7 @@ if (process.env.NODE_ENV === 'development' || process.env.DEVTOOL === 'true') {
     const name = `synology-download-remote-${context ?? 'background'}`;
     const devtools = { realtime: true, hostname: 'localhost', port: 8000, name };
     options.enhancers = [devToolsEnhancer(devtools)];
-    console.debug('Redux devtool exposed on', `http://${devtools.hostname}:${devtools.port}`, name);
+    LoggerService.debug('Redux devtool exposed on', `http://${devtools.hostname}:${devtools.port}`, name);
   }
 }
 export const store: Store = configureStore(options);
-
-export const store$ = <R, T = RootSlice>(_store: StoreOrProxy, getter: (state: T) => R) => {
-  const _store$ = new BehaviorSubject<T>(_store.getState());
-  const unsubscribe = _store.subscribe(() => _store$.next(_store.getState()));
-  return _store$.pipe(map<T, R>(getter), distinctUntilChanged(), finalize(unsubscribe));
-};

@@ -22,9 +22,8 @@ import type {
   TaskList,
 } from '@src/models';
 import { ConnectionType, FileListOption, LoginError, mapToTask, NotReadyError, TaskListOption, TaskStatus } from '@src/models';
-import { NotificationService } from '@src/services';
+import { LoggerService, NotificationService } from '@src/services';
 import { SynologyAuthService, SynologyDownloadService, SynologyFileService, SynologyInfoService } from '@src/services/http';
-import { store$ } from '@src/store';
 import {
   addDestinationHistory,
   addLoading,
@@ -53,7 +52,7 @@ import {
   getUrl,
   urlReducer,
 } from '@src/store/selectors';
-import { before } from '@src/utils';
+import { before, store$ } from '@src/utils';
 
 import type { Observable } from 'rxjs';
 
@@ -83,7 +82,7 @@ export class QueryService {
 
     this.store.dispatch(resetLoading());
 
-    console.debug('Query service initialized', { isProxy });
+    LoggerService.debug('Query service initialized', { isProxy });
   }
 
   static setBaseUrl(baseUrl: string): void {
@@ -215,16 +214,16 @@ export class QueryService {
    * If the application is not currently logged-in and we have the appropriate settings, we attempt a login.
    * If any condition is not respected, we return an empty observable that completes without emitting
    *
-   * @param state an optional state slice
-   * @param settings an optional settings slice
-   * @param notify if we should dispatch a notification or not
+   * @param options optional inputs, state, settings and notify
    */
-  static autoLogin(
-    state: StateSlice = getState(this.store.getState()),
-    settings: SettingsSlice = getSettings(this.store.getState()),
-    notify = true,
-  ): Observable<LoginResponse | null> {
-    console.debug('Attempting auto-login', { state, settings });
+  static autoLogin(options: { state?: StateSlice; settings?: SettingsSlice; notify?: boolean } = {}): Observable<LoginResponse | null> {
+    const { state, settings, notify } = {
+      state: getState(this.store.getState()),
+      settings: getSettings(this.store.getState()),
+      notify: true,
+      ...options,
+    };
+    LoggerService.debug('Attempting auto-login', { state, settings });
 
     // If we are already logged-in we ignore
     if (state?.logged) return of(null);
@@ -236,9 +235,9 @@ export class QueryService {
     return QueryService.login().pipe(
       this.loadingOperator(false, true),
       tap({
-        next: () => console.debug('Auto-login attempt successful'),
+        next: () => LoggerService.debug('Auto-login attempt successful'),
         error: err => {
-          console.warn('Auto-login failed.', err);
+          LoggerService.warn('Auto-login failed.', err);
 
           if (notify) {
             NotificationService.error({

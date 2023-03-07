@@ -5,6 +5,7 @@ import { HttpMethod } from '@dvcol/web-extension-utils';
 
 import type { Api, Endpoint, HttpResponse, SynologyQueryArgs, SynologyQueryPayload } from '@src/models';
 import { ChromeMessageType, Controller, SynologyError } from '@src/models';
+import { LoggerService } from '@src/services';
 import { onMessage, sendMessage, stringifyParams } from '@src/utils';
 
 import { BaseHttpService } from './base-http.service';
@@ -27,7 +28,7 @@ export class SynologyService extends BaseHttpService {
           .pipe(
             map(response => ({ success: true, payload: response })),
             catchError(error => {
-              console.error('Forwarded method failed.', { payload, error });
+              LoggerService.error('Forwarded method failed.', { payload, error });
               return of({ success: false, error: error?.toString() });
             }),
           )

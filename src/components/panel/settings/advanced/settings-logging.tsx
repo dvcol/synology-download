@@ -13,6 +13,7 @@ import { useI18n } from '@dvcol/web-extension-utils';
 import { ButtonWithConfirm, FormInput, FormSwitch } from '@src/components';
 import type { AdvancedLogging, RootSlice } from '@src/models';
 import { AdvancedHeader, ColorLevel, defaultAdvancedLogging, defaultAdvancedSettings, LoggingLevel, LoggingLevelLevelKeys } from '@src/models';
+import { LoggerService } from '@src/services';
 import { syncAdvancedLogging } from '@src/store/actions';
 import { getAdvancedSettingsLogging } from '@src/store/selectors';
 
@@ -46,7 +47,7 @@ export const SettingsLogging = () => {
   };
 
   const exportHistory = () => {
-    console.info('TODO : export history');
+    LoggerService.info('TODO : export history');
   };
 
   return (

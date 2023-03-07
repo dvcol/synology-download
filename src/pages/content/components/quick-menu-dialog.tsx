@@ -15,7 +15,7 @@ import { ChromeMessageType, QuickMenuType } from '@src/models';
 import { anchor$, lastClick$ } from '@src/pages/content/service/anchor.service';
 import type { TaskDialogIntercept } from '@src/pages/content/service/dialog.service';
 import { taskDialog$ } from '@src/pages/content/service/dialog.service';
-import { NotificationService, QueryService } from '@src/services';
+import { LoggerService, NotificationService, QueryService } from '@src/services';
 import type { StoreState } from '@src/store';
 import { getDestinationsHistory, getLogged, getQuick } from '@src/store/selectors';
 
@@ -37,7 +37,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
     setAnchor(anchor ?? null);
     setPosition(position);
     sendMessage<boolean>({ type: ChromeMessageType.contentMenuOpen, payload: Boolean(position || anchor) }).subscribe({
-      error: e => console.warn('Intercept menu open failed to send.', e),
+      error: e => LoggerService.warn('Intercept menu open failed to send.', e),
     });
   };
 

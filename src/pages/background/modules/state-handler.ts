@@ -3,7 +3,7 @@ import { catchError, of, switchMap, tap } from 'rxjs';
 import { localGet } from '@dvcol/web-extension-utils';
 
 import type { SettingsSlice, StateSlice } from '@src/models';
-import { QueryService } from '@src/services';
+import { LoggerService, QueryService } from '@src/services';
 import { restoreState } from '@src/store/actions';
 import { stateSlice } from '@src/store/slices/state.slice';
 
@@ -19,8 +19,8 @@ export const restoreLoginSate = (state?: StateSlice, settings?: SettingsSlice) =
   if (!QueryService.isReady) return of(null);
 
   // Attempt to Restore login
-  return QueryService.autoLogin(state, settings, false).pipe(
-    tap(() => console.debug('Login state restored.')),
+  return QueryService.autoLogin({ state, settings, notify: false }).pipe(
+    tap(() => LoggerService.debug('Login state restored.')),
     catchError(() => of(null)),
   );
 };
@@ -32,7 +32,7 @@ export const restoreLoginSate = (state?: StateSlice, settings?: SettingsSlice) =
 export const restoreLocalSate = (store: Store) =>
   localGet<StateSlice>(stateSlice.name).pipe(
     switchMap(state => {
-      console.debug('restoring state from chrome storage', state);
+      LoggerService.debug('restoring state from chrome storage', state);
 
       // restore saved state while removing logged state
       store.dispatch(restoreState({ ...state, logged: false }));
@@ -40,9 +40,9 @@ export const restoreLocalSate = (store: Store) =>
       // restore login state based on settings
       return restoreLoginSate();
     }),
-    tap(() => console.debug('Local state restored.')),
+    tap(() => LoggerService.debug('Local state restored.')),
     catchError(err => {
-      console.error('local state failed to restore.', err);
+      LoggerService.error('local state failed to restore.', err);
       return of(null);
     }),
   );

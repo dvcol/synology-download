@@ -21,7 +21,7 @@ import { TaskAdd } from '@src/components';
 import type { Download, Global, TaskForm } from '@src/models';
 import { ColorLevel, ColorLevelMap, DownloadStatus, downloadStatusToColor } from '@src/models';
 
-import { DownloadService, InterceptService } from '@src/services';
+import { DownloadService, InterceptService, LoggerService } from '@src/services';
 
 import type { StoreState } from '@src/store';
 import { getGlobalDownload, getSettingsDownloadsTransfer } from '@src/store/selectors';
@@ -101,7 +101,7 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
         if ($event.shiftKey || !modal) return InterceptService.transfer(download, { erase, resume }).subscribe();
         return toggleDialog(true);
       default:
-        console.warn(`Key '${key}' is unknown`);
+        LoggerService.warn(`Key '${key}' is unknown`);
     }
   };
 

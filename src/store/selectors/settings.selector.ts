@@ -1,6 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 
 import type {
+  AdvancedLogging,
   AdvancedSettings,
   Connection,
   Credentials,
@@ -13,6 +14,7 @@ import type {
   SettingsSlice,
 } from '@src/models';
 import { ConnectionType, defaultAdvancedSettings, defaultConnection, defaultDownloads, defaultGlobal, ThemeMode } from '@src/models';
+import { LoggerService } from '@src/services';
 import { darkTheme, lightTheme } from '@src/themes';
 
 import type { StoreState } from '../store';
@@ -81,7 +83,7 @@ export const getThemeMode = createSelector(getGlobal, (_global: Global) => {
     case ThemeMode.auto:
       return null;
     default:
-      console.warn(`Theme '${_global?.theme}' not supported, falling back to ${ThemeMode.auto}`);
+      LoggerService.warn(`Theme '${_global?.theme}' not supported, falling back to ${ThemeMode.auto}`);
       return null;
   }
 });
@@ -133,4 +135,14 @@ export const getAdvancedSettings = createSelector(getSettings, (settings: Settin
 export const getAdvancedSettingsLogging = createSelector(
   getAdvancedSettings,
   (settings: AdvancedSettings) => settings?.logging ?? defaultAdvancedSettings.logging,
+);
+
+export const getAdvancedSettingsLoggingEnabled = createSelector(
+  getAdvancedSettingsLogging,
+  (logging: AdvancedLogging) => logging?.enabled ?? defaultAdvancedSettings.logging?.enabled,
+);
+
+export const getAdvancedSettingsLoggingLevel = createSelector(
+  getAdvancedSettingsLogging,
+  (logging: AdvancedLogging) => logging?.level ?? defaultAdvancedSettings.logging?.level,
 );

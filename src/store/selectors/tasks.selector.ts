@@ -3,6 +3,8 @@ import { createSelector } from '@reduxjs/toolkit';
 import type { Content, ContentStatusTypeId, Task } from '@src/models';
 import { ContentSource, ContentStatusType, TaskStatus } from '@src/models';
 
+import { LoggerService } from '@src/services';
+
 import type { StoreState } from '../store';
 
 export const getTasks = createSelector(
@@ -45,7 +47,7 @@ export const geTasksIdsByStatusTypeReducer = (items: Content[]) =>
             map[ContentStatusType.error].add(id);
             break;
           default:
-            console.error(`Status ${status} is not supported`);
+            LoggerService.error(`Status ${status} is not supported`);
         }
         map[ContentStatusType.all].add(id);
         return map;

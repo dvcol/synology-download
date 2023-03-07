@@ -2,8 +2,6 @@ import { fromEventPattern } from 'rxjs';
 
 import { anchor$, lastClick$ } from '@src/pages/content/service/anchor.service';
 
-import type { Subscription } from 'rxjs';
-
 /**
  * List of supported protocols
  */
@@ -66,6 +64,4 @@ const listener = async (event: MouseEvent) => {
 const addAnchorClickListener = () => document.addEventListener('click', listener);
 const removeAnchorClickListener = () => document.removeEventListener('click', listener);
 
-const clickListener$ = fromEventPattern(addAnchorClickListener, removeAnchorClickListener);
-
-export const onClickEventListener = (): Subscription => clickListener$.subscribe();
+export const clickListener$ = fromEventPattern(addAnchorClickListener, removeAnchorClickListener);

@@ -13,7 +13,7 @@ import type {
   Task,
 } from '@src/models';
 import { ChromeMessageType, NotificationLevel, NotificationLevelKeys, NotificationType } from '@src/models';
-import { store$ } from '@src/store';
+import { LoggerService } from '@src/services';
 import { setBadge } from '@src/store/actions';
 import {
   getNotificationsBannerEnabled,
@@ -23,7 +23,7 @@ import {
   getNotificationsSnackLevel,
   getStateBadge,
 } from '@src/store/selectors';
-import { bufferDebounceUnless, createNotification, isMacOs, onMessage, parseMagnetLink, sendActiveTabMessage, sendMessage } from '@src/utils';
+import { bufferDebounceUnless, createNotification, isMacOs, onMessage, parseMagnetLink, sendActiveTabMessage, sendMessage, store$ } from '@src/utils';
 
 import type { VariantType } from 'notistack';
 import type { Observable } from 'rxjs';
@@ -77,7 +77,7 @@ export class NotificationService {
       });
     }
 
-    console.debug('Notification service initialized', { isProxy });
+    LoggerService.debug('Notification service initialized', { isProxy });
   }
 
   static get snackNotifications$(): Observable<SnackNotification> {
@@ -147,7 +147,7 @@ export class NotificationService {
         type: ChromeMessageType.notificationBanner,
         payload: notification,
       }).subscribe({
-        error: e => console.warn('Banner notification failed, forward ended in error.', e),
+        error: e => LoggerService.warn('Banner notification failed, forward ended in error.', e),
       });
     } else if (notification) {
       (notification.priority ?? NotificationLevel.info < 0 ? this.error$ : this.notify$).next(notification);
@@ -162,7 +162,7 @@ export class NotificationService {
         type: ChromeMessageType.notificationSnack,
         payload: notification,
       }).subscribe({
-        error: e => console.warn('Snack notification failed, no active tab found.', e),
+        error: e => LoggerService.warn('Snack notification failed, no active tab found.', e),
       });
     }
   }

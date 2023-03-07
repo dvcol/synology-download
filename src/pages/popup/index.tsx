@@ -5,9 +5,9 @@ import { render } from 'react-dom';
 import { App } from '@src/components';
 import { ModalInstance } from '@src/models';
 import { DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
-import { store$, storeProxy } from '@src/store';
+import { storeProxy } from '@src/store';
 import { getPopup } from '@src/store/selectors';
-import { portConnect } from '@src/utils';
+import { portConnect, store$ } from '@src/utils';
 
 const initOptionsApp = async () => {
   await storeProxy.ready();
@@ -32,7 +32,7 @@ const initOptionsApp = async () => {
 };
 
 initOptionsApp()
-  .then(() => console.debug('Popup app initialised.'))
-  .catch(err => console.debug('Popup app failed to initialised.', err));
+  .then(() => LoggerService.debug('Popup app initialised.'))
+  .catch(err => LoggerService.debug('Popup app failed to initialised.', err));
 
 if (module.hot) module.hot.accept();

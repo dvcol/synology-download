@@ -5,9 +5,9 @@ import { render } from 'react-dom';
 import { App } from '@src/components';
 import { AppRoute, ModalInstance } from '@src/models';
 import { DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
-import { store$, storeProxy } from '@src/store';
+import { storeProxy } from '@src/store';
 import { getOption } from '@src/store/selectors';
-import { portConnect } from '@src/utils';
+import { portConnect, store$ } from '@src/utils';
 
 // TODO custom UI for options
 const initOptionsApp = async () => {
@@ -33,7 +33,7 @@ const initOptionsApp = async () => {
 };
 
 initOptionsApp()
-  .then(() => console.debug('Options app initialised.'))
-  .catch(err => console.debug('Options app failed to initialised.', err));
+  .then(() => LoggerService.debug('Options app initialised.'))
+  .catch(err => LoggerService.debug('Options app failed to initialised.', err));
 
 if (module.hot) module.hot.accept();

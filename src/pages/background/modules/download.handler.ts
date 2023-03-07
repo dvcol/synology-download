@@ -2,14 +2,15 @@ import { withLatestFrom } from 'rxjs';
 
 import type { DownloadsIntercept, StoreOrProxy } from '@src/models';
 import { DownloadStatus } from '@src/models';
-import { InterceptService, NotificationService } from '@src/services';
-import { store$ } from '@src/store';
+import { InterceptService, LoggerService, NotificationService } from '@src/services';
 import { getSettingsDownloadsIntercept, getSettingsDownloadsInterceptEnabled, getSettingsDownloadsNotifications } from '@src/store/selectors';
-import { onFilename$, onStatus$ } from '@src/utils';
+import { onFilename$, onStatus$, store$ } from '@src/utils';
 
 import type { Subscription } from 'rxjs';
 
 const onDownloadEventsNotifications = (store: StoreOrProxy) => {
+  LoggerService.debug('Subscribing to download notifications events.');
+
   const notifications$ = store$<boolean>(store, getSettingsDownloadsNotifications);
   onStatus$(DownloadStatus.complete)
     .pipe(withLatestFrom(notifications$))
@@ -51,14 +52,18 @@ const onDownloadEventsIntercept = (store: StoreOrProxy) => {
   let sub: Subscription;
   enabled$.subscribe(_enabled => {
     if (_enabled) {
+      LoggerService.debug('Subscribing to download intercepts events.');
       sub = subscribe();
     } else {
+      LoggerService.debug('Unsubscribing from download intercepts events.');
       sub?.unsubscribe();
     }
   });
 };
 
 export const onDownloadEvents = (store: StoreOrProxy) => {
+  LoggerService.debug('Subscribing to download events.');
+
   onDownloadEventsNotifications(store);
   onDownloadEventsIntercept(store);
 };

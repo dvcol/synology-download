@@ -2,10 +2,9 @@ import { combineLatest, distinctUntilChanged, Subject, switchMap, timer, withLat
 
 import type { ChromeNotification, StoreOrProxy } from '@src/models';
 import { ChromeMessageType, defaultPolling } from '@src/models';
-import { DownloadService } from '@src/services';
-import { store$ } from '@src/store';
+import { DownloadService, LoggerService } from '@src/services';
 import { getLogged, getPollingEnabled, getPollingInterval, getSettingsDownloadsEnabled } from '@src/store/selectors';
-import { onMessage, sendMessage, skipUntilRepeat } from '@src/utils';
+import { onMessage, sendMessage, skipUntilRepeat, store$ } from '@src/utils';
 
 import { QueryService } from '../query';
 
@@ -61,7 +60,7 @@ export class PollingService {
       ]).subscribe(([enabled, logged, download]) => (enabled && (download || logged) ? this.start() : this.stop()));
     }
 
-    console.debug('Polling service initialized', { isProxy });
+    LoggerService.debug('Polling service initialized', { isProxy });
   }
 
   static start(): void {

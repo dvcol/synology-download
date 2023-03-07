@@ -1,6 +1,7 @@
 import { localSet } from '@dvcol/web-extension-utils';
 
 import type { ContentCount, StateSlice, TaskStatistics } from '@src/models';
+import { LoggerService } from '@src/services';
 import { formatBytes, setBadgeText, setTitle } from '@src/utils';
 
 import { stateSlice } from '../slices/state.slice';
@@ -43,7 +44,7 @@ type PartialState = Pick<StateSlice, 'logged' | 'history'>;
 export const syncStateReducer = (state: StateSlice): StateSlice => {
   const { logged, history } = state;
   // TODO : move to thunk ?
-  localSet<PartialState>(stateSlice.name, { logged, history }).subscribe(_state => console.debug('State local sync success', _state));
+  localSet<PartialState>(stateSlice.name, { logged, history }).subscribe(_state => LoggerService.debug('State local sync success', _state));
   return state;
 };
 

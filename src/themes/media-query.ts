@@ -1,9 +1,10 @@
 import { fromEventPattern } from 'rxjs';
 
 import type { StoreOrProxy } from '@src/models';
-import { store$ } from '@src/store';
 import { getThemeMode } from '@src/store/selectors';
 import { darkTheme, lightTheme } from '@src/themes/themes';
+
+import { store$ } from '@src/utils';
 
 import type { Theme } from '@mui/material/styles/createTheme';
 import type { Dispatch, SetStateAction } from 'react';

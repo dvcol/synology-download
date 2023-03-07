@@ -13,13 +13,14 @@ import type {
   SettingsSlice,
 } from '@src/models';
 import { defaultAdvancedLogging, defaultAdvancedSettings, defaultConnection, defaultDownloads, SettingsSliceName } from '@src/models';
+import { LoggerService } from '@src/services';
 import { setBadgeBackgroundColor } from '@src/utils';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 export const syncSettings = (settings: SettingsSlice): void => {
   // TODO : move to thunk ?
-  syncSet<SettingsSlice>(SettingsSliceName, settings).subscribe(() => console.debug('Setting chrome sync success', settings));
+  syncSet<SettingsSlice>(SettingsSliceName, settings).subscribe(() => LoggerService.debug('Setting chrome sync success', settings));
 };
 
 export const setNestedReducer = <T>(oldSettings: SettingsSlice, payload: Partial<T>, name: keyof SettingsSlice): SettingsSlice => {
@@ -50,7 +51,7 @@ export const setBadgeReducer = <T extends Notifications>(oldSettings: SettingsSl
   const color = payload?.count?.color;
   // TODO : move to thunk ?
   if (color !== oldSettings?.notifications?.count?.color) {
-    setBadgeBackgroundColor({ color: color ?? '' }).then(() => console.debug('Badge color changed to ', color));
+    setBadgeBackgroundColor({ color: color ?? '' }).then(() => LoggerService.debug('Badge color changed to ', color));
   }
   return syncNestedReducer<T>(oldSettings, payload, 'notifications');
 };

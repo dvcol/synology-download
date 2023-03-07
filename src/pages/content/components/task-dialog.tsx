@@ -11,7 +11,7 @@ import type { ContextMenuOnClickPayload, InterceptResponse, TaskForm } from '@sr
 import { ChromeMessageType } from '@src/models';
 import type { TaskDialogIntercept } from '@src/pages/content/service/dialog.service';
 import { taskDialog$ } from '@src/pages/content/service/dialog.service';
-import { NotificationService, QueryService } from '@src/services';
+import { LoggerService, NotificationService, QueryService } from '@src/services';
 import { onMessage, sendMessage, zIndexMax } from '@src/utils';
 
 import type { PortalProps } from '@mui/base/Portal';
@@ -32,7 +32,7 @@ export const TaskDialog: FC<{ container?: PortalProps['container'] }> = ({ conta
   const _setOpen = (_open: boolean) => {
     setOpen(_open);
     sendMessage<boolean>({ type: ChromeMessageType.contentDialogOpen, payload: _open }).subscribe({
-      error: e => console.warn('Intercept menu open failed to send.', e),
+      error: e => LoggerService.warn('Intercept menu open failed to send.', e),
     });
   };
 

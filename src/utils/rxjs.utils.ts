@@ -1,4 +1,23 @@
-import { buffer, debounceTime, elementAt, Observable, of, race, repeat, repeatWhen, skipWhile, switchMap, takeUntil, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  buffer,
+  debounceTime,
+  distinctUntilChanged,
+  elementAt,
+  finalize,
+  map,
+  Observable,
+  of,
+  race,
+  repeat,
+  repeatWhen,
+  skipWhile,
+  switchMap,
+  takeUntil,
+  tap,
+} from 'rxjs';
+
+import type { RootSlice, StoreOrProxy } from '@src/models';
 
 import type { MonoTypeOperatorFunction, OperatorFunction } from 'rxjs';
 
@@ -80,3 +99,14 @@ export const before: BeforeOperator =
       tap(callback),
       switchMap(() => source),
     );
+
+/**
+ * Rxjs wrapper for store subscriptions
+ * @param _store a store or proxy tore instance
+ * @param getter the getter to extract a slice
+ */
+export const store$ = <R, T = RootSlice>(_store: StoreOrProxy, getter: (state: T) => R) => {
+  const _store$ = new BehaviorSubject<T>(_store.getState());
+  const unsubscribe = _store.subscribe(() => _store$.next(_store.getState()));
+  return _store$.pipe(map<T, R>(getter), distinctUntilChanged(), finalize(unsubscribe));
+};

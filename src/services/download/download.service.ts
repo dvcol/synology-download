@@ -2,6 +2,7 @@ import { catchError, EMPTY, forkJoin, from, map, of, tap, throwError } from 'rxj
 
 import type { Download, DownloadQueryPayload, StoreOrProxy } from '@src/models';
 import { ChromeMessageType, mapToDownload } from '@src/models';
+import { LoggerService } from '@src/services';
 import { setDownloads } from '@src/store/actions';
 import {
   getActiveDownloadIdsByActionScope,
@@ -47,7 +48,7 @@ export class DownloadService {
 
     if (!isProxy) this.listen();
 
-    console.debug('Download service initialized', { isProxy });
+    LoggerService.debug('Download service initialized', { isProxy });
   }
 
   static search(query: DownloadQuery = {}): Observable<Download[]> {

@@ -6,13 +6,13 @@ import { injectContentScripts } from '@dvcol/web-extension-utils';
 import manifest from '@src/manifest.json';
 import type { SnackNotification, StoreOrProxy } from '@src/models';
 import { AppLinks, ChromeMessageType, NotificationLevel } from '@src/models';
-import { store$ } from '@src/store';
+import { LoggerService } from '@src/services';
 import { getPopup } from '@src/store/selectors';
 import type { InstalledDetails } from '@src/utils';
-import { onInstalled$, sendMessage } from '@src/utils';
+import { onInstalled$, sendMessage, store$ } from '@src/utils';
 
 export const onInstalledEvents = (store: StoreOrProxy) => {
-  console.debug('Subscribing to install events.');
+  LoggerService.debug('Subscribing to install events.');
 
   // re-inject content scripts in open tabs
   injectContentScripts();
@@ -47,7 +47,7 @@ export const onInstalledEvents = (store: StoreOrProxy) => {
     )
     .subscribe(message =>
       sendMessage<SnackNotification>(message).subscribe({
-        error: e => console.warn('Snack notification failed to send.', e),
+        error: e => LoggerService.warn('Snack notification failed to send.', e),
       }),
     );
 };

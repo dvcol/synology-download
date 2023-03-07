@@ -14,7 +14,7 @@ import { useI18n } from '@dvcol/web-extension-utils';
 import { ButtonWithConfirm, FormCheckbox, FormInput, FormSwitch } from '@src/components';
 import type { Connection, Credentials, InfoResponse, LoginResponse } from '@src/models';
 import { AppLinks, ColorLevel, ColorLevelMap, CommonAPI, ConnectionHeader, ConnectionType, defaultConnection, Protocol } from '@src/models';
-import { NotificationService, PollingService, QueryService } from '@src/services';
+import { LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { syncConnection } from '@src/store/actions';
 import { getConnection, getLogged, urlReducer } from '@src/store/selectors';
 import { before, createTab, useDebounceObservable } from '@src/utils';
@@ -105,7 +105,7 @@ export const SettingsCredentials = () => {
         if (_version < 6) setValue('enable_device_token', false);
         return _version;
       })
-      .catch(err => console.error('Failed to query info', err));
+      .catch(err => LoggerService.error('Failed to query info', err));
 
   useEffect(() => {
     PollingService.stop();
@@ -158,7 +158,7 @@ export const SettingsCredentials = () => {
           });
         },
         error: (error: Error) => {
-          console.error('Failed to login', error);
+          LoggerService.error('Failed to login', error);
           setLoginError({ ...loginError, [_type]: true });
           NotificationService.error({
             title: i18n(`${_type}__fail`),
