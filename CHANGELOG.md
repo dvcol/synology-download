@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.21.4](https://github.com/dvcol/synology-download/compare/v1.21.1...v1.21.4) (2023-03-07)
+
+
+### Bug Fixes
+
+* **connection:** fix auto-login for 2FA without device token ([3e2b46b](https://github.com/dvcol/synology-download/commit/3e2b46bb79f53b2c0a4972d818d68a877b7ebc60))
+* **connection:** fix https, 2FA and auto-login for DSM 7+ ([2d42259](https://github.com/dvcol/synology-download/commit/2d42259cd1596d8cf2556ccd4db525d9e2a69ce6))
+* **popup:** fix incorrect button label for seed/retry in task error ([d883d29](https://github.com/dvcol/synology-download/commit/d883d29709d743b973c2dcb9081db8c40b262c09))
+* **synology:** fix url sanitising for non-standard comma usage in urls ([b42a1e4](https://github.com/dvcol/synology-download/commit/b42a1e4a2c7013a673a30b8c9ca75e1339a82a20))
+
 ### [1.21.1](https://github.com/dvcol/synology-download/compare/v1.21.0...v1.21.1) (2023-03-06)
 
 
