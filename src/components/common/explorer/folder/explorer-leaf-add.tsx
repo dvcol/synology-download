@@ -4,8 +4,9 @@ import { Button, Stack } from '@mui/material';
 
 import React, { useState } from 'react';
 
-import { ExplorerLeafEdit } from '@src/components';
 import type { File, Folder } from '@src/models';
+
+import { ExplorerLeafEdit } from './explorer-leaf-edit';
 
 import type { ButtonProps } from '@mui/material';
 import type { FC } from 'react';

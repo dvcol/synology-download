@@ -7,11 +7,14 @@ import React, { useEffect } from 'react';
 
 import { finalize, tap } from 'rxjs';
 
-import { ExplorerBreadCrumbs, ExplorerLeafAdd, ExplorerLoading } from '@src/components';
 import type { File, FileList, Folder } from '@src/models';
+
 import { QueryService } from '@src/services';
 
+import { ExplorerBreadCrumbs } from './explorer-breadcrumb';
 import { ExplorerLeaf } from './explorer-leaf';
+import { ExplorerLeafAdd } from './explorer-leaf-add';
+import { ExplorerLoading } from './explorer-loading';
 
 import type { FC } from 'react';
 import type { Observable } from 'rxjs';
