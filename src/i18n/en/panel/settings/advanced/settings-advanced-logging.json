@@ -24,6 +24,22 @@
   },
 
   "panel__settings__advanced__logging__history__export": {
-    "message": "Export log history"
+    "message": "Export"
+  },
+  "panel__settings__advanced__logging__history__clear": {
+    "message": "Clear"
+  },
+
+  "panel__settings__advanced__logging__history_max__title": {
+    "message": "Max history"
+  },
+  "panel__settings__advanced__logging__history_max__subheader": {
+    "message": "The maximum number of lines to keep in memory.\n Note that too many line might impact performance."
+  },
+  "panel__settings__advanced__logging__history_max__label": {
+    "message": "Maximum"
+  },
+  "panel__settings__advanced__logging__history_max__unit": {
+    "message": "lines"
   }
 }

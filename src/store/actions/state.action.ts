@@ -14,6 +14,8 @@ const {
   resetLoading,
   setBadge,
   addDestinationHistory,
+  addLogHistory,
+  resetLogHistory,
 } = stateSlice.actions;
 
 // Export as named constants
@@ -30,4 +32,6 @@ export {
   resetLoading,
   setBadge,
   addDestinationHistory,
+  addLogHistory,
+  resetLogHistory,
 };

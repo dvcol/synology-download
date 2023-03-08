@@ -69,7 +69,7 @@ export const SettingsCredentials = () => {
     },
     username: { required: { value: true, message: i18n('required', 'common', 'error') } },
     password: { required: { value: true, message: i18n('required', 'common', 'error') } },
-    otp_code: { required: { value: is2FA, message: i18n('required', 'common', 'error') } },
+    otp_code: { required: { value: is2FA && !logged, message: i18n('required', 'common', 'error') } },
     device_name: { required: { value: !!(is2FA && getValues().enable_device_token), message: i18n('required', 'common', 'error') } },
   };
 

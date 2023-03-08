@@ -301,10 +301,26 @@ export const LoggingLevelLevelKeys = {
   [LoggingLevel.error]: 'error',
 };
 
+export enum LogInstance {
+  Background = 'background',
+  Popup = 'popup',
+  Option = 'option',
+  Content = 'content',
+}
+
+export interface Log {
+  timestamp: string;
+  level: LoggingLevel;
+  source: LogInstance;
+  value: string;
+  params?: string;
+}
+
 export interface AdvancedLogging {
   enabled?: boolean;
   level?: LoggingLevel;
   history?: boolean;
+  historyMax?: number;
 }
 
 export interface AdvancedSettings {
@@ -315,6 +331,7 @@ export const defaultAdvancedLogging = {
   enabled: true,
   level: LoggingLevel.error,
   history: false,
+  historyMax: 1000,
 };
 
 export const defaultAdvancedSettings = {

@@ -7,6 +7,12 @@
   },
 
   "panel__settings__advanced__storage__export": {
-    "message": "Export snapshot"
+    "message": "Export"
+  },
+  "panel__settings__advanced__storage__local__clear": {
+    "message": "Clear local"
+  },
+  "panel__settings__advanced__storage__sync__clear": {
+    "message": "Clear sync"
   }
 }

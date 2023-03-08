@@ -6,7 +6,7 @@ import { render } from 'react-dom';
 
 import { getManifest } from '@dvcol/web-extension-utils';
 
-import { ModalInstance } from '@src/models';
+import { LogInstance, ModalInstance } from '@src/models';
 import { ContentApp } from '@src/pages/content/components';
 import { clickListener$ } from '@src/pages/content/modules';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
@@ -85,7 +85,7 @@ export const renderContentApp = async (): Promise<void> => {
   await storeProxy.ready();
 
   // Pass store to services and init
-  LoggerService.init(storeProxy);
+  LoggerService.init(storeProxy, LogInstance.Content, true);
   QueryService.init(storeProxy, true);
   NotificationService.init(storeProxy, true);
 

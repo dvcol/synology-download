@@ -1,6 +1,7 @@
 import { lastValueFrom } from 'rxjs';
 import { wrapStore } from 'webext-redux';
 
+import { LogInstance } from '@src/models';
 import { DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { store } from '@src/store';
 
@@ -20,7 +21,7 @@ export const initServiceWorker = async () => {
   wrapStore(store);
 
   // initialize logger
-  LoggerService.init(store);
+  LoggerService.init(store, LogInstance.Background);
 
   // Listen to context menu events (first because it is required for setting restore)
   onMessageEvents();

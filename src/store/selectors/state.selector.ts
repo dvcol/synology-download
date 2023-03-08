@@ -28,3 +28,5 @@ export const getLoading = createSelector(getState, (state: StateSlice) => state.
 export const getHistory = createSelector(getState, (state: StateSlice) => state?.history ?? initialState.history);
 
 export const getDestinationsHistory = createSelector(getHistory, history => history?.destinations ?? initialState.history.destinations);
+
+export const getLogHistory = createSelector(getHistory, history => history?.logs ?? initialState.history.logs);

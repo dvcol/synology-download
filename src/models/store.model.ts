@@ -3,7 +3,7 @@ import type { ContentCount } from '@src/models/content.model';
 import type { Download } from './download.model';
 
 import type { ContextMenu, QuickMenu } from './menu.model';
-import type { AdvancedSettings, Connection, Downloads, Global, Notifications, Polling } from './settings.model';
+import type { Log, AdvancedSettings, Connection, Downloads, Global, Notifications, Polling } from './settings.model';
 import type { ContentTab } from './tab.model';
 import type { Task, TaskStatistics } from './task.model';
 import type { Store } from 'redux';
@@ -25,6 +25,7 @@ export interface StateSlice {
   history: {
     destinations: string[];
     folders: string[];
+    logs: Log[];
   };
 }
 

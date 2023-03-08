@@ -1,6 +1,6 @@
 import { localSet } from '@dvcol/web-extension-utils';
 
-import type { ContentCount, StateSlice, TaskStatistics } from '@src/models';
+import type { ContentCount, Log, StateSlice, TaskStatistics } from '@src/models';
 import { LoggerService } from '@src/services';
 import { formatBytes, setBadgeText, setTitle } from '@src/utils';
 
@@ -58,4 +58,8 @@ export const syncDestinationsHistoryReducer: CaseReducer<StateSlice, PayloadActi
 
 export const syncFoldersHistoryReducer: CaseReducer<StateSlice, PayloadAction<string[]>> = (state, { payload: folders }) => {
   return syncStateReducer({ ...state, history: { ...state.history, folders: [...new Set(folders.slice(0, 20))] } });
+};
+
+export const syncLogHistoryReducer: CaseReducer<StateSlice, PayloadAction<Log[]>> = (state, { payload: logs }) => {
+  return syncStateReducer({ ...state, history: { ...state.history, logs: logs?.slice(0, 10000) ?? [] } });
 };

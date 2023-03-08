@@ -34,7 +34,13 @@ export const JsonExplorer: FC<JsonExplorerProps> = ({ data, name }) => {
 
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100%' }}>
-      <TreeView aria-label="rich object" defaultCollapseIcon={<ExpandMoreIcon />} defaultExpanded={['root']} defaultExpandIcon={<ChevronRightIcon />}>
+      <TreeView
+        aria-label="rich object"
+        defaultCollapseIcon={<ExpandMoreIcon />}
+        defaultExpanded={['root']}
+        defaultExpandIcon={<ChevronRightIcon />}
+        disableSelection
+      >
         {renderTree(tree)}
       </TreeView>
     </Container>

@@ -3,7 +3,7 @@ import React from 'react';
 import { render } from 'react-dom';
 
 import { App } from '@src/components';
-import { ModalInstance } from '@src/models';
+import { LogInstance, ModalInstance } from '@src/models';
 import { DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { storeProxy } from '@src/store';
 import { getPopup } from '@src/store/selectors';
@@ -13,7 +13,7 @@ const initOptionsApp = async () => {
   await storeProxy.ready();
 
   // Pass store to service and init
-  LoggerService.init(storeProxy);
+  LoggerService.init(storeProxy, LogInstance.Popup, true);
   DownloadService.init(storeProxy, true);
   QueryService.init(storeProxy, true);
   NotificationService.init(storeProxy, true);

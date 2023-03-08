@@ -1,6 +1,6 @@
 import DownloadIcon from '@mui/icons-material/Download';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
-import { Button, Card, CardActions, CardContent, CardHeader, Collapse, MenuItem, Stack } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CardHeader, Collapse, InputAdornment, MenuItem, Stack } from '@mui/material';
 
 import React from 'react';
 
@@ -10,15 +10,17 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
-import { ButtonWithConfirm, FormInput, FormSwitch } from '@src/components';
+import { ButtonWithConfirm, FormInput, FormSwitch, JsonExplorer } from '@src/components';
 import type { AdvancedLogging, RootSlice } from '@src/models';
-import { AdvancedHeader, ColorLevel, defaultAdvancedLogging, defaultAdvancedSettings, LoggingLevel, LoggingLevelLevelKeys } from '@src/models';
-import { LoggerService } from '@src/services';
-import { syncAdvancedLogging } from '@src/store/actions';
-import { getAdvancedSettingsLogging } from '@src/store/selectors';
+import { AdvancedHeader, ColorLevel, defaultAdvancedLogging, LoggingLevel, LoggingLevelLevelKeys } from '@src/models';
+import { resetLogHistory, syncAdvancedLogging } from '@src/store/actions';
+import { getAdvancedSettingsLogging, getLogHistory } from '@src/store/selectors';
+import { downloadJson } from '@src/utils/downlaod.utils';
 
 export const SettingsLogging = () => {
   const i18n = useI18n('panel', 'settings', 'advanced', 'logging');
+  const logs = useSelector(getLogHistory);
+
   const dispatch = useDispatch();
   const advancedSettings = useSelector<RootSlice, AdvancedLogging>(getAdvancedSettingsLogging);
 
@@ -31,10 +33,15 @@ export const SettingsLogging = () => {
   } = useForm<AdvancedLogging>({
     mode: 'onChange',
     defaultValues: {
-      ...defaultAdvancedSettings,
+      ...defaultAdvancedLogging,
       ...advancedSettings,
     },
   });
+
+  const rules = {
+    min: { value: 0, message: i18n({ key: 'min', substitutions: ['0'] }, 'common', 'error') },
+    max: { value: 10000, message: i18n({ key: 'max', substitutions: ['10000'] }, 'common', 'error') },
+  };
 
   const onSubmit = (data: AdvancedLogging) => {
     dispatch(syncAdvancedLogging(data));
@@ -42,12 +49,12 @@ export const SettingsLogging = () => {
   };
 
   const onSubmitColor = () => {
-    if (isDirty) return 'primary';
-    return isSubmitted ? 'success' : 'info';
+    if (isDirty) return ColorLevel.primary;
+    return isSubmitted ? ColorLevel.success : ColorLevel.info;
   };
 
   const exportHistory = () => {
-    LoggerService.info('TODO : export history');
+    downloadJson(logs, `synology_download_logs_${new Date().toISOString()}.json`);
   };
 
   return (
@@ -96,6 +103,32 @@ export const SettingsLogging = () => {
             }
             sx={{ p: '0.5rem 0' }}
           />
+          <CardHeader
+            title={i18n('history_max__title')}
+            subheader={i18n('history_max__subheader')}
+            titleTypographyProps={{ variant: 'subtitle2' }}
+            subheaderTypographyProps={{ variant: 'subtitle2' }}
+            action={
+              <FormInput
+                controllerProps={{ name: 'historyMax', control, rules }}
+                textFieldProps={{
+                  type: 'number',
+                  label: i18n('history_max__label'),
+                  InputProps: {
+                    endAdornment: <InputAdornment position="end">{i18n('history_max__unit')}</InputAdornment>,
+                  },
+                  disabled: !getValues()?.enabled || !getValues()?.history,
+                  sx: { flex: '0 0 10rem' },
+                }}
+              />
+            }
+            sx={{ p: '0.5rem 0' }}
+          />
+          <Collapse in={getValues()?.enabled && getValues()?.history}>
+            <Card sx={{ p: '0.5rem', m: '0.5rem 0', maxHeight: '30rem', overflow: 'auto' }}>
+              <JsonExplorer data={logs} name={'logs'} />
+            </Card>
+          </Collapse>
         </Collapse>
       </CardContent>
       <CardActions sx={{ justifyContent: 'space-between', padding: '0 1.5rem 1.5rem' }}>
@@ -110,11 +143,16 @@ export const SettingsLogging = () => {
           >
             {i18n('history__export')}
           </Button>
+          <ButtonWithConfirm
+            buttonLabel={i18n('history__clear')}
+            buttonProps={{ variant: 'outlined', color: ColorLevel.error, startIcon: <SettingsBackupRestoreIcon /> }}
+            onDialogConfirm={() => dispatch(resetLogHistory())}
+          />
         </Stack>
         <Stack direction="row" spacing={2}>
           <ButtonWithConfirm
             buttonLabel={i18n('restore', 'common', 'buttons')}
-            buttonProps={{ variant: 'outlined', color: 'secondary', sx: { flex: '0 1 8rem' }, startIcon: <SettingsBackupRestoreIcon /> }}
+            buttonProps={{ variant: 'outlined', color: ColorLevel.secondary, startIcon: <SettingsBackupRestoreIcon /> }}
             onDialogConfirm={() => reset(defaultAdvancedLogging)}
           />
           <Button

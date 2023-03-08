@@ -1,8 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import type { StateSlice } from '@src/models';
+import type { Log, StateSlice } from '@src/models';
 
-import { setBadgeReducer, syncDestinationsHistoryReducer, syncFoldersHistoryReducer, syncLoggedReducer } from '@src/store/reducers/state.reducer';
+import {
+  setBadgeReducer,
+  syncDestinationsHistoryReducer,
+  syncFoldersHistoryReducer,
+  syncLoggedReducer,
+  syncLogHistoryReducer,
+} from '@src/store/reducers/state.reducer';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
@@ -22,6 +28,8 @@ export interface StateReducers<S = StateSlice> extends SliceCaseReducers<S> {
   setBadge: CaseReducer<S, PayloadAction<StateSlice['badge']>>;
   addDestinationHistory: CaseReducer<S, PayloadAction<string>>;
   addFolderHistory: CaseReducer<S, PayloadAction<string>>;
+  addLogHistory: CaseReducer<S, PayloadAction<{ log: Log; max: number }>>;
+  resetLogHistory: CaseReducer<S>;
 }
 
 export const initialState: StateSlice = {
@@ -40,6 +48,7 @@ export const initialState: StateSlice = {
   history: {
     destinations: [],
     folders: [],
+    logs: [],
   },
 };
 
@@ -65,5 +74,11 @@ export const stateSlice = createSlice<StateSlice, StateReducers, 'state'>({
       }),
     addFolderHistory: (state, action) =>
       syncFoldersHistoryReducer(state, { ...action, payload: [action.payload, ...(state.history?.folders ?? initialState.history.folders)] }),
+    addLogHistory: (state, action) =>
+      syncLogHistoryReducer(state, {
+        ...action,
+        payload: [...(state.history.logs ?? initialState.history.logs), action.payload.log].slice(0, action.payload.max),
+      }),
+    resetLogHistory: (state, action) => syncLogHistoryReducer(state, { ...action, payload: initialState.history.logs }),
   } as StateReducers,
 });

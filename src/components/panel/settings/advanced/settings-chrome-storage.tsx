@@ -1,4 +1,5 @@
 import DownloadIcon from '@mui/icons-material/Download';
+import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Button, Card, CardActions, CardContent, CardHeader, Stack } from '@mui/material';
 
 import React, { useEffect, useState } from 'react';
@@ -6,9 +7,9 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Subscription } from 'rxjs';
 
-import { localGet, syncGet, useI18n } from '@dvcol/web-extension-utils';
+import { localClear, localGet, syncClear, syncGet, useI18n } from '@dvcol/web-extension-utils';
 
-import { JsonExplorer } from '@src/components';
+import { ButtonWithConfirm, JsonExplorer } from '@src/components';
 import type { RootSlice } from '@src/models';
 import { AdvancedHeader, ColorLevel } from '@src/models';
 import { getRoot } from '@src/store/selectors';
@@ -47,7 +48,19 @@ export const SettingsChromeStorage = () => {
           <JsonExplorer data={local} name={'local'} />
         </Card>
       </CardContent>
-      <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
+      <CardActions sx={{ justifyContent: 'space-between', padding: '0 1.5rem 1.5rem' }}>
+        <Stack direction="row" spacing={2}>
+          <ButtonWithConfirm
+            buttonLabel={i18n('sync__clear')}
+            buttonProps={{ variant: 'outlined', color: ColorLevel.error, sx: { flex: '1 1 auto' }, startIcon: <SettingsBackupRestoreIcon /> }}
+            onDialogConfirm={() => syncClear().subscribe()}
+          />
+          <ButtonWithConfirm
+            buttonLabel={i18n('local__clear')}
+            buttonProps={{ variant: 'outlined', color: ColorLevel.error, sx: { flex: '1 1 auto' }, startIcon: <SettingsBackupRestoreIcon /> }}
+            onDialogConfirm={() => localClear().subscribe()}
+          />
+        </Stack>
         <Stack direction="row" spacing={2}>
           <Button variant="outlined" color={ColorLevel.primary} startIcon={<DownloadIcon />} type="submit" onClick={exportSnapshot}>
             {i18n('export')}
