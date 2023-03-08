@@ -41,7 +41,7 @@ const waitDestroyed = (el: Element): Promise<void> => {
  * Remove old instances of the component and trigger destroy lifecycle
  */
 export const removeOldInstances = (): Promise<void | void[]> => {
-  const previous = document.body.querySelectorAll(`#${rootContainerId}`);
+  const previous = document.body?.querySelectorAll(`#${rootContainerId}`);
   if (previous?.length) {
     LoggerService.debug(`Found exiting instance of '${rootContainerId}'`, previous);
     return Promise.all([...previous]?.map(el => waitDestroyed(el)));
@@ -81,6 +81,9 @@ const connect = () => {
  * Open a modal popup for custom download actions
  */
 export const renderContentApp = async (): Promise<void> => {
+  // if page is not a valid html document with body, skip injection
+  if (!document.body) return;
+
   // init store
   await storeProxy.ready();
 

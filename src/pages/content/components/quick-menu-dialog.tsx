@@ -1,4 +1,5 @@
-import { Menu } from '@mui/material';
+import PowerOffIcon from '@mui/icons-material/PowerOff';
+import { ListItemText, Menu, MenuItem } from '@mui/material';
 
 import React, { useEffect } from 'react';
 
@@ -10,7 +11,7 @@ import type { ChromeResponse } from '@dvcol/web-extension-utils';
 import { i18n } from '@dvcol/web-extension-utils';
 
 import type { InterceptPayload, InterceptResponse, QuickMenu, TaskForm } from '@src/models';
-import { ChromeMessageType, QuickMenuType } from '@src/models';
+import { ChromeMessageType, ColorLevel, QuickMenuType } from '@src/models';
 
 import { anchor$, lastClick$ } from '@src/pages/content/service/anchor.service';
 import type { TaskDialogIntercept } from '@src/pages/content/service/dialog.service';
@@ -154,6 +155,12 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
       }}
       sx={{ zIndex: `${zIndexMax} !important` }}
     >
+      {!isLogged && (
+        <MenuItem sx={{ fontSize: '1em' }} disableRipple disableTouchRipple>
+          <PowerOffIcon color={ColorLevel.error} sx={{ fontSize: '0.875em', width: '1.25em', height: '1.25em' }} />
+          <ListItemText primary={'Disconnected (logged out)'} primaryTypographyProps={{ sx: { fontSize: '0.75em', ml: '0.75em' } }} />
+        </MenuItem>
+      )}
       {_menus?.map(m => (
         <QuickMenuRecent
           key={m.id}

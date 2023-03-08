@@ -3,7 +3,7 @@ import { combineLatest, distinctUntilChanged, Subject, switchMap, timer, withLat
 import type { ChromeNotification, StoreOrProxy } from '@src/models';
 import { ChromeMessageType, defaultPolling } from '@src/models';
 import { DownloadService, LoggerService } from '@src/services';
-import { getLogged, getPollingEnabled, getPollingInterval, getSettingsDownloadsEnabled } from '@src/store/selectors';
+import { getLogged, getPollingEnabled, getPollingInterval, getPopup, getSettingsDownloadsEnabled } from '@src/store/selectors';
 import { onMessage, sendMessage, skipUntilRepeat, store$ } from '@src/utils';
 
 import { QueryService } from '../query';
@@ -32,6 +32,28 @@ export class PollingService {
     return getPollingInterval(this.store.getState()) ?? defaultPolling.background.interval;
   }
 
+  /**
+   * This is to attempts re-logging when we get SSL error in HTTPS, not sure why
+   * @private
+   * @todo TODO - investigate why this is requried
+   */
+  private static attemptAutoLogin(err: Error) {
+    if (err.message !== 'Failed to fetch') return;
+
+    // if no popup open
+    if (!getPopup(this.store.getState())) {
+      QueryService.autoLogin({ notify: false, logged: false }).subscribe();
+    }
+
+    // if popup open
+    sendMessage({ type: ChromeMessageType.autoLogin }).subscribe({
+      error: e => {
+        LoggerService.error('Polling auto-login failed to send.', e);
+        QueryService.autoLogin({ notify: false, logged: false }).subscribe();
+      },
+    });
+  }
+
   static init(store: StoreOrProxy, isProxy = false) {
     this.store = store;
     this.isProxy = isProxy;
@@ -49,8 +71,9 @@ export class PollingService {
           if (logged) {
             QueryService.listTasks().subscribe({
               error: err => {
-                LoggerService.error('Polling service failed to fetch list', err);
                 this.stop();
+                LoggerService.error('Polling service failed to fetch list', err);
+                this.attemptAutoLogin(err);
               },
             });
             QueryService.getStatistic().subscribe({
@@ -68,6 +91,9 @@ export class PollingService {
         store$(this.store, getLogged),
         store$(this.store, getSettingsDownloadsEnabled),
       ]).subscribe(([enabled, logged, download]) => (enabled && (download || logged) ? this.start() : this.stop()));
+    } else {
+      // Listens to auto login attempts -- TODO - fix HTTPS and remove this
+      onMessage([ChromeMessageType.autoLogin]).subscribe(() => QueryService.autoLogin({ notify: false, logged: false }).subscribe());
     }
 
     LoggerService.debug('Polling service initialized', { isProxy });

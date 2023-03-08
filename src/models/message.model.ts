@@ -26,6 +26,7 @@ export enum ChromeMessageType {
   contentMenuOpen = 'contentMenuOpen',
   contentDialogOpen = 'contentDialogOpen',
   logger = 'logger',
+  autoLogin = 'autoLogin',
 }
 
 export type InterceptPayload = TaskForm;

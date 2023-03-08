@@ -80,7 +80,7 @@ export class LoggerService {
   }
 
   private static get timestamp(): string {
-    return `[${this.source} - ${new Date()?.toISOString()}]`;
+    return `[${new Date()?.toISOString()} - ${this.source}]`;
   }
 
   /* eslint-disable no-console */
