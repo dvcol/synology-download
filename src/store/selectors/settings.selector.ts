@@ -13,7 +13,15 @@ import type {
   NotificationsSnack,
   SettingsSlice,
 } from '@src/models';
-import { ConnectionType, defaultAdvancedSettings, defaultConnection, defaultDownloads, defaultGlobal, ThemeMode } from '@src/models';
+import {
+  ConnectionType,
+  defaultAdvancedSettings,
+  defaultConnection,
+  defaultDownloads,
+  defaultGlobal,
+  defaultLoggingLevels,
+  ThemeMode,
+} from '@src/models';
 import { LoggerService } from '@src/services';
 import { darkTheme, lightTheme } from '@src/themes';
 
@@ -144,5 +152,5 @@ export const getAdvancedSettingsLoggingEnabled = createSelector(
 
 export const getAdvancedSettingsLoggingLevel = createSelector(
   getAdvancedSettingsLogging,
-  (logging: AdvancedLogging) => logging?.level ?? defaultAdvancedSettings.logging?.level,
+  (logging: AdvancedLogging) => logging?.levels ?? defaultLoggingLevels,
 );

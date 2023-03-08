@@ -12,7 +12,15 @@ import { useI18n } from '@dvcol/web-extension-utils';
 
 import { ButtonWithConfirm, FormInput, FormSwitch, JsonExplorer } from '@src/components';
 import type { AdvancedLogging, RootSlice } from '@src/models';
-import { AdvancedHeader, ColorLevel, defaultAdvancedLogging, LoggingLevel, LoggingLevelLevelKeys } from '@src/models';
+import {
+  AdvancedHeader,
+  ColorLevel,
+  defaultAdvancedLogging,
+  defaultLoggingLevels,
+  LoggingLevel,
+  LoggingLevelLevelKeys,
+  LogInstance,
+} from '@src/models';
 import { resetLogHistory, syncAdvancedLogging } from '@src/store/actions';
 import { getAdvancedSettingsLogging, getLogHistory } from '@src/store/selectors';
 import { downloadJson } from '@src/utils/downlaod.utils';
@@ -35,6 +43,7 @@ export const SettingsLogging = () => {
     defaultValues: {
       ...defaultAdvancedLogging,
       ...advancedSettings,
+      levels: advancedSettings?.levels ?? defaultAdvancedLogging.levels,
     },
   });
 
@@ -57,6 +66,11 @@ export const SettingsLogging = () => {
     downloadJson(logs, `synology_download_logs_${new Date().toISOString()}.json`);
   };
 
+  (window as any).defaultLoggingLevels = defaultLoggingLevels;
+  (window as any).defaultAdvancedLogging = defaultAdvancedLogging;
+  (window as any).LogInstance = LogInstance;
+  (window as any).LoggingLevel = LoggingLevel;
+
   return (
     <Card raised={true}>
       <CardHeader
@@ -69,30 +83,33 @@ export const SettingsLogging = () => {
       />
       <CardContent>
         <Collapse in={getValues()?.enabled} unmountOnExit>
-          <CardHeader
-            title={i18n('level__title')}
-            subheader={i18n('level__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={
-              <FormInput
-                controllerProps={{ name: 'level', control }}
-                textFieldProps={{
-                  select: true,
-                  label: i18n('level__label'),
-                  sx: { flex: '0 0 10rem', textTransform: 'capitalize' },
-                  disabled: !getValues()?.enabled,
-                }}
-              >
-                {[LoggingLevel.trace, LoggingLevel.debug, LoggingLevel.info, LoggingLevel.warn, LoggingLevel.error].map(level => (
-                  <MenuItem key={level} value={level} sx={{ textTransform: 'capitalize' }}>
-                    {i18n(LoggingLevelLevelKeys[level], 'common', 'model', 'logging', 'level')}
-                  </MenuItem>
-                ))}
-              </FormInput>
-            }
-            sx={{ p: '0.5rem 0' }}
-          />
+          {Object.values(LogInstance)?.map(instance => (
+            <CardHeader
+              key={instance}
+              title={i18n(`levels__${instance}__title`)}
+              subheader={i18n(`levels__${instance}__subheader`)}
+              titleTypographyProps={{ variant: 'subtitle2' }}
+              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              action={
+                <FormInput
+                  controllerProps={{ name: `levels.${instance}`, control }}
+                  textFieldProps={{
+                    select: true,
+                    label: i18n('level__label'),
+                    sx: { flex: '0 0 10rem', textTransform: 'capitalize' },
+                    disabled: !getValues()?.enabled,
+                  }}
+                >
+                  {[LoggingLevel.trace, LoggingLevel.debug, LoggingLevel.info, LoggingLevel.warn, LoggingLevel.error].map(level => (
+                    <MenuItem key={level} value={level} sx={{ textTransform: 'capitalize' }}>
+                      {i18n(LoggingLevelLevelKeys[level], 'common', 'model', 'logging', 'level')}
+                    </MenuItem>
+                  ))}
+                </FormInput>
+              }
+              sx={{ p: '0.5rem 0' }}
+            />
+          ))}
           <CardHeader
             title={i18n('history__title')}
             subheader={i18n('history__subheader')}

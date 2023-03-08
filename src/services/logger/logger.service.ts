@@ -1,5 +1,5 @@
 import type { Log, LogInstance, StoreOrProxy } from '@src/models';
-import { ChromeMessageType, LoggingLevel } from '@src/models';
+import { ChromeMessageType, defaultLoggingLevels, LoggingLevel } from '@src/models';
 import { addLogHistory } from '@src/store/actions';
 import { getAdvancedSettingsLogging } from '@src/store/selectors';
 import { onMessage, sendMessage, store$ } from '@src/utils';
@@ -20,7 +20,7 @@ export class LoggerService {
     this.isProxy = isProxy;
 
     store$(store, getAdvancedSettingsLogging).subscribe(settings => {
-      this.level = settings.level ?? this.level;
+      this.level = (settings.levels ?? defaultLoggingLevels)[this.source] ?? this.level;
       this.enabled = !!settings.enabled;
       this.history = settings.history ?? this.history;
       this.historyMax = settings.historyMax ?? this.historyMax;
@@ -34,6 +34,10 @@ export class LoggerService {
     }
 
     this.debug('Logger service initialized');
+  }
+
+  private static dispatch(log: Log) {
+    this.store?.dispatch(addLogHistory({ log, max: this.historyMax }));
   }
 
   /**
@@ -75,34 +79,34 @@ export class LoggerService {
     return this.filter(level);
   }
 
-  private static dispatch(log: Log) {
-    this.store?.dispatch(addLogHistory({ log, max: this.historyMax }));
+  private static get timestamp(): string {
+    return `[${this.source} - ${new Date()?.toISOString()}]`;
   }
 
   /* eslint-disable no-console */
   static trace(message?: any, ...params: any[]) {
     if (this.captureAndFilter(LoggingLevel.trace, message, params)) return;
-    return console.trace(message, ...params);
+    return console.trace(this.timestamp, message, ...params);
   }
 
   static debug(message?: any, ...params: any[]) {
     if (this.captureAndFilter(LoggingLevel.debug, message, params)) return;
-    return console.debug(message, ...params);
+    return console.debug(this.timestamp, message, ...params);
   }
 
   static info(message?: any, ...params: any[]) {
     if (this.captureAndFilter(LoggingLevel.info, message, params)) return;
-    return console.info(message, ...params);
+    return console.info(this.timestamp, message, ...params);
   }
 
   static warn(message?: any, ...params: any[]) {
     if (this.captureAndFilter(LoggingLevel.warn, message, params)) return;
-    return console.warn(message, ...params);
+    return console.warn(this.timestamp, message, ...params);
   }
 
   static error(message?: any, ...params: any[]) {
     if (this.captureAndFilter(LoggingLevel.error, message, params)) return;
-    return console.error(message, ...params);
+    return console.error(this.timestamp, message, ...params);
   }
   /* eslint-enable no-console */
 }

@@ -10,14 +10,14 @@ import type { Store } from 'redux';
 const onAppConnect = (store: Store, instance: ModalInstance, dispatch: typeof setOption | typeof setPopup) =>
   onConnect([instance]).pipe(
     tap(port => {
-      LoggerService.debug(`connecting ${port.name}`, { id: port?.sender?.tab?.id, timestamp: new Date().toISOString() });
+      LoggerService.debug(`connecting ${port.name}`, { id: port?.sender?.tab?.id, name: port.name });
 
       // dispatch connect
       store.dispatch(dispatch(true));
 
       // disconnect listener
       port.onDisconnect.addListener(() => {
-        LoggerService.debug(`disconnecting ${port.name}`, new Date().toISOString());
+        LoggerService.debug(`disconnecting ${port.name}`);
 
         // dispatch disconnect
         store.dispatch(dispatch(false));
@@ -37,7 +37,7 @@ export const onPortEvents = (store: Store) => {
 
   // Content script
   onConnect([ModalInstance.modal]).subscribe(port => {
-    LoggerService.debug(`connecting ${port.name}`, { id: port?.sender?.tab?.id, source: port?.sender?.origin, timestamp: new Date().toISOString() });
+    LoggerService.debug(`connecting ${port.name}`, { id: port?.sender?.tab?.id, source: port?.sender?.origin, name: port.name });
     /**
      * TODO: Remove if/when persistent MV3 service worker are introduced
      *
@@ -46,7 +46,7 @@ export const onPortEvents = (store: Store) => {
      * @see https://stackoverflow.com/questions/66618136/persistent-service-worker-in-chrome-extension
      */
     setTimeout(() => {
-      LoggerService.debug(`disconnecting ${port.name}`, new Date().toISOString());
+      LoggerService.debug(`disconnecting ${port.name}`);
       port.disconnect();
     }, 295e3);
   });

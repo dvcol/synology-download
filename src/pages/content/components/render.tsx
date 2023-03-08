@@ -73,7 +73,7 @@ const listenToClicksUntilDestroy = (root: HTMLElement) => {
  * @see https://stackoverflow.com/questions/66618136/persistent-service-worker-in-chrome-extension
  */
 const connect = () => {
-  LoggerService.debug(`connecting ${ModalInstance.modal}`, new Date().toISOString());
+  LoggerService.debug(`connecting ${ModalInstance.modal}`);
   portConnect({ name: ModalInstance.modal }).onDisconnect.addListener(connect);
 };
 

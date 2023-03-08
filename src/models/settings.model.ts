@@ -256,7 +256,7 @@ export interface Downloads {
   intercept: DownloadsIntercept;
 }
 
-export const defaultExtensions = [
+export const defaultExtensions: DownloadExtension[] = [
   // torrent
   { ext: '.torrent', mime: 'application/x-bittorrent' },
   // audio
@@ -284,6 +284,26 @@ export const defaultExtensions = [
   // documents
   { ext: '.pdf', mime: 'application/pdf' },
 ];
+
+export const defaultDownloads: Downloads = {
+  enabled: true,
+  buttons: true,
+  notifications: true,
+  transfer: {
+    erase: true,
+    resume: true,
+    modal: true,
+  },
+  intercept: {
+    enabled: false,
+    resume: false,
+    erase: true,
+    modal: false,
+    all: false,
+    extensions: defaultExtensions,
+    active: [{ ext: '.torrent', mime: 'application/x-bittorrent' }],
+  },
+};
 
 export enum LoggingLevel {
   trace = 0,
@@ -316,9 +336,11 @@ export interface Log {
   params?: string;
 }
 
+export type AdvancedLoggingLevels = Partial<Record<LogInstance, LoggingLevel>>;
+
 export interface AdvancedLogging {
   enabled?: boolean;
-  level?: LoggingLevel;
+  levels?: AdvancedLoggingLevels;
   history?: boolean;
   historyMax?: number;
 }
@@ -327,35 +349,20 @@ export interface AdvancedSettings {
   logging: AdvancedLogging;
 }
 
-export const defaultAdvancedLogging = {
+export const defaultLoggingLevels: AdvancedLoggingLevels = Object.values(LogInstance).reduce(
+  (acc, next) => ({ ...acc, [next]: LoggingLevel.error }),
+  {},
+);
+
+export const defaultAdvancedLogging: AdvancedLogging = {
   enabled: true,
-  level: LoggingLevel.error,
+  levels: defaultLoggingLevels,
   history: false,
   historyMax: 1000,
 };
 
-export const defaultAdvancedSettings = {
+export const defaultAdvancedSettings: AdvancedSettings = {
   logging: defaultAdvancedLogging,
-};
-
-export const defaultDownloads = {
-  enabled: true,
-  buttons: true,
-  notifications: true,
-  transfer: {
-    erase: true,
-    resume: true,
-    modal: true,
-  },
-  intercept: {
-    enabled: false,
-    resume: false,
-    erase: true,
-    modal: false,
-    all: false,
-    extensions: defaultExtensions,
-    active: [{ ext: '.torrent', mime: 'application/x-bittorrent' }],
-  },
 };
 
 export const defaultSettings: SettingsSlice = {
