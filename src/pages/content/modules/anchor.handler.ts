@@ -61,7 +61,13 @@ const listener = async (event: MouseEvent) => {
   }
 };
 
-const addAnchorClickListener = () => document.addEventListener('click', listener);
-const removeAnchorClickListener = () => document.removeEventListener('click', listener);
+const addAnchorClickListener = () => {
+  document.addEventListener('click', listener);
+  document.addEventListener('contextmenu', listener);
+};
+const removeAnchorClickListener = () => {
+  document.removeEventListener('click', listener);
+  document.addEventListener('contextmenu', listener);
+};
 
 export const clickListener$ = fromEventPattern(addAnchorClickListener, removeAnchorClickListener);
