@@ -163,7 +163,7 @@ if (process.env.NODE_ENV === 'development') {
         extractComments: false,
         terserOptions: {
           compress: {
-            drop_console: !process.env.DEBUG,
+            drop_console: false,
           },
         },
       }),
