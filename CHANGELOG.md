@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.24.0](https://github.com/dvcol/synology-download/compare/v1.23.3...v1.24.0) (2023-03-08)
+
+
+### Features
+
+* **download:** adds support for download history ([27b2977](https://github.com/dvcol/synology-download/commit/27b29779e2232e75d7fa724c827bb10d7e5d8a70))
+
+
+### Bug Fixes
+
+* **download:** fix active tab detection and retry download in intercepts ([7320624](https://github.com/dvcol/synology-download/commit/7320624dec888a6d8ab3e1699764a41798521a5a))
+
 ### [1.23.3](https://github.com/dvcol/synology-download/compare/v1.23.2...v1.23.3) (2023-03-08)
 
 
