@@ -9,7 +9,7 @@ export class LoggerService {
   private static store: any | StoreOrProxy;
   private static isProxy: boolean;
 
-  private static level: LoggingLevel | number = -1;
+  private static level: LoggingLevel | number = 4;
   private static enabled = true;
   private static history = false;
   private static historyMax = 1000;
