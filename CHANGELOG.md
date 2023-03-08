@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.1](https://github.com/dvcol/synology-download/compare/v1.22.0...v1.23.1) (2023-03-08)
+
+
+### Features
+
+* **advanced:** add logging download and sync/local storage clear ([b686b9f](https://github.com/dvcol/synology-download/commit/b686b9fa34af1920324c4bfee06f08f3d0f6af95))
+* **components:** adds json explorer component ([581e9c5](https://github.com/dvcol/synology-download/commit/581e9c5abc12ecfb27772f150a0ecf6b4776c0c7))
+* **logger:** create logger service ([0b05e96](https://github.com/dvcol/synology-download/commit/0b05e96887a2101ef69207f54582272b54ef0c97))
+* **logger:** wrap console usage in logger service ([7729266](https://github.com/dvcol/synology-download/commit/77292664b101fdb201f1ffd54f1e15fcee650bb3))
+* **settings:** adds advanced settings panels ([9ab1034](https://github.com/dvcol/synology-download/commit/9ab1034321910906ddd21f37a41a9f72aba3111d))
+* **settings:** hide settings details when functionality is disabled ([fd4d18e](https://github.com/dvcol/synology-download/commit/fd4d18ef2a91cbca6590161f7e3fae69219472cd))
+* **settings:** move download to dedicated tab ([a85b915](https://github.com/dvcol/synology-download/commit/a85b91594e6c3685f5ecc59db6059db0d67f73ba))
+* **settings:** split download and download intercept settings ([5a9fc26](https://github.com/dvcol/synology-download/commit/5a9fc26392db45f94528bcbd45463e2b63a8feea))
+
+
+### Bug Fixes
+
+* **auto-login:** adds auto-lopin at content injection ([18587e1](https://github.com/dvcol/synology-download/commit/18587e123c8271e4f5a869ef35c5c8b17eccd1e8))
+* **build:** disable console drop ([edeae8b](https://github.com/dvcol/synology-download/commit/edeae8b9efa3eed6a089b293f6a022970c14890f))
+* **logger:** fix trace level in logger ([daa479b](https://github.com/dvcol/synology-download/commit/daa479b5c4c45647abae2cfd3dd14abbb0220409))
+* **logging:** fix logging  settings panel ([c4eae6d](https://github.com/dvcol/synology-download/commit/c4eae6d6e9cea0eef9a6ca9fb7d9629aa98c79ed))
+
 ## [1.22.0](https://github.com/dvcol/synology-download/compare/v1.21.4...v1.22.0) (2023-03-07)
 
 
