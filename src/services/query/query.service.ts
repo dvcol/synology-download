@@ -1,4 +1,4 @@
-import { EMPTY, finalize, of, tap } from 'rxjs';
+import { EMPTY, finalize, of, tap, throwError } from 'rxjs';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
@@ -136,19 +136,25 @@ export class QueryService {
     { baseUrl, doNotProxy }: { baseUrl?: string; doNotProxy?: boolean },
   ): Observable<LoginResponse> {
     const { username, password, authVersion } = credentials;
-    if (!username || !password) throw new Error(i18n({ key: 'login_password_required', substitutions: [username ?? '', password ?? ''] }));
-
+    if (!username || !password) {
+      const error = new Error(i18n({ key: 'login_password_required', substitutions: [username ?? '', password ?? ''] }));
+      return throwError(() => error);
+    }
     let request: LoginRequest = { account: username, passwd: password, baseUrl };
 
     if (ConnectionType.twoFactor === credentials?.type) {
-      request = this.twoFactorRequest(request, credentials);
+      try {
+        request = this.twoFactorRequest(request, credentials);
+      } catch (e) {
+        return throwError(() => e);
+      }
     }
     return this.authClient.login(request, authVersion?.toString(), doNotProxy).pipe(this.readyCheckOperator(false, !baseUrl?.length));
   }
 
   private static twoFactorRequest(request: LoginRequest, { otp_code, enable_device_token, device_name, device_id }: Credentials): LoginRequest {
     if ((!enable_device_token && !otp_code) || (!!enable_device_token && !device_name)) {
-      throw new Error(i18n({ key: 'otp_code_device_required', substitutions: [otp_code ?? '', device_name ?? ''] }));
+      throw new Error(i18n({ key: 'otp_code_device_required', substitutions: [otp_code ?? 'missing code', device_name ?? 'missing device name'] }));
     }
     // If we enable remember device
     if (enable_device_token) {

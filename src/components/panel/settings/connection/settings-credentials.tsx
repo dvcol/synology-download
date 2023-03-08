@@ -445,7 +445,12 @@ export const SettingsCredentials = () => {
             justifyContent: 'flex-start',
           }}
         >
-          <Button variant="outlined" color={getColor('test')} disabled={loading || !isValid} onClick={handleSubmit(testLogin)}>
+          <Button
+            variant="outlined"
+            color={getColor('test')}
+            disabled={loading || !isValid || (logged && is2FA && !getValues()?.otp_code)}
+            onClick={handleSubmit(testLogin)}
+          >
             {i18n('login_test')}
           </Button>
           <Button
