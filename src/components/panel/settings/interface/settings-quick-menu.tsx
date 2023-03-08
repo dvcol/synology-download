@@ -119,7 +119,7 @@ export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
         sx={{ p: '0.5rem 0' }}
       />
 
-      <Collapse in={getValues()?.type === QuickMenuType.Recent} unmountOnExit>
+      <Collapse in={[QuickMenuType.Recent, QuickMenuType.RecentDownload].includes(getValues()?.type)} unmountOnExit>
         <CardHeader
           title={i18n('max_title')}
           subheader={i18n('max_subheader')}
@@ -138,7 +138,7 @@ export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
               textFieldProps={{
                 type: 'number',
                 label: i18n('max_label'),
-                disabled: getValues()?.type !== QuickMenuType.Recent,
+                disabled: [QuickMenuType.Recent, QuickMenuType.RecentDownload].includes(getValues()?.type),
                 sx: { flex: '0 0 12rem', ml: '0.5rem' },
               }}
             />

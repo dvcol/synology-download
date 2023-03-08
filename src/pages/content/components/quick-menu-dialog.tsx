@@ -18,7 +18,7 @@ import type { TaskDialogIntercept } from '@src/pages/content/service/dialog.serv
 import { taskDialog$ } from '@src/pages/content/service/dialog.service';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
 import type { StoreState } from '@src/store';
-import { getDestinationsHistory, getLogged, getQuick } from '@src/store/selectors';
+import { getDestinationsHistory, getFolderHistory, getLogged, getQuick } from '@src/store/selectors';
 
 import { onMessage, sendMessage, zIndexMax } from '@src/utils';
 
@@ -44,12 +44,11 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
 
   const [_form, setForm] = React.useState<TaskForm>();
   const menus = useSelector<StoreState, QuickMenu[]>(getQuick);
-  const destinations = useSelector<StoreState, string[]>(getDestinationsHistory);
 
   const isLogged = useSelector<StoreState, boolean>(getLogged);
 
   const [intercept, setIntercept] = React.useState<TaskDialogIntercept>();
-  const _menus = menus?.filter(m => !!intercept || m.type !== QuickMenuType.Download);
+  const _menus = menus?.filter(m => !!intercept || ![QuickMenuType.Download, QuickMenuType.RecentDownload].includes(m.type));
 
   const onIntercept = (response: ChromeResponse<InterceptResponse>) => {
     if (intercept?.callback) {
@@ -86,7 +85,14 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
   };
 
   const handleClick = ({ destination, modal, type, id }: QuickMenu, path?: string) => {
-    if (type === QuickMenuType.Download) return handleClose({ aborted: true, resume: true, message: `Quick menu '${id}' cliked.` });
+    if (type === QuickMenuType.Download) return handleClose({ aborted: true, resume: true, message: `Quick menu '${id}' clicked.` });
+    if (type === QuickMenuType.RecentDownload)
+      return handleClose({
+        aborted: true,
+        resume: true,
+        message: `Quick menu '${id}' clicked with folder '${path}'.`,
+        folder: path,
+      });
     handleClose();
     const _destination: QuickMenu['destination'] = path ? { custom: true, path } : destination;
     createTask({ ..._form, destination: _destination }, modal);
@@ -124,6 +130,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
         .subscribe(([{ message, sendResponse }, { event, anchor }]) => {
           const resolvedPosition = event ? { top: event.clientY, left: event.clientX } : undefined;
           const resolvedAnchor = event ? null : anchor ?? null;
+
           if (message?.payload) {
             setIntercept({ callback: sendResponse });
             onEvent(message?.payload, resolvedAnchor, resolvedPosition);
@@ -136,10 +143,9 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
     return () => subs.unsubscribe();
   }, []);
 
-  const isDisabled = (menu: QuickMenu): boolean => {
-    if (menu.type !== QuickMenuType.Download && !isLogged) return true;
-    return menu.type === QuickMenuType.Recent && !destinations?.length;
-  };
+  const destinations = useSelector<StoreState, string[]>(getDestinationsHistory);
+  const folders = useSelector<StoreState, string[]>(getFolderHistory);
+  const logged = useSelector<StoreState, boolean>(getLogged);
 
   return (
     <Menu
@@ -165,9 +171,10 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
         <QuickMenuRecent
           key={m.id}
           menu={m}
+          logged={logged}
+          folders={folders}
           destinations={destinations}
           onClick={(_, { menu, destination }) => handleClick(menu, destination)}
-          disabled={isDisabled(m)}
         />
       ))}
     </Menu>

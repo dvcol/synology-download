@@ -5,6 +5,7 @@ import type { Log, StateSlice } from '@src/models';
 import {
   setBadgeReducer,
   syncDestinationsHistoryReducer,
+  syncDownloadStateReducer,
   syncFoldersHistoryReducer,
   syncLoggedReducer,
   syncLogHistoryReducer,
@@ -30,6 +31,7 @@ export interface StateReducers<S = StateSlice> extends SliceCaseReducers<S> {
   addFolderHistory: CaseReducer<S, PayloadAction<string>>;
   addLogHistory: CaseReducer<S, PayloadAction<{ log: Log; max: number }>>;
   resetLogHistory: CaseReducer<S>;
+  syncDownloadState: CaseReducer<S, PayloadAction<StateSlice['download']>>;
 }
 
 export const initialState: StateSlice = {
@@ -49,6 +51,10 @@ export const initialState: StateSlice = {
     destinations: [],
     folders: [],
     logs: [],
+  },
+  download: {
+    enabled: false,
+    defaultFolder: undefined,
   },
 };
 
@@ -80,5 +86,6 @@ export const stateSlice = createSlice<StateSlice, StateReducers, 'state'>({
         payload: [...(state.history.logs ?? initialState.history.logs), action.payload.log].slice(0, action.payload.max),
       }),
     resetLogHistory: (state, action) => syncLogHistoryReducer(state, { ...action, payload: initialState.history.logs }),
+    syncDownloadState: syncDownloadStateReducer,
   } as StateReducers,
 });

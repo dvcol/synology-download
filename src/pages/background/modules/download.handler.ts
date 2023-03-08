@@ -2,15 +2,22 @@ import { catchError, firstValueFrom, of, withLatestFrom } from 'rxjs';
 
 import { getActiveTab } from '@dvcol/web-extension-utils';
 
-import type { DownloadsIntercept, StoreOrProxy } from '@src/models';
+import type { DownloadsIntercept } from '@src/models';
 import { DownloadStatus } from '@src/models';
 import { InterceptService, LoggerService, NotificationService } from '@src/services';
-import { getSettingsDownloadsIntercept, getSettingsDownloadsInterceptEnabled, getSettingsDownloadsNotifications } from '@src/store/selectors';
+import { addFolderHistory } from '@src/store/actions';
+import {
+  getDefaultFolder,
+  getSettingsDownloadsIntercept,
+  getSettingsDownloadsInterceptEnabled,
+  getSettingsDownloadsNotifications,
+} from '@src/store/selectors';
 import { onFilename$, onStatus$, store$ } from '@src/utils';
 
+import type { Store } from 'redux';
 import type { Subscription } from 'rxjs';
 
-const onDownloadEventsNotifications = (store: StoreOrProxy) => {
+const onDownloadEventsNotifications = (store: Store) => {
   LoggerService.debug('Subscribing to download notifications events.');
 
   const notifications$ = store$<boolean>(store, getSettingsDownloadsNotifications);
@@ -25,9 +32,29 @@ const onDownloadEventsNotifications = (store: StoreOrProxy) => {
     .subscribe(([item, notification]) => {
       if (notification) NotificationService.downloadError(item);
     });
+
+  onStatus$(DownloadStatus.downloading).subscribe(item => {
+    // if no folder path
+    if (!item?.folder?.length) return;
+
+    const defaultFolder = getDefaultFolder(store.getState());
+
+    // if no default folder
+    if (!defaultFolder?.length) return;
+    // if same as default folder
+    if (defaultFolder === item.folder) return;
+    // if not child of default folder
+    if (!item.folder.startsWith(defaultFolder)) return;
+
+    // strip default folder
+    const relative = item.folder.replace(new RegExp(`^${defaultFolder}`), '');
+
+    // add to history
+    if (relative?.length) store.dispatch(addFolderHistory(relative));
+  });
 };
 
-const onDownloadEventsIntercept = (store: StoreOrProxy) => {
+const onDownloadEventsIntercept = (store: Store) => {
   const enabled$ = store$<boolean>(store, getSettingsDownloadsInterceptEnabled);
 
   const subscribe = () =>
@@ -75,7 +102,7 @@ const onDownloadEventsIntercept = (store: StoreOrProxy) => {
   });
 };
 
-export const onDownloadEvents = (store: StoreOrProxy) => {
+export const onDownloadEvents = (store: Store) => {
   LoggerService.debug('Subscribing to download events.');
 
   onDownloadEventsNotifications(store);

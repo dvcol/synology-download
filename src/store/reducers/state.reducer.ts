@@ -40,11 +40,11 @@ export const setBadgeReducer: StateReducers['setBadge'] = (state, { payload: { c
   return { ...state, count };
 };
 
-type PartialState = Pick<StateSlice, 'logged' | 'history'>;
+type PartialState = Pick<StateSlice, 'logged' | 'history' | 'download'>;
 export const syncStateReducer = (state: StateSlice): StateSlice => {
-  const { logged, history } = state;
+  const { logged, history, download } = state;
   // TODO : move to thunk ?
-  localSet<PartialState>(stateSlice.name, { logged, history }).subscribe(_state => LoggerService.debug('State local sync success', _state));
+  localSet<PartialState>(stateSlice.name, { logged, history, download }).subscribe(_state => LoggerService.debug('State local sync success', _state));
   return state;
 };
 
@@ -62,4 +62,8 @@ export const syncFoldersHistoryReducer: CaseReducer<StateSlice, PayloadAction<st
 
 export const syncLogHistoryReducer: CaseReducer<StateSlice, PayloadAction<Log[]>> = (state, { payload: logs }) => {
   return syncStateReducer({ ...state, history: { ...state.history, logs: logs?.slice(0, 10000) ?? [] } });
+};
+
+export const syncDownloadStateReducer: StateReducers['syncDownloadState'] = (state, { payload: download }) => {
+  return syncStateReducer({ ...state, download });
 };

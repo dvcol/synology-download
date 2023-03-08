@@ -55,10 +55,17 @@ const common = {
         label: { fontSize: 'inherit' },
       },
     },
+    MuiSelect: {
+      styleOverrides: {
+        select: {
+          fontSize: 'inherit',
+        },
+      },
+    },
     MuiInputBase: {
       styleOverrides: {
         input: scrollbar,
-        root: { fontSize: 'inherit' },
+        root: { fontSize: '0.9em' },
       },
     },
     MuiInputLabel: {

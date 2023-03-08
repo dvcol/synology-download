@@ -42,6 +42,29 @@
   "common__error__invalid_argument": {
     "message": "Invalid argument"
   },
+
+  "common__error__download_erase_fail": {
+    "message": "Erase download failed"
+  },
+  "common__error__download_cancel_fail": {
+    "message": "Cancel download failed"
+  },
+  "common__error__download_retry_fail": {
+    "message": "Retry download failed"
+  },
+  "common__error__download_pause_fail": {
+    "message": "Pause download failed"
+  },
+  "common__error__download_resume_fail": {
+    "message": "Resume download failed"
+  },
+  "common__error__download_open_fail": {
+    "message": "Open download failed"
+  },
+  "common__error__download_transfer_fail": {
+    "message": "Transfer download failed"
+  },
+
   "common__error": {
     "message": "Error"
   },

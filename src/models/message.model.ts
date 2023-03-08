@@ -32,6 +32,7 @@ export enum ChromeMessageType {
 export type InterceptPayload = TaskForm;
 
 export type InterceptResponse = {
+  folder?: string;
   aborted: boolean;
   resume?: boolean;
   message?: string;
