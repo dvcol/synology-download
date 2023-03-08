@@ -55,7 +55,7 @@ export class LoggerService {
    */
   private static capture(level: LoggingLevel, value: any, params?: any[]) {
     if (!this.history || !this.store) return;
-    if (level < 2) return;
+    if (level < LoggingLevel.info) return;
 
     const log: Log = { timestamp: new Date().toISOString(), level, source: this.source, value: value?.toString(), params: params?.toString() };
 
@@ -86,22 +86,22 @@ export class LoggerService {
   }
 
   static debug(message?: any, ...params: any[]) {
-    if (this.captureAndFilter(LoggingLevel.trace, message, params)) return;
+    if (this.captureAndFilter(LoggingLevel.debug, message, params)) return;
     return console.debug(message, ...params);
   }
 
   static info(message?: any, ...params: any[]) {
-    if (this.captureAndFilter(LoggingLevel.trace, message, params)) return;
+    if (this.captureAndFilter(LoggingLevel.info, message, params)) return;
     return console.info(message, ...params);
   }
 
   static warn(message?: any, ...params: any[]) {
-    if (this.captureAndFilter(LoggingLevel.trace, message, params)) return;
+    if (this.captureAndFilter(LoggingLevel.warn, message, params)) return;
     return console.warn(message, ...params);
   }
 
   static error(message?: any, ...params: any[]) {
-    if (this.captureAndFilter(LoggingLevel.trace, message, params)) return;
+    if (this.captureAndFilter(LoggingLevel.error, message, params)) return;
     return console.error(message, ...params);
   }
   /* eslint-enable no-console */
