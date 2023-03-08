@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { defaultGlobal } from '@src/models';
+import { LoggerService } from '@src/services';
 import { getGlobalLoading, getLoading } from '@src/store/selectors';
 import { useDebounceObservable } from '@src/utils';
 
@@ -22,7 +23,10 @@ export const LoadingBar = (props?: LinearProgressProps) => {
 
   // Loading observable for debounce
   const [loading$, next] = useDebounceObservable<boolean>(setLoading, threshold);
-  useEffect(() => next(_loading > 0), [loading$, _loading]);
+  useEffect(() => {
+    next(_loading > 0);
+    if (_loading < 0) LoggerService.warn('Loading count negative', { count: _loading });
+  }, [loading$, _loading]);
 
   const show = enabled && loading && _loading > 0;
 

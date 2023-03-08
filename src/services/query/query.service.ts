@@ -24,17 +24,7 @@ import type {
 import { ConnectionType, FileListOption, LoginError, mapToTask, NotReadyError, TaskListOption, TaskStatus } from '@src/models';
 import { LoggerService, NotificationService } from '@src/services';
 import { SynologyAuthService, SynologyDownloadService, SynologyFileService, SynologyInfoService } from '@src/services/http';
-import {
-  addDestinationHistory,
-  addLoading,
-  removeLoading,
-  resetLoading,
-  setLogged,
-  setSid,
-  setTasks,
-  setTaskStats,
-  spliceTasks,
-} from '@src/store/actions';
+import { addDestinationHistory, addLoading, removeLoading, setLogged, setSid, setTasks, setTaskStats, spliceTasks } from '@src/store/actions';
 import {
   getActiveTasksIdsByActionScope,
   getCredentials,
@@ -79,8 +69,6 @@ export class QueryService {
 
     store$<string>(store, getUrl).subscribe(url => this.setBaseUrl(url));
     store$<string | undefined>(store, getSid).subscribe(sid => this.setSid(sid));
-
-    this.store.dispatch(resetLoading());
 
     LoggerService.debug('Query service initialized', { isProxy });
   }

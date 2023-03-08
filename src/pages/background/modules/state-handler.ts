@@ -11,8 +11,6 @@ import type { Store } from 'redux';
 
 /**
  * Restore Login state from settings
- * @param state the restored state slice
- * @param settings the restored settings slice
  */
 export const restoreLoginSate = () => {
   // If service is not initialized with url
