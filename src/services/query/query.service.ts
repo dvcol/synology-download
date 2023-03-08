@@ -16,7 +16,6 @@ import type {
   LoginResponse,
   NewFolderList,
   SettingsSlice,
-  StateSlice,
   StoreOrProxy,
   Task,
   TaskList,
@@ -36,7 +35,6 @@ import {
   getPausedTasksIdsByActionScope,
   getSettings,
   getSid,
-  getState,
   getTasksIdsByActionScope,
   getTasksIdsByStatusType,
   getUrl,
@@ -186,10 +184,9 @@ export class QueryService {
 
   /**
    * Returns true if we should attempt an auto-login
-   * @param state the state slice
    * @param settings the settings slice
    */
-  private static shouldAutoLogin = (state: StateSlice, settings: SettingsSlice) => {
+  private static shouldAutoLogin = (settings: SettingsSlice) => {
     // If missing username
     if (!settings?.connection?.username) return false;
     // If missing password
@@ -210,20 +207,20 @@ export class QueryService {
    *
    * @param options optional inputs, state, settings and notify
    */
-  static autoLogin(options: { state?: StateSlice; settings?: SettingsSlice; notify?: boolean } = {}): Observable<LoginResponse | null> {
-    const { state, settings, notify } = {
-      state: getState(this.store.getState()),
+  static autoLogin(options: { logged?: boolean; notify?: boolean; settings?: SettingsSlice } = {}): Observable<LoginResponse | null> {
+    const { logged, notify, settings } = {
+      logged: getLogged(this.store.getState()),
       settings: getSettings(this.store.getState()),
       notify: true,
       ...options,
     };
-    LoggerService.debug('Attempting auto-login', { state, settings });
+    LoggerService.debug('Attempting auto-login', { logged, settings });
 
     // If we are already logged-in we ignore
-    if (state?.logged) return of(null);
+    if (logged) return of(null);
 
     // If remember me is not enabled
-    if (!this.shouldAutoLogin(state, settings)) return of(null);
+    if (!this.shouldAutoLogin(settings)) return of(null);
 
     // Attempt to Restore login
     return QueryService.login().pipe(

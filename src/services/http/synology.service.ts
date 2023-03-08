@@ -4,7 +4,7 @@ import type { BaseHttpRequest, HttpParameters } from '@dvcol/web-extension-utils
 import { HttpMethod } from '@dvcol/web-extension-utils';
 
 import type { Api, Endpoint, HttpResponse, SynologyQueryArgs, SynologyQueryPayload } from '@src/models';
-import { ChromeMessageType, Controller, SynologyError } from '@src/models';
+import { AuthMethod, ChromeMessageType, Controller, SynologyError } from '@src/models';
 import { LoggerService } from '@src/services';
 import { onMessage, sendMessage, stringifyParams } from '@src/utils';
 
@@ -48,7 +48,7 @@ export class SynologyService extends BaseHttpService {
   query<T>(method: HttpMethod, params: HttpParameters, version: string, api: Api, endpoint: Endpoint, base?: string): Observable<HttpResponse<T>> {
     let url: BaseHttpRequest['url'] = endpoint;
     if (base) url = { base: base + this.prefix, path: endpoint };
-    if (this.sid) params._sid = this.sid;
+    if (this.sid && params?.method !== AuthMethod.login) params._sid = this.sid;
     switch (method) {
       case HttpMethod.POST:
       case HttpMethod.post:

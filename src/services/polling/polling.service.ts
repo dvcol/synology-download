@@ -47,8 +47,18 @@ export class PollingService {
         .subscribe(([_, logged, download]) => {
           if (download) DownloadService.searchAll().subscribe();
           if (logged) {
-            QueryService.listTasks().subscribe();
-            QueryService.getStatistic().subscribe();
+            QueryService.listTasks().subscribe({
+              error: err => {
+                LoggerService.error('Polling service failed to fetch list', err);
+                this.stop();
+              },
+            });
+            QueryService.getStatistic().subscribe({
+              error: err => {
+                this.stop();
+                LoggerService.error('Polling service failed to fetch statistics', err);
+              },
+            });
           }
         });
 

@@ -9,7 +9,6 @@ import { storeProxy } from '@src/store';
 import { getOption } from '@src/store/selectors';
 import { portConnect, store$ } from '@src/utils';
 
-// TODO custom UI for options
 const initOptionsApp = async () => {
   await storeProxy.ready();
 

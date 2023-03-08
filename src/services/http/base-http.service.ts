@@ -1,4 +1,4 @@
-import type { BaseHttpRequest, HttpBody, HttpHeaders, HttpParameters } from '@dvcol/web-extension-utils';
+import type { BaseHttpRequest, HttpBody, HttpParameters } from '@dvcol/web-extension-utils';
 import { HttpMethod, rxFetch } from '@dvcol/web-extension-utils';
 
 import type { Observable } from 'rxjs';
@@ -19,25 +19,31 @@ export class BaseHttpService {
     return rxFetch<T>(baseHttpRequest);
   }
 
-  get<T>(url: BaseHttpRequest['url'], params?: HttpParameters, headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*' }): Observable<T> {
-    return this.request({ url, method: HttpMethod.GET, params, headers });
+  get<T>(url: BaseHttpRequest['url'], params?: HttpParameters, request: Omit<BaseHttpRequest, 'url' | 'param'> = {}): Observable<T> {
+    const _request = { headers: { 'Access-Control-Allow-Origin': '*', credentials: 'omit' }, ...request };
+    return this.request({ url, method: HttpMethod.GET, params, ..._request });
   }
 
   post<T>(
     url: BaseHttpRequest['url'],
     body: HttpBody,
     params?: HttpParameters,
-    headers: HttpHeaders = {
-      'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json',
-    },
+    request: Omit<BaseHttpRequest, 'url' | 'param' | 'body'> = {},
   ): Observable<T> {
+    const _request = {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+        credentials: 'omit',
+      },
+      ...request,
+    };
     return this.request({
       url,
       method: HttpMethod.POST,
       params,
-      headers,
       body,
+      ..._request,
     });
   }
 
@@ -45,15 +51,21 @@ export class BaseHttpService {
     url: BaseHttpRequest['url'],
     body: HttpBody,
     params?: HttpParameters,
-    headers: HttpHeaders = {
-      'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json',
-    },
+    request: Omit<BaseHttpRequest, 'url' | 'param' | 'body'> = {},
   ): Observable<T> {
-    return this.request({ url, method: HttpMethod.PUT, params, headers, body });
+    const _request = {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+        credentials: 'omit',
+      },
+      ...request,
+    };
+    return this.request({ url, method: HttpMethod.PUT, params, body, ..._request });
   }
 
-  delete<T>(url: BaseHttpRequest['url'], params?: HttpParameters, headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*' }): Observable<T> {
-    return this.request({ url, method: HttpMethod.DELETE, params, headers });
+  delete<T>(url: BaseHttpRequest['url'], params?: HttpParameters, request: Omit<BaseHttpRequest, 'url' | 'param'> = {}): Observable<T> {
+    const _request = { headers: { 'Access-Control-Allow-Origin': '*', credentials: 'omit' }, ...request };
+    return this.request({ url, method: HttpMethod.DELETE, params, ..._request });
   }
 }

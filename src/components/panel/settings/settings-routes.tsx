@@ -49,7 +49,6 @@ export const SettingsRoutes: FC = () => {
           <SettingsTabs />
           <SettingsQuickMenus />
           <SettingsContextMenus />
-          {/* TODO: settings for folder display */}
         </React.Fragment>
       ),
     },
