@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.3](https://github.com/dvcol/synology-download/compare/v1.23.2...v1.23.3) (2023-03-08)
+
+
+### Features
+
+* **logger:** split logging levels by scope ([6af91dc](https://github.com/dvcol/synology-download/commit/6af91dc873b58a276244c2231f80a04b422810d5))
+
+
+### Bug Fixes
+
+* **https:** attempts auto-login on fetch failed ([96be68f](https://github.com/dvcol/synology-download/commit/96be68fe4892e3921ace17d22b628fd1a7f07eb6))
+* **https:** update base http api and code cleanup ([7bcfc14](https://github.com/dvcol/synology-download/commit/7bcfc1478941839699742ae71c8407cb8299bf3c))
+* **loading:** fix loading count reset ([f38ca22](https://github.com/dvcol/synology-download/commit/f38ca22349e53a20fbfb20f2119bdf06cc1c029d))
+
 ### [1.23.2](https://github.com/dvcol/synology-download/compare/v1.23.1...v1.23.2) (2023-03-08)
 
 
