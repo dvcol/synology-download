@@ -162,7 +162,7 @@ export const defaultNotifications: Notifications = {
       content: true,
     },
     timeout: 5000,
-    position: { vertical: 'bottom', horizontal: 'right' },
+    position: { vertical: 'top', horizontal: 'right' },
   },
   banner: {
     enabled: true,
