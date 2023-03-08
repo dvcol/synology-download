@@ -1,4 +1,6 @@
-import { withLatestFrom } from 'rxjs';
+import { catchError, firstValueFrom, of, withLatestFrom } from 'rxjs';
+
+import { getActiveTab } from '@dvcol/web-extension-utils';
 
 import type { DownloadsIntercept, StoreOrProxy } from '@src/models';
 import { DownloadStatus } from '@src/models';
@@ -36,16 +38,28 @@ const onDownloadEventsIntercept = (store: StoreOrProxy) => {
           store$<boolean>(store, getSettingsDownloadsInterceptEnabled),
         ),
       )
-      .subscribe(([[download, suggest], intercept, enabled]) => {
+      .subscribe(async ([[download, suggest], intercept, enabled]) => {
         const { all, erase, resume, modal, active } = intercept;
 
+        // If download send by extension ignore it
+        if (download?.byExtensionId) return suggest();
+
+        // If intercept disabled
         if (!enabled) return suggest();
+
+        // If extension not supported
         if (!all && !active.some(({ ext, mime }) => download.filename?.endsWith(ext) && (!mime?.length || download.mime === mime))) {
           return suggest();
         }
         // To ignore error since we catch them in Intercept
         const handler = { error: () => null };
         if (!modal) return InterceptService.transfer(download, { erase, resume }, suggest).subscribe(handler);
+
+        // If no active tab or pending navigation (link drag/drop)
+        const tab = await firstValueFrom(getActiveTab().pipe(catchError(() => of(null))));
+        if (!tab?.id || tab?.pendingUrl) return suggest();
+
+        // Else open menu
         InterceptService.openMenu(download, { erase, resume }, suggest).subscribe(handler);
       });
 

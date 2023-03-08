@@ -89,7 +89,14 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
       case 'cancel':
         return DownloadService.cancel(download.id).subscribe();
       case 'retry':
-        return forkJoin([DownloadService.download({ url: download.finalUrl }), DownloadService.erase({ id: download.id })]).subscribe();
+        return forkJoin([
+          DownloadService.download({
+            url: download.finalUrl,
+            filename: download.filename,
+            conflictAction: 'prompt',
+          }),
+          DownloadService.erase({ id: download.id }),
+        ]).subscribe();
       case 'pause':
         return DownloadService.pause(download.id).subscribe();
       case 'resume':
