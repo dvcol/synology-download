@@ -104,7 +104,7 @@ export const TaskAdd: FC<{
               subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '0.75em' }}
               sx={{ p: '0.5em 0' }}
             />
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1.25em', p: '0.5em 0', fontSize: '0.9em' }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1.25em', p: '0.5em 0', fontSize: '0.9em', margin: '0.5em 0' }}>
               <FormInput
                 controllerProps={{
                   name: 'uri',
@@ -157,7 +157,7 @@ export const TaskAdd: FC<{
               action={<FormSwitch controllerProps={{ name: 'destination.custom', control }} formControlLabelProps={{ label: '' }} />}
               sx={{ p: '0.5em 0' }}
             />
-            <Card sx={{ p: '0.5em', flex: '1 1 auto', m: '0.5rem 0', height: '20em' }}>
+            <Card sx={{ p: '0.5em', flex: '1 1 auto', m: '0.5em 0', height: '20em' }}>
               <FormExplorer
                 controllerProps={{ name: 'destination.path', control }}
                 explorerProps={{

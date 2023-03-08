@@ -13,7 +13,7 @@ import StorageIcon from '@mui/icons-material/Storage';
 import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
-
+import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
 import React from 'react';
 
 import { MaterialIcon } from '@src/models';
@@ -52,6 +52,8 @@ export const MuiIcon = ({ icon, props }: { icon: MaterialIcon; props?: SvgIconPr
       return <FolderIcon {...props} />;
     case MaterialIcon.history:
       return <HistoryIcon {...props} />;
+    case MaterialIcon.historyAlt:
+      return <WorkHistoryIcon {...props} />;
     case MaterialIcon.download:
       return <DownloadIcon {...props} />;
     default:

@@ -1,0 +1,21 @@
+{
+  "panel__settings__downloads__history__title": {
+    "message": "Download History"
+  },
+  "panel__settings__downloads__history__subheader": {
+    "message": "Keep a history of the folder destination for recent downloads."
+  },
+  "panel__settings__downloads__history__warning": {
+    "message": "Please note that due limitations in chrome download's API, only child of the default download folder are supported."
+  },
+
+  "panel__settings__downloads__history__default_folder__title": {
+    "message": "Default download folder"
+  },
+  "panel__settings__downloads__history__default_folder__subheader": {
+    "message": "Please set the default folder destination to enable parsing of recent downloads."
+  },
+  "panel__settings__downloads__history__default_folder__label": {
+    "message": "Folder"
+  }
+}

@@ -1,7 +1,14 @@
 import { DownloadStatus } from '@src/models/download.model';
 import { NavbarButtonType } from '@src/models/navbar.model';
 
-import { defaultContextMenu, defaultDownloadQuickMenu, defaultModalQuickMenu, defaultQuickMenu, defaultRecentQuickMenu } from './menu.model';
+import {
+  defaultContextMenu,
+  defaultDownloadQuickMenu,
+  defaultModalQuickMenu,
+  defaultQuickMenu,
+  defaultRecentDownloadQuickMenu,
+  defaultRecentQuickMenu,
+} from './menu.model';
 
 import { NotificationLevel } from './notification.model';
 
@@ -43,6 +50,7 @@ export enum ConnectionHeader {
 export enum DownloadsHeader {
   general = 'general',
   intercept = 'intercept',
+  history = 'history',
 }
 
 export enum InterfaceHeader {
@@ -371,7 +379,7 @@ export const defaultSettings: SettingsSlice = {
   polling: defaultPolling,
   tabs: defaultTabs,
   menus: [defaultContextMenu],
-  quick: [defaultQuickMenu, defaultModalQuickMenu, defaultRecentQuickMenu, defaultDownloadQuickMenu],
+  quick: [defaultQuickMenu, defaultModalQuickMenu, defaultRecentQuickMenu, defaultDownloadQuickMenu, defaultRecentDownloadQuickMenu],
   global: defaultGlobal,
   downloads: defaultDownloads,
   advanced: defaultAdvancedSettings,

@@ -3,7 +3,7 @@ import { switchMap, tap } from 'rxjs';
 import type { InterceptPayload, InterceptResponse, TaskForm } from '@src/models';
 import { ChromeMessageType } from '@src/models';
 import { DownloadService, LoggerService, QueryService } from '@src/services';
-import type { DownloadItem } from '@src/utils';
+import type { DownloadFilenameSuggestion, DownloadItem } from '@src/utils';
 import { sendActiveTabMessage } from '@src/utils';
 
 import type { Observable } from 'rxjs';
@@ -36,7 +36,7 @@ export class InterceptService {
   static openMenu<T extends DownloadItem>(
     download: T,
     { erase, resume }: InterceptOptions = {},
-    callback?: () => void,
+    callback?: (suggestion?: DownloadFilenameSuggestion) => void,
   ): Observable<InterceptResponse> {
     const form: TaskForm = { uri: download.finalUrl, source: download.referrer };
     return DownloadService.pause(download.id).pipe(
@@ -47,9 +47,13 @@ export class InterceptService {
         }),
       ),
       tap({
-        next: ({ message, aborted, resume: _resume }) => {
-          callback?.();
+        next: ({ folder, message, aborted, resume: _resume }) => {
+          const response = folder ? { filename: `.${folder}/${download?.filename?.split('/')?.pop()}` } : undefined;
+
+          callback?.(response);
+
           if (message) LoggerService.debug(`Intercept for download ${download.id} exited with message`, message);
+
           if (_resume || (aborted && resume)) {
             DownloadService.resume(download.id).subscribe();
           } else if (erase) {

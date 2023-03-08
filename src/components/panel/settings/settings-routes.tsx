@@ -9,7 +9,7 @@ import { SettingHeader } from '@src/models';
 
 import { SettingsCredentials, SettingsPolling } from './connection';
 
-import { SettingsDownloads, SettingsDownloadsIntercept } from './downloads';
+import { SettingsDownloads, SettingsDownloadsHistory, SettingsDownloadsIntercept } from './downloads';
 import { SettingsContextMenus, SettingsGlobal, SettingsQuickMenus, SettingsTabs } from './interface';
 import { SettingsBanner, SettingsSnack, SettingsTasksCount } from './notifications';
 
@@ -37,6 +37,7 @@ export const SettingsRoutes: FC = () => {
           <SettingsHeader label={SettingHeader.downloads} />
           <SettingsDownloads />
           <SettingsDownloadsIntercept />
+          <SettingsDownloadsHistory />
         </React.Fragment>
       ),
     },

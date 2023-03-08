@@ -21,7 +21,7 @@ import { TaskAdd } from '@src/components';
 import type { Download, Global, TaskForm } from '@src/models';
 import { ColorLevel, ColorLevelMap, DownloadStatus, downloadStatusToColor } from '@src/models';
 
-import { DownloadService, InterceptService, LoggerService } from '@src/services';
+import { DownloadService, InterceptService, LoggerService, NotificationService } from '@src/services';
 
 import type { StoreState } from '@src/store';
 import { getGlobalDownload, getSettingsDownloadsTransfer } from '@src/store/selectors';
@@ -81,31 +81,41 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
       }
     : {};
 
+  const errorHandler = (button: DownloadItemButton['key']) => ({
+    error: (error: Error) => {
+      LoggerService.error(`Download action '${button}' failed.`, error);
+      NotificationService.error({
+        title: i18n(`download_${button}_fail`, 'common', 'error'),
+        message: error?.message ?? error?.name ?? '',
+      });
+    },
+  });
+
   const handleClick = ($event: React.MouseEvent, key: DownloadItemButton['key']) => {
     $event.stopPropagation();
     switch (key) {
       case 'erase':
-        return DownloadService.erase({ id: download.id }).subscribe();
+        return DownloadService.erase({ id: download.id }).subscribe(errorHandler(key));
       case 'cancel':
-        return DownloadService.cancel(download.id).subscribe();
+        return DownloadService.cancel(download.id).subscribe(errorHandler(key));
       case 'retry':
         return forkJoin([
           DownloadService.download({
             url: download.finalUrl,
-            filename: download.filename,
-            conflictAction: 'prompt',
+            conflictAction: 'uniquify',
+            saveAs: $event.shiftKey,
           }),
           DownloadService.erase({ id: download.id }),
-        ]).subscribe();
+        ]).subscribe(errorHandler(key));
       case 'pause':
-        return DownloadService.pause(download.id).subscribe();
+        return DownloadService.pause(download.id).subscribe(errorHandler(key));
       case 'resume':
-        return DownloadService.resume(download.id).subscribe();
+        return DownloadService.resume(download.id).subscribe(errorHandler(key));
       case 'open':
         if ($event.shiftKey) return DownloadService.open(download.id).subscribe();
-        return DownloadService.show(download.id).subscribe();
+        return DownloadService.show(download.id).subscribe(errorHandler(key));
       case 'transfer':
-        if ($event.shiftKey || !modal) return InterceptService.transfer(download, { erase, resume }).subscribe();
+        if ($event.shiftKey || !modal) return InterceptService.transfer(download, { erase, resume }).subscribe(errorHandler(key));
         return toggleDialog(true);
       default:
         LoggerService.warn(`Key '${key}' is unknown`);

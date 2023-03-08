@@ -13,9 +13,11 @@ const {
   removeLoading,
   resetLoading,
   setBadge,
+  addFolderHistory,
   addDestinationHistory,
   addLogHistory,
   resetLogHistory,
+  syncDownloadState,
 } = stateSlice.actions;
 
 // Export as named constants
@@ -31,7 +33,9 @@ export {
   removeLoading,
   resetLoading,
   setBadge,
+  addFolderHistory,
   addDestinationHistory,
   addLogHistory,
   resetLogHistory,
+  syncDownloadState,
 };

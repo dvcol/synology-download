@@ -6,6 +6,9 @@
     "message": "Download"
   },
   "common__model__quick_menu_type__recent": {
-    "message": "Recent"
+    "message": "Recent tasks"
+  },
+  "common__model__quick_menu_type__recent_download": {
+    "message": "Recent downloads"
   }
 }

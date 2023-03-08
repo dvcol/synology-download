@@ -58,6 +58,7 @@ export enum MaterialIcon {
   server = 'server',
   download = 'download',
   history = 'history',
+  historyAlt = 'historyAlt',
 }
 
 export const MaterialIconMap: Record<MaterialIcon, string> = {
@@ -76,4 +77,5 @@ export const MaterialIconMap: Record<MaterialIcon, string> = {
   [MaterialIcon.server]: 'Server',
   [MaterialIcon.download]: 'Download',
   [MaterialIcon.history]: 'History',
+  [MaterialIcon.historyAlt]: 'History Alternate',
 };

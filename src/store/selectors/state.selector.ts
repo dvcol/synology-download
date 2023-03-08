@@ -29,4 +29,13 @@ export const getHistory = createSelector(getState, (state: StateSlice) => state?
 
 export const getDestinationsHistory = createSelector(getHistory, history => history?.destinations ?? initialState.history.destinations);
 
+export const getFolderHistory = createSelector(getHistory, history => history?.folders ?? initialState.history.folders);
+
 export const getLogHistory = createSelector(getHistory, history => history?.logs ?? initialState.history.logs);
+
+export const getDownloadState = createSelector(getState, (state: StateSlice) => state.download ?? initialState.download);
+
+export const getDefaultFolder = createSelector(
+  getDownloadState,
+  (state: StateSlice['download']) => state.defaultFolder ?? initialState.download.defaultFolder,
+);

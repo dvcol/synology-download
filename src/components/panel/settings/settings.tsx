@@ -13,7 +13,7 @@ export const Settings = () => {
     { label: SettingHeader.connection, links: [ConnectionHeader.credential, ConnectionHeader.polling] },
     {
       label: SettingHeader.downloads,
-      links: [DownloadsHeader.general, DownloadsHeader.intercept],
+      links: [DownloadsHeader.general, DownloadsHeader.intercept, DownloadsHeader.history],
     },
     {
       label: SettingHeader.interface,

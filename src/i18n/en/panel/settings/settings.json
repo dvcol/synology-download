@@ -18,6 +18,9 @@
   "panel__settings__downloads_intercept": {
     "message": "Intercept"
   },
+  "panel__settings__downloads_history": {
+    "message": "History"
+  },
 
   "panel__settings__interface": {
     "message": "Interface"

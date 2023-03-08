@@ -13,6 +13,7 @@ export enum QuickMenuType {
   Task = 'task',
   Download = 'download',
   Recent = 'recent',
+  RecentDownload = 'recent_download',
 }
 
 export interface QuickMenu extends Menu {
@@ -53,12 +54,22 @@ export const defaultRecentQuickMenu: QuickMenu = {
 
 export const defaultDownloadQuickMenu: QuickMenu = {
   id: uuid(),
-  title: 'Download to disk (local)',
+  title: 'Save to disk (local)',
   icon: MaterialIcon.download,
   modal: false,
   destination: { custom: false },
   max: 5,
   type: QuickMenuType.Download,
+};
+
+export const defaultRecentDownloadQuickMenu: QuickMenu = {
+  id: uuid(),
+  title: 'Recent folders (local)',
+  icon: MaterialIcon.historyAlt,
+  modal: false,
+  destination: { custom: false },
+  max: 5,
+  type: QuickMenuType.RecentDownload,
 };
 
 export enum ContextType {
