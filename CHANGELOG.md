@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.23.2](https://github.com/dvcol/synology-download/compare/v1.23.1...v1.23.2) (2023-03-08)
+
+
+### Bug Fixes
+
+* **logger:** change default logging level ([84dbf7f](https://github.com/dvcol/synology-download/commit/84dbf7fe7a6dcd5bcf40823325adf9ca89cde2b0))
+* **login:** fix auto-login on update ([4580c8d](https://github.com/dvcol/synology-download/commit/4580c8d6de75e14cfbb8a13d6c854f99fe6b57dd))
+* **login:** fix credential login error feedback ([7016535](https://github.com/dvcol/synology-download/commit/7016535ee9e8b7ae7b60534a4b13d27e92da852f))
+* **notifications:** fix relative size (rem to em) in notification snacks ([c8819f9](https://github.com/dvcol/synology-download/commit/c8819f9d3c690dc146717e74f0f8412545b4121a))
+
 ### [1.23.1](https://github.com/dvcol/synology-download/compare/v1.22.0...v1.23.1) (2023-03-08)
 
 
