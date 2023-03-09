@@ -20,7 +20,10 @@ export class BaseHttpService {
   }
 
   get<T>(url: BaseHttpRequest['url'], params?: HttpParameters, request: Omit<BaseHttpRequest, 'url' | 'param'> = {}): Observable<T> {
-    const _request = { headers: { 'Access-Control-Allow-Origin': '*', credentials: 'omit' }, ...request };
+    const _request = {
+      headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8', credentials: 'omit' },
+      ...request,
+    };
     return this.request({ url, method: HttpMethod.GET, params, ..._request });
   }
 
@@ -33,7 +36,7 @@ export class BaseHttpService {
     const _request = {
       headers: {
         'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
         credentials: 'omit',
       },
       ...request,
@@ -56,7 +59,7 @@ export class BaseHttpService {
     const _request = {
       headers: {
         'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
         credentials: 'omit',
       },
       ...request,
@@ -65,7 +68,10 @@ export class BaseHttpService {
   }
 
   delete<T>(url: BaseHttpRequest['url'], params?: HttpParameters, request: Omit<BaseHttpRequest, 'url' | 'param'> = {}): Observable<T> {
-    const _request = { headers: { 'Access-Control-Allow-Origin': '*', credentials: 'omit' }, ...request };
+    const _request = {
+      headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8', credentials: 'omit' },
+      ...request,
+    };
     return this.request({ url, method: HttpMethod.DELETE, params, ..._request });
   }
 }

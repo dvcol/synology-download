@@ -35,7 +35,7 @@ export class SynologyAuthService extends SynologyService {
     const params: HttpParameters = {
       method: AuthMethod.login,
       session: SessionName.DownloadStation,
-      format: format ?? 'cookie',
+      format: format ?? 'sid',
       account,
       passwd,
     };
