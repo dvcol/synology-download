@@ -3,7 +3,8 @@ import type { HttpMethod, HttpParameters } from '@dvcol/web-extension-utils';
 import type { ApiInfo } from './api-info.model';
 
 export enum SessionName {
-  DiskStation = 'DiskStation',
+  DownloadStation = 'DownloadStation',
+  FileStation = 'FileStation',
 }
 
 export enum Controller {

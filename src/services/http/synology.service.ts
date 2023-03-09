@@ -52,10 +52,10 @@ export class SynologyService extends BaseHttpService {
     switch (method) {
       case HttpMethod.POST:
       case HttpMethod.post:
-        return this.post<HttpResponse<T>>(url, stringifyParams({ ...params, api, version }));
+        return this.post<HttpResponse<T>>(url, stringifyParams({ api, version, ...params }));
       case HttpMethod.PUT:
       case HttpMethod.put:
-        return this.put<HttpResponse<T>>(url, stringifyParams({ ...params, api, version }));
+        return this.put<HttpResponse<T>>(url, stringifyParams({ api, version, ...params }));
       case HttpMethod.DELETE:
       case HttpMethod.delete:
         return this.delete<HttpResponse<T>>(url, { api, version, ...params });

@@ -34,8 +34,8 @@ export class SynologyAuthService extends SynologyService {
   ): Observable<LoginResponse> {
     const params: HttpParameters = {
       method: AuthMethod.login,
-      session: SessionName.DiskStation,
-      format: format ?? 'sid',
+      session: SessionName.DownloadStation,
+      format: format ?? 'cookie',
       account,
       passwd,
     };
@@ -47,7 +47,7 @@ export class SynologyAuthService extends SynologyService {
   }
 
   logout(): Observable<void> {
-    const params: HttpParameters = { method: AuthMethod.logout, session: SessionName.DiskStation };
+    const params: HttpParameters = { method: AuthMethod.logout, session: SessionName.DownloadStation };
     return this._do<void>(HttpMethod.POST, params);
   }
 }
