@@ -346,7 +346,7 @@ export class QueryService {
         },
         error: error => {
           NotificationService.error({
-            title: i18n('auto-login'),
+            title: i18n('create_task_fail'),
             message: error?.message ?? error?.name ?? '',
             contextMessage: source,
           });
