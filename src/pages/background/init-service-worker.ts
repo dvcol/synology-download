@@ -7,9 +7,9 @@ import { store } from '@src/store';
 
 import {
   onContentEvents,
+  onContestMenuEvents,
   onDownloadEvents,
   onInstalledEvents,
-  onMessageEvents,
   onPortEvents,
   restoreLocalSate,
   restoreSettings,
@@ -24,7 +24,7 @@ export const initServiceWorker = async () => {
   LoggerService.init(store, LogInstance.Background);
 
   // Listen to context menu events (first because it is required for setting restore)
-  onMessageEvents();
+  onContestMenuEvents();
 
   // Restore settings & polling
   await lastValueFrom(restoreSettings(store));

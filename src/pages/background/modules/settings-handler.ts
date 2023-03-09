@@ -1,4 +1,4 @@
-import { catchError, of, switchMap, tap } from 'rxjs';
+import { catchError, lastValueFrom, of, tap } from 'rxjs';
 
 import { syncGet } from '@dvcol/web-extension-utils';
 
@@ -14,7 +14,7 @@ import type { Store } from 'redux';
 /** Restore extension settings */
 export const restoreSettings = (store: Store) =>
   syncGet<SettingsSlice>(settingsSlice.name).pipe(
-    switchMap(async settings => {
+    tap(async settings => {
       LoggerService.debug('restoring settings from chrome storage', settings);
       // restore settings
       store.dispatch(syncSettings(settings));
@@ -30,7 +30,7 @@ export const restoreSettings = (store: Store) =>
       if (settings?.tabs?.length) store.dispatch(setNavbar(settings?.tabs[0]));
 
       // restore context menu
-      return buildContextMenu(settings?.menus || defaultSettings.menus);
+      await lastValueFrom(buildContextMenu(settings?.menus || defaultSettings.menus));
     }),
     tap(() => LoggerService.debug('Settings restored.')),
     catchError(err => {

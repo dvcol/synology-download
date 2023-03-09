@@ -1,4 +1,4 @@
-import { catchError, map, of, tap } from 'rxjs';
+import { catchError, of, tap } from 'rxjs';
 
 import { localGet } from '@dvcol/web-extension-utils';
 
@@ -13,7 +13,7 @@ import type { Store } from 'redux';
 /** Restore extension tasks list */
 export const restoreTasks = (store: Store) =>
   localGet<TasksSlice['entities']>(tasksSlice.name).pipe(
-    map(tasks => {
+    tap(tasks => {
       LoggerService.debug('restoring tasks from chrome storage.', tasks);
       const restoredTasks = parseJSON<TasksSlice['entities']>(tasks);
 
