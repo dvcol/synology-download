@@ -38,6 +38,7 @@ import {
   getTabs,
   getTasks,
   getTasksIds,
+  getWaitingTasksIds,
   isModalOpen,
 } from '@src/store/selectors';
 import { nullSafeCompare, numberCompare, stringCompare } from '@src/utils';
@@ -145,6 +146,7 @@ const getTasksIdsForActiveTab = createSelector(geTasksIdsByStatusTypeForActiveTa
 const getErrorTasksIdsForActiveTab = createSelector(geTasksIdsByStatusTypeForActiveTab, map => map[ContentStatusType.error]);
 const getPausedTasksIdsForActiveTab = createSelector(geTasksIdsByStatusTypeForActiveTab, map => map[ContentStatusType.paused]);
 const getActiveTasksIdsForActiveTab = createSelector(geTasksIdsByStatusTypeForActiveTab, map => map[ContentStatusType.active]);
+const getWaitingTasksIdsForActiveTab = createSelector(geTasksIdsByStatusTypeForActiveTab, map => map[ContentStatusType.waiting]);
 const getFinishedTasksIdsForActiveTab = createSelector(geTasksIdsByStatusTypeForActiveTab, map => map[ContentStatusType.finished]);
 
 const taskActionScopeReducer = (tasks: Set<Task['id']>, activeTasks: Set<Task['id']>, scope: ActionScope) =>
@@ -161,11 +163,19 @@ export const getPausedTasksIdsByActionScope = createSelector(
   taskActionScopeReducer,
 );
 
-export const getActiveTasksIdsByActionScope = createSelector(
-  getActiveTasksIds,
-  getActiveTasksIdsForActiveTab,
+const getActiveTasksIdsByActionScope = createSelector(getActiveTasksIds, getActiveTasksIdsForActiveTab, getActionScope, taskActionScopeReducer);
+
+export const getWaitingTasksIdsByActionScope = createSelector(
+  getWaitingTasksIds,
+  getWaitingTasksIdsForActiveTab,
   getActionScope,
   taskActionScopeReducer,
+);
+
+export const getActiveAndWaitingTasksIdsByActionScope = createSelector(
+  getWaitingTasksIdsByActionScope,
+  getActiveTasksIdsByActionScope,
+  (waiting, active) => new Set([...waiting, ...active]),
 );
 
 export const getFinishedTasksIdsByActionScope = createSelector(

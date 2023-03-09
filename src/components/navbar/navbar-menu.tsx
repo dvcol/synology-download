@@ -64,7 +64,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
   // Dialog
   const [prompt, setPrompt] = React.useState(false);
   const onErase = <T extends { altKey: boolean; shiftKey: boolean }>({ altKey, shiftKey }: T) => {
-    if (downloadButtons && !altKey) return DownloadService.cancelAll().subscribe();
+    if (downloadButtons && !altKey && shiftKey) return DownloadService.cancelAll().subscribe();
     if (logged) {
       if (altKey && shiftKey) return QueryService.deleteFinishedAndErrorTasks().subscribe(handleError('delete'));
       if (!shiftKey) return QueryService.deleteAllTasks().subscribe(handleError('delete'));
@@ -315,6 +315,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
         onCancel={() => setPrompt(false)}
         onConfirm={$event => {
           setPrompt(false);
+          console.info('on confirm', $event);
           onErase($event);
         }}
         toolitp={{

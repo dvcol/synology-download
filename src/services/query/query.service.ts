@@ -25,7 +25,7 @@ import { LoggerService, NotificationService } from '@src/services';
 import { SynologyAuthService, SynologyDownloadService, SynologyFileService, SynologyInfoService } from '@src/services/http';
 import { addDestinationHistory, addLoading, removeLoading, setLogged, setSid, setTasks, setTaskStats, spliceTasks } from '@src/store/actions';
 import {
-  getActiveTasksIdsByActionScope,
+  getActiveAndWaitingTasksIdsByActionScope,
   getCredentials,
   getFinishedAnErrorTasksIdsByActionScope,
   getFinishedTasksIdsByActionScope,
@@ -331,7 +331,7 @@ export class QueryService {
     );
   }
 
-  static pauseAllTasks(ids: Set<Task['id']> = getActiveTasksIdsByActionScope(this.store.getState())): Observable<CommonResponse[]> {
+  static pauseAllTasks(ids: Set<Task['id']> = getActiveAndWaitingTasksIdsByActionScope(this.store.getState())): Observable<CommonResponse[]> {
     return ids?.size ? this.pauseTask(Array.from(ids).join(',')) : EMPTY;
   }
 
