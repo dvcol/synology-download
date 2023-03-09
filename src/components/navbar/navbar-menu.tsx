@@ -252,7 +252,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
           ))}
 
       {!logged && (
-        <Tooltip title={i18n('menu_login')} key={'login'}>
+        <Tooltip arrow title={i18n('menu_login')} key={'login'}>
           <IconButton
             id={`login-pinned`}
             aria-controls={`login-pinned-button`}
@@ -266,7 +266,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
         </Tooltip>
       )}
 
-      <Tooltip title="Actions and Settings">
+      <Tooltip arrow title="Actions and Settings">
         <IconButton
           sx={{ m: '0 0.25rem' }}
           id="dropdown-menu-button"

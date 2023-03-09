@@ -21,13 +21,13 @@ const UrlCounts: FC<{ urls?: string[] }> = ({ urls }) => {
   if (!urls?.length) return null;
 
   const tooltip = urls?.map((_url, i) => (
-    <Box key={i} sx={i ? { borderTop: '0.03em solid #757575', pt: '0.25em' } : undefined}>
+    <Box key={i} sx={{ borderTop: i ? '0.03em solid #757575' : 0, p: '0.25em' }}>
       {_url}
     </Box>
   ));
 
   return (
-    <Tooltip PopperProps={{ disablePortal: true }} title={<Box sx={{ wordBreak: 'break-all' }}>{tooltip}</Box>} arrow>
+    <Tooltip arrow PopperProps={{ disablePortal: true }} title={<Box sx={{ wordBreak: 'break-all' }}>{tooltip}</Box>} sx={{ ml: '0.5rem' }}>
       <Chip
         label={
           <Box sx={{ fontSize: '1em' }}>

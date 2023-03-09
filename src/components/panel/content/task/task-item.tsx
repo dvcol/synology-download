@@ -90,7 +90,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
 
   const buttons = (
     <>
-      <Tooltip title={i18n('delete', 'common', 'buttons')} placement={'left'}>
+      <Tooltip arrow title={i18n('delete', 'common', 'buttons')} placement={'left'}>
         <span>
           <Button
             key="delete"
@@ -121,7 +121,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
         }}
       />
       {![TaskStatus.paused, TaskStatus.finished, TaskStatus.error].includes(task.status) ? (
-        <Tooltip title={i18n('pause', 'common', 'buttons')} placement={'left'}>
+        <Tooltip arrow title={i18n('pause', 'common', 'buttons')} placement={'left'}>
           <span>
             <Button
               key="pause"
@@ -135,7 +135,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
           </span>
         </Tooltip>
       ) : (
-        <Tooltip title={i18n(playOrSeedOrRetry, 'common', 'buttons')} placement={'left'}>
+        <Tooltip arrow title={i18n(playOrSeedOrRetry, 'common', 'buttons')} placement={'left'}>
           <span>
             <Button
               key={playOrSeedOrRetry}

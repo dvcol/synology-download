@@ -95,7 +95,7 @@ export const ExplorerLeafEdit: FC<ExplorerLeafEditProps> = ({ folder, isEditing,
       )}
       <Stack direction="row" sx={{ marginRight: editing ? '-0.5rem' : '-0.25rem' }}>
         {!editing && !disabled && hover && (
-          <Tooltip title={i18n('edit', 'common', 'buttons')}>
+          <Tooltip arrow title={i18n('edit', 'common', 'buttons')}>
             <span>
               <Button key="edit" sx={{ display: 'flex', flex: '1 1 auto', minWidth: '0', p: '0.125rem' }} disabled={disabled} onClick={onEdit}>
                 <EditIcon sx={{ fontSize: '0.9rem' }} />
@@ -104,7 +104,7 @@ export const ExplorerLeafEdit: FC<ExplorerLeafEditProps> = ({ folder, isEditing,
           </Tooltip>
         )}
         {editing && !disabled && isDirty && (
-          <Tooltip title={i18n('save', 'common', 'buttons')}>
+          <Tooltip arrow title={i18n('save', 'common', 'buttons')}>
             <span>
               <Button
                 key="save"
@@ -118,7 +118,7 @@ export const ExplorerLeafEdit: FC<ExplorerLeafEditProps> = ({ folder, isEditing,
           </Tooltip>
         )}
         {editing && !disabled && (
-          <Tooltip title={i18n('cancel', 'common', 'buttons')}>
+          <Tooltip arrow title={i18n('cancel', 'common', 'buttons')}>
             <span>
               <Button
                 key="cancel"

@@ -21,7 +21,7 @@ export const TooltipHoverChange: FC<TooltipHoverChangeProps> = ({ title, hoverTo
     if (hoverTooltip) setTooltip(hoverTooltip($event));
   };
   return (
-    <Tooltip title={tooltip ?? ''} {...props}>
+    <Tooltip arrow title={tooltip ?? ''} {...props}>
       <Box {...boxProps} onMouseOver={onEvent} onKeyUp={onEvent} onKeyDown={onEvent}>
         {children}
       </Box>
