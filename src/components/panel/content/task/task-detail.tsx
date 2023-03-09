@@ -126,18 +126,31 @@ const EditButton: FC<TaskDetailButtonProps> = ({ task, isDisabled, loadingIcon, 
 };
 
 const StopButton: FC<TaskDetailButtonProps> = ({ task, isDisabled, loadingIcon, buttonClick, i18n }) => {
+  const [prompt, setPrompt] = React.useState(false);
   if (TaskStatus.downloading !== task.status || !task.received) return null;
 
   return (
-    <Button
-      startIcon={<IconLoader icon={<StopIcon />} loading={loadingIcon?.stop} props={{ size: '1.25rem', color: 'error' }} />}
-      variant="outlined"
-      color="error"
-      disabled={isDisabled}
-      onClick={() => buttonClick('stop', QueryService.stopTask(task.id))}
-    >
-      {i18n('stop', 'common', 'buttons')}
-    </Button>
+    <>
+      <Button
+        startIcon={<IconLoader icon={<StopIcon />} loading={loadingIcon?.stop} props={{ size: '1.25rem', color: 'error' }} />}
+        variant="outlined"
+        color="error"
+        disabled={isDisabled}
+        onClick={() => setPrompt(true)}
+      >
+        {i18n('stop', 'common', 'buttons')}
+      </Button>
+      <ConfirmationDialog
+        open={prompt}
+        title={i18n('confirmation_title')}
+        description={i18n('stop__confirmation_description')}
+        onCancel={() => setPrompt(false)}
+        onConfirm={() => {
+          setPrompt(false);
+          buttonClick('stop', QueryService.stopTask(task.id));
+        }}
+      />
+    </>
   );
 };
 
@@ -160,7 +173,7 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
       <ConfirmationDialog
         open={prompt}
         title={i18n('confirmation_title')}
-        description={i18n('confirmation_description')}
+        description={i18n('delete__confirmation_description')}
         onCancel={() => setPrompt(false)}
         onConfirm={() => {
           setPrompt(false);
@@ -189,7 +202,7 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
           {!task.stopping && <PauseButton i18n={i18n} {...props} />}
           {!task.stopping && <EditButton i18n={i18n} {...props} />}
           {!task.stopping && <StopButton i18n={i18n} {...props} />}
-          {!task.stopping && DeleteButton}
+          {DeleteButton}
         </>
       }
       content={

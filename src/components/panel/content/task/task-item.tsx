@@ -176,13 +176,13 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
     </>
   );
 
-  const buttonProps = { task, isDisabled, loadingIcon, onClick, i18n };
+  const buttonProps = { task, loadingIcon, onClick, i18n };
 
   const buttons = (
     <>
-      {!task.stopping && DeleteButton}
-      {!task.stopping && <PauseButton {...buttonProps} />}
-      {!task.stopping && <PlayOrRetry {...buttonProps} />}
+      {DeleteButton}
+      {<PauseButton {...buttonProps} isDisabled={task.stopping || isDisabled} />}
+      {<PlayOrRetry {...buttonProps} isDisabled={task.stopping || isDisabled} />}
     </>
   );
 

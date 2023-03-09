@@ -22,7 +22,10 @@
   "panel__content__task__detail__confirmation_title": {
     "message": "Please confirm"
   },
-  "panel__content__task__detail__confirmation_description": {
+  "panel__content__task__detail__delete__confirmation_description": {
     "message": "This action will permanently remove this task."
+  },
+  "panel__content__task__detail__stop__confirmation_description": {
+    "message": "This action will permanently stop this task and move the partial download to it's destination folder."
   }
 }
