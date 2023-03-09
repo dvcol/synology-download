@@ -1,10 +1,10 @@
-import { Box, Button, Card, CardActions, CardContent, CardHeader, Grid, Stack } from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, CardHeader, Chip, Grid, Stack, Tooltip } from '@mui/material';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 
-import { lastValueFrom, tap } from 'rxjs';
+import { forkJoin, lastValueFrom, tap } from 'rxjs';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
@@ -15,6 +15,32 @@ import { QueryService } from '@src/services';
 import type { CardProps } from '@mui/material';
 import type { FC } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
+
+const UrlCounts: FC<{ urls?: string[] }> = ({ urls }) => {
+  const i18n = useI18n('panel', 'content', 'task', 'add');
+  if (!urls?.length) return null;
+
+  const tooltip = urls?.map((_url, i) => (
+    <Box key={i} sx={i ? { borderTop: '0.03em solid #757575', pt: '0.25em' } : undefined}>
+      {_url}
+    </Box>
+  ));
+
+  return (
+    <Tooltip PopperProps={{ disablePortal: true }} title={<Box sx={{ wordBreak: 'break-all' }}>{tooltip}</Box>} arrow>
+      <Chip
+        label={
+          <Box sx={{ fontSize: '1em' }}>
+            <span>{urls?.length}</span>&nbsp;<span>{i18n('urls')}</span>
+          </Box>
+        }
+        size="small"
+        variant="outlined"
+        color="primary"
+      />
+    </Tooltip>
+  );
+};
 
 export const TaskAdd: FC<{
   form?: TaskForm;
@@ -57,26 +83,35 @@ export const TaskAdd: FC<{
     onFormCancel?.(data);
   };
 
-  const onSubmit: SubmitHandler<TaskForm> = data => {
-    const { uri, source, destination, username, password, unzip } = data;
+  const [urls, setUrls] = useState<string[]>();
 
-    if (uri?.length) {
-      return lastValueFrom(
-        QueryService.createTask(
-          uri,
-          source,
-          destination?.custom ? destination?.path : undefined,
-          username?.length ? username : undefined,
-          password?.length ? password : undefined,
-          unzip?.length ? unzip : undefined,
-        ).pipe(
-          tap(() => {
-            reset(data);
-            onFormSubmit?.(data);
-          }),
-        ),
-      );
-    }
+  const parseUrls = (uri?: string) =>
+    setUrls(
+      uri
+        ?.split(/\r?\n/)
+        ?.map(_uri => _uri?.trim())
+        .filter(Boolean),
+    );
+
+  const createTask = (_uri: string, data: TaskForm) => {
+    const { source, destination, username, password, unzip } = data;
+    return QueryService.createTask(
+      _uri,
+      source,
+      destination?.custom ? destination?.path : undefined,
+      username?.length ? username : undefined,
+      password?.length ? password : undefined,
+      unzip?.length ? unzip : undefined,
+    ).pipe(
+      tap(() => {
+        reset(data);
+        onFormSubmit?.(data);
+      }),
+    );
+  };
+
+  const onSubmit: SubmitHandler<TaskForm> = data => {
+    if (urls?.length) return lastValueFrom(forkJoin(urls.map(_uri => createTask(_uri, data))));
     return Promise.reject(i18n('url_required'));
   };
 
@@ -102,6 +137,7 @@ export const TaskAdd: FC<{
               subheader={i18n('source_subheader')}
               titleTypographyProps={{ variant: 'subtitle2', fontSize: '0.875em' }}
               subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '0.75em' }}
+              action={<UrlCounts urls={urls} />}
               sx={{ p: '0.5em 0' }}
             />
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1.25em', p: '0.5em 0', fontSize: '0.9em', margin: '0.5em 0' }}>
@@ -111,14 +147,15 @@ export const TaskAdd: FC<{
                   control,
                   rules: {
                     required: { value: true, message: i18n('required', 'common', 'error') },
-                    minLength: { value: 1, message: i18n('required', 'common', 'error') },
+                    validate: (_uri?: string) => !!_uri?.trim()?.length || i18n('required', 'common', 'error'),
                   },
                 }}
                 textFieldProps={{
                   label: i18n('url_label'),
                   multiline: true,
                   rows: 4,
-                  inputProps: { style: { fontSize: '0.875em' } },
+                  onChange: e => parseUrls(e.target.value),
+                  inputProps: { style: { fontSize: '0.875em', wordBreak: 'break-all' } },
                 }}
               />
               <FormInput

@@ -10,6 +10,10 @@
     "message": "Submitted tasks will be added to your download station."
   },
 
+  "panel__content__task__add__urls": {
+    "message": "urls"
+  },
+
   "panel__content__task__add__source_title": {
     "message": "Source"
   },
