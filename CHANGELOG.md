@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.24.1](https://github.com/dvcol/synology-download/compare/v1.24.0...v1.24.1) (2023-03-09)
+
+
+### Bug Fixes
+
+* **login:** fix wrong session name in login ([7d53959](https://github.com/dvcol/synology-download/commit/7d5395984e563bfda84289aba81e982475022428))
+
 ## [1.24.0](https://github.com/dvcol/synology-download/compare/v1.23.3...v1.24.0) (2023-03-08)
 
 
