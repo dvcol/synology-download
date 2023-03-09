@@ -130,7 +130,7 @@ export const Config: FC<{
           }
           titleTypographyProps={{ variant: 'h6', color: 'text.primary', fontSize: '1rem' }}
           subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '0.875rem' }}
-          sx={{ p: '1rem 1rem 0', textTransform: 'capitalize' }}
+          sx={{ p: '1rem 1rem 0' }}
         />
         <CardContent sx={{ display: 'flex', flexDirection: 'column', p: '0.5rem 1rem 1rem' }}>
           <CardHeader
