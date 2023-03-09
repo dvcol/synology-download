@@ -1,3 +1,5 @@
+import { ProxyLogger } from '@dvcol/web-extension-utils';
+
 import type { Log, LogInstance, StoreOrProxy } from '@src/models';
 import { ChromeMessageType, defaultLoggingLevels, LoggingLevel } from '@src/models';
 import { addLogHistory } from '@src/store/actions';
@@ -18,6 +20,8 @@ export class LoggerService {
     this.store = store;
     this.source = source;
     this.isProxy = isProxy;
+
+    ProxyLogger.init(LoggerService);
 
     store$(store, getAdvancedSettingsLogging).subscribe(settings => {
       this.level = (settings.levels ?? defaultLoggingLevels)[this.source] ?? this.level;

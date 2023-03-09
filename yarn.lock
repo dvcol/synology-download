@@ -2108,7 +2108,7 @@ __metadata:
     "@dnd-kit/sortable": ^7.0.2
     "@dnd-kit/utilities": ^3.2.1
     "@dvcol/eslint-plugin-presets": ^1.2.1
-    "@dvcol/web-extension-utils": ^1.6.2
+    "@dvcol/web-extension-utils": ^1.7.0
     "@emotion/cache": ^11.7.1
     "@emotion/react": ^11.8.1
     "@emotion/styled": ^11.8.1
@@ -2182,12 +2182,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@dvcol/web-extension-utils@npm:^1.6.2":
-  version: 1.6.2
-  resolution: "@dvcol/web-extension-utils@npm:1.6.2"
+"@dvcol/web-extension-utils@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "@dvcol/web-extension-utils@npm:1.7.0"
   dependencies:
     rxjs: ^7.5.5
-  checksum: 31f84408cb33340d3846d46dc47719b164cfb57b466705e74881f09b826dd2db6df10bc4f35dd5d1fc30101f12d7f5caf687353c02c3380b7ffa214bb88c3c10
+  checksum: 563423b27cfe11706432faaaafee5cb24aa24f84e70e35410902928b588dbbcb64a696ac974e7ce8c17f62d306e5bc2ef1e1d46b96a5761085a94f448de0b330
   languageName: node
   linkType: hard
 
