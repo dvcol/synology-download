@@ -24,7 +24,7 @@ on:
     types: [completed]
 
 env:
-  node_version: 16.x
+  node_version: 18.x
 
 jobs:
   release:
