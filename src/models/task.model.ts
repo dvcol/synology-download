@@ -21,6 +21,12 @@ export interface Task extends Content {
   status: TaskStatus;
   status_extra: TaskStatusExtra;
   additional: TaskAdditional;
+  stopping?: boolean;
+}
+
+export interface TaskComplete {
+  id: string;
+  taskId: string;
 }
 
 /**
@@ -135,10 +141,11 @@ export interface TaskPeer {
 
 /**
  * Mapping function between task status and color level
- * @param status the TabType to map
+ * @param _task the task to map
  */
-export const taskStatusToColor = (status: TaskStatus) => {
-  switch (status) {
+export const taskStatusToColor = (_task: Task) => {
+  if (_task.stopping) return ColorLevel.error;
+  switch (_task.status) {
     case TaskStatus.downloading:
       return ColorLevel.info;
     case TaskStatus.seeding:
@@ -181,7 +188,7 @@ export interface TaskCount {
 
 export type TaskStatistics = DownloadStationStatistic;
 
-export const mapToTask = (task: Task): Task => {
+export const mapToTask = (task: Task, stoppingIds: TaskComplete['taskId'][]): Task => {
   const folder = task.additional?.detail?.destination ?? undefined;
   const received = task.additional?.transfer?.size_downloaded ?? 0;
   const speed = task.additional?.transfer?.speed_download ?? undefined;
@@ -198,5 +205,6 @@ export const mapToTask = (task: Task): Task => {
     eta: computeEta(task),
     createdAt: created ? new Date(created * 1000).getTime() : undefined,
     finishedAt: finished ? new Date(finished * 1000).getTime() : undefined,
+    stopping: stoppingIds?.includes(task.id),
   };
 };

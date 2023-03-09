@@ -19,10 +19,10 @@ export const ContentDetail: FC<ContentDetailProps> = ({ title, info, buttons, co
         </Grid>
       )}
       <Grid container sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
-        <Grid item xs={6} sx={{ wordBreak: 'break-all', flexGrow: 1 }}>
+        <Grid item sx={{ wordBreak: 'break-all', flexGrow: 1 }}>
           {info}
         </Grid>
-        <Grid item xs={6} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Grid item sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Stack direction="row" spacing={2}>
             {buttons}
           </Stack>

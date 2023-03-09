@@ -5,7 +5,7 @@ import type { Download } from './download.model';
 import type { ContextMenu, QuickMenu } from './menu.model';
 import type { AdvancedSettings, Connection, Downloads, Global, Log, Notifications, Polling } from './settings.model';
 import type { ContentTab } from './tab.model';
-import type { Task, TaskStatistics } from './task.model';
+import type { TaskComplete, Task, TaskStatistics } from './task.model';
 import type { Store } from 'redux';
 import type { Store as StoreProxy } from 'webext-redux';
 
@@ -38,6 +38,7 @@ export interface NavbarSlice {
 }
 
 export interface TasksSlice {
+  stopping: TaskComplete[];
   entities: Task[];
   stats?: TaskStatistics;
 }

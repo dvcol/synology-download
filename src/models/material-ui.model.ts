@@ -10,13 +10,25 @@ export enum ColorLevel {
   warning = 'warning',
 }
 
+/**
+ * Enumeration for color level
+ */
+export enum ColorLevelCss {
+  primary = '#90caf9',
+  secondary = '#ce93d8',
+  error = '#f44336',
+  info = '#29b6f6',
+  success = '#66bb6a',
+  warning = '#ffa726',
+}
+
 export const ColorLevelMap: Record<ColorLevel, string> = {
-  [ColorLevel.secondary]: '#ce93d8',
-  [ColorLevel.error]: '#f44336',
-  [ColorLevel.info]: '#29b6f6',
-  [ColorLevel.success]: '#66bb6a',
-  [ColorLevel.warning]: '#ffa726',
-  [ColorLevel.primary]: '#90caf9',
+  [ColorLevel.primary]: ColorLevelCss.primary,
+  [ColorLevel.secondary]: ColorLevelCss.secondary,
+  [ColorLevel.error]: ColorLevelCss.error,
+  [ColorLevel.info]: ColorLevelCss.info,
+  [ColorLevel.success]: ColorLevelCss.success,
+  [ColorLevel.warning]: ColorLevelCss.warning,
 };
 
 /**

@@ -35,6 +35,13 @@ export enum DownloadStationAPI {
   RssFeed = 'SYNO.DownloadStation.RSS.Feed',
 }
 
+export enum DownloadStation2API {
+  Task = 'SYNO.DownloadStation2.Task',
+  TaskBt = 'SYNO.DownloadStation2.Task.BT',
+  TaskBtFile = 'SYNO.DownloadStation2.Task.BT.File',
+  TaskComplete = 'SYNO.DownloadStation2.Task.Complete',
+}
+
 export enum FileStationAPI {
   Info = 'SYNO.FileStation.Info',
   List = 'SYNO.FileStation.List',
@@ -57,7 +64,7 @@ export enum FileStationAPI {
   BackgroundTask = 'SYNO.FileStation.BackgroundTask',
 }
 
-export type Api = CommonAPI | DownloadStationAPI | FileStationAPI;
+export type Api = CommonAPI | DownloadStationAPI | DownloadStation2API | FileStationAPI;
 
 export enum InfoMethod {
   query = 'query',
@@ -78,6 +85,22 @@ export enum TaskMethod {
   getInfo = 'getinfo',
   getConfig = 'getconfig',
   setConfig = 'setserverconfig',
+}
+
+export enum TaskCompleteMethod {
+  start = 'start',
+  status = 'status',
+  stop = 'stop',
+}
+export enum TaskBtMethod {
+  get = 'get',
+  set = 'set',
+}
+
+export enum TaskBtFileMethod {
+  set = 'set',
+  list = 'list',
+  copy = 'copy',
 }
 
 export enum FileMethod {
@@ -187,6 +210,30 @@ export interface LoginRequest {
   device_name?: string;
   device_id?: string;
   format?: 'cookie' | 'sid';
+}
+
+export interface TaskEditRequest {
+  task_id: string;
+  'ext-comp-1522'?: string;
+  seeding_ratio?: number;
+  max_upload_rate?: number;
+  max_download_rate?: number;
+  priority?: 'normal' | 'low' | 'high';
+  max_peers?: number;
+  seeding_interval?: number;
+  destination?: string;
+}
+
+export interface TaskFileEditRequest {
+  task_id: string;
+  index: number[];
+  wanted?: boolean;
+  priority?: 'normal' | 'low' | 'high';
+}
+
+export interface TaskCompleteResponse {
+  /** id fo the task end process (e.g. "dev/SYNODLTaskEnd640A245D84136759") */
+  task_id: string;
 }
 
 export interface LoginResponse {

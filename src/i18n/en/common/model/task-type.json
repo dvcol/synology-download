@@ -1,0 +1,17 @@
+{
+  "common__model__task_type__bt": {
+    "message": "BitTorrent"
+  },
+  "common__model__task_type__nzb": {
+    "message": "Newzbin (nzb)"
+  },
+  "common__model__task_type__http": {
+    "message": "Hypertext Transfer Protocol(http)"
+  },
+  "common__model__task_type__ftp": {
+    "message": "File Transfer Protocol (ftp)"
+  },
+  "common__model__task_type__emule": {
+    "message": "eMule"
+  }
+}

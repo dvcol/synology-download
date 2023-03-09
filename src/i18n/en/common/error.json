@@ -26,6 +26,9 @@
   "common__error__task_pause_fail": {
     "message": "Task pause failed"
   },
+  "common__error__task_stop_fail": {
+    "message": "Task stop failed"
+  },
   "common__error__task_delete_fail": {
     "message": "Task delete failed"
   },

@@ -28,5 +28,8 @@
   },
   "common__model__task_status__filehosting_waiting": {
     "message": "Filehosting Waiting"
+  },
+  "common__model__task_status__stopping": {
+    "message": "Stopping"
   }
 }

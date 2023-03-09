@@ -17,6 +17,13 @@ export const getStats = createSelector(
   state => state.tasks.stats,
 );
 
+export const getStopping = createSelector(
+  (state: StoreState) => state,
+  state => state.tasks.stopping,
+);
+
+export const getStoppingIds = createSelector(getStopping, tasks => tasks.map(t => t.taskId));
+
 export const geTasksIdsByStatusTypeReducer = (items: Content[]) =>
   items
     ?.filter(item => item.source === ContentSource.Task)

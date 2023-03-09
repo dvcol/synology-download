@@ -31,6 +31,9 @@
   "common__buttons__pause": {
     "message": "Pause"
   },
+  "common__buttons__stop": {
+    "message": "Stop"
+  },
   "common__buttons__edit": {
     "message": "Edit"
   },

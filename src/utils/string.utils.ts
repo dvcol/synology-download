@@ -16,3 +16,9 @@ export const parseMagnetLink = (uri: string): string => {
   const dn = url.searchParams.get('dn');
   return dn ?? uri;
 };
+
+export const stringifyKeys = (record: Record<string, any>): Record<string, string> =>
+  Object.values(record).reduce((acc, [key, value]) => {
+    if (acc[key]) acc[key] = value?.toString();
+    return acc;
+  }, {});

@@ -4,6 +4,7 @@ import DownloadDoneIcon from '@mui/icons-material/DownloadDone';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import LoopIcon from '@mui/icons-material/Loop';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
+import StopCircleIcon from '@mui/icons-material/StopCircle';
 import UploadIcon from '@mui/icons-material/Upload';
 import { blue, green, orange, purple, red } from '@mui/material/colors';
 
@@ -28,8 +29,9 @@ type TaskCardProps = { task: Task; hideStatus?: boolean; expanded?: boolean; hov
 export const TaskCard: FC<TaskCardProps> = ({ task, hideStatus, expanded, hover }) => {
   const i18n = useI18n('panel', 'content', 'task', 'card');
 
-  const statusIcon = (status: TaskStatus): JSX.Element => {
-    switch (status) {
+  const statusIcon = (_task: Task): JSX.Element => {
+    if (_task.stopping) return <StopCircleIcon />;
+    switch (_task.status) {
       case TaskStatus.waiting:
         return <AccessTimeIcon />;
       case TaskStatus.downloading:
@@ -47,8 +49,9 @@ export const TaskCard: FC<TaskCardProps> = ({ task, hideStatus, expanded, hover 
     }
   };
 
-  const avatarBgColor = (status: TaskStatus): string => {
-    switch (status) {
+  const avatarBgColor = (_task: Task): string => {
+    if (_task.stopping) return red[300];
+    switch (_task.status) {
       case TaskStatus.downloading:
         return blue[500];
       case TaskStatus.paused:
@@ -75,13 +78,13 @@ export const TaskCard: FC<TaskCardProps> = ({ task, hideStatus, expanded, hover 
   return (
     <ContentCard
       title={task.title}
-      icon={statusIcon(task.status)}
-      iconBackground={avatarBgColor(task.status)}
+      icon={statusIcon(task)}
+      iconBackground={avatarBgColor(task)}
       description={
         <>
           {!hideStatus && (
             <React.Fragment>
-              <span>{i18n(task.status, 'common', 'model', 'task_status')}</span>
+              <span>{i18n(task.stopping ? 'stopping' : task.status, 'common', 'model', 'task_status')}</span>
               <span> – </span>
             </React.Fragment>
           )}
@@ -107,8 +110,11 @@ export const TaskCard: FC<TaskCardProps> = ({ task, hideStatus, expanded, hover 
         showProgressBar
           ? {
               props: {
-                variant: [TaskStatus.seeding, TaskStatus.extracting, TaskStatus.finishing].includes(task.status) ? 'indeterminate' : 'determinate',
-                color: taskStatusToColor(task.status),
+                variant:
+                  task.stopping || [TaskStatus.seeding, TaskStatus.extracting, TaskStatus.finishing].includes(task.status)
+                    ? 'indeterminate'
+                    : 'determinate',
+                color: taskStatusToColor(task),
               },
               value: task.progress ?? 0,
               percentage: expanded || !hover,

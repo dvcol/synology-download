@@ -5,6 +5,9 @@
   "panel__content__task__detail__destination": {
     "message": "Destination"
   },
+  "panel__content__task__detail__type": {
+    "message": "Type"
+  },
   "panel__content__task__detail__created": {
     "message": "Created"
   },

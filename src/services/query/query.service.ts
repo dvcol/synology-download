@@ -18,12 +18,26 @@ import type {
   SettingsSlice,
   StoreOrProxy,
   Task,
+  TaskComplete,
+  TaskCompleteResponse,
   TaskList,
 } from '@src/models';
 import { ConnectionType, FileListOption, LoginError, mapToTask, NotReadyError, TaskListOption, TaskStatus } from '@src/models';
 import { LoggerService, NotificationService } from '@src/services';
-import { SynologyAuthService, SynologyDownloadService, SynologyFileService, SynologyInfoService } from '@src/services/http';
-import { addDestinationHistory, addLoading, removeLoading, setLogged, setSid, setTasks, setTaskStats, spliceTasks } from '@src/store/actions';
+import { SynologyAuthService, SynologyDownload2Service, SynologyDownloadService, SynologyFileService, SynologyInfoService } from '@src/services/http';
+import {
+  addDestinationHistory,
+  addLoading,
+  addStopping,
+  removeLoading,
+  removeStopping,
+  resetStopping,
+  setLogged,
+  setSid,
+  setTasks,
+  setTaskStats,
+  spliceTasks,
+} from '@src/store/actions';
 import {
   getActiveAndWaitingTasksIdsByActionScope,
   getCredentials,
@@ -35,6 +49,7 @@ import {
   getPausedTasksIdsByActionScope,
   getSettings,
   getSid,
+  getStoppingIds,
   getTasksIdsByActionScope,
   getTasksIdsByStatusType,
   getUrl,
@@ -54,6 +69,7 @@ export class QueryService {
   private static authClient: SynologyAuthService;
   private static fileClient: SynologyFileService;
   private static downloadClient: SynologyDownloadService;
+  private static download2Client: SynologyDownload2Service;
   private static baseUrl: string;
 
   static init(store: StoreOrProxy, isProxy = false) {
@@ -64,6 +80,7 @@ export class QueryService {
     this.authClient = new SynologyAuthService(isProxy);
     this.fileClient = new SynologyFileService(isProxy);
     this.downloadClient = new SynologyDownloadService(isProxy);
+    this.download2Client = new SynologyDownload2Service(isProxy);
 
     store$<string>(store, getUrl).subscribe(url => this.setBaseUrl(url));
     store$<string | undefined>(store, getSid).subscribe(sid => this.setSid(sid));
@@ -77,6 +94,7 @@ export class QueryService {
     this.authClient.setBaseUrl(baseUrl);
     this.fileClient.setBaseUrl(baseUrl);
     this.downloadClient.setBaseUrl(baseUrl);
+    this.download2Client.setBaseUrl(baseUrl);
   }
 
   static setSid(sid?: string): void {
@@ -84,6 +102,8 @@ export class QueryService {
     this.authClient.setSid(sid);
     this.fileClient.setSid(sid);
     this.downloadClient.setSid(sid);
+    this.download2Client.setSid(sid);
+    (globalThis as any).QueryService = this;
   }
 
   static get isReady() {
@@ -295,9 +315,11 @@ export class QueryService {
     return this.downloadClient.listTasks(0, -1, [TaskListOption.detail, TaskListOption.file, TaskListOption.transfer]).pipe(
       this.loadingOperator(),
       tap(({ tasks }) => {
-        const _tasks = tasks?.map(mapToTask);
+        const _stoppingIds = getStoppingIds(this.store.getState());
+        const _tasks = tasks?.map(t => mapToTask(t, _stoppingIds));
         // notify if we have tasks
         this.notifyTasks(extract, _tasks);
+        this.updateStopping(_tasks, _stoppingIds);
         this.store.dispatch(setTasks(_tasks));
       }),
     );
@@ -311,6 +333,20 @@ export class QueryService {
         NotificationService.taskError(t);
       }
     });
+  }
+
+  private static updateStopping(tasks: Task[], stoppingIds: TaskComplete['taskId'][]) {
+    const ids = tasks?.map(({ id }) => id);
+
+    console.info('new ids', { ids, tasks });
+
+    if (!ids?.length) return this.store.dispatch(resetStopping());
+
+    const toRemove = stoppingIds?.filter(id => !ids.includes(id));
+
+    console.info('to remove ids', { toRemove });
+    if (!toRemove?.length) return;
+    this.store.dispatch(removeStopping(toRemove));
   }
 
   static resumeTask(id: string | string[]): Observable<CommonResponse[]> {
@@ -351,6 +387,16 @@ export class QueryService {
             contextMessage: source,
           });
         },
+      }),
+    );
+  }
+
+  static stopTask(id: string): Observable<TaskCompleteResponse> {
+    return this.download2Client.stopTask(id).pipe(
+      this.loadingOperator(),
+      tap(({ task_id }) => {
+        this.store.dispatch(addStopping({ id: task_id, taskId: id }));
+        this.listTasks().subscribe();
       }),
     );
   }
