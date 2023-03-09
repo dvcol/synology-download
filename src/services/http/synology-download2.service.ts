@@ -1,7 +1,7 @@
 import type { HttpParameters } from '@dvcol/web-extension-utils';
 import { HttpMethod } from '@dvcol/web-extension-utils';
 
-import type { CommonResponse, TaskEditRequest, TaskFileEditRequest, TaskCompleteResponse } from '@src/models';
+import type { CommonResponse, TaskCompleteResponse, TaskEditRequest, TaskFileEditRequest, TaskEditResponse } from '@src/models';
 import { DownloadStation2API, Endpoint, TaskBtFileMethod, TaskBtMethod, TaskCompleteMethod } from '@src/models';
 import { SynologyService } from '@src/services/http';
 
@@ -27,6 +27,18 @@ export class SynologyDownload2Service extends SynologyService {
       },
       '1',
       DownloadStation2API.TaskComplete,
+    );
+  }
+
+  getTaskEdit(id: string): Observable<TaskEditResponse> {
+    return this._do<TaskEditResponse>(
+      HttpMethod.PUT,
+      {
+        method: TaskBtMethod.get,
+        id,
+      },
+      '2',
+      DownloadStation2API.TaskBt,
     );
   }
 

@@ -212,13 +212,31 @@ export interface LoginRequest {
   format?: 'cookie' | 'sid';
 }
 
+export enum TaskPriority {
+  low = 'low',
+  normal = 'normal',
+  high = 'high',
+}
+
+export interface TaskEditResponse {
+  destination: string;
+  extract_password: string;
+  is_active_torrent: boolean;
+  max_download_rate: number;
+  max_peers: number;
+  max_upload_rate: number;
+  priority: TaskPriority;
+  seeding_interval: number;
+  seeding_ratio: number;
+}
+
 export interface TaskEditRequest {
   task_id: string;
   'ext-comp-1522'?: string;
   seeding_ratio?: number;
   max_upload_rate?: number;
   max_download_rate?: number;
-  priority?: 'normal' | 'low' | 'high';
+  priority?: TaskPriority;
   max_peers?: number;
   seeding_interval?: number;
   destination?: string;
@@ -228,7 +246,7 @@ export interface TaskFileEditRequest {
   task_id: string;
   index: number[];
   wanted?: boolean;
-  priority?: 'normal' | 'low' | 'high';
+  priority?: TaskPriority;
 }
 
 export interface TaskCompleteResponse {
