@@ -11,18 +11,16 @@ import React from 'react';
 import type { i18n } from '@dvcol/web-extension-utils';
 import { useI18n } from '@dvcol/web-extension-utils';
 
-import { ConfirmationDialog, IconLoader, ProgressBar } from '@src/components';
+import { IconLoader, ProgressBar } from '@src/components';
 import type { Task } from '@src/models';
-import { TaskStatus } from '@src/models';
+import { ColorLevel, TaskStatus } from '@src/models';
 import { QueryService } from '@src/services';
 
 import { computeProgress, dateToLocalString, formatBytes } from '@src/utils';
 
 import ContentDetail from '../content-detail';
 
-import { TaskEdit } from './task-edit';
-
-import type { FC } from 'react';
+import type { Dispatch, FC, SetStateAction } from 'react';
 import type { Observable } from 'rxjs';
 
 const TaskTitle: FC<{ task: Task }> = ({ task }) => {
@@ -54,14 +52,52 @@ const TaskTitle: FC<{ task: Task }> = ({ task }) => {
   );
 };
 
-type TaskDetailProps = {
+export type TaskEditState = { open: boolean; task?: Task };
+export type ConfirmationState = { open: boolean; title?: string; description?: string; callback?: () => void };
+
+export type TaskDetailProps = {
   task: Task;
   isDisabled: boolean;
   loadingIcon: Record<string, boolean>;
   buttonClick: (button: string, request: Observable<any>, $event?: React.MouseEvent, delay?: number) => void;
+  setTaskEdit: Dispatch<SetStateAction<TaskEditState>>;
+  setConfirmation: Dispatch<SetStateAction<ConfirmationState>>;
 };
 
-type TaskDetailButtonProps = TaskDetailProps & { i18n: typeof i18n };
+type TaskDetailGenericButtonProps = {
+  i18n: typeof i18n;
+  isDisabled: boolean;
+  loadingIcon: Record<string, boolean>;
+  buttonName: string;
+  buttonColor: ColorLevel;
+  buttonIcon: JSX.Element;
+  buttonClick: () => void;
+};
+const TaskDetailGenericButton: FC<TaskDetailGenericButtonProps> = ({
+  isDisabled,
+  loadingIcon,
+  i18n,
+  buttonName,
+  buttonColor,
+  buttonIcon,
+  buttonClick,
+}) => {
+  return (
+    <>
+      <Button
+        startIcon={<IconLoader icon={buttonIcon} loading={loadingIcon?.[buttonName]} props={{ size: '1.25rem', color: buttonColor }} />}
+        variant="outlined"
+        color={buttonColor}
+        onClick={() => buttonClick()}
+        disabled={isDisabled}
+      >
+        {i18n(buttonName, 'common', 'buttons')}
+      </Button>
+    </>
+  );
+};
+
+type TaskDetailButtonProps = TaskDetailProps & Pick<TaskDetailGenericButtonProps, 'i18n' | 'isDisabled' | 'loadingIcon'>;
 
 const PlayOrSeedOrRetry: FC<TaskDetailButtonProps> = ({ task, isDisabled, loadingIcon, buttonClick, i18n }) => {
   if (![TaskStatus.paused, TaskStatus.finished, TaskStatus.error].includes(task.status)) return null;
@@ -70,21 +106,15 @@ const PlayOrSeedOrRetry: FC<TaskDetailButtonProps> = ({ task, isDisabled, loadin
   if (TaskStatus.finished === task.status) playOrSeedOrRetry = 'seed';
   if (TaskStatus.error === task.status) playOrSeedOrRetry = 'retry';
   return (
-    <Button
-      startIcon={
-        <IconLoader
-          icon={playOrSeedOrRetry === 'retry' ? <ReplayIcon /> : <PlayArrowIcon />}
-          loading={loadingIcon?.play}
-          props={{ size: '1.25rem', color: 'success' }}
-        />
-      }
-      variant="contained"
-      color={playOrSeedOrRetry === 'play' ? 'success' : 'secondary'}
-      onClick={() => buttonClick('play', QueryService.resumeTask(task.id))}
-      disabled={isDisabled}
-    >
-      {i18n(playOrSeedOrRetry, 'common', 'buttons')}
-    </Button>
+    <TaskDetailGenericButton
+      i18n={i18n}
+      isDisabled={isDisabled}
+      loadingIcon={loadingIcon}
+      buttonName={playOrSeedOrRetry}
+      buttonColor={playOrSeedOrRetry === 'play' ? ColorLevel.success : ColorLevel.secondary}
+      buttonIcon={playOrSeedOrRetry === 'retry' ? <ReplayIcon /> : <PlayArrowIcon />}
+      buttonClick={() => buttonClick('play', QueryService.resumeTask(task.id))}
+    />
   );
 };
 
@@ -92,72 +122,60 @@ const PauseButton: FC<TaskDetailButtonProps> = ({ task, isDisabled, loadingIcon,
   if (![TaskStatus.downloading, TaskStatus.seeding, TaskStatus.waiting].includes(task.status)) return null;
 
   return (
-    <Button
-      startIcon={<IconLoader icon={<PauseIcon />} loading={loadingIcon?.pause} props={{ size: '1.25rem', color: 'warning' }} />}
-      variant="contained"
-      color="warning"
-      onClick={() => buttonClick('pause', QueryService.pauseTask(task.id))}
-      disabled={isDisabled}
-    >
-      {i18n('pause', 'common', 'buttons')}
-    </Button>
+    <TaskDetailGenericButton
+      i18n={i18n}
+      isDisabled={isDisabled}
+      loadingIcon={loadingIcon}
+      buttonName={'pause'}
+      buttonColor={ColorLevel.warning}
+      buttonIcon={<PauseIcon />}
+      buttonClick={() => buttonClick('pause', QueryService.pauseTask(task.id))}
+    />
   );
 };
 
-const EditButton: FC<TaskDetailButtonProps> = ({ task, isDisabled, loadingIcon, i18n }) => {
-  const [openEdit, setOpenEdit] = React.useState(false);
-
+const EditButton: FC<TaskDetailButtonProps> = ({ task, isDisabled, loadingIcon, i18n, setTaskEdit }) => {
   if (![TaskStatus.downloading, TaskStatus.waiting, TaskStatus.paused, TaskStatus.seeding].includes(task.status)) return null;
 
   return (
-    <>
-      <Button
-        startIcon={<IconLoader icon={<EditIcon />} loading={loadingIcon?.edit} props={{ size: '1.25rem', color: 'secondary' }} />}
-        variant="outlined"
-        color="secondary"
-        onClick={() => setOpenEdit(true)}
-        disabled={isDisabled}
-      >
-        {i18n('edit', 'common', 'buttons')}
-      </Button>
-      <TaskEdit open={openEdit} task={task} onFormCancel={() => setOpenEdit(false)} onFormSubmit={() => setOpenEdit(false)} />
-    </>
+    <TaskDetailGenericButton
+      i18n={i18n}
+      isDisabled={isDisabled}
+      loadingIcon={loadingIcon}
+      buttonName={'edit'}
+      buttonColor={ColorLevel.secondary}
+      buttonIcon={<EditIcon />}
+      buttonClick={() => setTaskEdit({ open: true, task })}
+    />
   );
 };
 
-const StopButton: FC<TaskDetailButtonProps> = ({ task, isDisabled, loadingIcon, buttonClick, i18n }) => {
-  const [prompt, setPrompt] = React.useState(false);
+const StopButton: FC<TaskDetailButtonProps> = ({ task, isDisabled, loadingIcon, buttonClick, setConfirmation, i18n }) => {
   if (TaskStatus.downloading !== task.status || !task.received) return null;
 
   return (
-    <>
-      <Button
-        startIcon={<IconLoader icon={<StopIcon />} loading={loadingIcon?.stop} props={{ size: '1.25rem', color: 'error' }} />}
-        variant="outlined"
-        color="error"
-        disabled={isDisabled}
-        onClick={() => setPrompt(true)}
-      >
-        {i18n('stop', 'common', 'buttons')}
-      </Button>
-      <ConfirmationDialog
-        open={prompt}
-        title={i18n('confirmation_title')}
-        description={i18n('stop__confirmation_description')}
-        onCancel={() => setPrompt(false)}
-        onConfirm={() => {
-          setPrompt(false);
-          buttonClick('stop', QueryService.stopTask(task.id));
-        }}
-      />
-    </>
+    <TaskDetailGenericButton
+      i18n={i18n}
+      isDisabled={isDisabled}
+      loadingIcon={loadingIcon}
+      buttonName={'stop'}
+      buttonColor={ColorLevel.error}
+      buttonIcon={<StopIcon />}
+      buttonClick={() =>
+        setConfirmation({
+          open: true,
+          title: i18n('confirmation_title'),
+          description: i18n('stop__confirmation_description'),
+          callback: () => buttonClick('stop', QueryService.stopTask(task.id)),
+        })
+      }
+    />
   );
 };
 
 export const TaskDetail: FC<TaskDetailProps> = props => {
-  const { task, isDisabled, loadingIcon, buttonClick } = props;
+  const { task, isDisabled, loadingIcon, buttonClick, setConfirmation } = props;
   const i18n = useI18n('panel', 'content', 'task', 'detail');
-  const [prompt, setPrompt] = React.useState(false);
 
   const DeleteButton = (
     <>
@@ -166,20 +184,17 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
         variant="outlined"
         color="error"
         disabled={isDisabled}
-        onClick={() => setPrompt(true)}
+        onClick={() =>
+          setConfirmation({
+            open: true,
+            title: i18n('confirmation_title'),
+            description: i18n('delete__confirmation_description'),
+            callback: () => buttonClick('delete', QueryService.deleteTask(task.id), undefined, 0),
+          })
+        }
       >
         {i18n('delete', 'common', 'buttons')}
       </Button>
-      <ConfirmationDialog
-        open={prompt}
-        title={i18n('confirmation_title')}
-        description={i18n('delete__confirmation_description')}
-        onCancel={() => setPrompt(false)}
-        onConfirm={() => {
-          setPrompt(false);
-          buttonClick('delete', QueryService.deleteTask(task.id), undefined, 0);
-        }}
-      />
     </>
   );
 

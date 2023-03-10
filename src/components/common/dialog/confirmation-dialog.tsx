@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
@@ -19,20 +19,15 @@ export type ConfirmationDialogProps = {
 };
 export const ConfirmationDialog = ({ open, title, description, toolitp, onCancel, onConfirm }: ConfirmationDialogProps) => {
   const i18n = useI18n('common', 'buttons');
-  const [state, setState] = useState<boolean>(open);
-
-  useEffect(() => setState(open), [open]);
 
   const onCancelHandler: ButtonProps['onClick'] = $event => {
     onCancel?.($event);
-    setState(false);
   };
   const onConfirmHandler: ButtonProps['onClick'] = $event => {
     onConfirm?.($event);
-    setState(false);
   };
   return (
-    <Dialog open={state} onClose={onCancelHandler} aria-labelledby="confirm-delete-dialog" maxWidth={'xs'}>
+    <Dialog open={open} onClose={onCancelHandler} aria-labelledby="confirm-delete-dialog" maxWidth={'xs'}>
       <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
       <DialogContent sx={{ whiteSpace: 'pre-line' }}>{description}</DialogContent>
       <DialogActions>

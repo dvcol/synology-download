@@ -13,8 +13,8 @@ import { finalize } from 'rxjs';
 import type { i18n } from '@dvcol/web-extension-utils';
 import { useI18n } from '@dvcol/web-extension-utils';
 
-import type { ProgressBackgroundProps } from '@src/components';
-import { ConfirmationDialog, IconLoader } from '@src/components';
+import type { ProgressBackgroundProps, TaskDetailProps } from '@src/components';
+import { IconLoader } from '@src/components';
 
 import type { Global, Task } from '@src/models';
 import { ColorLevel, ColorLevelMap, ErrorType, LoginError, TaskStatus, taskStatusToColor } from '@src/models';
@@ -87,12 +87,16 @@ const PauseButton: FC<TaskItemsButtonProp> = ({ task, isDisabled, loadingIcon, o
   );
 };
 
-type TaskItemProps = { task: Task; hideStatus?: boolean };
-const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps> = ({ task, hideStatus }, ref) => {
+export type TaskItemProps = {
+  task: Task;
+  setTaskEdit: TaskDetailProps['setTaskEdit'];
+  setConfirmation: TaskDetailProps['setConfirmation'];
+  hideStatus?: boolean;
+};
+const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps> = ({ task, hideStatus, setTaskEdit, setConfirmation }, ref) => {
   const i18n = useI18n('panel', 'content', 'task', 'item');
   const [expanded, setExpanded] = useState(false);
   const [hover, setHover] = useState(false);
-  const [confirm, setConfirm] = useState(false);
 
   // Loading state
   const [loading, setLoading] = useState<Record<string, boolean>>({});
@@ -152,27 +156,18 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
             disabled={isDisabled}
             onClick={$event => {
               $event.stopPropagation();
-              setConfirm(true);
+              setConfirmation({
+                open: true,
+                title: i18n('confirmation_title'),
+                description: i18n('confirmation_description'),
+                callback: () => onClick('delete', QueryService.deleteTask(task.id), $event),
+              });
             }}
           >
             <IconLoader icon={<DeleteIcon />} loading={loadingIcon?.delete} props={{ size: '1rem', color: ColorLevel.error }} />
           </Button>
         </span>
       </Tooltip>
-      <ConfirmationDialog
-        open={confirm}
-        title={i18n('confirmation_title')}
-        description={i18n('confirmation_description')}
-        onCancel={$event => {
-          $event?.stopPropagation();
-          setConfirm(false);
-        }}
-        onConfirm={$event => {
-          $event?.stopPropagation();
-          setConfirm(false);
-          onClick('delete', QueryService.deleteTask(task.id), $event);
-        }}
-      />
     </>
   );
 
@@ -196,7 +191,16 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
         card: <TaskCard task={task} hideStatus={hideStatus} expanded={expanded} hover={hover} />,
         buttons,
       }}
-      details={<TaskDetail task={task} isDisabled={isDisabled} loadingIcon={loadingIcon} buttonClick={onClick} />}
+      details={
+        <TaskDetail
+          task={task}
+          isDisabled={isDisabled}
+          loadingIcon={loadingIcon}
+          buttonClick={onClick}
+          setTaskEdit={setTaskEdit}
+          setConfirmation={setConfirmation}
+        />
+      }
     />
   );
 };
