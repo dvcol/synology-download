@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/dvcol/synology-download/compare/v1.24.1...v2.0.0) (2023-03-10)
+
+
+### ⚠ BREAKING CHANGES
+
+* **tasks:** add support for task edits and clean up error handling
+
+### Features
+
+* **task:** add task edit info request ([03d5fb5](https://github.com/dvcol/synology-download/commit/03d5fb5778420c71d284efbb8e26836a0e78e610))
+* **tasks:** add support for multiple links in task add ([b6710c7](https://github.com/dvcol/synology-download/commit/b6710c7be5b93de3e97b857c81c70ce14d3273f7))
+* **tasks:** add support for task edits and clean up error handling ([00e9b1b](https://github.com/dvcol/synology-download/commit/00e9b1b9085c2ff78f59a259dc4b658ccef349d1))
+* **tasks:** adds support for task stopping (incomplete downloads) ([ffd627e](https://github.com/dvcol/synology-download/commit/ffd627ebb78523cdaecf8368e30e14c2df5057e1))
+
+
+### Bug Fixes
+
+* **context:** fix context menu restore ([40a4ed5](https://github.com/dvcol/synology-download/commit/40a4ed54502a46d2ff617b62364c2b1247cfce15))
+* **logger:** init proxy logger for package override ([fbdaaed](https://github.com/dvcol/synology-download/commit/fbdaaedcc45b9306c27a3f422096273014b3c61c))
+* **login:** fix auto-login and add error messages ([6df3e37](https://github.com/dvcol/synology-download/commit/6df3e374227aa5531df8f44e1c01b0a5f0306dfd))
+* **menu:** fix pause all and remove all buttons ([b848939](https://github.com/dvcol/synology-download/commit/b8489398c98ab1280fe4e9e2bdfd86cbcf7abbdc))
+* **notification:** fix i18n create task fail error notification ([6d10b64](https://github.com/dvcol/synology-download/commit/6d10b6410b4f67b4745b5f3dae5114cc8f3fdab8))
+* **tasks:** adds confirmation modal and allow deletion while stopping ([3e8f340](https://github.com/dvcol/synology-download/commit/3e8f340970138040421779b5de1a91d2a3344f1e))
+* **ui:** remove capitalisation in config ([e07027d](https://github.com/dvcol/synology-download/commit/e07027d4fda1d5aa9aa5d07b0abe92b245e0c334))
+
 ### [1.24.1](https://github.com/dvcol/synology-download/compare/v1.24.0...v1.24.1) (2023-03-09)
 
 
