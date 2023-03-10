@@ -48,6 +48,16 @@
   "common__error__task_clear_fail": {
     "message": "Finished tasks clear failed"
   },
+  "common__explorer__task_edit_get_fail": {
+    "message": "Failed to fetch task edit information."
+  },
+  "common__explorer__task_file_edit_set_fail": {
+    "message": "Failed to edit task file."
+  },
+  "common__explorer__task_edit_set_fail": {
+    "message": "Failed to edit task information."
+  },
+
   "common__error__invalid_argument": {
     "message": "Invalid argument"
   },
@@ -72,6 +82,13 @@
   },
   "common__error__download_transfer_fail": {
     "message": "Transfer download failed"
+  },
+
+  "common__explorer__list_folders_fail": {
+    "message": "Failed to load folder."
+  },
+  "common__explorer__list_files_fail": {
+    "message": "Failed to load files."
   },
 
   "common__error": {

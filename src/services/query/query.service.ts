@@ -1,4 +1,4 @@
-import { catchError, EMPTY, finalize, of, Subject, tap, throttleTime, throwError } from 'rxjs';
+import { catchError, EMPTY, finalize, map, of, Subject, switchMap, tap, throttleTime, throwError } from 'rxjs';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
@@ -21,7 +21,9 @@ import type {
   Task,
   TaskComplete,
   TaskCompleteResponse,
+  TaskEditRequest,
   TaskEditResponse,
+  TaskFileEditRequest,
   TaskList,
 } from '@src/models';
 import {
@@ -485,11 +487,19 @@ export class QueryService {
     return this.download2Client.getTaskEdit(id).pipe(this.loadingOperator(), this.handleErrors);
   }
 
-  static editTask(id: string | string[], destination: string): Observable<CommonResponse[]> {
-    return this.downloadClient.editTask(id, destination).pipe(
+  static editTask(request: TaskEditRequest): Observable<CommonResponse[]> {
+    return this.download2Client.editTask(request).pipe(
       this.loadingOperator(),
       this.handleErrors,
-      tap(() => this.listTasks().subscribe()),
+      switchMap(res => this.listTasks().pipe(map(() => res))),
+    );
+  }
+
+  static editTaskFile(request: TaskFileEditRequest): Observable<CommonResponse[]> {
+    return this.download2Client.editFile(request).pipe(
+      this.loadingOperator(),
+      this.handleErrors,
+      switchMap(res => this.listTasks().pipe(map(() => res))),
     );
   }
 

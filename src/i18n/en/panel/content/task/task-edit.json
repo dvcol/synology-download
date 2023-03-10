@@ -1,5 +1,78 @@
 {
   "panel__content__task__edit__destination_folder": {
-    "message": "Change destination folder"
+    "message": "Modify task or files download settings"
+  },
+
+  "panel__content__task__edit__destination__tab_label": {
+    "message": "Destination"
+  },
+  "panel__content__task__edit__task__tab_label": {
+    "message": "Task"
+  },
+  "panel__content__task__edit__task_files__tab_label": {
+    "message": "Files"
+  },
+
+  "panel__content__task__edit__priority__title": {
+    "message": "Task Priority"
+  },
+  "panel__content__task__edit__priority__subheader": {
+    "message": "The priority in which to allocate bandwidth."
+  },
+  "panel__content__task__edit__priority__label": {
+    "message": "Priority"
+  },
+
+  "panel__content__task__edit__max_peers__title": {
+    "message": "Maximum peers"
+  },
+  "panel__content__task__edit__max_peers__subheader": {
+    "message": "The maximum of peers allowed per torrent file."
+  },
+  "panel__content__task__edit__max_peers__label": {
+    "message": "Maximum"
+  },
+
+  "panel__content__task__edit__max_download_rate__title": {
+    "message": "Maximum download rate"
+  },
+  "panel__content__task__edit__max_download_rate__subheader": {
+    "message": "The maximum download rate (default to 0, which means unlimited)."
+  },
+  "panel__content__task__edit__max_download_rate__label": {
+    "message": "Download rate"
+  },
+
+  "panel__content__task__edit__max_upload_rate__title": {
+    "message": "Maximum upload rate"
+  },
+  "panel__content__task__edit__max_upload_rate__subheader": {
+    "message": "The maximum upload rate (default to 0, which means unlimited)."
+  },
+  "panel__content__task__edit__max_upload_rate__label": {
+    "message": "Upload rate"
+  },
+
+  "panel__content__task__edit__seeding_interval__title": {
+    "message": "Seeding time"
+  },
+  "panel__content__task__edit__seeding_interval__subheader": {
+    "message": "The amount of Seeding time to reach before completing task (in minutes, 0 means none, -1 means infinite)."
+  },
+  "panel__content__task__edit__seeding_interval__label": {
+    "message": "Seeding time"
+  },
+
+  "panel__content__task__edit__seeding_ratio__title": {
+    "message": "Seeding ratio"
+  },
+  "panel__content__task__edit__seeding_ratio__subheader": {
+    "message": "The Share ratio to reach before completing task (in %, 0 means none)."
+  },
+  "panel__content__task__edit__seeding_ratio__label": {
+    "message": "Seeding ratio"
+  },
+  "panel__content__task__edit__seeding_info": {
+    "message": "This task automatically stop seeding when both conditions below are satisfied. Set the share ratio and seeding time to '0' to stop seeding immediately when download finishes"
   }
 }

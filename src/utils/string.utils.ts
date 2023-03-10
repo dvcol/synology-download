@@ -17,8 +17,10 @@ export const parseMagnetLink = (uri: string): string => {
   return dn ?? uri;
 };
 
-export const stringifyKeys = (record: Record<string, any>): Record<string, string> =>
-  Object.values(record).reduce((acc, [key, value]) => {
-    if (acc[key]) acc[key] = value?.toString();
+export const stringifyKeys = <T extends Record<string, any>, R = Record<string, any>>(record: T): R =>
+  Object.entries(record).reduce((acc, [key, value]) => {
+    if (value === undefined) return acc;
+    if (value === null) return acc;
+    acc[key as keyof R] = value?.toString();
     return acc;
-  }, {});
+  }, {} as R);

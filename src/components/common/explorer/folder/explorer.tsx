@@ -5,11 +5,13 @@ import { Container } from '@mui/material';
 
 import React, { useEffect } from 'react';
 
-import { finalize, tap } from 'rxjs';
+import { catchError, finalize, tap } from 'rxjs';
+
+import { useI18n } from '@dvcol/web-extension-utils';
 
 import type { File, FileList, Folder } from '@src/models';
 
-import { QueryService } from '@src/services';
+import { LoggerService, NotificationService, QueryService } from '@src/services';
 
 import { ExplorerBreadCrumbs } from './explorer-breadcrumb';
 import { ExplorerLeaf } from './explorer-leaf';
@@ -38,6 +40,8 @@ export type ExplorerEvent = {
 
 // TODO implement virtual scroll
 export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disabled, readonly, fileType, startPath, onChange, editable }) => {
+  const i18n = useI18n('common', 'explorer');
+
   const [tree, setTree] = React.useState<Record<string, File[] | Folder[]>>({});
   const [loading, setLoading] = React.useState<Record<string, boolean>>({
     root: true,
@@ -49,9 +53,18 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
 
   useEffect(() => {
     if (QueryService.isLoggedIn) {
-      QueryService.listFolders(readonly ?? true).subscribe(list => {
-        setTree({ root: list?.shares ?? [] });
-        setLoading(_loading => ({ ..._loading, root: false }));
+      QueryService.listFolders(readonly ?? true).subscribe({
+        next: list => {
+          setTree({ root: list?.shares ?? [] });
+          setLoading(_loading => ({ ..._loading, root: false }));
+        },
+        error: error => {
+          LoggerService.error(`Failed load folders.`, error);
+          NotificationService.error({
+            title: i18n(`list_folders_fail`, 'common', 'error'),
+            message: error?.message ?? error?.name ?? '',
+          });
+        },
       });
     }
   }, []);
@@ -69,6 +82,14 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
       tap((list: FileList) => setTree({ ...tree, [key]: list?.files ?? [] })),
       finalize(() => {
         setTimeout(() => setLoading({ ...loading, [key]: false }), 200);
+      }),
+      catchError(error => {
+        LoggerService.error(`Failed load files for path '${path}'.`, { path, key, error });
+        NotificationService.error({
+          title: i18n(`list_files_fail`, 'common', 'error'),
+          message: error?.message ?? error?.name ?? '',
+        });
+        throw error;
       }),
     );
   };

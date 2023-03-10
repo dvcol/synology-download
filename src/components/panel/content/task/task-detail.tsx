@@ -4,7 +4,7 @@ import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReplayIcon from '@mui/icons-material/Replay';
 import StopIcon from '@mui/icons-material/Stop';
-import { Box, Button, Card, Grid, ListItem, ListItemText, Typography } from '@mui/material';
+import { Box, Button, Grid, ListItem, ListItemText, Typography } from '@mui/material';
 
 import React from 'react';
 
@@ -36,7 +36,7 @@ const TaskTitle: FC<{ task: Task }> = ({ task }) => {
   let Folder = null;
   if (task.folder?.length) {
     Folder = (
-      <Typography variant="caption" component="div">
+      <Typography variant="caption" component="div" sx={{ pt: Url ? '0.25em' : undefined }}>
         {`${i18n('destination')} :\t${task.folder}`}
       </Typography>
     );
@@ -198,6 +198,39 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
     </>
   );
 
+  let files = null;
+  if (task.additional?.file?.length) {
+    files = task.additional.file.map((f, i) => (
+      <ListItem key={`${i}-${f.filename}`}>
+        <ListItemText
+          primary={
+            <Grid container>
+              <Grid item xs={9}>
+                <span>{i18n(f.wanted ? f.priority : 'skip', 'common', 'model', 'task_priority')}</span>
+                <span> – </span>
+                <span>{f.filename}</span>
+              </Grid>
+              <Grid item xs={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                {i18n({
+                  key: 'downloaded',
+                  substitutions: [formatBytes(f.size_downloaded), formatBytes(f.size)],
+                })}
+              </Grid>
+            </Grid>
+          }
+          primaryTypographyProps={{
+            component: 'span',
+            variant: 'caption',
+            color: 'text.secondary',
+            sx: { display: 'inline' },
+          }}
+          secondary={<ProgressBar props={{ variant: 'determinate' }} value={computeProgress(f.size_downloaded, f.size)} />}
+          secondaryTypographyProps={{ component: 'span' }}
+        />
+      </ListItem>
+    ));
+  }
+
   return (
     <ContentDetail
       title={<TaskTitle task={task} />}
@@ -220,48 +253,7 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
           {DeleteButton}
         </>
       }
-      content={
-        task.additional?.file?.length ? (
-          <Card
-            elevation={0}
-            sx={{
-              mt: '1rem',
-              maxHeight: '20rem',
-              overflow: 'auto',
-            }}
-          >
-            {task.additional.file.map((f, i) => (
-              <ListItem key={`${i}-${f.filename}`}>
-                <ListItemText
-                  primary={
-                    <Grid container>
-                      <Grid item xs={8}>
-                        <span>{f.priority}</span>
-                        <span> – </span>
-                        <span>{f.filename}</span>
-                      </Grid>
-                      <Grid item xs={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        {i18n({
-                          key: 'downloaded',
-                          substitutions: [formatBytes(f.size_downloaded), formatBytes(f.size)],
-                        })}
-                      </Grid>
-                    </Grid>
-                  }
-                  primaryTypographyProps={{
-                    component: 'span',
-                    variant: 'caption',
-                    color: 'text.secondary',
-                    sx: { display: 'inline' },
-                  }}
-                  secondary={<ProgressBar props={{ variant: 'determinate' }} value={computeProgress(f.size_downloaded, f.size)} />}
-                  secondaryTypographyProps={{ component: 'span' }}
-                />
-              </ListItem>
-            ))}
-          </Card>
-        ) : undefined
-      }
+      content={files ? <>{files}</> : undefined}
     />
   );
 };

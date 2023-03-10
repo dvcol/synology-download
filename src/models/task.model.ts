@@ -1,4 +1,4 @@
-import type { Content, DownloadStationStatistic, TabCount } from '@src/models';
+import type { Content, DownloadStationStatistic, TabCount, TaskPriority } from '@src/models';
 import { ColorLevel, ContentSource } from '@src/models';
 import { computeProgress, formatTime } from '@src/utils';
 
@@ -91,7 +91,7 @@ export interface TaskDetail {
   unzip_password: string;
   create_time: number;
   completed_time: number;
-  priority: 'auto' | 'low' | 'normal' | 'high';
+  priority: TaskPriority;
   total_peers: number;
   total_pieces: number;
   connected_seeders: number;
@@ -113,11 +113,13 @@ export interface TaskTransfer {
 
 export interface TaskFile {
   filename: string;
+  index: number;
   /** File size in bytes */
   size: string;
   /** Task download speed: byte/s */
   size_downloaded: string;
   priority: 'skip' | 'low' | 'normal' | 'high';
+  wanted: boolean;
 }
 
 export interface TaskTracker {

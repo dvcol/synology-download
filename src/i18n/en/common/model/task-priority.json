@@ -1,0 +1,14 @@
+{
+  "common__model__task_priority__low": {
+    "message": "Low"
+  },
+  "common__model__task_priority__normal": {
+    "message": "Normal"
+  },
+  "common__model__task_priority__high": {
+    "message": "High"
+  },
+  "common__model__task_priority__skip": {
+    "message": "Skip"
+  }
+}

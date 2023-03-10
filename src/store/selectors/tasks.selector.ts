@@ -73,3 +73,5 @@ export const getPausedTasksIds = createSelector(getTasksIdsByStatusType, map => 
 export const getActiveTasksIds = createSelector(getTasksIdsByStatusType, map => map[ContentStatusType.active]);
 export const getWaitingTasksIds = createSelector(getTasksIdsByStatusType, map => map[ContentStatusType.waiting]);
 export const getFinishedTasksIds = createSelector(getTasksIdsByStatusType, map => map[ContentStatusType.finished]);
+
+export const getTaskById = (id: string) => createSelector(getTasks, tasks => tasks?.find(t => t.id === id));
