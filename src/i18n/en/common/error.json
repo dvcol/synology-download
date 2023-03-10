@@ -17,6 +17,12 @@
   "common__error__login_required": {
     "message": "Login required"
   },
+  "common__error__fetch_failed": {
+    "message": "Fetch failed, if you're using Https you might need to re-open the popup."
+  },
+  "common__error__fetch_failed_auto_login": {
+    "message": "Fetch failed, attempting auto-login ..."
+  },
   "common__error__please_login": {
     "message": "Please log in to access this functionality."
   },

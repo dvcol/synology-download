@@ -13,6 +13,7 @@ export * from './message.model';
 export * from './modal-instance.model';
 export * from './navbar.model';
 export * from './notification.model';
+export * from './query.model';
 export * from './routes.model';
 export * from './settings.model';
 export * from './store.model';

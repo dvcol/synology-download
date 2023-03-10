@@ -12,15 +12,7 @@ import { useI18n } from '@dvcol/web-extension-utils';
 
 import { ButtonWithConfirm, FormInput, FormSwitch, JsonExplorer } from '@src/components';
 import type { AdvancedLogging, RootSlice } from '@src/models';
-import {
-  AdvancedHeader,
-  ColorLevel,
-  defaultAdvancedLogging,
-  defaultLoggingLevels,
-  LoggingLevel,
-  LoggingLevelLevelKeys,
-  LogInstance,
-} from '@src/models';
+import { AdvancedHeader, ColorLevel, defaultAdvancedLogging, LoggingLevel, LoggingLevelLevelKeys, ServiceInstance } from '@src/models';
 import { resetLogHistory, syncAdvancedLogging } from '@src/store/actions';
 import { getAdvancedSettingsLogging, getLogHistory } from '@src/store/selectors';
 import { downloadJson } from '@src/utils/downlaod.utils';
@@ -66,11 +58,6 @@ export const SettingsLogging = () => {
     downloadJson(logs, `synology_download_logs_${new Date().toISOString()}.json`);
   };
 
-  (window as any).defaultLoggingLevels = defaultLoggingLevels;
-  (window as any).defaultAdvancedLogging = defaultAdvancedLogging;
-  (window as any).LogInstance = LogInstance;
-  (window as any).LoggingLevel = LoggingLevel;
-
   return (
     <Card raised={true}>
       <CardHeader
@@ -83,7 +70,7 @@ export const SettingsLogging = () => {
       />
       <CardContent>
         <Collapse in={getValues()?.enabled} unmountOnExit>
-          {Object.values(LogInstance)?.map(instance => (
+          {Object.values(ServiceInstance)?.map(instance => (
             <CardHeader
               key={instance}
               title={i18n(`levels__${instance}__title`)}

@@ -2,7 +2,7 @@ import { tap } from 'rxjs';
 
 import { ChromeMessageType, ModalInstance } from '@src/models';
 import { LoggerService } from '@src/services';
-import { setContentDialog, setContentMenu, setOption, setPopup } from '@src/store/actions';
+import { resetLoading, setContentDialog, setContentMenu, setOption, setPopup } from '@src/store/actions';
 import { onConnect, onMessage } from '@src/utils';
 
 import type { Store } from 'redux';
@@ -21,6 +21,9 @@ const onAppConnect = (store: Store, instance: ModalInstance, dispatch: typeof se
 
         // dispatch disconnect
         store.dispatch(dispatch(false));
+
+        // clear loading
+        store.dispatch(resetLoading());
       });
     }),
   );

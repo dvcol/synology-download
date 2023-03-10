@@ -5,7 +5,7 @@ import type { Download } from './download.model';
 import type { ContextMenu, QuickMenu } from './menu.model';
 import type { AdvancedSettings, Connection, Downloads, Global, Log, Notifications, Polling } from './settings.model';
 import type { ContentTab } from './tab.model';
-import type { TaskComplete, Task, TaskStatistics } from './task.model';
+import type { Task, TaskComplete, TaskStatistics } from './task.model';
 import type { Store } from 'redux';
 import type { Store as StoreProxy } from 'webext-redux';
 
@@ -70,3 +70,5 @@ export interface RootSlice {
 }
 
 export type StoreOrProxy = Store | StoreProxy;
+
+export const StorePortName = 'synology-download-proxy-store';

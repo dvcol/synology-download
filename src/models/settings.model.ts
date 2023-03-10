@@ -329,7 +329,7 @@ export const LoggingLevelLevelKeys = {
   [LoggingLevel.error]: 'error',
 };
 
-export enum LogInstance {
+export enum ServiceInstance {
   Background = 'background',
   Popup = 'popup',
   Option = 'option',
@@ -339,12 +339,12 @@ export enum LogInstance {
 export interface Log {
   timestamp: string;
   level: LoggingLevel;
-  source: LogInstance;
+  source: ServiceInstance;
   value: string;
   params?: string;
 }
 
-export type AdvancedLoggingLevels = Partial<Record<LogInstance, LoggingLevel>>;
+export type AdvancedLoggingLevels = Partial<Record<ServiceInstance, LoggingLevel>>;
 
 export interface AdvancedLogging {
   enabled?: boolean;
@@ -357,7 +357,7 @@ export interface AdvancedSettings {
   logging: AdvancedLogging;
 }
 
-export const defaultLoggingLevels: AdvancedLoggingLevels = Object.values(LogInstance).reduce(
+export const defaultLoggingLevels: AdvancedLoggingLevels = Object.values(ServiceInstance).reduce(
   (acc, next) => ({ ...acc, [next]: LoggingLevel.error }),
   {},
 );

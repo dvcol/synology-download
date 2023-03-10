@@ -29,7 +29,7 @@ export class SynologyService extends BaseHttpService {
             map(response => ({ success: true, payload: response })),
             catchError(error => {
               LoggerService.error('Forwarded method failed.', { payload, error });
-              return of({ success: false, error: error?.toString() });
+              return of({ success: false, error: { name: error?.name, message: error?.message } });
             }),
           )
           .subscribe(response => sendResponse(response));

@@ -6,6 +6,7 @@ import type { Api } from './synology.model';
 export enum ErrorType {
   Synology = 'synology',
   Login = 'login',
+  Fetch = 'fetch',
   NotReady = 'not_ready',
 }
 
@@ -23,6 +24,16 @@ export class SynologyError extends Error {
     this.errors = errors;
 
     if (errors?.length) this.errors = this.errors?.map(err => (err.code ? { ...err, message: ErrorMap[api][err.code] } : err));
+  }
+}
+
+export class FetchError extends Error {
+  type = ErrorType.Fetch;
+  error: Error;
+
+  constructor(_error: Error, message = 'fetch_failed') {
+    super(message);
+    this.error = _error;
   }
 }
 

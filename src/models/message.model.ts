@@ -1,10 +1,9 @@
 import type { OnClickData } from '@src/utils';
 
 import type { DownloadQueryPayload } from './download.model';
-
 import type { ContextMenu } from './menu.model';
 import type { ChromeNotification, SnackNotification } from './notification.model';
-
+import type { QueryAutoLoginOptions } from './query.model';
 import type { SynologyQueryPayload } from './synology.model';
 import type { TaskForm } from './task.model';
 
@@ -56,7 +55,8 @@ export type ChromeMessagePayload =
   | DownloadQueryPayload
   | ContextMenuOnClickPayload
   | SnackNotification
-  | InterceptPayload;
+  | InterceptPayload
+  | QueryAutoLoginOptions;
 
 /**
  * Message interface for communication between content & background

@@ -1,3 +1,7 @@
 import { Store as StoreProxy } from 'webext-redux';
 
-export const storeProxy = new StoreProxy();
+import { StorePortName } from '@src/models';
+
+export const storeProxy = new StoreProxy({
+  portName: StorePortName,
+});

@@ -1,7 +1,7 @@
 import { lastValueFrom } from 'rxjs';
 import { wrapStore } from 'webext-redux';
 
-import { LogInstance } from '@src/models';
+import { ServiceInstance, StorePortName } from '@src/models';
 import { DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { store } from '@src/store';
 
@@ -18,10 +18,12 @@ import {
 
 export const initServiceWorker = async () => {
   // Wrap proxy store see https://github.com/tshaddix/webext-redux
-  wrapStore(store);
+  wrapStore(store, {
+    portName: StorePortName,
+  });
 
   // initialize logger
-  LoggerService.init(store, LogInstance.Background);
+  LoggerService.init(store, ServiceInstance.Background);
 
   // Listen to context menu events (first because it is required for setting restore)
   onContestMenuEvents();
@@ -30,10 +32,10 @@ export const initServiceWorker = async () => {
   await lastValueFrom(restoreSettings(store));
 
   // Init notifications
-  NotificationService.init(store);
+  NotificationService.init(store, ServiceInstance.Background);
 
   // Set store to query service
-  QueryService.init(store);
+  QueryService.init(store, ServiceInstance.Background);
 
   // Set store to download service
   DownloadService.init(store);

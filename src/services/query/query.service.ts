@@ -1,4 +1,4 @@
-import { EMPTY, finalize, of, tap, throwError } from 'rxjs';
+import { catchError, EMPTY, finalize, of, Subject, tap, throttleTime, throwError } from 'rxjs';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
@@ -15,14 +15,27 @@ import type {
   LoginRequest,
   LoginResponse,
   NewFolderList,
+  QueryAutoLoginOptions,
   SettingsSlice,
   StoreOrProxy,
   Task,
   TaskComplete,
   TaskCompleteResponse,
+  TaskEditResponse,
   TaskList,
 } from '@src/models';
-import { ConnectionType, FileListOption, LoginError, mapToTask, NotReadyError, TaskListOption, TaskStatus } from '@src/models';
+import {
+  ChromeMessageType,
+  ConnectionType,
+  FetchError,
+  FileListOption,
+  LoginError,
+  mapToTask,
+  NotReadyError,
+  ServiceInstance,
+  TaskListOption,
+  TaskStatus,
+} from '@src/models';
 import { LoggerService, NotificationService } from '@src/services';
 import { SynologyAuthService, SynologyDownload2Service, SynologyDownloadService, SynologyFileService, SynologyInfoService } from '@src/services/http';
 import {
@@ -46,7 +59,9 @@ import {
   getLogged,
   getNotificationsBannerFailedEnabled,
   getNotificationsBannerFinishedEnabled,
+  getOption,
   getPausedTasksIdsByActionScope,
+  getPopup,
   getSettings,
   getSid,
   getStoppingIds,
@@ -55,7 +70,7 @@ import {
   getUrl,
   urlReducer,
 } from '@src/store/selectors';
-import { before, store$ } from '@src/utils';
+import { before, sendMessage, store$ } from '@src/utils';
 
 import type { Observable } from 'rxjs';
 
@@ -63,6 +78,7 @@ import type { Observable } from 'rxjs';
 const i18n = useI18n('common', 'error');
 
 export class QueryService {
+  private static source: ServiceInstance;
   private static store: any | StoreOrProxy;
   private static isProxy: boolean;
   private static infoClient: SynologyInfoService;
@@ -72,8 +88,9 @@ export class QueryService {
   private static download2Client: SynologyDownload2Service;
   private static baseUrl: string;
 
-  static init(store: StoreOrProxy, isProxy = false) {
+  static init(store: StoreOrProxy, source: ServiceInstance, isProxy = false) {
     this.store = store;
+    this.source = source;
     this.isProxy = isProxy;
 
     this.infoClient = new SynologyInfoService(isProxy);
@@ -84,6 +101,14 @@ export class QueryService {
 
     store$<string>(store, getUrl).subscribe(url => this.setBaseUrl(url));
     store$<string | undefined>(store, getSid).subscribe(sid => this.setSid(sid));
+
+    // TODO - remove this if HTTPS is fixed
+    this.autologinQueue
+      .pipe(
+        throttleTime(1000),
+        tap(options => this.autoLogin(options).subscribe()),
+      )
+      .subscribe();
 
     LoggerService.debug('Query service initialized', { isProxy });
   }
@@ -103,7 +128,6 @@ export class QueryService {
     this.fileClient.setSid(sid);
     this.downloadClient.setSid(sid);
     this.download2Client.setSid(sid);
-    (globalThis as any).QueryService = this;
   }
 
   static get isReady() {
@@ -133,8 +157,61 @@ export class QueryService {
         finalize(() => this.store.dispatch(removeLoading())),
       );
 
+  /**
+   * This handles errors in a generic way
+   * @private
+   */
+  private static handleErrors = <T>(source: Observable<T>) =>
+    source.pipe(
+      catchError(error => {
+        throw this.catchAutoLogin(error);
+      }),
+    );
+
+  /**
+   * A autoLogin event queue to avoid spamming
+   * @private
+   * @todo TODO - investigate why this is required
+   */
+  private static autologinQueue = new Subject<QueryAutoLoginOptions>();
+
+  /**
+   * This is to attempts re-logging when we get SSL error in HTTPS, not sure why
+   * @private
+   * @todo TODO - investigate why this is required
+   */
+  private static catchAutoLogin(err: Error) {
+    if (err.message !== 'Failed to fetch') return err;
+
+    // mark as logged out
+    this.store.dispatch(setLogged(false));
+
+    if ([ServiceInstance.Popup, ServiceInstance.Option].includes(this.source)) {
+      this.autologinQueue.next({ notify: false, logged: false });
+      return new FetchError(err, i18n('fetch_failed_auto_login', 'common', 'error'));
+    }
+
+    // if  popup or option open
+    if (getPopup(this.store.getState()) && getOption(this.store.getState())) {
+      sendMessage({ type: ChromeMessageType.autoLogin }).subscribe({
+        error: e => {
+          LoggerService.error('Auto-login failed to send.', e);
+          this.autologinQueue.next({ logged: false });
+        },
+      });
+      return new FetchError(err, i18n('fetch_failed_auto_login', 'common', 'error'));
+    }
+
+    if (ServiceInstance.Content !== this.source) {
+      this.autologinQueue.next({ notify: false, logged: false });
+      return new FetchError(err, i18n('fetch_failed_auto_login', 'common', 'error'));
+    }
+
+    return new FetchError(err, i18n('fetch_failed', 'common', 'error'));
+  }
+
   static info(baseUrl?: string, doNotProxy?: boolean): Observable<InfoResponse> {
-    return this.infoClient.info(baseUrl, { doNotProxy }).pipe(this.readyCheckOperator(false, !baseUrl?.length));
+    return this.infoClient.info(baseUrl, { doNotProxy }).pipe(this.readyCheckOperator(false, !baseUrl?.length), this.handleErrors);
   }
 
   private static doLogin(
@@ -227,7 +304,7 @@ export class QueryService {
    *
    * @param options optional inputs, state, settings and notify
    */
-  static autoLogin(options: { logged?: boolean; notify?: boolean; settings?: SettingsSlice } = {}): Observable<LoginResponse | null> {
+  static autoLogin(options: QueryAutoLoginOptions = {}): Observable<LoginResponse | null> {
     const { logged, notify, settings } = {
       logged: getLogged(this.store.getState()),
       settings: getSettings(this.store.getState()),
@@ -263,11 +340,11 @@ export class QueryService {
   }
 
   static listFolders(readonly = true): Observable<FolderList> {
-    return this.fileClient.listFolder(0, 0, readonly).pipe(this.readyCheckOperator());
+    return this.fileClient.listFolder(0, 0, readonly).pipe(this.readyCheckOperator(), this.handleErrors);
   }
 
   static listFiles(folderPath: string, filetype: 'all' | 'dir' = 'dir'): Observable<FileList> {
-    return this.fileClient.listFile(folderPath, 0, 0, filetype, [FileListOption.perm]).pipe(this.readyCheckOperator());
+    return this.fileClient.listFile(folderPath, 0, 0, filetype, [FileListOption.perm]).pipe(this.readyCheckOperator(), this.handleErrors);
   }
 
   static createFolder(
@@ -276,7 +353,7 @@ export class QueryService {
     forceParent = false,
     additional: FileListOption[] = [FileListOption.perm],
   ): Observable<NewFolderList> {
-    return this.fileClient.createFolder(folderPath, name, forceParent, additional).pipe(this.readyCheckOperator());
+    return this.fileClient.createFolder(folderPath, name, forceParent, additional).pipe(this.readyCheckOperator(), this.handleErrors);
   }
 
   static renameFolder(
@@ -285,24 +362,25 @@ export class QueryService {
     additional: FileListOption[] = [FileListOption.perm],
     searchTaskId?: string,
   ): Observable<FileList> {
-    return this.fileClient.renameFolder(folderPath, name, additional, searchTaskId).pipe(this.readyCheckOperator());
+    return this.fileClient.renameFolder(folderPath, name, additional, searchTaskId).pipe(this.readyCheckOperator(), this.handleErrors);
   }
 
   static getConfig(): Observable<DownloadStationConfig> {
-    return this.downloadClient.getConfig().pipe(this.readyCheckOperator());
+    return this.downloadClient.getConfig().pipe(this.readyCheckOperator(), this.handleErrors);
   }
 
   static setConfig(config: DownloadStationConfig): Observable<CommonResponse> {
-    return this.downloadClient.setConfig(config).pipe(this.readyCheckOperator());
+    return this.downloadClient.setConfig(config).pipe(this.readyCheckOperator(), this.handleErrors);
   }
 
   static getInfo(): Observable<DownloadStationInfo> {
-    return this.downloadClient.getInfo().pipe(this.readyCheckOperator());
+    return this.downloadClient.getInfo().pipe(this.readyCheckOperator(), this.handleErrors);
   }
 
   static getStatistic(): Observable<DownloadStationStatistic> {
     return this.downloadClient.getStatistic().pipe(
       this.loadingOperator(),
+      this.handleErrors,
       tap(stats => {
         this.store.dispatch(setTaskStats(stats));
       }),
@@ -314,6 +392,7 @@ export class QueryService {
     const extract: ContentStatusTypeId<Task['id']> = getTasksIdsByStatusType(this.store.getState());
     return this.downloadClient.listTasks(0, -1, [TaskListOption.detail, TaskListOption.file, TaskListOption.transfer]).pipe(
       this.loadingOperator(),
+      this.handleErrors,
       tap(({ tasks }) => {
         const _stoppingIds = getStoppingIds(this.store.getState());
         const _tasks = tasks?.map(t => mapToTask(t, _stoppingIds));
@@ -338,13 +417,10 @@ export class QueryService {
   private static updateStopping(tasks: Task[], stoppingIds: TaskComplete['taskId'][]) {
     const ids = tasks?.map(({ id }) => id);
 
-    console.info('new ids', { ids, tasks });
-
     if (!ids?.length) return this.store.dispatch(resetStopping());
 
     const toRemove = stoppingIds?.filter(id => !ids.includes(id));
 
-    console.info('to remove ids', { toRemove });
     if (!toRemove?.length) return;
     this.store.dispatch(removeStopping(toRemove));
   }
@@ -352,6 +428,7 @@ export class QueryService {
   static resumeTask(id: string | string[]): Observable<CommonResponse[]> {
     return this.downloadClient.resumeTask(id).pipe(
       this.loadingOperator(),
+      this.handleErrors,
       tap(() => this.listTasks().subscribe()),
     );
   }
@@ -363,6 +440,7 @@ export class QueryService {
   static pauseTask(id: string | string[]): Observable<CommonResponse[]> {
     return this.downloadClient.pauseTask(id).pipe(
       this.loadingOperator(),
+      this.handleErrors,
       tap(() => this.listTasks().subscribe()),
     );
   }
@@ -374,6 +452,7 @@ export class QueryService {
   static createTask(uri: string, source?: string, destination?: string, username?: string, password?: string, unzip?: string): Observable<void> {
     return this.downloadClient.createTask(uri, destination, username, password, unzip).pipe(
       this.loadingOperator(),
+      this.handleErrors,
       tap({
         complete: () => {
           this.listTasks().subscribe();
@@ -394,6 +473,7 @@ export class QueryService {
   static stopTask(id: string): Observable<TaskCompleteResponse> {
     return this.download2Client.stopTask(id).pipe(
       this.loadingOperator(),
+      this.handleErrors,
       tap(({ task_id }) => {
         this.store.dispatch(addStopping({ id: task_id, taskId: id }));
         this.listTasks().subscribe();
@@ -401,9 +481,14 @@ export class QueryService {
     );
   }
 
+  static getTaskEdit(id: string): Observable<TaskEditResponse> {
+    return this.download2Client.getTaskEdit(id).pipe(this.loadingOperator(), this.handleErrors);
+  }
+
   static editTask(id: string | string[], destination: string): Observable<CommonResponse[]> {
     return this.downloadClient.editTask(id, destination).pipe(
       this.loadingOperator(),
+      this.handleErrors,
       tap(() => this.listTasks().subscribe()),
     );
   }
@@ -411,6 +496,7 @@ export class QueryService {
   static deleteTask(id: string | string[], force = false): Observable<CommonResponse[]> {
     return this.downloadClient.deleteTask(id, force).pipe(
       this.loadingOperator(),
+      this.handleErrors,
       tap(() => {
         this.store.dispatch(spliceTasks(id));
         this.listTasks().subscribe();

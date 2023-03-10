@@ -6,6 +6,7 @@ import type {
   ChromeNotification,
   Download,
   NotificationServiceOptions,
+  ServiceInstance,
   SnackMessage,
   SnackNotification,
   StateSlice,
@@ -32,6 +33,7 @@ import type { Observable } from 'rxjs';
 const i18n = useI18n('common', 'notification');
 
 export class NotificationService {
+  private static source: ServiceInstance;
   private static store: any | StoreOrProxy;
 
   private static isProxy: boolean;
@@ -56,8 +58,9 @@ export class NotificationService {
         tap(n => n && createNotification(n)),
       );
 
-  static init(store: StoreOrProxy, isProxy = false): void {
+  static init(store: StoreOrProxy, source: ServiceInstance, isProxy = false): void {
     this.store = store;
+    this.source = source;
     this.isProxy = isProxy;
 
     if (!isProxy) {

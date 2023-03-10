@@ -315,7 +315,6 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
         onCancel={() => setPrompt(false)}
         onConfirm={$event => {
           setPrompt(false);
-          console.info('on confirm', $event);
           onErase($event);
         }}
         toolitp={{

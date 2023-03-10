@@ -1,13 +1,13 @@
 import { ProxyLogger } from '@dvcol/web-extension-utils';
 
-import type { Log, LogInstance, StoreOrProxy } from '@src/models';
+import type { Log, ServiceInstance, StoreOrProxy } from '@src/models';
 import { ChromeMessageType, defaultLoggingLevels, LoggingLevel } from '@src/models';
 import { addLogHistory } from '@src/store/actions';
 import { getAdvancedSettingsLogging } from '@src/store/selectors';
 import { onMessage, sendMessage, store$ } from '@src/utils';
 
 export class LoggerService {
-  private static source: LogInstance;
+  private static source: ServiceInstance;
   private static store: any | StoreOrProxy;
   private static isProxy: boolean;
 
@@ -16,7 +16,7 @@ export class LoggerService {
   private static history = false;
   private static historyMax = 1000;
 
-  static init(store: StoreOrProxy, source: LogInstance, isProxy = false) {
+  static init(store: StoreOrProxy, source: ServiceInstance, isProxy = false) {
     this.store = store;
     this.source = source;
     this.isProxy = isProxy;
