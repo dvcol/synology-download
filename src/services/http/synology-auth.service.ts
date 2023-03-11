@@ -24,7 +24,7 @@ export class SynologyAuthService extends SynologyService {
       doNotProxy: false,
       ...options,
     };
-    return super.do<T>(method, params, version, api, endpoint, baseUrl, doNotProxy);
+    return super.do<T>(method, params, version, api, endpoint, baseUrl, false, doNotProxy);
   }
 
   login(

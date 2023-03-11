@@ -5,12 +5,15 @@ export const parseJSON = <T>(json?: string | object) => (typeof json == 'string'
 export const encodeParam = (param: string) => encodeURIComponent(param);
 
 export const buildFormData = (params: HttpParameters): FormData =>
-  Object.values(params).reduce((_form, [key, value]) => {
-    _form.append(key, Array.isArray(value) ? value?.map(encodeParam).join(',') : encodeParam(value));
+  Object.keys(params).reduce((_form, key) => {
+    let value = params[key];
+    if (typeof value === 'string') value = encodeParam(value);
+    else if (Array.isArray(value)) value = value?.map(encodeParam).join(',');
+    _form.append(key, value);
     return _form;
   }, new FormData());
 
-export const stringifyParams = (params: HttpParameters): string =>
+export const stringifyParams = (params: { [key: string]: string | string[] }): string =>
   Object.entries(params)
     .map(([k, v]) => `${k}=${Array.isArray(v) ? v?.map(encodeParam).join(',') : encodeParam(v)}`)
     .join('&');

@@ -6,7 +6,7 @@ import { HttpMethod } from '@dvcol/web-extension-utils';
 import type { Api, Endpoint, HttpResponse, SynologyQueryArgs, SynologyQueryPayload } from '@src/models';
 import { AuthMethod, ChromeMessageType, Controller, SynologyError } from '@src/models';
 import { LoggerService } from '@src/services';
-import { onMessage, sendMessage, stringifyParams } from '@src/utils';
+import { buildFormData, onMessage, sendMessage, stringifyParams } from '@src/utils';
 
 import { BaseHttpService } from './base-http.service';
 
@@ -45,17 +45,25 @@ export class SynologyService extends BaseHttpService {
     this.sid = sid;
   }
 
-  query<T>(method: HttpMethod, params: HttpParameters, version: string, api: Api, endpoint: Endpoint, base?: string): Observable<HttpResponse<T>> {
+  query<T>(
+    method: HttpMethod,
+    params: HttpParameters,
+    version: string,
+    api: Api,
+    endpoint: Endpoint,
+    base?: string,
+    formData?: boolean,
+  ): Observable<HttpResponse<T>> {
     let url: BaseHttpRequest['url'] = endpoint;
     if (base) url = { base: base + this.prefix, path: endpoint };
     if (this.sid && params?.method !== AuthMethod.login) params._sid = this.sid;
     switch (method) {
       case HttpMethod.POST:
       case HttpMethod.post:
-        return this.post<HttpResponse<T>>(url, stringifyParams({ api, version, ...params }));
+        return this.post<HttpResponse<T>>(url, formData ? buildFormData({ api, version, ...params }) : stringifyParams({ api, version, ...params }));
       case HttpMethod.PUT:
       case HttpMethod.put:
-        return this.put<HttpResponse<T>>(url, stringifyParams({ api, version, ...params }));
+        return this.put<HttpResponse<T>>(url, formData ? buildFormData({ api, version, ...params }) : stringifyParams({ api, version, ...params }));
       case HttpMethod.DELETE:
       case HttpMethod.delete:
         return this.delete<HttpResponse<T>>(url, { api, version, ...params });
@@ -77,10 +85,11 @@ export class SynologyService extends BaseHttpService {
     api: Api,
     endpoint: Endpoint,
     base?: string,
+    formData?: boolean,
     doNotProxy?: boolean,
   ): Observable<T> {
     return (!doNotProxy && this.isProxy ? this.forward : this.query)
-      .bind(this)<T>(method, params, version, api, endpoint, base)
+      .bind(this)<T>(method, params, version, api, endpoint, base, formData)
       .pipe(
         map(response => {
           if (response?.success === true) {
