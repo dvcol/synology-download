@@ -26,6 +26,10 @@ import type {
   TaskEditResponse,
   TaskFileEditRequest,
   TaskList,
+  TaskListDeleteResponse,
+  TaskListDownloadRequest,
+  TaskListDownloadResponse,
+  TaskListResponse,
 } from '@src/models';
 import {
   ChromeMessageType,
@@ -447,7 +451,38 @@ export class QueryService {
         complete: () => {
           this.listTasks().subscribe();
           if (request.destination?.trim()) this.store.dispatch(addDestinationHistory(request.destination?.trim()));
-          NotificationService.taskCreated(torrent?.name ?? request?.url ?? 'unknown', source, request.destination);
+          if (!request?.create_list) NotificationService.taskCreated(torrent?.name ?? request?.url ?? 'unknown', source, request.destination);
+        },
+        error: error => {
+          NotificationService.error({
+            title: i18n('create_task_fail'),
+            message: error?.message ?? error?.name ?? '',
+            contextMessage: source,
+          });
+        },
+      }),
+    );
+  }
+
+  static getTaskList(list_id: string): Observable<TaskListResponse> {
+    return this.download2Client.getTaskList(list_id).pipe(this.loadingOperator(), this.handleErrors);
+  }
+
+  static deleteTaskList(list_id: string): Observable<TaskListDeleteResponse> {
+    return this.download2Client.deleteTaskList(list_id).pipe(this.loadingOperator(), this.handleErrors);
+  }
+
+  static setTaskListDownload(
+    request: TaskListDownloadRequest,
+    { name, source }: { name: string; source: string },
+  ): Observable<TaskListDownloadResponse> {
+    return this.download2Client.setTaskListDownload(request).pipe(
+      this.loadingOperator(),
+      this.handleErrors,
+      tap({
+        complete: () => {
+          this.listTasks().subscribe();
+          NotificationService.taskCreated(name, source, request.destination);
         },
         error: error => {
           NotificationService.error({
