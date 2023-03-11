@@ -1,4 +1,4 @@
-import { TextField } from '@mui/material';
+import { Grid, TextField } from '@mui/material';
 
 import React, { useState } from 'react';
 
@@ -18,10 +18,12 @@ export const FormInput = <TFieldValues extends FieldValues = FieldValues, TName 
   textFieldProps,
   iconProps,
   children,
+  inputFileProps,
 }: React.PropsWithChildren<{
   controllerProps: Omit<ControllerProps<TFieldValues, TName>, 'render'>;
   textFieldProps?: TextFieldProps;
   iconProps?: SvgIconProps;
+  inputFileProps?: { split: boolean };
 }>) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -46,8 +48,28 @@ export const FormInput = <TFieldValues extends FieldValues = FieldValues, TName 
         ...(_textFieldProps.InputProps ?? {}),
       };
     } else if (textFieldProps?.type === 'file') {
-      const UploadButton = <FormInputFile onChange={_textFieldProps.onChange} />;
       _textFieldProps.type = 'text';
+      const UploadButton = <FormInputFile onChange={_textFieldProps.onChange} />;
+      if (inputFileProps?.split) {
+        _textFieldProps.InputProps = {
+          readOnly: true,
+          ...(_textFieldProps.InputProps ?? {}),
+        };
+        return (
+          <Grid container direction="column">
+            <Grid container direction="row" wrap="nowrap" sx={{ pb: '0.5em', alignItems: 'center' }}>
+              <Grid xs={4}>
+                <FormInputFile split={true} onChange={_textFieldProps.onChange} />
+              </Grid>
+              <Grid xs={8}>{children}</Grid>
+            </Grid>
+            <Grid container direction="row" wrap="nowrap">
+              <TextField {...field} {..._textFieldProps} />
+            </Grid>
+          </Grid>
+        );
+      }
+
       _textFieldProps.InputProps = {
         startAdornment: UploadButton,
         readOnly: true,
