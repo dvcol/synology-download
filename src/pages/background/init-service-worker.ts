@@ -25,6 +25,9 @@ export const initServiceWorker = async () => {
   // initialize logger
   LoggerService.init(store, ServiceInstance.Background);
 
+  // Listen to extension update -- needs to be early or else onInstalled fires too late
+  onInstalledEvents(store);
+
   // Listen to context menu events (first because it is required for setting restore)
   onContestMenuEvents();
 
@@ -52,12 +55,9 @@ export const initServiceWorker = async () => {
   // Content script listener
   onContentEvents(store);
 
-  // Init polling
-  PollingService.init(store);
-
   // Listen to download events
   onDownloadEvents(store);
 
-  // Listen to extension update
-  onInstalledEvents(store);
+  // Init polling
+  PollingService.init(store);
 };

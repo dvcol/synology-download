@@ -1,16 +1,15 @@
-import { combineLatest, filter, map, takeWhile } from 'rxjs';
+import { combineLatest, map, of, takeWhile } from 'rxjs';
 
-import type { ChromeMessage } from '@dvcol/web-extension-utils';
-import { injectContentScripts } from '@dvcol/web-extension-utils';
+import type { ChromeMessage, Manifest } from '@dvcol/web-extension-utils';
+import { getManifest, injectContentScripts } from '@dvcol/web-extension-utils';
 
-import manifest from '@src/manifest.json';
 import type { SnackNotification, StoreOrProxy } from '@src/models';
 import { AppLinks, ChromeMessageType, NotificationLevel } from '@src/models';
 import { LoggerService } from '@src/services';
 import { getPopup } from '@src/store/selectors';
-import type { InstalledDetails } from '@src/utils';
 import { onInstalled$, sendMessage, store$ } from '@src/utils';
 
+type InstalledPayload = { open: boolean; previousVersion?: string; nextVersion: string };
 export const onInstalledEvents = (store: StoreOrProxy) => {
   LoggerService.debug('Subscribing to install events.');
 
@@ -18,26 +17,29 @@ export const onInstalledEvents = (store: StoreOrProxy) => {
   injectContentScripts();
 
   // Subscribe to installed until first popup open
-  combineLatest([store$<boolean>(store, getPopup), onInstalled$])
+  combineLatest([store$<boolean>(store, getPopup), onInstalled$, of<Manifest>(getManifest())])
     .pipe(
       // take while popup is closed and new version available
-      takeWhile(([open, { previousVersion }]) => previousVersion !== manifest.version && !open, true),
-      // only emits if popup is open and new version available
-      filter(([open, { previousVersion }]) => !!previousVersion && previousVersion !== manifest.version && open),
-      map<[boolean, InstalledDetails], ChromeMessage<ChromeMessageType, SnackNotification>>(() => ({
+      map(([open, { previousVersion }, { version }]) => {
+        const payload: InstalledPayload = { open, previousVersion, nextVersion: version };
+        LoggerService.info('Service worker installed', payload);
+        return payload;
+      }),
+      takeWhile(({ open, previousVersion, nextVersion }) => previousVersion !== nextVersion && !open, true),
+      map<InstalledPayload, ChromeMessage<ChromeMessageType, SnackNotification>>(({ nextVersion }) => ({
         type: ChromeMessageType.notificationSnack,
         payload: {
           message: {
-            title: `Updated to version ${manifest.version}`,
+            title: `Updated to version ${nextVersion}`,
             message: `
-            A new update (version ${manifest.version}) has just been installed.
+            A new update (version ${nextVersion}) has just been installed.
     
             To now more about the changes, please click on the button below.`,
             priority: NotificationLevel.info,
             buttons: [
               {
                 title: 'see release notes',
-                url: AppLinks.Release + (manifest.version ? `/tag/v${manifest.version}` : '/latest'),
+                url: AppLinks.Release + (nextVersion ? `/tag/v${nextVersion}` : '/latest'),
               },
             ],
           },
