@@ -15,5 +15,8 @@
 
   "panel__content__empty__go_to_settings": {
     "message": "Go to settings"
+  },
+  "panel__content__empty__auto_login": {
+    "message": "Auto login"
   }
 }

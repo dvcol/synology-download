@@ -11,9 +11,10 @@ import { useI18n } from '@dvcol/web-extension-utils';
 
 import { AppRoute } from '@src/models';
 
+import { QueryService } from '@src/services';
 import type { StoreState } from '@src/store';
 import { setNavbar } from '@src/store/actions';
-import { getLoading, getLogged } from '@src/store/selectors';
+import { getLoading, getLogged, getShouldAutoLogin } from '@src/store/selectors';
 
 import type { FC } from 'react';
 
@@ -21,6 +22,7 @@ export const ContentEmpty: FC = () => {
   const i18n = useI18n('panel', 'content', 'empty');
   const logged = useSelector<StoreState, boolean>(getLogged);
   const loading = useSelector<StoreState, number>(getLoading);
+  const autoLogin = useSelector<StoreState, boolean>(getShouldAutoLogin);
 
   const dispatch = useDispatch();
 
@@ -55,6 +57,16 @@ export const ContentEmpty: FC = () => {
               <Button variant="outlined" color="primary" component={Link} to={AppRoute.Settings} sx={{ fontSize: '0.75rem' }} onClick={clearTab}>
                 {i18n('go_to_settings')}
               </Button>
+              {autoLogin && (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  sx={{ fontSize: '0.75rem' }}
+                  onClick={() => QueryService.autoLogin({ logged: false }).subscribe()}
+                >
+                  {i18n('auto_login')}
+                </Button>
+              )}
             </Stack>
           </Fragment>
         ) : (

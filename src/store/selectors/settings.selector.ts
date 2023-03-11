@@ -40,6 +40,27 @@ export const getQuick = createSelector(getSettings, (setting: SettingsSlice) => 
 
 export const getConnection = createSelector(getSettings, (setting: SettingsSlice) => setting?.connection ?? defaultConnection);
 
+/**
+ * Returns true if we should attempt an auto-login
+ * @param connection the connection slice
+ */
+const shouldAutoLogin = (connection: Connection) => {
+  // If missing username
+  if (!connection?.username) return false;
+  // If missing password
+  if (!connection?.password) return false;
+  // If remember me is not enabled
+  if (!connection?.rememberMe) return false;
+  // If no auto-login and no previous logged state
+  if (!connection?.autoLogin) return false;
+  // If 2FA but no device token enabled
+  if (connection?.type === ConnectionType.twoFactor && !connection?.enable_device_token) return false;
+  // If device token for 2FA but no device id saved
+  return !(connection?.type === ConnectionType.twoFactor && !connection?.device_id);
+};
+
+export const getShouldAutoLogin = createSelector(getConnection, shouldAutoLogin);
+
 export const urlReducer = (connection: Connection) => {
   if (connection?.protocol && connection?.path && connection?.port) {
     const { type, protocol, path, port } = connection;

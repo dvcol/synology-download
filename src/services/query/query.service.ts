@@ -16,7 +16,6 @@ import type {
   LoginResponse,
   NewFolderList,
   QueryAutoLoginOptions,
-  SettingsSlice,
   StoreOrProxy,
   Task,
   TaskComplete,
@@ -64,13 +63,12 @@ import {
   getOption,
   getPausedTasksIdsByActionScope,
   getPopup,
-  getSettings,
+  getShouldAutoLogin,
   getSid,
   getStoppingIds,
   getTasksIdsByActionScope,
   getTasksIdsByStatusType,
   getUrl,
-  urlReducer,
 } from '@src/store/selectors';
 import { before, sendMessage, store$ } from '@src/utils';
 
@@ -285,44 +283,25 @@ export class QueryService {
   }
 
   /**
-   * Returns true if we should attempt an auto-login
-   * @param settings the settings slice
-   */
-  private static shouldAutoLogin = (settings: SettingsSlice) => {
-    // If missing username
-    if (!settings?.connection?.username) return false;
-    // If missing password
-    if (!settings?.connection?.password) return false;
-    // If remember me is not enabled
-    if (!settings?.connection?.rememberMe) return false;
-    // If no auto-login and no previous logged state
-    if (!settings?.connection?.autoLogin) return false;
-    // If 2FA but no device token enabled
-    if (settings?.connection?.type === ConnectionType.twoFactor && !settings?.connection?.enable_device_token) return false;
-    // If device token for 2FA but no device id saved
-    return !(settings?.connection?.type === ConnectionType.twoFactor && !settings?.connection?.device_id);
-  };
-
-  /**
    * If the application is not currently logged-in and we have the appropriate settings, we attempt a login.
    * If any condition is not respected, we return an empty observable that completes without emitting
    *
    * @param options optional inputs, state, settings and notify
    */
   static autoLogin(options: QueryAutoLoginOptions = {}): Observable<LoginResponse | null> {
-    const { logged, notify, settings } = {
-      logged: getLogged(this.store.getState()),
-      settings: getSettings(this.store.getState()),
+    const { logged, notify, autoLogin } = {
       notify: true,
+      logged: getLogged(this.store.getState()),
+      autoLogin: getShouldAutoLogin(this.store.getState()),
       ...options,
     };
-    LoggerService.debug('Attempting auto-login', { logged, settings });
+    LoggerService.debug('Attempting auto-login', { logged, autoLogin });
 
     // If we are already logged-in we ignore
     if (logged) return of(null);
 
-    // If remember me is not enabled
-    if (!this.shouldAutoLogin(settings)) return of(null);
+    // If missing required settings
+    if (!autoLogin) return of(null);
 
     // Attempt to Restore login
     return QueryService.login().pipe(
@@ -336,7 +315,7 @@ export class QueryService {
             NotificationService.error({
               title: i18n('manual_login_required'),
               message: i18n({ key: `auto_login`, substitutions: [err?.message ?? err?.name ?? ''] }),
-              contextMessage: urlReducer(settings.connection),
+              contextMessage: getUrl(this.store.getState()),
             });
           }
         },
