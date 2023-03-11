@@ -155,7 +155,13 @@ export const TaskEdit = ({
   const disableTaskFiles = disableTask || !task?.additional?.file?.length;
 
   return (
-    <Dialog open={open} onClose={() => handleSubmit(onCancel)} aria-labelledby="confirm-delete-dialog" maxWidth={'md'}>
+    <Dialog
+      open={open}
+      onClose={() => handleSubmit(onCancel)}
+      aria-labelledby="confirm-delete-dialog"
+      maxWidth={'md'}
+      PaperProps={{ sx: { maxHeight: 'calc(100% - 1em)' } }}
+    >
       <DialogTitle>{i18n('destination_folder')}</DialogTitle>
       <DialogContent sx={{ display: 'flex', flexDirection: 'column' }}>
         <LinearProgress

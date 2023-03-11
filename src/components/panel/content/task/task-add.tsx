@@ -1,15 +1,16 @@
-import { Box, Button, Card, CardActions, CardContent, CardHeader, Chip, Grid, Stack, Tooltip } from '@mui/material';
+import { Box, Button, Card, CardActions, CardContent, CardHeader, Chip, Grid, Stack, ToggleButton, ToggleButtonGroup, Tooltip } from '@mui/material';
 
 import React, { useEffect, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 
-import { forkJoin, lastValueFrom, tap } from 'rxjs';
+import { lastValueFrom, tap } from 'rxjs';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
-import { FormExplorer, FormInput, FormSwitch } from '@src/components';
+import { FormCheckbox, FormExplorer, FormInput, FormSwitch } from '@src/components';
 import type { TaskForm } from '@src/models';
+import { TaskCreateType } from '@src/models';
 import { QueryService } from '@src/services';
 
 import type { CardProps } from '@mui/material';
@@ -48,9 +49,13 @@ export const TaskAdd: FC<{
   onFormCancel?: (form: TaskForm) => void;
   onFormSubmit?: (form: TaskForm) => void;
   cardProps?: CardProps;
-}> = ({ form, withCancel, onFormCancel, onFormSubmit, cardProps }) => {
+  allowFile?: boolean;
+}> = ({ form, withCancel, onFormCancel, onFormSubmit, cardProps, allowFile }) => {
   const i18n = useI18n('panel', 'content', 'task', 'add');
   const [path, setPath] = React.useState<string>(form?.destination?.path ?? '');
+  const [type, setType] = useState(TaskCreateType.url);
+
+  const isFile = allowFile && type === TaskCreateType.file;
 
   const {
     handleSubmit,
@@ -67,6 +72,8 @@ export const TaskAdd: FC<{
       username: form?.username ?? '',
       password: form?.password ?? '',
       unzip: form?.unzip ?? '',
+      file: form?.file ?? undefined,
+      create_list: form?.create_list ?? false,
     },
   });
 
@@ -83,25 +90,27 @@ export const TaskAdd: FC<{
     onFormCancel?.(data);
   };
 
-  const [urls, setUrls] = useState<string[]>();
-
   const parseUrls = (uri?: string) =>
-    setUrls(
-      uri
-        ?.split(/\r?\n/)
-        ?.map(_uri => _uri?.trim())
-        .filter(Boolean),
-    );
+    uri
+      ?.split(/\r?\n/)
+      ?.map(_uri => _uri?.trim())
+      .filter(Boolean);
 
-  const createTask = (_uri: string, data: TaskForm) => {
+  const [urls, setUrls] = useState<string[] | undefined>(parseUrls(getValues().uri));
+
+  const createTask = (url: string[], data: TaskForm) => {
     const { source, destination, username, password, unzip } = data;
     return QueryService.createTask(
-      _uri,
-      source,
-      destination?.custom ? destination?.path : undefined,
-      username?.length ? username : undefined,
-      password?.length ? password : undefined,
-      unzip?.length ? unzip : undefined,
+      {
+        url,
+        destination: destination?.custom ? destination?.path : undefined,
+        username: username?.length ? username : undefined,
+        password: password?.length ? password : undefined,
+        unzip: unzip?.length ? unzip : undefined,
+      },
+      {
+        source,
+      },
     ).pipe(
       tap(() => {
         reset(data);
@@ -111,7 +120,7 @@ export const TaskAdd: FC<{
   };
 
   const onSubmit: SubmitHandler<TaskForm> = data => {
-    if (urls?.length) return lastValueFrom(forkJoin(urls.map(_uri => createTask(_uri, data))));
+    if (urls?.length) return lastValueFrom(createTask(urls, data));
     return Promise.reject(i18n('url_required'));
   };
 
@@ -128,10 +137,29 @@ export const TaskAdd: FC<{
         titleTypographyProps={{ variant: 'h6', color: 'text.primary', fontSize: '1em' }}
         subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '0.875em' }}
         sx={{ p: '1em 1em 0', textTransform: 'capitalize' }}
+        action={
+          allowFile && (
+            <ToggleButtonGroup
+              color="primary"
+              size="small"
+              value={type}
+              exclusive
+              onChange={(_, _type) => setType(_type)}
+              aria-label="task-create-type"
+              disabled={!allowFile}
+            >
+              {Object.values(TaskCreateType).map(priority => (
+                <ToggleButton key={priority} value={priority} sx={{ textTransform: 'inherit', minWidth: '4em' }}>
+                  {i18n(priority, 'common', 'model', 'task_create_type')}
+                </ToggleButton>
+              ))}
+            </ToggleButtonGroup>
+          )
+        }
       />
       <CardContent sx={{ display: 'flex', flexDirection: 'row', p: '0.5em 1em 0.75em', fontSize: '1em' }}>
         <Grid container spacing={2}>
-          <Grid item xs={6}>
+          <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column' }}>
             <CardHeader
               title={i18n('source_title')}
               subheader={i18n('source_subheader')}
@@ -140,24 +168,56 @@ export const TaskAdd: FC<{
               action={<UrlCounts urls={urls} />}
               sx={{ p: '0.5em 0' }}
             />
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '1.25em', p: '0.5em 0', fontSize: '0.9em', margin: '0.5em 0' }}>
-              <FormInput
-                controllerProps={{
-                  name: 'uri',
-                  control,
-                  rules: {
-                    required: { value: true, message: i18n('required', 'common', 'error') },
-                    validate: (_uri?: string) => !!_uri?.trim()?.length || i18n('required', 'common', 'error'),
-                  },
-                }}
-                textFieldProps={{
-                  label: i18n('url_label'),
-                  multiline: true,
-                  rows: 4,
-                  onChange: e => parseUrls(e.target.value),
-                  inputProps: { style: { fontSize: '0.875em', wordBreak: 'break-all' } },
-                }}
-              />
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                flex: '1 1 auto',
+                justifyContent: 'space-around',
+                gap: '1em',
+                p: '0.5em 0',
+                fontSize: '0.9em',
+              }}
+            >
+              {isFile ? (
+                <>
+                  <FormInput
+                    controllerProps={{ name: 'file', control }}
+                    textFieldProps={{
+                      type: 'file',
+                      label: i18n('file_label'),
+                      placeholder: i18n('file_placeholder'),
+                      inputProps: { style: { fontSize: '0.875em' } },
+                      disabled: !isFile,
+                      onChange: $event => console.info('file event', $event),
+                    }}
+                    inputFileProps={{ split: true }}
+                  >
+                    <FormCheckbox
+                      controllerProps={{ name: 'create_list', control }}
+                      formControlLabelProps={{ label: i18n('create_list_label'), disabled: !isFile }}
+                    />
+                  </FormInput>
+                </>
+              ) : (
+                <FormInput
+                  controllerProps={{
+                    name: 'uri',
+                    control,
+                    rules: {
+                      required: { value: true, message: i18n('required', 'common', 'error') },
+                      validate: (_uri?: string) => !!_uri?.trim()?.length || i18n('required', 'common', 'error'),
+                    },
+                  }}
+                  textFieldProps={{
+                    label: i18n('url_label'),
+                    multiline: true,
+                    rows: 4,
+                    onChange: e => setUrls(parseUrls(e.target.value)),
+                    inputProps: { style: { fontSize: '0.875em', wordBreak: 'break-all' } },
+                  }}
+                />
+              )}
               <FormInput
                 controllerProps={{ name: 'username', control }}
                 textFieldProps={{

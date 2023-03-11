@@ -1,0 +1,8 @@
+{
+  "common__model__task_create_type__file": {
+    "message": "File"
+  },
+  "common__model__task_create_type__url": {
+    "message": "Url"
+  }
+}

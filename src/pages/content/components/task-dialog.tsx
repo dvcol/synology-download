@@ -58,7 +58,7 @@ export const TaskDialog: FC<{ container?: PortalProps['container'] }> = ({ conta
               setForm({ uri, source, destination });
               _setOpen(true);
             } else {
-              QueryService.createTask(uri, source, destination?.path).subscribe();
+              QueryService.createTask({ url: [uri], destination: destination?.path }, { source }).subscribe();
             }
           } else if (uri) {
             NotificationService.loginRequired();

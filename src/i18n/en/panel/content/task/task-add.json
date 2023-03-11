@@ -18,9 +18,18 @@
     "message": "Source"
   },
   "panel__content__task__add__source_subheader": {
-    "message": "Each new lines is considered an individual url and will result in a new task."
+    "message": "Each new lines is considered an individual url and will create a task."
   },
 
+  "panel__content__task__add__file_label": {
+    "message": "File to upload"
+  },
+  "panel__content__task__add__file_placeholder": {
+    "message": "Path to the file to upload"
+  },
+  "panel__content__task__add__create_list_label": {
+    "message": "Choose files to download"
+  },
   "panel__content__task__add__url_label": {
     "message": "Download url or magnet link"
   },

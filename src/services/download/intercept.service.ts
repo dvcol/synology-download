@@ -1,6 +1,6 @@
 import { switchMap, tap } from 'rxjs';
 
-import type { InterceptPayload, InterceptResponse, TaskForm } from '@src/models';
+import type { InterceptPayload, InterceptResponse, TaskCreateResponse, TaskForm } from '@src/models';
 import { ChromeMessageType } from '@src/models';
 import { DownloadService, LoggerService, QueryService } from '@src/services';
 import type { DownloadFilenameSuggestion, DownloadItem } from '@src/utils';
@@ -10,10 +10,9 @@ import type { Observable } from 'rxjs';
 
 type InterceptOptions = { erase?: boolean; resume?: boolean };
 export class InterceptService {
-  static transfer<T extends DownloadItem>(download: T, { erase, resume }: InterceptOptions, callback?: () => void): Observable<void> {
+  static transfer<T extends DownloadItem>(download: T, { erase, resume }: InterceptOptions, callback?: () => void): Observable<TaskCreateResponse> {
     return DownloadService.pause(download.id).pipe(
-      switchMap(() => QueryService.createTask(download.finalUrl, download.referrer)),
-
+      switchMap(() => QueryService.createTask({ url: [download.finalUrl] }, { source: download.referrer })),
       tap({
         error: err => {
           callback?.();
