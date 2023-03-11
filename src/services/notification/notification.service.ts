@@ -234,10 +234,14 @@ export class NotificationService {
     );
   }
 
-  static taskCreated(uri: string, source?: string, destination?: string): void {
+  static taskCreated(url: string | string[], source?: string, destination?: string): void {
+    const _url: string[] = (Array.isArray(url) ? url : [url]) ?? [];
     this.info({
       title: i18n('task_created'),
-      message: [`${i18n('title')}\xa0${parseMagnetLink(uri)}`, destination ? `${i18n('destination_folder')}\xa0${destination}` : ''].join('\n'),
+      message: [
+        ..._url.map(uri => `${i18n('title')}\xa0${parseMagnetLink(uri)}`),
+        destination ? `${i18n('destination_folder')}\xa0${destination}` : '',
+      ].join('\n'),
       contextMessage: source,
       success: true,
     });

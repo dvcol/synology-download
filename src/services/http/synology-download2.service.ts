@@ -22,6 +22,21 @@ import { stringifyKeys } from '@src/utils';
 import type { Observable } from 'rxjs';
 
 export class SynologyDownload2Service extends SynologyService {
+  /**
+   * Synology uses comma in a non standardized way to delimit array payload in the API.
+   * This makes urls containing un-encoded commas though technically non-malformed, invalid for the API.
+   *
+   * To palliate this, we substitute comma with it's unicode equivalent before encoding parameters
+   *
+   * @param url the url to sanitize
+   * @private
+   *
+   * @see https://global.download.synology.com/download/Document/Software/DeveloperGuide/Package/DownloadStation/All/enu/Synology_Download_Station_Web_API.pdf
+   */
+  private static _sanitizeUrl(url: string): URL {
+    return new URL(url.toString().replace(/,/g, '%2C'));
+  }
+
   constructor(isProxy = false, name = 'SynologyDownloadService2') {
     super(isProxy, name);
   }
@@ -42,8 +57,11 @@ export class SynologyDownload2Service extends SynologyService {
     return super.do<T>(method, params, version ?? '1', api ?? DownloadStation2API.Task, endpoint ?? Endpoint.Entry);
   }
 
-  createTask(request: TaskCreateRequest, torrent?: Blob): Observable<TaskCreateResponse> {
-    const params: HttpParameters = { method: TaskCreateMethod.create, ...stringifyKeys(request) };
+  createTask(request: TaskCreateRequest, torrent?: File): Observable<TaskCreateResponse> {
+    const { url, file, ..._request } = request;
+    const params: HttpParameters = { method: TaskCreateMethod.create, ...stringifyKeys(_request) };
+    if (url) params.url = `[${url?.map(_url => `"${SynologyDownload2Service._sanitizeUrl(_url).toString()}"`)?.join(',')}]`;
+    if (file) params.file = `[${file?.map(_file => `"${_file}"`)?.join(',')}]`;
     if (torrent) params.torrent = torrent;
     return this._do<TaskCreateResponse>({
       method: HttpMethod.POST,

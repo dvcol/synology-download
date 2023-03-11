@@ -20,6 +20,8 @@ import type {
   Task,
   TaskComplete,
   TaskCompleteResponse,
+  TaskCreateRequest,
+  TaskCreateResponse,
   TaskEditRequest,
   TaskEditResponse,
   TaskFileEditRequest,
@@ -34,6 +36,7 @@ import {
   mapToTask,
   NotReadyError,
   ServiceInstance,
+  TaskCreateType,
   TaskListOption,
   TaskStatus,
 } from '@src/models';
@@ -433,15 +436,18 @@ export class QueryService {
     return ids?.size ? this.pauseTask(Array.from(ids).join(',')) : EMPTY;
   }
 
-  static createTask(uri: string, source?: string, destination?: string, username?: string, password?: string, unzip?: string): Observable<void> {
-    return this.downloadClient.createTask(uri, destination, username, password, unzip).pipe(
+  static createTask(request: Partial<TaskCreateRequest>, options: { source?: string; torrent?: File } = {}): Observable<TaskCreateResponse> {
+    const { source, torrent } = options;
+    const _request: TaskCreateRequest = { type: TaskCreateType.url, create_list: false, ...request, destination: request?.destination ?? '""' };
+
+    return this.download2Client.createTask(_request, torrent).pipe(
       this.loadingOperator(),
       this.handleErrors,
       tap({
         complete: () => {
           this.listTasks().subscribe();
-          if (destination) this.store.dispatch(addDestinationHistory(destination));
-          NotificationService.taskCreated(uri, source, destination);
+          if (request.destination?.trim()) this.store.dispatch(addDestinationHistory(request.destination?.trim()));
+          NotificationService.taskCreated(torrent?.name ?? request?.url ?? 'unknown', source, request.destination);
         },
         error: error => {
           NotificationService.error({

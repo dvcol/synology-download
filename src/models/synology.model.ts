@@ -288,19 +288,22 @@ export interface CommonResponse {
 }
 
 export enum TaskCreateType {
-  file = 'file',
   url = 'url',
+  file = 'file',
 }
 
 export interface TaskCreateRequest {
   type: TaskCreateType;
-  /** to prompt task creation or not */
-  create_list: boolean;
-  destination?: string;
+
+  /** required, empty string means default folder */
+  destination: string;
   username?: string;
   password?: string;
   unzip?: string;
   url?: string[];
+
+  /** to prompt for file selection after creation or not */
+  create_list: boolean;
   file?: string[];
   /** epoch timestamp */
   mtime?: number;

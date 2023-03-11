@@ -180,6 +180,8 @@ export interface TaskForm {
   username?: string;
   password?: string;
   unzip?: string; // unzip password
+  file?: Blob;
+  create_list?: boolean;
 }
 
 export interface TaskCount {
