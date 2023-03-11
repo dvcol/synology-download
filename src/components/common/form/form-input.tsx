@@ -1,12 +1,12 @@
-import { Visibility, VisibilityOff } from '@mui/icons-material';
-
-import { IconButton, InputAdornment, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 
 import React, { useState } from 'react';
 
 import { Controller } from 'react-hook-form';
 
-import { useI18n } from '@dvcol/web-extension-utils';
+import { FormInputFile } from './form-input-file';
+
+import { FormInputPassword } from './form-input-password';
 
 import type { SvgIconProps, TextFieldProps } from '@mui/material';
 import type { ControllerProps } from 'react-hook-form';
@@ -23,8 +23,8 @@ export const FormInput = <TFieldValues extends FieldValues = FieldValues, TName 
   textFieldProps?: TextFieldProps;
   iconProps?: SvgIconProps;
 }>) => {
-  const i18n = useI18n('common', 'form', 'input');
-  const [showPassword, setShowPassword] = useState<boolean>();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+
   const render: ControllerProps['render'] = ({ field, fieldState: { invalid, error } }) => {
     const _textFieldProps: TextFieldProps = {
       id: `${controllerProps.name}-input`,
@@ -42,23 +42,22 @@ export const FormInput = <TFieldValues extends FieldValues = FieldValues, TName 
     if (textFieldProps?.type === 'password') {
       _textFieldProps.type = showPassword ? 'text' : 'password';
       _textFieldProps.InputProps = {
-        endAdornment: (
-          <InputAdornment position="end">
-            <IconButton
-              aria-label={i18n('toggle_password_visibility')}
-              onClick={() => setShowPassword(!showPassword)}
-              edge="end"
-              sx={{ fontSize: '1.25em' }}
-            >
-              {showPassword ? <VisibilityOff {...iconProps} /> : <Visibility {...iconProps} />}
-            </IconButton>
-          </InputAdornment>
-        ),
+        endAdornment: <FormInputPassword iconProps={iconProps} onToggle={show => setShowPassword(show)} />,
+        ...(_textFieldProps.InputProps ?? {}),
+      };
+    } else if (textFieldProps?.type === 'file') {
+      const UploadButton = <FormInputFile onChange={_textFieldProps.onChange} />;
+      _textFieldProps.type = 'text';
+      _textFieldProps.InputProps = {
+        startAdornment: UploadButton,
+        readOnly: true,
+        ...(_textFieldProps.InputProps ?? {}),
       };
     }
+
     return (
       <TextField {...field} {..._textFieldProps}>
-        {children ?? ''}
+        {children}
       </TextField>
     );
   };
