@@ -17,7 +17,7 @@ export class SynologyError extends Error {
   errors?: any[];
 
   constructor(api: Api, { code, errors }: HttpError) {
-    super(ErrorMap[api][code] ?? code);
+    super(ErrorMap?.[api]?.[code] ?? code);
 
     this.code = code;
     this.api = api;

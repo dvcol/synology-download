@@ -21,6 +21,17 @@ import { stringifyKeys } from '@src/utils';
 
 import type { Observable } from 'rxjs';
 
+type DoOptions = {
+  method: HttpMethod;
+  params: HttpParameters;
+  version: string;
+  api?: Api;
+  endpoint?: Endpoint;
+  base?: string;
+  formData?: boolean;
+  doNotProxy?: boolean;
+};
+
 export class SynologyDownload2Service extends SynologyService {
   /**
    * Synology uses comma in a non standardized way to delimit array payload in the API.
@@ -41,105 +52,103 @@ export class SynologyDownload2Service extends SynologyService {
     super(isProxy, name);
   }
 
-  _do<T>({
-    method,
-    params,
-    version,
-    api,
-    endpoint,
-  }: {
-    method: HttpMethod;
-    params: HttpParameters;
-    version: string;
-    api?: Api;
-    endpoint?: Endpoint;
-  }): Observable<T> {
-    return super.do<T>(method, params, version ?? '1', api ?? DownloadStation2API.Task, endpoint ?? Endpoint.Entry);
+  _do<T>({ method, params, version, api, endpoint, base, formData, doNotProxy }: DoOptions): Observable<T> {
+    return super.do<T>(method, params, version ?? '1', api ?? DownloadStation2API.Task, endpoint ?? Endpoint.Entry, base, formData, doNotProxy);
   }
 
-  createTask(request: TaskCreateRequest, torrent?: File): Observable<TaskCreateResponse> {
-    const { url, file, ..._request } = request;
-    const params: HttpParameters = { method: TaskCreateMethod.create, ...stringifyKeys(_request) };
-    if (url) params.url = `[${url?.map(_url => `"${SynologyDownload2Service._sanitizeUrl(_url).toString()}"`)?.join(',')}]`;
-    if (file) params.file = `[${file?.map(_file => `"${_file}"`)?.join(',')}]`;
-    if (torrent) params.torrent = torrent;
-    return this._do<TaskCreateResponse>({
-      method: HttpMethod.POST,
-      params,
-      version: '2',
+  createTask(request: TaskCreateRequest): Observable<TaskCreateResponse> {
+    const { url, file, torrent, ..._request } = request;
+    const params: HttpParameters = { method: TaskCreateMethod.create, ...stringifyKeys(_request, true) };
+    if (url?.length) params.url = JSON.stringify(url?.map(_url => SynologyDownload2Service._sanitizeUrl(_url).toString()));
+    if (torrent) {
+      params.torrent = torrent;
+      params.mtime = Date.now()?.toString();
+      params.size = torrent.size?.toString();
+      params.file = JSON.stringify(['torrent']);
+    }
+    const _params: DoOptions = {
       api: DownloadStation2API.Task,
-    });
+      method: HttpMethod.POST,
+      version: '2',
+      endpoint: Endpoint.Entry,
+      params,
+    };
+    if (params.torrent) {
+      _params.doNotProxy = true;
+      _params.formData = true;
+    }
+    return this._do<TaskCreateResponse>(_params);
   }
 
   getTaskList(list_id: string): Observable<TaskListResponse> {
     return this._do<TaskListResponse>({
+      api: DownloadStation2API.Task,
       method: HttpMethod.POST,
+      version: '2',
       params: {
         method: TaskCreateMethod.get,
         list_id,
       },
-      version: '2',
-      api: DownloadStation2API.Task,
     });
   }
 
   getTaskListDownload(request: TaskListDownloadRequest): Observable<TaskListDownloadResponse> {
     return this._do<TaskListDownloadResponse>({
+      api: DownloadStation2API.TaskListPolling,
       method: HttpMethod.POST,
+      version: '2',
       params: {
         method: TaskCreateMethod.download,
         ...stringifyKeys(request),
       },
-      version: '2',
-      api: DownloadStation2API.TaskListPolling,
     });
   }
 
   stopTask(id: string | string[]): Observable<TaskCompleteResponse> {
     return this._do<TaskCompleteResponse>({
+      api: DownloadStation2API.TaskComplete,
       method: HttpMethod.POST,
+      version: '1',
       params: {
         method: TaskCompleteMethod.start,
         id: Array.isArray(id) ? id : [id],
       },
-      version: '1',
-      api: DownloadStation2API.TaskComplete,
     });
   }
 
   getTaskEdit(task_id: string): Observable<TaskEditResponse> {
     return this._do<TaskEditResponse>({
+      api: DownloadStation2API.TaskBt,
       method: HttpMethod.POST,
+      version: '2',
       params: {
         method: TaskBtMethod.get,
         task_id,
       },
-      version: '2',
-      api: DownloadStation2API.TaskBt,
     });
   }
 
   editTask(request: TaskEditRequest): Observable<CommonResponse[]> {
     return this._do<CommonResponse[]>({
+      api: DownloadStation2API.TaskBt,
       method: HttpMethod.POST,
+      version: '2',
       params: {
         method: TaskBtMethod.set,
         ...stringifyKeys(request),
       },
-      version: '2',
-      api: DownloadStation2API.TaskBt,
     });
   }
 
   editFile(request: TaskFileEditRequest): Observable<CommonResponse[]> {
     return this._do<CommonResponse[]>({
+      api: DownloadStation2API.TaskBtFile,
       method: HttpMethod.POST,
+      version: '2',
       params: {
         method: TaskBtFileMethod.set,
         ...stringifyKeys(request),
       },
-      version: '2',
-      api: DownloadStation2API.TaskBtFile,
     });
   }
 }

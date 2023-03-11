@@ -438,9 +438,9 @@ export class QueryService {
 
   static createTask(request: Partial<TaskCreateRequest>, options: { source?: string; torrent?: File } = {}): Observable<TaskCreateResponse> {
     const { source, torrent } = options;
-    const _request: TaskCreateRequest = { type: TaskCreateType.url, create_list: false, ...request, destination: request?.destination ?? '""' };
+    const _request: TaskCreateRequest = { type: TaskCreateType.url, create_list: false, ...request, destination: request?.destination ?? '' };
 
-    return this.download2Client.createTask(_request, torrent).pipe(
+    return this.download2Client.createTask(_request).pipe(
       this.loadingOperator(),
       this.handleErrors,
       tap({

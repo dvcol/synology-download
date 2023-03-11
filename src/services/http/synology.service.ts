@@ -1,6 +1,6 @@
 import { catchError, map, of } from 'rxjs';
 
-import type { BaseHttpRequest, HttpParameters } from '@dvcol/web-extension-utils';
+import type { BaseHttpRequest, HttpHeaders, HttpParameters } from '@dvcol/web-extension-utils';
 import { HttpMethod } from '@dvcol/web-extension-utils';
 
 import type { Api, Endpoint, HttpResponse, SynologyQueryArgs, SynologyQueryPayload } from '@src/models';
@@ -46,7 +46,7 @@ export class SynologyService extends BaseHttpService {
   }
 
   query<T>(
-    method: HttpMethod,
+    httpMethod: HttpMethod,
     params: HttpParameters,
     version: string,
     api: Api,
@@ -57,20 +57,28 @@ export class SynologyService extends BaseHttpService {
     let url: BaseHttpRequest['url'] = endpoint;
     if (base) url = { base: base + this.prefix, path: endpoint };
     if (this.sid && params?.method !== AuthMethod.login) params._sid = this.sid;
-    switch (method) {
+    const { method, ..._params } = params;
+    const body: string | FormData = formData
+      ? buildFormData({ api, method, version, ..._params })
+      : stringifyParams({ api, method, version, ..._params } as Record<string, string | string[]>);
+
+    const headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*', credentials: 'omit' };
+    if (!formData) headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
+
+    switch (httpMethod) {
       case HttpMethod.POST:
       case HttpMethod.post:
-        return this.post<HttpResponse<T>>(url, formData ? buildFormData({ api, version, ...params }) : stringifyParams({ api, version, ...params }));
+        return this.post<HttpResponse<T>>(url, body, undefined, headers);
       case HttpMethod.PUT:
       case HttpMethod.put:
-        return this.put<HttpResponse<T>>(url, formData ? buildFormData({ api, version, ...params }) : stringifyParams({ api, version, ...params }));
+        return this.put<HttpResponse<T>>(url, body, undefined, headers);
       case HttpMethod.DELETE:
       case HttpMethod.delete:
-        return this.delete<HttpResponse<T>>(url, { api, version, ...params });
+        return this.delete<HttpResponse<T>>(url, { api, method, version, ..._params }, undefined, headers);
       case HttpMethod.GET:
       case HttpMethod.get:
       default:
-        return this.get<HttpResponse<T>>(url, { api, version, ...params });
+        return this.get<HttpResponse<T>>(url, { api, method, version, ..._params }, undefined, headers);
     }
   }
 

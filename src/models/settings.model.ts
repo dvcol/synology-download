@@ -264,9 +264,11 @@ export interface Downloads {
   intercept: DownloadsIntercept;
 }
 
+export const torrentExtension: DownloadExtension = { ext: '.torrent', mime: 'application/x-bittorrent' };
+
 export const defaultExtensions: DownloadExtension[] = [
   // torrent
-  { ext: '.torrent', mime: 'application/x-bittorrent' },
+  torrentExtension,
   // audio
   { ext: '.flac', mime: 'audio/flac' },
   { ext: '.wav', mime: 'audio/wav' },

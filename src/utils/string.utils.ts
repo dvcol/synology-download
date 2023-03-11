@@ -7,8 +7,7 @@ export const encodeParam = (param: string) => encodeURIComponent(param);
 export const buildFormData = (params: HttpParameters): FormData =>
   Object.keys(params).reduce((_form, key) => {
     let value = params[key];
-    if (typeof value === 'string') value = encodeParam(value);
-    else if (Array.isArray(value)) value = value?.map(encodeParam).join(',');
+    if (Array.isArray(value)) value = value?.join(',');
     _form.append(key, value);
     return _form;
   }, new FormData());
@@ -26,10 +25,10 @@ export const parseMagnetLink = (uri: string): string => {
   return dn ?? uri;
 };
 
-export const stringifyKeys = <T extends Record<string, any>, R = Record<string, any>>(record: T): R =>
+export const stringifyKeys = <T extends Record<string, any>>(record: T, stringify = false): Record<string, string> =>
   Object.entries(record).reduce((acc, [key, value]) => {
     if (value === undefined) return acc;
     if (value === null) return acc;
-    acc[key as keyof R] = value?.toString();
+    acc[key] = stringify ? JSON.stringify(value) : value?.toString();
     return acc;
-  }, {} as R);
+  }, {} as any);

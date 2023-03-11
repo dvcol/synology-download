@@ -8,6 +8,7 @@ import { FormInputFile } from './form-input-file';
 
 import { FormInputPassword } from './form-input-password';
 
+import type { FormInputFileProps } from './form-input-file';
 import type { SvgIconProps, TextFieldProps } from '@mui/material';
 import type { ControllerProps } from 'react-hook-form';
 
@@ -23,7 +24,7 @@ export const FormInput = <TFieldValues extends FieldValues = FieldValues, TName 
   controllerProps: Omit<ControllerProps<TFieldValues, TName>, 'render'>;
   textFieldProps?: TextFieldProps;
   iconProps?: SvgIconProps;
-  inputFileProps?: { split: boolean };
+  inputFileProps?: Omit<FormInputFileProps, 'onChange'>;
 }>) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -49,7 +50,7 @@ export const FormInput = <TFieldValues extends FieldValues = FieldValues, TName 
       };
     } else if (textFieldProps?.type === 'file') {
       _textFieldProps.type = 'text';
-      const UploadButton = <FormInputFile onChange={_textFieldProps.onChange} />;
+      const UploadButton = <FormInputFile split={inputFileProps?.split} accept={inputFileProps?.accept} onChange={_textFieldProps.onChange} />;
       if (inputFileProps?.split) {
         _textFieldProps.InputProps = {
           readOnly: true,
@@ -57,11 +58,13 @@ export const FormInput = <TFieldValues extends FieldValues = FieldValues, TName 
         };
         return (
           <Grid container direction="column">
-            <Grid container direction="row" wrap="nowrap" sx={{ pb: '0.5em', alignItems: 'center' }}>
-              <Grid xs={4}>
-                <FormInputFile split={true} onChange={_textFieldProps.onChange} />
+            <Grid container direction="row" wrap="nowrap" sx={{ mb: '0.75em', alignItems: 'center' }}>
+              <Grid item xs={4}>
+                {UploadButton}
               </Grid>
-              <Grid xs={8}>{children}</Grid>
+              <Grid item xs={8}>
+                {children}
+              </Grid>
             </Grid>
             <Grid container direction="row" wrap="nowrap">
               <TextField {...field} {..._textFieldProps} />

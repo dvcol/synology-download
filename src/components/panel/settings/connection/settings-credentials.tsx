@@ -12,14 +12,13 @@ import { finalize, lastValueFrom } from 'rxjs';
 import { useI18n } from '@dvcol/web-extension-utils';
 
 import { ButtonWithConfirm, FormCheckbox, FormInput, FormSwitch } from '@src/components';
-import type { Connection, Credentials, InfoResponse, LoginResponse } from '@src/models';
+import type { Connection, Credentials, FormRules, InfoResponse, LoginResponse } from '@src/models';
 import { AppLinks, ColorLevel, ColorLevelMap, CommonAPI, ConnectionHeader, ConnectionType, defaultConnection, Protocol } from '@src/models';
 import { LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { syncConnection } from '@src/store/actions';
 import { getConnection, getLogged, urlReducer } from '@src/store/selectors';
 import { before, createTab, useDebounceObservable } from '@src/utils';
 
-import type { RegisterOptions } from 'react-hook-form';
 import type { Observable } from 'rxjs';
 
 export const SettingsCredentials = () => {
@@ -58,7 +57,7 @@ export const SettingsCredentials = () => {
   const port = watch('port');
   const protocol = watch('protocol');
 
-  const rules: Partial<Record<keyof Omit<Connection, 'logged' | 'rememberMe'>, RegisterOptions>> = {
+  const rules: FormRules<Connection> = {
     type: { required: { value: true, message: i18n('required', 'common', 'error') } },
     protocol: { required: { value: true, message: i18n('required', 'common', 'error') } },
     path: { required: { value: true, message: i18n('required', 'common', 'error') } },
