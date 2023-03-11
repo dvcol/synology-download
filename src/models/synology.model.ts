@@ -1,5 +1,7 @@
 import type { HttpMethod, HttpParameters } from '@dvcol/web-extension-utils';
 
+import type { TaskType } from '@src/models/task.model';
+
 import type { ApiInfo } from './api-info.model';
 
 export enum SessionName {
@@ -37,6 +39,8 @@ export enum DownloadStationAPI {
 
 export enum DownloadStation2API {
   Task = 'SYNO.DownloadStation2.Task',
+  TaskList = 'SYNO.DownloadStation2.Task.List',
+  TaskListPolling = 'SYNO.DownloadStation2.Task.List.Polling',
   TaskBt = 'SYNO.DownloadStation2.Task.BT',
   TaskBtFile = 'SYNO.DownloadStation2.Task.BT.File',
   TaskComplete = 'SYNO.DownloadStation2.Task.Complete',
@@ -85,6 +89,12 @@ export enum TaskMethod {
   getInfo = 'getinfo',
   getConfig = 'getconfig',
   setConfig = 'setserverconfig',
+}
+
+export enum TaskCreateMethod {
+  get = 'get',
+  create = 'create',
+  download = 'download',
 }
 
 export enum TaskCompleteMethod {
@@ -277,7 +287,57 @@ export interface CommonResponse {
   id: string;
 }
 
-export type SynologyQueryArgs = [method: HttpMethod, params: HttpParameters, version: string, api: Api, endpoint: Endpoint];
+export enum TaskCreateType {
+  file = 'file',
+  url = 'url',
+}
+
+export interface TaskCreateRequest {
+  type: TaskCreateType;
+  /** to prompt task creation or not */
+  create_list: boolean;
+  destination?: string;
+  username?: string;
+  password?: string;
+  unzip?: string;
+  url?: string[];
+  file?: string[];
+  /** epoch timestamp */
+  mtime?: number;
+  size?: number;
+}
+
+export interface TaskCreateResponse {
+  list_id: string[];
+  task_id: string[];
+}
+
+export interface TaskListFile {
+  index: number;
+  name: string;
+  size: number;
+}
+
+export interface TaskListResponse {
+  size: number;
+  title: string;
+  type: TaskType;
+  filed: TaskListFile[];
+}
+
+export interface TaskListDownloadRequest {
+  list_id: string;
+  selected: number[];
+  destination?: string;
+  create_subfolder?: boolean;
+}
+
+export interface TaskListDownloadResponse {
+  /** id fo the task create process (e.g. "dev/SYNODLTaskListDownload640BB11B252329B4") */
+  task_id: string;
+}
+
+export type SynologyQueryArgs = [method: HttpMethod, params: HttpParameters, version: string, api: Api, endpoint: Endpoint, base?: string];
 
 export interface SynologyQueryPayload {
   id: string;
