@@ -337,7 +337,15 @@ export interface TaskListDownloadResponse {
   task_id: string;
 }
 
-export type SynologyQueryArgs = [method: HttpMethod, params: HttpParameters, version: string, api: Api, endpoint: Endpoint, base?: string];
+export type SynologyQueryArgs = [
+  method: HttpMethod,
+  params: HttpParameters,
+  version: string,
+  api: Api,
+  endpoint: Endpoint,
+  base?: string,
+  formData?: boolean,
+];
 
 export interface SynologyQueryPayload {
   id: string;
