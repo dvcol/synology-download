@@ -2,7 +2,6 @@ import PowerOffIcon from '@mui/icons-material/PowerOff';
 import { ListItemText, Menu, MenuItem } from '@mui/material';
 
 import React, { useEffect } from 'react';
-
 import { useSelector } from 'react-redux';
 
 import { Subscription, withLatestFrom } from 'rxjs';
@@ -47,12 +46,14 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
 
   const isLogged = useSelector<StoreState, boolean>(getLogged);
 
+  let callback: TaskDialogIntercept['callback']; // fallback for when we respond before react setState
   const [intercept, setIntercept] = React.useState<TaskDialogIntercept>();
   const _menus = menus?.filter(m => !!intercept || ![QuickMenuType.Download, QuickMenuType.RecentDownload].includes(m.type));
 
   const onIntercept = (response: ChromeResponse<InterceptResponse>) => {
-    if (intercept?.callback) {
-      intercept.callback(response);
+    const _callback = intercept?.callback ?? callback;
+    if (_callback) {
+      _callback(response);
       setIntercept(undefined);
     }
   };
@@ -62,7 +63,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
       if (modal) {
         taskDialog$.next({ open: true, form, intercept });
       } else {
-        QueryService.createTask(form?.uri, form?.source, form?.destination?.path).subscribe({
+        QueryService.createTask({ url: [form?.uri], destination: form?.destination?.path }, { source: form?.source }).subscribe({
           error: error => onIntercept({ success: false, error }),
           next: () => onIntercept({ success: true, payload: { aborted: false, message: 'Task created successfully' } }),
         });
@@ -132,6 +133,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
           const resolvedAnchor = event ? null : anchor ?? null;
 
           if (message?.payload) {
+            callback = sendResponse;
             setIntercept({ callback: sendResponse });
             onEvent(message?.payload, resolvedAnchor, resolvedPosition);
           } else {
