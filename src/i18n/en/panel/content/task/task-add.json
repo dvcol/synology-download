@@ -2,6 +2,9 @@
   "panel__content__task__add__url_required": {
     "message": "Url is required"
   },
+  "panel__content__task__add__file_required": {
+    "message": "File is required"
+  },
 
   "panel__content__task__add__title": {
     "message": "Add custom download task"
@@ -21,11 +24,11 @@
     "message": "Each new lines is considered an individual url and will create a task."
   },
 
-  "panel__content__task__add__file_label": {
-    "message": "File to upload"
+  "panel__content__task__add__torrent_file_label": {
+    "message": "Torrent file to upload"
   },
-  "panel__content__task__add__file_placeholder": {
-    "message": "Path to the file to upload"
+  "panel__content__task__add__torrent_file_placeholder": {
+    "message": "Path to the torrent file to upload"
   },
   "panel__content__task__add__create_list_label": {
     "message": "Choose files to download"

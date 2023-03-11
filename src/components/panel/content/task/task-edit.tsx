@@ -25,7 +25,7 @@ import { finalize, lastValueFrom } from 'rxjs';
 import { useI18n } from '@dvcol/web-extension-utils';
 
 import { FormExplorer, FormInput } from '@src/components';
-import type { Task, TaskEditRequest } from '@src/models';
+import type { Task, TaskEditRequest, FormRules } from '@src/models';
 import { TaskPriority, TaskStatus, TaskType } from '@src/models';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
 
@@ -34,7 +34,6 @@ import { before } from '@src/utils';
 import { TaskEditFiles } from './task-edit-files';
 
 import type { SyntheticEvent } from 'react';
-import type { UseControllerProps } from 'react-hook-form/dist/types/controller';
 import type { Subscription } from 'rxjs';
 
 type TaskEditForm = TaskEditRequest;
@@ -75,7 +74,7 @@ export const TaskEdit = ({
     },
   });
 
-  const rules: Partial<Record<keyof TaskEditForm, UseControllerProps['rules']>> = {
+  const rules: FormRules<TaskEditForm> = {
     max_peers: {
       min: { value: 0, message: i18n({ key: 'min', substitutions: ['0'] }, 'common', 'error') },
     },

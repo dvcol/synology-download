@@ -36,6 +36,7 @@ export enum TaskType {
   bt = 'bt',
   nzb = 'nzb',
   http = 'http',
+  https = 'https',
   ftp = 'ftp',
   eMule = 'eMule',
 }
@@ -179,8 +180,8 @@ export interface TaskForm {
   destination?: { custom?: boolean; path?: string };
   username?: string;
   password?: string;
-  unzip?: string; // unzip password
-  file?: Blob;
+  extract_password?: string; // unzip password
+  torrent?: string;
   create_list?: boolean;
 }
 

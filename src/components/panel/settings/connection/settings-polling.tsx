@@ -10,12 +10,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useI18n } from '@dvcol/web-extension-utils';
 
 import { ButtonWithConfirm, FormInput, FormSwitch } from '@src/components';
-import type { Polling } from '@src/models';
+import type { FormRules, Polling } from '@src/models';
 import { ConnectionHeader, defaultPolling } from '@src/models';
 import { syncPolling } from '@src/store/actions';
 import { getPolling } from '@src/store/selectors';
-
-import type { RegisterOptions } from 'react-hook-form';
 
 export const SettingsPolling = () => {
   const i18n = useI18n('panel', 'settings', 'polling');
@@ -36,7 +34,7 @@ export const SettingsPolling = () => {
     },
   });
 
-  const rules: Record<string, RegisterOptions> = {
+  const rules: FormRules<{ interval: number }> = {
     interval: {
       min: { value: 500, message: i18n({ key: 'min', substitutions: ['500'] }, 'common', 'error') },
       max: { value: 86400, message: i18n({ key: 'max', substitutions: ['86400'] }, 'common', 'error') },

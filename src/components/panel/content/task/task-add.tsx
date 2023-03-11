@@ -9,12 +9,12 @@ import { lastValueFrom, tap } from 'rxjs';
 import { useI18n } from '@dvcol/web-extension-utils';
 
 import { FormCheckbox, FormExplorer, FormInput, FormSwitch } from '@src/components';
-import type { TaskForm } from '@src/models';
-import { TaskCreateType } from '@src/models';
+import type { FormRules, TaskCreateRequest, TaskForm } from '@src/models';
+import { TaskCreateType, torrentExtension } from '@src/models';
 import { QueryService } from '@src/services';
 
 import type { CardProps } from '@mui/material';
-import type { FC } from 'react';
+import type { ChangeEvent, FC } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 
 const UrlCounts: FC<{ urls?: string[] }> = ({ urls }) => {
@@ -54,6 +54,7 @@ export const TaskAdd: FC<{
   const i18n = useI18n('panel', 'content', 'task', 'add');
   const [path, setPath] = React.useState<string>(form?.destination?.path ?? '');
   const [type, setType] = useState(TaskCreateType.url);
+  const [file, setFile] = useState<File>();
 
   const isFile = allowFile && type === TaskCreateType.file;
 
@@ -71,11 +72,21 @@ export const TaskAdd: FC<{
       destination: { custom: form?.destination?.custom ?? false, path: path ?? '' },
       username: form?.username ?? '',
       password: form?.password ?? '',
-      unzip: form?.unzip ?? '',
-      file: form?.file ?? undefined,
+      extract_password: form?.extract_password ?? '',
+      torrent: form?.torrent ?? '',
       create_list: form?.create_list ?? false,
     },
   });
+
+  const rules: FormRules<TaskForm> = {
+    uri: {
+      required: { value: type === TaskCreateType.url, message: i18n('required', 'common', 'error') },
+      validate: (_uri?: string) => !!_uri?.trim()?.length || i18n('required', 'common', 'error'),
+    },
+    torrent: {
+      required: { value: type === TaskCreateType.file, message: i18n('required', 'common', 'error') },
+    },
+  };
 
   useEffect(() => {
     if (!path?.length && QueryService.isLoggedIn) {
@@ -98,20 +109,27 @@ export const TaskAdd: FC<{
 
   const [urls, setUrls] = useState<string[] | undefined>(parseUrls(getValues().uri));
 
-  const createTask = (url: string[], data: TaskForm) => {
-    const { source, destination, username, password, unzip } = data;
-    return QueryService.createTask(
-      {
-        url,
-        destination: destination?.custom ? destination?.path : undefined,
-        username: username?.length ? username : undefined,
-        password: password?.length ? password : undefined,
-        unzip: unzip?.length ? unzip : undefined,
-      },
-      {
-        source,
-      },
-    ).pipe(
+  const createTask = (data: TaskForm) => {
+    const { source, destination, username, password, extract_password } = data;
+    const _request: Partial<TaskCreateRequest> = {
+      type,
+      destination: destination?.custom ? destination?.path : undefined,
+      username: username?.length ? username : undefined,
+      password: password?.length ? password : undefined,
+      extract_password: extract_password?.length ? extract_password : undefined,
+    };
+    if (type === TaskCreateType.url) {
+      _request.url = urls;
+      _request.torrent = undefined;
+    } else if (type === TaskCreateType.file) {
+      _request.url = undefined;
+      _request.torrent = file;
+    }
+
+    return QueryService.createTask(_request, {
+      source,
+      torrent: file,
+    }).pipe(
       tap(() => {
         reset(data);
         onFormSubmit?.(data);
@@ -120,8 +138,8 @@ export const TaskAdd: FC<{
   };
 
   const onSubmit: SubmitHandler<TaskForm> = data => {
-    if (urls?.length) return lastValueFrom(createTask(urls, data));
-    return Promise.reject(i18n('url_required'));
+    if (data?.torrent?.length || urls?.length) return lastValueFrom(createTask(data));
+    return Promise.reject(i18n(`${isFile ? 'file' : 'url'}_required`));
   };
 
   const onSubmitColor = () => {
@@ -182,16 +200,16 @@ export const TaskAdd: FC<{
               {isFile ? (
                 <>
                   <FormInput
-                    controllerProps={{ name: 'file', control }}
+                    controllerProps={{ name: 'torrent', control, rules: rules.torrent }}
                     textFieldProps={{
                       type: 'file',
-                      label: i18n('file_label'),
-                      placeholder: i18n('file_placeholder'),
+                      label: i18n('torrent_file_label'),
+                      placeholder: i18n('torrent_file_placeholder'),
                       inputProps: { style: { fontSize: '0.875em' } },
                       disabled: !isFile,
-                      onChange: $event => console.info('file event', $event),
+                      onChange: ($event: ChangeEvent<HTMLInputElement>) => setFile($event.target?.files?.[0]),
                     }}
-                    inputFileProps={{ split: true }}
+                    inputFileProps={{ split: true, accept: `${torrentExtension.mime},.torrent` }}
                   >
                     <FormCheckbox
                       controllerProps={{ name: 'create_list', control }}
@@ -204,10 +222,7 @@ export const TaskAdd: FC<{
                   controllerProps={{
                     name: 'uri',
                     control,
-                    rules: {
-                      required: { value: true, message: i18n('required', 'common', 'error') },
-                      validate: (_uri?: string) => !!_uri?.trim()?.length || i18n('required', 'common', 'error'),
-                    },
+                    rules: rules.uri,
                   }}
                   textFieldProps={{
                     label: i18n('url_label'),
@@ -215,6 +230,7 @@ export const TaskAdd: FC<{
                     rows: 4,
                     onChange: e => setUrls(parseUrls(e.target.value)),
                     inputProps: { style: { fontSize: '0.875em', wordBreak: 'break-all' } },
+                    disabled: isFile,
                   }}
                 />
               )}
@@ -235,7 +251,7 @@ export const TaskAdd: FC<{
                 iconProps={{ sx: { fontSize: '1em' } }}
               />
               <FormInput
-                controllerProps={{ name: 'unzip', control }}
+                controllerProps={{ name: 'extract_password', control }}
                 textFieldProps={{
                   type: 'password',
                   label: i18n('zip_password_label'),

@@ -143,6 +143,7 @@ export const CommonErrorCode = {
   117: 'The network connection is unstable or the system is busy.',
   118: 'The network connection is unstable or the system is busy.',
   119: 'Invalid session.',
+  120: 'Invalid argument type.',
   150: 'Request source IP does not match the login IP.',
 };
 
@@ -204,6 +205,7 @@ export const ErrorMap: Record<string, Record<number, string>> = {
   [CommonAPI.Info]: CommonErrorCode,
   [CommonAPI.Auth]: { ...CommonErrorCode, ...AuthErrorCode },
   ...Object.values(DownloadStationAPI).reduce((codes, v) => ({ ...codes, [v]: { ...CommonErrorCode, ...TaskErrorCode } }), {}),
+  ...Object.values(DownloadStation2API).reduce((codes, v) => ({ ...codes, [v]: { ...CommonErrorCode, ...TaskErrorCode } }), {}),
   ...Object.values(FileStationAPI).reduce((codes, v) => ({ ...codes, [v]: { ...CommonErrorCode, ...FileErrorCode } }), {}),
 };
 
@@ -299,15 +301,16 @@ export interface TaskCreateRequest {
   destination: string;
   username?: string;
   password?: string;
-  unzip?: string;
+  extract_password?: string;
   url?: string[];
 
-  /** to prompt for file selection after creation or not */
-  create_list: boolean;
   file?: string[];
   /** epoch timestamp */
   mtime?: number;
   size?: number;
+  torrent?: Blob;
+  /** to prompt for file selection after creation or not */
+  create_list: boolean;
 }
 
 export interface TaskCreateResponse {
