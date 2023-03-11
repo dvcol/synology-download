@@ -189,12 +189,14 @@ export class QueryService {
     this.store.dispatch(setLogged(false));
 
     if ([ServiceInstance.Popup, ServiceInstance.Option].includes(this.source)) {
+      LoggerService.error('Fetch error caught, attempting auto-login locally in ', this.source);
       this.autologinQueue.next({ notify: false, logged: false });
       return new FetchError(err, i18n('fetch_failed_auto_login', 'common', 'error'));
     }
 
     // if  popup or option open
-    if (getPopup(this.store.getState()) && getOption(this.store.getState())) {
+    if (getPopup(this.store.getState()) || getOption(this.store.getState())) {
+      LoggerService.error('Fetch error caught, sending auto-login to popup/option');
       sendMessage({ type: ChromeMessageType.autoLogin }).subscribe({
         error: e => {
           LoggerService.error('Auto-login failed to send.', e);
@@ -205,6 +207,7 @@ export class QueryService {
     }
 
     if (ServiceInstance.Content !== this.source) {
+      LoggerService.error('Fetch error caught, attempting auto-login locally in ', this.source);
       this.autologinQueue.next({ notify: false, logged: false });
       return new FetchError(err, i18n('fetch_failed_auto_login', 'common', 'error'));
     }
