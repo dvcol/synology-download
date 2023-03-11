@@ -28,6 +28,10 @@ export enum CommonAPI {
   Auth = 'SYNO.API.Auth',
 }
 
+export enum EntryAPI {
+  request = 'SYNO.Entry.Request',
+}
+
 export enum DownloadStationAPI {
   Schedule = 'SYNO.DownloadStation.Schedule',
   Task = 'SYNO.DownloadStation.Task',
@@ -68,10 +72,14 @@ export enum FileStationAPI {
   BackgroundTask = 'SYNO.FileStation.BackgroundTask',
 }
 
-export type Api = CommonAPI | DownloadStationAPI | DownloadStation2API | FileStationAPI;
+export type Api = CommonAPI | EntryAPI | DownloadStationAPI | DownloadStation2API | FileStationAPI;
 
 export enum InfoMethod {
   query = 'query',
+}
+
+export enum EntryMethod {
+  request = 'request',
 }
 
 export enum AuthMethod {
@@ -94,6 +102,7 @@ export enum TaskMethod {
 export enum TaskCreateMethod {
   get = 'get',
   create = 'create',
+  delete = 'delete',
   download = 'download',
 }
 
@@ -120,7 +129,16 @@ export enum FileMethod {
   rename = 'rename',
 }
 
-export type SynologyMethod = InfoMethod | AuthMethod | TaskMethod | FileMethod;
+export type SynologyMethod =
+  | InfoMethod
+  | EntryMethod
+  | AuthMethod
+  | TaskMethod
+  | TaskCreateMethod
+  | TaskCompleteMethod
+  | TaskBtMethod
+  | TaskBtFileMethod
+  | FileMethod;
 
 export const CommonErrorCode = {
   100: 'Unknown error',
@@ -328,7 +346,7 @@ export interface TaskListResponse {
   size: number;
   title: string;
   type: TaskType;
-  filed: TaskListFile[];
+  files: TaskListFile[];
 }
 
 export interface TaskListDownloadRequest {
@@ -341,6 +359,31 @@ export interface TaskListDownloadRequest {
 export interface TaskListDownloadResponse {
   /** id fo the task create process (e.g. "dev/SYNODLTaskListDownload640BB11B252329B4") */
   task_id: string;
+}
+
+export interface TaskListDeleteRequestCompound {
+  api: Api;
+  method: SynologyMethod;
+  version: string;
+  list_id: string;
+}
+
+export interface TaskListDeleteRequest {
+  stop_when_error: boolean;
+  mode: 'sequential';
+  compound: TaskListDeleteRequestCompound[];
+}
+
+export interface TaskListDeleteResponseResult {
+  api: Api;
+  method: SynologyMethod;
+  version: string;
+  success: true;
+}
+
+export interface TaskListDeleteResponse {
+  has_fail: boolean;
+  result: TaskListDeleteResponseResult[];
 }
 
 export type SynologyQueryArgs = [

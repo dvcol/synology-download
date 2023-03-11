@@ -10,11 +10,22 @@ import type {
   TaskEditRequest,
   TaskEditResponse,
   TaskFileEditRequest,
+  TaskListDeleteRequest,
+  TaskListDeleteResponse,
   TaskListDownloadRequest,
   TaskListDownloadResponse,
   TaskListResponse,
 } from '@src/models';
-import { DownloadStation2API, Endpoint, TaskBtFileMethod, TaskBtMethod, TaskCompleteMethod, TaskCreateMethod } from '@src/models';
+import {
+  DownloadStation2API,
+  Endpoint,
+  EntryAPI,
+  EntryMethod,
+  TaskBtFileMethod,
+  TaskBtMethod,
+  TaskCompleteMethod,
+  TaskCreateMethod,
+} from '@src/models';
 import { SynologyService } from '@src/services/http';
 
 import { stringifyKeys } from '@src/utils';
@@ -82,7 +93,7 @@ export class SynologyDownload2Service extends SynologyService {
 
   getTaskList(list_id: string): Observable<TaskListResponse> {
     return this._do<TaskListResponse>({
-      api: DownloadStation2API.Task,
+      api: DownloadStation2API.TaskList,
       method: HttpMethod.POST,
       version: '2',
       params: {
@@ -92,7 +103,7 @@ export class SynologyDownload2Service extends SynologyService {
     });
   }
 
-  getTaskListDownload(request: TaskListDownloadRequest): Observable<TaskListDownloadResponse> {
+  setTaskListDownload(request: TaskListDownloadRequest): Observable<TaskListDownloadResponse> {
     return this._do<TaskListDownloadResponse>({
       api: DownloadStation2API.TaskListPolling,
       method: HttpMethod.POST,
@@ -100,6 +111,31 @@ export class SynologyDownload2Service extends SynologyService {
       params: {
         method: TaskCreateMethod.download,
         ...stringifyKeys(request),
+      },
+    });
+  }
+
+  deleteTaskList(list_id: string): Observable<TaskListDeleteResponse> {
+    const request: TaskListDeleteRequest = {
+      mode: 'sequential',
+      stop_when_error: false,
+      compound: [
+        {
+          api: DownloadStation2API.TaskList,
+          method: TaskCreateMethod.delete,
+          version: '2',
+          list_id,
+        },
+      ],
+    };
+    return this._do<TaskListDeleteResponse>({
+      api: EntryAPI.request,
+      method: HttpMethod.POST,
+      version: '1',
+      params: {
+        method: EntryMethod.request,
+        ...stringifyKeys(request),
+        compound: JSON.stringify(request.compound),
       },
     });
   }

@@ -57,6 +57,15 @@
   "common__error__task_edit_set_fail": {
     "message": "Failed to edit task information."
   },
+  "common__error__task_list_fail": {
+    "message": "List task files failed"
+  },
+  "common__error__task_list_delete_fail": {
+    "message": "Delete task list failed"
+  },
+  "common__error__task_list_set_download_fail": {
+    "message": "Set download files list failed"
+  },
 
   "common__error__invalid_argument": {
     "message": "Invalid argument"

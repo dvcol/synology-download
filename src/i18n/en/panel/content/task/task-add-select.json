@@ -1,0 +1,11 @@
+{
+  "panel__content__task__add__select__select_files": {
+    "message": "Select files to download"
+  },
+  "panel__content__task__add__select__title": {
+    "message": "Title"
+  },
+  "panel__content__task__add__select__required": {
+    "message": "Please select at least one file to download."
+  }
+}

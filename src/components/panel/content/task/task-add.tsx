@@ -9,9 +9,11 @@ import { lastValueFrom, tap } from 'rxjs';
 import { useI18n } from '@dvcol/web-extension-utils';
 
 import { FormCheckbox, FormExplorer, FormInput, FormSwitch } from '@src/components';
-import type { FormRules, TaskCreateRequest, TaskForm } from '@src/models';
+import type { FormRules, TaskCreateRequest, TaskForm, TaskListDownloadRequest } from '@src/models';
 import { TaskCreateType, torrentExtension } from '@src/models';
 import { QueryService } from '@src/services';
+
+import { TaskAddSelect } from './task-add-select';
 
 import type { CardProps } from '@mui/material';
 import type { ChangeEvent, FC } from 'react';
@@ -46,8 +48,8 @@ const UrlCounts: FC<{ urls?: string[] }> = ({ urls }) => {
 export const TaskAdd: FC<{
   form?: TaskForm;
   withCancel?: boolean;
-  onFormCancel?: (form: TaskForm) => void;
-  onFormSubmit?: (form: TaskForm) => void;
+  onFormCancel?: (form: TaskForm | TaskListDownloadRequest) => void;
+  onFormSubmit?: (form: TaskForm | TaskListDownloadRequest) => void;
   cardProps?: CardProps;
   allowFile?: boolean;
 }> = ({ form, withCancel, onFormCancel, onFormSubmit, cardProps, allowFile }) => {
@@ -55,6 +57,7 @@ export const TaskAdd: FC<{
   const [path, setPath] = React.useState<string>(form?.destination?.path ?? '');
   const [type, setType] = useState(TaskCreateType.url);
   const [file, setFile] = useState<File>();
+  const [openSelect, setOpenSelect] = useState<{ open: boolean; list_id?: string }>({ open: false });
 
   const isFile = allowFile && type === TaskCreateType.file;
 
@@ -110,13 +113,14 @@ export const TaskAdd: FC<{
   const [urls, setUrls] = useState<string[] | undefined>(parseUrls(getValues().uri));
 
   const createTask = (data: TaskForm) => {
-    const { source, destination, username, password, extract_password } = data;
+    const { source, destination, username, password, extract_password, create_list } = data;
     const _request: Partial<TaskCreateRequest> = {
       type,
       destination: destination?.custom ? destination?.path : undefined,
       username: username?.length ? username : undefined,
       password: password?.length ? password : undefined,
       extract_password: extract_password?.length ? extract_password : undefined,
+      create_list,
     };
     if (type === TaskCreateType.url) {
       _request.url = urls;
@@ -130,9 +134,14 @@ export const TaskAdd: FC<{
       source,
       torrent: file,
     }).pipe(
-      tap(() => {
+      tap(response => {
+        const list_id = response?.list_id?.[0];
         reset(data);
-        onFormSubmit?.(data);
+        if (list_id) {
+          setOpenSelect({ open: true, list_id });
+        } else {
+          onFormSubmit?.(data);
+        }
       }),
     );
   };
@@ -303,6 +312,22 @@ export const TaskAdd: FC<{
           </Button>
         </Stack>
       </CardActions>
+      {isFile && openSelect.list_id && (
+        <TaskAddSelect
+          open={openSelect.open}
+          list_id={openSelect.list_id}
+          source={getValues()?.source ?? 'Custom Task'}
+          destination={getValues().destination?.path}
+          onFormCancel={data => {
+            setOpenSelect(_current => ({ ..._current, open: false }));
+            onFormSubmit?.(data);
+          }}
+          onFormSubmit={data => {
+            setOpenSelect(_current => ({ ..._current, open: false }));
+            onFormSubmit?.(data);
+          }}
+        />
+      )}
     </Card>
   );
 };
