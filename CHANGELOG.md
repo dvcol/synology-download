@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.1](https://github.com/dvcol/synology-download/compare/v2.0.0...v2.0.1) (2023-03-11)
+
+
+### Bug Fixes
+
+* **login:** add auto-login to content tab ([41f7e99](https://github.com/dvcol/synology-download/commit/41f7e99fbb05d1c797fcfbb29471303cd1c92918))
+* **login:** fix auto-login within popup ([1d4f737](https://github.com/dvcol/synology-download/commit/1d4f737caaec429050941de999f4496a7afb7e72))
+
 ## [2.0.0](https://github.com/dvcol/synology-download/compare/v1.24.1...v2.0.0) (2023-03-10)
 
 
