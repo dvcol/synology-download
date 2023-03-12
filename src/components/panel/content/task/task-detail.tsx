@@ -200,8 +200,8 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
 
   let files = null;
   if (task.additional?.file?.length) {
-    files = task.additional.file.map((f, i) => (
-      <ListItem key={`${i}-${f.filename}`}>
+    files = task.additional.file.map(f => (
+      <ListItem key={`${f.index}-${f.filename}`}>
         <ListItemText
           primary={
             <Grid container>
