@@ -1,4 +1,4 @@
-import { catchError, EMPTY, finalize, map, of, Subject, switchMap, tap, throttleTime, throwError } from 'rxjs';
+import { catchError, EMPTY, exhaustMap, finalize, map, of, Subject, switchMap, take, tap, throttleTime, throwError } from 'rxjs';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
@@ -113,6 +113,11 @@ export class QueryService {
 
     store$<string>(store, getUrl).subscribe(url => this.setBaseUrl(url));
     store$<string | undefined>(store, getSid).subscribe(sid => this.setSid(sid));
+
+    // subscribe to exhaust map for polling
+    this.listTaskHandler.subscribe();
+    this.listTaskFilesHandler.subscribe();
+    this.taskStatisticsHandler.subscribe();
 
     // TODO - remove this if HTTPS is fixed
     this.autologinQueue
@@ -235,7 +240,12 @@ export class QueryService {
   ): Observable<LoginResponse> {
     const { username, password, authVersion } = credentials;
     if (!username || !password) {
-      const error = new Error(i18n({ key: 'login_password_required', substitutions: [username ?? '', password ?? ''] }));
+      const error = new Error(
+        i18n({
+          key: 'login_password_required',
+          substitutions: [username ?? '', password ?? ''],
+        }),
+      );
       return throwError(() => error);
     }
     let request: LoginRequest = { account: username, passwd: password, baseUrl };
@@ -252,7 +262,12 @@ export class QueryService {
 
   private static twoFactorRequest(request: LoginRequest, { otp_code, enable_device_token, device_name, device_id }: Credentials): LoginRequest {
     if ((!enable_device_token && !otp_code) || (!!enable_device_token && !device_name)) {
-      throw new Error(i18n({ key: 'otp_code_device_required', substitutions: [otp_code ?? 'missing code', device_name ?? 'missing device name'] }));
+      throw new Error(
+        i18n({
+          key: 'otp_code_device_required',
+          substitutions: [otp_code ?? 'missing code', device_name ?? 'missing device name'],
+        }),
+      );
     }
     // If we enable remember device
     if (enable_device_token) {
@@ -373,7 +388,14 @@ export class QueryService {
     return this.downloadClient.getInfo().pipe(this.readyCheckOperator(), this.handleErrors);
   }
 
-  static getStatistic(): Observable<DownloadStationStatistic> {
+  private static taskStatisticsRequest: Subject<void> = new Subject();
+  private static taskStatisticsResponse: Subject<DownloadStationStatistic> = new Subject();
+  private static taskStatisticsHandler = this.taskStatisticsRequest.pipe(
+    exhaustMap(() => this.doGetStatistic()),
+    tap(response => this.taskStatisticsResponse.next(response)),
+  );
+
+  private static doGetStatistic(): Observable<DownloadStationStatistic> {
     return this.downloadClient.getStatistic().pipe(
       this.loadingOperator(),
       this.handleErrors,
@@ -383,7 +405,24 @@ export class QueryService {
     );
   }
 
+  static getStatistic(): Observable<DownloadStationStatistic> {
+    this.taskStatisticsRequest.next();
+    return this.taskStatisticsResponse.pipe(take(1));
+  }
+
+  private static listTaskRequest: Subject<void> = new Subject();
+  private static listTaskResponse: Subject<TaskList> = new Subject();
+  private static listTaskHandler = this.listTaskRequest.pipe(
+    exhaustMap(() => this.doListTasks()),
+    tap(response => this.listTaskResponse.next(response)),
+  );
+
   static listTasks(): Observable<TaskList> {
+    this.listTaskRequest.next();
+    return this.listTaskResponse.pipe(take(1));
+  }
+
+  private static doListTasks(): Observable<TaskList> {
     // snapshot task before call
     const extract: ContentStatusTypeId<Task['id']> = getTasksIdsByStatusType(this.store.getState());
     return this.downloadClient.listTasks(0, -1, [TaskListOption.detail, TaskListOption.transfer]).pipe(
@@ -410,22 +449,40 @@ export class QueryService {
     });
   }
 
+  private static listTaskFilesRequest: Subject<TaskListFilesRequest> = new Subject();
+  private static listTaskFilesResponse: Subject<TaskListFilesResponse> = new Subject();
+  private static listTaskFilesHandler = this.listTaskFilesRequest.pipe(
+    exhaustMap(request => this.doListTaskFiles(request)),
+    tap(response => this.listTaskFilesResponse.next(response)),
+  );
+
+  private static doListTaskFiles(request: TaskListFilesRequest): Observable<TaskListFilesResponse> {
+    return this.download2Client.getTaskFiles(request).pipe(
+      this.readyCheckOperator(),
+      this.handleErrors,
+      tap({
+        next: ({ items }) => {
+          this.store.dispatch(setFiles({ taskId: request.task_id, files: items }));
+        },
+        error: error =>
+          LoggerService.error(`Failed to fetch files for task '${request.task_id}'`, {
+            request,
+            error,
+          }),
+      }),
+    );
+  }
+
   static listTaskFiles(taskId: string, request?: Partial<TaskListFilesRequest>): Observable<TaskListFilesResponse> {
-    const _request: TaskListFilesRequest = {
+    this.listTaskFilesRequest.next({
       task_id: taskId,
       offset: 0,
-      limit: -1,
+      limit: 100,
       order_by: TaskListFilesOrderBy.name,
       order: Order.ASC,
       ...request,
-    };
-    return this.download2Client.getTaskFiles(_request).pipe(
-      this.loadingOperator(),
-      this.handleErrors,
-      tap(({ items }) => {
-        this.store.dispatch(setFiles({ taskId, files: items }));
-      }),
-    );
+    });
+    return this.listTaskFilesResponse.pipe(take(1));
   }
 
   private static updateStopping(tasks: Task[], stoppingIds: TaskComplete['taskId'][]) {
@@ -465,7 +522,12 @@ export class QueryService {
 
   static createTask(request: Partial<TaskCreateRequest>, options: { source?: string; torrent?: File } = {}): Observable<TaskCreateResponse> {
     const { source, torrent } = options;
-    const _request: TaskCreateRequest = { type: TaskCreateType.url, create_list: false, ...request, destination: request?.destination ?? '' };
+    const _request: TaskCreateRequest = {
+      type: TaskCreateType.url,
+      create_list: false,
+      ...request,
+      destination: request?.destination ?? '',
+    };
 
     return this.download2Client.createTask(_request).pipe(
       this.loadingOperator(),

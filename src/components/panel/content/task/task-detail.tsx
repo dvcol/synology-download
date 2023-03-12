@@ -4,22 +4,23 @@ import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReplayIcon from '@mui/icons-material/Replay';
 import StopIcon from '@mui/icons-material/Stop';
-import { Box, Button, Grid, ListItem, ListItemText, Typography } from '@mui/material';
+import { Box, Button, Grid, LinearProgress, ListItem, ListItemText, Typography } from '@mui/material';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useSelector } from 'react-redux';
+
+import { exhaustMap, finalize, map, timer } from 'rxjs';
 
 import type { i18n } from '@dvcol/web-extension-utils';
 import { useI18n } from '@dvcol/web-extension-utils';
 
 import { IconLoader, ProgressBar } from '@src/components';
 import type { RootSlice, Task, TaskFile } from '@src/models';
-import { ColorLevel, TaskStatus } from '@src/models';
+import { ColorLevel, TaskStatus, TaskType } from '@src/models';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
-
-import { getTaskFilesById } from '@src/store/selectors';
-import { computeProgress, dateToLocalString, formatBytes } from '@src/utils';
+import { getPollingInterval, getTaskFilesById } from '@src/store/selectors';
+import { before, computeProgress, dateToLocalString, formatBytes, useDebounceObservable } from '@src/utils';
 
 import ContentDetail from '../content-detail';
 
@@ -181,16 +182,44 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
   const i18n = useI18n('panel', 'content', 'task', 'detail');
   const taskFiles = useSelector<RootSlice, TaskFile[]>(getTaskFilesById(task.id));
 
+  const polling = useSelector<RootSlice, number>(getPollingInterval);
+  const [firstLoad, setFirstLoad] = useState<boolean>(task.type === TaskType.bt);
+  const [loadingBar, setLoadingBar] = useState<boolean>(task.type === TaskType.bt);
+
+  const showLoadingBar = loadingBar && (firstLoad || taskFiles?.length);
+
+  // Loading observable for debounce
+  const [, next] = useDebounceObservable<boolean>(setLoadingBar, 200);
+
   useEffect(() => {
-    const sub = QueryService.listTaskFiles(task.id).subscribe({
-      error: error => {
-        LoggerService.error(`Failed to fetch files for task '${task.id}'`, { task, error });
-        NotificationService.error({
-          title: i18n(`task_list_files_fail`, 'common', 'error'),
-          message: error?.message ?? error?.name ?? '',
-        });
-      },
-    });
+    if (task.type !== TaskType.bt) return;
+    const sub = timer(0, polling * 2)
+      .pipe(
+        exhaustMap(() =>
+          QueryService.listTaskFiles(task.id).pipe(
+            before(() => {
+              next(true);
+            }),
+            finalize(() => {
+              setLoadingBar(false);
+              next(false); // So that observable data is not stale
+            }),
+          ),
+        ),
+        map((_timer, index) => {
+          if (index === 0) setFirstLoad(false);
+          return _timer;
+        }),
+      )
+      .subscribe({
+        error: error => {
+          LoggerService.error(`Failed to fetch files for task '${task.id}'`, { task, error });
+          NotificationService.error({
+            title: i18n(`task_list_files_fail`, 'common', 'error'),
+            message: error?.message ?? error?.name ?? '',
+          });
+        },
+      });
 
     return () => {
       if (!sub?.closed) sub?.unsubscribe();
@@ -273,7 +302,25 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
           {DeleteButton}
         </>
       }
-      content={files ? <>{files}</> : undefined}
+      content={
+        <>
+          {taskFiles?.length > 100 && (
+            <Typography color={ColorLevel.warning} variant="subtitle2">
+              {i18n('files_limit')}
+            </Typography>
+          )}
+          <LinearProgress
+            variant={'indeterminate'}
+            sx={{
+              height: showLoadingBar ? '0.125em' : 0,
+              transition: 'height 0.3s linear',
+              position: 'sticky',
+              top: '0',
+            }}
+          />
+          {files ? <>{files}</> : undefined}
+        </>
+      }
     />
   );
 };

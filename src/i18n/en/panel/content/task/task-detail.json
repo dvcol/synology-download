@@ -27,5 +27,9 @@
   },
   "panel__content__task__detail__stop__confirmation_description": {
     "message": "This action will permanently stop this task and move the partial download to it's destination folder."
+  },
+
+  "panel__content__task__detail__files_limit": {
+    "message": "Note that only the first 100 files are displayed. To see the full list, please use the DSM interface."
   }
 }
