@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.3](https://github.com/dvcol/synology-download/compare/v2.0.2...v2.0.3) (2023-03-12)
+
+
+### Bug Fixes
+
+* **modals:** fix loading indicators in modals ([c06085e](https://github.com/dvcol/synology-download/commit/c06085e20607c10df5ca75ef405be7f102f972ac))
+* **performance:** exhaust map polling request to prevent overtaxing ([a358554](https://github.com/dvcol/synology-download/commit/a358554c8caa07bc4365cb7e13ff36942d366b9c))
+* **performance:** move to lazy load file list to improve performance ([44a11bd](https://github.com/dvcol/synology-download/commit/44a11bded3b217e45a5c48f98d5990f85e6aa218))
+* **task:** fix task splicing ([f1610ac](https://github.com/dvcol/synology-download/commit/f1610acf4e22a6f59450d8d2b07a00f453501d16))
+
 ### [2.0.2](https://github.com/dvcol/synology-download/compare/v2.0.1...v2.0.2) (2023-03-12)
 
 
