@@ -26,7 +26,7 @@ export const TaskEditFiles: FC<TaskEditFilesProps> = ({ taskId }) => {
   const [loadingState, setLoadingState] = useState<Record<string, boolean>>({});
 
   // Loading observable for debounce
-  const [, next] = useDebounceObservable<Record<string, boolean>>(setLoadingState, 300);
+  const [, next] = useDebounceObservable<Record<string, boolean>>(setLoadingState, 200);
 
   useEffect(() => {
     const sub = QueryService.listTaskFiles(taskId)
@@ -104,7 +104,7 @@ export const TaskEditFiles: FC<TaskEditFilesProps> = ({ taskId }) => {
                 onChange={(_, size) => onChange(f.index, size)}
                 aria-label="priority"
                 sx={{ height: '3em' }}
-                disabled={loadingState[f.index]}
+                disabled={loading[f.index]}
               >
                 {Object.values(TaskPriority).map(priority => (
                   <ToggleButton key={priority} value={priority} sx={{ textTransform: 'inherit' }}>

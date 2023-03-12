@@ -1,3 +1,4 @@
+import SaveIcon from '@mui/icons-material/Save';
 import {
   Button,
   Card,
@@ -23,7 +24,7 @@ import { finalize, lastValueFrom } from 'rxjs';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
-import { FormCheckbox } from '@src/components';
+import { FormCheckbox, IconLoader } from '@src/components';
 import type { FormRules, TaskListDownloadRequest, TaskListResponse } from '@src/models';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
 
@@ -194,10 +195,10 @@ export const TaskAddSelect: FC<TaskAddSelectProp> = ({ open, list_id, source, de
           <Button
             variant="outlined"
             color={onSubmitColor()}
-            sx={{ width: '5rem' }}
             type="submit"
-            disabled={!isValid || !QueryService.isLoggedIn}
+            disabled={loading > 0 || !isValid || !QueryService.isLoggedIn}
             onClick={handleSubmit(onSubmit)}
+            startIcon={<IconLoader icon={<SaveIcon />} loading={isDirty && loading > 0} props={{ size: '1.25rem', color: onSubmitColor() }} />}
           >
             {i18n('save', 'common', 'buttons')}
           </Button>

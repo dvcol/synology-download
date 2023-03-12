@@ -1,17 +1,21 @@
+import SaveIcon from '@mui/icons-material/Save';
+
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Chip, Grid, Stack, ToggleButton, ToggleButtonGroup, Tooltip } from '@mui/material';
 
 import React, { useEffect, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 
-import { lastValueFrom, tap } from 'rxjs';
+import { finalize, lastValueFrom, tap } from 'rxjs';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
-import { FormCheckbox, FormExplorer, FormInput, FormSwitch } from '@src/components';
+import { FormCheckbox, FormExplorer, FormInput, FormSwitch, IconLoader } from '@src/components';
 import type { FormRules, TaskCreateRequest, TaskForm, TaskListDownloadRequest } from '@src/models';
 import { TaskCreateType, torrentExtension } from '@src/models';
 import { QueryService } from '@src/services';
+
+import { before } from '@src/utils';
 
 import { TaskAddSelect } from './task-add-select';
 
@@ -58,6 +62,8 @@ export const TaskAdd: FC<{
   const [type, setType] = useState(TaskCreateType.url);
   const [file, setFile] = useState<File>();
   const [openSelect, setOpenSelect] = useState<{ open: boolean; list_id?: string }>({ open: false });
+
+  const [loading, setLoading] = useState<boolean>(false);
 
   const isFile = allowFile && type === TaskCreateType.file;
 
@@ -134,6 +140,8 @@ export const TaskAdd: FC<{
       source,
       torrent: file,
     }).pipe(
+      before(() => setLoading(true)),
+      finalize(() => setLoading(false)),
       tap(response => {
         const list_id = response?.list_id?.[0];
         reset(data);
@@ -303,10 +311,11 @@ export const TaskAdd: FC<{
           <Button
             variant="outlined"
             color={onSubmitColor()}
-            sx={{ width: '5em', fontSize: '0.75em' }}
+            sx={{ fontSize: '0.75em' }}
             type="submit"
-            disabled={!isValid || !QueryService.isLoggedIn}
+            disabled={loading || !isValid || !QueryService.isLoggedIn}
             onClick={handleSubmit(onSubmit)}
+            startIcon={<IconLoader icon={<SaveIcon />} loading={isDirty && loading} props={{ size: '1.25rem', color: onSubmitColor() }} />}
           >
             {i18n('save', 'common', 'buttons')}
           </Button>

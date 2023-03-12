@@ -1,3 +1,4 @@
+import SaveIcon from '@mui/icons-material/Save';
 import {
   AppBar,
   Box,
@@ -26,13 +27,13 @@ import { finalize, lastValueFrom } from 'rxjs';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
-import { FormExplorer, FormInput } from '@src/components';
+import { FormExplorer, FormInput, IconLoader } from '@src/components';
 import type { FormRules, RootSlice, Task, TaskEditRequest, TaskFile } from '@src/models';
 import { TaskPriority, TaskStatus, TaskType } from '@src/models';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
 
 import { getTaskFilesById } from '@src/store/selectors';
-import { before } from '@src/utils';
+import { before, useDebounceObservable } from '@src/utils';
 
 import { TaskEditFiles } from './task-edit-files';
 
@@ -57,8 +58,13 @@ export const TaskEdit = ({
   const taskFiles = useSelector<RootSlice, TaskFile[]>(getTaskFilesById(task.id));
 
   const [tab, setTab] = useState(0);
-  const [loading, setLoading] = useState<boolean>();
   const [isActive, setIsActive] = useState<boolean>(task?.status === TaskStatus.downloading && !!task?.received);
+
+  const [loading, setLoading] = useState<boolean>();
+  const [loadingBar, setLoadingBar] = useState<boolean>(false);
+
+  // Loading observable for debounce
+  const [, next] = useDebounceObservable<boolean>(setLoadingBar, 200);
 
   const {
     handleSubmit,
@@ -103,8 +109,15 @@ export const TaskEdit = ({
     if (open) {
       sub = QueryService.getTaskEdit(task.id)
         .pipe(
-          before(() => setLoading(true)),
-          finalize(() => setLoading(false)),
+          before(() => {
+            setLoading(true);
+            next(true);
+          }),
+          finalize(() => {
+            setLoading(false);
+            setLoadingBar(false);
+            next(false); // So that observable data is not stale
+          }),
         )
         .subscribe({
           next: response => {
@@ -139,7 +152,19 @@ export const TaskEdit = ({
       onFormSubmit?.(data);
       return;
     }
-    return lastValueFrom(QueryService.editTask(data))
+    return lastValueFrom(
+      QueryService.editTask(data).pipe(
+        before(() => {
+          setLoading(true);
+          next(true);
+        }),
+        finalize(() => {
+          setLoading(false);
+          setLoadingBar(false);
+          next(false); // So that observable data is not stale
+        }),
+      ),
+    )
       .then(() => {
         reset(data);
         onFormSubmit?.(data);
@@ -178,7 +203,7 @@ export const TaskEdit = ({
           sx={{
             height: '0.125rem',
             transition: 'opacity 0.3s linear',
-            opacity: loading ? 1 : 0,
+            opacity: loadingBar ? 1 : 0,
           }}
         />
         <AppBar position="relative">
@@ -360,10 +385,10 @@ export const TaskEdit = ({
           <Button
             variant="outlined"
             color={onSubmitColor()}
-            sx={{ width: '5rem' }}
             type="submit"
-            disabled={!isValid || !QueryService.isLoggedIn}
+            disabled={loading || !isValid || !QueryService.isLoggedIn}
             onClick={handleSubmit(onSubmit)}
+            startIcon={<IconLoader icon={<SaveIcon />} loading={isDirty && loading} props={{ size: '1.25rem', color: onSubmitColor() }} />}
           >
             {i18n('save', 'common', 'buttons')}
           </Button>
