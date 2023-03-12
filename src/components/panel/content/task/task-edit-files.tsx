@@ -20,7 +20,12 @@ type TaskEditFilesProps = { id: string };
 export const TaskEditFiles: FC<TaskEditFilesProps> = ({ id }) => {
   const i18n = useI18n('panel', 'content', 'task', 'edit');
 
-  const task = useSelector<RootSlice, Task | undefined>(getTaskById(id));
+  const task = useSelector<RootSlice, Task | undefined>(
+    getTaskById(id),
+    (left, right) =>
+      JSON.stringify(left?.additional?.file?.map(f => `${f.index}-${f.priority}`)) ===
+      JSON.stringify(right?.additional?.file?.map(f => `${f.index}-${f.priority}`)),
+  );
 
   const [loading, setLoading] = useState<Record<string, boolean>>({});
   const [loadingState, setLoadingState] = useState<Record<string, boolean>>({});
@@ -59,8 +64,8 @@ export const TaskEditFiles: FC<TaskEditFilesProps> = ({ id }) => {
       )
       .subscribe();
 
-  const files = task.additional.file.map((f, i) => (
-    <ListItem key={`${i}-${f.filename}`}>
+  const files = task.additional.file.map(f => (
+    <ListItem key={`${f.index}-${f.filename}`}>
       <ListItemText
         primary={
           <Grid container>
@@ -73,10 +78,10 @@ export const TaskEditFiles: FC<TaskEditFilesProps> = ({ id }) => {
                 size="small"
                 value={f.wanted ? f.priority : 'skip'}
                 exclusive
-                onChange={(_, size) => onChange(i, size)}
+                onChange={(_, size) => onChange(f.index, size)}
                 aria-label="priority"
                 sx={{ height: '3em' }}
-                disabled={loadingState[i]}
+                disabled={loadingState[f.index]}
               >
                 {Object.values(TaskPriority).map(priority => (
                   <ToggleButton key={priority} value={priority} sx={{ textTransform: 'inherit' }}>
@@ -97,7 +102,10 @@ export const TaskEditFiles: FC<TaskEditFilesProps> = ({ id }) => {
           sx: { display: 'inline' },
         }}
         secondary={
-          <ProgressBar props={{ variant: loadingState[i] ? 'indeterminate' : 'determinate' }} value={computeProgress(f.size_downloaded, f.size)} />
+          <ProgressBar
+            props={{ variant: loadingState[f.index] ? 'indeterminate' : 'determinate' }}
+            value={computeProgress(f.size_downloaded, f.size)}
+          />
         }
         secondaryTypographyProps={{ component: 'span' }}
       />
