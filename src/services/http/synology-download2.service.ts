@@ -2,8 +2,8 @@ import type { HttpParameters } from '@dvcol/web-extension-utils';
 import { HttpMethod } from '@dvcol/web-extension-utils';
 
 import type {
-  Api,
   CommonResponse,
+  SynologyQueryOptions,
   TaskCompleteResponse,
   TaskCreateRequest,
   TaskCreateResponse,
@@ -28,20 +28,9 @@ import {
 } from '@src/models';
 import { SynologyService } from '@src/services/http';
 
-import { stringifyKeys } from '@src/utils';
+import { buildFormData, stringifyKeys } from '@src/utils';
 
 import type { Observable } from 'rxjs';
-
-type DoOptions = {
-  method: HttpMethod;
-  params: HttpParameters;
-  version: string;
-  api?: Api;
-  endpoint?: Endpoint;
-  base?: string;
-  formData?: boolean;
-  doNotProxy?: boolean;
-};
 
 export class SynologyDownload2Service extends SynologyService {
   /**
@@ -63,32 +52,54 @@ export class SynologyDownload2Service extends SynologyService {
     super(isProxy, name);
   }
 
-  _do<T>({ method, params, version, api, endpoint, base, formData, doNotProxy }: DoOptions): Observable<T> {
-    return super.do<T>(method, params, version ?? '1', api ?? DownloadStation2API.Task, endpoint ?? Endpoint.Entry, base, formData, doNotProxy);
+  _do<T>(
+    { method, params, body, version, api, endpoint, base }: Partial<SynologyQueryOptions> & { method: HttpMethod },
+    doNotProxy?: boolean,
+  ): Observable<T> {
+    return super.do<T>(
+      {
+        api: api ?? DownloadStation2API.Task,
+        method,
+        version: version ?? '1',
+        body,
+        params,
+        endpoint: endpoint ?? Endpoint.Entry,
+        base,
+      },
+      doNotProxy,
+    );
   }
 
   createTask(request: TaskCreateRequest): Observable<TaskCreateResponse> {
     const { url, file, torrent, ..._request } = request;
-    const params: HttpParameters = { method: TaskCreateMethod.create, ...stringifyKeys(_request, true) };
+    const params: HttpParameters = stringifyKeys(_request, true);
     if (url?.length) params.url = JSON.stringify(url?.map(_url => SynologyDownload2Service._sanitizeUrl(_url).toString()));
-    if (torrent) {
-      params.torrent = torrent;
-      params.mtime = Date.now()?.toString();
-      params.size = torrent.size?.toString();
-      params.file = JSON.stringify(['torrent']);
-    }
-    const _params: DoOptions = {
+
+    const options: SynologyQueryOptions = {
       api: DownloadStation2API.Task,
       method: HttpMethod.POST,
       version: '2',
       endpoint: Endpoint.Entry,
-      params,
     };
-    if (params.torrent) {
-      _params.doNotProxy = true;
-      _params.formData = true;
+    if (torrent) {
+      options.body = buildFormData({
+        api: DownloadStation2API.Task,
+        method: TaskCreateMethod.create,
+        version: '2',
+        ...params,
+        torrent,
+        mtime: Date.now()?.toString(),
+        size: torrent.size?.toString(),
+        file: JSON.stringify(['torrent']),
+      });
+    } else {
+      options.params = {
+        method: TaskCreateMethod.create,
+        ...params,
+      };
     }
-    return this._do<TaskCreateResponse>(_params);
+
+    return this._do<TaskCreateResponse>(options, !!torrent);
   }
 
   getTaskList(list_id: string): Observable<TaskListResponse> {

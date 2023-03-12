@@ -28,7 +28,7 @@ export class SynologyDownloadService extends SynologyService {
   }
 
   _do<T>(method: HttpMethod, params: HttpParameters, version = '1', api = DownloadStationAPI.Task, endpoint = Endpoint.Task): Observable<T> {
-    return super.do<T>(method, params, version, api, endpoint);
+    return super.do<T>({ method, params, version, api, endpoint });
   }
 
   getConfig(): Observable<DownloadStationConfig> {

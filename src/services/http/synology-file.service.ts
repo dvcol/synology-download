@@ -13,7 +13,7 @@ export class SynologyFileService extends SynologyService {
   }
 
   _do<T>(method: HttpMethod, params: HttpParameters, version = '2', api = FileStationAPI.List, endpoint = Endpoint.Entry): Observable<T> {
-    return super.do<T>(method, params, version, api, endpoint);
+    return super.do<T>({ method, params, version, api, endpoint });
   }
 
   /**
