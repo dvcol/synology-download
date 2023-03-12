@@ -319,11 +319,11 @@ export const TaskAdd: FC<{
           source={getValues()?.source ?? 'Custom Task'}
           destination={getValues().destination?.path}
           onFormCancel={data => {
-            setOpenSelect(_current => ({ ..._current, open: false }));
+            setOpenSelect(_current => ({ open: false }));
             onFormSubmit?.(data);
           }}
           onFormSubmit={data => {
-            setOpenSelect(_current => ({ ..._current, open: false }));
+            setOpenSelect(_current => ({ open: false }));
             onFormSubmit?.(data);
           }}
         />
