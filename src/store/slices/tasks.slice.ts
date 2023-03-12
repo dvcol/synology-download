@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import type { Task, TaskComplete, TasksSlice, TaskStatistics, TaskFile } from '@src/models';
+import type { Task, TaskComplete, TaskFile, TasksSlice, TaskStatistics } from '@src/models';
 
 import { setTasksStatsReducer, syncTaskReducer } from '@src/store/reducers/tasks.reducer';
 
@@ -38,7 +38,7 @@ export const tasksSlice = createSlice<TasksSlice, TasksReducers, 'tasks'>({
       stopping: { ...state.stopping, [task.taskId]: task },
     }),
     removeStopping: (state, { payload: ids }) => {
-      const _state = { ...state };
+      const _state = { ...state, stopping: { ...state.stopping } };
       const _ids = Array.isArray(ids) ? ids : [ids];
       _ids?.forEach(id => delete _state.stopping[id]);
       return _state;
@@ -47,7 +47,7 @@ export const tasksSlice = createSlice<TasksSlice, TasksReducers, 'tasks'>({
     setTasks: syncTaskReducer,
     spliceTasks: (state, { payload: ids }) => {
       const _ids = Array.isArray(ids) ? ids : [ids];
-      const _state = { ...state, tasksIds: state.tasksIds?.filter(id => !ids.includes(id)) };
+      const _state = { ...state, tasks: { ...state.tasks }, tasksIds: state.tasksIds?.filter(id => !ids.includes(id)) };
       _ids?.forEach(id => delete _state.tasks[id]);
       return _state;
     },
