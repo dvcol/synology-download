@@ -28,6 +28,7 @@ import { ContentItem } from '../content-item';
 import TaskCard from './task-card';
 import TaskDetail from './task-detail';
 
+import type { ContentItemAccordionProps } from '../content-item';
 import type { FC, ForwardRefRenderFunction } from 'react';
 import type { Observable } from 'rxjs';
 
@@ -92,8 +93,12 @@ export type TaskItemProps = {
   setTaskEdit: TaskDetailProps['setTaskEdit'];
   setConfirmation: TaskDetailProps['setConfirmation'];
   hideStatus?: boolean;
+  accordion: ContentItemAccordionProps;
 };
-const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps> = ({ task, hideStatus, setTaskEdit, setConfirmation }, ref) => {
+const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps> = (
+  { task, hideStatus, setTaskEdit, setConfirmation, accordion },
+  ref,
+) => {
   const i18n = useI18n('panel', 'content', 'task', 'item');
   const [expanded, setExpanded] = useState(false);
   const [hover, setHover] = useState(false);
@@ -184,6 +189,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
   return (
     <ContentItem
       ref={ref}
+      accordion={accordion}
       onHover={_visible => setHover(_visible)}
       onToggle={_expanded => setExpanded(_expanded)}
       background={background}

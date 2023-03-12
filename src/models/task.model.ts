@@ -113,13 +113,16 @@ export interface TaskTransfer {
 }
 
 export interface TaskFile {
-  filename: string;
   index: number;
+  /** File name for Task v2 */
+  name?: string;
+  /** File name for Task v1 */
+  filename?: string;
+  priority: TaskPriority | 'skip';
   /** File size in bytes */
   size: string;
   /** Task download speed: byte/s */
   size_downloaded: string;
-  priority: 'skip' | 'low' | 'normal' | 'high';
   wanted: boolean;
 }
 

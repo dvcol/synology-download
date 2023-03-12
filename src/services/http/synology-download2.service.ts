@@ -14,18 +14,11 @@ import type {
   TaskListDeleteResponse,
   TaskListDownloadRequest,
   TaskListDownloadResponse,
+  TaskListFilesRequest,
+  TaskListFilesResponse,
   TaskListResponse,
 } from '@src/models';
-import {
-  DownloadStation2API,
-  Endpoint,
-  EntryAPI,
-  EntryMethod,
-  TaskBtFileMethod,
-  TaskBtMethod,
-  TaskCompleteMethod,
-  TaskCreateMethod,
-} from '@src/models';
+import { DownloadStation2API, Endpoint, EntryAPI, EntryMethod, Task2Method } from '@src/models';
 import { SynologyService } from '@src/services/http';
 
 import { buildFormData, stringifyKeys } from '@src/utils';
@@ -84,7 +77,7 @@ export class SynologyDownload2Service extends SynologyService {
     if (torrent) {
       options.body = buildFormData({
         api: DownloadStation2API.Task,
-        method: TaskCreateMethod.create,
+        method: Task2Method.create,
         version: '2',
         ...params,
         torrent,
@@ -94,12 +87,24 @@ export class SynologyDownload2Service extends SynologyService {
       });
     } else {
       options.params = {
-        method: TaskCreateMethod.create,
+        method: Task2Method.create,
         ...params,
       };
     }
 
     return this._do<TaskCreateResponse>(options, !!torrent);
+  }
+
+  getTaskFiles(request: TaskListFilesRequest): Observable<TaskListFilesResponse> {
+    return this._do<TaskListFilesResponse>({
+      api: DownloadStation2API.TaskBtFile,
+      method: HttpMethod.POST,
+      version: '2',
+      params: {
+        method: Task2Method.list,
+        ...stringifyKeys(request),
+      },
+    });
   }
 
   getTaskList(list_id: string): Observable<TaskListResponse> {
@@ -108,7 +113,7 @@ export class SynologyDownload2Service extends SynologyService {
       method: HttpMethod.POST,
       version: '2',
       params: {
-        method: TaskCreateMethod.get,
+        method: Task2Method.get,
         list_id,
       },
     });
@@ -120,7 +125,7 @@ export class SynologyDownload2Service extends SynologyService {
       method: HttpMethod.POST,
       version: '2',
       params: {
-        method: TaskCreateMethod.download,
+        method: Task2Method.download,
         ...stringifyKeys(request),
       },
     });
@@ -133,7 +138,7 @@ export class SynologyDownload2Service extends SynologyService {
       compound: [
         {
           api: DownloadStation2API.TaskList,
-          method: TaskCreateMethod.delete,
+          method: Task2Method.delete,
           version: '2',
           list_id,
         },
@@ -157,7 +162,7 @@ export class SynologyDownload2Service extends SynologyService {
       method: HttpMethod.POST,
       version: '1',
       params: {
-        method: TaskCompleteMethod.start,
+        method: Task2Method.start,
         id: Array.isArray(id) ? id : [id],
       },
     });
@@ -169,7 +174,7 @@ export class SynologyDownload2Service extends SynologyService {
       method: HttpMethod.POST,
       version: '2',
       params: {
-        method: TaskBtMethod.get,
+        method: Task2Method.get,
         task_id,
       },
     });
@@ -181,7 +186,7 @@ export class SynologyDownload2Service extends SynologyService {
       method: HttpMethod.POST,
       version: '2',
       params: {
-        method: TaskBtMethod.set,
+        method: Task2Method.set,
         ...stringifyKeys(request),
       },
     });
@@ -193,7 +198,7 @@ export class SynologyDownload2Service extends SynologyService {
       method: HttpMethod.POST,
       version: '2',
       params: {
-        method: TaskBtFileMethod.set,
+        method: Task2Method.set,
         ...stringifyKeys(request),
       },
     });

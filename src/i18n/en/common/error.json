@@ -60,6 +60,9 @@
   "common__error__task_list_fail": {
     "message": "List task files failed"
   },
+  "common__error__task_list_files_fail": {
+    "message": "Failed to fetch files list"
+  },
   "common__error__task_list_delete_fail": {
     "message": "Delete task list failed"
   },

@@ -1,6 +1,6 @@
 import type { HttpBody, HttpMethod, HttpParameters } from '@dvcol/web-extension-utils';
 
-import type { TaskType } from '@src/models/task.model';
+import type { TaskFile, TaskType } from '@src/models/task.model';
 
 import type { ApiInfo } from './api-info.model';
 
@@ -99,27 +99,19 @@ export enum TaskMethod {
   setConfig = 'setserverconfig',
 }
 
-export enum TaskCreateMethod {
+export enum Task2Method {
   get = 'get',
-  create = 'create',
-  delete = 'delete',
-  download = 'download',
-}
-
-export enum TaskCompleteMethod {
-  start = 'start',
-  status = 'status',
-  stop = 'stop',
-}
-export enum TaskBtMethod {
-  get = 'get',
-  set = 'set',
-}
-
-export enum TaskBtFileMethod {
   set = 'set',
   list = 'list',
   copy = 'copy',
+
+  create = 'create',
+  delete = 'delete',
+  download = 'download',
+
+  start = 'start',
+  stop = 'stop',
+  status = 'status',
 }
 
 export enum FileMethod {
@@ -129,16 +121,7 @@ export enum FileMethod {
   rename = 'rename',
 }
 
-export type SynologyMethod =
-  | InfoMethod
-  | EntryMethod
-  | AuthMethod
-  | TaskMethod
-  | TaskCreateMethod
-  | TaskCompleteMethod
-  | TaskBtMethod
-  | TaskBtFileMethod
-  | FileMethod;
+export type SynologyMethod = InfoMethod | EntryMethod | AuthMethod | TaskMethod | Task2Method | FileMethod;
 
 export const CommonErrorCode = {
   100: 'Unknown error',
@@ -384,6 +367,47 @@ export interface TaskListDeleteResponseResult {
 export interface TaskListDeleteResponse {
   has_fail: boolean;
   result: TaskListDeleteResponseResult[];
+}
+
+export enum Order {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
+
+export enum TaskQuerySortBy {
+  filename = 'filename',
+  total_size = 'total_size',
+  current_size = 'current_size',
+  progress = 'progress',
+  upload_rate = 'upload_rate',
+  current_rate = 'current_rate',
+  status = 'status',
+  destination = 'destination',
+}
+
+export interface TaskQueryRequest {
+  sort_by: TaskQuerySortBy;
+}
+
+export enum TaskListFilesOrderBy {
+  name = 'name',
+  size = 'size',
+  size_downloaded = 'size_downloaded',
+  progress = 'progress',
+  priority = 'priority',
+}
+
+export interface TaskListFilesRequest {
+  task_id: string;
+  offset: number;
+  limit: number;
+  order_by: TaskListFilesOrderBy;
+  order: 'ASC' | 'DESC';
+  query?: string;
+}
+
+export interface TaskListFilesResponse {
+  items: TaskFile[];
 }
 
 export type SynologyQueryOptions = {

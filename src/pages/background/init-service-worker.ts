@@ -13,7 +13,7 @@ import {
   onPortEvents,
   restoreLocalSate,
   restoreSettings,
-  restoreTasks,
+  restoreTaskSlice,
 } from './modules';
 
 export const initServiceWorker = async () => {
@@ -47,7 +47,7 @@ export const initServiceWorker = async () => {
   await lastValueFrom(restoreLocalSate(store));
 
   // Restore Tasks
-  await lastValueFrom(restoreTasks(store));
+  await lastValueFrom(restoreTaskSlice(store));
 
   // Listen to ports
   onPortEvents(store);

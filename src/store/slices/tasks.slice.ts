@@ -1,14 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import type { Task, TaskComplete, TasksSlice, TaskStatistics } from '@src/models';
+import type { Task, TaskComplete, TasksSlice, TaskStatistics, TaskFile } from '@src/models';
 
 import { setTasksStatsReducer, syncTaskReducer } from '@src/store/reducers/tasks.reducer';
-
-import { uniqueArray } from '@src/utils';
 
 import type { CaseReducer, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
 
 export interface TasksReducers<S = TasksSlice> extends SliceCaseReducers<S> {
+  restoreTasks: CaseReducer<S, PayloadAction<Partial<S>>>;
   addStopping: CaseReducer<S, PayloadAction<TaskComplete>>;
   removeStopping: CaseReducer<S, PayloadAction<TaskComplete['taskId'] | TaskComplete['taskId'][]>>;
   resetStopping: CaseReducer<S>;
@@ -16,11 +15,16 @@ export interface TasksReducers<S = TasksSlice> extends SliceCaseReducers<S> {
   spliceTasks: CaseReducer<S, PayloadAction<Task['id'] | Task['id'][]>>;
   setTaskStats: CaseReducer<S, PayloadAction<TaskStatistics>>;
   resetTasks: CaseReducer<S>;
+  resetFiles: CaseReducer<S>;
+  setFiles: CaseReducer<S, PayloadAction<{ taskId: string; files: TaskFile[] }>>;
 }
 
 const initialState: TasksSlice = {
-  stopping: [],
-  entities: [],
+  stopping: {},
+  tasks: {},
+  tasksIds: [],
+  files: {},
+  filesIds: {},
   stats: undefined,
 };
 
@@ -28,21 +32,28 @@ export const tasksSlice = createSlice<TasksSlice, TasksReducers, 'tasks'>({
   name: 'tasks',
   initialState,
   reducers: {
+    restoreTasks: (state, { payload }) => ({ ...state, ...payload }),
     addStopping: (state, { payload: task }) => ({
       ...state,
-      stopping: uniqueArray([...state.stopping, task], ({ taskId }) => taskId === task.taskId),
+      stopping: { ...state.stopping, [task.taskId]: task },
     }),
-    removeStopping: (state, { payload: ids }) => ({
-      ...state,
-      stopping: state.stopping?.filter(({ taskId }) => (Array.isArray(ids) ? !ids.includes(taskId) : taskId !== ids)),
-    }),
+    removeStopping: (state, { payload: ids }) => {
+      const _state = { ...state };
+      const _ids = Array.isArray(ids) ? ids : [ids];
+      _ids?.forEach(id => delete _state.stopping[id]);
+      return _state;
+    },
     resetStopping: state => ({ ...state, stopping: initialState.stopping }),
     setTasks: syncTaskReducer,
-    spliceTasks: (state, { payload: ids }) => ({
-      ...state,
-      entities: state.entities?.filter(e => (Array.isArray(ids) ? !ids.includes(e.id) : e.id !== ids)),
-    }),
+    spliceTasks: (state, { payload: ids }) => {
+      const _ids = Array.isArray(ids) ? ids : [ids];
+      const _state = { ...state, tasksIds: state.tasksIds?.filter(id => !ids.includes(id)) };
+      _ids?.forEach(id => delete _state.tasks[id]);
+      return _state;
+    },
     setTaskStats: setTasksStatsReducer,
     resetTasks: () => initialState,
+    setFiles: (state, { payload: { taskId, files } }) => ({ ...state, files: { ...state.files, [taskId]: files } }),
+    resetFiles: state => ({ ...state, files: initialState.files, filesIds: initialState.filesIds }),
   } as TasksReducers,
 });

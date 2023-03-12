@@ -11,19 +11,21 @@ import { getContentsForActiveTab, getTabOrFirst } from '@src/store/selectors';
 
 import { ContentEmpty } from './content-empty';
 
+import type { ContentItemAccordionProps } from './content-item';
 import type { FC } from 'react';
 
 const ContentItemInstance: FC<{
   item: Content;
+  accordion: ContentItemAccordionProps;
   hideStatus: boolean;
   setTaskEdit: TaskItemProps['setTaskEdit'];
   setConfirmation: TaskItemProps['setConfirmation'];
-}> = ({ item, hideStatus, setTaskEdit, setConfirmation }) => {
+}> = ({ item, accordion, hideStatus, setTaskEdit, setConfirmation }) => {
   if (item.source === ContentSource.Download) {
-    return <DownloadItem download={item as Download} hideStatus={hideStatus} />;
+    return <DownloadItem accordion={accordion} download={item as Download} hideStatus={hideStatus} />;
   }
   if (item.source === ContentSource.Task) {
-    return <TaskItem task={item as Task} hideStatus={hideStatus} setTaskEdit={setTaskEdit} setConfirmation={setConfirmation} />;
+    return <TaskItem accordion={accordion} task={item as Task} hideStatus={hideStatus} setTaskEdit={setTaskEdit} setConfirmation={setConfirmation} />;
   }
   return null;
 };
@@ -35,9 +37,12 @@ export const ContentPanel = () => {
   const [taskEdit, setTaskEdit] = useState<TaskEditState>({ open: false });
   const [confirmation, setConfirmation] = useState<ConfirmationState>({ open: false });
 
-  const items = contents.map(item => (
+  const [expanded, setExpanded] = useState<number | false>(false);
+
+  const items = contents.map((item, index) => (
     <ContentItemInstance
       key={item.id}
+      accordion={{ index, expanded, setExpanded }}
       item={item}
       hideStatus={(tab?.status?.length ?? 0) <= 1}
       setTaskEdit={setTaskEdit}

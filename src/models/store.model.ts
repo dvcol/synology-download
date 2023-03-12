@@ -5,7 +5,7 @@ import type { Download } from './download.model';
 import type { ContextMenu, QuickMenu } from './menu.model';
 import type { AdvancedSettings, Connection, Downloads, Global, Log, Notifications, Polling } from './settings.model';
 import type { ContentTab } from './tab.model';
-import type { Task, TaskComplete, TaskStatistics } from './task.model';
+import type { Task, TaskComplete, TaskFile, TaskStatistics } from './task.model';
 import type { Store } from 'redux';
 import type { Store as StoreProxy } from 'webext-redux';
 
@@ -38,10 +38,15 @@ export interface NavbarSlice {
 }
 
 export interface TasksSlice {
-  stopping: TaskComplete[];
-  entities: Task[];
+  stopping: Record<string, TaskComplete>;
+  tasks: Record<string, Task>;
+  tasksIds: string[];
+  files: Record<string, TaskFile[]>;
+  filesIds: Record<string, string[]>;
   stats?: TaskStatistics;
 }
+
+export type SyncedTaskSlice = Pick<TasksSlice, 'tasks' | 'tasksIds'>;
 
 export interface DownloadsSlice {
   entities: Download[];

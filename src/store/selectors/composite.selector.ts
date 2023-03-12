@@ -36,7 +36,7 @@ import {
   getStats,
   getTab,
   getTabs,
-  getTasks,
+  getTasksArray,
   getTasksIds,
   getWaitingTasksIds,
   isModalOpen,
@@ -102,7 +102,7 @@ const doFilter = <T extends Content>(items?: T[], tab?: Tab): T[] =>
       })
     : items ?? [];
 
-export const getContents = createSelector(getTasks, getDownloads, getSettingsDownloadsEnabled, (tasks, contents, downloadEnabled) =>
+export const getContents = createSelector(getTasksArray, getDownloads, getSettingsDownloadsEnabled, (tasks, contents, downloadEnabled) =>
   downloadEnabled ? [...tasks, ...contents] : tasks,
 );
 export const getContentsByTabId = createSelector(getContents, getTabs, (contents: Content[], tabs: ContentTab[]) =>

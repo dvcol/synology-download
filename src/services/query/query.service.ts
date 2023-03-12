@@ -29,6 +29,8 @@ import type {
   TaskListDeleteResponse,
   TaskListDownloadRequest,
   TaskListDownloadResponse,
+  TaskListFilesRequest,
+  TaskListFilesResponse,
   TaskListResponse,
 } from '@src/models';
 import {
@@ -39,8 +41,10 @@ import {
   LoginError,
   mapToTask,
   NotReadyError,
+  Order,
   ServiceInstance,
   TaskCreateType,
+  TaskListFilesOrderBy,
   TaskListOption,
   TaskStatus,
 } from '@src/models';
@@ -53,6 +57,7 @@ import {
   removeLoading,
   removeStopping,
   resetStopping,
+  setFiles,
   setLogged,
   setSid,
   setTasks,
@@ -381,7 +386,7 @@ export class QueryService {
   static listTasks(): Observable<TaskList> {
     // snapshot task before call
     const extract: ContentStatusTypeId<Task['id']> = getTasksIdsByStatusType(this.store.getState());
-    return this.downloadClient.listTasks(0, -1, [TaskListOption.detail, TaskListOption.file, TaskListOption.transfer]).pipe(
+    return this.downloadClient.listTasks(0, -1, [TaskListOption.detail, TaskListOption.transfer]).pipe(
       this.loadingOperator(),
       this.handleErrors,
       tap(({ tasks }) => {
@@ -403,6 +408,24 @@ export class QueryService {
         NotificationService.taskError(t);
       }
     });
+  }
+
+  static listTaskFiles(taskId: string, request?: Partial<TaskListFilesRequest>): Observable<TaskListFilesResponse> {
+    const _request: TaskListFilesRequest = {
+      task_id: taskId,
+      offset: 0,
+      limit: -1,
+      order_by: TaskListFilesOrderBy.name,
+      order: Order.ASC,
+      ...request,
+    };
+    return this.download2Client.getTaskFiles(_request).pipe(
+      this.loadingOperator(),
+      this.handleErrors,
+      tap(({ items }) => {
+        this.store.dispatch(setFiles({ taskId, files: items }));
+      }),
+    );
   }
 
   private static updateStopping(tasks: Task[], stoppingIds: TaskComplete['taskId'][]) {
@@ -522,7 +545,7 @@ export class QueryService {
     return this.download2Client.editFile(request).pipe(
       this.loadingOperator(),
       this.handleErrors,
-      switchMap(res => this.listTasks().pipe(map(() => res))),
+      switchMap(res => this.listTaskFiles(request.task_id).pipe(map(() => res))),
     );
   }
 

@@ -9,7 +9,12 @@ import type { StoreState } from '../store';
 
 export const getTasks = createSelector(
   (state: StoreState) => state,
-  state => state.tasks.entities,
+  state => state.tasks.tasks,
+);
+
+export const getTaskFiles = createSelector(
+  (state: StoreState) => state,
+  state => state.tasks.files,
 );
 
 export const getStats = createSelector(
@@ -22,7 +27,9 @@ export const getStopping = createSelector(
   state => state.tasks.stopping,
 );
 
-export const getStoppingIds = createSelector(getStopping, tasks => tasks.map(t => t.taskId));
+export const getStoppingIds = createSelector(getStopping, tasks => Object.keys(tasks));
+
+export const getTasksArray = createSelector(getTasks, (tasks: Record<string, Task>) => Object.values(tasks));
 
 export const geTasksIdsByStatusTypeReducer = (items: Content[]) =>
   items
@@ -65,7 +72,7 @@ export const geTasksIdsByStatusTypeReducer = (items: Content[]) =>
       }, {} as ContentStatusTypeId<Task['id']>),
     );
 
-export const getTasksIdsByStatusType = createSelector(getTasks, geTasksIdsByStatusTypeReducer);
+export const getTasksIdsByStatusType = createSelector(getTasksArray, geTasksIdsByStatusTypeReducer);
 
 export const getTasksIds = createSelector(getTasksIdsByStatusType, map => map[ContentStatusType.all]);
 export const getErrorTasksIds = createSelector(getTasksIdsByStatusType, map => map[ContentStatusType.error]);
@@ -74,4 +81,6 @@ export const getActiveTasksIds = createSelector(getTasksIdsByStatusType, map => 
 export const getWaitingTasksIds = createSelector(getTasksIdsByStatusType, map => map[ContentStatusType.waiting]);
 export const getFinishedTasksIds = createSelector(getTasksIdsByStatusType, map => map[ContentStatusType.finished]);
 
-export const getTaskById = (id: string) => createSelector(getTasks, tasks => tasks?.find(t => t.id === id));
+export const getTaskById = (id: string) => createSelector(getTasks, tasks => tasks[id]);
+
+export const getTaskFilesById = (id: string) => createSelector(getTaskFiles, files => files[id]);

@@ -30,3 +30,18 @@ export const stringifyKeys = <T extends Record<string, any>>(record: T, stringif
     acc[key] = stringify ? JSON.stringify(value) : value?.toString();
     return acc;
   }, {} as any);
+
+const versionCompare = (version: number[], current: number[]) => {
+  for (let i = 0; i < version?.length; i += 1) {
+    if (version[i] && !current[i]) return 1;
+    if (version[i] < current[i]) return -1;
+    if (version[i] > current[i]) return 1;
+  }
+  return version?.length >= current?.length ? 0 : -1;
+};
+
+export const versionCheck = (version: string, current: string) => {
+  const _current = current?.split('.')?.map(Number);
+  const _version = version?.split('.')?.map(Number);
+  return versionCompare(_version, _current);
+};

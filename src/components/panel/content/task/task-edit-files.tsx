@@ -1,6 +1,6 @@
 import { Grid, List, ListItem, ListItemText, ToggleButton, ToggleButtonGroup } from '@mui/material';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useSelector } from 'react-redux';
 import { finalize, tap } from 'rxjs';
@@ -8,24 +8,19 @@ import { finalize, tap } from 'rxjs';
 import { useI18n } from '@dvcol/web-extension-utils';
 
 import { ProgressBar } from '@src/components';
-import type { RootSlice, Task } from '@src/models';
+import type { RootSlice, TaskFile } from '@src/models';
 import { TaskPriority } from '@src/models';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
-import { getTaskById } from '@src/store/selectors';
+import { getTaskFilesById } from '@src/store/selectors';
 import { before, computeProgress, useDebounceObservable } from '@src/utils';
 
 import type { FC } from 'react';
 
-type TaskEditFilesProps = { id: string };
-export const TaskEditFiles: FC<TaskEditFilesProps> = ({ id }) => {
+type TaskEditFilesProps = { taskId: string };
+export const TaskEditFiles: FC<TaskEditFilesProps> = ({ taskId }) => {
   const i18n = useI18n('panel', 'content', 'task', 'edit');
 
-  const task = useSelector<RootSlice, Task | undefined>(
-    getTaskById(id),
-    (left, right) =>
-      JSON.stringify(left?.additional?.file?.map(f => `${f.index}-${f.priority}`)) ===
-      JSON.stringify(right?.additional?.file?.map(f => `${f.index}-${f.priority}`)),
-  );
+  const taskFiles = useSelector<RootSlice, TaskFile[]>(getTaskFilesById(taskId));
 
   const [loading, setLoading] = useState<Record<string, boolean>>({});
   const [loadingState, setLoadingState] = useState<Record<string, boolean>>({});
@@ -33,11 +28,39 @@ export const TaskEditFiles: FC<TaskEditFilesProps> = ({ id }) => {
   // Loading observable for debounce
   const [, next] = useDebounceObservable<Record<string, boolean>>(setLoadingState, 300);
 
-  if (!task?.additional?.file?.length) return null;
+  useEffect(() => {
+    const sub = QueryService.listTaskFiles(taskId)
+      .pipe(
+        before(() => {
+          setLoading({ ...loading, 'initial-load': true });
+          next({ ...loading, 'initial-load': true });
+        }),
+        finalize(() => {
+          setLoading({ ...loading, 'initial-load': false });
+          setLoadingState({ ...loading, 'initial-load': false }); // So there is no delay
+          next({ ...loading, 'initial-load': false }); // So that observable data is not stale
+        }),
+      )
+      .subscribe({
+        error: error => {
+          LoggerService.error(`Failed to fetch files for task '${taskId}'`, { taskId, error });
+          NotificationService.error({
+            title: i18n(`task_list_files_fail`, 'common', 'error'),
+            message: error?.message ?? error?.name ?? '',
+          });
+        },
+      });
+
+    return () => {
+      if (!sub?.closed) sub?.unsubscribe();
+    };
+  }, []);
+
+  if (!taskFiles?.length) return null;
 
   const onChange = (index: number, priority: TaskPriority | 'skip') =>
     QueryService.editTaskFile({
-      task_id: task.id,
+      task_id: taskId,
       index: [index],
       wanted: priority === 'skip' ? false : undefined,
       priority: priority !== 'skip' ? priority : undefined,
@@ -49,7 +72,7 @@ export const TaskEditFiles: FC<TaskEditFilesProps> = ({ id }) => {
         }),
         tap({
           error: error => {
-            LoggerService.error(`Failed to change files '${index}' priority for task '${task.id}'`, { index, priority, task, error });
+            LoggerService.error(`Failed to change files '${index}' priority for task '${taskId}'`, { index, priority, taskId, error });
             NotificationService.error({
               title: i18n(`task_file_edit_fail`, 'common', 'error'),
               message: error?.message ?? error?.name ?? '',
@@ -64,13 +87,13 @@ export const TaskEditFiles: FC<TaskEditFilesProps> = ({ id }) => {
       )
       .subscribe();
 
-  const files = task.additional.file.map(f => (
-    <ListItem key={`${f.index}-${f.filename}`}>
+  const files = taskFiles.map(f => (
+    <ListItem key={`${f.index}-${f.name ?? f.filename}`}>
       <ListItemText
         primary={
           <Grid container>
             <Grid item xs={8} sx={{ alignSelf: 'center' }}>
-              <span>{f.filename}</span>
+              <span>{f.name ?? f.filename}</span>
             </Grid>
             <Grid item xs={4} sx={{ textAlign: 'end' }}>
               <ToggleButtonGroup

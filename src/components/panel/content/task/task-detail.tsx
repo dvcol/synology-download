@@ -6,16 +6,19 @@ import ReplayIcon from '@mui/icons-material/Replay';
 import StopIcon from '@mui/icons-material/Stop';
 import { Box, Button, Grid, ListItem, ListItemText, Typography } from '@mui/material';
 
-import React from 'react';
+import React, { useEffect } from 'react';
+
+import { useSelector } from 'react-redux';
 
 import type { i18n } from '@dvcol/web-extension-utils';
 import { useI18n } from '@dvcol/web-extension-utils';
 
 import { IconLoader, ProgressBar } from '@src/components';
-import type { Task } from '@src/models';
+import type { RootSlice, Task, TaskFile } from '@src/models';
 import { ColorLevel, TaskStatus } from '@src/models';
-import { QueryService } from '@src/services';
+import { LoggerService, NotificationService, QueryService } from '@src/services';
 
+import { getTaskFilesById } from '@src/store/selectors';
 import { computeProgress, dateToLocalString, formatBytes } from '@src/utils';
 
 import ContentDetail from '../content-detail';
@@ -176,6 +179,23 @@ const StopButton: FC<TaskDetailButtonProps> = ({ task, isDisabled, loadingIcon, 
 export const TaskDetail: FC<TaskDetailProps> = props => {
   const { task, isDisabled, loadingIcon, buttonClick, setConfirmation } = props;
   const i18n = useI18n('panel', 'content', 'task', 'detail');
+  const taskFiles = useSelector<RootSlice, TaskFile[]>(getTaskFilesById(task.id));
+
+  useEffect(() => {
+    const sub = QueryService.listTaskFiles(task.id).subscribe({
+      error: error => {
+        LoggerService.error(`Failed to fetch files for task '${task.id}'`, { task, error });
+        NotificationService.error({
+          title: i18n(`task_list_files_fail`, 'common', 'error'),
+          message: error?.message ?? error?.name ?? '',
+        });
+      },
+    });
+
+    return () => {
+      if (!sub?.closed) sub?.unsubscribe();
+    };
+  }, []);
 
   const DeleteButton = (
     <>
@@ -199,16 +219,16 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
   );
 
   let files = null;
-  if (task.additional?.file?.length) {
-    files = task.additional.file.map(f => (
-      <ListItem key={`${f.index}-${f.filename}`}>
+  if (taskFiles?.length) {
+    files = taskFiles.map(f => (
+      <ListItem key={`${f.index}-${f.name ?? f.filename}`}>
         <ListItemText
           primary={
             <Grid container>
               <Grid item xs={9}>
                 <span>{i18n(f.wanted ? f.priority : 'skip', 'common', 'model', 'task_priority')}</span>
                 <span> – </span>
-                <span>{f.filename}</span>
+                <span>{f.name ?? f.filename}</span>
               </Grid>
               <Grid item xs={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                 {i18n({

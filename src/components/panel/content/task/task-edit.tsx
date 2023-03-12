@@ -20,15 +20,18 @@ import React, { useEffect, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 
+import { useSelector } from 'react-redux';
+
 import { finalize, lastValueFrom } from 'rxjs';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
 import { FormExplorer, FormInput } from '@src/components';
-import type { Task, TaskEditRequest, FormRules } from '@src/models';
+import type { FormRules, RootSlice, Task, TaskEditRequest, TaskFile } from '@src/models';
 import { TaskPriority, TaskStatus, TaskType } from '@src/models';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
 
+import { getTaskFilesById } from '@src/store/selectors';
 import { before } from '@src/utils';
 
 import { TaskEditFiles } from './task-edit-files';
@@ -50,6 +53,9 @@ export const TaskEdit = ({
   onFormSubmit?: (form: TaskEditForm) => void;
 }) => {
   const i18n = useI18n('panel', 'content', 'task', 'edit');
+
+  const taskFiles = useSelector<RootSlice, TaskFile[]>(getTaskFilesById(task.id));
+
   const [tab, setTab] = useState(0);
   const [loading, setLoading] = useState<boolean>();
   const [isActive, setIsActive] = useState<boolean>(task?.status === TaskStatus.downloading && !!task?.received);
@@ -128,7 +134,11 @@ export const TaskEdit = ({
   };
 
   const onSubmit = (data: TaskEditForm) => {
-    if (!isDirty) return;
+    if (!isDirty) {
+      reset(data);
+      onFormSubmit?.(data);
+      return;
+    }
     return lastValueFrom(QueryService.editTask(data))
       .then(() => {
         reset(data);
@@ -151,7 +161,7 @@ export const TaskEdit = ({
   const changeTab = (_: SyntheticEvent, newValue: number) => setTab(newValue);
   const isBt = task.type === TaskType.bt;
   const disableTask = !isBt || !isActive;
-  const disableTaskFiles = disableTask || !task?.additional?.file?.length;
+  const disableTaskFiles = disableTask || !taskFiles?.length;
 
   return (
     <Dialog
@@ -338,7 +348,7 @@ export const TaskEdit = ({
             />
           </Box>
           <Box hidden={tab !== 2}>
-            <TaskEditFiles id={task.id} />
+            <TaskEditFiles taskId={task.id} />
           </Box>
         </Card>
       </DialogContent>

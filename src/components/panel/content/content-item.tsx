@@ -11,9 +11,16 @@ import type { Global } from '@src/models';
 import type { StoreState } from '@src/store';
 import { getGlobalTask } from '@src/store/selectors';
 
-import type { ForwardRefRenderFunction } from 'react';
+import type { Dispatch, ForwardRefRenderFunction, SetStateAction } from 'react';
+
+export type ContentItemAccordionProps = {
+  index: number;
+  expanded: number | false;
+  setExpanded: Dispatch<SetStateAction<number | false>>;
+};
 
 type ContentItemProps = {
+  accordion: ContentItemAccordionProps;
   background?: ProgressBackgroundProps;
   summary: { card: JSX.Element; buttons?: JSX.Element };
   details?: JSX.Element;
@@ -22,14 +29,13 @@ type ContentItemProps = {
 };
 
 const ContentItemComponent: ForwardRefRenderFunction<HTMLDivElement, ContentItemProps> = (
-  { background, summary, details, onToggle, onHover },
+  { accordion: { index, expanded, setExpanded }, background, summary, details, onToggle, onHover },
   ref,
 ) => {
-  const [expanded, setExpanded] = useState(false);
   const [hover, setHover] = useState(false);
 
   const onChange = (_: React.SyntheticEvent, _expanded: boolean) => {
-    setExpanded(_expanded);
+    setExpanded(_expanded ? index : false);
     onToggle(_expanded);
   };
   const onMouseHover = (_hover: boolean) => {
@@ -39,7 +45,7 @@ const ContentItemComponent: ForwardRefRenderFunction<HTMLDivElement, ContentItem
 
   const showBackground = useSelector<StoreState, Global['task']>(getGlobalTask)?.background;
   return (
-    <Accordion ref={ref} onChange={onChange} TransitionProps={{ unmountOnExit: true }}>
+    <Accordion ref={ref} expanded={expanded === index} onChange={onChange} TransitionProps={{ unmountOnExit: true }}>
       <AccordionSummary
         aria-controls="task-content"
         id="task-header"
