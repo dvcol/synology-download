@@ -1,12 +1,12 @@
 import { catchError, map, of } from 'rxjs';
 
-import type { BaseHttpRequest, HttpHeaders, HttpParameters } from '@dvcol/web-extension-utils';
+import type { BaseHttpRequest, HttpHeaders } from '@dvcol/web-extension-utils';
 import { HttpMethod } from '@dvcol/web-extension-utils';
 
-import type { Api, Endpoint, HttpResponse, SynologyQueryArgs, SynologyQueryPayload } from '@src/models';
+import type { HttpResponse, SynologyQueryArgs, SynologyQueryOptions, SynologyQueryPayload } from '@src/models';
 import { AuthMethod, ChromeMessageType, Controller, SynologyError } from '@src/models';
 import { LoggerService } from '@src/services';
-import { buildFormData, onMessage, sendMessage, stringifyParams } from '@src/utils';
+import { onMessage, sendMessage, stringifyParams } from '@src/utils';
 
 import { BaseHttpService } from './base-http.service';
 
@@ -45,33 +45,25 @@ export class SynologyService extends BaseHttpService {
     this.sid = sid;
   }
 
-  query<T>(
-    httpMethod: HttpMethod,
-    params: HttpParameters,
-    version: string,
-    api: Api,
-    endpoint: Endpoint,
-    base?: string,
-    formData?: boolean,
-  ): Observable<HttpResponse<T>> {
+  query<T>({ method: httpMethod, params, body: httpBody, version, api, endpoint, base }: SynologyQueryOptions): Observable<HttpResponse<T>> {
+    const { method, ..._params } = params ?? {};
     let url: BaseHttpRequest['url'] = endpoint;
+
     if (base) url = { base: base + this.prefix, path: endpoint };
-    if (this.sid && params?.method !== AuthMethod.login) params._sid = this.sid;
-    const { method, ..._params } = params;
-    const body: string | FormData = formData
-      ? buildFormData({ api, method, version, ..._params })
-      : stringifyParams({ api, method, version, ..._params } as Record<string, string | string[]>);
+    if (this.sid && params?.method !== AuthMethod.login) _params._sid = this.sid;
+
+    const _body = httpBody ?? stringifyParams({ api, method, version, ..._params });
 
     const headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*', credentials: 'omit' };
-    if (!formData) headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
+    if (!httpBody) headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
 
     switch (httpMethod) {
       case HttpMethod.POST:
       case HttpMethod.post:
-        return this.post<HttpResponse<T>>(url, body, undefined, headers);
+        return this.post<HttpResponse<T>>(url, _body, undefined, headers);
       case HttpMethod.PUT:
       case HttpMethod.put:
-        return this.put<HttpResponse<T>>(url, body, undefined, headers);
+        return this.put<HttpResponse<T>>(url, _body, undefined, headers);
       case HttpMethod.DELETE:
       case HttpMethod.delete:
         return this.delete<HttpResponse<T>>(url, { api, method, version, ..._params }, undefined, headers);
@@ -86,25 +78,16 @@ export class SynologyService extends BaseHttpService {
     return sendMessage<SynologyQueryPayload, T>({ type: ChromeMessageType.query, payload: { id: this.name, args } });
   }
 
-  do<T>(
-    method: HttpMethod,
-    params: HttpParameters,
-    version: string,
-    api: Api,
-    endpoint: Endpoint,
-    base?: string,
-    formData?: boolean,
-    doNotProxy?: boolean,
-  ): Observable<T> {
+  do<T>(options: SynologyQueryOptions, doNotProxy?: boolean): Observable<T> {
     return (!doNotProxy && this.isProxy ? this.forward : this.query)
-      .bind(this)<T>(method, params, version, api, endpoint, base, formData)
+      .bind(this)<T>(options)
       .pipe(
         map(response => {
           if (response?.success === true) {
             return response.data;
           }
           if (response?.success === false) {
-            throw new SynologyError(api, response?.error);
+            throw new SynologyError(options.api, response?.error);
           }
           return response;
         }),

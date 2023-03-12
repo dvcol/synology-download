@@ -24,7 +24,7 @@ export class SynologyInfoService extends SynologyService {
       doNotProxy: false,
       ...options,
     };
-    return super.do<T>(method, params, version, api, endpoint, baseUrl, false, doNotProxy);
+    return super.do<T>({ method, params, version, api, endpoint, base: baseUrl }, doNotProxy);
   }
 
   info(baseUrl?: string, options: { query?: string[]; doNotProxy?: boolean } = {}): Observable<InfoResponse> {

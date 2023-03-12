@@ -1,10 +1,8 @@
-import type { HttpParameters } from '@dvcol/web-extension-utils';
-
 export const parseJSON = <T>(json?: string | object) => (typeof json == 'string' && json?.length ? JSON.parse(json) : json) as T;
 
 export const encodeParam = (param: string) => encodeURIComponent(param);
 
-export const buildFormData = (params: HttpParameters): FormData =>
+export const buildFormData = (params: Record<string, string | string[] | Blob>): FormData =>
   Object.keys(params).reduce((_form, key) => {
     let value = params[key];
     if (Array.isArray(value)) value = value?.join(',');

@@ -1,4 +1,4 @@
-import type { HttpMethod, HttpParameters } from '@dvcol/web-extension-utils';
+import type { HttpBody, HttpMethod, HttpParameters } from '@dvcol/web-extension-utils';
 
 import type { TaskType } from '@src/models/task.model';
 
@@ -386,15 +386,17 @@ export interface TaskListDeleteResponse {
   result: TaskListDeleteResponseResult[];
 }
 
-export type SynologyQueryArgs = [
-  method: HttpMethod,
-  params: HttpParameters,
-  version: string,
-  api: Api,
-  endpoint: Endpoint,
-  base?: string,
-  formData?: boolean,
-];
+export type SynologyQueryOptions = {
+  api: Api;
+  endpoint: Endpoint;
+  method: HttpMethod;
+  version: string;
+  params?: HttpParameters;
+  body?: HttpBody;
+  base?: string;
+};
+
+export type SynologyQueryArgs = [SynologyQueryOptions];
 
 export interface SynologyQueryPayload {
   id: string;
