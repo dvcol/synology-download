@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.2](https://github.com/dvcol/synology-download/compare/v2.0.1...v2.0.2) (2023-03-12)
+
+
+### Features
+
+* **api:** adds list, download and create task api ([5ada04f](https://github.com/dvcol/synology-download/commit/5ada04f11f6c301f1b5a6f39a1a0a6e89a5c541e))
+* **api:** move to formData ([2a5e21d](https://github.com/dvcol/synology-download/commit/2a5e21dc694c99b993690120cf689dcd49a33112))
+* **form:** adds support for files to FormInput ([35e150b](https://github.com/dvcol/synology-download/commit/35e150b881427e53425153fe2ac830ead2c99c7b))
+* **task:** add support for adding task from file ([8610b59](https://github.com/dvcol/synology-download/commit/8610b59530da463bec52c767e335b240b7a38eb2))
+* **task:** add support for choosing files when adding torrent file ([0f1a608](https://github.com/dvcol/synology-download/commit/0f1a608dc9ad7b37ecfac603ab2cb15685a69509))
+* **task:** move to downloadstation2 and support for multiple urls ([5b33056](https://github.com/dvcol/synology-download/commit/5b33056ff2ee14ffcd7f8512c2dcdef09764e616))
+
+
+### Bug Fixes
+
+* **api:** fix typing and rework body ([85ddea0](https://github.com/dvcol/synology-download/commit/85ddea043813382796842bb7d8b6f46ac182677c))
+* **download:** fix download erase on one click payload ([d9f0116](https://github.com/dvcol/synology-download/commit/d9f01168a588de55b28d7e2bfcf9b017cf142666))
+* **installed:** fix installed new version detection ([5704939](https://github.com/dvcol/synology-download/commit/5704939dd13dbbea0858b1253239b7b212289628))
+* **performance:** modify index and add equality in selector ([6360966](https://github.com/dvcol/synology-download/commit/636096628370e964980607affd47cf1769b52e8c))
+* **task:** fix clear state when aborting file select ([af8a0af](https://github.com/dvcol/synology-download/commit/af8a0afaa0af8ee57073b17aa6af73ab0d025598))
+
 ### [2.0.1](https://github.com/dvcol/synology-download/compare/v2.0.0...v2.0.1) (2023-03-11)
 
 
