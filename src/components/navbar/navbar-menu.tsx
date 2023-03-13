@@ -317,7 +317,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
           setPrompt(false);
           onErase($event);
         }}
-        toolitp={{
+        tooltip={{
           hoverTooltip: modifiers => `${i18n('menu_remove')} ${onEraseTooltip(modifiers)}`,
           boxProps: { sx: { ml: '0.5rem' } },
         }}

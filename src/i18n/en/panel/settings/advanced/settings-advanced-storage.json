@@ -16,6 +16,22 @@
     "message": "Sync mode"
   },
 
+  "panel__settings__advanced__storage__sync_mode_prompt_title": {
+    "message": "Confirm sync change"
+  },
+  "panel__settings__advanced__storage__sync_mode_prompt_description": {
+    "message": "When changing to chrome sync, you can either import existing settings or overwrite them."
+  },
+  "panel__settings__advanced__storage__sync_mode_prompt_warning": {
+    "message": "Warning, this action is permanent and cannot be reverted once confirmed."
+  },
+  "panel__settings__advanced__storage__sync_mode_prompt_erase": {
+    "message": "Overwrite"
+  },
+  "panel__settings__advanced__storage__sync_mode_prompt_import": {
+    "message": "Import"
+  },
+
   "panel__settings__advanced__storage__export": {
     "message": "Export"
   },

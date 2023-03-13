@@ -1,42 +1,46 @@
 import DownloadIcon from '@mui/icons-material/Download';
+import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
-import { Button, Card, CardActions, CardContent, CardHeader, MenuItem, Stack } from '@mui/material';
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  MenuItem,
+  Stack,
+  Typography,
+} from '@mui/material';
 
 import React, { useEffect, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 
 import { localClear, localGet, syncClear, syncGet, useI18n } from '@dvcol/web-extension-utils';
 
 import { ButtonWithConfirm, FormInput, JsonExplorer } from '@src/components';
-import type { RootSlice, SyncSettings } from '@src/models';
-import { AdvancedHeader, ColorLevel, defaultSyncSettings, SyncSettingMode } from '@src/models';
-import { setSyncSettings } from '@src/store/actions';
+import type { RootSlice, SettingsSlice, SyncSettings } from '@src/models';
+import { AdvancedHeader, ColorLevel, ColorLevelCss, defaultSettings, defaultSyncSettings, SyncSettingMode } from '@src/models';
+import { setSyncSettings, syncSettings } from '@src/store/actions';
 import { getRoot, getSyncSettings } from '@src/store/selectors';
+import { settingsSlice } from '@src/store/slices/settings.slice';
 import { downloadJson } from '@src/utils/downlaod.utils';
 
 export const SettingsChromeStorage = () => {
   const i18n = useI18n('panel', 'settings', 'advanced', 'storage');
+
   const store = useSelector<RootSlice, RootSlice>(getRoot);
-
-  const syncSettings = useSelector<RootSlice, SyncSettings>(getSyncSettings);
-
-  const { handleSubmit, control } = useForm<SyncSettings>({
-    mode: 'onChange',
-    defaultValues: {
-      ...defaultSyncSettings,
-      ...syncSettings,
-    },
-  });
-
-  const dispatch = useDispatch();
-
-  const onEnableChange = handleSubmit(data => dispatch(setSyncSettings(data)));
+  const syncSettingsState = useSelector<RootSlice, SyncSettings>(getSyncSettings);
 
   const [sync, setSync] = useState({});
   const [local, setLocal] = useState({});
+  const [prompt, setPrompt] = useState(false);
 
   useEffect(() => {
     const subs = new Subscription();
@@ -46,6 +50,34 @@ export const SettingsChromeStorage = () => {
       if (!subs.closed) subs.unsubscribe();
     };
   }, [store]);
+
+  const { handleSubmit, control, getValues, reset } = useForm<SyncSettings>({
+    mode: 'onChange',
+    defaultValues: {
+      ...defaultSyncSettings,
+      ...syncSettingsState,
+    },
+  });
+
+  const dispatch = useDispatch();
+
+  const onModeChange = handleSubmit(data => {
+    if (data.mode === SyncSettingMode.local) return dispatch(setSyncSettings(data));
+    setPrompt(true);
+  });
+
+  const onPromptCancel = () => {
+    setPrompt(false);
+    reset({ ...getValues(), mode: SyncSettingMode.local });
+  };
+  const onPromptConfirm = async (action: 'erase' | 'import') => {
+    setPrompt(false);
+    // overwrite sync with local
+    if (action === 'erase') return dispatch(setSyncSettings(getValues()));
+    // import from sync
+    const settings = await firstValueFrom(syncGet<SettingsSlice>(settingsSlice.name));
+    return dispatch(syncSettings({ ...defaultSettings, ...settings }));
+  };
 
   const exportSnapshot = () => downloadJson({ sync, local }, `synology_download_chrome_storage_snapshot_${new Date().toISOString()}.json`);
 
@@ -71,7 +103,7 @@ export const SettingsChromeStorage = () => {
                 select: true,
                 label: i18n('sync_mode_label'),
                 sx: { flex: '0 0 10rem', textTransform: 'capitalize' },
-                onChange: onEnableChange,
+                onChange: onModeChange,
               }}
             >
               {Object.values(SyncSettingMode).map(mode => (
@@ -83,6 +115,25 @@ export const SettingsChromeStorage = () => {
           }
           sx={{ p: '0.5rem 0' }}
         />
+        <Dialog open={prompt} onClose={onPromptCancel} aria-labelledby="confirm-sync-dialog" maxWidth={'xs'}>
+          <DialogTitle id="alert-dialog-title">{i18n('sync_mode_prompt_title')}</DialogTitle>
+          <DialogContent sx={{ whiteSpace: 'pre-line' }}>
+            <Typography sx={{ mb: '1em' }}>{i18n('sync_mode_prompt_description')}</Typography>
+
+            <Typography sx={{ color: ColorLevelCss.warning }}>{i18n('sync_mode_prompt_warning')}</Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button variant="outlined" sx={{ mr: 'auto' }} onClick={onPromptCancel}>
+              {i18n('cancel', 'common', 'buttons')}
+            </Button>
+            <Button variant="outlined" color={ColorLevel.error} startIcon={<RestoreFromTrashIcon />} onClick={() => onPromptConfirm('erase')}>
+              {i18n('sync_mode_prompt_erase')}
+            </Button>
+            <Button variant="outlined" color={ColorLevel.primary} startIcon={<SettingsBackupRestoreIcon />} onClick={() => onPromptConfirm('import')}>
+              {i18n('sync_mode_prompt_import')}
+            </Button>
+          </DialogActions>
+        </Dialog>
         <Card sx={{ p: '0.5rem', m: '0.5rem 0', maxHeight: '30rem', overflow: 'auto' }}>
           <JsonExplorer data={sync} name={'sync'} />
           <JsonExplorer data={local} name={'local'} />

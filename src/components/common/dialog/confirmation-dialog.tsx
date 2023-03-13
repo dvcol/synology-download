@@ -13,11 +13,11 @@ export type ConfirmationDialogProps = {
   open: boolean;
   title?: JSX.Element | string;
   description?: JSX.Element | string;
-  toolitp?: TooltipHoverChangeProps;
+  tooltip?: TooltipHoverChangeProps;
   onCancel?: ButtonProps['onClick'];
   onConfirm?: ButtonProps['onClick'];
 };
-export const ConfirmationDialog = ({ open, title, description, toolitp, onCancel, onConfirm }: ConfirmationDialogProps) => {
+export const ConfirmationDialog = ({ open, title, description, tooltip, onCancel, onConfirm }: ConfirmationDialogProps) => {
   const i18n = useI18n('common', 'buttons');
 
   const onCancelHandler: ButtonProps['onClick'] = $event => {
@@ -34,8 +34,8 @@ export const ConfirmationDialog = ({ open, title, description, toolitp, onCancel
         <Button variant="outlined" onClick={onCancelHandler}>
           {i18n('cancel')}
         </Button>
-        {toolitp ? (
-          <TooltipHoverChange {...toolitp}>
+        {tooltip ? (
+          <TooltipHoverChange {...tooltip}>
             <Button variant="outlined" color="error" onClick={onConfirmHandler}>
               {i18n('confirm')}
             </Button>
