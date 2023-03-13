@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/dvcol/synology-download/compare/v2.0.3...v2.2.0) (2023-03-13)
+
+
+### Features
+
+* **settings:** add chrome sync/local option ([107e328](https://github.com/dvcol/synology-download/commit/107e3282280225038d4141e85ff0d9068e3e5a1a))
+* **sync:** adds confirmation prompt when switching mode ([fe5db48](https://github.com/dvcol/synology-download/commit/fe5db48b45b7bb8f8297c08cbe0e616f5309d62b))
+
+
+### Bug Fixes
+
+* **tasks:** fix task restore ([86c24d8](https://github.com/dvcol/synology-download/commit/86c24d8c4baf90771477409579c5e631e84cd8ec))
+
 ### [2.0.3](https://github.com/dvcol/synology-download/compare/v2.0.2...v2.0.3) (2023-03-12)
 
 
