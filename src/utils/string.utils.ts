@@ -40,8 +40,13 @@ const versionCompare = (version: number[], current: number[]) => {
   return version?.length >= current?.length ? 0 : -1;
 };
 
-export const versionCheck = (version: string, current: string) => {
-  const _current = current?.split('.')?.map(Number);
+/**
+ * Returns 1 if version is higher than compared, -1 if it's lower and 0 if it's equal
+ * @param version
+ * @param compared
+ */
+export const versionCheck = (version: string, compared: string) => {
+  const _compared = compared?.split('.')?.map(Number);
   const _version = version?.split('.')?.map(Number);
-  return versionCompare(_version, _current);
+  return versionCompare(_version, _compared);
 };
