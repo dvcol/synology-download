@@ -6,6 +6,16 @@
     "message": "This is an advanced settings, it is purely technical and does not impact features."
   },
 
+  "panel__settings__advanced__storage__sync_mode_title": {
+    "message": "Settings sync mode"
+  },
+  "panel__settings__advanced__storage__sync_mode_subheader": {
+    "message": "Sets if the settings are synced locally or through chrome sync."
+  },
+  "panel__settings__advanced__storage__sync_mode_label": {
+    "message": "Sync mode"
+  },
+
   "panel__settings__advanced__storage__export": {
     "message": "Export"
   },

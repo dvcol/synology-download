@@ -1,4 +1,4 @@
-import { syncSet } from '@dvcol/web-extension-utils';
+import { localSet, syncSet } from '@dvcol/web-extension-utils';
 
 import type {
   AdvancedLogging,
@@ -11,16 +11,35 @@ import type {
   Notifications,
   QuickMenu,
   SettingsSlice,
+  SyncSettings,
 } from '@src/models';
-import { defaultAdvancedLogging, defaultAdvancedSettings, defaultConnection, defaultDownloads, SettingsSliceName } from '@src/models';
+import {
+  defaultAdvancedLogging,
+  defaultAdvancedSettings,
+  defaultConnection,
+  defaultDownloads,
+  SettingsSliceName,
+  SyncSettingMode,
+} from '@src/models';
 import { LoggerService } from '@src/services';
 import { setBadgeBackgroundColor } from '@src/utils';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
+import type { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
 
-export const syncSettings = (settings: SettingsSlice): void => {
+const localSettings = (settings: SettingsSlice): void => {
+  // TODO : move to thunk ?
+  localSet<SettingsSlice>(SettingsSliceName, settings).subscribe(() => LoggerService.debug('Setting chrome local success', settings));
+};
+
+const syncSettings = (settings: SettingsSlice): void => {
   // TODO : move to thunk ?
   syncSet<SettingsSlice>(SettingsSliceName, settings).subscribe(() => LoggerService.debug('Setting chrome sync success', settings));
+};
+
+export const saveSettings = (settings: SettingsSlice): void => {
+  if (settings.sync.mode === SyncSettingMode.sync) syncSettings(settings);
+  localSettings(settings);
 };
 
 export const setNestedReducer = <T>(oldSettings: SettingsSlice, payload: Partial<T>, name: keyof SettingsSlice): SettingsSlice => {
@@ -29,7 +48,7 @@ export const setNestedReducer = <T>(oldSettings: SettingsSlice, payload: Partial
 
 export const syncNestedReducer = <T>(oldSettings: SettingsSlice, payload: Partial<T>, name: keyof SettingsSlice): SettingsSlice => {
   const newSettings = setNestedReducer(oldSettings, payload, name);
-  syncSettings(newSettings);
+  saveSettings(newSettings);
   return newSettings;
 };
 
@@ -63,13 +82,13 @@ export const setReducer = (oldSettings: SettingsSlice, action: PayloadAction<Par
 
 export const syncReducer = (oldSettings: SettingsSlice, action: PayloadAction<Partial<SettingsSlice>>): SettingsSlice => {
   const newSettings = setReducer(oldSettings, action);
-  syncSettings(newSettings);
+  saveSettings(newSettings);
   return newSettings;
 };
 
 export const syncConnectionReducer = (oldSettings: SettingsSlice, { payload }: PayloadAction<Partial<Connection>>): SettingsSlice => {
   const newSettings = setNestedReducer(oldSettings, payload, 'connection');
-  syncSettings(
+  saveSettings(
     payload?.rememberMe
       ? { ...newSettings, connection: { ...newSettings.connection, otp_code: '' } }
       : { ...newSettings, connection: { ...defaultConnection, rememberMe: payload?.rememberMe } },
@@ -105,4 +124,10 @@ export const addTo = <P extends Payloads, K extends Keys>(
 };
 export const removeFrom = <P extends Payloads, K extends Keys>(oldSettings: SettingsSlice, key: K, filter: (obj: P) => boolean): SettingsSlice => {
   return syncPayload<P, K>(oldSettings, key, array => array?.filter(filter));
+};
+
+export const setSyncSettingsReducer: CaseReducer<SettingsSlice, PayloadAction<Partial<SyncSettings>>> = (state, { payload: sync }) => {
+  const newState = { ...state, sync: { ...state.sync, ...sync } };
+  saveSettings(newState);
+  return newState;
 };

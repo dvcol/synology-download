@@ -37,7 +37,7 @@ export class LoggerService {
       });
     }
 
-    this.debug('Logger service initialized');
+    console.debug(this.timestamp, 'Logger service initialized');
   }
 
   private static dispatch(log: Log) {
@@ -72,7 +72,7 @@ export class LoggerService {
         type: ChromeMessageType.logger,
         payload: log,
       }).subscribe({
-        error: e => console.warn('Log dispatch failed, forward ended in error.', e),
+        error: e => console.warn(this.timestamp, 'Log dispatch failed, forward ended in error.', e),
       });
     }
     this.dispatch(log);

@@ -1,0 +1,8 @@
+{
+  "common__model__sync_mode__sync": {
+    "message": "Sync"
+  },
+  "common__model__sync_mode__local": {
+    "message": "Local"
+  }
+}

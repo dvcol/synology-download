@@ -1,4 +1,4 @@
-import { catchError, of, switchMap, tap } from 'rxjs';
+import { catchError, finalize, of, switchMap, tap } from 'rxjs';
 
 import { localGet } from '@dvcol/web-extension-utils';
 
@@ -30,7 +30,7 @@ export const restoreLoginSate = () => {
 export const restoreLocalSate = (store: Store) =>
   localGet<StateSlice>(stateSlice.name).pipe(
     switchMap(state => {
-      LoggerService.debug('restoring state from chrome storage', state);
+      LoggerService.debug('Restoring state slice from chrome storage...', state);
 
       // restore saved state while removing logged state
       store.dispatch(restoreState({ ...state, logged: false }));
@@ -38,9 +38,9 @@ export const restoreLocalSate = (store: Store) =>
       // restore login state based on settings
       return restoreLoginSate();
     }),
-    tap(() => LoggerService.debug('Local state restored.')),
+    finalize(() => LoggerService.debug('Local state slice restored.')),
     catchError(err => {
-      LoggerService.error('local state failed to restore.', err);
+      LoggerService.error('Local state slice failed to restore.', err);
       return of(null);
     }),
   );

@@ -175,3 +175,5 @@ export const getAdvancedSettingsLoggingLevel = createSelector(
   getAdvancedSettingsLogging,
   (logging: AdvancedLogging) => logging?.levels ?? defaultLoggingLevels,
 );
+
+export const getSyncSettings = createSelector(getSettings, (setting: SettingsSlice) => setting?.sync);

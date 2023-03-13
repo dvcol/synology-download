@@ -26,6 +26,7 @@ const {
   syncDownloadsIntercept,
   syncAdvanced,
   syncAdvancedLogging,
+  setSyncSettings,
 } = settingsSlice.actions;
 
 // Export as named constants
@@ -54,4 +55,5 @@ export {
   syncDownloadsIntercept,
   syncAdvanced,
   syncAdvancedLogging,
+  setSyncSettings,
 };

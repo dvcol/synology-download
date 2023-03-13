@@ -1,23 +1,39 @@
 import DownloadIcon from '@mui/icons-material/Download';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
-import { Button, Card, CardActions, CardContent, CardHeader, Stack } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CardHeader, MenuItem, Stack } from '@mui/material';
 
 import React, { useEffect, useState } from 'react';
 
-import { useSelector } from 'react-redux';
+import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 import { Subscription } from 'rxjs';
 
 import { localClear, localGet, syncClear, syncGet, useI18n } from '@dvcol/web-extension-utils';
 
-import { ButtonWithConfirm, JsonExplorer } from '@src/components';
-import type { RootSlice } from '@src/models';
-import { AdvancedHeader, ColorLevel } from '@src/models';
-import { getRoot } from '@src/store/selectors';
+import { ButtonWithConfirm, FormInput, JsonExplorer } from '@src/components';
+import type { RootSlice, SyncSettings } from '@src/models';
+import { AdvancedHeader, ColorLevel, defaultSyncSettings, SyncSettingMode } from '@src/models';
+import { setSyncSettings } from '@src/store/actions';
+import { getRoot, getSyncSettings } from '@src/store/selectors';
 import { downloadJson } from '@src/utils/downlaod.utils';
 
 export const SettingsChromeStorage = () => {
   const i18n = useI18n('panel', 'settings', 'advanced', 'storage');
   const store = useSelector<RootSlice, RootSlice>(getRoot);
+
+  const syncSettings = useSelector<RootSlice, SyncSettings>(getSyncSettings);
+
+  const { handleSubmit, control } = useForm<SyncSettings>({
+    mode: 'onChange',
+    defaultValues: {
+      ...defaultSyncSettings,
+      ...syncSettings,
+    },
+  });
+
+  const dispatch = useDispatch();
+
+  const onEnableChange = handleSubmit(data => dispatch(setSyncSettings(data)));
 
   const [sync, setSync] = useState({});
   const [local, setLocal] = useState({});
@@ -43,6 +59,30 @@ export const SettingsChromeStorage = () => {
         sx={{ p: '1rem 1rem 0' }}
       />
       <CardContent>
+        <CardHeader
+          title={i18n('sync_mode_title')}
+          subheader={i18n('sync_mode_subheader')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          action={
+            <FormInput
+              controllerProps={{ name: `mode`, control }}
+              textFieldProps={{
+                select: true,
+                label: i18n('sync_mode_label'),
+                sx: { flex: '0 0 10rem', textTransform: 'capitalize' },
+                onChange: onEnableChange,
+              }}
+            >
+              {Object.values(SyncSettingMode).map(mode => (
+                <MenuItem key={mode} value={mode}>
+                  {i18n(mode, 'common', 'model', 'sync_mode')}
+                </MenuItem>
+              ))}
+            </FormInput>
+          }
+          sx={{ p: '0.5rem 0' }}
+        />
         <Card sx={{ p: '0.5rem', m: '0.5rem 0', maxHeight: '30rem', overflow: 'auto' }}>
           <JsonExplorer data={sync} name={'sync'} />
           <JsonExplorer data={local} name={'local'} />

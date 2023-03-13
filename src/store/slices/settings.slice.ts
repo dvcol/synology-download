@@ -13,6 +13,7 @@ import type {
   Polling,
   QuickMenu,
   SettingsSlice,
+  SyncSettings,
 } from '@src/models';
 import { defaultSettings, SettingsSliceName } from '@src/models';
 
@@ -21,6 +22,7 @@ import {
   removeFrom,
   setBadgeReducer,
   setReducer,
+  setSyncSettingsReducer,
   syncAdvancedLoggingReducer,
   syncConnectionReducer,
   syncInterceptReducer,
@@ -56,6 +58,7 @@ interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   syncDownloadsIntercept: CaseReducer<S, PayloadAction<DownloadsIntercept>>;
   syncAdvanced: CaseReducer<S, PayloadAction<AdvancedSettings>>;
   syncAdvancedLogging: CaseReducer<S, PayloadAction<AdvancedLogging>>;
+  setSyncSettings: CaseReducer<S, PayloadAction<Partial<SyncSettings>>>;
 }
 
 export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'settings'>({
@@ -114,5 +117,6 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
     syncDownloadsIntercept: syncInterceptReducer,
     syncAdvanced: (oldSettings, { payload }) => syncNestedReducer<AdvancedSettings>(oldSettings, payload, 'advanced'),
     syncAdvancedLogging: syncAdvancedLoggingReducer,
+    setSyncSettings: setSyncSettingsReducer,
   } as SettingsReducers,
 });

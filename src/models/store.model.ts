@@ -3,7 +3,7 @@ import type { ContentCount } from '@src/models/content.model';
 import type { Download } from './download.model';
 
 import type { ContextMenu, QuickMenu } from './menu.model';
-import type { AdvancedSettings, Connection, Downloads, Global, Log, Notifications, Polling } from './settings.model';
+import type { AdvancedSettings, Connection, Downloads, Global, Log, Notifications, Polling, SyncSettings } from './settings.model';
 import type { ContentTab } from './tab.model';
 import type { Task, TaskComplete, TaskFile, TaskStatistics } from './task.model';
 import type { Store } from 'redux';
@@ -64,6 +64,7 @@ export interface SettingsSlice {
   global: Global;
   downloads: Downloads;
   advanced: AdvancedSettings;
+  sync: SyncSettings;
 }
 
 export interface RootSlice {

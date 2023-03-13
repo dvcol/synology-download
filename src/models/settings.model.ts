@@ -375,6 +375,19 @@ export const defaultAdvancedSettings: AdvancedSettings = {
   logging: defaultAdvancedLogging,
 };
 
+export enum SyncSettingMode {
+  sync = 'sync',
+  local = 'local',
+}
+
+export interface SyncSettings {
+  mode: SyncSettingMode;
+}
+
+export const defaultSyncSettings: SyncSettings = {
+  mode: SyncSettingMode.sync,
+};
+
 export const defaultSettings: SettingsSlice = {
   notifications: defaultNotifications,
   connection: defaultConnection,
@@ -385,4 +398,5 @@ export const defaultSettings: SettingsSlice = {
   global: defaultGlobal,
   downloads: defaultDownloads,
   advanced: defaultAdvancedSettings,
+  sync: defaultSyncSettings,
 };
