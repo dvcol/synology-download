@@ -33,7 +33,7 @@ jobs:
       - name: Clean install dependencies
         run: yarn install
 
-      - name: Release
+      - name: Tag and bump Release
         run: |
           # setup git creds
           git config user.name "GitHub Release Bot"
