@@ -83,7 +83,7 @@ export class LoggerService {
     return this.filter(level);
   }
 
-  private static get timestamp(): string {
+  static get timestamp(): string {
     return `[${new Date()?.toISOString()} - ${this.source}]`;
   }
 

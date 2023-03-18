@@ -1,4 +1,4 @@
-import { catchError, EMPTY, exhaustMap, finalize, map, of, Subject, switchMap, take, tap, throttleTime, throwError } from 'rxjs';
+import { catchError, EMPTY, exhaustMap, finalize, map, of, retry, Subject, switchMap, take, tap, throttleTime, throwError } from 'rxjs';
 
 import { useI18n } from '@dvcol/web-extension-utils';
 
@@ -393,6 +393,7 @@ export class QueryService {
   private static taskStatisticsHandler = this.taskStatisticsRequest.pipe(
     exhaustMap(() => this.doGetStatistic()),
     tap(response => this.taskStatisticsResponse.next(response)),
+    retry(), // re subscribe on error
   );
 
   private static doGetStatistic(): Observable<DownloadStationStatistic> {
@@ -415,6 +416,7 @@ export class QueryService {
   private static listTaskHandler = this.listTaskRequest.pipe(
     exhaustMap(() => this.doListTasks()),
     tap(response => this.listTaskResponse.next(response)),
+    retry(), // re subscribe on error
   );
 
   static listTasks(): Observable<TaskList> {
@@ -454,6 +456,7 @@ export class QueryService {
   private static listTaskFilesHandler = this.listTaskFilesRequest.pipe(
     exhaustMap(request => this.doListTaskFiles(request)),
     tap(response => this.listTaskFilesResponse.next(response)),
+    retry(), // re subscribe on error
   );
 
   private static doListTaskFiles(request: TaskListFilesRequest): Observable<TaskListFilesResponse> {
