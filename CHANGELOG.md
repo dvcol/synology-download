@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.1](https://github.com/dvcol/synology-download/compare/v2.2.0...v2.2.1) (2023-03-18)
+
+
+### Bug Fixes
+
+* **polling:** add retry to keep polling task after error ([dbe590f](https://github.com/dvcol/synology-download/commit/dbe590f41cd72df52e9fbc8cdfce9123351f9cae))
+
 ## [2.2.0](https://github.com/dvcol/synology-download/compare/v2.0.3...v2.2.0) (2023-03-13)
 
 
