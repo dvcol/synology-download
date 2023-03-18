@@ -1,0 +1,129 @@
+name: Bug report
+description: Report errors or unexpected issues
+title: '[bug]: Bug Report (please change this title)'
+labels: ['bug', 'bug-report']
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for creating an issue! In order to expedite the bug fixing please fill as much of the following categories as possible.
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Affected part
+      description: Which part of the application is impacted ?
+      multiple: true
+      options:
+        - General UI
+        - General Options/Settings
+        - Connection (login/fetching)
+        - Polling (task refresh)
+        - Task list
+        - Notification
+        - Pop-up
+        - Quick menus (dropdown click)
+        - Context menu (right click on links)
+        - Overlay (modal)
+        - Local Downloads
+        - Content script (inside the page)
+        - Background script (background extension process)
+        - Other (none of the above)
+    validations:
+      required: true
+
+  - type: input
+    id: version-extension
+    attributes:
+      label: Extension version
+      description: The version of synology-download (visible in the manage extension page in your browser).
+      placeholder: ex. 2.0.2
+    validations:
+      required: true
+
+  - type: input
+    id: version-dsm
+    attributes:
+      label: DSM version
+      description: The version of your nas (DSM > Control Panel > Info Center > General > DSM version).
+      placeholder: ex. DSM 7.1
+    validations:
+      required: true
+
+  - type: input
+    id: version-browser
+    attributes:
+      label: Browser version
+      description: The version of your browser (usually found in the browser's "About").
+      placeholder: e.g. Chrome Version 110.0.5481.177 (Official Build) (arm64)
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A brief description of the issue.
+      placeholder: |
+        Describe what happens:
+        
+        Everytime I add a new torrent, the extension crashes ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to Reproduce the Issue
+      description: Please describe in details the steps to reproduce your issue.
+      placeholder: | 
+        Describe how to reproduce:
+        
+          1. When I'm doing this
+          2. Then this
+          3. While having this open
+          4. This doesn't work
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or Mock up
+      description: If possible provide a screenshot or a mock-up of the issue.
+      placeholder: Paster your screenshot of mockup here.
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      render: console
+      label: Failure Logs
+      description: |
+        If possible open the console by right clicking the extension's icon, left clicking on 'Inspect Popup-up' and then copy pasting any error log you can find.
+        You can also enable higher logging levels in extension settings > advanced > logging. 
+        We recommend reproducing the issue with debug logging enabled everywhere to facilitate debugging.
+      placeholder: |
+        Paste your logs here :
+
+        [2023-03-18T11:14:43.789Z - popup] Logger service initialized
+        [2023-03-18T11:14:43.791Z - popup] Download service initialized Object
+        [2023-03-18T11:14:43.791Z - popup] Query service initialized Object
+        2023-03-18T11:14:43.791Z - popup] Notification service initialized Object
+        ...
+    validations:
+      required: false
+
+  - type: textarea
+    id: snapshots
+    attributes:
+      render: json
+      label: Store snapshots
+      description: |
+        If possible generate an export of your store and/or storage state to help debug the issue (extension settings > advanced > storage/redux > export snapshot).
+        Note that those snapshot may contain identifiable information you might want to redact before submitting (like credentials or external ip addresses)
+      placeholder: Paste your snapshot here.
+    validations:
+      required: false

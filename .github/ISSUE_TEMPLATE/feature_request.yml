@@ -1,0 +1,71 @@
+name: Feature request
+description: Suggest an improvement
+title: '[feature]: Feature Request (please change this title)'
+labels: ['enhancement', 'feature-request']
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for creating a feature request ! Please detail as much as possible the desired functionality.
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Affected part
+      description: Which part of the application do you with to improve ?
+      multiple: true
+      options:
+        - General UI
+        - General Options/Settings
+        - Connection (login/fetching)
+        - Polling (task refresh)
+        - Task list
+        - Notification
+        - Pop-up
+        - Quick menus (dropdown click)
+        - Context menu (right click on links)
+        - Overlay (modal)
+        - Local Downloads
+        - Content script (inside the page)
+        - Background script (background extension process)
+        - Other (none of the above)
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A brief description of the proposed functionality.
+      placeholder: |
+        Describe what you want to improve:
+        
+        I wish that when I'm downloading a task I also get a free coffee !
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots or Mock up
+      description: If possible provide a screenshot or a mock-up of the desired functionality.
+      placeholder: Paster your screenshot of mockup here.
+    validations:
+      required: false
+
+  - type: textarea
+    id: code
+    attributes:
+      render: code
+      label: Code example
+      description: |
+        If you have a specific solution in mind, please document it here, or better create a PR and link it to this issue
+      placeholder: |
+        Please right or link your code here
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: If you are enjoying the extension, please leave a review in the extension [store](https://chrome.google.com/webstore/detail/ebbdkledlkjpgbbmmopgbnnjmklnkcef) !
