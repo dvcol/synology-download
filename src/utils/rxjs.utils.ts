@@ -10,7 +10,6 @@ import {
   of,
   race,
   repeat,
-  repeatWhen,
   skipWhile,
   switchMap,
   takeUntil,
@@ -40,11 +39,7 @@ export type SkipUntilRepeat = <T>(
  * @param start$ a stream notifier
  */
 export const skipUntilRepeat: SkipUntilRepeat = (skip, stop$, start$) => source$ =>
-  source$.pipe(
-    skipWhile(skip),
-    takeUntil(stop$),
-    repeatWhen(() => start$),
-  );
+  source$.pipe(skipWhile(skip), takeUntil(stop$), repeat({ delay: () => start$ }));
 
 /**
  * Type signature for the rxjs operator function that buffer source observable until debounce condition is reached or buffer size reach limit
