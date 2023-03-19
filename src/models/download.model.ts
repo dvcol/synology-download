@@ -1,7 +1,9 @@
+import { elapsedTime } from '@dvcol/web-extension-utils';
+
 import { ColorLevel } from '@src/models/material-ui.model';
 
 import type { DownloadItem, DownloadQuery } from '@src/utils';
-import { computeProgress, formatTime, getDateDiff } from '@src/utils';
+import { computeProgress, formatTime } from '@src/utils';
 
 import { ContentSource } from './content.model';
 
@@ -78,7 +80,7 @@ const getEstimatedSpeed = (download: DownloadItem): number | undefined => {
   if (!download.estimatedEndTime) return;
   if (download.bytesReceived > download.fileSize) return;
   const date = new Date(download.estimatedEndTime);
-  const seconds = getDateDiff(date);
+  const seconds = elapsedTime(date);
   const remaining = download.fileSize - download.bytesReceived;
   return remaining / seconds;
 };
@@ -86,7 +88,7 @@ const getEstimatedSpeed = (download: DownloadItem): number | undefined => {
 const formatEstimatedTime = (download: DownloadItem) => {
   if (!download.estimatedEndTime) return;
   const date = new Date(download.estimatedEndTime);
-  const seconds = getDateDiff(date);
+  const seconds = elapsedTime(date);
   return formatTime(seconds);
 };
 

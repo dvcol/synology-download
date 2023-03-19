@@ -1,6 +1,6 @@
 import { filter, map, Subject, tap } from 'rxjs';
 
-import { useI18n } from '@dvcol/web-extension-utils';
+import { isMacOs, useI18n } from '@dvcol/web-extension-utils';
 
 import type {
   ChromeNotification,
@@ -24,7 +24,7 @@ import {
   getNotificationsSnackLevel,
   getStateBadge,
 } from '@src/store/selectors';
-import { bufferDebounceUnless, createNotification, isMacOs, onMessage, parseMagnetLink, sendActiveTabMessage, sendMessage, store$ } from '@src/utils';
+import { bufferDebounceUnless, createNotification, onMessage, parseMagnetLink, sendActiveTabMessage, sendMessage, store$ } from '@src/utils';
 
 import type { VariantType } from 'notistack';
 import type { Observable } from 'rxjs';
