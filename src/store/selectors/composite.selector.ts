@@ -1,7 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-import { nullSafeCompare, numberCompare, stringCompare } from '@dvcol/web-extension-utils';
-
 import type {
   Content,
   ContentCount,
@@ -43,6 +41,7 @@ import {
   getWaitingTasksIds,
   isModalOpen,
 } from '@src/store/selectors';
+import { nullSafeCompare, numberCompare, stringCompare } from '@src/utils';
 
 export const getTabOrFirst = createSelector(getTab, getTabs, (tab?: ContentTab, tabs?: ContentTab[]) => tab ?? (tabs?.length ? tabs[0] : tab));
 

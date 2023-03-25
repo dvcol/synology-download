@@ -6,12 +6,11 @@ import { useForm } from 'react-hook-form';
 
 import { useDispatch } from 'react-redux';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import { FormInput, FormTab } from '@src/components';
 import type { ContentTab, Tab } from '@src/models';
 import { ColorLevel, ColorLevelMap, ContentTabSort, getColorFromLevel, getLevelFromColor } from '@src/models';
 import { removeContentTab, saveContentTab } from '@src/store/actions';
+import { useI18n } from '@src/utils';
 
 import type { UseFormGetValues, UseFormSetValue } from 'react-hook-form';
 import type { Control } from 'react-hook-form/dist/types/form';

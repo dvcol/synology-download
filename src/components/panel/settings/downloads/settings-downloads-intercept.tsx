@@ -7,8 +7,6 @@ import { useForm } from 'react-hook-form';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import { ButtonWithConfirm, FormCheckbox, FormSwitch } from '@src/components';
 
 import type { DownloadExtension, DownloadsIntercept } from '@src/models';
@@ -16,6 +14,7 @@ import { ColorLevel, ColorLevelMap, defaultDownloads, DownloadsHeader } from '@s
 import type { StoreState } from '@src/store';
 import { syncDownloadsIntercept } from '@src/store/actions';
 import { getSettingsDownloadsEnabled, getSettingsDownloadsIntercept } from '@src/store/selectors';
+import { useI18n } from '@src/utils';
 
 import { SettingsDownloadsExtensions } from './settings-downloads-extensions';
 

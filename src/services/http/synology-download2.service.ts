@@ -1,6 +1,3 @@
-import type { HttpParameters } from '@dvcol/web-extension-utils';
-import { HttpMethod } from '@dvcol/web-extension-utils';
-
 import type {
   CommonResponse,
   SynologyQueryOptions,
@@ -20,8 +17,8 @@ import type {
 } from '@src/models';
 import { DownloadStation2API, Endpoint, EntryAPI, EntryMethod, Task2Method } from '@src/models';
 import { SynologyService } from '@src/services/http';
-
-import { buildFormData, stringifyKeys } from '@src/utils';
+import type { HttpParameters } from '@src/utils';
+import { HttpMethod, buildFormData, stringifyKeys } from '@src/utils';
 
 import type { Observable } from 'rxjs';
 

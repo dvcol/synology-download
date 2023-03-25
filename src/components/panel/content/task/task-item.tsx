@@ -10,9 +10,6 @@ import { useSelector } from 'react-redux';
 
 import { finalize } from 'rxjs';
 
-import type { i18n } from '@dvcol/web-extension-utils';
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import type { ProgressBackgroundProps, TaskDetailProps } from '@src/components';
 import { IconLoader } from '@src/components';
 
@@ -21,7 +18,8 @@ import { ColorLevel, ColorLevelMap, ErrorType, LoginError, TaskStatus, taskStatu
 import { LoggerService, NotificationService, QueryService } from '@src/services';
 import type { StoreState } from '@src/store';
 import { getGlobalTask } from '@src/store/selectors';
-import { before, useDebounceObservable } from '@src/utils';
+import type { i18n } from '@src/utils';
+import { useI18n, before, useDebounceObservable } from '@src/utils';
 
 import { ContentItem } from '../content-item';
 

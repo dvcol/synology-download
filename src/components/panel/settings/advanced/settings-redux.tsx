@@ -5,12 +5,11 @@ import React from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import { JsonExplorer } from '@src/components';
 import type { RootSlice } from '@src/models';
 import { AdvancedHeader, ColorLevel } from '@src/models';
 import { getRoot } from '@src/store/selectors';
+import { useI18n } from '@src/utils';
 import { downloadJson } from '@src/utils/downlaod.utils';
 
 export const SettingsRedux = () => {

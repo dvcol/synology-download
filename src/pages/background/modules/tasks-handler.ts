@@ -1,11 +1,10 @@
 import { catchError, finalize, map, of } from 'rxjs';
 
-import { getManifest, localGet, localSet, parseJSON, versionCheck } from '@dvcol/web-extension-utils';
-
 import type { SyncedTaskSlice } from '@src/models';
 import { LoggerService } from '@src/services';
 import { restoreTasks } from '@src/store/actions';
 import { tasksSlice } from '@src/store/slices/tasks.slice';
+import { getManifest, localGet, localSet, parseJSON, versionCheck } from '@src/utils';
 
 import type { Store } from 'redux';
 

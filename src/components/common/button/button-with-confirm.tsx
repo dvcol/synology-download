@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import React, { useState } from 'react';
 
-import { useI18n } from '@dvcol/web-extension-utils';
+import { useI18n } from '@src/utils';
 
 import { ConfirmationDialog } from '../dialog';
 

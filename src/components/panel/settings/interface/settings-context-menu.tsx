@@ -6,13 +6,11 @@ import { useForm } from 'react-hook-form';
 
 import { useDispatch } from 'react-redux';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import { FormExplorer, FormInput, FormSwitch } from '@src/components/common';
 import type { ContextMenu } from '@src/models';
 import { ChromeMessageType } from '@src/models';
 import { removeContextMenu, saveContextMenu } from '@src/store/actions';
-import { sendMessage } from '@src/utils';
+import { useI18n, sendMessage } from '@src/utils';
 
 export const SettingsContextMenu = ({ menu }: { menu: ContextMenu }) => {
   const i18n = useI18n('panel', 'settings', 'context_menu');

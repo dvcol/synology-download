@@ -22,13 +22,10 @@ import { useForm } from 'react-hook-form';
 
 import { finalize, lastValueFrom } from 'rxjs';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import { FormCheckbox, IconLoader } from '@src/components';
 import type { FormRules, TaskListDownloadRequest, TaskListResponse } from '@src/models';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
-
-import { before } from '@src/utils';
+import { useI18n, before } from '@src/utils';
 
 import type { FC } from 'react';
 import type { Subscription } from 'rxjs';

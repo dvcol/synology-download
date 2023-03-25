@@ -4,13 +4,12 @@ import React from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import type { QuickMenu } from '@src/models';
 import { defaultQuickMenu, InterfaceHeader } from '@src/models';
 import type { StoreState } from '@src/store';
 import { resetQuickMenus, saveQuickMenu, setQuickMenus } from '@src/store/actions';
 import { getQuick } from '@src/store/selectors';
+import { useI18n } from '@src/utils';
 
 import { SettingsAccordion } from '../common';
 

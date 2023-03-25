@@ -22,14 +22,13 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { firstValueFrom, Subscription } from 'rxjs';
 
-import { localClear, localGet, syncClear, syncGet, useI18n } from '@dvcol/web-extension-utils';
-
 import { ButtonWithConfirm, FormInput, JsonExplorer } from '@src/components';
 import type { RootSlice, SettingsSlice, SyncSettings } from '@src/models';
 import { AdvancedHeader, ColorLevel, ColorLevelCss, defaultSettings, defaultSyncSettings, SyncSettingMode } from '@src/models';
 import { setSyncSettings, syncSettings } from '@src/store/actions';
 import { getRoot, getSyncSettings } from '@src/store/selectors';
 import { settingsSlice } from '@src/store/slices/settings.slice';
+import { localClear, localGet, syncClear, syncGet, useI18n } from '@src/utils';
 import { downloadJson } from '@src/utils/downlaod.utils';
 
 export const SettingsChromeStorage = () => {

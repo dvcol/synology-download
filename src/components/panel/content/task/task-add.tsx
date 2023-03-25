@@ -8,14 +8,11 @@ import { useForm } from 'react-hook-form';
 
 import { finalize, lastValueFrom, tap } from 'rxjs';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import { FormCheckbox, FormExplorer, FormInput, FormSwitch, IconLoader } from '@src/components';
 import type { FormRules, TaskCreateRequest, TaskForm, TaskListDownloadRequest } from '@src/models';
 import { TaskCreateType, torrentExtension } from '@src/models';
 import { QueryService } from '@src/services';
-
-import { before } from '@src/utils';
+import { useI18n, before } from '@src/utils';
 
 import { TaskAddSelect } from './task-add-select';
 

@@ -7,14 +7,13 @@ import React, { Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import { AppRoute } from '@src/models';
 
 import { QueryService } from '@src/services';
 import type { StoreState } from '@src/store';
 import { setNavbar } from '@src/store/actions';
 import { getLoading, getLogged, getShouldAutoLogin } from '@src/store/selectors';
+import { useI18n } from '@src/utils';
 
 import type { FC } from 'react';
 

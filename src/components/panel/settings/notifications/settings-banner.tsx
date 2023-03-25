@@ -7,13 +7,12 @@ import { useForm } from 'react-hook-form';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import { ButtonWithConfirm, FormInput, FormSwitch } from '@src/components';
 import type { Notifications, NotificationsBanner } from '@src/models';
 import { defaultNotifications, NotificationHeader, NotificationLevel, NotificationLevelKeys } from '@src/models';
 import { syncNotifications } from '@src/store/actions';
 import { getNotifications } from '@src/store/selectors';
+import { useI18n } from '@src/utils';
 
 export const SettingsBanner = () => {
   const i18n = useI18n('panel', 'settings', 'banner');

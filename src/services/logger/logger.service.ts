@@ -1,10 +1,8 @@
-import { ProxyLogger } from '@dvcol/web-extension-utils';
-
 import type { Log, ServiceInstance, StoreOrProxy } from '@src/models';
 import { ChromeMessageType, defaultLoggingLevels, LoggingLevel } from '@src/models';
 import { addLogHistory } from '@src/store/actions';
 import { getAdvancedSettingsLogging } from '@src/store/selectors';
-import { onMessage, sendMessage, store$ } from '@src/utils';
+import { ProxyLogger, onMessage, sendMessage, store$ } from '@src/utils';
 
 export class LoggerService {
   private static source: ServiceInstance;

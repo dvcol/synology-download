@@ -8,13 +8,12 @@ import { useForm } from 'react-hook-form';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import { ButtonWithConfirm, FormInput, FormSwitch, JsonExplorer } from '@src/components';
 import type { AdvancedLogging, RootSlice } from '@src/models';
 import { AdvancedHeader, ColorLevel, defaultAdvancedLogging, LoggingLevel, LoggingLevelLevelKeys, ServiceInstance } from '@src/models';
 import { resetLogHistory, syncAdvancedLogging } from '@src/store/actions';
 import { getAdvancedSettingsLogging, getLogHistory } from '@src/store/selectors';
+import { useI18n } from '@src/utils';
 import { downloadJson } from '@src/utils/downlaod.utils';
 
 export const SettingsLogging = () => {

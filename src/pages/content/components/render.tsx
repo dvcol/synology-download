@@ -4,14 +4,12 @@ import React from 'react';
 
 import { render } from 'react-dom';
 
-import { getManifest } from '@dvcol/web-extension-utils';
-
 import { ModalInstance, ServiceInstance } from '@src/models';
 import { ContentApp } from '@src/pages/content/components';
 import { clickListener$ } from '@src/pages/content/modules';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
 import { storeProxy } from '@src/store';
-import { portConnect } from '@src/utils';
+import { getManifest, portConnect } from '@src/utils';
 
 const { name, version } = getManifest();
 const injection = new Date().toISOString();

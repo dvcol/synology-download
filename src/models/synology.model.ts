@@ -1,6 +1,5 @@
-import type { HttpBody, HttpMethod, HttpParameters } from '@dvcol/web-extension-utils';
-
 import type { TaskFile, TaskType } from '@src/models/task.model';
+import type { HttpBody, HttpMethod, HttpParameters } from '@src/utils';
 
 import type { ApiInfo } from './api-info.model';
 

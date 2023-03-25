@@ -1,5 +1,5 @@
-import type { BaseHttpRequest, HttpBody, HttpHeaders, HttpParameters } from '@dvcol/web-extension-utils';
-import { HttpMethod, rxFetch } from '@dvcol/web-extension-utils';
+import type { BaseHttpRequest, HttpBody, HttpHeaders, HttpParameters } from '@src/utils';
+import { HttpMethod, rxFetch } from '@src/utils';
 
 import type { Observable } from 'rxjs';
 

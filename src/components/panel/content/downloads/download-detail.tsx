@@ -2,12 +2,9 @@ import { Button, Typography } from '@mui/material';
 
 import React from 'react';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import type { DownloadItemButton } from '@src/components';
 import type { Download } from '@src/models';
-
-import { dateToLocalString } from '@src/utils';
+import { useI18n, dateToLocalString } from '@src/utils';
 
 import ContentDetail from '../content-detail';
 

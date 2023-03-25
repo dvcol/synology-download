@@ -1,8 +1,6 @@
-import { localSet } from '@dvcol/web-extension-utils';
-
 import type { ContentCount, Log, StateSlice, TaskStatistics } from '@src/models';
 import { LoggerService } from '@src/services';
-import { formatBytes, setBadgeText, setTitle } from '@src/utils';
+import { localSet, formatBytes, setBadgeText, setTitle } from '@src/utils';
 
 import { stateSlice } from '../slices/state.slice';
 

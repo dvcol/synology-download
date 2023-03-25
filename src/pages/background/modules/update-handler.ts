@@ -1,13 +1,11 @@
 import { combineLatest, map, of, takeWhile } from 'rxjs';
 
-import type { ChromeMessage, Manifest } from '@dvcol/web-extension-utils';
-import { getManifest, injectContentScripts } from '@dvcol/web-extension-utils';
-
 import type { SnackNotification, StoreOrProxy } from '@src/models';
 import { AppLinks, ChromeMessageType, NotificationLevel } from '@src/models';
 import { LoggerService } from '@src/services';
 import { getPopup } from '@src/store/selectors';
-import { onInstalled$, sendMessage, store$ } from '@src/utils';
+import type { ChromeMessage, Manifest } from '@src/utils';
+import { getManifest, injectContentScripts, onInstalled$, sendMessage, store$ } from '@src/utils';
 
 type InstalledPayload = { open: boolean; previousVersion?: string; nextVersion: string };
 export const onInstalledEvents = (store: StoreOrProxy) => {

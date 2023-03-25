@@ -7,13 +7,12 @@ import { useForm } from 'react-hook-form';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import { ButtonWithConfirm, FormInput, FormSwitch } from '@src/components';
 import type { FormRules, Polling } from '@src/models';
 import { ConnectionHeader, defaultPolling } from '@src/models';
 import { syncPolling } from '@src/store/actions';
 import { getPolling } from '@src/store/selectors';
+import { useI18n } from '@src/utils';
 
 export const SettingsPolling = () => {
   const i18n = useI18n('panel', 'settings', 'polling');

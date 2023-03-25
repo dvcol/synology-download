@@ -6,9 +6,6 @@ import { useSelector } from 'react-redux';
 
 import { Subscription, withLatestFrom } from 'rxjs';
 
-import type { ChromeResponse } from '@dvcol/web-extension-utils';
-import { i18n } from '@dvcol/web-extension-utils';
-
 import type { InterceptPayload, InterceptResponse, QuickMenu, TaskForm } from '@src/models';
 import { ChromeMessageType, ColorLevel, QuickMenuType } from '@src/models';
 
@@ -18,8 +15,8 @@ import { taskDialog$ } from '@src/pages/content/service/dialog.service';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
 import type { StoreState } from '@src/store';
 import { getDestinationsHistory, getFolderHistory, getLogged, getQuick } from '@src/store/selectors';
-
-import { onMessage, sendMessage, zIndexMax } from '@src/utils';
+import type { ChromeResponse } from '@src/utils';
+import { i18n, onMessage, sendMessage, zIndexMax } from '@src/utils';
 
 import { QuickMenuRecent } from './quick-menu-recent';
 

@@ -3,10 +3,9 @@ import { Paper, Tab, Tabs } from '@mui/material';
 import React from 'react';
 import { HashLink as Link } from 'react-router-hash-link';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import type { SettingsPanelTab } from '@src/models';
 import { SettingHeader } from '@src/models';
+import { useI18n } from '@src/utils';
 
 import type { FC, SyntheticEvent } from 'react';
 

@@ -1,13 +1,11 @@
 import { catchError, finalize, from, lastValueFrom, of, switchMap } from 'rxjs';
 
-import { localGet, syncGet } from '@dvcol/web-extension-utils';
-
 import type { SettingsSlice } from '@src/models';
 import { defaultSettings, SyncSettingMode } from '@src/models';
 import { LoggerService } from '@src/services';
 import { setNavbar, setSettings } from '@src/store/actions';
 import { settingsSlice } from '@src/store/slices/settings.slice';
-import { buildContextMenu, setBadgeBackgroundColor } from '@src/utils';
+import { localGet, syncGet, buildContextMenu, setBadgeBackgroundColor } from '@src/utils';
 
 import type { Store } from 'redux';
 

@@ -18,15 +18,13 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import { ConfirmationDialog, TooltipHoverChange } from '@src/components';
 import type { NavbarButton } from '@src/models';
 import { AppLinks, AppRoute, ErrorType, LoginError, NavbarButtonType } from '@src/models';
 import { DownloadService, NotificationService, QueryService } from '@src/services';
 import { resetDownloads, resetTasks, setNavbar } from '@src/store/actions';
 import { getGlobalNavbarButton, getLogged, getSettingsDownloadsButtons, getSettingsDownloadsEnabled, getUrl } from '@src/store/selectors';
-import { createTab } from '@src/utils';
+import { useI18n, createTab } from '@src/utils';
 
 import NavbarMenuIcon from './navbar-menu-icon';
 

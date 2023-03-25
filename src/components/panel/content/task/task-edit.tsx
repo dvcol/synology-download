@@ -25,15 +25,13 @@ import { useSelector } from 'react-redux';
 
 import { finalize, lastValueFrom } from 'rxjs';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import { FormExplorer, FormInput, IconLoader } from '@src/components';
 import type { FormRules, RootSlice, Task, TaskEditRequest, TaskFile } from '@src/models';
 import { TaskPriority, TaskStatus, TaskType } from '@src/models';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
 
 import { getTaskFilesById } from '@src/store/selectors';
-import { before, useDebounceObservable } from '@src/utils';
+import { useI18n, before, useDebounceObservable } from '@src/utils';
 
 import { TaskEditFiles } from './task-edit-files';
 

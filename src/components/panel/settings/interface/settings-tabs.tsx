@@ -4,13 +4,12 @@ import React from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import type { ContentTab } from '@src/models';
 import { defaultTabs, InterfaceHeader, TaskStatus } from '@src/models';
 import type { StoreState } from '@src/store';
 import { resetContentTabs, saveContentTab, setContentTabs } from '@src/store/actions';
 import { getTabs } from '@src/store/selectors';
+import { useI18n } from '@src/utils';
 
 import { SettingsAccordion } from '../common';
 

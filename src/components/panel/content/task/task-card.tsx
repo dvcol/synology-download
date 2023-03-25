@@ -12,14 +12,12 @@ import React from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import type { Global, Task } from '@src/models';
 import { TaskStatus, taskStatusToColor } from '@src/models';
 
 import type { StoreState } from '@src/store';
 import { getGlobalTask } from '@src/store/selectors';
-import { formatBytes } from '@src/utils';
+import { useI18n, formatBytes } from '@src/utils';
 
 import { ContentCard } from '../content-card';
 

@@ -1,5 +1,3 @@
-import { localSet, syncSet } from '@dvcol/web-extension-utils';
-
 import type {
   AdvancedLogging,
   AdvancedSettings,
@@ -22,7 +20,7 @@ import {
   SyncSettingMode,
 } from '@src/models';
 import { LoggerService } from '@src/services';
-import { setBadgeBackgroundColor } from '@src/utils';
+import { localSet, syncSet, setBadgeBackgroundColor } from '@src/utils';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { CaseReducer } from '@reduxjs/toolkit/src/createReducer';

@@ -12,15 +12,13 @@ import { useSelector } from 'react-redux';
 
 import { exhaustMap, finalize, map, timer } from 'rxjs';
 
-import type { i18n } from '@dvcol/web-extension-utils';
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import { IconLoader, ProgressBar } from '@src/components';
 import type { RootSlice, Task, TaskFile } from '@src/models';
 import { ColorLevel, TaskStatus, TaskType } from '@src/models';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
 import { getPollingInterval, getTaskFilesById } from '@src/store/selectors';
-import { before, computeProgress, dateToLocalString, formatBytes, useDebounceObservable } from '@src/utils';
+import type { i18n } from '@src/utils';
+import { useI18n, before, computeProgress, dateToLocalString, formatBytes, useDebounceObservable } from '@src/utils';
 
 import ContentDetail from '../content-detail';
 

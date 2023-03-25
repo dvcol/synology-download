@@ -1,11 +1,10 @@
 import { catchError, finalize, of, switchMap, tap } from 'rxjs';
 
-import { localGet } from '@dvcol/web-extension-utils';
-
 import type { StateSlice } from '@src/models';
 import { LoggerService, QueryService } from '@src/services';
 import { restoreState } from '@src/store/actions';
 import { stateSlice } from '@src/store/slices/state.slice';
+import { localGet } from '@src/utils';
 
 import type { Store } from 'redux';
 
