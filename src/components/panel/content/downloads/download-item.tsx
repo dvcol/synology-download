@@ -13,8 +13,6 @@ import { useSelector } from 'react-redux';
 
 import { forkJoin } from 'rxjs';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import type { ProgressBackgroundProps } from '@src/components';
 import { TaskAdd } from '@src/components';
 
@@ -25,6 +23,7 @@ import { DownloadService, InterceptService, LoggerService, NotificationService }
 
 import type { StoreState } from '@src/store';
 import { getGlobalDownload, getSettingsDownloadsTransfer } from '@src/store/selectors';
+import { useI18n } from '@src/utils';
 
 import { ContentItem } from '../content-item';
 

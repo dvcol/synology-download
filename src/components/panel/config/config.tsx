@@ -19,13 +19,11 @@ import { useForm } from 'react-hook-form';
 
 import { finalize, forkJoin } from 'rxjs';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import { FormExplorer, FormInput, FormSwitch } from '@src/components';
 import type { DownloadStationConfig, DownloadStationInfo } from '@src/models';
 import { ColorLevel, ColorLevelMap, defaultConfig } from '@src/models';
 import { NotificationService, QueryService } from '@src/services';
-import { before, useDebounceObservable } from '@src/utils';
+import { useI18n, before, useDebounceObservable } from '@src/utils';
 
 import type { CardProps } from '@mui/material';
 import type { FC } from 'react';

@@ -1,8 +1,7 @@
-import { localSet } from '@dvcol/web-extension-utils';
-
 import type { SyncedTaskSlice } from '@src/models';
 
 import { LoggerService } from '@src/services';
+import { localSet } from '@src/utils';
 
 import { tasksSlice } from '../slices/tasks.slice';
 

@@ -1,7 +1,5 @@
 import { catchError, EMPTY, exhaustMap, finalize, map, of, retry, Subject, switchMap, take, tap, throttleTime, throwError } from 'rxjs';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import type {
   CommonResponse,
   ContentStatusTypeId,
@@ -82,7 +80,7 @@ import {
   getTasksIdsByStatusType,
   getUrl,
 } from '@src/store/selectors';
-import { before, sendMessage, store$ } from '@src/utils';
+import { useI18n, before, sendMessage, store$ } from '@src/utils';
 
 import type { Observable } from 'rxjs';
 

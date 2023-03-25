@@ -4,7 +4,7 @@ import { IconButton, InputAdornment } from '@mui/material';
 
 import React, { useState } from 'react';
 
-import { useI18n } from '@dvcol/web-extension-utils';
+import { useI18n } from '@src/utils';
 
 import type { SvgIconProps } from '@mui/material';
 import type { FC, PropsWithChildren } from 'react';

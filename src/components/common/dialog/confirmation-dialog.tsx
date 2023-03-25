@@ -2,10 +2,9 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/
 
 import React from 'react';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import type { TooltipHoverChangeProps } from '@src/components/common/tooltip/tooltip-hover-change';
 import TooltipHoverChange from '@src/components/common/tooltip/tooltip-hover-change';
+import { useI18n } from '@src/utils';
 
 import type { ButtonProps } from '@mui/material';
 

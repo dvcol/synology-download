@@ -9,15 +9,13 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { finalize, lastValueFrom } from 'rxjs';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import { ButtonWithConfirm, FormCheckbox, FormInput, FormSwitch } from '@src/components';
 import type { Connection, Credentials, FormRules, InfoResponse, LoginResponse } from '@src/models';
 import { AppLinks, ColorLevel, ColorLevelMap, CommonAPI, ConnectionHeader, ConnectionType, defaultConnection, Protocol } from '@src/models';
 import { LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { syncConnection } from '@src/store/actions';
 import { getConnection, getLogged, urlReducer } from '@src/store/selectors';
-import { before, createTab, useDebounceObservable } from '@src/utils';
+import { useI18n, before, createTab, useDebounceObservable } from '@src/utils';
 
 import type { Observable } from 'rxjs';
 

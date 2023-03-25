@@ -3,16 +3,14 @@ import { Dialog, DialogContent } from '@mui/material';
 import React, { useEffect } from 'react';
 import { Subject, takeUntil } from 'rxjs';
 
-import type { ChromeResponse } from '@dvcol/web-extension-utils';
-import { i18n } from '@dvcol/web-extension-utils';
-
 import { TaskAdd } from '@src/components';
 import type { ContextMenuOnClickPayload, InterceptResponse, TaskForm } from '@src/models';
 import { ChromeMessageType } from '@src/models';
 import type { TaskDialogIntercept } from '@src/pages/content/service/dialog.service';
 import { taskDialog$ } from '@src/pages/content/service/dialog.service';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
-import { onMessage, sendMessage, zIndexMax } from '@src/utils';
+import type { ChromeResponse } from '@src/utils';
+import { i18n, onMessage, sendMessage, zIndexMax } from '@src/utils';
 
 import type { PortalProps } from '@mui/base/Portal';
 import type { FC } from 'react';

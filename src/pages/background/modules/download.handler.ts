@@ -1,7 +1,5 @@
 import { catchError, firstValueFrom, of, withLatestFrom } from 'rxjs';
 
-import { getActiveTab } from '@dvcol/web-extension-utils';
-
 import type { DownloadsIntercept } from '@src/models';
 import { DownloadStatus } from '@src/models';
 import { InterceptService, LoggerService, NotificationService } from '@src/services';
@@ -12,7 +10,7 @@ import {
   getSettingsDownloadsInterceptEnabled,
   getSettingsDownloadsNotifications,
 } from '@src/store/selectors';
-import { onFilename$, onStatus$, store$ } from '@src/utils';
+import { getActiveTab, onFilename$, onStatus$, store$ } from '@src/utils';
 
 import type { Store } from 'redux';
 import type { Subscription } from 'rxjs';

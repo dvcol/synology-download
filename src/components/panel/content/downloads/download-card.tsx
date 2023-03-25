@@ -12,14 +12,12 @@ import React from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import type { Download, Global } from '@src/models';
 import { DownloadStatus, downloadStatusToColor } from '@src/models';
 
 import type { StoreState } from '@src/store';
 import { getGlobalDownload } from '@src/store/selectors';
-import { formatBytes } from '@src/utils';
+import { useI18n, formatBytes } from '@src/utils';
 
 import { ContentCard } from '../content-card';
 

@@ -3,7 +3,7 @@ import { Box, CircularProgress, Typography } from '@mui/material';
 
 import React from 'react';
 
-import { useI18n } from '@dvcol/web-extension-utils';
+import { useI18n } from '@src/utils';
 
 export const ExplorerLoading = ({ loading, empty }: { loading?: boolean; empty?: boolean }) => {
   const i18n = useI18n('common', 'explorer', 'explorer_loading');

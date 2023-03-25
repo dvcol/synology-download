@@ -7,8 +7,6 @@ import { useForm } from 'react-hook-form';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import { ButtonWithConfirm, FormInput, FormSwitch } from '@src/components';
 import type { StateSlice } from '@src/models';
 import { ColorLevel, ColorLevelMap, DownloadsHeader } from '@src/models';
@@ -16,6 +14,7 @@ import type { StoreState } from '@src/store';
 import { syncDownloadState } from '@src/store/actions';
 import { getDownloadState } from '@src/store/selectors';
 import { initialState } from '@src/store/slices/state.slice';
+import { useI18n } from '@src/utils';
 
 type StateDownload = StateSlice['download'];
 

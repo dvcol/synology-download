@@ -7,11 +7,10 @@ import React, { useEffect } from 'react';
 
 import { catchError, finalize, tap } from 'rxjs';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import type { File, FileList, Folder } from '@src/models';
 
 import { LoggerService, NotificationService, QueryService } from '@src/services';
+import { useI18n } from '@src/utils';
 
 import { ExplorerBreadCrumbs } from './explorer-breadcrumb';
 import { ExplorerLeaf } from './explorer-leaf';

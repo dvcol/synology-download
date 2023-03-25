@@ -2,7 +2,7 @@ import { Box, Button, InputAdornment } from '@mui/material';
 
 import React from 'react';
 
-import { useI18n } from '@dvcol/web-extension-utils';
+import { useI18n } from '@src/utils';
 
 import type { TextFieldProps } from '@mui/material';
 import type { FC, PropsWithChildren } from 'react';

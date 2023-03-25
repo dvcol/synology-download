@@ -1,9 +1,7 @@
-import { elapsedTime } from '@dvcol/web-extension-utils';
-
 import { ColorLevel } from '@src/models/material-ui.model';
 
 import type { DownloadItem, DownloadQuery } from '@src/utils';
-import { computeProgress, formatTime } from '@src/utils';
+import { elapsedTime, computeProgress, formatTime } from '@src/utils';
 
 import { ContentSource } from './content.model';
 

@@ -4,14 +4,12 @@ import React from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import type { ContextMenu } from '@src/models';
 import { ChromeMessageType, defaultContextMenu, InterfaceHeader } from '@src/models';
 import type { StoreState } from '@src/store';
 import { resetContextMenu, saveContextMenu, setContextMenus } from '@src/store/actions';
 import { getMenus } from '@src/store/selectors';
-import { sendMessage } from '@src/utils';
+import { useI18n, sendMessage } from '@src/utils';
 
 import { SettingsAccordion } from '../common';
 

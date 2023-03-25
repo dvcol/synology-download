@@ -1,9 +1,9 @@
 import { BehaviorSubject, distinctUntilChanged, finalize, map } from 'rxjs';
 
-import type { BeforeOperator, BufferDebounceUnless, SkipUntilRepeat } from '@dvcol/web-extension-utils';
 import { before as _before, bufferDebounceUnless as _bufferDebounceUnless, skipUntilRepeat as _skipUntilRepeat } from '@dvcol/web-extension-utils';
 
 import type { RootSlice, StoreOrProxy } from '@src/models';
+import type { BeforeOperator, BufferDebounceUnless, SkipUntilRepeat } from '@src/utils';
 
 /**
  * Rxjs operator that start emitting when skip condition is falsy, keeps emitting until stop$ emits and restart emitting if start$ emits.

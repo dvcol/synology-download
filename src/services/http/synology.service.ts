@@ -1,12 +1,10 @@
 import { catchError, map, of } from 'rxjs';
 
-import type { BaseHttpRequest, HttpHeaders } from '@dvcol/web-extension-utils';
-import { HttpMethod } from '@dvcol/web-extension-utils';
-
 import type { HttpResponse, SynologyQueryArgs, SynologyQueryOptions, SynologyQueryPayload } from '@src/models';
 import { AuthMethod, ChromeMessageType, Controller, SynologyError } from '@src/models';
 import { LoggerService } from '@src/services';
-import { onMessage, sendMessage, stringifyParams } from '@src/utils';
+import type { BaseHttpRequest, HttpHeaders } from '@src/utils';
+import { HttpMethod, onMessage, sendMessage, stringifyParams } from '@src/utils';
 
 import { BaseHttpService } from './base-http.service';
 

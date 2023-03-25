@@ -2,8 +2,6 @@ import { Button, Card, CardHeader, Collapse, Grid, MenuItem } from '@mui/materia
 
 import React from 'react';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import { FormExplorer, FormSwitch } from '@src/components';
 import type { ContentTab, Tab, TabStatus } from '@src/models';
 import {
@@ -16,6 +14,7 @@ import {
   TabTemplate,
   TaskStatus,
 } from '@src/models';
+import { useI18n } from '@src/utils';
 
 import { FormCheckbox } from './form-checkbox';
 import { FormInput } from './form-input';

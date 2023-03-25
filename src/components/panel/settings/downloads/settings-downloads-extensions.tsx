@@ -5,10 +5,9 @@ import React from 'react';
 
 import { useForm } from 'react-hook-form';
 
-import { useI18n } from '@dvcol/web-extension-utils';
-
 import { FormInput } from '@src/components';
 import type { DownloadExtension } from '@src/models';
+import { useI18n } from '@src/utils';
 
 import type { FC } from 'react';
 

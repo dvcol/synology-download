@@ -1,4 +1,3 @@
-import type { ChromeMessage, ChromeMessageHandler, InstalledDetails } from '@dvcol/web-extension-utils';
 import {
   onConnect as _onConnect,
   onInstalled$ as _onInstalled$,
@@ -12,6 +11,7 @@ import {
 import type { ChromeMessagePayload, ChromeMessageType } from '@src/models';
 
 import { LoggerService } from '@src/services';
+import type { ChromeMessage, ChromeMessageHandler, InstalledDetails } from '@src/utils';
 
 import type { Observable } from 'rxjs';
 
