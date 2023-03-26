@@ -44,9 +44,10 @@ export const ScrapePanel: FC<ScrapePanelProps> = ({ cardProps }) => {
   }, []);
 
   const columns: GridColDef<ScrapedContent>[] = [
-    { field: 'type', headerName: 'Type', description: 'Content type', flex: 1 },
-    { field: 'title', headerName: 'Title', description: 'Content title (as shown on page)', flex: 4 },
-    { field: 'src', headerName: 'Url', description: 'Content url (final computed url)', flex: 4 },
+    { field: 'type', headerName: i18n('column__type__label'), description: i18n('column__type__description'), flex: 1 },
+    { field: 'title', headerName: i18n('column__title__label'), description: i18n('column__title__description'), flex: 2 },
+    { field: 'name', headerName: i18n('column__name__label'), description: i18n('column__name__description'), flex: 4 },
+    { field: 'src', headerName: i18n('column__url__label'), description: i18n('column__url__description'), flex: 4 },
   ];
 
   const [form, setForm] = React.useState<TaskForm>();

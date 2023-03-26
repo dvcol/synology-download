@@ -4,5 +4,33 @@
   },
   "panel__scrape__download": {
     "message": "Download"
+  },
+
+  "panel__scrape__column__type__label": {
+    "message": "Type"
+  },
+  "panel__scrape__column__type__description": {
+    "message": "Mime type or generic tag type"
+  },
+
+  "panel__scrape__column__title__label": {
+    "message": "Title"
+  },
+  "panel__scrape__column__title__description": {
+    "message": "Title or alias on the scraped tag (as shown on page)"
+  },
+
+  "panel__scrape__column__name__label": {
+    "message": "Name"
+  },
+  "panel__scrape__column__name__description": {
+    "message": "Parsed filename, pathname or source URL"
+  },
+
+  "panel__scrape__column__url__label": {
+    "message": "Url"
+  },
+  "panel__scrape__column__url__description": {
+    "message": "Source url (src, href, etc.)"
   }
 }

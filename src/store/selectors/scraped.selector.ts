@@ -13,10 +13,11 @@ export const getScrapedPage = createSelector(getScraped, (scraped: ScrapedSlice)
 export const getScrapedContents = createSelector(getScraped, (scraped: ScrapedSlice) => scraped.contents);
 
 const getScrappedContentList = createSelector(getScrapedContents, (contents: ScrapedContents) => [
+  ...contents.links.filter(({ type }) => type === 'magnet'),
   ...contents.videos,
   ...contents.audios,
   ...contents.images,
-  ...contents.links,
+  ...contents.links.filter(({ type }) => type !== 'magnet'),
 ]);
 
 export const getScrappedRows = createSelector(getScrappedContentList, (contents: ScrapedContent[]) =>

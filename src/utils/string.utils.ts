@@ -31,14 +31,15 @@ export const parseMagnetLink = (uri: string, fallback?: string): string => {
  * @param src a source to parse
  * @param fallback default name when none is inferred
  */
-export const parseSrc = (src: string, fallback?: string): string => {
-  if (!src) return fallback ?? src;
+export const parseSrc = (src: string, fallback?: string): string | undefined => {
+  if (!src) return fallback;
   if (src.includes('dn=')) return parseMagnetLink(src, fallback);
   try {
     const pathname = new URL(src).pathname?.split('/').pop()?.trim();
-    if (pathname && /\.(\w+)$/.test(pathname)) return decodeURIComponent(pathname) ?? fallback ?? src;
+    if (pathname && /\.(\w+)$/.test(pathname)) return decodeURIComponent(pathname) ?? fallback;
+    if (pathname) return pathname;
   } catch (e) {
     LoggerService.warn('Failed to parse', src);
   }
-  return fallback ?? src;
+  return fallback;
 };

@@ -31,7 +31,8 @@ const scrapeAudios = (_document?: Document | null, withElements?: boolean): Scra
   _document.querySelectorAll<HTMLSourceElement>('audio > source[src]')?.forEach(source => {
     if (!source.src) return;
     addOrUpdate(links, {
-      title: source?.title?.trim() || parseSrc(source.src),
+      title: source?.title?.trim(),
+      name: parseSrc(source.src),
       src: source.src,
       type: source.type || 'audio',
       element: withElements ? source : undefined,
@@ -49,7 +50,8 @@ const scrapeVideos = (_document?: Document | null, withElements?: boolean): Scra
   _document.querySelectorAll<HTMLVideoElement>('video[src]')?.forEach(video => {
     if (!video.currentSrc) return;
     addOrUpdate(links, {
-      title: video?.title?.trim() || parseSrc(video.currentSrc),
+      title: video?.title?.trim(),
+      name: parseSrc(video.currentSrc),
       src: video.currentSrc,
       duration: video.duration,
       element: withElements ? video : undefined,
@@ -60,7 +62,8 @@ const scrapeVideos = (_document?: Document | null, withElements?: boolean): Scra
   _document.querySelectorAll<HTMLSourceElement>('video > source[src]')?.forEach(source => {
     if (!source.src) return;
     addOrUpdate(links, {
-      title: source?.title?.trim() || parseSrc(source.src),
+      title: source?.title?.trim(),
+      name: parseSrc(source.src),
       src: source.src,
       type: source.type || 'video',
       element: withElements ? source : undefined,
@@ -79,7 +82,8 @@ const scrapeImages = (_document?: Document | null, withElements?: boolean): Scra
   _document.querySelectorAll<HTMLImageElement>('img[src]')?.forEach(image => {
     if (!image.currentSrc) return;
     addOrUpdate(links, {
-      title: image?.title?.trim() || image?.alt?.trim() || parseSrc(image.currentSrc),
+      title: image?.title?.trim() || image?.alt?.trim(),
+      name: parseSrc(image.currentSrc),
       src: image.currentSrc,
       type: 'image',
       element: withElements ? image : undefined,
@@ -89,7 +93,8 @@ const scrapeImages = (_document?: Document | null, withElements?: boolean): Scra
   _document.querySelectorAll<HTMLSourceElement>('picture > source[srcset]')?.forEach(source => {
     if (!source.srcset) return;
     addOrUpdate(links, {
-      title: source?.title?.trim() || parseSrc(source.srcset),
+      title: source?.title?.trim(),
+      name: parseSrc(source.srcset),
       src: source.srcset,
       type: source.type || 'image',
       element: withElements ? source : undefined,
@@ -103,7 +108,8 @@ const scrapeImages = (_document?: Document | null, withElements?: boolean): Scra
     if (!bgImageUrl) return;
     const src = `${window.location.origin}/${encodeURI(bgImageUrl)}`;
     addOrUpdate(links, {
-      title: element?.title?.trim() || parseSrc(src),
+      title: element?.title?.trim(),
+      name: parseSrc(src),
       src,
       type: 'image',
       element: withElements ? element : undefined,
@@ -122,7 +128,8 @@ const scrapeLinks = (_document?: Document | null, withElements?: boolean): Scrap
     const src = a?.href || a?.src;
     if (!src) return;
     addOrUpdate(links, {
-      title: a?.title?.trim() || a?.innerText?.trim() || parseSrc(src),
+      title: a?.title?.trim() || a?.innerText?.trim(),
+      name: parseSrc(src),
       src,
       type: src?.startsWith('magnet:') ? 'magnet' : 'link',
       element: withElements ? a : undefined,
