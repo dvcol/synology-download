@@ -14,6 +14,7 @@ export enum NavbarButtonType {
   OpenSynology = 'openSynology',
   OpenDownloads = 'openDownloads',
   About = 'about',
+  Scrape = 'scrape',
 }
 
 export type ModifiedEvent = Pick<MouseEvent, 'shiftKey' | 'altKey'>;
@@ -27,5 +28,7 @@ export interface NavbarButton {
   hoverTooltip?: ($event: ModifiedEvent) => string | undefined;
   component?: ForwardRefExoticComponent<any>;
   to?: string;
+  hide?: boolean;
+  divider?: boolean;
   disabled?: boolean;
 }

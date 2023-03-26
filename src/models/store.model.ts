@@ -1,5 +1,7 @@
 import type { ContentCount } from '@src/models/content.model';
 
+import type { ScrapedContents, ScrapedPage } from '@src/models/scraped-content.model';
+
 import type { Download } from './download.model';
 
 import type { ContextMenu, QuickMenu } from './menu.model';
@@ -52,6 +54,11 @@ export interface DownloadsSlice {
   entities: Download[];
 }
 
+export interface ScrapedSlice {
+  page: ScrapedPage;
+  contents: ScrapedContents;
+}
+
 export const SettingsSliceName = 'settings';
 
 export interface SettingsSlice {
@@ -72,6 +79,7 @@ export interface RootSlice {
   navbar: NavbarSlice;
   tasks: TasksSlice;
   downloads: DownloadsSlice;
+  scraped: ScrapedSlice;
   settings: SettingsSlice;
 }
 

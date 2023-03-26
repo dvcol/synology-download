@@ -7,10 +7,11 @@ import { store } from '@src/store';
 
 import {
   onContentEvents,
-  onContestMenuEvents,
+  onContextMenuEvents,
   onDownloadEvents,
   onInstalledEvents,
   onPortEvents,
+  onScrapedContentEvent,
   restoreLocalSate,
   restoreSettings,
   restoreTaskSlice,
@@ -29,7 +30,10 @@ export const initServiceWorker = async () => {
   onInstalledEvents(store);
 
   // Listen to context menu events (first because it is required for setting restore)
-  onContestMenuEvents();
+  onContextMenuEvents();
+
+  // Listen to scrapped events
+  onScrapedContentEvent(store);
 
   // Restore settings & polling
   await lastValueFrom(restoreSettings(store));

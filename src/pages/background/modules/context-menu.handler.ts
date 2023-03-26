@@ -6,7 +6,7 @@ import { buildContextMenu, onMessage, removeContextMenu, saveContextMenu } from 
 import type { Observable } from 'rxjs';
 
 /** Listen to context menu events to create/updates menus */
-export const onContestMenuEvents = () => {
+export const onContextMenuEvents = () => {
   LoggerService.debug('Subscribing to context menu events.');
 
   // On message from chrome handle payload
