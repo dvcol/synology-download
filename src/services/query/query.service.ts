@@ -16,11 +16,11 @@ import type {
   QueryAutoLoginOptions,
   StoreOrProxy,
   Task,
+  TaskBtEditRequest,
   TaskComplete,
   TaskCompleteResponse,
   TaskCreateRequest,
   TaskCreateResponse,
-  TaskEditRequest,
   TaskEditResponse,
   TaskFileEditRequest,
   TaskList,
@@ -45,6 +45,7 @@ import {
   TaskListFilesOrderBy,
   TaskListOption,
   TaskStatus,
+  TaskType,
 } from '@src/models';
 import { LoggerService, NotificationService } from '@src/services';
 import { SynologyAuthService, SynologyDownload2Service, SynologyDownloadService, SynologyFileService, SynologyInfoService } from '@src/services/http';
@@ -80,7 +81,7 @@ import {
   getTasksIdsByStatusType,
   getUrl,
 } from '@src/store/selectors';
-import { useI18n, before, sendMessage, store$ } from '@src/utils';
+import { before, sendMessage, store$, useI18n } from '@src/utils';
 
 import type { Observable } from 'rxjs';
 
@@ -596,8 +597,11 @@ export class QueryService {
     return this.download2Client.getTaskEdit(id).pipe(this.loadingOperator(), this.handleErrors);
   }
 
-  static editTask(request: TaskEditRequest): Observable<CommonResponse[]> {
-    return this.download2Client.editTask(request).pipe(
+  static editTask(type: TaskType, request: TaskBtEditRequest): Observable<CommonResponse[]> {
+    let obs$: Observable<CommonResponse[]>;
+    if (type === TaskType.bt) obs$ = this.download2Client.editTaskBt(request);
+    else obs$ = this.download2Client.editTask({ id: [request.task_id], destination: request.destination });
+    return obs$.pipe(
       this.loadingOperator(),
       this.handleErrors,
       switchMap(res => this.listTasks().pipe(map(() => res))),

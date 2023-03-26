@@ -1,6 +1,7 @@
 import type {
   CommonResponse,
   SynologyQueryOptions,
+  TaskBtEditRequest,
   TaskCompleteResponse,
   TaskCreateRequest,
   TaskCreateResponse,
@@ -18,7 +19,7 @@ import type {
 import { DownloadStation2API, Endpoint, EntryAPI, EntryMethod, Task2Method } from '@src/models';
 import { SynologyService } from '@src/services/http';
 import type { HttpParameters } from '@src/utils';
-import { HttpMethod, buildFormData, stringifyKeys } from '@src/utils';
+import { buildFormData, HttpMethod, stringifyKeys } from '@src/utils';
 
 import type { Observable } from 'rxjs';
 
@@ -178,6 +179,18 @@ export class SynologyDownload2Service extends SynologyService {
   }
 
   editTask(request: TaskEditRequest): Observable<CommonResponse[]> {
+    return this._do<CommonResponse[]>({
+      api: DownloadStation2API.Task,
+      method: HttpMethod.POST,
+      version: '2',
+      params: {
+        method: Task2Method.edit,
+        ...stringifyKeys(request),
+      },
+    });
+  }
+
+  editTaskBt(request: TaskBtEditRequest): Observable<CommonResponse[]> {
     return this._do<CommonResponse[]>({
       api: DownloadStation2API.TaskBt,
       method: HttpMethod.POST,

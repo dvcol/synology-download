@@ -102,6 +102,7 @@ export enum Task2Method {
   get = 'get',
   set = 'set',
   list = 'list',
+  edit = 'edit',
   copy = 'copy',
 
   create = 'create',
@@ -247,6 +248,11 @@ export interface TaskEditResponse {
 }
 
 export interface TaskEditRequest {
+  id: string[];
+  destination?: string;
+}
+
+export interface TaskBtEditRequest {
   task_id: string;
 
   destination?: string;

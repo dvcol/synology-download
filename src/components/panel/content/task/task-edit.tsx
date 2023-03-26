@@ -26,19 +26,19 @@ import { useSelector } from 'react-redux';
 import { finalize, lastValueFrom } from 'rxjs';
 
 import { FormExplorer, FormInput, IconLoader } from '@src/components';
-import type { FormRules, RootSlice, Task, TaskEditRequest, TaskFile } from '@src/models';
+import type { FormRules, RootSlice, Task, TaskBtEditRequest, TaskFile } from '@src/models';
 import { TaskPriority, TaskStatus, TaskType } from '@src/models';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
 
 import { getTaskFilesById } from '@src/store/selectors';
-import { useI18n, before, useDebounceObservable } from '@src/utils';
+import { before, useDebounceObservable, useI18n } from '@src/utils';
 
 import { TaskEditFiles } from './task-edit-files';
 
 import type { SyntheticEvent } from 'react';
 import type { Subscription } from 'rxjs';
 
-type TaskEditForm = TaskEditRequest;
+type TaskEditForm = TaskBtEditRequest;
 
 export const TaskEdit = ({
   open,
@@ -151,7 +151,7 @@ export const TaskEdit = ({
       return;
     }
     return lastValueFrom(
-      QueryService.editTask(data).pipe(
+      QueryService.editTask(task.type, data).pipe(
         before(() => {
           setLoading(true);
           next(true);
