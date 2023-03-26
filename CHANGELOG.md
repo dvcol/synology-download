@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://github.com/dvcol/synology-download/compare/v2.2.1...v2.3.0) (2023-03-26)
+
+
+### Features
+
+* **scraping:** adds support for link scrapping ([7eab8a3](https://github.com/dvcol/synology-download/commit/7eab8a39822207a96cc9d54723bf4c0a2c7c78b5))
+
 ### [2.2.1](https://github.com/dvcol/synology-download/compare/v2.2.0...v2.2.1) (2023-03-18)
 
 
