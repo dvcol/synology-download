@@ -1,6 +1,6 @@
 {
   "name": "@dvcol/synology-download",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "packageManager": "yarn@3.5.0",
   "description": "A basic synology download station client chrome extension",
   "license": "MIT",
@@ -45,6 +45,7 @@
     "@mui/material": "^5.5.0",
     "@mui/x-data-grid": "^6.0.3",
     "@reduxjs/toolkit": "^1.7.2",
+    "global": "^4.4.0",
     "notistack": "^2.0.3",
     "pretty-bytes": "^5.6.0",
     "react": "^17.0.2",
