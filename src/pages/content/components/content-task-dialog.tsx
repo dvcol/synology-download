@@ -1,9 +1,7 @@
-import { Dialog, DialogContent } from '@mui/material';
-
 import React, { useEffect } from 'react';
 import { Subject, takeUntil } from 'rxjs';
 
-import { TaskAdd } from '@src/components';
+import { TaskDialog } from '@src/components';
 import type { ContextMenuOnClickPayload, InterceptResponse, TaskForm } from '@src/models';
 import { ChromeMessageType } from '@src/models';
 import type { TaskDialogIntercept } from '@src/pages/content/service/dialog.service';
@@ -15,7 +13,7 @@ import { i18n, onMessage, sendMessage, zIndexMax } from '@src/utils';
 import type { PortalProps } from '@mui/base/Portal';
 import type { FC } from 'react';
 
-export const TaskDialog: FC<{ container?: PortalProps['container'] }> = ({ container }) => {
+export const ContentTaskDialog: FC<{ container?: PortalProps['container'] }> = ({ container }) => {
   const [form, setForm] = React.useState<TaskForm>();
   const [open, setOpen] = React.useState<boolean>(false);
 
@@ -83,17 +81,14 @@ export const TaskDialog: FC<{ container?: PortalProps['container'] }> = ({ conta
   }, []);
 
   return (
-    <Dialog
+    <TaskDialog
       open={open}
+      taskForm={form}
       container={container}
-      fullWidth={true}
+      dialogProps={{ sx: { zIndex: `${zIndexMax} !important`, fontSize: '16px' } }}
       onClose={() => onClose(true)}
-      maxWidth={'md'}
-      sx={{ zIndex: `${zIndexMax} !important`, fontSize: '16px' }}
-    >
-      <DialogContent sx={{ p: '0' }}>
-        <TaskAdd form={form} withCancel={true} onFormCancel={() => onClose(true)} onFormSubmit={() => onClose(false)} />
-      </DialogContent>
-    </Dialog>
+      onCancel={() => onClose(true)}
+      onSubmit={() => onClose(false)}
+    />
   );
 };

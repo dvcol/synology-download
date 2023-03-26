@@ -21,3 +21,4 @@ export * from './store.model';
 export * from './synology.model';
 export * from './tab.model';
 export * from './task.model';
+export * from './scraped-content.model';

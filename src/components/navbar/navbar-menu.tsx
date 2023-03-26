@@ -2,6 +2,7 @@ import AddLinkIcon from '@mui/icons-material/AddLink';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
+import ImageSearchIcon from '@mui/icons-material/ImageSearch';
 import InfoIcon from '@mui/icons-material/Info';
 import LaunchIcon from '@mui/icons-material/Launch';
 import PauseIcon from '@mui/icons-material/Pause';
@@ -24,7 +25,7 @@ import { AppLinks, AppRoute, ErrorType, LoginError, NavbarButtonType } from '@sr
 import { DownloadService, NotificationService, QueryService } from '@src/services';
 import { resetDownloads, resetTasks, setNavbar } from '@src/store/actions';
 import { getGlobalNavbarButton, getLogged, getSettingsDownloadsButtons, getSettingsDownloadsEnabled, getUrl } from '@src/store/selectors';
-import { useI18n, createTab } from '@src/utils';
+import { createTab, useI18n } from '@src/utils';
 
 import NavbarMenuIcon from './navbar-menu-icon';
 
@@ -39,7 +40,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
   const downloadEnabled = useSelector(getSettingsDownloadsEnabled);
   const downloadButtons = useSelector(getSettingsDownloadsButtons);
 
-  const [anchorEl, setAnchorEl] = React.useState<null | Element>(null);
+  const [anchorEl, setAnchorEl] = React.useState<undefined | null | Element>(null);
   const open = Boolean(anchorEl);
 
   const handleClick = <T extends Element>(event: React.MouseEvent<T>) => setAnchorEl(event.currentTarget);
@@ -68,7 +69,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       if (!shiftKey) return QueryService.deleteAllTasks().subscribe(handleError('delete'));
     }
   };
-  const onEraseTooltip: NavbarButton['hoverTooltip'] = ({ altKey, shiftKey }) => {
+  const onEraseTooltip: NonNullable<NavbarButton['hoverTooltip']> = ({ altKey, shiftKey }) => {
     if (downloadButtons && !altKey && shiftKey) return i18n('tooltip__download');
     if (logged) {
       if (altKey && shiftKey) return i18n('tooltip__synology_error_finished');
@@ -139,6 +140,15 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       onClick: handleClearTab,
     },
     {
+      type: NavbarButtonType.Scrape,
+      label: i18n('menu_scrape'),
+      icon: <ImageSearchIcon />,
+      color: 'secondary',
+      component: Link,
+      to: AppRoute.Scrape,
+      divider: true,
+    },
+    {
       type: NavbarButtonType.Refresh,
       label: i18n('menu_refresh'),
       icon: <RefreshIcon />,
@@ -198,6 +208,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
         alt: () => QueryService.deleteFinishedTasks().subscribe(handleError('clear')),
       }),
       hoverTooltip,
+      divider: true,
     },
     {
       type: NavbarButtonType.Configs,
@@ -224,6 +235,8 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       icon: <DriveFileMoveIcon />,
       color: 'primary',
       onClick: () => DownloadService.show().subscribe(),
+      hide: !downloadEnabled,
+      divider: true,
     },
     {
       type: NavbarButtonType.About,
@@ -284,20 +297,12 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
         onClick={handleClose}
         MenuListProps={{ 'aria-labelledby': 'dropdown-menu' }}
       >
-        <NavbarMenuIcon {...buttons[0]} />
-        <Divider />
-        <NavbarMenuIcon {...buttons[1]} />
-        <NavbarMenuIcon {...buttons[2]} />
-        <NavbarMenuIcon {...buttons[3]} />
-        <NavbarMenuIcon {...buttons[4]} />
-        <NavbarMenuIcon {...buttons[5]} />
-        <Divider />
-        <NavbarMenuIcon {...buttons[6]} />
-        <NavbarMenuIcon {...buttons[7]} />
-        <NavbarMenuIcon {...buttons[8]} />
-        {downloadEnabled && <NavbarMenuIcon {...buttons[9]} />}
-        <Divider />
-        <NavbarMenuIcon {...buttons[10]} />
+        {buttons?.map(button => (
+          <>
+            {!button?.hide && <NavbarMenuIcon {...button} />}
+            {button?.divider && <Divider />}
+          </>
+        ))}
       </Menu>
 
       <ConfirmationDialog

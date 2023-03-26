@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 
 import { NotificationStack } from '@src/components';
 import type { StoreOrProxy } from '@src/models/store.model';
-import { QuickMenuDialog, TaskDialog } from '@src/pages/content/components';
+import { ContentTaskDialog, QuickMenuDialog } from '@src/pages/content/components';
 import { getTheme, subscribeToTheme } from '@src/themes';
 
 import type { EmotionCache } from '@emotion/utils';
@@ -29,7 +29,7 @@ export const ContentApp = ({ store, cache, container }: { store: StoreOrProxy; c
           <ThemeProvider theme={theme}>
             <NotificationStack maxSnack={5} />
             <QuickMenuDialog container={container} />
-            <TaskDialog container={container} />
+            <ContentTaskDialog container={container} />
           </ThemeProvider>
         </CacheProvider>
       </Provider>

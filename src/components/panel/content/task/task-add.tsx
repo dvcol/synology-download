@@ -12,7 +12,7 @@ import { FormCheckbox, FormExplorer, FormInput, FormSwitch, IconLoader } from '@
 import type { FormRules, TaskCreateRequest, TaskForm, TaskListDownloadRequest } from '@src/models';
 import { TaskCreateType, torrentExtension } from '@src/models';
 import { QueryService } from '@src/services';
-import { useI18n, before } from '@src/utils';
+import { before, useI18n } from '@src/utils';
 
 import { TaskAddSelect } from './task-add-select';
 
@@ -46,14 +46,15 @@ const UrlCounts: FC<{ urls?: string[] }> = ({ urls }) => {
   );
 };
 
-export const TaskAdd: FC<{
+export type TaskAddProps = {
   form?: TaskForm;
   withCancel?: boolean;
   onFormCancel?: (form: TaskForm | TaskListDownloadRequest) => void;
   onFormSubmit?: (form: TaskForm | TaskListDownloadRequest) => void;
   cardProps?: CardProps;
   allowFile?: boolean;
-}> = ({ form, withCancel, onFormCancel, onFormSubmit, cardProps, allowFile }) => {
+};
+export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFormSubmit, cardProps, allowFile }) => {
   const i18n = useI18n('panel', 'content', 'task', 'add');
   const [path, setPath] = React.useState<string>(form?.destination?.path ?? '');
   const [type, setType] = useState(TaskCreateType.url);

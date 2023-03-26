@@ -43,6 +43,7 @@
     "@mui/icons-material": "^5.4.1",
     "@mui/lab": "^5.0.0-alpha.69",
     "@mui/material": "^5.5.0",
+    "@mui/x-data-grid": "^6.0.3",
     "@reduxjs/toolkit": "^1.7.2",
     "notistack": "^2.0.3",
     "pretty-bytes": "^5.6.0",

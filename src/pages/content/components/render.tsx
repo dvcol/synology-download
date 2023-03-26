@@ -6,7 +6,7 @@ import { render } from 'react-dom';
 
 import { ModalInstance, ServiceInstance } from '@src/models';
 import { ContentApp } from '@src/pages/content/components';
-import { clickListener$ } from '@src/pages/content/modules';
+import { clickListener$, listenToScrapEvents } from '@src/pages/content/modules';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
 import { storeProxy } from '@src/store';
 import { getManifest, portConnect } from '@src/utils';
@@ -48,17 +48,19 @@ export const removeOldInstances = (): Promise<void | void[]> => {
 };
 
 /**
- * Subscribe to magnet link clicks and unsubscribe on destroy
+ * Subscribe to magnet link clicks and scrapping events and unsubscribe on destroy
  * @param root the root element to watch for destroy cycle
  */
-const listenToClicksUntilDestroy = (root: HTMLElement) => {
+const listenUntilDestroy = (root: HTMLElement) => {
   // Attach click listener
-  const sub = clickListener$.subscribe();
+  const clicks = clickListener$.subscribe();
+  const scraps = listenToScrapEvents().subscribe();
 
   // remove it when destroying
   root.addEventListener(onDestroyEvent, () => {
     LoggerService.debug(`Unsubscribing to events from '${rootContainerId}'.`, { version, injection });
-    sub.unsubscribe();
+    clicks.unsubscribe();
+    scraps.unsubscribe();
     root.dispatchEvent(new CustomEvent(destroyedEvent));
   });
 };
@@ -113,8 +115,8 @@ export const renderContentApp = async (): Promise<void> => {
   const container = shadowRoot.querySelector(`#${ModalInstance.modal}-container`) as HTMLElement;
   const cache = createCache({ key: `${ModalInstance.modal}-cache`, container });
 
-  // attach click listener
-  listenToClicksUntilDestroy(root);
+  // attach listeners
+  listenUntilDestroy(root);
 
   // Register as open
   connect();

@@ -2,6 +2,9 @@
   "common__model__navbar_button_type__add": {
     "message": "add"
   },
+  "common__model__navbar_button_type__scrape": {
+    "message": "scrape"
+  },
   "common__model__navbar_button_type__refresh": {
     "message": "refresh"
   },

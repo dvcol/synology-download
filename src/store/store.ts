@@ -6,6 +6,8 @@ import type { RootSlice } from '@src/models';
 
 import { LoggerService } from '@src/services';
 
+import { scrapedSlice } from '@src/store/slices/scraped.slice';
+
 import { downloadsSlice } from './slices/downloads.slice';
 import { navbarSlice } from './slices/navbar.slice';
 import { settingsSlice } from './slices/settings.slice';
@@ -21,6 +23,7 @@ const reducers: ReducersMapObject<RootSlice> = {
   [navbarSlice.name]: navbarSlice.reducer,
   [tasksSlice.name]: tasksSlice.reducer,
   [downloadsSlice.name]: downloadsSlice.reducer,
+  [scrapedSlice.name]: scrapedSlice.reducer,
   [settingsSlice.name]: settingsSlice.reducer,
 };
 
@@ -28,7 +31,7 @@ const rootReducer = combineReducers<RootSlice>(reducers);
 
 export type StoreState = ReturnType<typeof rootReducer>;
 
-const options: ConfigureStoreOptions = { reducer: reducers, devTools: { name: 'synology-download' } };
+const options: ConfigureStoreOptions<RootSlice> = { reducer: reducers, devTools: { name: 'synology-download' } };
 
 if (process.env.NODE_ENV === 'development' || process.env.DEVTOOL === 'true') {
   const context = global?.document?.querySelector<HTMLDivElement>("[id^='synology-download-']")?.dataset?.context;

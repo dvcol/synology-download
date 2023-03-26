@@ -1,3 +1,4 @@
+import type { ScrapedContents, ScrapedPage } from '@src/models';
 import type { OnClickData } from '@src/utils';
 
 import type { DownloadQueryPayload } from './download.model';
@@ -26,7 +27,14 @@ export enum ChromeMessageType {
   contentDialogOpen = 'contentDialogOpen',
   logger = 'logger',
   autoLogin = 'autoLogin',
+  scrap = 'scrap',
+  scraped = 'scraped',
 }
+
+export type ScrapedContentsPayload = {
+  page: ScrapedPage;
+  contents: ScrapedContents;
+};
 
 export type InterceptPayload = TaskForm;
 
@@ -56,7 +64,8 @@ export type ChromeMessagePayload =
   | ContextMenuOnClickPayload
   | SnackNotification
   | InterceptPayload
-  | QueryAutoLoginOptions;
+  | QueryAutoLoginOptions
+  | ScrapedContentsPayload;
 
 /**
  * Message interface for communication between content & background
