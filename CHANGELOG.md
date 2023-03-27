@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.4.2](https://github.com/dvcol/synology-download/compare/v2.4.1...v2.4.2) (2023-03-27)
+
+
+### Bug Fixes
+
+* **recent:** add highlight on recent select ([ed5edb8](https://github.com/dvcol/synology-download/commit/ed5edb8610eee214bec10bd6acd4ccb440914e87))
+
 ### [2.4.1](https://github.com/dvcol/synology-download/compare/v2.4.0...v2.4.1) (2023-03-27)
 
 
