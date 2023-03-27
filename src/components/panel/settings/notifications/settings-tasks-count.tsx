@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ButtonWithConfirm, FormSwitch, FormTab } from '@src/components';
-import type { Notifications, NotificationsCount, Tab } from '@src/models';
+import type { NotificationsCount, NotificationSettings, Tab } from '@src/models';
 import { defaultNotifications, NotificationHeader } from '@src/models';
 import { syncNotifications } from '@src/store/actions';
 import { getNotifications } from '@src/store/selectors';
@@ -20,7 +20,7 @@ import type { Control } from 'react-hook-form/dist/types/form';
 export const SettingsTasksCount = () => {
   const i18n = useI18n('panel', 'settings', 'tasks_count');
   const dispatch = useDispatch();
-  const notifications: Notifications = useSelector(getNotifications);
+  const notifications: NotificationSettings = useSelector(getNotifications);
 
   const {
     handleSubmit,

@@ -16,7 +16,7 @@ import { forkJoin } from 'rxjs';
 import type { ProgressBackgroundProps } from '@src/components';
 import { TaskAdd } from '@src/components';
 
-import type { Download, Global, TaskForm } from '@src/models';
+import type { Download, GlobalSettings, TaskForm } from '@src/models';
 import { ColorLevel, ColorLevelMap, DownloadStatus, downloadStatusToColor } from '@src/models';
 
 import { DownloadService, InterceptService, LoggerService, NotificationService } from '@src/services';
@@ -73,7 +73,7 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
   }
   buttons.push(bottomButton);
 
-  const showBackground = useSelector<StoreState, Global['download']>(getGlobalDownload)?.background;
+  const showBackground = useSelector<StoreState, GlobalSettings['download']>(getGlobalDownload)?.background;
   const background: ProgressBackgroundProps = showBackground
     ? {
         primary: `${ColorLevelMap[downloadStatusToColor(download.status)]}${hover ? 30 : 20}`,

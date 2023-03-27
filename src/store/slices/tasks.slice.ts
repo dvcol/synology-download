@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import type { Task, TaskComplete, TaskFile, TasksSlice, TaskStatistics } from '@src/models';
+import type { Task, TaskComplete, TaskFile, TaskForm, TasksSlice, TaskStatistics } from '@src/models';
 
 import { setTasksStatsReducer, syncTaskReducer } from '@src/store/reducers/tasks.reducer';
 
@@ -17,9 +17,12 @@ export interface TasksReducers<S = TasksSlice> extends SliceCaseReducers<S> {
   resetTasks: CaseReducer<S>;
   resetFiles: CaseReducer<S>;
   setFiles: CaseReducer<S, PayloadAction<{ taskId: string; files: TaskFile[] }>>;
+  setTaskForm: CaseReducer<S, PayloadAction<TaskForm>>;
+  clearTaskForm: CaseReducer<S>;
 }
 
 const initialState: TasksSlice = {
+  taskForm: {},
   stopping: {},
   tasks: {},
   tasksIds: [],
@@ -55,5 +58,7 @@ export const tasksSlice = createSlice<TasksSlice, TasksReducers, 'tasks'>({
     resetTasks: () => initialState,
     setFiles: (state, { payload: { taskId, files } }) => ({ ...state, files: { ...state.files, [taskId]: files } }),
     resetFiles: state => ({ ...state, files: initialState.files, filesIds: initialState.filesIds }),
-  } as TasksReducers,
+    setTaskForm: (state, { payload }) => ({ ...state, taskForm: payload }),
+    clearTaskForm: state => ({ ...state, taskForm: initialState.taskForm }),
+  },
 });

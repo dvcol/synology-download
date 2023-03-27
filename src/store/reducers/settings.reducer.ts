@@ -1,12 +1,12 @@
 import type {
   AdvancedLogging,
   AdvancedSettings,
-  Connection,
+  ConnectionSettings,
   ContentTab,
   ContextMenu,
-  Downloads,
+  DownloadSettings,
   DownloadsIntercept,
-  Notifications,
+  NotificationSettings,
   QuickMenu,
   SettingsSlice,
   SyncSettings,
@@ -20,7 +20,7 @@ import {
   SyncSettingMode,
 } from '@src/models';
 import { LoggerService } from '@src/services';
-import { localSet, syncSet, setBadgeBackgroundColor } from '@src/utils';
+import { localSet, setBadgeBackgroundColor, syncSet } from '@src/utils';
 
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
@@ -51,9 +51,9 @@ export const syncNestedReducer = <T>(oldSettings: SettingsSlice, payload: Partia
 };
 
 export const syncInterceptReducer = (oldSettings: SettingsSlice, { payload }: PayloadAction<DownloadsIntercept>): SettingsSlice => {
-  const newDownloads: Downloads = { ...(oldSettings.downloads ?? defaultDownloads), intercept: payload ?? defaultDownloads.intercept };
+  const newDownloads: DownloadSettings = { ...(oldSettings.downloads ?? defaultDownloads), intercept: payload ?? defaultDownloads.intercept };
   const newSettings = setNestedReducer(oldSettings, newDownloads, 'downloads');
-  syncNestedReducer<Downloads>(newSettings, newDownloads, 'downloads');
+  syncNestedReducer<DownloadSettings>(newSettings, newDownloads, 'downloads');
   return newSettings;
 };
 
@@ -64,7 +64,10 @@ export const syncAdvancedLoggingReducer = (oldSettings: SettingsSlice, { payload
   return newSettings;
 };
 
-export const setBadgeReducer = <T extends Notifications>(oldSettings: SettingsSlice, { payload }: PayloadAction<Partial<T>>): SettingsSlice => {
+export const setBadgeReducer = <T extends NotificationSettings>(
+  oldSettings: SettingsSlice,
+  { payload }: PayloadAction<Partial<T>>,
+): SettingsSlice => {
   const color = payload?.count?.color;
   // TODO : move to thunk ?
   if (color !== oldSettings?.notifications?.count?.color) {
@@ -84,7 +87,7 @@ export const syncReducer = (oldSettings: SettingsSlice, action: PayloadAction<Pa
   return newSettings;
 };
 
-export const syncConnectionReducer = (oldSettings: SettingsSlice, { payload }: PayloadAction<Partial<Connection>>): SettingsSlice => {
+export const syncConnectionReducer = (oldSettings: SettingsSlice, { payload }: PayloadAction<Partial<ConnectionSettings>>): SettingsSlice => {
   const newSettings = setNestedReducer(oldSettings, payload, 'connection');
   saveSettings(
     payload?.rememberMe

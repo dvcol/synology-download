@@ -10,12 +10,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { finalize, lastValueFrom } from 'rxjs';
 
 import { ButtonWithConfirm, FormCheckbox, FormInput, FormSwitch } from '@src/components';
-import type { Connection, Credentials, FormRules, InfoResponse, LoginResponse } from '@src/models';
+import type { ConnectionSettings, Credentials, FormRules, InfoResponse, LoginResponse } from '@src/models';
 import { AppLinks, ColorLevel, ColorLevelMap, CommonAPI, ConnectionHeader, ConnectionType, defaultConnection, Protocol } from '@src/models';
 import { LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { syncConnection } from '@src/store/actions';
 import { getConnection, getLogged, urlReducer } from '@src/store/selectors';
-import { useI18n, before, createTab, useDebounceObservable } from '@src/utils';
+import { before, createTab, useDebounceObservable, useI18n } from '@src/utils';
 
 import type { Observable } from 'rxjs';
 
@@ -34,7 +34,7 @@ export const SettingsCredentials = () => {
     setValue,
     getValues,
     formState: { isValid, isDirty, isSubmitted, dirtyFields },
-  } = useForm<Connection>({
+  } = useForm<ConnectionSettings>({
     mode: 'onChange',
     defaultValues: {
       ...defaultConnection,
@@ -55,7 +55,7 @@ export const SettingsCredentials = () => {
   const port = watch('port');
   const protocol = watch('protocol');
 
-  const rules: FormRules<Connection> = {
+  const rules: FormRules<ConnectionSettings> = {
     type: { required: { value: true, message: i18n('required', 'common', 'error') } },
     protocol: { required: { value: true, message: i18n('required', 'common', 'error') } },
     path: { required: { value: true, message: i18n('required', 'common', 'error') } },
@@ -110,7 +110,7 @@ export const SettingsCredentials = () => {
     return () => PollingService.start();
   }, []);
 
-  const buildUrl = (data: Connection, _type: keyof LoginError): string | undefined => {
+  const buildUrl = (data: ConnectionSettings, _type: keyof LoginError): string | undefined => {
     try {
       return urlReducer(data);
     } catch (error) {
@@ -120,7 +120,7 @@ export const SettingsCredentials = () => {
   };
 
   const syncOnSubscribe = async <T extends LoginResponse | void>(
-    data: Connection,
+    data: ConnectionSettings,
     query: (credentials: Credentials, basUrl?: string) => Observable<unknown>,
     _type: 'login_test' | 'login' | 'logout',
   ) => {
@@ -166,16 +166,17 @@ export const SettingsCredentials = () => {
       });
   };
 
-  const testLogin = (data: Connection) => syncOnSubscribe(data, QueryService.loginTest, 'login_test');
+  const testLogin = (data: ConnectionSettings) => syncOnSubscribe(data, QueryService.loginTest, 'login_test');
 
-  const loginLogout = (data: Connection) => syncOnSubscribe(data, logged ? QueryService.logout : QueryService.login, logged ? 'logout' : 'login');
+  const loginLogout = (data: ConnectionSettings) =>
+    syncOnSubscribe(data, logged ? QueryService.logout : QueryService.login, logged ? 'logout' : 'login');
 
   const getColor = (_type: keyof LoginError) => {
     if (loginError[_type] === undefined || isDirty) return 'info';
     return loginError[_type] ? 'error' : 'success';
   };
 
-  const onSave = (data: Connection) => {
+  const onSave = (data: ConnectionSettings) => {
     dispatch(syncConnection(data));
     reset(data, { keepIsSubmitted: true, keepSubmitCount: true });
   };

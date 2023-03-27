@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ButtonWithConfirm, FormInput, FormSwitch } from '@src/components';
-import type { FormRules, Polling } from '@src/models';
+import type { FormRules, PollingSettings } from '@src/models';
 import { ConnectionHeader, defaultPolling } from '@src/models';
 import { syncPolling } from '@src/store/actions';
 import { getPolling } from '@src/store/selectors';
@@ -17,7 +17,7 @@ import { useI18n } from '@src/utils';
 export const SettingsPolling = () => {
   const i18n = useI18n('panel', 'settings', 'polling');
   const dispatch = useDispatch();
-  const polling: Polling = useSelector(getPolling);
+  const polling: PollingSettings = useSelector(getPolling);
 
   const {
     handleSubmit,
@@ -25,7 +25,7 @@ export const SettingsPolling = () => {
     control,
     getValues,
     formState: { isValid, isDirty, isSubmitted },
-  } = useForm<Polling>({
+  } = useForm<PollingSettings>({
     mode: 'onChange',
     defaultValues: {
       ...defaultPolling,
@@ -40,7 +40,7 @@ export const SettingsPolling = () => {
     },
   };
 
-  const onSubmit = (data: Polling) => {
+  const onSubmit = (data: PollingSettings) => {
     dispatch(syncPolling(data));
     reset(data, { keepIsSubmitted: true, keepSubmitCount: true });
   };

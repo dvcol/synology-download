@@ -13,13 +13,13 @@ import { finalize } from 'rxjs';
 import type { ProgressBackgroundProps, TaskDetailProps } from '@src/components';
 import { IconLoader } from '@src/components';
 
-import type { Global, Task } from '@src/models';
+import type { GlobalSettings, Task } from '@src/models';
 import { ColorLevel, ColorLevelMap, ErrorType, LoginError, TaskStatus, taskStatusToColor } from '@src/models';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
 import type { StoreState } from '@src/store';
 import { getGlobalTask } from '@src/store/selectors';
 import type { i18n } from '@src/utils';
-import { useI18n, before, useDebounceObservable } from '@src/utils';
+import { before, useDebounceObservable, useI18n } from '@src/utils';
 
 import { ContentItem } from '../content-item';
 
@@ -139,7 +139,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
 
   const isDisabled = Object.values(loading).some(Boolean);
 
-  const showBackground = useSelector<StoreState, Global['task']>(getGlobalTask)?.background;
+  const showBackground = useSelector<StoreState, GlobalSettings['task']>(getGlobalTask)?.background;
   const background: ProgressBackgroundProps = showBackground
     ? {
         primary: `${ColorLevelMap[taskStatusToColor(task)]}${hover ? 30 : 20}`,

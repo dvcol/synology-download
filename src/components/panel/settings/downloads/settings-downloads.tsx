@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ButtonWithConfirm, FormSwitch } from '@src/components';
-import type { Downloads } from '@src/models';
+import type { DownloadSettings } from '@src/models';
 import { defaultDownloads, DownloadsHeader } from '@src/models';
 import type { StoreState } from '@src/store';
 import { syncDownloads } from '@src/store/actions';
@@ -18,7 +18,7 @@ import { useI18n } from '@src/utils';
 export const SettingsDownloads = () => {
   const i18n = useI18n('panel', 'settings', 'downloads');
   const dispatch = useDispatch();
-  const state = useSelector<StoreState, Downloads>(getSettingsDownloads);
+  const state = useSelector<StoreState, DownloadSettings>(getSettingsDownloads);
 
   const {
     handleSubmit,
@@ -26,7 +26,7 @@ export const SettingsDownloads = () => {
     control,
     getValues,
     formState: { isValid, isDirty, isSubmitSuccessful },
-  } = useForm<Downloads>({
+  } = useForm<DownloadSettings>({
     mode: 'onChange',
     defaultValues: {
       ...defaultDownloads,
@@ -36,7 +36,7 @@ export const SettingsDownloads = () => {
     },
   });
 
-  const onSubmit = (data: Downloads) => {
+  const onSubmit = (data: DownloadSettings) => {
     dispatch(syncDownloads(data));
     reset(data);
   };

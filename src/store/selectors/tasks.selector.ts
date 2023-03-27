@@ -27,6 +27,11 @@ export const getStopping = createSelector(
   state => state.tasks.stopping,
 );
 
+export const getTaskForm = createSelector(
+  (state: StoreState) => state,
+  state => state.tasks.taskForm,
+);
+
 export const getStoppingIds = createSelector(getStopping, tasks => Object.keys(tasks));
 
 export const getTasksArray = createSelector(getTasks, (tasks: Record<string, Task>) => Object.values(tasks));
