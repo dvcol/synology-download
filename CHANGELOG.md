@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.4.1](https://github.com/dvcol/synology-download/compare/v2.4.0...v2.4.1) (2023-03-27)
+
+
+### Bug Fixes
+
+* **task:** fix recent scroll container in task ([1ffcfdd](https://github.com/dvcol/synology-download/commit/1ffcfddfdf99109813ea952163fdcaad679334de))
+
 ## [2.4.0](https://github.com/dvcol/synology-download/compare/v2.3.0...v2.4.0) (2023-03-27)
 
 
