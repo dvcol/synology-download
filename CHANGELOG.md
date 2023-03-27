@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.4.0](https://github.com/dvcol/synology-download/compare/v2.3.0...v2.4.0) (2023-03-27)
+
+
+### Features
+
+* **explorer:** add recent destination to folder explorer ([34a7950](https://github.com/dvcol/synology-download/commit/34a7950b243ecd77efc0ff2dc59ac431d8644d46))
+
+
+### Bug Fixes
+
+* **scrapping:** fix missing i18n and name parsing ([f3fc75e](https://github.com/dvcol/synology-download/commit/f3fc75e3e32d7bce7876a6aac476900d6c3cbd57))
+* **task:** fix edit for non bt taks ([116c20b](https://github.com/dvcol/synology-download/commit/116c20b444ab99c1e39007aa1d46771acd359e65))
+
 ## [2.3.0](https://github.com/dvcol/synology-download/compare/v2.2.1...v2.3.0) (2023-03-26)
 
 
