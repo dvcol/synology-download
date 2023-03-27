@@ -37,7 +37,7 @@ export const onInstalledEvents = (store: StoreOrProxy) => {
             buttons: [
               {
                 title: 'see release notes',
-                url: AppLinks.Release + (nextVersion ? `/tag/v${nextVersion}` : '/latest'),
+                url: AppLinks.Release,
               },
             ],
           },
