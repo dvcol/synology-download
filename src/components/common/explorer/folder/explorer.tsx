@@ -186,6 +186,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
       />
       {showDestinations ? (
         <ExplorerRecent
+          selected={selectedPath}
           destinations={recentDestinations}
           onSelect={destination => {
             selectPath(destination);
