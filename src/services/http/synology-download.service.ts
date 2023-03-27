@@ -1,8 +1,10 @@
+import { throwError } from 'rxjs';
+
 import type { CommonResponse, DownloadStationConfig, DownloadStationInfo, DownloadStationStatistic, TaskList, TaskListOption } from '@src/models';
 import { Controller, DownloadStationAPI, Endpoint, TaskMethod } from '@src/models';
 import { SynologyService } from '@src/services/http';
-import { HttpMethod } from '@src/utils';
 import type { HttpParameters } from '@src/utils';
+import { HttpMethod } from '@src/utils';
 
 import type { Observable } from 'rxjs';
 
@@ -65,12 +67,19 @@ export class SynologyDownloadService extends SynologyService {
   }
 
   createTask(uri: string, destination?: string, username?: string, password?: string, unzip?: string): Observable<void> {
-    const params: HttpParameters = { method: TaskMethod.create, uri: SynologyDownloadService._sanitizeUrl(uri).toString() };
-    if (destination) params.destination = destination;
-    if (username) params.username = username;
-    if (password) params.password = password;
-    if (unzip) params.unzip = unzip;
-    return this._do<void>(HttpMethod.POST, params);
+    try {
+      const params: HttpParameters = {
+        method: TaskMethod.create,
+        uri: SynologyDownloadService._sanitizeUrl(uri).toString(),
+      };
+      if (destination) params.destination = destination;
+      if (username) params.username = username;
+      if (password) params.password = password;
+      if (unzip) params.unzip = unzip;
+      return this._do<void>(HttpMethod.POST, params);
+    } catch (error) {
+      return throwError(error);
+    }
   }
 
   deleteTask(id: string | string[], force = false): Observable<CommonResponse[]> {
