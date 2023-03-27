@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import type { ProgressBackgroundProps } from '@src/components';
 import { ProgressBackground } from '@src/components';
 
-import type { Global } from '@src/models';
+import type { GlobalSettings } from '@src/models';
 import type { StoreState } from '@src/store';
 import { getGlobalTask } from '@src/store/selectors';
 
@@ -43,7 +43,7 @@ const ContentItemComponent: ForwardRefRenderFunction<HTMLDivElement, ContentItem
     setHover(_hover);
   };
 
-  const showBackground = useSelector<StoreState, Global['task']>(getGlobalTask)?.background;
+  const showBackground = useSelector<StoreState, GlobalSettings['task']>(getGlobalTask)?.background;
   return (
     <Accordion ref={ref} expanded={expanded === index} onChange={onChange} TransitionProps={{ unmountOnExit: true }}>
       <AccordionSummary

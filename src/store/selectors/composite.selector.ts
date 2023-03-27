@@ -8,7 +8,7 @@ import type {
   NotificationsBanner,
   NotificationsCount,
   NotificationsSnack,
-  Polling,
+  PollingSettings,
   Tab,
   TabCount,
   Task,
@@ -45,14 +45,14 @@ import { nullSafeCompare, numberCompare, stringCompare } from '@src/utils';
 
 export const getTabOrFirst = createSelector(getTab, getTabs, (tab?: ContentTab, tabs?: ContentTab[]) => tab ?? (tabs?.length ? tabs[0] : tab));
 
-export const getPollingInterval = createSelector(isModalOpen, getPolling, (open: boolean, polling: Polling) =>
+export const getPollingInterval = createSelector(isModalOpen, getPolling, (open: boolean, polling: PollingSettings) =>
   open ? polling?.popup?.interval : polling?.background?.interval,
 );
 
 export const getPollingEnabled = createSelector(
   getPolling,
   isModalOpen,
-  ({ enabled, popup, background }: Polling, open: boolean) => enabled && (open ? popup?.enabled : background?.enabled),
+  ({ enabled, popup, background }: PollingSettings, open: boolean) => enabled && (open ? popup?.enabled : background?.enabled),
 );
 
 export const getNotificationsBannerEnabled = createSelector(

@@ -4,14 +4,17 @@ import { Box, Button, Card, CardActions, CardContent, CardHeader, Chip, Grid, St
 
 import React, { useEffect, useState } from 'react';
 
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 
+import { useDispatch, useSelector } from 'react-redux';
 import { finalize, lastValueFrom, tap } from 'rxjs';
 
 import { FormCheckbox, FormExplorer, FormInput, FormSwitch, IconLoader } from '@src/components';
 import type { FormRules, TaskCreateRequest, TaskForm, TaskListDownloadRequest } from '@src/models';
-import { TaskCreateType, torrentExtension } from '@src/models';
-import { QueryService } from '@src/services';
+import { ColorLevel, TaskCreateType, torrentExtension } from '@src/models';
+import { LoggerService, QueryService } from '@src/services';
+import { clearTaskForm, setTaskForm } from '@src/store/actions';
+import { getClearOnExitTaskSettings, getTaskForm } from '@src/store/selectors';
 import { before, useI18n } from '@src/utils';
 
 import { TaskAddSelect } from './task-add-select';
@@ -64,6 +67,10 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
 
   const [loading, setLoading] = useState<boolean>(false);
 
+  const clearOnExist = useSelector(getClearOnExitTaskSettings);
+  const taskForm = useSelector(getTaskForm);
+  const dispatch = useDispatch();
+
   const isFile = allowFile && type === TaskCreateType.file;
 
   const {
@@ -75,16 +82,30 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
   } = useForm<TaskForm>({
     mode: 'onChange',
     defaultValues: {
-      uri: form?.uri ?? '',
-      source: form?.source ?? 'Custom Task',
-      destination: { custom: form?.destination?.custom ?? false, path: path ?? '' },
-      username: form?.username ?? '',
-      password: form?.password ?? '',
-      extract_password: form?.extract_password ?? '',
-      torrent: form?.torrent ?? '',
-      create_list: form?.create_list ?? false,
+      ...taskForm,
+      ...form,
+      uri: [...new Set([taskForm?.uri, form?.uri]?.filter(Boolean).flatMap(uri => uri!.split(/\r?\n/)))].join('\n'),
+      source: taskForm?.source ?? form?.source ?? 'Custom Task',
+      destination: {
+        ...taskForm,
+        ...form,
+        custom: taskForm?.destination?.custom ?? taskForm?.destination?.custom ?? false,
+        path: taskForm?.destination?.path ?? taskForm?.destination?.path ?? path ?? '',
+      },
+      username: taskForm?.username ?? form?.username ?? '',
+      password: taskForm?.password ?? form?.password ?? '',
+      extract_password: taskForm?.extract_password ?? form?.extract_password ?? '',
+      torrent: taskForm?.torrent ?? form?.torrent ?? '',
+      create_list: taskForm?.create_list ?? form?.create_list ?? false,
     },
   });
+
+  const values = useWatch({ control });
+
+  useEffect(() => {
+    if (clearOnExist) return;
+    dispatch(setTaskForm({ ...getValues(), torrent: undefined }));
+  }, [values]);
 
   const rules: FormRules<TaskForm> = {
     uri: {
@@ -105,8 +126,9 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
     }
   }, []);
 
-  const onCancel = (data: TaskForm = getValues()) => {
+  const onCancel = (discard = true, data: TaskForm = getValues()) => {
     onFormCancel?.(data);
+    if (discard) dispatch(clearTaskForm());
   };
 
   const parseUrls = (uri?: string) =>
@@ -141,26 +163,29 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
     }).pipe(
       before(() => setLoading(true)),
       finalize(() => setLoading(false)),
-      tap(response => {
-        const list_id = response?.list_id?.[0];
-        reset(data);
-        if (list_id) {
-          setOpenSelect({ open: true, list_id });
-        } else {
-          onFormSubmit?.(data);
-        }
+      tap({
+        next: response => {
+          const list_id = response?.list_id?.[0];
+          reset(data);
+          if (list_id) {
+            setOpenSelect({ open: true, list_id });
+          } else {
+            onFormSubmit?.(data);
+          }
+        },
+        error: error => LoggerService.error('Failed to create task', { data, _request, error }),
       }),
     );
   };
 
   const onSubmit: SubmitHandler<TaskForm> = data => {
-    if (data?.torrent?.length || urls?.length) return lastValueFrom(createTask(data));
-    return Promise.reject(i18n(`${isFile ? 'file' : 'url'}_required`));
+    if (data?.torrent?.length || urls?.length) return lastValueFrom(createTask(data)).then(() => dispatch(clearTaskForm()));
+    return Promise.reject(i18n(`${isFile ? 'file' : 'url'}_required`)).then(() => dispatch(clearTaskForm()));
   };
 
   const onSubmitColor = () => {
-    if (!isSubmitted || isDirty) return 'info';
-    return isSubmitSuccessful ? 'success' : 'error';
+    if (!isSubmitted || isDirty) return ColorLevel.info;
+    return isSubmitSuccessful ? ColorLevel.success : ColorLevel.error;
   };
 
   return (
@@ -229,7 +254,10 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
                   >
                     <FormCheckbox
                       controllerProps={{ name: 'create_list', control }}
-                      formControlLabelProps={{ label: i18n('create_list_label'), disabled: !isFile }}
+                      formControlLabelProps={{
+                        label: i18n('create_list_label'),
+                        disabled: !isFile,
+                      }}
                     />
                   </FormInput>
                 </>
@@ -303,8 +331,18 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
       <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5em 1em' }}>
         <Stack direction="row" spacing={2}>
           {withCancel && (
-            <Button variant="outlined" color={'secondary'} sx={{ width: '5em', fontSize: '0.75em' }} onClick={() => onCancel()}>
-              {i18n('cancel', 'common', 'buttons')}
+            <Button
+              variant="outlined"
+              color={clearOnExist ? ColorLevel.secondary : ColorLevel.error}
+              sx={{ fontSize: '0.75em' }}
+              onClick={() => onCancel(true)}
+            >
+              {i18n(clearOnExist ? 'cancel' : 'discard', 'common', 'buttons')}
+            </Button>
+          )}
+          {withCancel && !clearOnExist && (
+            <Button variant="outlined" color={ColorLevel.secondary} sx={{ fontSize: '0.75em' }} onClick={() => onCancel(false)}>
+              {i18n('continue', 'common', 'buttons')}
             </Button>
           )}
           <Button
@@ -316,7 +354,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
             onClick={handleSubmit(onSubmit)}
             startIcon={<IconLoader icon={<SaveIcon />} loading={isDirty && loading} props={{ size: '1.25rem', color: onSubmitColor() }} />}
           >
-            {i18n('save', 'common', 'buttons')}
+            {i18n('create', 'common', 'buttons')}
           </Button>
         </Stack>
       </CardActions>

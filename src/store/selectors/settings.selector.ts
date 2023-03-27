@@ -3,15 +3,16 @@ import { createSelector } from '@reduxjs/toolkit';
 import type {
   AdvancedLogging,
   AdvancedSettings,
-  Connection,
+  ConnectionSettings,
   Credentials,
-  Downloads,
+  DownloadSettings,
   DownloadsIntercept,
-  Global,
-  Notifications,
+  GlobalSettings,
   NotificationsBanner,
+  NotificationSettings,
   NotificationsSnack,
   SettingsSlice,
+  TaskSettings,
 } from '@src/models';
 import {
   ConnectionType,
@@ -20,6 +21,7 @@ import {
   defaultDownloads,
   defaultGlobal,
   defaultLoggingLevels,
+  defaultTaskSettings,
   ThemeMode,
 } from '@src/models';
 import { LoggerService } from '@src/services';
@@ -44,7 +46,7 @@ export const getConnection = createSelector(getSettings, (setting: SettingsSlice
  * Returns true if we should attempt an auto-login
  * @param connection the connection slice
  */
-const shouldAutoLogin = (connection: Connection) => {
+const shouldAutoLogin = (connection: ConnectionSettings) => {
   // If missing username
   if (!connection?.username) return false;
   // If missing password
@@ -61,7 +63,7 @@ const shouldAutoLogin = (connection: Connection) => {
 
 export const getShouldAutoLogin = createSelector(getConnection, shouldAutoLogin);
 
-export const urlReducer = (connection: Connection) => {
+export const urlReducer = (connection: ConnectionSettings) => {
   if (connection?.protocol && connection?.path && connection?.port) {
     const { type, protocol, path, port } = connection;
     if (ConnectionType.quickConnect === type) return new URL(`${protocol}://${path}.quickconnect.to`).toString();
@@ -74,22 +76,22 @@ export const getUrl = createSelector(getConnection, urlReducer);
 
 export const getCredentials = createSelector(
   getConnection,
-  ({ rememberMe, protocol, path, port, ...credentials }: Connection) => credentials as Credentials,
+  ({ rememberMe, protocol, path, port, ...credentials }: ConnectionSettings) => credentials as Credentials,
 );
 
-export const getType = createSelector(getConnection, (connection: Connection) => connection?.type);
+export const getType = createSelector(getConnection, (connection: ConnectionSettings) => connection?.type);
 
 export const getPolling = createSelector(getSettings, (setting: SettingsSlice) => setting?.polling);
 
 export const getNotifications = createSelector(getSettings, (setting: SettingsSlice) => setting?.notifications);
 
-export const getNotificationsCount = createSelector(getNotifications, (notifications: Notifications) => notifications?.count);
+export const getNotificationsCount = createSelector(getNotifications, (notifications: NotificationSettings) => notifications?.count);
 
-export const getNotificationsSnack = createSelector(getNotifications, (notifications: Notifications) => notifications?.snack);
+export const getNotificationsSnack = createSelector(getNotifications, (notifications: NotificationSettings) => notifications?.snack);
 
 export const getNotificationsSnackLevel = createSelector(getNotificationsSnack, (snack: NotificationsSnack) => snack?.level);
 
-export const getNotificationsBanner = createSelector(getNotifications, (notifications: Notifications) => notifications?.banner);
+export const getNotificationsBanner = createSelector(getNotifications, (notifications: NotificationSettings) => notifications?.banner);
 
 export const getNotificationsBannerLevel = createSelector(getNotificationsBanner, (banner: NotificationsBanner) => banner?.level);
 
@@ -99,11 +101,11 @@ export const getNotificationsBannerFinishedEnabled = createSelector(getNotificat
 
 export const getGlobal = createSelector(getSettings, (setting: SettingsSlice) => setting?.global);
 
-export const getGlobalLoading = createSelector(getGlobal, (_global: Global) => _global?.loading);
+export const getGlobalLoading = createSelector(getGlobal, (_global: GlobalSettings) => _global?.loading);
 
-export const getActionScope = createSelector(getGlobal, (_global: Global) => _global?.actions);
+export const getActionScope = createSelector(getGlobal, (_global: GlobalSettings) => _global?.actions);
 
-export const getThemeMode = createSelector(getGlobal, (_global: Global) => {
+export const getThemeMode = createSelector(getGlobal, (_global: GlobalSettings) => {
   switch (_global?.theme) {
     case ThemeMode.dark:
       return darkTheme;
@@ -117,40 +119,46 @@ export const getThemeMode = createSelector(getGlobal, (_global: Global) => {
   }
 });
 
-export const getGlobalTask = createSelector(getGlobal, (_global: Global) => _global?.task ?? defaultGlobal.task);
+export const getGlobalTask = createSelector(getGlobal, (_global: GlobalSettings) => _global?.task ?? defaultGlobal.task);
 
-export const getGlobalDownload = createSelector(getGlobal, (_global: Global) => _global?.download ?? defaultGlobal.download);
-export const getGlobalNavbarButton = createSelector(getGlobal, (_global: Global) => _global?.navbar?.buttons ?? defaultGlobal.navbar?.buttons);
+export const getGlobalDownload = createSelector(getGlobal, (_global: GlobalSettings) => _global?.download ?? defaultGlobal.download);
+export const getGlobalNavbarButton = createSelector(
+  getGlobal,
+  (_global: GlobalSettings) => _global?.navbar?.buttons ?? defaultGlobal.navbar?.buttons,
+);
 
-export const getInterface = createSelector(getGlobal, (_global: Global) => _global?.interface);
+export const getInterface = createSelector(getGlobal, (_global: GlobalSettings) => _global?.interface);
 
-export const getInterfaceSize = createSelector(getInterface, (_interface: Global['interface']) => _interface?.size ?? defaultGlobal.interface?.size);
+export const getInterfaceSize = createSelector(
+  getInterface,
+  (_interface: GlobalSettings['interface']) => _interface?.size ?? defaultGlobal.interface?.size,
+);
 
 export const getSettingsDownloads = createSelector(getSettings, (setting: SettingsSlice) => setting?.downloads ?? defaultDownloads);
 
 export const getSettingsDownloadsEnabled = createSelector(
   getSettingsDownloads,
-  (downloads: Downloads) => downloads.enabled ?? defaultDownloads.enabled,
+  (downloads: DownloadSettings) => downloads.enabled ?? defaultDownloads.enabled,
 );
 
 export const getSettingsDownloadsButtons = createSelector(
   getSettingsDownloads,
   getSettingsDownloadsEnabled,
-  (downloads: Downloads, enabled: boolean) => enabled && (downloads.buttons ?? defaultDownloads.buttons),
+  (downloads: DownloadSettings, enabled: boolean) => enabled && (downloads.buttons ?? defaultDownloads.buttons),
 );
 export const getSettingsDownloadsNotifications = createSelector(
   getSettingsDownloads,
   getSettingsDownloadsEnabled,
-  (downloads: Downloads, enabled: boolean) => enabled && (downloads.notifications ?? defaultDownloads.notifications),
+  (downloads: DownloadSettings, enabled: boolean) => enabled && (downloads.notifications ?? defaultDownloads.notifications),
 );
 export const getSettingsDownloadsTransfer = createSelector(
   getSettingsDownloads,
-  (downloads: Downloads) => downloads.transfer ?? defaultDownloads.transfer,
+  (downloads: DownloadSettings) => downloads.transfer ?? defaultDownloads.transfer,
 );
 
 export const getSettingsDownloadsIntercept = createSelector(
   getSettingsDownloads,
-  (downloads: Downloads) => downloads.intercept ?? defaultDownloads.intercept,
+  (downloads: DownloadSettings) => downloads.intercept ?? defaultDownloads.intercept,
 );
 
 export const getSettingsDownloadsInterceptEnabled = createSelector(
@@ -177,3 +185,7 @@ export const getAdvancedSettingsLoggingLevel = createSelector(
 );
 
 export const getSyncSettings = createSelector(getSettings, (setting: SettingsSlice) => setting?.sync);
+
+export const getTaskSettings = createSelector(getSettings, (setting: SettingsSlice) => setting?.tasks ?? defaultTaskSettings);
+
+export const getClearOnExitTaskSettings = createSelector(getTaskSettings, (setting: TaskSettings) => setting.clearOnExist);

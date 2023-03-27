@@ -12,12 +12,12 @@ import React from 'react';
 
 import { useSelector } from 'react-redux';
 
-import type { Download, Global } from '@src/models';
+import type { Download, GlobalSettings } from '@src/models';
 import { DownloadStatus, downloadStatusToColor } from '@src/models';
 
 import type { StoreState } from '@src/store';
 import { getGlobalDownload } from '@src/store/selectors';
-import { useI18n, formatBytes } from '@src/utils';
+import { formatBytes, useI18n } from '@src/utils';
 
 import { ContentCard } from '../content-card';
 
@@ -64,7 +64,7 @@ export const DownloadCard: FC<DownloadCardProps> = ({ download, hideStatus, expa
     }
   };
 
-  const showProgressBar = useSelector<StoreState, Global['download']>(getGlobalDownload)?.progressBar;
+  const showProgressBar = useSelector<StoreState, GlobalSettings['download']>(getGlobalDownload)?.progressBar;
   return (
     <ContentCard
       title={download.title ?? download.filename}

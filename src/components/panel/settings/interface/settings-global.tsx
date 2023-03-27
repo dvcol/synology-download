@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ButtonWithConfirm, FormCheckbox, FormInput, FormSwitch } from '@src/components';
-import type { Global } from '@src/models';
+import type { GlobalSettings } from '@src/models';
 import { ActionScope, defaultGlobal, InterfaceHeader, InterfaceSize, NavbarButtonType, ThemeMode } from '@src/models';
 import type { StoreState } from '@src/store';
 import { syncInterface } from '@src/store/actions';
@@ -18,7 +18,7 @@ import { useI18n } from '@src/utils';
 export const SettingsGlobal = () => {
   const i18n = useI18n('panel', 'settings', 'global');
   const dispatch = useDispatch();
-  const state = useSelector<StoreState, Global>(getGlobal);
+  const state = useSelector<StoreState, GlobalSettings>(getGlobal);
 
   const {
     handleSubmit,
@@ -26,7 +26,7 @@ export const SettingsGlobal = () => {
     control,
     getValues,
     formState: { isValid, isDirty, isSubmitSuccessful },
-  } = useForm<Global>({
+  } = useForm<GlobalSettings>({
     mode: 'onChange',
     defaultValues: {
       ...state,
@@ -46,7 +46,7 @@ export const SettingsGlobal = () => {
     },
   });
 
-  const onSubmit = (data: Global) => {
+  const onSubmit = (data: GlobalSettings) => {
     dispatch(syncInterface(data));
     reset(data);
   };

@@ -5,9 +5,19 @@ import type { ScrapedContents, ScrapedPage } from '@src/models/scraped-content.m
 import type { Download } from './download.model';
 
 import type { ContextMenu, QuickMenu } from './menu.model';
-import type { AdvancedSettings, Connection, Downloads, Global, Log, Notifications, Polling, SyncSettings } from './settings.model';
+import type {
+  AdvancedSettings,
+  ConnectionSettings,
+  DownloadSettings,
+  GlobalSettings,
+  Log,
+  NotificationSettings,
+  PollingSettings,
+  SyncSettings,
+  TaskSettings,
+} from './settings.model';
 import type { ContentTab } from './tab.model';
-import type { Task, TaskComplete, TaskFile, TaskStatistics } from './task.model';
+import type { Task, TaskComplete, TaskFile, TaskForm, TaskStatistics } from './task.model';
 import type { Store } from 'redux';
 import type { Store as StoreProxy } from 'webext-redux';
 
@@ -40,6 +50,7 @@ export interface NavbarSlice {
 }
 
 export interface TasksSlice {
+  taskForm: TaskForm;
   stopping: Record<string, TaskComplete>;
   tasks: Record<string, Task>;
   tasksIds: string[];
@@ -62,14 +73,15 @@ export interface ScrapedSlice {
 export const SettingsSliceName = 'settings';
 
 export interface SettingsSlice {
-  notifications: Notifications;
-  connection: Connection;
-  polling: Polling;
+  notifications: NotificationSettings;
+  connection: ConnectionSettings;
+  polling: PollingSettings;
   tabs: ContentTab[];
   menus: ContextMenu[];
   quick: QuickMenu[];
-  global: Global;
-  downloads: Downloads;
+  global: GlobalSettings;
+  tasks: TaskSettings;
+  downloads: DownloadSettings;
   advanced: AdvancedSettings;
   sync: SyncSettings;
 }

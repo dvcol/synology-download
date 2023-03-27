@@ -99,7 +99,7 @@ export const defaultCredentials: Credentials = {
   device_id: '',
 };
 
-export interface Connection extends Credentials {
+export interface ConnectionSettings extends Credentials {
   rememberMe?: boolean;
   autoLogin?: boolean;
   protocol?: Protocol;
@@ -107,7 +107,7 @@ export interface Connection extends Credentials {
   port?: number;
 }
 
-export const defaultConnection: Connection = {
+export const defaultConnection: ConnectionSettings = {
   ...defaultCredentials,
   rememberMe: true,
   autoLogin: true,
@@ -116,7 +116,7 @@ export const defaultConnection: Connection = {
   port: 5000,
 };
 
-export interface Polling {
+export interface PollingSettings {
   enabled: boolean;
   // 0 means disabled
   background: { enabled: boolean; interval: number };
@@ -124,7 +124,7 @@ export interface Polling {
   popup: { enabled: boolean; interval: number };
 }
 
-export const defaultPolling: Polling = {
+export const defaultPolling: PollingSettings = {
   enabled: true,
   background: { enabled: true, interval: 20000 },
   popup: { enabled: true, interval: 3000 },
@@ -148,13 +148,13 @@ export interface NotificationsSnack {
   position: OptionsObject['anchorOrigin'];
 }
 
-export interface Notifications {
+export interface NotificationSettings {
   count: NotificationsCount;
   snack: NotificationsSnack;
   banner: NotificationsBanner;
 }
 
-export const defaultNotifications: Notifications = {
+export const defaultNotifications: NotificationSettings = {
   count: {
     enabled: true,
     template: TabTemplate.all,
@@ -201,7 +201,7 @@ export enum InterfaceSize {
   large = 1.2,
 }
 
-export interface Global {
+export interface GlobalSettings {
   theme: ThemeMode;
   actions: ActionScope;
   loading: { enabled: boolean; threshold: number };
@@ -252,7 +252,7 @@ export interface DownloadsIntercept {
   active: DownloadExtension[];
 }
 
-export interface Downloads {
+export interface DownloadSettings {
   enabled: boolean;
   buttons: boolean;
   notifications: boolean;
@@ -295,7 +295,7 @@ export const defaultExtensions: DownloadExtension[] = [
   { ext: '.pdf', mime: 'application/pdf' },
 ];
 
-export const defaultDownloads: Downloads = {
+export const defaultDownloads: DownloadSettings = {
   enabled: true,
   buttons: true,
   notifications: true,
@@ -388,6 +388,14 @@ export const defaultSyncSettings: SyncSettings = {
   mode: SyncSettingMode.sync,
 };
 
+export interface TaskSettings {
+  clearOnExist: boolean;
+}
+
+export const defaultTaskSettings = {
+  clearOnExist: false,
+};
+
 export const defaultSettings: SettingsSlice = {
   notifications: defaultNotifications,
   connection: defaultConnection,
@@ -396,6 +404,7 @@ export const defaultSettings: SettingsSlice = {
   menus: [defaultContextMenu],
   quick: [defaultQuickMenu, defaultModalQuickMenu, defaultRecentQuickMenu, defaultDownloadQuickMenu, defaultRecentDownloadQuickMenu],
   global: defaultGlobal,
+  tasks: defaultTaskSettings,
   downloads: defaultDownloads,
   advanced: defaultAdvancedSettings,
   sync: defaultSyncSettings,

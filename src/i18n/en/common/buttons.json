@@ -2,11 +2,20 @@
   "common__buttons__cancel": {
     "message": "Cancel"
   },
+  "common__buttons__continue": {
+    "message": "Continue"
+  },
+  "common__buttons__discard": {
+    "message": "Discard"
+  },
   "common__buttons__confirm": {
     "message": "Confirm"
   },
   "common__buttons__save": {
     "message": "Save"
+  },
+  "common__buttons__create": {
+    "message": "Create"
   },
   "common__buttons__delete": {
     "message": "Delete"

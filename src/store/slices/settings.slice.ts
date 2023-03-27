@@ -3,14 +3,14 @@ import { createSlice } from '@reduxjs/toolkit';
 import type {
   AdvancedLogging,
   AdvancedSettings,
-  Connection,
+  ConnectionSettings,
   ContentTab,
   ContextMenu,
-  Downloads,
+  DownloadSettings,
   DownloadsIntercept,
-  Global,
-  Notifications,
-  Polling,
+  GlobalSettings,
+  NotificationSettings,
+  PollingSettings,
   QuickMenu,
   SettingsSlice,
   SyncSettings,
@@ -38,9 +38,9 @@ interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   setSettings: CaseReducer<S, PayloadAction<S>>;
   syncSettings: CaseReducer<S, PayloadAction<Partial<S>>>;
   resetSettings: CaseReducer<S>;
-  syncConnection: CaseReducer<S, PayloadAction<Partial<Connection>>>;
-  syncPolling: CaseReducer<S, PayloadAction<Partial<Polling>>>;
-  syncNotifications: CaseReducer<S, PayloadAction<Partial<Notifications>>>;
+  syncConnection: CaseReducer<S, PayloadAction<Partial<ConnectionSettings>>>;
+  syncPolling: CaseReducer<S, PayloadAction<Partial<PollingSettings>>>;
+  syncNotifications: CaseReducer<S, PayloadAction<Partial<NotificationSettings>>>;
   setContextMenus: CaseReducer<S, PayloadAction<ContextMenu[]>>;
   saveContextMenu: CaseReducer<S, PayloadAction<ContextMenu>>;
   removeContextMenu: CaseReducer<S, PayloadAction<string>>;
@@ -53,8 +53,8 @@ interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   saveQuickMenu: CaseReducer<S, PayloadAction<QuickMenu>>;
   removeQuickMenu: CaseReducer<S, PayloadAction<string>>;
   resetQuickMenus: CaseReducer<S>;
-  syncInterface: CaseReducer<S, PayloadAction<Partial<Global>>>;
-  syncDownloads: CaseReducer<S, PayloadAction<Partial<Downloads>>>;
+  syncInterface: CaseReducer<S, PayloadAction<Partial<GlobalSettings>>>;
+  syncDownloads: CaseReducer<S, PayloadAction<Partial<DownloadSettings>>>;
   syncDownloadsIntercept: CaseReducer<S, PayloadAction<DownloadsIntercept>>;
   syncAdvanced: CaseReducer<S, PayloadAction<AdvancedSettings>>;
   syncAdvancedLogging: CaseReducer<S, PayloadAction<AdvancedLogging>>;
@@ -69,7 +69,7 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
     syncSettings: syncReducer,
     resetSettings: oldSettings => syncReducer(oldSettings, { type: 'sync', payload: defaultSettings }),
     syncConnection: syncConnectionReducer,
-    syncPolling: (oldSettings, { payload }) => syncNestedReducer<Polling>(oldSettings, payload, 'polling'),
+    syncPolling: (oldSettings, { payload }) => syncNestedReducer<PollingSettings>(oldSettings, payload, 'polling'),
     syncNotifications: (oldSettings, action) => setBadgeReducer(oldSettings, action),
     setContextMenus: (oldSettings, { payload: menus }): SettingsSlice =>
       syncReducer(oldSettings, {
@@ -112,8 +112,8 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
         type: 'sync',
         payload: { quick: defaultSettings.quick },
       }),
-    syncInterface: (oldSettings, { payload }) => syncNestedReducer<Global>(oldSettings, payload, 'global'),
-    syncDownloads: (oldSettings, { payload }) => syncNestedReducer<Downloads>(oldSettings, payload, 'downloads'),
+    syncInterface: (oldSettings, { payload }) => syncNestedReducer<GlobalSettings>(oldSettings, payload, 'global'),
+    syncDownloads: (oldSettings, { payload }) => syncNestedReducer<DownloadSettings>(oldSettings, payload, 'downloads'),
     syncDownloadsIntercept: syncInterceptReducer,
     syncAdvanced: (oldSettings, { payload }) => syncNestedReducer<AdvancedSettings>(oldSettings, payload, 'advanced'),
     syncAdvancedLogging: syncAdvancedLoggingReducer,

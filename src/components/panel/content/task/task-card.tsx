@@ -12,12 +12,12 @@ import React from 'react';
 
 import { useSelector } from 'react-redux';
 
-import type { Global, Task } from '@src/models';
+import type { GlobalSettings, Task } from '@src/models';
 import { TaskStatus, taskStatusToColor } from '@src/models';
 
 import type { StoreState } from '@src/store';
 import { getGlobalTask } from '@src/store/selectors';
-import { useI18n, formatBytes } from '@src/utils';
+import { formatBytes, useI18n } from '@src/utils';
 
 import { ContentCard } from '../content-card';
 
@@ -72,7 +72,7 @@ export const TaskCard: FC<TaskCardProps> = ({ task, hideStatus, expanded, hover 
     return <span>{bytes}/s</span>;
   };
 
-  const showProgressBar = useSelector<StoreState, Global['task']>(getGlobalTask)?.progressBar;
+  const showProgressBar = useSelector<StoreState, GlobalSettings['task']>(getGlobalTask)?.progressBar;
   return (
     <ContentCard
       title={task.title}
