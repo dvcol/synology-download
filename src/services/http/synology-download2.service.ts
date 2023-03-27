@@ -1,3 +1,5 @@
+import { throwError } from 'rxjs';
+
 import type {
   CommonResponse,
   SynologyQueryOptions,
@@ -62,35 +64,39 @@ export class SynologyDownload2Service extends SynologyService {
   }
 
   createTask(request: TaskCreateRequest): Observable<TaskCreateResponse> {
-    const { url, file, torrent, ..._request } = request;
-    const params: HttpParameters = stringifyKeys(_request, true);
-    if (url?.length) params.url = JSON.stringify(url?.map(_url => SynologyDownload2Service._sanitizeUrl(_url).toString()));
+    try {
+      const { url, file, torrent, ..._request } = request;
+      const params: HttpParameters = stringifyKeys(_request, true);
+      if (url?.length) params.url = JSON.stringify(url?.map(_url => SynologyDownload2Service._sanitizeUrl(_url).toString()));
 
-    const options: SynologyQueryOptions = {
-      api: DownloadStation2API.Task,
-      method: HttpMethod.POST,
-      version: '2',
-      endpoint: Endpoint.Entry,
-    };
-    if (torrent) {
-      options.body = buildFormData({
+      const options: SynologyQueryOptions = {
         api: DownloadStation2API.Task,
-        method: Task2Method.create,
+        method: HttpMethod.POST,
         version: '2',
-        ...params,
-        torrent,
-        mtime: Date.now()?.toString(),
-        size: torrent.size?.toString(),
-        file: JSON.stringify(['torrent']),
-      });
-    } else {
-      options.params = {
-        method: Task2Method.create,
-        ...params,
+        endpoint: Endpoint.Entry,
       };
-    }
+      if (torrent) {
+        options.body = buildFormData({
+          api: DownloadStation2API.Task,
+          method: Task2Method.create,
+          version: '2',
+          ...params,
+          torrent,
+          mtime: Date.now()?.toString(),
+          size: torrent.size?.toString(),
+          file: JSON.stringify(['torrent']),
+        });
+      } else {
+        options.params = {
+          method: Task2Method.create,
+          ...params,
+        };
+      }
 
-    return this._do<TaskCreateResponse>(options, !!torrent);
+      return this._do<TaskCreateResponse>(options, !!torrent);
+    } catch (error) {
+      return throwError(error);
+    }
   }
 
   getTaskFiles(request: TaskListFilesRequest): Observable<TaskListFilesResponse> {
