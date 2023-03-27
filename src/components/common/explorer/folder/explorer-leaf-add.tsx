@@ -1,10 +1,12 @@
 import CreateNewFolderOutlinedIcon from '@mui/icons-material/CreateNewFolderOutlined';
 
-import { Button, Stack } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 
 import React, { useState } from 'react';
 
 import type { File, Folder } from '@src/models';
+
+import { useI18n } from '@src/utils';
 
 import { ExplorerLeafEdit } from './explorer-leaf-edit';
 
@@ -19,6 +21,7 @@ export type ExplorerLeafAddProps = {
 };
 
 export const ExplorerLeafAdd: FC<ExplorerLeafAddProps> = ({ nodeId, path, disabled, spliceTree }) => {
+  const i18n = useI18n('common', 'explorer', 'leaf', 'add');
   const [editing, setEditing] = useState(false);
 
   const onClick: ButtonProps['onClick'] = event => {
@@ -32,14 +35,14 @@ export const ExplorerLeafAdd: FC<ExplorerLeafAddProps> = ({ nodeId, path, disabl
   };
 
   return (
-    <Stack direction="row" sx={{ flex: '1 1 auto' }}>
+    <Stack direction="row" sx={{ flex: '1 1 auto', m: '0.2em 0' }}>
       {editing ? (
         <Stack direction="row" sx={{ flex: '1 1 auto', p: '0 0.5em', alignItems: 'center' }}>
-          <CreateNewFolderOutlinedIcon sx={{ mr: '0.25em', ml: '-0.125em' }} />
+          <CreateNewFolderOutlinedIcon sx={{ mr: '0.25em', ml: '-0.125em', width: '1em', fontSize: '1.25em' }} />
           <ExplorerLeafEdit
             folder={{ path }}
             isEditing={true}
-            placeholder={'Create a new folder'}
+            placeholder={i18n('new_folder')}
             disabled={disabled}
             onChange={(...args) => spliceTree?.(nodeId, ...args)}
             onCancel={onCancel}
@@ -49,17 +52,30 @@ export const ExplorerLeafAdd: FC<ExplorerLeafAddProps> = ({ nodeId, path, disabl
       ) : (
         <Button
           variant="text"
-          startIcon={<CreateNewFolderOutlinedIcon sx={{ ml: '0.125em', mr: '-0.25em' }} />}
+          startIcon={<CreateNewFolderOutlinedIcon sx={{ ml: '0.125em', mr: '-0.25em', width: '1em', fontSize: '1.125em', mb: '0.125em' }} />}
           sx={{
             height: '1.5em',
             flex: '1 1 auto',
-            p: '0 0.5em',
+            p: '1em 0.5em',
             justifyContent: 'flex-start',
             textTransform: 'none',
+            fontSize: '0.875em',
           }}
           onClick={onClick}
         >
-          Create a new Folder
+          <Typography
+            sx={{
+              flex: '1 1 auto',
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+              fontSize: '0.875em',
+              textAlign: 'start',
+              ml: '0.25em',
+            }}
+          >
+            {i18n('new_folder')}
+          </Typography>
         </Button>
       )}
     </Stack>

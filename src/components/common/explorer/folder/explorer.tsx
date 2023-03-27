@@ -3,19 +3,23 @@ import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import { TreeView } from '@mui/lab';
 import { Container } from '@mui/material';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+
+import { useSelector } from 'react-redux';
 
 import { catchError, finalize, tap } from 'rxjs';
 
-import type { File, FileList, Folder } from '@src/models';
+import type { File, FileList, Folder, RootSlice } from '@src/models';
 
 import { LoggerService, NotificationService, QueryService } from '@src/services';
+import { getDestinationsHistory } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
 
 import { ExplorerBreadCrumbs } from './explorer-breadcrumb';
 import { ExplorerLeaf } from './explorer-leaf';
 import { ExplorerLeafAdd } from './explorer-leaf-add';
 import { ExplorerLoading } from './explorer-loading';
+import { ExplorerRecent } from './explorer-recent';
 
 import type { FC } from 'react';
 import type { Observable } from 'rxjs';
@@ -41,14 +45,17 @@ export type ExplorerEvent = {
 export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disabled, readonly, fileType, startPath, onChange, editable }) => {
   const i18n = useI18n('common', 'explorer');
 
-  const [tree, setTree] = React.useState<Record<string, File[] | Folder[]>>({});
-  const [loading, setLoading] = React.useState<Record<string, boolean>>({
+  const [showDestinations, setShowDestinations] = useState(false);
+  const recentDestinations = useSelector<RootSlice, string[]>(getDestinationsHistory);
+
+  const [tree, setTree] = useState<Record<string, File[] | Folder[]>>({});
+  const [loading, setLoading] = useState<Record<string, boolean>>({
     root: true,
   });
-  const [selected, setSelected] = React.useState<string>('root');
-  const [selectedPath, setSelectedPath] = React.useState<string | undefined>(startPath);
-  const [expanded, setExpanded] = React.useState<string[]>([]);
-  const [crumbs, setCrumbs] = React.useState<string[]>([]);
+  const [selected, setSelected] = useState<string>('root');
+  const [selectedPath, setSelectedPath] = useState<string | undefined>(startPath);
+  const [expanded, setExpanded] = useState<string[]>([]);
+  const [crumbs, setCrumbs] = useState<string[]>([]);
 
   useEffect(() => {
     if (QueryService.isLoggedIn) {
@@ -68,11 +75,13 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
     }
   }, []);
 
+  const selectPath = (path: string) => {
+    setCrumbs(path?.includes('/') ? path?.split('/') : [path]);
+    setSelectedPath(path);
+  };
+
   useEffect(() => {
-    if (startPath?.length) {
-      setCrumbs(startPath?.includes('/') ? startPath?.split('/') : [startPath]);
-      setSelectedPath(startPath);
-    }
+    if (startPath?.length) selectPath(startPath);
   }, [startPath]);
 
   const listFiles = (path: string, key: string): Observable<FileList> => {
@@ -167,57 +176,74 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
   const onExpand = ($event: React.SyntheticEvent, nodeIds: string[]) => !flatten && setExpanded(nodeIds);
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100%' }}>
-      <ExplorerBreadCrumbs crumbs={crumbs} onClick={(_, i) => crumbSelect(i)} disabled={disabled} />
-      <TreeView
-        key={`tree-${disabled}`}
-        aria-label="file system navigator"
-        defaultCollapseIcon={<FolderOpenIcon />}
-        defaultExpandIcon={<FolderIcon />}
-        selected={selected}
-        onNodeSelect={onSelect}
-        expanded={expanded}
-        onNodeToggle={onExpand}
-        disableSelection={disabled}
-        sx={{
-          overflow: 'auto',
-          height: 'calc(100% - 2.0625em)',
-        }}
-      >
-        {
-          // only > 1 so that we do not allow creation of shares
-          flatten && editable && !loading[selected] && selected?.split('-')?.length > 1 && selectedPath && (
-            <ExplorerLeafAdd nodeId={selected} path={selectedPath} disabled={disabled} spliceTree={spliceTree} />
-          )
-        }
-        {flatten && <ExplorerLoading loading={loading[selected]} empty={!tree[selected]?.length} />}
-        {flatten &&
-          !loading[selected] &&
-          tree[selected]?.map((f, i) => (
-            <ExplorerLeaf
-              key={`${i}-${disabled}`}
-              nodeId={`${selected}-${i}`}
-              folder={f}
-              tree={tree}
-              loading={loading}
-              disabled={disabled}
-              editable={editable}
-              spliceTree={spliceTree}
-            />
-          ))}
-        {!flatten &&
-          tree?.root?.map((f, i) => (
-            <ExplorerLeaf
-              key={`${i}-${disabled}`}
-              nodeId={`root-${i}`}
-              folder={f}
-              tree={tree}
-              loading={loading}
-              disabled={disabled}
-              editable={editable}
-              spliceTree={spliceTree}
-            />
-          ))}
-      </TreeView>
+      <ExplorerBreadCrumbs
+        crumbs={crumbs}
+        showDestinations={showDestinations}
+        hasDestinations={!!recentDestinations?.length}
+        onClick={(_, i) => crumbSelect(i)}
+        onRecent={() => setShowDestinations(_show => !_show)}
+        disabled={disabled}
+      />
+      {showDestinations ? (
+        <ExplorerRecent
+          destinations={recentDestinations}
+          onSelect={destination => {
+            selectPath(destination);
+            onChange?.({ path: destination });
+          }}
+        />
+      ) : (
+        <TreeView
+          key={`tree-${disabled}`}
+          aria-label="file system navigator"
+          defaultCollapseIcon={<FolderOpenIcon />}
+          defaultExpandIcon={<FolderIcon />}
+          selected={selected}
+          onNodeSelect={onSelect}
+          expanded={expanded}
+          onNodeToggle={onExpand}
+          disableSelection={disabled}
+          sx={{
+            overflow: 'auto',
+            height: 'calc(100% - 2.0625em)',
+          }}
+        >
+          {
+            // only > 1 so that we do not allow creation of shares
+            flatten && editable && !loading[selected] && selected?.split('-')?.length > 1 && selectedPath && (
+              <ExplorerLeafAdd nodeId={selected} path={selectedPath} disabled={disabled} spliceTree={spliceTree} />
+            )
+          }
+          {flatten && <ExplorerLoading loading={loading[selected]} empty={!tree[selected]?.length} />}
+          {flatten &&
+            !loading[selected] &&
+            tree[selected]?.map((f, i) => (
+              <ExplorerLeaf
+                key={`${i}-${disabled}`}
+                nodeId={`${selected}-${i}`}
+                folder={f}
+                tree={tree}
+                loading={loading}
+                disabled={disabled}
+                editable={editable}
+                spliceTree={spliceTree}
+              />
+            ))}
+          {!flatten &&
+            tree?.root?.map((f, i) => (
+              <ExplorerLeaf
+                key={`${i}-${disabled}`}
+                nodeId={`root-${i}`}
+                folder={f}
+                tree={tree}
+                loading={loading}
+                disabled={disabled}
+                editable={editable}
+                spliceTree={spliceTree}
+              />
+            ))}
+        </TreeView>
+      )}
     </Container>
   );
 };

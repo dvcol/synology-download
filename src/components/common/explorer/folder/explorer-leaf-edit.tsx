@@ -90,45 +90,56 @@ export const ExplorerLeafEdit: FC<ExplorerLeafEditProps> = ({ folder, isEditing,
           onClick={onClick}
         />
       ) : (
-        <Typography sx={{ flex: '1 1 auto', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{folder?.name}</Typography>
+        <Tooltip arrow title={folder?.name ?? ''} PopperProps={{ disablePortal: true, sx: { wordBreak: 'break-all' } }} enterDelay={1000}>
+          <Typography
+            sx={{
+              flex: '1 1 auto',
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+              fontSize: '0.875em',
+            }}
+          >
+            {folder?.name}
+          </Typography>
+        </Tooltip>
       )}
-      <Stack direction="row" sx={{ marginRight: editing ? '-0.5rem' : '-0.25rem' }}>
+      <Stack direction="row" sx={{ mt: editing ? '0.25em' : 0 }}>
         {!editing && !disabled && hover && (
-          <Tooltip arrow title={i18n('edit', 'common', 'buttons')}>
-            <span>
-              <Button key="edit" sx={{ display: 'flex', flex: '1 1 auto', minWidth: '0', p: '0.125rem' }} disabled={disabled} onClick={onEdit}>
-                <EditIcon sx={{ fontSize: '0.9rem' }} />
-              </Button>
-            </span>
+          <Tooltip arrow title={i18n('edit', 'common', 'buttons')} PopperProps={{ disablePortal: true }}>
+            <Button
+              key="edit"
+              sx={{ display: 'flex', flex: '1 1 auto', minWidth: '0', p: '0.25em', fontSize: '0.75em' }}
+              disabled={disabled}
+              onClick={onEdit}
+            >
+              <EditIcon sx={{ width: '1em', fontSize: '1.125em' }} />
+            </Button>
           </Tooltip>
         )}
         {editing && !disabled && isDirty && (
-          <Tooltip arrow title={i18n('save', 'common', 'buttons')}>
-            <span>
-              <Button
-                key="save"
-                sx={{ display: 'flex', flex: '1 1 auto', minWidth: '0', p: '0.25rem' }}
-                disabled={disabled}
-                onClick={onCreateOrRename}
-              >
-                <SaveIcon fontSize="small" />
-              </Button>
-            </span>
+          <Tooltip arrow title={i18n('save', 'common', 'buttons')} PopperProps={{ disablePortal: true }}>
+            <Button
+              key="save"
+              sx={{ display: 'flex', flex: '1 1 auto', minWidth: '0', p: '0.5em', fontSize: '0.75em' }}
+              disabled={disabled}
+              onClick={onCreateOrRename}
+            >
+              <SaveIcon fontSize="small" sx={{ width: '1em', fontSize: '1.125em' }} />
+            </Button>
           </Tooltip>
         )}
         {editing && !disabled && (
-          <Tooltip arrow title={i18n('cancel', 'common', 'buttons')}>
-            <span>
-              <Button
-                key="cancel"
-                color="error"
-                sx={{ display: 'flex', flex: '1 1 auto', minWidth: '0', p: '0.25rem' }}
-                disabled={disabled}
-                onClick={_onCancel}
-              >
-                <ClearIcon fontSize="small" />
-              </Button>
-            </span>
+          <Tooltip arrow title={i18n('cancel', 'common', 'buttons')} PopperProps={{ disablePortal: true }}>
+            <Button
+              key="cancel"
+              color="error"
+              sx={{ display: 'flex', flex: '1 1 auto', minWidth: '0', p: '0.5em', fontSize: '0.75em' }}
+              disabled={disabled}
+              onClick={_onCancel}
+            >
+              <ClearIcon fontSize="small" sx={{ width: '1em', fontSize: '1.125em' }} />
+            </Button>
           </Tooltip>
         )}
       </Stack>

@@ -90,12 +90,18 @@ const SnackNotificationCardComponent: ForwardRefRenderFunction<HTMLDivElement, S
         action={
           <Box sx={{ marginLeft: 'auto' }}>
             {(message || contextMessage) && (
-              <ExpandMore expand={_expanded} onClick={handleExpandClick} aria-expanded={_expanded} aria-label="show more">
+              <ExpandMore
+                expand={_expanded}
+                onClick={handleExpandClick}
+                aria-expanded={_expanded}
+                aria-label="show more"
+                sx={{ fontSize: '1.125em' }}
+              >
                 <ExpandMoreIcon sx={{ fontSize: '1.125em' }} />
               </ExpandMore>
             )}
-            <IconButton onClick={handleDismiss}>
-              <CloseIcon sx={{ fontSize: '1.125em' }} />
+            <IconButton onClick={handleDismiss} sx={{ fontSize: '1em' }}>
+              <CloseIcon sx={{ fontSize: '1em' }} />
             </IconButton>
           </Box>
         }

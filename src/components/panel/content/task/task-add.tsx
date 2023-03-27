@@ -41,6 +41,7 @@ const UrlCounts: FC<{ urls?: string[] }> = ({ urls }) => {
         size="small"
         variant="outlined"
         color="primary"
+        sx={{ fontSize: '0.7em' }}
       />
     </Tooltip>
   );

@@ -1,0 +1,12 @@
+{
+  "common__explorer__breadcrumb__home": {
+    "message": "Home"
+  },
+
+  "common__explorer__breadcrumb__show__recent": {
+    "message": "Show recent destinations"
+  },
+  "common__explorer__breadcrumb__show__explorer": {
+    "message": "Show destinations explorer"
+  }
+}
