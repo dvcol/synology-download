@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.5.0](https://github.com/dvcol/synology-download/compare/v2.4.2...v2.5.0) (2023-03-28)
+
+
+### Features
+
+* **settings:** add task form settings ([2e394c8](https://github.com/dvcol/synology-download/commit/2e394c893c5cfa9bf9c850c83a87d84f8efa5db4))
+* **task:** persist task form state in modal ([9e93474](https://github.com/dvcol/synology-download/commit/9e93474a110bd2ddc6fa260d3e63e516a4f972f7))
+
+
+### Bug Fixes
+
+* **task:** fix error notification when url parsing fails ([cfcabea](https://github.com/dvcol/synology-download/commit/cfcabeab4ad921dcfd02d217b76b42809d6176cd))
+
 ### [2.4.2](https://github.com/dvcol/synology-download/compare/v2.4.1...v2.4.2) (2023-03-27)
 
 
