@@ -5,6 +5,7 @@ import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { SettingsChromeStorage, SettingsLogging, SettingsRedux } from '@src/components/panel/settings/advanced';
+
 import { SettingHeader } from '@src/models';
 
 import { SettingsCredentials, SettingsPolling } from './connection';
@@ -14,6 +15,7 @@ import { SettingsContextMenus, SettingsGlobal, SettingsQuickMenus, SettingsTabs 
 import { SettingsBanner, SettingsSnack, SettingsTasksCount } from './notifications';
 
 import { SettingsHeader } from './settings-header';
+import { SettingsTasks } from './tasks';
 
 import type { FC } from 'react';
 import type { PathRouteProps } from 'react-router/lib/components';
@@ -38,6 +40,15 @@ export const SettingsRoutes: FC = () => {
           <SettingsDownloads />
           <SettingsDownloadsIntercept />
           <SettingsDownloadsHistory />
+        </React.Fragment>
+      ),
+    },
+    {
+      path: SettingHeader.tasks,
+      element: (
+        <React.Fragment>
+          <SettingsHeader label={SettingHeader.tasks} />
+          <SettingsTasks />
         </React.Fragment>
       ),
     },

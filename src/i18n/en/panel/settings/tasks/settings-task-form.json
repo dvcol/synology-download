@@ -1,0 +1,15 @@
+{
+  "panel__settings__task_form__title": {
+    "message": "Task Form"
+  },
+  "panel__settings__task_form__subheader": {
+    "message": "Specific settings and options for task creation forms."
+  },
+
+  "panel__settings__task_form__clear_on_exist__title": {
+    "message": "Clear on exit"
+  },
+  "panel__settings__task_form__clear_on_exist__subheader": {
+    "message": "Clear the form when exiting task creation interface without submitting."
+  }
+}

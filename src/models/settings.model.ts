@@ -28,6 +28,7 @@ export enum SettingHeader {
   interface = 'interface',
   notification = 'notification',
   advanced = 'advanced',
+  tasks = 'tasks',
 }
 
 export interface SettingsPanelTab {
@@ -58,6 +59,10 @@ export enum InterfaceHeader {
   tabs = 'tabs',
   quickMenu = 'quick_menu',
   contextMenu = 'context_menu',
+}
+
+export enum TasksHeader {
+  form = 'form',
 }
 
 export enum AdvancedHeader {
@@ -393,7 +398,7 @@ export interface TaskSettings {
 }
 
 export const defaultTaskSettings = {
-  clearOnExist: false,
+  clearOnExist: true,
 };
 
 export const defaultSettings: SettingsSlice = {

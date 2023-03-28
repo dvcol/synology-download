@@ -27,6 +27,7 @@ const {
   syncAdvanced,
   syncAdvancedLogging,
   setSyncSettings,
+  syncTasksSettings,
 } = settingsSlice.actions;
 
 // Export as named constants
@@ -56,4 +57,5 @@ export {
   syncAdvanced,
   syncAdvancedLogging,
   setSyncSettings,
+  syncTasksSettings,
 };

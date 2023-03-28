@@ -9,6 +9,13 @@
     "message": "Polling"
   },
 
+  "panel__settings__tasks": {
+    "message": "Tasks"
+  },
+  "panel__settings__tasks_form": {
+    "message": "Task form"
+  },
+
   "panel__settings__downloads": {
     "message": "Downloads"
   },

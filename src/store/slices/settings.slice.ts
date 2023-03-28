@@ -14,6 +14,7 @@ import type {
   QuickMenu,
   SettingsSlice,
   SyncSettings,
+  TaskSettings,
 } from '@src/models';
 import { defaultSettings, SettingsSliceName } from '@src/models';
 
@@ -59,6 +60,7 @@ interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   syncAdvanced: CaseReducer<S, PayloadAction<AdvancedSettings>>;
   syncAdvancedLogging: CaseReducer<S, PayloadAction<AdvancedLogging>>;
   setSyncSettings: CaseReducer<S, PayloadAction<Partial<SyncSettings>>>;
+  syncTasksSettings: CaseReducer<S, PayloadAction<TaskSettings>>;
 }
 
 export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'settings'>({
@@ -118,5 +120,6 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
     syncAdvanced: (oldSettings, { payload }) => syncNestedReducer<AdvancedSettings>(oldSettings, payload, 'advanced'),
     syncAdvancedLogging: syncAdvancedLoggingReducer,
     setSyncSettings: setSyncSettingsReducer,
-  } as SettingsReducers,
+    syncTasksSettings: (oldSettings, { payload }) => syncNestedReducer<TaskSettings>(oldSettings, payload, 'tasks'),
+  },
 });
