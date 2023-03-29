@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.5.1](https://github.com/dvcol/synology-download/compare/v2.5.0...v2.5.1) (2023-03-29)
+
+
+### Bug Fixes
+
+* **http:** fix error handling for exhaust streams ([c325c6f](https://github.com/dvcol/synology-download/commit/c325c6fd1ec635c18d18201830ee9989c0e41a9c))
+* **tasks:** fix loading indicator for task files ([4df86da](https://github.com/dvcol/synology-download/commit/4df86da5eb0150ea8926f89fc345077d9edebb88))
+* **ui:** fix debounce threshold for loading bar ([62bf19c](https://github.com/dvcol/synology-download/commit/62bf19c4ba7a0e3695aed6cc38e96c69499aa81e))
+
 ## [2.5.0](https://github.com/dvcol/synology-download/compare/v2.4.2...v2.5.0) (2023-03-28)
 
 
