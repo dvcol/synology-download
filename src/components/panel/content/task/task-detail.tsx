@@ -18,7 +18,7 @@ import { ColorLevel, TaskStatus, TaskType } from '@src/models';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
 import { getPollingInterval, getTaskFilesById } from '@src/store/selectors';
 import type { i18n } from '@src/utils';
-import { useI18n, before, computeProgress, dateToLocalString, formatBytes, useDebounceObservable } from '@src/utils';
+import { before, computeProgress, dateToLocalString, formatBytes, useDebounceObservable, useI18n } from '@src/utils';
 
 import ContentDetail from '../content-detail';
 
@@ -87,7 +87,7 @@ const TaskDetailGenericButton: FC<TaskDetailGenericButtonProps> = ({
   return (
     <>
       <Button
-        startIcon={<IconLoader icon={buttonIcon} loading={loadingIcon?.[buttonName]} props={{ size: '1.25rem', color: buttonColor }} />}
+        startIcon={<IconLoader icon={buttonIcon} loading={!!loadingIcon?.[buttonName]} props={{ size: '1.25rem', color: buttonColor }} />}
         variant="outlined"
         color={buttonColor}
         onClick={() => buttonClick()}
@@ -180,9 +180,12 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
   const i18n = useI18n('panel', 'content', 'task', 'detail');
   const taskFiles = useSelector<RootSlice, TaskFile[]>(getTaskFilesById(task.id));
 
+  const isBt: boolean = task.type === TaskType.bt;
+  const isActive: boolean = [TaskStatus.downloading, TaskStatus.seeding].includes(task.status);
+
   const polling = useSelector<RootSlice, number>(getPollingInterval);
-  const [firstLoad, setFirstLoad] = useState<boolean>(task.type === TaskType.bt);
-  const [loadingBar, setLoadingBar] = useState<boolean>(task.type === TaskType.bt);
+  const [firstLoad, setFirstLoad] = useState<boolean>(isBt);
+  const [loadingBar, setLoadingBar] = useState<boolean>(isBt && isActive);
 
   const showLoadingBar = loadingBar && (firstLoad || taskFiles?.length);
 
@@ -190,7 +193,7 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
   const [, next] = useDebounceObservable<boolean>(setLoadingBar);
 
   useEffect(() => {
-    if (task.type !== TaskType.bt) return;
+    if (!isBt || !isActive) return;
     const sub = timer(0, polling * 2)
       .pipe(
         exhaustMap(() =>
@@ -222,12 +225,12 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
     return () => {
       if (!sub?.closed) sub?.unsubscribe();
     };
-  }, []);
+  }, [task.status]);
 
   const DeleteButton = (
     <>
       <Button
-        startIcon={<IconLoader icon={<DeleteIcon />} loading={loadingIcon?.delete} props={{ size: '1.25rem', color: 'error' }} />}
+        startIcon={<IconLoader icon={<DeleteIcon />} loading={!!loadingIcon?.delete} props={{ size: '1.25rem', color: 'error' }} />}
         variant="outlined"
         color="error"
         disabled={isDisabled}
@@ -302,20 +305,21 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
       }
       content={
         <>
+          <LinearProgress
+            variant={'indeterminate'}
+            sx={{
+              height: showLoadingBar || taskFiles?.length ? '0.125em' : 0,
+              opacity: showLoadingBar ? 1 : 0,
+              transition: 'opacity 0.3s linear',
+              position: 'sticky',
+              top: '0',
+            }}
+          />
           {taskFiles?.length > 100 && (
             <Typography color={ColorLevel.warning} variant="subtitle2">
               {i18n('files_limit')}
             </Typography>
           )}
-          <LinearProgress
-            variant={'indeterminate'}
-            sx={{
-              height: showLoadingBar ? '0.125em' : 0,
-              transition: 'height 0.3s linear',
-              position: 'sticky',
-              top: '0',
-            }}
-          />
           {files ? <>{files}</> : undefined}
         </>
       }
