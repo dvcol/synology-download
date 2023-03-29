@@ -391,7 +391,10 @@ export class QueryService {
   private static taskStatisticsResponse: Subject<DownloadStationStatistic> = new Subject();
   private static taskStatisticsHandler = this.taskStatisticsRequest.pipe(
     exhaustMap(() => this.doGetStatistic()),
-    tap(response => this.taskStatisticsResponse.next(response)),
+    tap({
+      next: response => this.taskStatisticsResponse.next(response),
+      error: error => this.taskStatisticsResponse.next(error),
+    }),
     retry(), // re subscribe on error
   );
 
@@ -407,20 +410,35 @@ export class QueryService {
 
   static getStatistic(): Observable<DownloadStationStatistic> {
     this.taskStatisticsRequest.next();
-    return this.taskStatisticsResponse.pipe(take(1));
+    return this.taskStatisticsResponse.pipe(
+      take(1),
+      map(res => {
+        if (res instanceof Error) throw res;
+        return res;
+      }),
+    );
   }
 
   private static listTaskRequest: Subject<void> = new Subject();
   private static listTaskResponse: Subject<TaskList> = new Subject();
   private static listTaskHandler = this.listTaskRequest.pipe(
     exhaustMap(() => this.doListTasks()),
-    tap(response => this.listTaskResponse.next(response)),
+    tap({
+      next: response => this.listTaskResponse.next(response),
+      error: error => this.listTaskResponse.next(error),
+    }),
     retry(), // re subscribe on error
   );
 
   static listTasks(): Observable<TaskList> {
     this.listTaskRequest.next();
-    return this.listTaskResponse.pipe(take(1));
+    return this.listTaskResponse.pipe(
+      take(1),
+      map(res => {
+        if (res instanceof Error) throw res;
+        return res;
+      }),
+    );
   }
 
   private static doListTasks(): Observable<TaskList> {
@@ -454,7 +472,10 @@ export class QueryService {
   private static listTaskFilesResponse: Subject<TaskListFilesResponse> = new Subject();
   private static listTaskFilesHandler = this.listTaskFilesRequest.pipe(
     exhaustMap(request => this.doListTaskFiles(request)),
-    tap(response => this.listTaskFilesResponse.next(response)),
+    tap({
+      next: response => this.listTaskFilesResponse.next(response),
+      error: error => this.listTaskFilesResponse.next(error),
+    }),
     retry(), // re subscribe on error
   );
 
@@ -484,7 +505,13 @@ export class QueryService {
       order: Order.ASC,
       ...request,
     });
-    return this.listTaskFilesResponse.pipe(take(1));
+    return this.listTaskFilesResponse.pipe(
+      take(1),
+      map(res => {
+        if (res instanceof Error) throw res;
+        return res;
+      }),
+    );
   }
 
   private static updateStopping(tasks: Task[], stoppingIds: TaskComplete['taskId'][]) {
