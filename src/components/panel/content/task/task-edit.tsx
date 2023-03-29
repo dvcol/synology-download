@@ -62,7 +62,7 @@ export const TaskEdit = ({
   const [loadingBar, setLoadingBar] = useState<boolean>(false);
 
   // Loading observable for debounce
-  const [, next] = useDebounceObservable<boolean>(setLoadingBar, 200);
+  const [, next] = useDebounceObservable<boolean>(setLoadingBar);
 
   const {
     handleSubmit,

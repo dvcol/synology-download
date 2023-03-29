@@ -106,7 +106,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
   const [loadingIcon, setLoadingIcon] = useState<Record<string, boolean>>({});
 
   // Loading observable for debounce
-  const [, next] = useDebounceObservable<Record<string, boolean>>(setLoadingIcon, 300);
+  const [, next] = useDebounceObservable<Record<string, boolean>>(setLoadingIcon);
 
   const onClick = <T,>(button: string, request: Observable<T>, $event?: React.MouseEvent): void => {
     request

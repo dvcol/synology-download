@@ -10,7 +10,7 @@ import type { RootSlice, TaskFile } from '@src/models';
 import { TaskPriority } from '@src/models';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
 import { getTaskFilesById } from '@src/store/selectors';
-import { useI18n, before, computeProgress, useDebounceObservable } from '@src/utils';
+import { before, computeProgress, useDebounceObservable, useI18n } from '@src/utils';
 
 import type { FC } from 'react';
 
@@ -24,7 +24,7 @@ export const TaskEditFiles: FC<TaskEditFilesProps> = ({ taskId }) => {
   const [loadingState, setLoadingState] = useState<Record<string, boolean>>({});
 
   // Loading observable for debounce
-  const [, next] = useDebounceObservable<Record<string, boolean>>(setLoadingState, 200);
+  const [, next] = useDebounceObservable<Record<string, boolean>>(setLoadingState);
 
   useEffect(() => {
     const sub = QueryService.listTaskFiles(taskId)

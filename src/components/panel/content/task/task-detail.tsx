@@ -187,7 +187,7 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
   const showLoadingBar = loadingBar && (firstLoad || taskFiles?.length);
 
   // Loading observable for debounce
-  const [, next] = useDebounceObservable<boolean>(setLoadingBar, 200);
+  const [, next] = useDebounceObservable<boolean>(setLoadingBar);
 
   useEffect(() => {
     if (task.type !== TaskType.bt) return;
