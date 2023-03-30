@@ -10,7 +10,7 @@
   },
 
   "navbar__menu__tooltip__synology_error_finished": {
-    "message": "tasks in error or finished"
+    "message": "downloads and tasks in error or finished"
   },
   "navbar__menu__tooltip__clean": {
     "message": "items in memory"

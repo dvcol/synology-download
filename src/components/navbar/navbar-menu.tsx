@@ -60,28 +60,8 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
     },
   });
 
-  // Dialog
-  const [prompt, setPrompt] = React.useState(false);
-  const onErase = <T extends { altKey: boolean; shiftKey: boolean }>({ altKey, shiftKey }: T) => {
-    if (downloadButtons && !altKey && shiftKey) return DownloadService.cancelAll().subscribe();
-    if (logged) {
-      if (altKey && shiftKey) return QueryService.deleteFinishedAndErrorTasks().subscribe(handleError('delete'));
-      if (!shiftKey) return QueryService.deleteAllTasks().subscribe(handleError('delete'));
-    }
-  };
-  const onEraseTooltip: NonNullable<NavbarButton['hoverTooltip']> = ({ altKey, shiftKey }) => {
-    if (downloadButtons && !altKey && shiftKey) return i18n('tooltip__download');
-    if (logged) {
-      if (altKey && shiftKey) return i18n('tooltip__synology_error_finished');
-      if (altKey) return i18n('tooltip__synology');
-    }
-    if (!logged) return i18n('tooltip__download');
-    if (!downloadButtons) return i18n('tooltip__synology');
-    return i18n('tooltip__synology_download');
-  };
-
   // buttons helpers
-  const getOnClick: <T extends () => void>(callbacks?: { both?: T; shift?: T; alt?: T }) => NavbarButton['onClick'] =
+  const getOnClick: <T extends () => void>(callbacks?: { both?: T; shift?: T; alt?: T }) => NonNullable<NavbarButton['onClick']> =
     ({ both, shift, alt } = {}) =>
     ({ altKey, shiftKey }) => {
       // if both are pressed
@@ -98,7 +78,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       if (logged && !shiftKey) alt?.();
     };
 
-  const getHoverTooltip: (tooltips?: { both?: string; shift?: string; alt?: string; none?: string }) => NavbarButton['hoverTooltip'] = (
+  const getHoverTooltip: (tooltips?: { both?: string; shift?: string; alt?: string; none?: string }) => NonNullable<NavbarButton['hoverTooltip']> = (
     tooltips = {},
   ) => {
     const { both, shift, alt, none } = {
@@ -127,6 +107,14 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
   };
 
   const hoverTooltip = getHoverTooltip();
+
+  // Dialog
+  const [prompt, setPrompt] = React.useState(false);
+  const onErase = <T extends React.MouseEvent>($event: T) =>
+    getOnClick({
+      shift: () => DownloadService.cancelAll().subscribe(),
+      alt: () => QueryService.deleteAllTasks().subscribe(handleError('delete')),
+    })($event);
 
   // Button list
   const buttons: NavbarButton[] = [
@@ -195,7 +183,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       color: 'error',
       disabled: !downloadEnabled && !logged,
       onClick: $event => (logged ? setPrompt(true) : onErase($event)),
-      hoverTooltip: onEraseTooltip,
+      hoverTooltip,
     },
     {
       type: NavbarButtonType.Clear,
@@ -204,10 +192,14 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       color: 'primary',
       disabled: !downloadEnabled && !logged,
       onClick: getOnClick({
+        both: () => {
+          if (downloadButtons) DownloadService.eraseAll().subscribe();
+          if (logged) QueryService.deleteFinishedAndErrorTasks().subscribe(handleError('clear'));
+        },
         shift: () => DownloadService.eraseAll().subscribe(),
         alt: () => QueryService.deleteFinishedTasks().subscribe(handleError('clear')),
       }),
-      hoverTooltip,
+      hoverTooltip: getHoverTooltip({ both: i18n('tooltip__synology_error_finished') }),
       divider: true,
     },
     {
@@ -321,7 +313,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
           onErase($event);
         }}
         tooltip={{
-          hoverTooltip: modifiers => `${i18n('menu_remove')} ${onEraseTooltip(modifiers)}`,
+          hoverTooltip: modifiers => `${i18n('menu_remove')} ${hoverTooltip(modifiers)}`,
           boxProps: { sx: { ml: '0.5rem' } },
         }}
       />
