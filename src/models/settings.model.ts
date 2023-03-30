@@ -341,6 +341,7 @@ export enum ServiceInstance {
   Popup = 'popup',
   Option = 'option',
   Content = 'content',
+  WebComponent = 'webComponent',
 }
 
 export interface Log {

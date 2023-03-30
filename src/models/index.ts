@@ -11,7 +11,7 @@ export * from './links.model';
 export * from './material-ui.model';
 export * from './menu.model';
 export * from './message.model';
-export * from './modal-instance.model';
+export * from './app-instance.model';
 export * from './navbar.model';
 export * from './notification.model';
 export * from './query.model';

@@ -1,11 +1,5 @@
-import createCache from '@emotion/cache';
-
-import React from 'react';
-
-import { render } from 'react-dom';
-
-import { ModalInstance, ServiceInstance } from '@src/models';
-import { ContentApp } from '@src/pages/content/components';
+import { AppInstance, ServiceInstance } from '@src/models';
+import { ContentAppWc } from '@src/pages/content/components/content-app-wc';
 import { clickListener$, listenToScrapEvents } from '@src/pages/content/modules';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
 import { storeProxy } from '@src/store';
@@ -16,7 +10,7 @@ const injection = new Date().toISOString();
 
 LoggerService.debug('Content script injected.', { name, version, injection });
 
-const rootContainerId = `${ModalInstance.modal}-root`;
+const rootContainerId = `${AppInstance.content}-root`;
 const onDestroyEvent = 'onDestroy';
 const destroyedEvent = 'destroyed';
 
@@ -73,14 +67,14 @@ const listenUntilDestroy = (root: HTMLElement) => {
  * @see https://stackoverflow.com/questions/66618136/persistent-service-worker-in-chrome-extension
  */
 const connect = () => {
-  LoggerService.debug(`connecting ${ModalInstance.modal}`);
-  portConnect({ name: ModalInstance.modal }).onDisconnect.addListener(connect);
+  LoggerService.debug(`connecting ${AppInstance.content}`);
+  portConnect({ name: AppInstance.content }).onDisconnect.addListener(connect);
 };
 
 /**
  * Open a modal popup for custom download actions
  */
-export const renderContentApp = async (): Promise<void> => {
+export const injectContentApp = async (): Promise<void> => {
   // if page is not a valid html document with body, skip injection
   if (!document.body) return;
 
@@ -96,7 +90,7 @@ export const renderContentApp = async (): Promise<void> => {
   await removeOldInstances();
 
   // Create a root element to host app
-  const root = document.createElement('div');
+  const root = document.createElement(AppInstance.content);
   root.id = rootContainerId;
   root.dataset.version = version;
   root.dataset.injection = injection;
@@ -104,22 +98,12 @@ export const renderContentApp = async (): Promise<void> => {
   root.style.all = 'initial';
   document.body.appendChild(root);
 
-  // Create shadow root to isolate styles
-  const shadowRoot = root.attachShadow({ mode: 'closed' });
-  shadowRoot.innerHTML = `
-    <div id="${ModalInstance.modal}-container">
-        <div id="${ModalInstance.modal}-app"></div>
-    </div>`;
-
-  const app = shadowRoot.querySelector(`#${ModalInstance.modal}-app`);
-  const container = shadowRoot.querySelector(`#${ModalInstance.modal}-container`) as HTMLElement;
-  const cache = createCache({ key: `${ModalInstance.modal}-cache`, container });
-
   // attach listeners
   listenUntilDestroy(root);
 
   // Register as open
   connect();
 
-  return render(<ContentApp store={storeProxy} cache={cache} container={container} />, app);
+  // render component
+  return ContentAppWc.prototype.render(root, storeProxy);
 };

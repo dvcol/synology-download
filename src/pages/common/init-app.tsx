@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 
 import { App } from '@src/components';
-import type { AppRoute, ModalInstance, QueryAutoLoginOptions, RootSlice, ServiceInstance } from '@src/models';
+import type { AppInstance, AppRoute, QueryAutoLoginOptions, RootSlice, ServiceInstance } from '@src/models';
 import { ChromeMessageType } from '@src/models';
 import { DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { storeProxy } from '@src/store';
@@ -10,7 +10,7 @@ import { onMessage, portConnect, store$ } from '@src/utils';
 
 export const initApp = async (
   logInstance: ServiceInstance,
-  modalInstance: ModalInstance,
+  appInstance: AppInstance,
   getter: (state: RootSlice) => boolean,
   redirect?: AppRoute,
 ): Promise<void> => {
@@ -24,7 +24,7 @@ export const initApp = async (
   PollingService.init(storeProxy, true);
 
   // Register as open
-  portConnect({ name: modalInstance });
+  portConnect({ name: appInstance });
 
   // attempt auto-login on open
   store$<boolean>(storeProxy, getter).subscribe(open => {
@@ -37,5 +37,5 @@ export const initApp = async (
   );
 
   // Render the app
-  render(<App store={storeProxy} redirect={redirect} />, window.document.querySelector(`#${modalInstance}-app-container`));
+  render(<App store={storeProxy} redirect={redirect} />, window.document.querySelector(`#${appInstance}-app-container`));
 };

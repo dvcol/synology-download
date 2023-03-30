@@ -1,13 +1,13 @@
 import { tap } from 'rxjs';
 
-import { ChromeMessageType, ModalInstance } from '@src/models';
+import { AppInstance, ChromeMessageType } from '@src/models';
 import { LoggerService } from '@src/services';
 import { resetLoading, setContentDialog, setContentMenu, setOption, setPopup } from '@src/store/actions';
 import { onConnect, onMessage } from '@src/utils';
 
 import type { Store } from 'redux';
 
-const onAppConnect = (store: Store, instance: ModalInstance, dispatch: typeof setOption | typeof setPopup) =>
+const onAppConnect = (store: Store, instance: AppInstance, dispatch: typeof setOption | typeof setPopup) =>
   onConnect([instance]).pipe(
     tap(port => {
       LoggerService.debug(`connecting ${port.name}`, { id: port?.sender?.tab?.id, name: port.name });
@@ -33,13 +33,13 @@ export const onPortEvents = (store: Store) => {
   LoggerService.debug('Subscribing to ports events.');
 
   // Dropdown popup
-  onAppConnect(store, ModalInstance.popup, setPopup).subscribe();
+  onAppConnect(store, AppInstance.popup, setPopup).subscribe();
 
   // Option page
-  onAppConnect(store, ModalInstance.option, setOption).subscribe();
+  onAppConnect(store, AppInstance.option, setOption).subscribe();
 
   // Content script
-  onConnect([ModalInstance.modal]).subscribe(port => {
+  onConnect([AppInstance.content]).subscribe(port => {
     LoggerService.debug(`connecting ${port.name}`, { id: port?.sender?.tab?.id, source: port?.sender?.origin, name: port.name });
     /**
      * TODO: Remove if/when persistent MV3 service worker are introduced

@@ -1,9 +1,9 @@
-import { ModalInstance, ServiceInstance } from '@src/models';
+import { AppInstance, ServiceInstance } from '@src/models';
 import { initApp } from '@src/pages/common';
 import { LoggerService } from '@src/services';
 import { getPopup } from '@src/store/selectors';
 
-initApp(ServiceInstance.Popup, ModalInstance.popup, getPopup)
+initApp(ServiceInstance.Popup, AppInstance.popup, getPopup)
   .then(() => LoggerService.debug('Popup app initialised.'))
   .catch(err => LoggerService.debug('Popup app failed to initialised.', err));
 

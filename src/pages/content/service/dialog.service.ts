@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
 
-import type { TaskForm, InterceptResponse } from '@src/models';
+import type { InterceptResponse, TaskForm } from '@src/models';
 import type { ChromeResponse } from '@src/utils';
 
 export type TaskDialogIntercept = { callback: (response?: ChromeResponse<InterceptResponse>) => void };
