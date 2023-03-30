@@ -246,7 +246,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       {(logged || downloadEnabled) &&
         buttons
           ?.filter(({ type }) => navbarButtons?.includes(type))
-          ?.map(({ type, icon, label, hoverTooltip: bHoverTooltip, ..._props }) => (
+          ?.map(({ type, icon, label, hoverTooltip: bHoverTooltip, divider, hide, ..._props }) => (
             <TooltipHoverChange title={label} hoverTooltip={modifiers => (bHoverTooltip ? `${label} ${bHoverTooltip(modifiers)}` : label)} key={type}>
               <IconButton id={`${type}-pinned`} aria-controls={`${type}-pinned-button`} {..._props}>
                 {icon}
@@ -289,12 +289,15 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
         onClick={handleClose}
         MenuListProps={{ 'aria-labelledby': 'dropdown-menu' }}
       >
-        {buttons?.map(button => (
-          <>
-            {!button?.hide && <NavbarMenuIcon {...button} />}
-            {button?.divider && <Divider />}
-          </>
-        ))}
+        {buttons
+          ?.map(({ divider, hide, ..._button }) => {
+            const elements: JSX.Element[] = [];
+            if (!hide) elements.push(<NavbarMenuIcon {..._button} key={`${_button.type}-icon`} />);
+            if (divider) elements.push(<Divider key={`${_button.type}-divider`} />);
+            return elements;
+          })
+          .flat()
+          .filter(Boolean)}
       </Menu>
 
       <ConfirmationDialog
