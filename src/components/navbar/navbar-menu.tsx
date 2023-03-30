@@ -248,38 +248,44 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
           ?.filter(({ type }) => navbarButtons?.includes(type))
           ?.map(({ type, icon, label, hoverTooltip: bHoverTooltip, divider, hide, ..._props }) => (
             <TooltipHoverChange title={label} hoverTooltip={modifiers => (bHoverTooltip ? `${label} ${bHoverTooltip(modifiers)}` : label)} key={type}>
-              <IconButton id={`${type}-pinned`} aria-controls={`${type}-pinned-button`} {..._props}>
-                {icon}
-              </IconButton>
+              <span>
+                <IconButton id={`${type}-pinned`} aria-controls={`${type}-pinned-button`} {..._props}>
+                  {icon}
+                </IconButton>
+              </span>
             </TooltipHoverChange>
           ))}
 
       {!logged && (
         <Tooltip arrow title={i18n('menu_login')} key={'login'}>
-          <IconButton
-            id={`login-pinned`}
-            aria-controls={`login-pinned-button`}
-            color={'error'}
-            component={Link}
-            to={AppRoute.Settings}
-            onClick={handleClearTab}
-          >
-            <PowerOffIcon />
-          </IconButton>
+          <span>
+            <IconButton
+              id={`login-pinned`}
+              aria-controls={`login-pinned-button`}
+              color={'error'}
+              component={Link}
+              to={AppRoute.Settings}
+              onClick={handleClearTab}
+            >
+              <PowerOffIcon />
+            </IconButton>
+          </span>
         </Tooltip>
       )}
 
       <Tooltip arrow title="Actions and Settings">
-        <IconButton
-          sx={{ m: '0 0.25rem' }}
-          id="dropdown-menu-button"
-          aria-controls="dropdown-menu-button"
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          onClick={handleClick}
-        >
-          {menuIcon}
-        </IconButton>
+        <span>
+          <IconButton
+            sx={{ m: '0 0.25rem' }}
+            id="dropdown-menu-button"
+            aria-controls="dropdown-menu-button"
+            aria-haspopup="true"
+            aria-expanded={open ? 'true' : undefined}
+            onClick={handleClick}
+          >
+            {menuIcon}
+          </IconButton>
+        </span>
       </Tooltip>
       <Menu
         id="dropdown-menu"
