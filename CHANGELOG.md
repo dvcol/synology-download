@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.5.2](https://github.com/dvcol/synology-download/compare/v2.5.1...v2.5.2) (2023-03-30)
+
+
+### Bug Fixes
+
+* **navbar:** move delete error to clear button instead of remove ([a524678](https://github.com/dvcol/synology-download/commit/a5246789e84785499afbc30c9dfe6140e0f0b13a))
+
 ### [2.5.1](https://github.com/dvcol/synology-download/compare/v2.5.0...v2.5.1) (2023-03-29)
 
 
