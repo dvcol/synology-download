@@ -70,4 +70,4 @@ const removeAnchorClickListener = () => {
   document.addEventListener('contextmenu', listener);
 };
 
-export const clickListener$ = fromEventPattern(addAnchorClickListener, removeAnchorClickListener);
+export const clickListener$ = fromEventPattern<MouseEvent>(addAnchorClickListener, removeAnchorClickListener);

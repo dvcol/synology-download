@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Synology Download standalone web component</title>
+  </head>
+  <body>
+    <div id="synology-download-web-app-container" data-context="web">
+      <wc-synology-download-standalone>
+        <div id="app-skeleton-navbar"></div>
+        <div id="app-skeleton-content">
+          <span id="app-skeleton-loader">Loading application ...</span>
+        </div>
+      </wc-synology-download-standalone>
+    </div>
+    <wc-synology-download-content></wc-synology-download-content>
+  </body>
+</html>
+
+<style>
+
+  body {
+    height: 100vh;
+    font-size: 1rem;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+      "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+      "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+      monospace;
+  }
+
+  #synology-download-web-app-container {
+    overflow: hidden;
+    height: 100%;
+    background-color: rgb(234, 238, 243);
+    transition: width 1s, height 2s;
+  }
+
+  #app-skeleton-navbar {
+    width: 100%;
+    height: 48px;
+    box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2),
+      0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+    background-color: white;
+  }
+
+  #app-skeleton-content {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    #synology-download-web-app-container {
+      color: #bdbdbd;
+      background-color: rgb(32, 38, 45);
+    }
+
+    #app-skeleton-navbar {
+      background-color: #272727;
+    }
+  }
+</style>
