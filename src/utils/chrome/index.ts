@@ -1,4 +1,3 @@
-export * from './chrome.mock';
 export * from './chrome.utils';
 export * from './chrome-context.utils';
 export * from './chrome-message.utils';

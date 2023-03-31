@@ -1,19 +1,14 @@
+import { chromeMock } from '@src/mocks/chrome.mock';
 import { AppInstance } from '@src/models/app-instance.model';
-import { chromeMock } from '@src/utils/chrome/chrome.mock';
 
 global.chrome = chromeMock;
 
-global.chrome.runtime.onMessage.addListener = callback => {
-  console.info('chrome.runtime.onMessage.addListener');
-  callback('mockMessage', { id: 'mockSender' }, (...args) => console.info('chrome.runtime.onMessage.addListener.sendResponse', args));
-};
-
 global.chrome.action.setBadgeText = badge => {
-  console.info('chrome.action.setBadgeText', badge);
+  console.debug('chrome.action.setBadgeText', badge);
   return Promise.resolve();
 };
 global.chrome.action.setTitle = title => {
-  console.info('chrome.action.setTitle', title);
+  console.debug('chrome.action.setTitle', title);
   return Promise.resolve();
 };
 
