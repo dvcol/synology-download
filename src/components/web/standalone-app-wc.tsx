@@ -16,10 +16,10 @@ export class StandaloneAppWc extends HTMLElement {
   }
 
   init(storeProxy: StoreOrProxy = store) {
-    LoggerService.init(storeProxy, ServiceInstance.WebComponent);
+    LoggerService.init(storeProxy, ServiceInstance.Standalone);
     DownloadService.init(storeProxy);
-    QueryService.init(storeProxy, ServiceInstance.WebComponent);
-    NotificationService.init(storeProxy, ServiceInstance.WebComponent);
+    QueryService.init(storeProxy, ServiceInstance.Standalone);
+    NotificationService.init(storeProxy, ServiceInstance.Standalone);
     PollingService.init(storeProxy);
   }
 

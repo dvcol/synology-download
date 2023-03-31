@@ -1,7 +1,7 @@
 const logger =
   (method: string) =>
   (...arg: any[]) =>
-    console.info(`chrome override ${method}`, arg);
+    console.debug(`chrome override ${method}`, arg);
 
 export const chromeMock = {
   loadTimes: logger('chrome.loadTimes'),

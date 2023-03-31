@@ -29,9 +29,9 @@ import { createTab, useI18n } from '@src/utils';
 
 import NavbarMenuIcon from './navbar-menu-icon';
 
-type NavbarMenuProps = { menuIcon: React.ReactNode };
+type NavbarMenuProps = { menuIcon: React.ReactNode; getContainer?: () => Element | null };
 
-export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
+export const NavbarMenu = ({ menuIcon, getContainer }: NavbarMenuProps) => {
   const i18n = useI18n('navbar', 'menu');
   const dispatch = useDispatch();
   const url = useSelector(getUrl) + AppLinks.DownloadStation;
@@ -257,7 +257,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
           ))}
 
       {!logged && (
-        <Tooltip arrow title={i18n('menu_login')} key={'login'}>
+        <Tooltip arrow title={i18n('menu_login')} key={'login'} PopperProps={{ disablePortal: true }}>
           <span>
             <IconButton
               id={`login-pinned`}
@@ -273,7 +273,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
         </Tooltip>
       )}
 
-      <Tooltip arrow title="Actions and Settings">
+      <Tooltip arrow title={i18n('menu_drawer')} PopperProps={{ disablePortal: true }}>
         <span>
           <IconButton
             sx={{ m: '0 0.25rem' }}
@@ -291,6 +291,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
         id="dropdown-menu"
         anchorEl={anchorEl}
         open={open}
+        container={getContainer}
         onClose={handleClose}
         onClick={handleClose}
         MenuListProps={{ 'aria-labelledby': 'dropdown-menu' }}
@@ -298,7 +299,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
         {buttons
           ?.map(({ divider, hide, ..._button }) => {
             const elements: JSX.Element[] = [];
-            if (!hide) elements.push(<NavbarMenuIcon {..._button} key={`${_button.type}-icon`} />);
+            if (!hide) elements.push(<NavbarMenuIcon getContainer={getContainer} {..._button} key={`${_button.type}-icon`} />);
             if (divider) elements.push(<Divider key={`${_button.type}-divider`} />);
             return elements;
           })

@@ -162,7 +162,7 @@ export const SettingsDownloadsIntercept = () => {
                         controllerProps={{ name: 'active', control }}
                         formControlLabelProps={{
                           label: (
-                            <Tooltip arrow title={extension.mime ?? '⚠ no mime type specified'}>
+                            <Tooltip arrow title={extension.mime ?? '⚠ no mime type specified'} PopperProps={{ disablePortal: true }}>
                               <Typography
                                 variant="body2"
                                 color="text.secondary"

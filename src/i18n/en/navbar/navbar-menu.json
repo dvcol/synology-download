@@ -16,6 +16,9 @@
     "message": "items in memory"
   },
 
+  "navbar__menu__menu_drawer": {
+    "message": "Actions and Settings"
+  },
   "navbar__menu__menu_add": {
     "message": "Add download task"
   },

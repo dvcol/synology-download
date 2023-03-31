@@ -18,10 +18,10 @@ export class ContentAppWc extends HTMLElement {
   }
 
   init(storeProxy: StoreOrProxy = store) {
-    LoggerService.init(storeProxy, ServiceInstance.WebComponent);
+    LoggerService.init(storeProxy, ServiceInstance.Content);
     DownloadService.init(storeProxy);
-    QueryService.init(storeProxy, ServiceInstance.WebComponent);
-    NotificationService.init(storeProxy, ServiceInstance.WebComponent);
+    QueryService.init(storeProxy, ServiceInstance.Content);
+    NotificationService.init(storeProxy, ServiceInstance.Content);
     PollingService.init(storeProxy);
   }
 

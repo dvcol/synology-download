@@ -26,7 +26,7 @@ export const ExplorerBreadCrumbs = ({
   return (
     <Breadcrumbs aria-label="breadcrumb" maxItems={3} sx={{ mb: '0.125em', overflow: 'auto', fontSize: '0.875em', minHeight: '2em' }}>
       {crumbs?.length || !hasDestinations ? (
-        <Tooltip arrow title={i18n('home')}>
+        <Tooltip arrow title={i18n('home')} PopperProps={{ disablePortal: true }}>
           <span>
             <Button
               key={`home-${disabled}`}
