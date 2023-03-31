@@ -79,6 +79,11 @@ jobs:
           body_path: RELEASE.md
           files: build/synology-download.zip
 
+      - name: Publish to npm
+        run: yarn publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Publish to Chrome webstore
         env:
           CHROME_WEB_STORE_EXTENSION_ID: ebbdkledlkjpgbbmmopgbnnjmklnkcef
