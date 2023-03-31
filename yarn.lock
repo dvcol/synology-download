@@ -2269,9 +2269,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dvcol/stylelint-plugin-presets@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "@dvcol/stylelint-plugin-presets@npm:1.1.1"
+"@dvcol/stylelint-plugin-presets@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "@dvcol/stylelint-plugin-presets@npm:1.1.2"
   dependencies:
     chalk: ^4.1.2
     ora: ^5.4.1
@@ -2290,7 +2290,6 @@ __metadata:
     stylelint-config-standard-vue: ^1.0.0
     stylelint-declaration-block-no-ignored-properties: ^2.7.0
     stylelint-group-selectors: ^1.0.9
-    stylelint-high-performance-animation: ^1.8.0
     stylelint-order: ^6.0.3
     stylelint-prettier: ^3.0.0
     stylelint-use-nesting: ^4.1.0
@@ -2310,7 +2309,7 @@ __metadata:
       optional: true
     postcss-scss:
       optional: true
-  checksum: f062206fd117e0e8f4ccfec5e4c8d72ea57f496610717f2943b8b17732f8bacbd4420a36b040214f073f4c2525481f4ed1089b36a4bcdac92a2a919154f5430e
+  checksum: 24f9c90f6aef09be613bf5a64a8b31e0babce054ea0835771bbd1307a2169e3905b7b85b7eef83a6a1b89207384d182fe7a40897359f47b8b8f45e7f27573842
   languageName: node
   linkType: hard
 
@@ -2326,7 +2325,7 @@ __metadata:
     "@dnd-kit/sortable": ^7.0.2
     "@dnd-kit/utilities": ^3.2.1
     "@dvcol/eslint-plugin-presets": 1.2.1
-    "@dvcol/stylelint-plugin-presets": ^1.1.1
+    "@dvcol/stylelint-plugin-presets": ^1.1.2
     "@dvcol/web-extension-utils": ~2.1.0
     "@emotion/cache": ^11.7.1
     "@emotion/react": ^11.8.1
@@ -18671,17 +18670,6 @@ __metadata:
   peerDependencies:
     stylelint: ^14.9.1
   checksum: 9089e800aa02ff71c2af33179653d46abfbe03ea672d8ec63707530878c2faf2f1498519114d6dbd0a46859a624f3f8b5e4c4d2ce34d5e9ccb74483affec40a1
-  languageName: node
-  linkType: hard
-
-"stylelint-high-performance-animation@npm:^1.8.0":
-  version: 1.8.0
-  resolution: "stylelint-high-performance-animation@npm:1.8.0"
-  dependencies:
-    postcss-value-parser: ^4.2.0
-  peerDependencies:
-    stylelint: ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0
-  checksum: c082427c6dec7af167f9b6b16fd66b332628d7078683c50efe6417c9ea4c9ea29bf74f87e3f78ed57e31dbf17b80e0579a1a23cee043b8f52ee5085ef9049e19
   languageName: node
   linkType: hard
 

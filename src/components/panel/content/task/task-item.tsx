@@ -44,7 +44,7 @@ const PlayOrRetry: FC<TaskItemsButtonProp> = ({ task, isDisabled, loadingIcon, o
   if (TaskStatus.error === task.status) playOrSeedOrRetry = 'retry';
 
   return (
-    <Tooltip arrow title={i18n(playOrSeedOrRetry, 'common', 'buttons')} placement={'left'}>
+    <Tooltip arrow title={i18n(playOrSeedOrRetry, 'common', 'buttons')} placement={'left'} PopperProps={{ disablePortal: true }}>
       <span>
         <Button
           key={playOrSeedOrRetry}
@@ -70,7 +70,7 @@ const PlayOrRetry: FC<TaskItemsButtonProp> = ({ task, isDisabled, loadingIcon, o
 const PauseButton: FC<TaskItemsButtonProp> = ({ task, isDisabled, loadingIcon, onClick, i18n }) => {
   if ([TaskStatus.paused, TaskStatus.finished, TaskStatus.error].includes(task.status)) return null;
   return (
-    <Tooltip arrow title={i18n('pause', 'common', 'buttons')} placement={'left'}>
+    <Tooltip arrow title={i18n('pause', 'common', 'buttons')} placement={'left'} PopperProps={{ disablePortal: true }}>
       <span>
         <Button
           key="pause"
@@ -150,7 +150,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
 
   const DeleteButton = (
     <>
-      <Tooltip arrow title={i18n('delete', 'common', 'buttons')} placement={'left'}>
+      <Tooltip arrow title={i18n('delete', 'common', 'buttons')} placement={'left'} PopperProps={{ disablePortal: true }}>
         <span>
           <Button
             key="delete"

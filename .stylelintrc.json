@@ -1,9 +1,3 @@
 {
-  "extends": ["@dvcol/stylelint-plugin-presets/config/scss"],
-  "overrides": [
-    {
-      "files": ["**/*.html"],
-      "customSyntax": "postcss-html"
-    }
-  ]
+  "extends": ["@dvcol/stylelint-plugin-presets/config/scss"]
 }

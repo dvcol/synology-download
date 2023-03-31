@@ -10,11 +10,13 @@ import type { FC } from 'react';
 type MenuItemIconProps = {
   label: string;
   icon: React.ReactNode;
+
+  getContainer?: () => Element | null;
 } & NavbarButton;
 
-export const NavbarMenuIcon: FC<MenuItemIconProps> = ({ label, icon, hoverTooltip, ...props }) => {
+export const NavbarMenuIcon: FC<MenuItemIconProps> = ({ label, icon, hoverTooltip, getContainer, ...props }) => {
   return (
-    <TooltipHoverChange hoverTooltip={hoverTooltip} props={{ placement: 'right' }}>
+    <TooltipHoverChange hoverTooltip={hoverTooltip} props={{ placement: 'right' }} getContainer={getContainer}>
       <MenuItem {...props}>
         <ListItemIcon>{icon}</ListItemIcon>
         {label}

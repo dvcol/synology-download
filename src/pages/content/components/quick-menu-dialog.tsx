@@ -16,7 +16,7 @@ import { LoggerService, NotificationService, QueryService } from '@src/services'
 import type { StoreState } from '@src/store';
 import { getDestinationsHistory, getFolderHistory, getLogged, getQuick } from '@src/store/selectors';
 import type { ChromeResponse } from '@src/utils';
-import { i18n, onMessage, sendMessage, zIndexMax } from '@src/utils';
+import { onMessage, sendMessage, useI18n, zIndexMax } from '@src/utils';
 
 import { QuickMenuRecent } from './quick-menu-recent';
 
@@ -25,6 +25,7 @@ import type { PopoverProps } from '@mui/material/Popover';
 import type { FC } from 'react';
 
 export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ container }) => {
+  const i18n = useI18n('content', 'quick_menu', 'dialog');
   const [_anchor, setAnchor] = React.useState<PopoverProps['anchorEl']>();
   const [_position, setPosition] = React.useState<PopoverProps['anchorPosition'] | undefined>();
 
@@ -163,7 +164,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
       {!isLogged && (
         <MenuItem sx={{ fontSize: '1em' }} disableRipple disableTouchRipple>
           <PowerOffIcon color={ColorLevel.error} sx={{ fontSize: '0.875em', width: '1.25em', height: '1.25em' }} />
-          <ListItemText primary={'Disconnected (logged out)'} primaryTypographyProps={{ sx: { fontSize: '0.75em', ml: '0.75em' } }} />
+          <ListItemText primary={i18n('disconnected')} primaryTypographyProps={{ sx: { fontSize: '0.75em', ml: '0.75em' } }} />
         </MenuItem>
       )}
       {_menus?.map(m => (
