@@ -3,7 +3,7 @@ import { Box, CssBaseline, ThemeProvider } from '@mui/material';
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { HashRouter as Router } from 'react-router-dom';
 
 import { SettingsInjector } from '@src/components/panel';
 import type { StoreOrProxy } from '@src/models';
