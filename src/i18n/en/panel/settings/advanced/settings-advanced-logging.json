@@ -30,6 +30,12 @@
   "panel__settings__advanced__logging__levels__content__subheader": {
     "message": "The cumulative level of logging for the content script (defaults to error)."
   },
+  "panel__settings__advanced__logging__levels__standalone__title": {
+    "message": "Stand alone app logging level"
+  },
+  "panel__settings__advanced__logging__levels__standalone__subheader": {
+    "message": "The cumulative level of logging for the standalone app (defaults to error)."
+  },
 
   "panel__settings__advanced__logging__level__label": {
     "message": "Logging level"
