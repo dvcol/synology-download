@@ -4,6 +4,7 @@ const path = require('path');
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const webpack = require('webpack');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const ROOT_DIR = '../../';
 
@@ -98,6 +99,14 @@ const getCommonConfig = () => {
       level: 'info',
     },
   };
+
+  if (process.env.ANALYSE_BUNDLE) {
+    options.plugins.push(
+      new BundleAnalyzerPlugin({
+        analyzerMode: 'static',
+      }),
+    );
+  }
 
   if (process.env.NODE_ENV === 'development') {
     options.devtool = 'cheap-module-source-map';

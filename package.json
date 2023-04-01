@@ -17,11 +17,13 @@
     "type": "git",
     "url": "https://github.com/dvcol/synology-download.git"
   },
-  "main": "./dist/main.bundle.js",
+  "main": "./dist/src/index.js",
+  "types": "./dist/types/pages/web/index.d.ts",
   "files": [
     "*.md",
     "LICENSE",
-    "dist"
+    "dist/src",
+    "dist/types/pages/web"
   ],
   "publishConfig": {
     "access": "public"
@@ -30,7 +32,9 @@
   "scripts": {
     "prepare": "husky install",
     "build:web": "node webpack/build/web.js",
+    "build:web:analyse": "ANALYSE_BUNDLE=true yarn build:web",
     "build:extension": "node webpack/build/extension.js",
+    "build:extension:analyse": "ANALYSE_BUNDLE=true yarn build:extension",
     "build": "yarn build:web && yarn build:extension",
     "build:debug": "DEBUG=true DEVTOOL=true yarn build",
     "start:web": "node webpack/dev/web.js",
@@ -63,6 +67,7 @@
     "@mui/icons-material": "^5.4.1",
     "@mui/lab": "^5.0.0-alpha.69",
     "@mui/material": "^5.5.0",
+    "@mui/system": "^5.11.15",
     "@mui/x-data-grid": "^6.0.3",
     "@reduxjs/toolkit": "^1.7.2",
     "global": "^4.4.0",
@@ -131,6 +136,7 @@
     "ts-loader": "^9.2.6",
     "typescript": "^4.9.5",
     "webpack": "^5.76.3",
+    "webpack-bundle-analyzer": "^4.8.0",
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.7.4"
   },

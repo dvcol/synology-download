@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2021",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -19,25 +15,15 @@
     "resolveJsonModule": true,
     "noEmit": false,
     "jsx": "react",
+    "declaration": true,
+    "declarationMap": true,
+    "declarationDir": "dist/types",
     "baseUrl": "src",
     "sourceMap": true,
     "paths": {
-      "@src/*": [
-        "*"
-      ]
+      "@src/*": ["*"]
     }
   },
-  "include": [
-    "src",
-    "webpack",
-    ".eslintrc.js"
-  ],
-  "exclude": [
-    "**/*.spec.ts",
-    "**/*.spec.tsx",
-    "**/*.test.ts",
-    "**/*.test.tsx",
-    "build",
-    "node_modules"
-  ]
+  "include": ["src", "webpack", ".eslintrc.js"],
+  "exclude": ["**/*.spec.ts", "**/*.spec.tsx", "**/*.test.ts", "**/*.test.tsx", "build", "node_modules"]
 }
