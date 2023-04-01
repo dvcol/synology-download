@@ -35,8 +35,11 @@ jobs:
       - name: Clean install
         run: yarn install
 
-      - name: Build
-        run: yarn build
+      - name: Build extension
+        run: yarn build:extension
+
+      - name: Build web
+        run: yarn build:web
 
       - name: Linting (eslint)
         run: yarn lint
@@ -44,18 +47,3 @@ jobs:
       - name: Unit tests
         run: yarn test:unit
         if: github.event_name == 'push' && github.ref == 'ref/head/main'
-
-#  coverage:
-#    name: Coverage
-#    runs-on: ubuntu-latest
-#    if: github.event_name == 'pull_request' && !startsWith(github.actor, 'dependabot')
-#
-#    steps:
-#      - name: Checkout branch ${{ github.r }}
-#        uses: actions/checkout@v3
-#
-#      - name: Unit tests (changes only)
-#        uses: ArtiomTr/jest-coverage-report-action@v2.2.1
-#        with:
-#          package-manager: yarn
-#          test-script: yarn test:unit
