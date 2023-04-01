@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 
 import { Controller } from 'react-hook-form';
 
+import { ContainerService } from '@src/services';
+
 import { FormInputFile } from './form-input-file';
 
 import { FormInputPassword } from './form-input-password';
@@ -79,6 +81,12 @@ export const FormInput = <TFieldValues extends FieldValues = FieldValues, TName 
         ...(_textFieldProps.InputProps ?? {}),
       };
     }
+
+    _textFieldProps.SelectProps = {
+      MenuProps: {
+        container: ContainerService.getContainer.bind(ContainerService),
+      },
+    };
 
     return (
       <TextField {...field} {..._textFieldProps}>

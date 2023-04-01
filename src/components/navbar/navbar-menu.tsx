@@ -22,16 +22,16 @@ import { Link } from 'react-router-dom';
 import { ConfirmationDialog, TooltipHoverChange } from '@src/components';
 import type { NavbarButton } from '@src/models';
 import { AppLinks, AppRoute, ErrorType, LoginError, NavbarButtonType } from '@src/models';
-import { DownloadService, NotificationService, QueryService } from '@src/services';
+import { ContainerService, DownloadService, NotificationService, QueryService } from '@src/services';
 import { resetDownloads, resetTasks, setNavbar } from '@src/store/actions';
 import { getGlobalNavbarButton, getLogged, getSettingsDownloadsButtons, getSettingsDownloadsEnabled, getUrl } from '@src/store/selectors';
 import { createTab, useI18n } from '@src/utils';
 
 import NavbarMenuIcon from './navbar-menu-icon';
 
-type NavbarMenuProps = { menuIcon: React.ReactNode; getContainer?: () => Element | null };
+type NavbarMenuProps = { menuIcon: React.ReactNode };
 
-export const NavbarMenu = ({ menuIcon, getContainer }: NavbarMenuProps) => {
+export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
   const i18n = useI18n('navbar', 'menu');
   const dispatch = useDispatch();
   const url = useSelector(getUrl) + AppLinks.DownloadStation;
@@ -291,7 +291,7 @@ export const NavbarMenu = ({ menuIcon, getContainer }: NavbarMenuProps) => {
         id="dropdown-menu"
         anchorEl={anchorEl}
         open={open}
-        container={getContainer}
+        container={ContainerService.getContainer.bind(ContainerService)}
         onClose={handleClose}
         onClick={handleClose}
         MenuListProps={{ 'aria-labelledby': 'dropdown-menu' }}
@@ -299,7 +299,7 @@ export const NavbarMenu = ({ menuIcon, getContainer }: NavbarMenuProps) => {
         {buttons
           ?.map(({ divider, hide, ..._button }) => {
             const elements: JSX.Element[] = [];
-            if (!hide) elements.push(<NavbarMenuIcon getContainer={getContainer} {..._button} key={`${_button.type}-icon`} />);
+            if (!hide) elements.push(<NavbarMenuIcon {..._button} key={`${_button.type}-icon`} />);
             if (divider) elements.push(<Divider key={`${_button.type}-divider`} />);
             return elements;
           })

@@ -15,7 +15,7 @@ import NavbarTab from './navbar-tab';
 
 import type { FC } from 'react';
 
-export const Navbar: FC<{ getContainer?: () => Element | null }> = ({ getContainer }) => {
+export const Navbar: FC = () => {
   const i18n = useI18n('navbar');
   const dispatch = useDispatch();
 
@@ -47,7 +47,7 @@ export const Navbar: FC<{ getContainer?: () => Element | null }> = ({ getContain
         >
           {tabComponents}
         </Tabs>
-        <NavbarMenu menuIcon={<MenuIcon />} getContainer={getContainer} />
+        <NavbarMenu menuIcon={<MenuIcon />} />
       </Toolbar>
     </AppBar>
   );

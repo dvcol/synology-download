@@ -7,6 +7,7 @@ import { HashRouter as Router } from 'react-router-dom';
 
 import { SettingsInjector } from '@src/components/panel';
 import type { StoreOrProxy } from '@src/models';
+import { ContainerService } from '@src/services';
 import { getTheme, subscribeToTheme } from '@src/themes';
 
 import { NotificationStack } from './common';
@@ -20,7 +21,12 @@ import type { FC } from 'react';
 
 export const App: FC<{ store: StoreOrProxy; redirect?: string; cache?: EmotionCache }> = ({ store, redirect, cache }) => {
   const [theme, setTheme] = useState<Theme>(getTheme(store));
+
   const containerRef = useRef(null);
+
+  useEffect(() => {
+    ContainerService.setContainer(containerRef.current);
+  }, [containerRef.current]);
 
   useEffect(() => {
     const sub = subscribeToTheme(store, theme, setTheme);
@@ -33,7 +39,7 @@ export const App: FC<{ store: StoreOrProxy; redirect?: string; cache?: EmotionCa
       <SettingsInjector />
       <Router>
         <CssBaseline />
-        <Navbar getContainer={() => containerRef.current} />
+        <Navbar />
         <Panel redirect={redirect} />
       </Router>
     </ThemeProvider>
