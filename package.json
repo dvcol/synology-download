@@ -24,6 +24,7 @@
     "LICENSE",
     "dist/src",
     "dist/_locales",
+    "dist/types/pages/web/modules",
     "dist/types/pages/web/index.d.ts"
   ],
   "publishConfig": {

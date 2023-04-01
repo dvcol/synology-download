@@ -1,19 +1,20 @@
 import { chromeMock } from '@src/mocks';
 import { AppInstance } from '@src/models';
+import { deepMerge } from '@src/utils/object.utils';
 
-export const defineComponents = () => {
-  global.chrome = chromeMock;
+export const defineComponents = (_global = window) => {
+  _global.chrome = deepMerge(_global.chrome, chromeMock);
 
-  global.chrome.action.setBadgeText = badge => {
+  _global.chrome.action.setBadgeText = badge => {
     console.debug('chrome.action.setBadgeText', badge);
     return Promise.resolve();
   };
-  global.chrome.action.setTitle = title => {
+  _global.chrome.action.setTitle = title => {
     console.debug('chrome.action.setTitle', title);
     return Promise.resolve();
   };
 
-  global.chrome.downloads.search = () => Promise.resolve([]);
+  _global.chrome.downloads.search = () => Promise.resolve([]);
 
   /* eslint-disable @typescript-eslint/no-var-requires, global-require -- necessary for mocking global */
   customElements.define(`wc-${AppInstance.content}`, require('@src/pages/content/components/content-app-wc').ContentAppWc);

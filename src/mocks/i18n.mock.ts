@@ -1,16 +1,5 @@
-type Locale = Record<string, { message: string; descriptions?: string }>;
-type Locales = Record<string, Locale>;
-type LocalesFetch = Record<string, Promise<Locale>>;
-
-declare global {
-  interface Global {
-    _locales?: Locales;
-    _localesFetch?: LocalesFetch;
-  }
-}
-
-export const mockI18n = async (lang = 'en', _global: Global = global as Global) => {
-  global.chrome.i18n.getMessage = (key: string) => (global as Global)._locales?.[lang]?.[key]?.message ?? key;
+export const mockI18n = async (lang = 'en', _global: Window = window) => {
+  _global.chrome.i18n.getMessage = (key: string) => _global._locales?.[lang]?.[key]?.message ?? key;
 
   if (!_global._localesFetch) _global._localesFetch = {};
   if (!_global._locales) _global._locales = {};
