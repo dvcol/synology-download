@@ -8,7 +8,7 @@ import { HashRouter as Router } from 'react-router-dom';
 import { SettingsInjector } from '@src/components/panel';
 import type { StoreOrProxy } from '@src/models';
 import { ContainerService } from '@src/services';
-import { getTheme, subscribeToTheme } from '@src/themes';
+import { getTheme, isDarkTheme, subscribeToTheme } from '@src/themes';
 
 import { NotificationStack } from './common';
 import { Navbar } from './navbar/navbar';
@@ -35,13 +35,15 @@ export const App: FC<{ store: StoreOrProxy; redirect?: string; cache?: EmotionCa
 
   let Main = (
     <ThemeProvider theme={theme}>
-      <NotificationStack maxSnack={2} />
-      <SettingsInjector />
-      <Router>
-        <CssBaseline />
-        <Navbar />
-        <Panel redirect={redirect} />
-      </Router>
+      <Box id="synology-download-app-container" sx={{ backgroundColor: isDarkTheme() ? '#20262D' : undefined }} ref={containerRef}>
+        <NotificationStack maxSnack={2} />
+        <SettingsInjector />
+        <Router>
+          <CssBaseline />
+          <Navbar />
+          <Panel redirect={redirect} />
+        </Router>
+      </Box>
     </ThemeProvider>
   );
 
@@ -49,9 +51,7 @@ export const App: FC<{ store: StoreOrProxy; redirect?: string; cache?: EmotionCa
 
   return (
     <React.StrictMode>
-      <Provider store={store}>
-        <Box ref={containerRef}>{Main}</Box>
-      </Provider>
+      <Provider store={store}>{Main}</Provider>
     </React.StrictMode>
   );
 };
