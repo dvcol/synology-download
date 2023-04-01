@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.4](https://github.com/dvcol/synology-download/compare/v3.0.2...v3.0.4) (2023-04-01)
+
+
+### Bug Fixes
+
+* **routing:** switch to hash router for wc compatibility ([42159ad](https://github.com/dvcol/synology-download/commit/42159ad80aabce01b859497d61afb7376d305590))
+* **web-component:** adds background to root container ([bb83b64](https://github.com/dvcol/synology-download/commit/bb83b642ded99ecd5eb66b14cb98e304f263a3a7))
+* **web-component:** fix container for input selects ([7f20229](https://github.com/dvcol/synology-download/commit/7f202291b6ae8f718d67fbf2ad8cc39df7867f34))
+* **web-component:** fix i18n typing ([d53991a](https://github.com/dvcol/synology-download/commit/d53991a9bbc2fcfbd119e5c9ab0410aa401b7f10))
+
 ### [3.0.2](https://github.com/dvcol/synology-download/compare/v3.0.1...v3.0.2) (2023-04-01)
 
 
