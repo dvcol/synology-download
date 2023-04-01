@@ -105,8 +105,10 @@ export const getGlobalLoading = createSelector(getGlobal, (_global: GlobalSettin
 
 export const getActionScope = createSelector(getGlobal, (_global: GlobalSettings) => _global?.actions);
 
-export const getThemeMode = createSelector(getGlobal, (_global: GlobalSettings) => {
-  switch (_global?.theme) {
+export const getThemeMode = createSelector(getGlobal, (_global: GlobalSettings) => _global?.theme);
+
+export const getTheme = createSelector(getThemeMode, (theme: ThemeMode) => {
+  switch (theme) {
     case ThemeMode.dark:
       return darkTheme;
     case ThemeMode.light:
@@ -114,7 +116,7 @@ export const getThemeMode = createSelector(getGlobal, (_global: GlobalSettings) 
     case ThemeMode.auto:
       return null;
     default:
-      LoggerService.warn(`Theme '${_global?.theme}' not supported, falling back to ${ThemeMode.auto}`);
+      LoggerService.warn(`Theme '${theme}' not supported, falling back to ${ThemeMode.auto}`);
       return null;
   }
 });

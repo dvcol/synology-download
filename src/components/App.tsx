@@ -8,7 +8,7 @@ import { HashRouter as Router } from 'react-router-dom';
 import { SettingsInjector } from '@src/components/panel';
 import type { StoreOrProxy } from '@src/models';
 import { ContainerService } from '@src/services';
-import { getTheme, isDarkTheme, subscribeToTheme } from '@src/themes';
+import { darkTheme, getThemeFromStore, subscribeToTheme } from '@src/themes';
 
 import { NotificationStack } from './common';
 import { Navbar } from './navbar/navbar';
@@ -20,7 +20,10 @@ import type { Theme } from '@mui/material/styles/createTheme';
 import type { FC } from 'react';
 
 export const App: FC<{ store: StoreOrProxy; redirect?: string; cache?: EmotionCache }> = ({ store, redirect, cache }) => {
-  const [theme, setTheme] = useState<Theme>(getTheme(store));
+  const [theme, setTheme] = useState<Theme>(getThemeFromStore(store));
+  const isDark = theme === darkTheme;
+
+  console.info('isDark', isDark);
 
   const containerRef = useRef(null);
 
@@ -35,7 +38,7 @@ export const App: FC<{ store: StoreOrProxy; redirect?: string; cache?: EmotionCa
 
   let Main = (
     <ThemeProvider theme={theme}>
-      <Box id="synology-download-app-container" sx={{ backgroundColor: isDarkTheme() ? '#20262D' : undefined }} ref={containerRef}>
+      <Box id="synology-download-app-container" sx={isDark ? { color: '#bdbdbd', backgroundColor: '#20262D' } : undefined} ref={containerRef}>
         <NotificationStack maxSnack={2} />
         <SettingsInjector />
         <Router>

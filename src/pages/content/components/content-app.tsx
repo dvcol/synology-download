@@ -10,13 +10,13 @@ import { NotificationStack } from '@src/components';
 import type { StoreOrProxy } from '@src/models/store.model';
 import { ContentTaskDialog, QuickMenuDialog } from '@src/pages/content/components';
 import { store } from '@src/store';
-import { getTheme, subscribeToTheme } from '@src/themes';
+import { getThemeFromStore, subscribeToTheme } from '@src/themes';
 
 import type { EmotionCache } from '@emotion/utils';
-import type { Theme } from '@mui/material/styles/createTheme';
+import type { Theme } from '@mui/material';
 
 export const ContentApp = ({ storeOrProxy, cache, container }: { storeOrProxy: StoreOrProxy; cache: EmotionCache; container: HTMLElement }) => {
-  const [theme, setTheme] = useState<Theme>(getTheme(store));
+  const [theme, setTheme] = useState<Theme>(getThemeFromStore(store));
 
   const _store = storeOrProxy;
 

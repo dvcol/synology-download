@@ -1,7 +1,7 @@
 import { fromEventPattern } from 'rxjs';
 
 import type { StoreOrProxy } from '@src/models';
-import { getThemeMode } from '@src/store/selectors';
+import { getTheme } from '@src/store/selectors';
 import { darkTheme, lightTheme } from '@src/themes/themes';
 
 import { store$ } from '@src/utils';
@@ -17,17 +17,17 @@ export const isDarkTheme$ = fromEventPattern<MediaQueryListEvent>(
   handler => window.matchMedia('(prefers-color-scheme: dark').removeEventListener('change', handler),
 );
 
-export const getTheme = (store?: StoreOrProxy, isDark: boolean = isDarkTheme()) => {
-  if (store) return getThemeMode(store.getState()) ?? isDark ? darkTheme : lightTheme;
+export const getThemeFromStore = (store?: StoreOrProxy, isDark: boolean = isDarkTheme()) => {
+  if (store) return getTheme(store.getState()) ?? isDark ? darkTheme : lightTheme;
   return isDark ? darkTheme : lightTheme;
 };
 
 export const subscribeToTheme = (store: StoreOrProxy, theme: Theme, setTheme: Dispatch<SetStateAction<Theme>>): Subscription => {
   // On Os theme change
-  const subscription = isDarkTheme$.subscribe(({ matches }) => setTheme(getTheme(store, matches)));
+  const subscription = isDarkTheme$.subscribe(({ matches }) => setTheme(getThemeFromStore(store, matches)));
 
   // On store theme change
-  subscription.add(store$<Theme | null>(store, getThemeMode).subscribe(_theme => setTheme(_theme ?? getTheme())));
+  subscription.add(store$<Theme | null>(store, getTheme).subscribe(_theme => setTheme(_theme ?? getThemeFromStore())));
 
   return subscription;
 };
