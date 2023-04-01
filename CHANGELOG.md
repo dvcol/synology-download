@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.5](https://github.com/dvcol/synology-download/compare/v3.0.4...v3.0.5) (2023-04-01)
+
+
+### Bug Fixes
+
+* **web-component:** fix theme switching ([c5ef65f](https://github.com/dvcol/synology-download/commit/c5ef65f227bd752a349df7f5e45ed416ad72e2ad))
+
 ### [3.0.4](https://github.com/dvcol/synology-download/compare/v3.0.2...v3.0.4) (2023-04-01)
 
 
