@@ -1,1 +1,5 @@
-export { defineComponents } from './modules';
+import { defineComponents } from './modules';
+
+export { defineComponents };
+
+export default defineComponents;

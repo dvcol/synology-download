@@ -23,7 +23,8 @@
     "*.md",
     "LICENSE",
     "dist/src",
-    "dist/types/pages/web"
+    "dist/_locales",
+    "dist/types/pages/web/index.d.ts"
   ],
   "publishConfig": {
     "access": "public"

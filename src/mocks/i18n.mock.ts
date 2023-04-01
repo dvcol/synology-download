@@ -20,7 +20,12 @@ export const mockI18n = async (lang = 'en', _global: Global = global as Global) 
 
   let locale$ = _global._localesFetch?.[lang];
   if (!locale$) {
-    locale$ = fetch(`_locales/${lang}/messages.json`).then(res => res.json());
+    locale$ = fetch(`_locales/${lang}/messages.json`)
+      .then(res => res.json())
+      .catch(err => {
+        console.error('failed to load locales', { lang, err });
+        return {};
+      });
     _global._localesFetch[lang] = locale$;
   }
   _global._locales[lang] = await locale$;
