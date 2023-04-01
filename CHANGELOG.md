@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.6](https://github.com/dvcol/synology-download/compare/v3.0.5...v3.0.6) (2023-04-01)
+
+
+### Bug Fixes
+
+* **web-component:** fix missing i18n ([8f7ce72](https://github.com/dvcol/synology-download/commit/8f7ce7243ef2103b67a218931c93b5311b46544a))
+
 ### [3.0.5](https://github.com/dvcol/synology-download/compare/v3.0.4...v3.0.5) (2023-04-01)
 
 
