@@ -8,7 +8,8 @@ const ROOT_DIR = '../../';
 
 const getWebConfig = (common = getCommonConfig()) => {
   const ASSET_PATH = process.env.ASSET_PATH || '/';
-  return {
+
+  const options = {
     ...common,
     entry: {
       main: path.join(__dirname, ROOT_DIR, 'src', 'pages', 'web', 'main.ts'),
@@ -28,9 +29,24 @@ const getWebConfig = (common = getCommonConfig()) => {
         chunks: 'main',
         filename: 'index.html',
         scriptLoading: 'module',
+        chunkFilename: '[name].chunk.js',
       }),
     ],
   };
+
+  if (process.env.ANALYSE_BUNDLE) {
+    options.optimization.splitChunks = {
+      chunks: chunk => chunk.name !== 'src/index',
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors.chunk',
+          chunks: 'all',
+        },
+      },
+    };
+  }
+  return options;
 };
 
 module.exports = { getWebConfig };
