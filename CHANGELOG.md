@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0](https://github.com/dvcol/synology-download/compare/v2.5.2...v3.0.0) (2023-04-01)
+
+
+### ⚠ BREAKING CHANGES
+
+* **publish:** adds npm publishing
+
+### Features
+
+* **publish:** adds npm publishing ([991d12a](https://github.com/dvcol/synology-download/commit/991d12a7945d41630345aeb6156c6fa3332dc42f))
+* **web-component:** initial commit adding web-component support ([4d4080c](https://github.com/dvcol/synology-download/commit/4d4080c3833424d637c540368ff5c1aaa24c1610))
+
+
+### Bug Fixes
+
+* **mui:** fix mui error for disabled button wrapped in tooltips ([4917440](https://github.com/dvcol/synology-download/commit/49174403e4d36ac79506d7f308ef052d17a94638))
+* **navbar:** fix typing issues on navbar buttons ([e33d936](https://github.com/dvcol/synology-download/commit/e33d936e414130f1df55b5404bd95b00a7b33625))
+* **web-component:** fix i18n mocks ([5d85ab5](https://github.com/dvcol/synology-download/commit/5d85ab50c2ef27fcb9bbdc6b0fc22f0c7942aa7e))
+* **web-component:** fix popper and popover targets ([56467ec](https://github.com/dvcol/synology-download/commit/56467ec512fe1b4039c72304293081a8b050dcd1))
+
 ### [2.5.2](https://github.com/dvcol/synology-download/compare/v2.5.1...v2.5.2) (2023-03-30)
 
 
