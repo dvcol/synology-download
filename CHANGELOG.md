@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.1](https://github.com/dvcol/synology-download/compare/v3.0.0...v3.0.1) (2023-04-01)
+
+
+### Bug Fixes
+
+* **web-component:** fix export define and add bundle analyzer ([9fb3a91](https://github.com/dvcol/synology-download/commit/9fb3a91a027fb0f5f42205be25a36df73ebbc847))
+
 ## [3.0.0](https://github.com/dvcol/synology-download/compare/v2.5.2...v3.0.0) (2023-04-01)
 
 
