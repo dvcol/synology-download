@@ -1,42 +1,23 @@
-import { chromeMock } from '@src/mocks';
 import { AppInstance } from '@src/models';
-import { deepMerge } from '@src/utils/object.utils';
 
-export const defineComponents = (_global = window) => {
-  _global.chrome = deepMerge(_global.chrome, chromeMock);
+import { patchApi } from '@src/pages/web/modules/patch-api';
 
-  _global.chrome.action.setBadgeText = badge => {
-    console.debug('chrome.action.setBadgeText', badge);
-    return Promise.resolve();
-  };
-  _global.chrome.action.setTitle = title => {
-    console.debug('chrome.action.setTitle', title);
-    return Promise.resolve();
-  };
+import type { PatchOptions } from '../models';
 
-  _global.chrome.storage.local.set = items => {
-    console.debug('chrome.storage.local.set', items);
-    return Promise.resolve();
-  };
-  _global.chrome.storage.local.get = keys => {
-    console.debug('chrome.storage.local.set', keys);
-    return Promise.resolve({});
-  };
-
-  _global.chrome.storage.sync.set = items => {
-    console.debug('chrome.storage.sync.set', items);
-    return Promise.resolve();
-  };
-  _global.chrome.storage.sync.get = keys => {
-    console.debug('chrome.storage.sync.set', keys);
-    return Promise.resolve({});
-  };
-
-  _global.chrome.downloads.search = () => Promise.resolve([]);
+export const defineComponents = async (options?: PatchOptions, _global = window) => {
+  await patchApi({ patch: false, ...options });
 
   /* eslint-disable @typescript-eslint/no-var-requires, global-require -- necessary for mocking global */
-  customElements.define(`wc-${AppInstance.content}`, require('@src/pages/content/components/content-app-wc').ContentAppWc);
+  if (customElements.get(`wc-${AppInstance.content}`)) {
+    console.warn(`Custom element 'wc-${AppInstance.content}' is already defined.`);
+  } else {
+    customElements.define(`wc-${AppInstance.content}`, require('@src/pages/content/components/content-app-wc').ContentAppWc);
+  }
 
-  customElements.define(`wc-${AppInstance.standalone}`, require('@src/components/web/standalone-app-wc').StandaloneAppWc);
+  if (customElements.get(`wc-${AppInstance.standalone}`)) {
+    console.warn(`Custom element 'wc-${AppInstance.standalone}' is already defined.`);
+  } else {
+    customElements.define(`wc-${AppInstance.standalone}`, require('@src/components/web/standalone-app-wc').StandaloneAppWc);
+  }
   /* eslint-enable @typescript-eslint/no-var-requires, global-require */
 };

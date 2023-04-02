@@ -1,9 +1,11 @@
+import { deepMerge } from '@src/utils/object.utils';
+
 const logger =
   (method: string) =>
   (...arg: any[]) =>
     console.debug(`chrome override ${method}`, arg);
 
-export const chromeMock = {
+const chromePatch = {
   loadTimes: logger('chrome.loadTimes'),
   csi: logger('chrome.csi'),
   action: {
@@ -708,3 +710,8 @@ export const chromeMock = {
     WINDOW_ID_NONE: 'chrome.windows.WINDOW_ID_NONE',
   },
 } as unknown as typeof chrome;
+
+export const patchChrome = (_global = window) => {
+  _global.chrome = deepMerge(_global.chrome, chromePatch);
+  return _global.chrome;
+};

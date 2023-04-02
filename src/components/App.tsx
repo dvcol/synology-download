@@ -26,8 +26,6 @@ export const App: FC<AppProps> = ({ store, redirect, cache, routerProps }) => {
   const [theme, setTheme] = useState<Theme>(getThemeFromStore(store));
   const isDark = theme === darkTheme;
 
-  console.info('isDark', isDark);
-
   const containerRef = useRef(null);
 
   useEffect(() => {

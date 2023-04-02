@@ -1,8 +1,6 @@
 import { defineComponents } from './modules';
 
-export type Locale = Record<string, { message: string; descriptions?: string }>;
-export type Locales = Record<string, Locale>;
-export type LocalesFetch = Record<string, Promise<Locale>>;
+import type { Locales, LocalesFetch } from './models';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface

@@ -3,7 +3,6 @@ import React from 'react';
 
 import { render } from 'react-dom';
 
-import { mockI18n } from '@src/mocks';
 import type { StoreOrProxy } from '@src/models';
 import { AppInstance, ServiceInstance } from '@src/models';
 import { ContentApp } from '@src/pages/content/components/content-app';
@@ -14,7 +13,6 @@ import { store } from '@src/store';
 
 export class ContentAppWc extends HTMLElement {
   async connectedCallback() {
-    await mockI18n();
     this.init();
     this.render();
   }
