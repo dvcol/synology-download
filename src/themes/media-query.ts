@@ -10,11 +10,11 @@ import type { Theme } from '@mui/material/styles/createTheme';
 import type { Dispatch, SetStateAction } from 'react';
 import type { Subscription } from 'rxjs';
 
-export const isDarkTheme = (): boolean => window.matchMedia('(prefers-color-scheme: dark').matches;
+export const isDarkTheme = (): boolean => window.matchMedia('(prefers-color-scheme: dark)').matches;
 
 export const isDarkTheme$ = fromEventPattern<MediaQueryListEvent>(
-  handler => window.matchMedia('(prefers-color-scheme: dark').addEventListener('change', handler),
-  handler => window.matchMedia('(prefers-color-scheme: dark').removeEventListener('change', handler),
+  handler => window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', handler),
+  handler => window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', handler),
 );
 
 export const getThemeFromStore = (store?: StoreOrProxy, isDark: boolean = isDarkTheme()) => {

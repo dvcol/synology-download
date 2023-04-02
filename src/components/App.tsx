@@ -39,7 +39,11 @@ export const App: FC<AppProps> = ({ store, redirect, cache, routerProps }) => {
 
   let Main = (
     <ThemeProvider theme={theme}>
-      <Box id="synology-download-app-container" sx={isDark ? { color: '#bdbdbd', backgroundColor: '#20262D' } : undefined} ref={containerRef}>
+      <Box
+        id="synology-download-app-container"
+        sx={isDark ? { color: '#bdbdbd', backgroundColor: '#20262D' } : { color: '#1f2020', backgroundColor: '#eaeef2' }}
+        ref={containerRef}
+      >
         <NotificationStack maxSnack={2} />
         <SettingsInjector />
         <Router {...routerProps}>
