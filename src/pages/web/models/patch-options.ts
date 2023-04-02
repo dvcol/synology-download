@@ -1,3 +1,3 @@
-import type { Locales } from '@src/pages/web/models/locales.model';
+import type { Locales } from './locales.model';
 
 export type PatchOptions = { patch?: boolean; locales?: Locales };

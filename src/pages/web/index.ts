@@ -1,6 +1,6 @@
 import { defineComponents } from './modules';
 
-import type { Locales, LocalesFetch } from './models';
+import type { ContentAppHtmlElement, Locales, LocalesFetch, StandaloneAppHtmlElement, WebComponents } from './models';
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -8,8 +8,14 @@ declare global {
     _locales?: Locales;
     _localesFetch?: LocalesFetch;
   }
+
+  interface HTMLElementTagNameMap {
+    [WebComponents.ContentApp]: Partial<ContentAppHtmlElement>;
+    [WebComponents.StandaloneApp]: Partial<StandaloneAppHtmlElement>;
+  }
 }
 
-export { defineComponents };
+export * from './modules';
+export * from './models';
 
 export default defineComponents;

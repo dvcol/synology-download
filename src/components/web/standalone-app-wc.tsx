@@ -10,12 +10,12 @@ import { DownloadService, LoggerService, NotificationService, PollingService, Qu
 import { store } from '@src/store';
 
 export class StandaloneAppWc extends HTMLElement {
-  async connectedCallback() {
+  private async connectedCallback() {
     this.init();
     this.render();
   }
 
-  init(storeProxy: StoreOrProxy = store) {
+  private init(storeProxy: StoreOrProxy = store) {
     LoggerService.init(storeProxy, ServiceInstance.Standalone);
     DownloadService.init(storeProxy);
     QueryService.init(storeProxy, ServiceInstance.Standalone);
