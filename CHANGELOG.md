@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.8](https://github.com/dvcol/synology-download/compare/v3.0.6...v3.0.8) (2023-04-02)
+
+
+### Bug Fixes
+
+* **css:** fix webkit override to camel case ([9399c77](https://github.com/dvcol/synology-download/commit/9399c77e39b86f2dce7dee607bf69c7f81fd9e26))
+* **theme:** fix auto detect dark/light theme ([3c7d268](https://github.com/dvcol/synology-download/commit/3c7d268e1e513cd1b3a20f776a834da727baaee2))
+* **web-component:** adds missing chrome patch ([ff56ec6](https://github.com/dvcol/synology-download/commit/ff56ec67da43511dbe4ec8cffad4d3c6eeb8f49a))
+* **web-component:** adds support for basename routing ([57eb954](https://github.com/dvcol/synology-download/commit/57eb95405f9fe1497c48b3d25d6cda23e31e7ba3))
+* **web-component:** rework chrome patching ([e39d197](https://github.com/dvcol/synology-download/commit/e39d197f8442cde85615c4ed8cdcfae51199864e))
+
 ### [3.0.6](https://github.com/dvcol/synology-download/compare/v3.0.5...v3.0.6) (2023-04-01)
 
 
