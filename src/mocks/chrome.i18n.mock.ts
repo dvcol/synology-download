@@ -1,7 +1,7 @@
 import type { Locales } from '@src/pages/web/models';
 import { deepMerge } from '@src/utils/object.utils';
 
-export const patchI18n = async (lang = 'en', _global: Window = window) => {
+export const patchI18n = async (_global: Window = window, lang = 'en') => {
   _global.chrome.i18n.getMessage = (key: string) => _global._locales?.[lang]?.[key]?.message ?? key;
 
   if (!_global._localesFetch) _global._localesFetch = {};

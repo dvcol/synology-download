@@ -1,6 +1,6 @@
-export const patchFetch = () => {
-  const _fetch = global.fetch;
-  global.fetch = (input, init) => {
+export const patchFetch = (_global = window) => {
+  const _fetch = _global.fetch;
+  _global.fetch = (input, init) => {
     console.debug('fetching', { input, init });
     if (input.toString()?.startsWith('http://diskstation')) {
       return Promise.resolve(new Response(JSON.stringify({})));
