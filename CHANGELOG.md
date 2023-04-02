@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.9](https://github.com/dvcol/synology-download/compare/v3.0.8...v3.0.9) (2023-04-02)
+
+
+### Bug Fixes
+
+* **web-component:** add intellij web types ([f9ae6f1](https://github.com/dvcol/synology-download/commit/f9ae6f1c6fe3f30b76eb4039d91786191f6c7bf9))
+* **web-component:** adds web components typing ([b2bce12](https://github.com/dvcol/synology-download/commit/b2bce124e352d2376eaf5f123f836d0c2e784b7e))
+
 ### [3.0.8](https://github.com/dvcol/synology-download/compare/v3.0.6...v3.0.8) (2023-04-02)
 
 
