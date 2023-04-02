@@ -10,8 +10,8 @@ declare global {
   }
 
   interface HTMLElementTagNameMap {
-    [WebComponents.ContentApp]: Partial<ContentAppHtmlElement>;
     [WebComponents.StandaloneApp]: Partial<StandaloneAppHtmlElement>;
+    [WebComponents.ContentApp]: Partial<ContentAppHtmlElement>;
   }
 }
 

@@ -23,17 +23,20 @@
     "*.md",
     "LICENSE",
     "dist/src",
+    "dist/json",
     "dist/_locales",
     "dist/types/pages/web/models",
     "dist/types/pages/web/modules",
     "dist/types/pages/web/index.d.ts"
   ],
+  "web-types": "dist/json/web-types.json",
   "publishConfig": {
     "access": "public"
   },
   "sideEffects": false,
   "scripts": {
     "prepare": "husky install",
+    "build:web-types": "node webpack/build/web-types.js",
     "build:web": "node webpack/build/web.js",
     "build:web:analyse": "ANALYSE_BUNDLE=true yarn build:web",
     "build:extension": "node webpack/build/extension.js",

@@ -1,5 +1,6 @@
 const path = require('path');
 
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const { getCommonConfig } = require('./common');
@@ -30,6 +31,14 @@ const getWebConfig = (common = getCommonConfig()) => {
         filename: 'index.html',
         scriptLoading: 'module',
         chunkFilename: '[name].chunk.js',
+      }),
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: path.join(__dirname, ROOT_DIR, 'src', 'pages', 'web', 'json'),
+            to: path.join(__dirname, ROOT_DIR, 'dist', 'json'),
+          },
+        ],
       }),
     ],
   };

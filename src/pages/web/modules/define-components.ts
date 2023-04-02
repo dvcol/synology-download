@@ -9,8 +9,8 @@ export const defineComponents = async (options?: PatchOptions, _global = window)
 
   /* eslint-disable @typescript-eslint/no-var-requires, global-require -- necessary for mocking global */
   const components: Record<string, CustomElementConstructor> = {
-    [WebComponents.ContentApp]: require('@src/pages/content/components/content-app-wc').ContentAppWc,
     [WebComponents.StandaloneApp]: require('@src/components/web/standalone-app-wc').StandaloneAppWc,
+    [WebComponents.ContentApp]: require('@src/pages/content/components/content-app-wc').ContentAppWc,
   };
   /* eslint-enable @typescript-eslint/no-var-requires, global-require */
 

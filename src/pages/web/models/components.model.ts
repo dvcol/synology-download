@@ -1,8 +1,8 @@
 import type { Store } from 'redux';
 
 export enum WebComponents {
-  ContentApp = `wc-synology-download-content`,
   StandaloneApp = `wc-synology-download-standalone`,
+  ContentApp = `wc-synology-download-content`,
 }
 
 export type ContentAppTaskForm = {

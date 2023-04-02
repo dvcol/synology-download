@@ -1,0 +1,41 @@
+{
+  "$schema": "http://json.schemastore.org/web-types",
+  "framework": "react",
+  "name": "synology-download",
+  "version": "1.0.0",
+  "js-types-syntax": "typescript",
+  "description-markup": "markdown",
+  "contributions": {
+    "html": {
+      "elements": [
+        {
+          "name": "wc-synology-download-standalone",
+          "source": {
+            "module": "./src/components/index.ts",
+            "symbol": "wc-synology-download-standalone"
+          },
+          "attributes": [
+            {
+              "name": "basename",
+              "description": "Base path for inner routing.",
+              "default": "true",
+              "value": {
+                "kind": "expression",
+                "type": "string"
+              },
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "name": "wc-synology-download-content",
+          "source": {
+            "module": "./src/components/index.ts",
+            "symbol": "wc-synology-download-content"
+          },
+          "attributes": []
+        }
+      ]
+    }
+  }
+}
