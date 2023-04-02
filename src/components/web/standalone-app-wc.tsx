@@ -25,6 +25,10 @@ export class StandaloneAppWc extends HTMLElement {
     PollingService.init(storeProxy);
   }
 
+  get basename() {
+    return this.getAttribute('basename') ?? undefined;
+  }
+
   /**
    * Render the web component
    * @param root
@@ -42,6 +46,6 @@ export class StandaloneAppWc extends HTMLElement {
     const app = shadowRoot.querySelector(`#${AppInstance.standalone}-app`);
     const cache = createCache({ key: `${AppInstance.standalone}-cache`, container });
 
-    return render(<StandaloneApp storeOrProxy={storeOrProxy} cache={cache} />, app);
+    return render(<StandaloneApp store={storeOrProxy} cache={cache} routerProps={{ basename: this.basename }} />, app);
   }
 }

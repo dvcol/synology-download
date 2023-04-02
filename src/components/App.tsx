@@ -3,6 +3,7 @@ import { Box, CssBaseline, ThemeProvider } from '@mui/material';
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Provider } from 'react-redux';
+
 import { HashRouter as Router } from 'react-router-dom';
 
 import { SettingsInjector } from '@src/components/panel';
@@ -18,8 +19,10 @@ import type { EmotionCache } from '@emotion/utils';
 
 import type { Theme } from '@mui/material/styles/createTheme';
 import type { FC } from 'react';
+import type { HashRouterProps } from 'react-router-dom';
 
-export const App: FC<{ store: StoreOrProxy; redirect?: string; cache?: EmotionCache }> = ({ store, redirect, cache }) => {
+export type AppProps = { store: StoreOrProxy; cache?: EmotionCache; redirect?: string; routerProps?: HashRouterProps };
+export const App: FC<AppProps> = ({ store, redirect, cache, routerProps }) => {
   const [theme, setTheme] = useState<Theme>(getThemeFromStore(store));
   const isDark = theme === darkTheme;
 
@@ -41,7 +44,7 @@ export const App: FC<{ store: StoreOrProxy; redirect?: string; cache?: EmotionCa
       <Box id="synology-download-app-container" sx={isDark ? { color: '#bdbdbd', backgroundColor: '#20262D' } : undefined} ref={containerRef}>
         <NotificationStack maxSnack={2} />
         <SettingsInjector />
-        <Router>
+        <Router {...routerProps}>
           <CssBaseline />
           <Navbar />
           <Panel redirect={redirect} />
