@@ -121,8 +121,8 @@ export const ScrapePanel: FC<ScrapePanelProps> = ({ cardProps }) => {
             textOverflow: 'ellipsis',
             overflow: 'hidden',
             display: '-webkit-box',
-            '-webkit-line-clamp': '1',
-            '-webkit-box-orient': 'vertical',
+            WebkitLineClamp: '1',
+            WebkitBoxOrient: 'vertical',
           },
         }}
         subheaderTypographyProps={{
@@ -133,8 +133,8 @@ export const ScrapePanel: FC<ScrapePanelProps> = ({ cardProps }) => {
             overflow: 'hidden',
             display: '-webkit-box',
             wordBreak: 'break-all',
-            '-webkit-line-clamp': '2',
-            '-webkit-box-orient': 'vertical',
+            WebkitLineClamp: '2',
+            WebkitBoxOrient: 'vertical',
           },
         }}
         sx={{ p: '1em 1em 0', textTransform: 'capitalize' }}
