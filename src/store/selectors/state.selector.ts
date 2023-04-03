@@ -39,3 +39,5 @@ export const getDefaultFolder = createSelector(
   getDownloadState,
   (state: StateSlice['download']) => state.defaultFolder ?? initialState.download.defaultFolder,
 );
+
+export const getApi = createSelector(getState, (state: StateSlice) => state.api);

@@ -52,7 +52,7 @@ export class SynologyService extends BaseHttpService {
 
     const _body = httpBody ?? stringifyParams({ api, method, version, ..._params });
 
-    const headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*', credentials: 'omit' };
+    const headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*' };
     if (!httpBody) headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
 
     switch (httpMethod) {
