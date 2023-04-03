@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import type { Log, StateSlice } from '@src/models';
+import type { InfoResponse, Log, StateSlice } from '@src/models';
 
 import {
   setBadgeReducer,
@@ -32,6 +32,7 @@ export interface StateReducers<S = StateSlice> extends SliceCaseReducers<S> {
   addLogHistory: CaseReducer<S, PayloadAction<{ log: Log; max: number }>>;
   resetLogHistory: CaseReducer<S>;
   syncDownloadState: CaseReducer<S, PayloadAction<StateSlice['download']>>;
+  setApi: CaseReducer<S, PayloadAction<InfoResponse>>;
 }
 
 export const initialState: StateSlice = {
@@ -56,6 +57,7 @@ export const initialState: StateSlice = {
     enabled: false,
     defaultFolder: undefined,
   },
+  api: {},
 };
 
 export const stateSlice = createSlice<StateSlice, StateReducers, 'state'>({
@@ -87,5 +89,6 @@ export const stateSlice = createSlice<StateSlice, StateReducers, 'state'>({
       }),
     resetLogHistory: (state, action) => syncLogHistoryReducer(state, { ...action, payload: initialState.history.logs }),
     syncDownloadState: syncDownloadStateReducer,
+    setApi: (state, { payload }) => ({ ...state, api: payload }),
   } as StateReducers,
 });

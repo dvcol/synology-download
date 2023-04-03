@@ -56,6 +56,7 @@ import {
   removeLoading,
   removeStopping,
   resetStopping,
+  setApi,
   setFiles,
   setLogged,
   setSid,
@@ -65,6 +66,7 @@ import {
 } from '@src/store/actions';
 import {
   getActiveAndWaitingTasksIdsByActionScope,
+  getApi,
   getCredentials,
   getFinishedAnErrorTasksIdsByActionScope,
   getFinishedTasksIdsByActionScope,
@@ -114,6 +116,7 @@ export class QueryService {
     store$<string | undefined>(store, getSid).subscribe(sid => this.setSid(sid));
 
     // subscribe to exhaust map for polling
+    this.infoHandler.subscribe();
     this.listTaskHandler.subscribe();
     this.listTaskFilesHandler.subscribe();
     this.taskStatisticsHandler.subscribe();
@@ -160,15 +163,24 @@ export class QueryService {
   }
 
   private static readyCheckOperator =
-    (logged?: boolean, ready?: boolean) =>
+    ({ logged, ready }: { logged?: boolean; ready?: boolean } = {}) =>
     <T>(source: Observable<T>) =>
       source.pipe(before(() => this.readyCheck(logged, ready)));
 
+  private static apiCheckOperator = <T>(source: Observable<T>) =>
+    source.pipe(
+      tap(() => {
+        console.info('fetching info');
+        if (Object.keys(getApi(this.store.getState()))?.length) return;
+        this.info().subscribe({ error: err => LoggerService.error('Failed to get info', err) });
+      }),
+    );
+
   private static loadingOperator =
-    (logged?: boolean, ready?: boolean) =>
+    ({ logged, ready }: { logged?: boolean; ready?: boolean } = {}) =>
     <T>(source: Observable<T>) =>
       source.pipe(
-        this.readyCheckOperator(logged, ready),
+        this.readyCheckOperator({ logged, ready }),
         before(() => this.store.dispatch(addLoading())),
         finalize(() => this.store.dispatch(removeLoading())),
       );
@@ -229,8 +241,36 @@ export class QueryService {
     return new FetchError(err, i18n('fetch_failed', 'common', 'error'));
   }
 
+  private static infoRequest: Subject<{ baseUrl?: string; doNotProxy?: boolean }> = new Subject();
+  private static infoResponse: Subject<InfoResponse> = new Subject();
+  private static infoHandler = this.infoRequest.pipe(
+    exhaustMap(({ baseUrl, doNotProxy }) => this.doInfo(baseUrl, doNotProxy)),
+    tap({
+      next: response => this.infoResponse.next(response),
+      error: error => this.infoResponse.next(error),
+    }),
+    retry(), // re subscribe on error
+  );
+
+  private static doInfo(baseUrl?: string, doNotProxy?: boolean): Observable<InfoResponse> {
+    return this.infoClient.info(baseUrl, { doNotProxy }).pipe(
+      this.readyCheckOperator({ logged: false, ready: !baseUrl?.length }),
+      this.handleErrors,
+      tap({
+        next: info => this.store.dispatch(setApi(info)),
+      }),
+    );
+  }
+
   static info(baseUrl?: string, doNotProxy?: boolean): Observable<InfoResponse> {
-    return this.infoClient.info(baseUrl, { doNotProxy }).pipe(this.readyCheckOperator(false, !baseUrl?.length), this.handleErrors);
+    this.infoRequest.next({ baseUrl, doNotProxy });
+    return this.infoResponse.pipe(
+      take(1),
+      map(res => {
+        if (res instanceof Error) throw res;
+        return res;
+      }),
+    );
   }
 
   private static doLogin(
@@ -256,7 +296,9 @@ export class QueryService {
         return throwError(() => e);
       }
     }
-    return this.authClient.login(request, authVersion?.toString(), doNotProxy).pipe(this.readyCheckOperator(false, !baseUrl?.length));
+    return this.authClient
+      .login(request, authVersion?.toString(), doNotProxy)
+      .pipe(this.readyCheckOperator({ logged: false, ready: !baseUrl?.length }));
   }
 
   private static twoFactorRequest(request: LoginRequest, { otp_code, enable_device_token, device_name, device_id }: Credentials): LoginRequest {
@@ -331,7 +373,7 @@ export class QueryService {
 
     // Attempt to Restore login
     return QueryService.login().pipe(
-      this.loadingOperator(false, true),
+      this.loadingOperator({ logged: false, ready: true }),
       tap({
         next: () => LoggerService.debug('Auto-login attempt successful'),
         error: err => {
@@ -446,6 +488,7 @@ export class QueryService {
     const extract: ContentStatusTypeId<Task['id']> = getTasksIdsByStatusType(this.store.getState());
     return this.downloadClient.listTasks(0, -1, [TaskListOption.detail, TaskListOption.transfer]).pipe(
       this.loadingOperator(),
+      this.apiCheckOperator,
       this.handleErrors,
       tap(({ tasks }) => {
         const _stoppingIds = getStoppingIds(this.store.getState());

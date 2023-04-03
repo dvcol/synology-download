@@ -2,6 +2,8 @@ import type { ContentCount } from '@src/models/content.model';
 
 import type { ScrapedContents, ScrapedPage } from '@src/models/scraped-content.model';
 
+import type { InfoResponse } from '@src/models/synology.model';
+
 import type { Download } from './download.model';
 
 import type { ContextMenu, QuickMenu } from './menu.model';
@@ -43,6 +45,7 @@ export interface StateSlice {
     enabled: boolean;
     defaultFolder?: string;
   };
+  api: InfoResponse;
 }
 
 export interface NavbarSlice {

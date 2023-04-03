@@ -18,6 +18,7 @@ const {
   addLogHistory,
   resetLogHistory,
   syncDownloadState,
+  setApi,
 } = stateSlice.actions;
 
 // Export as named constants
@@ -38,4 +39,5 @@ export {
   addLogHistory,
   resetLogHistory,
   syncDownloadState,
+  setApi,
 };
