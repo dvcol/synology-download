@@ -631,6 +631,9 @@ export class QueryService {
     return obs$.pipe(
       this.loadingOperator(),
       this.handleErrors,
+      finalize(() => {
+        if (request.destination?.trim()) this.store.dispatch(addDestinationHistory(request.destination?.trim()));
+      }),
       switchMap(res => this.listTasks().pipe(map(() => res))),
     );
   }
