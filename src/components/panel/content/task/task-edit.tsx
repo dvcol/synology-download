@@ -64,6 +64,17 @@ export const TaskEdit = ({
   // Loading observable for debounce
   const [, next] = useDebounceObservable<boolean>(setLoadingBar);
 
+  const getNewForm = (_task = task) => ({
+    task_id: _task?.id ?? '',
+    destination: _task?.additional?.detail?.destination ?? '',
+    priority: _task?.additional?.detail?.priority ?? TaskPriority.normal,
+    max_peers: 0,
+    max_download_rate: 0,
+    max_upload_rate: 0,
+    seeding_interval: 0,
+    seeding_ratio: 0,
+  });
+
   const {
     handleSubmit,
     control,
@@ -72,16 +83,7 @@ export const TaskEdit = ({
     formState: { isValid, isDirty, isSubmitted, isSubmitSuccessful },
   } = useForm<TaskEditForm>({
     mode: 'onChange',
-    defaultValues: {
-      task_id: task?.id ?? '',
-      destination: task?.additional?.detail?.destination ?? '',
-      priority: task?.additional?.detail?.priority ?? TaskPriority.normal,
-      max_peers: 0,
-      max_download_rate: 0,
-      max_upload_rate: 0,
-      seeding_interval: 0,
-      seeding_ratio: 0,
-    },
+    defaultValues: getNewForm(),
   });
 
   const rules: FormRules<TaskEditForm> = {
@@ -103,6 +105,7 @@ export const TaskEdit = ({
   };
 
   useEffect(() => {
+    reset(getNewForm());
     let sub: Subscription;
     if (open) {
       sub = QueryService.getTaskEdit(task.id)
