@@ -18,3 +18,7 @@ export interface FailureHttpResponse<T> extends BaseHttpResponse<T> {
 }
 
 export type HttpResponse<T> = SuccessHttpResponse<T> | FailureHttpResponse<T>;
+
+export enum CustomHeader {
+  SynologyDownloadApp = 'synology-download-app',
+}

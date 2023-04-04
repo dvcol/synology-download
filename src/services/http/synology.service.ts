@@ -1,7 +1,7 @@
 import { catchError, map, of } from 'rxjs';
 
 import type { HttpResponse, SynologyQueryArgs, SynologyQueryOptions, SynologyQueryPayload } from '@src/models';
-import { AuthMethod, ChromeMessageType, Controller, SynologyError } from '@src/models';
+import { AuthMethod, ChromeMessageType, Controller, CustomHeader, SynologyError } from '@src/models';
 import { LoggerService } from '@src/services';
 import type { BaseHttpRequest, HttpHeaders } from '@src/utils';
 import { HttpMethod, onMessage, sendMessage, stringifyParams } from '@src/utils';
@@ -52,7 +52,7 @@ export class SynologyService extends BaseHttpService {
 
     const _body = httpBody ?? stringifyParams({ api, method, version, ..._params });
 
-    const headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*' };
+    const headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*', [CustomHeader.SynologyDownloadApp]: this.name };
     if (!httpBody) headers['Content-Type'] = 'application/x-www-form-urlencoded; charset=UTF-8';
 
     switch (httpMethod) {
@@ -64,11 +64,11 @@ export class SynologyService extends BaseHttpService {
         return this.put<HttpResponse<T>>(url, _body, undefined, headers);
       case HttpMethod.DELETE:
       case HttpMethod.delete:
-        return this.delete<HttpResponse<T>>(url, { api, method, version, ..._params }, undefined, headers);
+        return this.delete<HttpResponse<T>>(url, { api, method, version, ..._params }, headers);
       case HttpMethod.GET:
       case HttpMethod.get:
       default:
-        return this.get<HttpResponse<T>>(url, { api, method, version, ..._params }, undefined, headers);
+        return this.get<HttpResponse<T>>(url, { api, method, version, ..._params }, headers);
     }
   }
 
