@@ -12,6 +12,10 @@ import { DownloadService, LoggerService, NotificationService, PollingService, Qu
 import { store } from '@src/store';
 
 export class ContentAppWc extends HTMLElement {
+  get store() {
+    return store;
+  }
+
   private async connectedCallback() {
     this.init();
     this.render();
