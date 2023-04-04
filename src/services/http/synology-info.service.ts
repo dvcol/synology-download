@@ -1,8 +1,8 @@
 import type { InfoResponse } from '@src/models';
 import { CommonAPI, Endpoint, InfoMethod } from '@src/models';
 import { SynologyService } from '@src/services/http';
-import { HttpMethod } from '@src/utils';
 import type { HttpParameters } from '@src/utils';
+import { HttpMethod } from '@src/utils';
 
 import type { Observable } from 'rxjs';
 
@@ -29,6 +29,6 @@ export class SynologyInfoService extends SynologyService {
   info(baseUrl?: string, options: { query?: string[]; doNotProxy?: boolean } = {}): Observable<InfoResponse> {
     const { query, doNotProxy } = { query: ['ALL'], doNotProxy: false, ...options };
     const params: HttpParameters = { method: InfoMethod.query, query: query?.join(',') };
-    return this._do<InfoResponse>(HttpMethod.GET, params, { baseUrl, doNotProxy });
+    return this._do<InfoResponse>(HttpMethod.POST, params, { baseUrl, doNotProxy });
   }
 }
