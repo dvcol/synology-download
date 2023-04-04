@@ -1,6 +1,14 @@
 import { throwError } from 'rxjs';
 
-import type { CommonResponse, DownloadStationConfig, DownloadStationInfo, DownloadStationStatistic, TaskList, TaskListOption } from '@src/models';
+import type {
+  CommonResponse,
+  DownloadStationConfig,
+  DownloadStationInfo,
+  DownloadStationStatistic,
+  TaskCreateRequest,
+  TaskList,
+  TaskListOption,
+} from '@src/models';
 import { Controller, DownloadStationAPI, Endpoint, TaskMethod } from '@src/models';
 import { SynologyService } from '@src/services/http';
 import type { HttpParameters } from '@src/utils';
@@ -66,16 +74,16 @@ export class SynologyDownloadService extends SynologyService {
     return this._do<TaskList>(HttpMethod.POST, params);
   }
 
-  createTask(uri: string, destination?: string, username?: string, password?: string, unzip?: string): Observable<void> {
+  createTask(request: TaskCreateRequest): Observable<void> {
+    const { url, destination, username, password, extract_password } = request;
     try {
-      const params: HttpParameters = {
-        method: TaskMethod.create,
-        uri: SynologyDownloadService._sanitizeUrl(uri).toString(),
-      };
+      const params: HttpParameters = { method: TaskMethod.create };
+      if (url?.length) params.uri = url?.map(_url => SynologyDownloadService._sanitizeUrl(_url).toString())?.join(',');
+
       if (destination) params.destination = destination;
       if (username) params.username = username;
       if (password) params.password = password;
-      if (unzip) params.unzip = unzip;
+      if (extract_password) params.unzip = extract_password;
       return this._do<void>(HttpMethod.POST, params);
     } catch (error) {
       return throwError(error);

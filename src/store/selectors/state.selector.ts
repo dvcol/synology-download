@@ -1,7 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-import type { StateSlice } from '@src/models';
-
+import type { Api, InfoResponse, StateSlice } from '@src/models';
+import { DownloadStation2API } from '@src/models';
 import { initialState } from '@src/store/slices/state.slice';
 
 import type { StoreState } from '../store';
@@ -41,3 +41,10 @@ export const getDefaultFolder = createSelector(
 );
 
 export const getApi = createSelector(getState, (state: StateSlice) => state.api);
+
+export const getApiInfo = (api: Api) => createSelector(getApi, (apis: InfoResponse) => apis?.[api]);
+
+export const getDownloadStation2APITask = getApiInfo(DownloadStation2API.Task);
+export const getDownloadStation2APITaskBt = getApiInfo(DownloadStation2API.TaskBt);
+export const getDownloadStation2APITaskBtFile = getApiInfo(DownloadStation2API.TaskBtFile);
+export const getDownloadStation2APITaskComplete = getApiInfo(DownloadStation2API.TaskComplete);

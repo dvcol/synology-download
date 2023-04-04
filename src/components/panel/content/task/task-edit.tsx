@@ -30,7 +30,7 @@ import type { FormRules, RootSlice, Task, TaskBtEditRequest, TaskFile } from '@s
 import { TaskPriority, TaskStatus, TaskType } from '@src/models';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
 
-import { getTaskFilesById } from '@src/store/selectors';
+import { getDownloadStation2APITaskBt, getTaskFilesById } from '@src/store/selectors';
 import { before, useDebounceObservable, useI18n } from '@src/utils';
 
 import { TaskEditFiles } from './task-edit-files';
@@ -104,10 +104,13 @@ export const TaskEdit = ({
     },
   };
 
+  const hasDownload2Api = useSelector(getDownloadStation2APITaskBt);
+
   useEffect(() => {
+    setTab(0);
     reset(getNewForm());
     let sub: Subscription;
-    if (open) {
+    if (open && hasDownload2Api) {
       sub = QueryService.getTaskEdit(task.id)
         .pipe(
           before(() => {
@@ -185,8 +188,9 @@ export const TaskEdit = ({
   };
 
   const changeTab = (_: SyntheticEvent, newValue: number) => setTab(newValue);
+
   const isBt = task.type === TaskType.bt;
-  const disableTask = !isBt || !isActive;
+  const disableTask = !hasDownload2Api || !isBt || !isActive;
   const disableTaskFiles = disableTask || !taskFiles?.length;
 
   return (

@@ -14,7 +14,7 @@ import type { FormRules, TaskCreateRequest, TaskForm, TaskListDownloadRequest } 
 import { ColorLevel, TaskCreateType, torrentExtension } from '@src/models';
 import { LoggerService, QueryService } from '@src/services';
 import { clearTaskForm, setTaskForm } from '@src/store/actions';
-import { getClearOnExitTaskSettings, getTaskForm } from '@src/store/selectors';
+import { getClearOnExitTaskSettings, getDownloadStation2APITask, getTaskForm } from '@src/store/selectors';
 import { before, useI18n } from '@src/utils';
 
 import { TaskAddSelect } from './task-add-select';
@@ -71,7 +71,10 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
   const taskForm = useSelector(getTaskForm);
   const dispatch = useDispatch();
 
-  const isFile = allowFile && type === TaskCreateType.file;
+  const hasDownload2Api = useSelector(getDownloadStation2APITask);
+
+  const _allowFile = allowFile && !!hasDownload2Api;
+  const isFile = _allowFile && type === TaskCreateType.file;
 
   const {
     handleSubmit,
@@ -197,7 +200,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
         subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '0.875em' }}
         sx={{ p: '1em 1em 0', textTransform: 'capitalize' }}
         action={
-          allowFile && (
+          _allowFile && (
             <ToggleButtonGroup
               color="primary"
               size="small"
@@ -205,7 +208,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
               exclusive
               onChange={(_, _type) => setType(_type)}
               aria-label="task-create-type"
-              disabled={!allowFile}
+              disabled={!_allowFile}
             >
               {Object.values(TaskCreateType).map(priority => (
                 <ToggleButton key={priority} value={priority} sx={{ textTransform: 'inherit', minWidth: '4em' }}>
