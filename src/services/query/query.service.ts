@@ -68,6 +68,7 @@ import {
   getActiveAndWaitingTasksIdsByActionScope,
   getApi,
   getCredentials,
+  getDownloadStation2APITask,
   getFinishedAnErrorTasksIdsByActionScope,
   getFinishedTasksIdsByActionScope,
   getLogged,
@@ -170,7 +171,6 @@ export class QueryService {
   private static apiCheckOperator = <T>(source: Observable<T>) =>
     source.pipe(
       tap(() => {
-        console.info('fetching info');
         if (Object.keys(getApi(this.store.getState()))?.length) return;
         this.info().subscribe({ error: err => LoggerService.error('Failed to get info', err) });
       }),
@@ -592,7 +592,7 @@ export class QueryService {
     return ids?.size ? this.pauseTask(Array.from(ids).join(',')) : EMPTY;
   }
 
-  static createTask(request: Partial<TaskCreateRequest>, options: { source?: string; torrent?: File } = {}): Observable<TaskCreateResponse> {
+  static createTask(request: Partial<TaskCreateRequest>, options: { source?: string; torrent?: File } = {}): Observable<TaskCreateResponse | void> {
     const { source, torrent } = options;
     const _request: TaskCreateRequest = {
       type: TaskCreateType.url,
@@ -601,7 +601,14 @@ export class QueryService {
       destination: request?.destination ?? '',
     };
 
-    return this.download2Client.createTask(_request).pipe(
+    let obs$: Observable<TaskCreateResponse | void>;
+
+    const hasDownload2Api = getDownloadStation2APITask(this.store.getState());
+
+    if (hasDownload2Api) obs$ = this.download2Client.createTask(_request);
+    else obs$ = this.downloadClient.createTask(_request);
+
+    return obs$.pipe(
       this.loadingOperator(),
       this.handleErrors,
       tap({
@@ -669,7 +676,11 @@ export class QueryService {
 
   static editTask(type: TaskType, request: TaskBtEditRequest): Observable<CommonResponse[]> {
     let obs$: Observable<CommonResponse[]>;
-    if (type === TaskType.bt) obs$ = this.download2Client.editTaskBt(request);
+
+    const hasDownload2Api = getDownloadStation2APITask(this.store.getState());
+
+    if (!hasDownload2Api) obs$ = this.downloadClient.editTask(request.task_id, request.destination ?? '');
+    else if (type === TaskType.bt) obs$ = this.download2Client.editTaskBt(request);
     else obs$ = this.download2Client.editTask({ id: [request.task_id], destination: request.destination });
     return obs$.pipe(
       this.loadingOperator(),

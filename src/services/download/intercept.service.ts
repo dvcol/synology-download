@@ -10,7 +10,11 @@ import type { Observable } from 'rxjs';
 
 type InterceptOptions = { erase?: boolean; resume?: boolean };
 export class InterceptService {
-  static transfer<T extends DownloadItem>(download: T, { erase, resume }: InterceptOptions, callback?: () => void): Observable<TaskCreateResponse> {
+  static transfer<T extends DownloadItem>(
+    download: T,
+    { erase, resume }: InterceptOptions,
+    callback?: () => void,
+  ): Observable<TaskCreateResponse | void> {
     return DownloadService.pause(download.id).pipe(
       switchMap(() => QueryService.createTask({ url: [download.finalUrl] }, { source: download.referrer })),
       tap({

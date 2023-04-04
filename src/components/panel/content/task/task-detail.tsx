@@ -13,10 +13,10 @@ import { useSelector } from 'react-redux';
 import { exhaustMap, finalize, map, timer } from 'rxjs';
 
 import { IconLoader, ProgressBar } from '@src/components';
-import type { RootSlice, Task, TaskFile } from '@src/models';
+import type { ApiInfo, RootSlice, Task, TaskFile } from '@src/models';
 import { ColorLevel, TaskStatus, TaskType } from '@src/models';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
-import { getPollingInterval, getTaskFilesById } from '@src/store/selectors';
+import { getDownloadStation2APITaskBtFile, getDownloadStation2APITaskComplete, getPollingInterval, getTaskFilesById } from '@src/store/selectors';
 import type { i18n } from '@src/utils';
 import { before, computeProgress, dateToLocalString, formatBytes, useDebounceObservable, useI18n } from '@src/utils';
 
@@ -153,7 +153,8 @@ const EditButton: FC<TaskDetailButtonProps> = ({ task, isDisabled, loadingIcon, 
 };
 
 const StopButton: FC<TaskDetailButtonProps> = ({ task, isDisabled, loadingIcon, buttonClick, setConfirmation, i18n }) => {
-  if (TaskStatus.downloading !== task.status || !task.received) return null;
+  const hasDownload2Api = useSelector<RootSlice, ApiInfo>(getDownloadStation2APITaskComplete);
+  if (!hasDownload2Api || TaskStatus.downloading !== task.status || !task.received) return null;
 
   return (
     <TaskDetailGenericButton
@@ -183,9 +184,12 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
   const isBt: boolean = task.type === TaskType.bt;
   const isActive: boolean = [TaskStatus.downloading, TaskStatus.seeding].includes(task.status);
 
+  const hasDownload2Api = useSelector<RootSlice, ApiInfo>(getDownloadStation2APITaskBtFile);
+  const fetchFiles = hasDownload2Api && isBt && isActive;
+
   const polling = useSelector<RootSlice, number>(getPollingInterval);
   const [firstLoad, setFirstLoad] = useState<boolean>(isBt);
-  const [loadingBar, setLoadingBar] = useState<boolean>(isBt && isActive);
+  const [loadingBar, setLoadingBar] = useState<boolean>(fetchFiles);
 
   const showLoadingBar = loadingBar && (firstLoad || taskFiles?.length);
 
@@ -193,7 +197,7 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
   const [, next] = useDebounceObservable<boolean>(setLoadingBar);
 
   useEffect(() => {
-    if (!isBt || !isActive) return;
+    if (!fetchFiles) return;
     const sub = timer(0, polling * 2)
       .pipe(
         exhaustMap(() =>
