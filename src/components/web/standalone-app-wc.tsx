@@ -10,6 +10,13 @@ import { DownloadService, LoggerService, NotificationService, PollingService, Qu
 import { store } from '@src/store';
 
 export class StandaloneAppWc extends HTMLElement {
+  get store() {
+    return store;
+  }
+  get basename() {
+    return this.getAttribute('basename') ?? undefined;
+  }
+
   private async connectedCallback() {
     this.init();
     this.render();
@@ -21,10 +28,6 @@ export class StandaloneAppWc extends HTMLElement {
     QueryService.init(storeProxy, ServiceInstance.Standalone);
     NotificationService.init(storeProxy, ServiceInstance.Standalone);
     PollingService.init(storeProxy);
-  }
-
-  get basename() {
-    return this.getAttribute('basename') ?? undefined;
   }
 
   /**
