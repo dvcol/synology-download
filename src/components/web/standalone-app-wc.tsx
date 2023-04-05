@@ -6,13 +6,18 @@ import { render } from 'react-dom';
 import { StandaloneApp } from '@src/components';
 import type { StoreOrProxy } from '@src/models';
 import { AppInstance, ServiceInstance } from '@src/models';
-import { DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
+import { BaseLoggerService, DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { store } from '@src/store';
 
 export class StandaloneAppWc extends HTMLElement {
   get store() {
     return store;
   }
+
+  get logger() {
+    return BaseLoggerService;
+  }
+
   get basename() {
     return this.getAttribute('basename') ?? undefined;
   }

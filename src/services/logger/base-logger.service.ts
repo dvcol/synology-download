@@ -4,8 +4,8 @@ export class BaseLoggerService {
   protected static source: string;
   protected static color: string;
 
-  protected static level: LoggingLevel | number = 4;
-  protected static enabled = true;
+  static level: LoggingLevel | number = 4;
+  static enabled = true;
 
   static init({ source, color }: { source: string; color?: string }) {
     this.source = source;
