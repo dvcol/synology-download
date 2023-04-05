@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.13](https://github.com/dvcol/synology-download/compare/v3.0.9...v3.0.13) (2023-04-05)
+
+
+### Bug Fixes
+
+* **api:** adds api fetch on polling event to get supported apis ([278f01d](https://github.com/dvcol/synology-download/commit/278f01d7b824037100db48ba9dac268e43cb789f))
+* **history:** adds destination history on task edit ([fd349ff](https://github.com/dvcol/synology-download/commit/fd349ffcd84939ecdb760a5537fd4c0951bdc25f))
+* **http:** fix GET and DELTE headers ([bd68b79](https://github.com/dvcol/synology-download/commit/bd68b793c06c950c7ece01be60f618f7052b1156))
+* **logger:** create base logger without store integration ([b89b6a0](https://github.com/dvcol/synology-download/commit/b89b6a0ed83ce251c05df3a790d4e9c7dce448ff))
+* **task:** fix task edit form not reseting between tasks ([e311e34](https://github.com/dvcol/synology-download/commit/e311e34ddd198a3ce9538570574cf352e85d5dee))
+* **task:** move downloadApi2 behind api check ([ae780bf](https://github.com/dvcol/synology-download/commit/ae780bf086e58e7f15b74260a8edc3c2a0a6a183))
+* **web-component:** expose logger in wc ([671650a](https://github.com/dvcol/synology-download/commit/671650afe9720cc63458d2c9b0f1d8eff5fdf9ff))
+* **web-component:** expose store in web components ([3cd5425](https://github.com/dvcol/synology-download/commit/3cd54252d6fae3cf52430b1e85b3a802076d2d51))
+* **web-component:** fix dialog container target ([8856ff0](https://github.com/dvcol/synology-download/commit/8856ff04cb1d63f4c6850f706a5fc979078dfdd1))
+* **web-component:** fix extensibility in fetch intercept ([f8f8c8d](https://github.com/dvcol/synology-download/commit/f8f8c8dca66982d28cbb7b09d282ee47a478e3fc))
+* **web-component:** move console.debug to base logger ([001bfdb](https://github.com/dvcol/synology-download/commit/001bfdb9f452c60a08b02ff539b0cb2a0e8b306f))
+
 ### [3.0.9](https://github.com/dvcol/synology-download/compare/v3.0.8...v3.0.9) (2023-04-02)
 
 
