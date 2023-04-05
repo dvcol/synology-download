@@ -14,7 +14,7 @@ import { forkJoin } from 'rxjs';
 import { TaskDialog } from '@src/components';
 import type { RootSlice, ScrapedContent, ScrapedSlice, TaskForm } from '@src/models';
 import { ChromeMessageType, ColorLevel } from '@src/models';
-import { DownloadService, LoggerService } from '@src/services';
+import { ContainerService, DownloadService, LoggerService } from '@src/services';
 import { clearScrapedContents } from '@src/store/actions';
 import { getScrapedPage, getScrappedRows } from '@src/store/selectors';
 
@@ -164,6 +164,7 @@ export const ScrapePanel: FC<ScrapePanelProps> = ({ cardProps }) => {
         onClose={onFormClose}
         onCancel={onFormClose}
         onSubmit={onFormClose}
+        container={ContainerService.getContainer.bind(ContainerService)}
       />
     </Card>
   );

@@ -28,7 +28,7 @@ import { finalize, lastValueFrom } from 'rxjs';
 import { FormExplorer, FormInput, IconLoader } from '@src/components';
 import type { FormRules, RootSlice, Task, TaskBtEditRequest, TaskFile } from '@src/models';
 import { TaskPriority, TaskStatus, TaskType } from '@src/models';
-import { LoggerService, NotificationService, QueryService } from '@src/services';
+import { ContainerService, LoggerService, NotificationService, QueryService } from '@src/services';
 
 import { getDownloadStation2APITaskBt, getTaskFilesById } from '@src/store/selectors';
 import { before, useDebounceObservable, useI18n } from '@src/utils';
@@ -200,6 +200,7 @@ export const TaskEdit = ({
       aria-labelledby="confirm-delete-dialog"
       maxWidth={'md'}
       PaperProps={{ sx: { maxHeight: 'calc(100% - 1em)' } }}
+      container={ContainerService.getContainer.bind(ContainerService)}
     >
       <DialogTitle>{i18n('destination_folder')}</DialogTitle>
       <DialogContent sx={{ display: 'flex', flexDirection: 'column' }}>
