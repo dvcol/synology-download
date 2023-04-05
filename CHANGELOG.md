@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.15](https://github.com/dvcol/synology-download/compare/v3.0.13...v3.0.15) (2023-04-05)
+
+
+### Bug Fixes
+
+* **ui:** fix spacing to be relative to parent instead of viewport ([9324be7](https://github.com/dvcol/synology-download/commit/9324be7dce57402e26aea92fc3c93ebdb887c684))
+* **web-component:** adds background color to dev index.html ([0d188c1](https://github.com/dvcol/synology-download/commit/0d188c1e77f2c67d61b3098fb5e86145541b0735))
+
 ### [3.0.13](https://github.com/dvcol/synology-download/compare/v3.0.9...v3.0.13) (2023-04-05)
 
 
