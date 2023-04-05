@@ -8,12 +8,16 @@ import { AppInstance, ServiceInstance } from '@src/models';
 import { ContentApp } from '@src/pages/content/components/content-app';
 import type { AnchorPayload, TaskDialogPayload } from '@src/pages/content/service';
 import { anchor$, taskDialog$ } from '@src/pages/content/service';
-import { DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
+import { BaseLoggerService, DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { store } from '@src/store';
 
 export class ContentAppWc extends HTMLElement {
   get store() {
     return store;
+  }
+
+  get logger() {
+    return BaseLoggerService;
   }
 
   private async connectedCallback() {
