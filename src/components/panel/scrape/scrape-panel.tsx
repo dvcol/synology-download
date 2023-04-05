@@ -107,7 +107,7 @@ export const ScrapePanel: FC<ScrapePanelProps> = ({ cardProps }) => {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        minHeight: 'calc(100% - 1rem)',
+        minHeight: 'calc(100% - 1em)',
       }}
     >
       <CardHeader

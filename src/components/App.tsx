@@ -26,6 +26,8 @@ export const App: FC<AppProps> = ({ store, redirect, cache, routerProps }) => {
   const [theme, setTheme] = useState<Theme>(getThemeFromStore(store));
   const isDark = theme === darkTheme;
 
+  const background = isDark ? { color: '#bdbdbd', backgroundColor: '#20262D' } : { color: '#1f2020', backgroundColor: '#eaeef2' };
+
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -39,11 +41,7 @@ export const App: FC<AppProps> = ({ store, redirect, cache, routerProps }) => {
 
   let Main = (
     <ThemeProvider theme={theme}>
-      <Box
-        id="synology-download-app-container"
-        sx={isDark ? { color: '#bdbdbd', backgroundColor: '#20262D' } : { color: '#1f2020', backgroundColor: '#eaeef2' }}
-        ref={containerRef}
-      >
+      <Box id="synology-download-app-container" sx={{ ...background, height: '100%' }} ref={containerRef}>
         <NotificationStack maxSnack={2} />
         <SettingsInjector />
         <Router {...routerProps}>

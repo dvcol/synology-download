@@ -15,7 +15,7 @@ const server = async (getConfig, mode = 'development') => {
 
   const env = {
     NODE_ENV: process.env.NODE_ENV || 'development',
-    PORT: process.env.PORT || 3000,
+    PORT: process.env.PORT || 3001,
   };
 
   Object.keys(config.entry).forEach(entryName => {

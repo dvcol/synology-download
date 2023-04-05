@@ -75,6 +75,8 @@ export const TaskCard: FC<TaskCardProps> = ({ task, hideStatus, expanded, hover 
   const showProgressBar = useSelector<StoreState, GlobalSettings['task']>(getGlobalTask)?.progressBar;
   return (
     <ContentCard
+      hover={hover}
+      expanded={expanded}
       title={task.title}
       icon={statusIcon(task)}
       iconBackground={avatarBgColor(task)}

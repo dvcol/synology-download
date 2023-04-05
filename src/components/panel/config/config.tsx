@@ -23,7 +23,7 @@ import { FormExplorer, FormInput, FormSwitch } from '@src/components';
 import type { DownloadStationConfig, DownloadStationInfo } from '@src/models';
 import { ColorLevel, ColorLevelMap, defaultConfig } from '@src/models';
 import { NotificationService, QueryService } from '@src/services';
-import { useI18n, before, useDebounceObservable } from '@src/utils';
+import { before, useDebounceObservable, useI18n } from '@src/utils';
 
 import type { CardProps } from '@mui/material';
 import type { FC } from 'react';
@@ -104,7 +104,7 @@ export const Config: FC<{
   };
 
   return (
-    <Container disableGutters sx={{ display: 'flex', flex: '1 1 auto', height: 'calc(100vh - 3rem)', overflow: 'auto' }} maxWidth={false}>
+    <Container disableGutters sx={{ display: 'flex', flex: '1 1 auto', height: '100%', overflow: 'auto' }} maxWidth={false}>
       <Card raised={true} {...cardProps} sx={{ ...cardProps?.sx, height: 'fit-content' }}>
         <LinearProgress
           sx={{

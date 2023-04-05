@@ -34,7 +34,7 @@ export const Settings = () => {
   ];
 
   return (
-    <Container disableGutters sx={{ display: 'flex', flex: '1 1 auto', height: 'calc(100vh - 3rem)' }} maxWidth={false}>
+    <Container disableGutters sx={{ display: 'flex', flex: '1 1 auto', height: '100%' }} maxWidth={false}>
       <SettingsNavbar tabs={tabs} />
       <SettingsRoutes />
     </Container>

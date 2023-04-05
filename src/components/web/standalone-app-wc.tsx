@@ -43,8 +43,8 @@ export class StandaloneAppWc extends HTMLElement {
   render(root: Element = this, storeOrProxy: StoreOrProxy = store) {
     const shadowRoot = root.attachShadow({ mode: 'closed' });
     shadowRoot.innerHTML = `
-      <div id="${AppInstance.standalone}-container">
-          <div id="${AppInstance.standalone}-app"></div>
+      <div id="${AppInstance.standalone}-container" style="height: 100%">
+          <div id="${AppInstance.standalone}-app" style="height: 100%"></div>
       </div>
     `;
 

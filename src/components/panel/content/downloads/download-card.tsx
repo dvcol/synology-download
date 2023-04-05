@@ -67,6 +67,8 @@ export const DownloadCard: FC<DownloadCardProps> = ({ download, hideStatus, expa
   const showProgressBar = useSelector<StoreState, GlobalSettings['download']>(getGlobalDownload)?.progressBar;
   return (
     <ContentCard
+      hover={hover}
+      expanded={expanded}
       title={download.title ?? download.filename}
       icon={statusIcon(download.status)}
       iconBackground={avatarBgColor(download.status)}

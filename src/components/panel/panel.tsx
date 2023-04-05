@@ -27,7 +27,7 @@ export const Panel: FC<{ redirect?: string }> = ({ redirect }) => {
   }, [redirect]);
 
   return (
-    <Container disableGutters maxWidth={false} sx={{ overflow: 'auto', height: 'calc(100vh - 3rem)' }}>
+    <Container disableGutters maxWidth={false} sx={{ overflow: 'auto', height: 'calc(100% - 3em)' }}>
       <Routes>
         <Route path={`${AppRoute.All}`} element={<ContentPanel />} />
         <Route path={`${AppRoute.Add}/*`} element={<TaskAdd cardProps={{ sx: { m: '0.5rem', fontSize: '1rem' } }} allowFile={true} />} />

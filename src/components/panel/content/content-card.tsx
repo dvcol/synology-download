@@ -19,8 +19,19 @@ type ContentCardProps = {
   progress?: JSX.Element;
   progressBar?: ProgressBarProps;
   expanded?: boolean;
+  hover?: boolean;
 };
-export const ContentCard: FC<ContentCardProps> = ({ title, icon, iconBackground, iconVariant, description, progress, progressBar, expanded }) => {
+export const ContentCard: FC<ContentCardProps> = ({
+  title,
+  icon,
+  iconBackground,
+  iconVariant,
+  description,
+  progress,
+  progressBar,
+  expanded,
+  hover,
+}) => {
   return (
     <ListItem sx={{ minWidth: '40rem', padding: '0.5rem 1rem' }} dense={true}>
       <ListItemAvatar sx={{ minWidth: '4.125rem' }}>
@@ -29,14 +40,14 @@ export const ContentCard: FC<ContentCardProps> = ({ title, icon, iconBackground,
         </Avatar>
       </ListItemAvatar>
       <ListItemText
-        sx={{ maxWidth: '100vw', whiteSpace: 'nowrap' }}
+        sx={{ maxWidth: '100%', whiteSpace: 'nowrap' }}
         primary={title}
         primaryTypographyProps={{
           component: 'span',
           sx: {
-            maxWidth: expanded ? '100%' : 'calc(100vw - 9rem)',
+            maxWidth: !expanded && !hover ? 'calc(100% - 2.5rem)' : '100%',
             display: '-webkit-box',
-            WebkitLineClamp: expanded ? 'non' : '3',
+            WebkitLineClamp: expanded ? undefined : '3',
             WebkitBoxOrient: 'vertical',
           },
         }}
