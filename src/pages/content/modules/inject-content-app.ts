@@ -82,7 +82,7 @@ export const injectContentApp = async (): Promise<void> => {
   await storeProxy.ready();
 
   // Pass store to services and init
-  LoggerService.init(storeProxy, ServiceInstance.Content, true);
+  LoggerService.init({ store: storeProxy, source: ServiceInstance.Content, isProxy: true });
   QueryService.init(storeProxy, ServiceInstance.Content, true);
   NotificationService.init(storeProxy, ServiceInstance.Content, true);
 

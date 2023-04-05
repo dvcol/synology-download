@@ -1,25 +1,26 @@
 import type { Log, ServiceInstance, StoreOrProxy } from '@src/models';
-import { ChromeMessageType, defaultLoggingLevels, LoggingLevel } from '@src/models';
+import { ChromeMessageType, defaultLoggingLevels, LoggingLevel, ServiceInstanceColorsMap } from '@src/models';
+import { BaseLoggerService } from '@src/services';
 import { addLogHistory } from '@src/store/actions';
 import { getAdvancedSettingsLogging } from '@src/store/selectors';
-import { ProxyLogger, onMessage, sendMessage, store$ } from '@src/utils';
+import { onMessage, ProxyLogger, sendMessage, store$ } from '@src/utils';
 
-export class LoggerService {
-  private static source: ServiceInstance;
+export class LoggerService extends BaseLoggerService {
+  protected static source: ServiceInstance;
+
   private static store: any | StoreOrProxy;
   private static isProxy: boolean;
 
-  private static level: LoggingLevel | number = 4;
-  private static enabled = true;
   private static history = false;
   private static historyMax = 1000;
 
-  static init(store: StoreOrProxy, source: ServiceInstance, isProxy = false) {
-    this.store = store;
-    this.source = source;
-    this.isProxy = isProxy;
+  static init({ source, store, isProxy }: { store: StoreOrProxy; source: ServiceInstance; isProxy?: boolean }) {
+    super.init({ source, color: ServiceInstanceColorsMap[source] });
 
-    ProxyLogger.init(LoggerService);
+    ProxyLogger.init(this);
+
+    this.store = store;
+    this.isProxy = isProxy ?? false;
 
     store$(store, getAdvancedSettingsLogging).subscribe(settings => {
       this.level = (settings.levels ?? defaultLoggingLevels)[this.source] ?? this.level;
@@ -35,21 +36,11 @@ export class LoggerService {
       });
     }
 
-    console.debug(this.timestamp, 'Logger service initialized');
+    console.debug(...this.timestamp, 'Logger service initialized');
   }
 
   private static dispatch(log: Log) {
     this.store?.dispatch(addLogHistory({ log, max: this.historyMax }));
-  }
-
-  /**
-   * Filters logs below active log level
-   * @param level log level of the call
-   * @private
-   */
-  private static filter(level: LoggingLevel) {
-    if (process.env.DEBUG === 'true') return false;
-    return !this.enabled || this.level > level;
   }
 
   /**
@@ -70,45 +61,36 @@ export class LoggerService {
         type: ChromeMessageType.logger,
         payload: log,
       }).subscribe({
-        error: e => console.warn(this.timestamp, 'Log dispatch failed, forward ended in error.', e),
+        error: e => console.warn(...this.timestamp, 'Log dispatch failed, forward ended in error.', e),
       });
     }
     this.dispatch(log);
   }
 
-  private static captureAndFilter(level: LoggingLevel, message?: any, params?: any[]) {
-    this.capture(level, message, params);
-    return this.filter(level);
-  }
-
-  static get timestamp(): string {
-    return `[${new Date()?.toISOString()} - ${this.source}]`;
-  }
-
   /* eslint-disable no-console */
   static trace(message?: any, ...params: any[]) {
-    if (this.captureAndFilter(LoggingLevel.trace, message, params)) return;
-    return console.trace(this.timestamp, message, ...params);
+    this.capture(LoggingLevel.trace, message, params);
+    return super.trace(message, ...params);
   }
 
   static debug(message?: any, ...params: any[]) {
-    if (this.captureAndFilter(LoggingLevel.debug, message, params)) return;
-    return console.debug(this.timestamp, message, ...params);
+    this.capture(LoggingLevel.debug, message, params);
+    return super.debug(message, ...params);
   }
 
   static info(message?: any, ...params: any[]) {
-    if (this.captureAndFilter(LoggingLevel.info, message, params)) return;
-    return console.info(this.timestamp, message, ...params);
+    this.capture(LoggingLevel.info, message, params);
+    return super.info(message, ...params);
   }
 
   static warn(message?: any, ...params: any[]) {
-    if (this.captureAndFilter(LoggingLevel.warn, message, params)) return;
-    return console.warn(this.timestamp, message, ...params);
+    this.capture(LoggingLevel.warn, message, params);
+    return super.warn(message, ...params);
   }
 
   static error(message?: any, ...params: any[]) {
-    if (this.captureAndFilter(LoggingLevel.error, message, params)) return;
-    return console.error(this.timestamp, message, ...params);
+    this.capture(LoggingLevel.error, message, params);
+    return super.error(message, ...params);
   }
   /* eslint-enable no-console */
 }

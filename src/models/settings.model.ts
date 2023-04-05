@@ -1,4 +1,5 @@
 import { DownloadStatus } from '@src/models/download.model';
+import { LoggingLevel } from '@src/models/logger.model';
 import { NavbarButtonType } from '@src/models/navbar.model';
 
 import {
@@ -320,29 +321,29 @@ export const defaultDownloads: DownloadSettings = {
   },
 };
 
-export enum LoggingLevel {
-  trace = 0,
-  debug = 1,
-  info = 2,
-  warn = 3,
-  error = 4,
-}
-
-export const LoggingLevelLevelKeys = {
-  [LoggingLevel.trace]: 'trace',
-  [LoggingLevel.debug]: 'debug',
-  [LoggingLevel.info]: 'info',
-  [LoggingLevel.warn]: 'warn',
-  [LoggingLevel.error]: 'error',
-};
-
 export enum ServiceInstance {
   Background = 'background',
+  Content = 'content',
   Popup = 'popup',
   Option = 'option',
-  Content = 'content',
   Standalone = 'standalone',
 }
+
+export enum ServiceInstanceColors {
+  Background = '#7dffc7',
+  Content = '#ccbbff',
+  Popup = '#42e9ff',
+  Option = '#42ffb7',
+  Standalone = '#42ff78',
+}
+
+export const ServiceInstanceColorsMap: Record<ServiceInstance, ServiceInstanceColors> = {
+  [ServiceInstance.Background]: ServiceInstanceColors.Background,
+  [ServiceInstance.Content]: ServiceInstanceColors.Content,
+  [ServiceInstance.Popup]: ServiceInstanceColors.Popup,
+  [ServiceInstance.Option]: ServiceInstanceColors.Option,
+  [ServiceInstance.Standalone]: ServiceInstanceColors.Standalone,
+};
 
 export interface Log {
   timestamp: string;

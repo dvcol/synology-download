@@ -17,7 +17,7 @@ export const initApp = async (
   await storeProxy.ready();
 
   // Pass store to service and init
-  LoggerService.init(storeProxy, logInstance, true);
+  LoggerService.init({ store: storeProxy, source: logInstance, isProxy: true });
   DownloadService.init(storeProxy, true);
   QueryService.init(storeProxy, logInstance, true);
   NotificationService.init(storeProxy, logInstance, true);

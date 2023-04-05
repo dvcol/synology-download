@@ -22,7 +22,7 @@ export class ContentAppWc extends HTMLElement {
   }
 
   private init(storeProxy: StoreOrProxy = store) {
-    LoggerService.init(storeProxy, ServiceInstance.Content);
+    LoggerService.init({ store: storeProxy, source: ServiceInstance.Content });
     DownloadService.init(storeProxy);
     QueryService.init(storeProxy, ServiceInstance.Content);
     NotificationService.init(storeProxy, ServiceInstance.Content);
