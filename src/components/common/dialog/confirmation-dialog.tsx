@@ -4,6 +4,7 @@ import React from 'react';
 
 import type { TooltipHoverChangeProps } from '@src/components/common/tooltip/tooltip-hover-change';
 import TooltipHoverChange from '@src/components/common/tooltip/tooltip-hover-change';
+import { ContainerService } from '@src/services';
 import { useI18n } from '@src/utils';
 
 import type { ButtonProps } from '@mui/material';
@@ -26,7 +27,13 @@ export const ConfirmationDialog = ({ open, title, description, tooltip, onCancel
     onConfirm?.($event);
   };
   return (
-    <Dialog open={open} onClose={onCancelHandler} aria-labelledby="confirm-delete-dialog" maxWidth={'xs'}>
+    <Dialog
+      open={open}
+      onClose={onCancelHandler}
+      aria-labelledby="confirm-delete-dialog"
+      maxWidth={'xs'}
+      container={ContainerService.getContainer.bind(ContainerService)}
+    >
       <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
       <DialogContent sx={{ whiteSpace: 'pre-line' }}>{description}</DialogContent>
       <DialogActions>

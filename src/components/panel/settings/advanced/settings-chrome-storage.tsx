@@ -25,6 +25,7 @@ import { firstValueFrom, Subscription } from 'rxjs';
 import { ButtonWithConfirm, FormInput, JsonExplorer } from '@src/components';
 import type { RootSlice, SettingsSlice, SyncSettings } from '@src/models';
 import { AdvancedHeader, ColorLevel, ColorLevelCss, defaultSettings, defaultSyncSettings, SyncSettingMode } from '@src/models';
+import { ContainerService } from '@src/services';
 import { setSyncSettings, syncSettings } from '@src/store/actions';
 import { getRoot, getSyncSettings } from '@src/store/selectors';
 import { settingsSlice } from '@src/store/slices/settings.slice';
@@ -114,7 +115,13 @@ export const SettingsChromeStorage = () => {
           }
           sx={{ p: '0.5rem 0' }}
         />
-        <Dialog open={prompt} onClose={onPromptCancel} aria-labelledby="confirm-sync-dialog" maxWidth={'xs'}>
+        <Dialog
+          open={prompt}
+          onClose={onPromptCancel}
+          aria-labelledby="confirm-sync-dialog"
+          maxWidth={'xs'}
+          container={ContainerService.getContainer.bind(ContainerService)}
+        >
           <DialogTitle id="alert-dialog-title">{i18n('sync_mode_prompt_title')}</DialogTitle>
           <DialogContent sx={{ whiteSpace: 'pre-line' }}>
             <Typography sx={{ mb: '1em' }}>{i18n('sync_mode_prompt_description')}</Typography>

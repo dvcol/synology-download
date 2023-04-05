@@ -24,8 +24,8 @@ import { finalize, lastValueFrom } from 'rxjs';
 
 import { FormCheckbox, IconLoader } from '@src/components';
 import type { FormRules, TaskListDownloadRequest, TaskListResponse } from '@src/models';
-import { LoggerService, NotificationService, QueryService } from '@src/services';
-import { useI18n, before } from '@src/utils';
+import { ContainerService, LoggerService, NotificationService, QueryService } from '@src/services';
+import { before, useI18n } from '@src/utils';
 
 import type { FC } from 'react';
 import type { Subscription } from 'rxjs';
@@ -138,6 +138,7 @@ export const TaskAddSelect: FC<TaskAddSelectProp> = ({ open, list_id, source, de
       aria-labelledby="confirm-delete-dialog"
       maxWidth={'md'}
       PaperProps={{ sx: { maxHeight: 'calc(100% - 1em)' } }}
+      container={ContainerService.getContainer.bind(ContainerService)}
     >
       <DialogTitle>
         {i18n('select_files')}
