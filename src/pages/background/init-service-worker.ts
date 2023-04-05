@@ -24,7 +24,7 @@ export const initServiceWorker = async () => {
   });
 
   // initialize logger
-  LoggerService.init(store, ServiceInstance.Background);
+  LoggerService.init({ store, source: ServiceInstance.Background });
 
   // Listen to extension update -- needs to be early or else onInstalled fires too late
   onInstalledEvents(store);
