@@ -38,7 +38,8 @@
   #synology-download-web-app-container {
     height: 100%;
     overflow: hidden;
-    background-color: rgb(234 238 243);
+    color: #1f2020;
+    background-color: #eaeef2;
     transition: width 1s, height 2s;
   }
 
@@ -58,6 +59,12 @@
   }
 
   @media (prefers-color-scheme: dark) {
+    #synology-download-web-app-container,
+    body {
+      color: #bdbdbd;
+      background-color: #20262D;
+    }
+
     #app-skeleton-navbar {
       background-color: #272727;
     }
