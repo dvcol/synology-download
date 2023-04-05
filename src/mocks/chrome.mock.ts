@@ -1,9 +1,10 @@
+import { BaseLoggerService } from '@src/services';
 import { deepMerge } from '@src/utils/object.utils';
 
 const logger =
   (method: string) =>
   (...arg: any[]) =>
-    console.debug(`chrome override ${method}`, arg);
+    BaseLoggerService.debug(`chrome override ${method}`, arg);
 
 const chromePatch = {
   loadTimes: logger('chrome.loadTimes'),

@@ -8,6 +8,7 @@ export * from './folder.model';
 export * from './form.model';
 export * from './http.model';
 export * from './links.model';
+export * from './logger.model';
 export * from './material-ui.model';
 export * from './menu.model';
 export * from './message.model';
