@@ -20,19 +20,19 @@ const build = config => {
 
       const info = stats.toJson(config.stats);
 
+      if (stats.hasWarnings()) {
+        console.warn('[Compilation warning]:\t', info.warnings);
+      }
+
       // Compilation errors (missing modules, syntax errors, etc)
       if (stats.hasErrors()) {
         console.error('[Compilation error]:\t', info.errors);
       }
-
-      if (stats.hasWarnings()) {
-        console.warn('[Compilation warning]:\t', info.warnings);
-      }
     }
 
-    console.info(stats.toString(config.stats));
-
     if (err || stats.hasErrors()) process.exit(1);
+
+    console.info(stats.toString(config.stats));
   });
 };
 

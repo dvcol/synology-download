@@ -2,6 +2,7 @@ const path = require('path');
 
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { LimitChunkCountPlugin } = require('webpack').optimize;
 
 const { getCommonConfig } = require('./common');
 
@@ -21,6 +22,7 @@ const getWebConfig = (common = getCommonConfig()) => {
       filename: 'entry/[name].js',
       chunkFilename: 'chunks/[name].chunk.js',
       publicPath: ASSET_PATH,
+      library: 'index',
       libraryTarget: 'umd',
       clean: true,
     },
@@ -49,10 +51,9 @@ const getWebConfig = (common = getCommonConfig()) => {
   };
 
   if (process.env.ANALYSE_BUNDLE || process.env.NODE_ENV === 'development') {
-    if (!options.optimization) options.optimization = {};
     options.optimization.splitChunks = {
+      ...options.optimization.splitChunks,
       chunks: 'all',
-      name: (module, chunks) => chunks.map(chunk => chunk.name).join('-'),
       cacheGroups: {
         react: {
           test: /[\\/]node_modules[\\/](react|react-dom|react-router-dom)[\\/]/,
@@ -88,6 +89,18 @@ const getWebConfig = (common = getCommonConfig()) => {
         },
       },
     };
+  } else {
+    options.module.parser = {
+      ...options.module.parser,
+      javascript: {
+        dynamicImportMode: 'eager',
+      },
+    };
+    options.plugins.push(
+      new LimitChunkCountPlugin({
+        maxChunks: 1,
+      }),
+    );
   }
   return options;
 };

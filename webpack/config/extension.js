@@ -18,7 +18,8 @@ const getExtensionConfig = (common = getCommonConfig()) => ({
   },
   output: {
     path: path.resolve(__dirname, ROOT_DIR, 'build'),
-    filename: '[name].bundle.js',
+    filename: 'entry/[name].entry.js',
+    chunkFilename: 'chunks/[name].chunk.js',
     publicPath: ASSET_PATH,
     clean: true,
   },

@@ -113,6 +113,7 @@ const getCommonConfig = () => {
 
   if (process.env.NODE_ENV === 'development') {
     options.devtool = 'cheap-module-source-map';
+    options.optimization = {};
   } else {
     options.optimization = {
       usedExports: true,
@@ -129,6 +130,10 @@ const getCommonConfig = () => {
       ],
     };
   }
+
+  options.optimization.splitChunks = {
+    name: (module, chunks) => chunks.map(chunk => chunk.name).join('-'),
+  };
 
   return options;
 };
