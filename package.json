@@ -17,13 +17,13 @@
     "type": "git",
     "url": "https://github.com/dvcol/synology-download.git"
   },
-  "main": "./dist/src/index.js",
+  "main": "./dist/entry/index.js",
   "types": "./dist/types/pages/web/index.d.ts",
   "files": [
     "*.md",
     "LICENSE",
-    "dist/src",
     "dist/json",
+    "dist/entry",
     "dist/_locales",
     "dist/types/pages/web/models",
     "dist/types/pages/web/modules",
