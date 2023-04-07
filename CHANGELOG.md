@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.19](https://github.com/dvcol/synology-download/compare/v3.0.18...v3.0.19) (2023-04-07)
+
+
+### Bug Fixes
+
+* **build:** disable chunking for web prod build ([c1dfa89](https://github.com/dvcol/synology-download/commit/c1dfa89d97823faa3735c0e805d18be8d88f03a2))
+
 ### [3.0.18](https://github.com/dvcol/synology-download/compare/v3.0.15...v3.0.18) (2023-04-07)
 
 
