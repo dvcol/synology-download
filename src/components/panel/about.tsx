@@ -9,7 +9,7 @@ import { Button, Card, CardActions, CardContent, CardHeader, Chip, Stack, Typogr
 import React, { useEffect, useState } from 'react';
 
 import { AppLinks } from '@src/models';
-import { getAcceptLanguages, getManifest, useI18n, createTab } from '@src/utils';
+import { createTab, getAcceptLanguages, getManifest, useI18n } from '@src/utils';
 
 import type { CardProps } from '@mui/material';
 import type { FC } from 'react';
@@ -139,3 +139,4 @@ export const About: FC<{
     </Card>
   );
 };
+export default About;

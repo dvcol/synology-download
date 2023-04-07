@@ -14,11 +14,12 @@ const getWebConfig = (common = getCommonConfig()) => {
     ...common,
     entry: {
       main: path.join(__dirname, ROOT_DIR, 'src', 'pages', 'web', 'main.ts'),
-      'src/index': path.join(__dirname, ROOT_DIR, 'src', 'pages', 'web', 'index.ts'),
+      index: path.join(__dirname, ROOT_DIR, 'src', 'pages', 'web', 'index.ts'),
     },
     output: {
       path: path.resolve(__dirname, ROOT_DIR, 'dist'),
-      filename: '[name].js',
+      filename: 'entry/[name].js',
+      chunkFilename: 'chunks/[name].chunk.js',
       publicPath: ASSET_PATH,
       libraryTarget: 'umd',
       clean: true,
@@ -45,12 +46,40 @@ const getWebConfig = (common = getCommonConfig()) => {
 
   if (process.env.ANALYSE_BUNDLE) {
     options.optimization.splitChunks = {
-      chunks: chunk => chunk.name !== 'src/index',
+      chunks: 'all',
+      name: (module, chunks) => chunks.map(chunk => chunk.name).join('-'),
       cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors.chunk',
+        react: {
+          test: /[\\/]node_modules[\\/](react|react-dom|react-router-dom)[\\/]/,
+          name: 'vendor-react',
           chunks: 'all',
+        },
+        mui_data_grid: {
+          priority: 10,
+          test: /[\\/]node_modules[\\/]@mui[\\/]x-data-grid[\\/]/,
+          name: 'vendor-mui_data_grid',
+          chunks: 'all',
+        },
+        mui_icons: {
+          priority: 10,
+          test: /[\\/]node_modules[\\/]@mui[\\/]icons-material[\\/]/,
+          name: 'vendor-mui_icons',
+          chunks: 'all',
+        },
+        mui: {
+          test: /[\\/]node_modules[\\/]@mui[\\/]/,
+          name: 'vendor-mui',
+          chunks: 'all',
+        },
+        dnd: {
+          test: /[\\/]node_modules[\\/]@dnd-kit[\\/]/,
+          name: 'vendor-dnd_kit',
+          chunks: 'all',
+        },
+        node_modules: {
+          priority: -10,
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendor-node_modules',
         },
       },
     };

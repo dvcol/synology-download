@@ -380,3 +380,5 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
     </Card>
   );
 };
+
+export default TaskAdd;

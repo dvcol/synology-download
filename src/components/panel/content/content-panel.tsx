@@ -77,3 +77,5 @@ export const ContentPanel = () => {
     </Fragment>
   );
 };
+
+export default ContentPanel;
