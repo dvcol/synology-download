@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.22](https://github.com/dvcol/synology-download/compare/v3.0.20...v3.0.22) (2023-04-07)
+
+
+### Bug Fixes
+
+* **build:** switch to esm ([7e2fd1d](https://github.com/dvcol/synology-download/commit/7e2fd1df6df53b153d9ee839b8bea1e6f69311d3))
+* **patch:** fix chrome patch in other browser (without globals) ([c577797](https://github.com/dvcol/synology-download/commit/c57779719962a58ed917af0892f4fff702ce1035))
+
 ### [3.0.20](https://github.com/dvcol/synology-download/compare/v3.0.19...v3.0.20) (2023-04-07)
 
 
