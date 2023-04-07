@@ -713,7 +713,7 @@ const chromePatch = {
 } as unknown as typeof chrome;
 
 export const patchChrome = (_global = window) => {
-  _global._chrome = chrome;
-  _global.chrome = deepMerge(_global.chrome, chromePatch);
+  _global._chrome = _global.chrome;
+  _global.chrome = deepMerge(_global._chrome, chromePatch);
   return _global.chrome;
 };
