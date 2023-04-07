@@ -1,7 +1,7 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Release - Tag and release package
+name: Release - Tag, release and publish package
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -9,6 +9,10 @@ concurrency:
 
 on:
   workflow_dispatch:
+    inputs:
+      tagName:
+        description: 'Tag name'
+        required: false
 
 env:
   node_version: 18.x
@@ -50,3 +54,97 @@ jobs:
           
           # push changes
           git push origin --follow-tags
+
+  publish-store:
+    needs: release
+    name: Publish extension
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion != 'failure' }}
+
+    steps:
+      - name: Checkout branch ${{ github.ref }}
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js ${{ env.node_version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.node_version }}
+          cache: 'yarn'
+
+      - name: Clean install dependencies
+        run: yarn install
+
+      - name: Build application
+        run: yarn build:extension
+
+      - name: Zip build folder
+        run: |
+          # Zipping build folder for artifact upload
+          cd build;
+          zip -r synology-download.zip *
+
+          # Check zip created
+          echo "Zip created in 'build/'"
+          ls -l  synology-download.zip
+          cd ..
+
+      - name: Generate Release changelog
+        run: yarn release:changelog
+
+      - name: Fetch latest tag
+        if: ${{ github.event_name == 'workflow_run' || (github.event_name == 'workflow_dispatch' && github.event.inputs.tagName == '') }}
+        id: latest-tag
+        run: |
+          tag_name=$(git describe --abbrev=0)
+          echo "Tag found: '$tag_name'"
+          echo "::set-output name=TAG_NAME::$tag_name"
+
+      - name: Push Release to github
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.tagName || steps.latest-tag.outputs.TAG_NAME || github.ref}}
+          body_path: RELEASE.md
+          files: build/synology-download.zip
+
+      - name: Publish to Chrome webstore
+        env:
+          CHROME_WEB_STORE_EXTENSION_ID: ebbdkledlkjpgbbmmopgbnnjmklnkcef
+          CHROME_WEB_STORE_CLIENT_ID: ${{ secrets.CHROME_WEB_STORE_CLIENT_ID }}
+          CHROME_WEB_STORE_CLIENT_SECRET: ${{ secrets.CHROME_WEB_STORE_CLIENT_SECRET }}
+          CHROME_WEB_STORE_REFRESH_TOKEN: ${{ secrets.CHROME_WEB_STORE_REFRESH_TOKEN }}
+        run: |
+          # Uploadind zip to web store
+          yarn dlx -q chrome-webstore-upload-cli upload --source build/synology-download.zip --extension-id "$CHROME_WEB_STORE_EXTENSION_ID" --client-id "$CHROME_WEB_STORE_CLIENT_ID" --client-secret "$CHROME_WEB_STORE_CLIENT_SECRET" --refresh-token "$CHROME_WEB_STORE_REFRESH_TOKEN"
+
+
+  publish-npm:
+    needs: release
+    name: Publish npm
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion != 'failure' }}
+
+    steps:
+      - name: Checkout branch ${{ github.ref }}
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js ${{ env.node_version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.node_version }}
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'yarn'
+
+      - name: Clean install dependencies
+        run: yarn install
+
+      - name: Build application
+        run: yarn build:web
+
+      - name: Publish to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
