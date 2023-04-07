@@ -39,6 +39,10 @@ const getWebConfig = (common = getCommonConfig()) => {
             from: path.join(__dirname, ROOT_DIR, 'src', 'pages', 'web', 'json'),
             to: path.join(__dirname, ROOT_DIR, 'dist', 'json'),
           },
+          {
+            from: path.join(__dirname, ROOT_DIR, 'src', 'manifest.json'),
+            to: path.join(__dirname, ROOT_DIR, 'dist', 'json', 'manifest.json'),
+          },
         ],
       }),
     ],
