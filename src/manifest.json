@@ -1,6 +1,6 @@
 {
   "name": "Download Station (client for Synology NAS)",
-  "version": "3.0.18",
+  "version": "3.0.19",
   "description": "Chrome extension for Synology Download Station",
   "manifest_version": 3,
   "default_locale": "en",
@@ -28,16 +28,36 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*"],
-      "js": ["entry/contentScript.entry.js"]
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "entry/contentScript.entry.js"
+      ]
     }
   ],
-  "permissions": ["scripting", "contextMenus", "notifications", "storage", "tabs", "downloads", "downloads.open"],
-  "host_permissions": ["http://*/*", "https://*/*"],
+  "permissions": [
+    "scripting",
+    "contextMenus",
+    "notifications",
+    "storage",
+    "tabs",
+    "downloads",
+    "downloads.open"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
   "web_accessible_resources": [
     {
-      "resources": ["*.html"],
-      "matches": ["<all_urls>"]
+      "resources": [
+        "*.html"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
     }
   ],
   "content_security_policy": {
