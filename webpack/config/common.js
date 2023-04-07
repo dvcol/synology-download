@@ -3,13 +3,12 @@ const path = require('path');
 
 const MergeJsonWebpackPlugin = require('merge-jsons-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const webpack = require('webpack');
+const { ProgressPlugin, EnvironmentPlugin } = require('webpack');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const ROOT_DIR = '../../';
 
 const alias = {
-  'react-dom': '@hot-loader/react-dom',
   '@src': path.resolve(__dirname, ROOT_DIR, 'src'),
 };
 
@@ -19,6 +18,10 @@ const fileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'eot', 'otf', 'svg', 'ttf',
 const getCommonConfig = () => {
   process.env.DEBUG = process.env.DEBUG ?? process.env.NODE_ENV === 'development';
   process.env.DEVTOOL = process.env.DEVTOOL ?? process.env.NODE_ENV === 'development';
+
+  if (process.env.NODE_ENV === 'development') {
+    alias['react-dom'] = '@hot-loader/react-dom';
+  }
 
   const options = {
     mode: process.env.NODE_ENV || 'development',
@@ -83,9 +86,9 @@ const getCommonConfig = () => {
       extensions: fileExtensions.map(extension => `.${extension}`).concat(['.js', '.jsx', '.ts', '.tsx', '.css', '.scss']),
     },
     plugins: [
-      new webpack.ProgressPlugin(),
+      new ProgressPlugin(),
       // expose and write the allowed env vars on the compiled bundle
-      new webpack.EnvironmentPlugin(['NODE_ENV', 'DEBUG', 'DEVTOOL']),
+      new EnvironmentPlugin(['NODE_ENV', 'DEBUG', 'DEVTOOL']),
       new MergeJsonWebpackPlugin({
         output: {
           groupBy: fs.readdirSync('src/i18n')?.map(lang => ({
