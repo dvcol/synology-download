@@ -9,7 +9,7 @@ const build = config => {
   config.mode = 'production';
 
   return webpack(config, (err, stats) => {
-    if ((config.stats?.preset ?? config.stats) === 'verbose') {
+    if ((config.stats?.preset ?? config.stats) !== 'none') {
       if (err) {
         // Fatal webpack errors (wrong configuration, etc)
         console.error('[Fatal error]:\t', err.stack || err);

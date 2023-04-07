@@ -22,9 +22,13 @@ const getWebConfig = (common = getCommonConfig()) => {
       filename: 'entry/[name].js',
       chunkFilename: 'chunks/[name].chunk.js',
       publicPath: ASSET_PATH,
-      library: 'index',
-      libraryTarget: 'umd',
+      library: {
+        type: 'module',
+      },
       clean: true,
+    },
+    experiments: {
+      outputModule: true,
     },
     plugins: [
       ...common.plugins,
