@@ -1,4 +1,4 @@
-import type { IconButtonProps } from '@mui/material/IconButton/IconButton';
+import type { IconButtonProps } from '@mui/material';
 
 import type { ForwardRefExoticComponent, MouseEventHandler } from 'react';
 

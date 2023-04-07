@@ -1,4 +1,5 @@
 import PowerOffIcon from '@mui/icons-material/PowerOff';
+
 import { ListItemText, Menu, MenuItem } from '@mui/material';
 
 import React, { useEffect } from 'react';
@@ -20,8 +21,7 @@ import { onMessage, sendMessage, useI18n, zIndexMax } from '@src/utils';
 
 import { QuickMenuRecent } from './quick-menu-recent';
 
-import type { PortalProps } from '@mui/base/Portal';
-import type { PopoverProps } from '@mui/material/Popover';
+import type { PopoverProps, PortalProps } from '@mui/material';
 import type { FC } from 'react';
 
 export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ container }) => {

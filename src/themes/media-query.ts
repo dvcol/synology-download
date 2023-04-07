@@ -6,7 +6,7 @@ import { darkTheme, lightTheme } from '@src/themes/themes';
 
 import { store$ } from '@src/utils';
 
-import type { Theme } from '@mui/material/styles/createTheme';
+import type { Theme } from '@mui/material';
 import type { Dispatch, SetStateAction } from 'react';
 import type { Subscription } from 'rxjs';
 

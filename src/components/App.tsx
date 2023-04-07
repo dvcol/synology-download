@@ -1,4 +1,5 @@
 import { CacheProvider } from '@emotion/react';
+
 import { Box, CssBaseline, ThemeProvider } from '@mui/material';
 
 import React, { useEffect, useRef, useState } from 'react';
@@ -16,8 +17,7 @@ import { Navbar } from './navbar/navbar';
 import { Panel } from './panel/panel';
 
 import type { EmotionCache } from '@emotion/utils';
-
-import type { Theme } from '@mui/material/styles/createTheme';
+import type { Theme } from '@mui/material';
 import type { FC } from 'react';
 import type { HashRouterProps } from 'react-router-dom';
 
