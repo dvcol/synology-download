@@ -1,97 +1,36 @@
 import { Container } from '@mui/material';
 
-import React from 'react';
+import React, { lazy } from 'react';
 
 import { Route, Routes } from 'react-router-dom';
 
-import { SettingsChromeStorage, SettingsLogging, SettingsRedux } from '@src/components/panel/settings/advanced';
-
+import { SuspenseLoader } from '@src/components';
 import { SettingHeader } from '@src/models';
-
-import { SettingsCredentials, SettingsPolling } from './connection';
-
-import { SettingsDownloads, SettingsDownloadsHistory, SettingsDownloadsIntercept } from './downloads';
-import { SettingsContextMenus, SettingsGlobal, SettingsQuickMenus, SettingsTabs } from './interface';
-import { SettingsBanner, SettingsSnack, SettingsTasksCount } from './notifications';
-
-import { SettingsHeader } from './settings-header';
-import { SettingsTasks } from './tasks';
 
 import type { FC } from 'react';
 import type { PathRouteProps } from 'react-router/lib/components';
 
+const SettingsAdvanced = lazy(() => import(/* webpackChunkName: "SettingsAdvanced" */ './advanced/settings-advanced'));
+const SettingsConnection = lazy(() => import(/* webpackChunkName: "SettingsConnection" */ './connection/settings-connection'));
+const SettingsDownloads = lazy(() => import(/* webpackChunkName: "SettingsDownloads" */ './downloads/settings-downloads'));
+const SettingsInterface = lazy(() => import(/* webpackChunkName: "SettingsInterface" */ './interface/settings-interface'));
+const SettingsNotifications = lazy(() => import(/* webpackChunkName: "SettingsNotifications" */ './notifications/settings-notifications'));
+const SettingsTasks = lazy(() => import(/* webpackChunkName: "SettingsTasks" */ './tasks/settings-tasks'));
+
 export const SettingsRoutes: FC = () => {
   const routes: PathRouteProps[] = [
-    {
-      path: '/*',
-      element: (
-        <React.Fragment>
-          <SettingsHeader label={SettingHeader.connection} />
-          <SettingsCredentials />
-          <SettingsPolling />
-        </React.Fragment>
-      ),
-    },
-    {
-      path: SettingHeader.downloads,
-      element: (
-        <React.Fragment>
-          <SettingsHeader label={SettingHeader.downloads} />
-          <SettingsDownloads />
-          <SettingsDownloadsIntercept />
-          <SettingsDownloadsHistory />
-        </React.Fragment>
-      ),
-    },
-    {
-      path: SettingHeader.tasks,
-      element: (
-        <React.Fragment>
-          <SettingsHeader label={SettingHeader.tasks} />
-          <SettingsTasks />
-        </React.Fragment>
-      ),
-    },
-    {
-      path: SettingHeader.interface,
-      element: (
-        <React.Fragment>
-          <SettingsHeader label={SettingHeader.interface} />
-          <SettingsGlobal />
-          <SettingsTabs />
-          <SettingsQuickMenus />
-          <SettingsContextMenus />
-        </React.Fragment>
-      ),
-    },
-    {
-      path: SettingHeader.notification,
-      element: (
-        <React.Fragment>
-          <SettingsHeader label={SettingHeader.notification} />
-          <SettingsTasksCount />
-          <SettingsSnack />
-          <SettingsBanner />
-        </React.Fragment>
-      ),
-    },
-    {
-      path: SettingHeader.advanced,
-      element: (
-        <React.Fragment>
-          <SettingsHeader label={SettingHeader.advanced} />
-          <SettingsLogging />
-          <SettingsRedux />
-          <SettingsChromeStorage />
-        </React.Fragment>
-      ),
-    },
+    { path: '/*', element: <SettingsConnection /> },
+    { path: SettingHeader.downloads, element: <SettingsDownloads /> },
+    { path: SettingHeader.tasks, element: <SettingsTasks /> },
+    { path: SettingHeader.interface, element: <SettingsInterface /> },
+    { path: SettingHeader.notification, element: <SettingsNotifications /> },
+    { path: SettingHeader.advanced, element: <SettingsAdvanced /> },
   ];
   return (
     <Container sx={{ p: '0 1.5rem', overflow: 'auto', '& .MuiCard-root': { mb: '1rem' } }}>
       <Routes>
-        {routes?.map((route, i) => (
-          <Route key={i} {...route} />
+        {routes?.map(({ path, element }, index) => (
+          <Route key={index} path={path} element={<SuspenseLoader element={element} />} />
         ))}
       </Routes>
     </Container>

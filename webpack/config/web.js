@@ -44,7 +44,8 @@ const getWebConfig = (common = getCommonConfig()) => {
     ],
   };
 
-  if (process.env.ANALYSE_BUNDLE) {
+  if (process.env.ANALYSE_BUNDLE || process.env.NODE_ENV === 'development') {
+    if (!options.optimization) options.optimization = {};
     options.optimization.splitChunks = {
       chunks: 'all',
       name: (module, chunks) => chunks.map(chunk => chunk.name).join('-'),
