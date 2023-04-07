@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.18](https://github.com/dvcol/synology-download/compare/v3.0.15...v3.0.18) (2023-04-07)
+
+
+### Bug Fixes
+
+* **build:** clean up hot-reload bundle ([6304177](https://github.com/dvcol/synology-download/commit/630417704afbd2751b6950bdcb1b440dad925408))
+* **build:** fix mui imports ([e02c558](https://github.com/dvcol/synology-download/commit/e02c5581d6a504b100ebe210ee2d5365dea9456d))
+* **build:** improve chunking in analyze mode ([381bb6c](https://github.com/dvcol/synology-download/commit/381bb6cdd2f70b391127593c058f5a837a631cd7))
+* **build:** lazy load settings routes ([0ffe4b3](https://github.com/dvcol/synology-download/commit/0ffe4b3669e07ccffc128975844a9d410f88a51b))
+* **build:** move to lazy loaded routes ([8f92a3b](https://github.com/dvcol/synology-download/commit/8f92a3b91e136ce5d2718d74c57885b3d2c15cd2))
+* **ci:** simplify ci workflow ([26ebf84](https://github.com/dvcol/synology-download/commit/26ebf84ff1e2cc1753123c1b5fa3f3ae2dee6b8c))
+* **mock:** mock get manifest ([9ff0e3f](https://github.com/dvcol/synology-download/commit/9ff0e3f2fee97013bbc9880e69bd7f444d1900c2))
+
 ### [3.0.15](https://github.com/dvcol/synology-download/compare/v3.0.13...v3.0.15) (2023-04-05)
 
 
