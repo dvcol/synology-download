@@ -17,7 +17,7 @@ env:
   node_version: 18.x
 
 jobs:
-  build:
+  build-extension:
     name: Build
     runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'chore(release)') && !contains(github.event.head_commit.message, 'chore(version)')"
@@ -37,6 +37,31 @@ jobs:
 
       - name: Build extension
         run: yarn build:extension
+
+      - name: Linting (eslint)
+        run: yarn lint
+
+      - name: Unit tests
+        run: yarn test:unit
+        if: github.event_name == 'push' && github.ref == 'ref/head/main'
+
+  build-web:
+    name: Build
+    runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'chore(release)') && !contains(github.event.head_commit.message, 'chore(version)')"
+
+    steps:
+      - name: Checkout branch ${{ github.ref }}
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js ${{ env.node_version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.node_version }}
+          cache: 'yarn'
+
+      - name: Clean install
+        run: yarn install
 
       - name: Build web
         run: yarn build:web
