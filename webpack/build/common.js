@@ -9,25 +9,18 @@ const build = config => {
   config.mode = 'production';
 
   return webpack(config, (err, stats) => {
-    if ((config.stats?.preset ?? config.stats) !== 'none') {
-      if (err) {
-        // Fatal webpack errors (wrong configuration, etc)
-        console.error('[Fatal error]:\t', err.stack || err);
-        if (err.details) {
-          console.error('\t[Details]:\t', err.details);
-        }
-      }
+    const info = stats.toJson(config.stats);
+    if ((config.stats?.preset ?? config.stats) === 'verbose') {
+      if (stats.hasWarnings()) console.warn('[Compilation warning]:\t', info.warnings);
+    }
 
-      const info = stats.toJson(config.stats);
+    // Compilation errors (missing modules, syntax errors, etc)
+    if (stats.hasErrors()) console.error('[Compilation error]:\t', info.errors);
 
-      if (stats.hasWarnings()) {
-        console.warn('[Compilation warning]:\t', info.warnings);
-      }
-
-      // Compilation errors (missing modules, syntax errors, etc)
-      if (stats.hasErrors()) {
-        console.error('[Compilation error]:\t', info.errors);
-      }
+    if (err) {
+      // Fatal webpack errors (wrong configuration, etc)
+      console.error('[Fatal error]:\t', err.stack || err);
+      if (err.details) console.error('\t[Details]:\t', err.details);
     }
 
     if (err || stats.hasErrors()) process.exit(1);
