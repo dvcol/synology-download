@@ -46,7 +46,7 @@ export enum TabTemplate {
 
 export type TabCount = Record<string, number>;
 
-export const defaultTabs: ContentTab[] = [
+export const templateTabs: ContentTab[] = [
   {
     id: uuid(),
     name: TabTemplate.all,
@@ -55,14 +55,14 @@ export const defaultTabs: ContentTab[] = [
     destination: { enabled: false },
     color: ColorLevel.primary,
   },
-  // {
-  //   id: uuid(),
-  //   name: TabTemplate.downloading,
-  //   template: TabTemplate.downloading,
-  //   status: [TaskStatus.downloading, TaskStatus.waiting, DownloadStatus.downloading],
-  //   destination: { enabled: false },
-  //   color: ColorLevel.info,
-  // },
+  {
+    id: uuid(),
+    name: TabTemplate.downloading,
+    template: TabTemplate.downloading,
+    status: [TaskStatus.downloading, TaskStatus.waiting, DownloadStatus.downloading],
+    destination: { enabled: false },
+    color: ColorLevel.info,
+  },
   {
     id: uuid(),
     name: TabTemplate.active,
@@ -94,14 +94,14 @@ export const defaultTabs: ContentTab[] = [
     destination: { enabled: false },
     color: ColorLevel.success,
   },
-  // {
-  //   id: uuid(),
-  //   name: TabTemplate.stopped,
-  //   template: TabTemplate.stopped,
-  //   status: [TaskStatus.paused, DownloadStatus.paused],
-  //   destination: { enabled: false },
-  //   color: ColorLevel.warning,
-  // },
+  {
+    id: uuid(),
+    name: TabTemplate.stopped,
+    template: TabTemplate.stopped,
+    status: [TaskStatus.paused, DownloadStatus.paused],
+    destination: { enabled: false },
+    color: ColorLevel.warning,
+  },
   {
     id: uuid(),
     name: TabTemplate.tasks,
@@ -109,6 +109,49 @@ export const defaultTabs: ContentTab[] = [
     status: Object.values(TaskStatus),
     destination: { enabled: false },
     color: ColorLevel.info,
+  },
+  {
+    id: uuid(),
+    name: TabTemplate.downloads,
+    template: TabTemplate.downloads,
+    status: Object.values(DownloadStatus),
+    destination: { enabled: false },
+    color: ColorLevel.secondary,
+  },
+];
+
+export const defaultTabs: ContentTab[] = [
+  {
+    id: uuid(),
+    name: TabTemplate.all,
+    template: TabTemplate.all,
+    status: [...Object.values(TaskStatus)],
+    destination: { enabled: false },
+    color: ColorLevel.primary,
+  },
+  {
+    id: uuid(),
+    name: TabTemplate.active,
+    template: TabTemplate.active,
+    status: [TaskStatus.downloading, TaskStatus.finishing, TaskStatus.hash_checking, TaskStatus.extracting, TaskStatus.seeding],
+    destination: { enabled: false },
+    color: ColorLevel.secondary,
+  },
+  {
+    id: uuid(),
+    name: TabTemplate.inactive,
+    template: TabTemplate.inactive,
+    status: [TaskStatus.waiting, TaskStatus.filehosting_waiting, TaskStatus.paused, TaskStatus.error],
+    destination: { enabled: false },
+    color: ColorLevel.warning,
+  },
+  {
+    id: uuid(),
+    name: TabTemplate.completed,
+    template: TabTemplate.completed,
+    status: [TaskStatus.finished],
+    destination: { enabled: false },
+    color: ColorLevel.success,
   },
   {
     id: uuid(),

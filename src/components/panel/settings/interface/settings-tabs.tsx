@@ -5,7 +5,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import type { ContentTab } from '@src/models';
-import { defaultTabs, InterfaceHeader, TaskStatus } from '@src/models';
+import { InterfaceHeader, TaskStatus, templateTabs } from '@src/models';
 import type { StoreState } from '@src/store';
 import { resetContentTabs, saveContentTab, setContentTabs } from '@src/store/actions';
 import { getTabs } from '@src/store/selectors';
@@ -22,7 +22,7 @@ export const SettingsTabs = () => {
   const i18n = useI18n();
 
   const addNew = (id: string) => {
-    const newTab = { ...defaultTabs[0], name: 'New Tab', id };
+    const newTab = { ...templateTabs[0], name: 'New Tab', id };
     dispatch(saveContentTab(newTab));
   };
 

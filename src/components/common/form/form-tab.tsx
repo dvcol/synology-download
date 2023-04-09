@@ -7,12 +7,12 @@ import type { ContentTab, Tab, TabStatus } from '@src/models';
 import {
   ColorLevel,
   defaultNotifications,
-  defaultTabs,
   DownloadStatus,
   getColorFromLevel,
   getLevelFromColor,
   TabTemplate,
   TaskStatus,
+  templateTabs,
 } from '@src/models';
 import { useI18n } from '@src/utils';
 
@@ -31,7 +31,7 @@ export const FormTab = ({
   disabled?: boolean;
 }>) => {
   const i18n = useI18n('common', 'form', 'tab');
-  const getTab = (type?: TabTemplate | string): ContentTab | undefined => defaultTabs.find(t => t.name === type);
+  const getTab = (type?: TabTemplate | string): ContentTab | undefined => templateTabs.find(t => t.name === type);
   const getTemplateStatuses = (tab?: Tab): TabStatus[] => (tab?.status?.length ? tab?.status : status) ?? [];
 
   const [templateStatuses, setTemplateStatuses] = React.useState<TabStatus[]>(getTemplateStatuses(getTab(template)));
