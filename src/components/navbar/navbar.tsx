@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import LoadingBar from '@src/components/navbar/loading-bar';
 import { setNavbar } from '@src/store/actions';
-import { getTab, getTabs } from '@src/store/selectors';
+import { getActiveTabs, getTab } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
 
 import NavbarMenu from './navbar-menu';
@@ -19,7 +19,7 @@ export const Navbar: FC = () => {
   const i18n = useI18n('navbar');
   const dispatch = useDispatch();
 
-  const tabs = useSelector(getTabs);
+  const tabs = useSelector(getActiveTabs);
   const tab = useSelector(getTab);
 
   useEffect(() => {

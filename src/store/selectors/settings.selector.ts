@@ -22,6 +22,7 @@ import {
   defaultGlobal,
   defaultLoggingLevels,
   defaultTaskSettings,
+  TaskStatus,
   ThemeMode,
 } from '@src/models';
 import { LoggerService } from '@src/services';
@@ -35,6 +36,15 @@ export const getSettings = createSelector(
 );
 
 export const getTabs = createSelector(getSettings, (setting: SettingsSlice) => setting?.tabs);
+
+const taskStatuses = Object.values(TaskStatus).map(String);
+export const getActiveTabs = createSelector(getSettings, (setting: SettingsSlice) => {
+  if (!setting.downloads.enabled) {
+    return setting?.tabs?.filter(tab => tab.status?.some(s => taskStatuses.includes(s)));
+  }
+
+  return setting?.tabs;
+});
 
 export const getMenus = createSelector(getSettings, (setting: SettingsSlice) => setting?.menus);
 
