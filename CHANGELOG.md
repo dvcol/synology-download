@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.0.23](https://github.com/dvcol/synology-download/compare/v3.0.22...v3.0.23) (2023-04-09)
+
+
+### Bug Fixes
+
+* **build:** fix build log level ([5a18794](https://github.com/dvcol/synology-download/commit/5a18794e8259e49a5e41b7d1f8c725b1b5773922))
+* **tabs:** filter download only tabs if download disabled ([d169abe](https://github.com/dvcol/synology-download/commit/d169abef07dd02219e2fd1912ec5f496c7092365))
+* **tabs:** split default from template tabs ([535e30e](https://github.com/dvcol/synology-download/commit/535e30eb8ded3c5e9f8e9c71bc9358c7f7137d5f))
+
 ### [3.0.22](https://github.com/dvcol/synology-download/compare/v3.0.20...v3.0.22) (2023-04-07)
 
 
