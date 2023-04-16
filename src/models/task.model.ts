@@ -19,8 +19,8 @@ export interface Task extends Content {
   /** Task size in bytes */
   size: number;
   status: TaskStatus;
-  status_extra: TaskStatusExtra;
-  additional: TaskAdditional;
+  status_extra?: TaskStatusExtra;
+  additional?: TaskAdditional;
   stopping?: boolean;
 }
 
@@ -72,9 +72,9 @@ export interface TaskStatusExtra {
 export interface TaskAdditional {
   detail: TaskDetail;
   transfer: TaskTransfer;
-  file: TaskFile[];
-  tracker: TaskTracker;
-  peer: TaskPeer;
+  file?: TaskFile[];
+  tracker?: TaskTracker;
+  peer?: TaskPeer;
 }
 
 export enum TaskListOption {
@@ -91,21 +91,24 @@ export interface TaskDetail {
   uri: string;
   unzip_password: string;
   create_time: number;
+  started_time: number;
   completed_time: number;
   priority: TaskPriority;
   total_peers: number;
   total_pieces: number;
   connected_seeders: number;
   connected_leechers: number;
+  connected_peers: number;
   seedelapsed: number;
+  waiting_seconds: number;
 }
 
 export interface TaskTransfer {
   downloaded_pieces: number;
   /** Task downloaded size in bytes */
-  size_downloaded: string;
+  size_downloaded: string | number;
   /** Task uploaded size in bytes */
-  size_uploaded: string;
+  size_uploaded: string | number;
   /** Task download speed: byte/s */
   speed_download: number;
   /** Task upload speed: byte/s */

@@ -1,5 +1,5 @@
 import type { StandaloneAppWc } from '@src/components';
-
+import { generateTask } from '@src/mocks';
 import type { ContentAppWc } from '@src/pages/content/components';
 
 import { defineComponents } from './modules';
@@ -44,5 +44,7 @@ declare global {
 
 export * from './modules';
 export * from './models';
+
+export { generateTask };
 
 export default defineComponents;

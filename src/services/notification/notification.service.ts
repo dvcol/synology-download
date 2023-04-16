@@ -23,15 +23,15 @@ import {
   getStateBadge,
 } from '@src/store/selectors';
 import {
-  isMacOs,
-  useI18n,
   bufferDebounceUnless,
   createNotification,
+  isMacOs,
   onMessage,
   parseMagnetLink,
   sendActiveTabMessage,
   sendMessage,
   store$,
+  useI18n,
 } from '@src/utils';
 
 import type { VariantType } from 'notistack';
@@ -260,7 +260,7 @@ export class NotificationService {
       {
         title: i18n('task_finished'),
         message: `${i18n('title')}\xa0${parseMagnetLink(task?.title) ?? task.id}`,
-        contextMessage: task.additional.detail.destination ? `${i18n('destination_folder')}\xa0${task.additional.detail.destination}` : undefined,
+        contextMessage: task.additional?.detail.destination ? `${i18n('destination_folder')}\xa0${task.additional.detail.destination}` : undefined,
       },
       { type: NotificationType.banner },
     );

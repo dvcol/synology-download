@@ -5,3 +5,4 @@ export * from './chrome.storage.mock';
 export * from './chrome.notifications.mock';
 export * from './chrome.tabs.mock';
 export * from './fetch.mock';
+export * from './task.mock';
