@@ -3,14 +3,17 @@ import { CSS } from '@dnd-kit/utilities';
 
 import { Box } from '@mui/material';
 
-import React from 'react';
+import React, { forwardRef } from 'react';
 
 import type { UniqueIdentifier } from '@dnd-kit/core';
 import type { BoxProps } from '@mui/material';
-import type { FC, MouseEventHandler, PropsWithChildren } from 'react';
+import type { ForwardRefRenderFunction, MouseEventHandler, PropsWithChildren, RefCallback } from 'react';
 
-type SortableItemProps = PropsWithChildren<{ id: UniqueIdentifier; box?: BoxProps; onClick?: MouseEventHandler }>;
-export const SortableListItem: FC<SortableItemProps> = ({ id, box, children, onClick }) => {
+export type SortableItemProps = PropsWithChildren<{ id: UniqueIdentifier; box?: BoxProps; onClick?: MouseEventHandler; className?: string }>;
+const SortableListItemComponent: ForwardRefRenderFunction<HTMLDivElement, SortableItemProps> = (
+  { id, box, children, onClick, className },
+  forward,
+) => {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
 
   const style = {
@@ -18,9 +21,17 @@ export const SortableListItem: FC<SortableItemProps> = ({ id, box, children, onC
     transition,
   };
 
+  const _setRef: RefCallback<HTMLDivElement> = node => {
+    if (typeof forward === 'function') forward(node);
+    else if (forward) forward.current = node;
+    setNodeRef(node);
+  };
+
   return (
-    <Box {...box} ref={setNodeRef} style={style} onClick={onClick} {...attributes} {...listeners}>
+    <Box className={className} {...box} ref={_setRef} style={style} onClick={onClick} {...attributes} {...listeners}>
       {children}
     </Box>
   );
 };
+
+export const SortableListItem = forwardRef(SortableListItemComponent);

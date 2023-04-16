@@ -16,7 +16,7 @@ import type { FC, ForwardRefRenderFunction } from 'react';
 import type { TransitionStatus } from 'react-transition-group';
 import type { CSSTransitionProps } from 'react-transition-group/CSSTransition';
 
-type ComponentProps = {
+type ItemComponentProps = {
   item: Content;
   accordion: ContentItemAccordionProps;
   hideStatus: boolean;
@@ -24,7 +24,7 @@ type ComponentProps = {
   setConfirmation: TaskItemProps['setConfirmation'];
   className?: string;
 };
-const Component: ForwardRefRenderFunction<HTMLDivElement, ComponentProps> = (
+const ItemComponent: ForwardRefRenderFunction<HTMLDivElement, ItemComponentProps> = (
   { item, accordion, hideStatus, setTaskEdit, setConfirmation, className },
   ref,
 ) => {
@@ -50,7 +50,7 @@ const Component: ForwardRefRenderFunction<HTMLDivElement, ComponentProps> = (
 const duration = { enter: 300, exit: 300 };
 const STAGGER = 50;
 type StylingProps = { state: TransitionStatus; index: number };
-const StyledComponent = styled(forwardRef(Component))<StylingProps>`
+const StyledItemComponent = styled(forwardRef(ItemComponent))<StylingProps>`
   z-index: 0;
   animation-fill-mode: both;
 
@@ -73,8 +73,8 @@ const StyledComponent = styled(forwardRef(Component))<StylingProps>`
   }
 `;
 
-type TransitionProps = { content: ComponentProps & Pick<StylingProps, 'index'> } & Partial<CSSTransitionProps>;
-const TransitionComponent: FC<TransitionProps> = props => {
+type ItemTransitionProps = { content: ItemComponentProps & Pick<StylingProps, 'index'> } & Partial<CSSTransitionProps>;
+const TransitionComponent: FC<ItemTransitionProps> = props => {
   const ref = createRef<HTMLDivElement>();
   const { content, ..._props } = props;
   const { index, item } = content;
@@ -87,7 +87,7 @@ const TransitionComponent: FC<TransitionProps> = props => {
       unmountOnExit
       {..._props}
     >
-      {state => <StyledComponent ref={ref} state={state} {...content} />}
+      {state => <StyledItemComponent ref={ref} state={state} {...content} />}
     </CSSTransition>
   );
 };

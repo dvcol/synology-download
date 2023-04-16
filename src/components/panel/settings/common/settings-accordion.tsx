@@ -4,7 +4,6 @@ import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore
 import { Accordion, AccordionSummary, Button, Card, CardActions, CardContent, CardHeader, Stack } from '@mui/material';
 
 import React from 'react';
-
 import { v4 as uuid } from 'uuid';
 
 import { ButtonWithConfirm, SortableList } from '@src/components';
@@ -38,7 +37,7 @@ export const SettingsAccordion = <T extends { id: string }>({
   const _addNew = () => {
     const id = uuid();
     addNew?.(id);
-    setExpanded(id);
+    setTimeout(() => setExpanded(id), 330);
   };
 
   const _reset = () => reset && reset();

@@ -5,7 +5,9 @@ import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-ki
 
 import React, { useEffect, useState } from 'react';
 
-import { SortableListItem } from './sortable-list-item';
+import { TransitionGroup } from 'react-transition-group';
+
+import { SortableListItemTransition } from './sortable-list-transition';
 
 import type { DndContextProps, UniqueIdentifier } from '@dnd-kit/core';
 import type { BoxProps } from '@mui/material';
@@ -56,11 +58,21 @@ export const SortableList = <T extends SortableValue>({ values, render, context,
       {...context}
     >
       <SortableContext items={_values} strategy={verticalListSortingStrategy} disabled={disabled}>
-        {_values.map((value, index) => (
-          <SortableListItem key={value.id} id={value.id} box={box} onClick={e => onClick?.(e, value)}>
-            {render(value, index)}
-          </SortableListItem>
-        ))}
+        <TransitionGroup component={null} enter exit>
+          {_values.map((value, index) => (
+            <SortableListItemTransition
+              key={value.id}
+              item={{
+                id: value.id,
+                index,
+                box,
+                onClick: e => onClick?.(e, value),
+              }}
+            >
+              {render(value, index)}
+            </SortableListItemTransition>
+          ))}
+        </TransitionGroup>
       </SortableContext>
     </DndContext>
   );
