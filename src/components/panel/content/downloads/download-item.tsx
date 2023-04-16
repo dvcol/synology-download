@@ -33,7 +33,7 @@ import { DownloadDetail } from './download-detail';
 import type { ContentItemAccordionProps } from '../content-item';
 import type { ForwardRefRenderFunction } from 'react';
 
-type DownloadItemProps = { download: Download; hideStatus?: boolean; accordion: ContentItemAccordionProps };
+type DownloadItemProps = { download: Download; hideStatus?: boolean; accordion: ContentItemAccordionProps; className?: string };
 export type DownloadItemButton = {
   key: 'erase' | 'cancel' | 'retry' | 'pause' | 'resume' | 'open' | 'transfer';
   icon: JSX.Element;
@@ -41,7 +41,7 @@ export type DownloadItemButton = {
 };
 
 const ButtonStyle = { display: 'flex', flex: '1 1 auto', minHeight: '2.5rem' };
-const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadItemProps> = ({ download, hideStatus, accordion }, ref) => {
+const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadItemProps> = ({ download, hideStatus, accordion, className }, ref) => {
   const i18n = useI18n('panel', 'content', 'download', 'item');
   const [expanded, setExpanded] = useState(false);
   const [hover, setHover] = useState(false);
@@ -128,6 +128,7 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
     <>
       <ContentItem
         ref={ref}
+        className={className}
         accordion={accordion}
         onHover={_visible => setHover(_visible)}
         onToggle={_expanded => setExpanded(_expanded)}

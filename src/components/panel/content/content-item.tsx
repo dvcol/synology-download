@@ -26,10 +26,11 @@ type ContentItemProps = {
   details?: JSX.Element;
   onToggle: (expanded: boolean) => void;
   onHover: (visible: boolean) => void;
+  className?: string;
 };
 
 const ContentItemComponent: ForwardRefRenderFunction<HTMLDivElement, ContentItemProps> = (
-  { accordion: { index, expanded, setExpanded }, background, summary, details, onToggle, onHover },
+  { accordion: { index, expanded, setExpanded }, background, summary, details, onToggle, onHover, className },
   ref,
 ) => {
   const [hover, setHover] = useState(false);
@@ -45,7 +46,7 @@ const ContentItemComponent: ForwardRefRenderFunction<HTMLDivElement, ContentItem
 
   const showBackground = useSelector<StoreState, GlobalSettings['task']>(getGlobalTask)?.background;
   return (
-    <Accordion ref={ref} expanded={expanded === index} onChange={onChange} TransitionProps={{ unmountOnExit: true }}>
+    <Accordion ref={ref} className={className} expanded={expanded === index} onChange={onChange} TransitionProps={{ unmountOnExit: true }}>
       <AccordionSummary
         aria-controls="task-content"
         id="task-header"

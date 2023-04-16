@@ -92,9 +92,10 @@ export type TaskItemProps = {
   setConfirmation: TaskDetailProps['setConfirmation'];
   hideStatus?: boolean;
   accordion: ContentItemAccordionProps;
+  className?: string;
 };
 const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps> = (
-  { task, hideStatus, setTaskEdit, setConfirmation, accordion },
+  { task, hideStatus, setTaskEdit, setConfirmation, accordion, className },
   ref,
 ) => {
   const i18n = useI18n('panel', 'content', 'task', 'item');
@@ -187,6 +188,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
   return (
     <ContentItem
       ref={ref}
+      className={className}
       accordion={accordion}
       onHover={_visible => setHover(_visible)}
       onToggle={_expanded => setExpanded(_expanded)}

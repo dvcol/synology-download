@@ -2382,6 +2382,7 @@ __metadata:
     react-redux: ^7.2.6
     react-router-dom: ^6.2.2
     react-router-hash-link: ^2.4.3
+    react-transition-group: ^4.4.5
     redux: ^4.1.2
     rxjs: ^7.8.0
     sass: ^1.58.0
@@ -16690,7 +16691,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-transition-group@npm:^4.3.0, react-transition-group@npm:^4.4.2":
+"react-transition-group@npm:^4.3.0, react-transition-group@npm:^4.4.2, react-transition-group@npm:^4.4.5":
   version: 4.4.5
   resolution: "react-transition-group@npm:4.4.5"
   dependencies:

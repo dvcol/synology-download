@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { debounce, Subject, timer } from 'rxjs';
 
 import { defaultGlobal } from '@src/models';
 import { getGlobalLoading } from '@src/store/selectors';
+
+import type { DependencyList } from 'react';
 
 /**
  * React hook which call observer on subject inside react effect
@@ -23,4 +25,12 @@ export const useDebounceObservable = <T>(observer: (value: T) => void, threshold
   }, [subject$, threshold, _threshold]);
 
   return [subject$, v => subject$.next(v)];
+};
+
+export const usePrevious = <T>(value: T, deps: DependencyList[] = []) => {
+  const ref = useRef<T>();
+  useEffect(() => {
+    ref.current = value;
+  }, [value, ...deps]);
+  return ref.current;
 };

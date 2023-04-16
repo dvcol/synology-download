@@ -1,34 +1,20 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
+
 import { useSelector } from 'react-redux';
 
-import type { ConfirmationState, TaskEditState, TaskItemProps } from '@src/components';
-import { ConfirmationDialog, DownloadItem, TaskEdit, TaskItem } from '@src/components';
+import { TransitionGroup } from 'react-transition-group';
 
-import type { Content, Download, Task } from '@src/models';
-import { ContentSource } from '@src/models';
+import type { ConfirmationState, TaskEditState } from '@src/components';
+import { ConfirmationDialog, TaskEdit } from '@src/components';
+
+import { ContentItemInstance } from '@src/components/panel/content/content-item-instance';
+import type { Content } from '@src/models';
 import type { StoreState } from '@src/store';
 import { getContentsForActiveTab, getTabOrFirst } from '@src/store/selectors';
 
 import { ContentEmpty } from './content-empty';
 
-import type { ContentItemAccordionProps } from './content-item';
-import type { FC } from 'react';
-
-const ContentItemInstance: FC<{
-  item: Content;
-  accordion: ContentItemAccordionProps;
-  hideStatus: boolean;
-  setTaskEdit: TaskItemProps['setTaskEdit'];
-  setConfirmation: TaskItemProps['setConfirmation'];
-}> = ({ item, accordion, hideStatus, setTaskEdit, setConfirmation }) => {
-  if (item.source === ContentSource.Download) {
-    return <DownloadItem accordion={accordion} download={item as Download} hideStatus={hideStatus} />;
-  }
-  if (item.source === ContentSource.Task) {
-    return <TaskItem accordion={accordion} task={item as Task} hideStatus={hideStatus} setTaskEdit={setTaskEdit} setConfirmation={setConfirmation} />;
-  }
-  return null;
-};
+let firstMount = true;
 
 export const ContentPanel = () => {
   const tab = useSelector(getTabOrFirst);
@@ -39,16 +25,29 @@ export const ContentPanel = () => {
 
   const [expanded, setExpanded] = useState<number | false>(false);
 
-  const items = contents.map((item, index) => (
-    <ContentItemInstance
-      key={item.id}
-      accordion={{ index, expanded, setExpanded }}
-      item={item}
-      hideStatus={(tab?.status?.length ?? 0) <= 1}
-      setTaskEdit={setTaskEdit}
-      setConfirmation={setConfirmation}
-    />
-  ));
+  useEffect(() => {
+    if (firstMount) firstMount = false;
+    console.info(tab?.name);
+    setExpanded(false);
+  }, [tab]);
+
+  const items = (
+    <TransitionGroup component={null} appear enter exit>
+      {contents.map((item, index) => (
+        <ContentItemInstance
+          key={item.key ?? item.id}
+          content={{
+            index,
+            item,
+            accordion: { index, expanded, setExpanded },
+            hideStatus: (tab?.status?.length ?? 0) <= 1,
+            setTaskEdit,
+            setConfirmation,
+          }}
+        />
+      ))}
+    </TransitionGroup>
+  );
   return (
     <Fragment>
       {contents?.length ? items : <ContentEmpty />}
