@@ -1,6 +1,4 @@
-import type { StandaloneAppWc } from '@src/components';
-import { generateTask } from '@src/mocks';
-import type { ContentAppWc } from '@src/pages/content/components';
+import { generateTask } from '../../mocks/task.mock';
 
 import { defineComponents } from './modules';
 
@@ -31,8 +29,8 @@ declare global {
     _fetchInterceptResponse?: FetchInterceptResponse;
     /** synology download wc instances */
     _synology: {
-      content?: ContentAppWc;
-      standalone?: StandaloneAppWc;
+      content?: ContentAppHtmlElement;
+      standalone?: StandaloneAppHtmlElement;
     };
   }
 
