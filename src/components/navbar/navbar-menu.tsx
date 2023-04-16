@@ -295,6 +295,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
         onClose={handleClose}
         onClick={handleClose}
         MenuListProps={{ 'aria-labelledby': 'dropdown-menu' }}
+        disableScrollLock={true}
       >
         {buttons
           ?.map(({ divider, hide, ..._button }) => {
