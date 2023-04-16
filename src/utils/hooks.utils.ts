@@ -27,10 +27,13 @@ export const useDebounceObservable = <T>(observer: (value: T) => void, threshold
   return [subject$, v => subject$.next(v)];
 };
 
-export const usePrevious = <T>(value: T, deps: DependencyList[] = []) => {
+export const usePrevious = <T>(value: T, deps: DependencyList[] = []): [T | undefined, (value: T) => void] => {
   const ref = useRef<T>();
+  const setRef = (_value: T) => {
+    ref.current = _value;
+  };
   useEffect(() => {
     ref.current = value;
   }, [value, ...deps]);
-  return ref.current;
+  return [ref.current, setRef];
 };
