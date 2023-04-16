@@ -56,7 +56,7 @@ const ContentItemComponent: ForwardRefRenderFunction<HTMLDivElement, ContentItem
       >
         {showBackground && background && <ProgressBackground {...background} />}
         {summary.card}
-        {summary.buttons && hover && !expanded && (
+        {summary.buttons && hover && expanded !== index && (
           <ButtonGroup orientation="vertical" variant="text">
             {summary.buttons}
           </ButtonGroup>

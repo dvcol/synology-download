@@ -5,7 +5,7 @@ import { TaskPriority, TaskStatus, TaskType } from '@src/models';
 
 /**
  * Generate a Task
- * @todo: move from faker to a threeshakable smaller lib
+ * @todo: move from faker to a three-shakable smaller lib
  */
 export const generateTask = (_task: Partial<Task> = {}): Task => {
   const status = _task.status ?? faker.helpers.arrayElement(Object.values(TaskStatus));
