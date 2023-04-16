@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.1.1](https://github.com/dvcol/synology-download/compare/v3.0.23...v3.1.1) (2023-04-16)
+
+
+### Features
+
+* **accordion:** adds animations to accordion ([7dac8e5](https://github.com/dvcol/synology-download/commit/7dac8e5a627c892a3e864ce5da0386b6e8616b8d))
+* **content:** add basic enter/exit animations ([a216b1b](https://github.com/dvcol/synology-download/commit/a216b1b9aa7b41c5ff43317b70ca2da4b8c2731c))
+* **mocks:** add task generator ([ab4b2d6](https://github.com/dvcol/synology-download/commit/ab4b2d69bd11f63c5425446d41e1cfad32bc400f))
+* **wc:** adds component registration and task adding ([062b554](https://github.com/dvcol/synology-download/commit/062b5542596e38054a5c9f2caa80d36822c50b68))
+
+
+### Bug Fixes
+
+* **accordion:** adds collapse to remove animation ([8a21b37](https://github.com/dvcol/synology-download/commit/8a21b37d9e36865113bb8948438ced659be890cb))
+* **content:** disable animation when first paint ([d3d32bb](https://github.com/dvcol/synology-download/commit/d3d32bbda392824be78769317e3368e61cd7ac31))
+* **content:** fix hover button on first element when expanded ([8584662](https://github.com/dvcol/synology-download/commit/8584662eb988cf831469a1d880ec3a0944bf56af))
+* **menu:** disable scroll lock on menu open ([e645875](https://github.com/dvcol/synology-download/commit/e64587540f42a90bbce4b9831d103cd6c62b800e))
+* **options:** fix sizing of option container ([9685b7d](https://github.com/dvcol/synology-download/commit/9685b7de849756def3e9cba048dda90e29932c10))
+
 ### [3.0.23](https://github.com/dvcol/synology-download/compare/v3.0.22...v3.0.23) (2023-04-09)
 
 
