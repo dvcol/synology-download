@@ -12,7 +12,7 @@ import { MaterialIcon, MaterialIconMap, QuickMenuType } from '@src/models';
 import { removeQuickMenu, saveQuickMenu } from '@src/store/actions';
 import { useI18n } from '@src/utils';
 
-export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
+export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemove: (id: QuickMenu['id']) => Promise<void> }) => {
   const i18n = useI18n('panel', 'settings', 'quick_menu');
   const dispatch = useDispatch();
   const {
@@ -31,7 +31,10 @@ export const SettingsQuickMenu = ({ menu }: { menu: QuickMenu }) => {
     },
   });
 
-  const onDelete = () => dispatch(removeQuickMenu(menu.id));
+  const onDelete = async () => {
+    await onRemove(menu.id);
+    dispatch(removeQuickMenu(menu.id));
+  };
 
   const onSubmit = (form: QuickMenu) => {
     dispatch(saveQuickMenu(form));

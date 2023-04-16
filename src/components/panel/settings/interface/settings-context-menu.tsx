@@ -10,9 +10,9 @@ import { FormExplorer, FormInput, FormSwitch } from '@src/components/common';
 import type { ContextMenu } from '@src/models';
 import { ChromeMessageType } from '@src/models';
 import { removeContextMenu, saveContextMenu } from '@src/store/actions';
-import { useI18n, sendMessage } from '@src/utils';
+import { sendMessage, useI18n } from '@src/utils';
 
-export const SettingsContextMenu = ({ menu }: { menu: ContextMenu }) => {
+export const SettingsContextMenu = ({ menu, onRemove }: { menu: ContextMenu; onRemove: (id: ContextMenu['id']) => Promise<void> }) => {
   const i18n = useI18n('panel', 'settings', 'context_menu');
   const dispatch = useDispatch();
   const {
@@ -30,7 +30,8 @@ export const SettingsContextMenu = ({ menu }: { menu: ContextMenu }) => {
     },
   });
 
-  const onDelete = () => {
+  const onDelete = async () => {
+    await onRemove(menu.id);
     sendMessage<string>({ type: ChromeMessageType.removeMenu, payload: menu.id }).subscribe(() => dispatch(removeContextMenu(menu.id)));
   };
 

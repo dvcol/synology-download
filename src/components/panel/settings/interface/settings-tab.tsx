@@ -15,7 +15,7 @@ import { useI18n } from '@src/utils';
 import type { UseFormGetValues, UseFormSetValue } from 'react-hook-form';
 import type { Control } from 'react-hook-form/dist/types/form';
 
-export const SettingsTab = ({ tab }: { tab: ContentTab }) => {
+export const SettingsTab = ({ tab, onRemove }: { tab: ContentTab; onRemove: (id: ContentTab['id']) => Promise<void> }) => {
   const i18n = useI18n('panel', 'settings', 'tab');
   const formTab = {
     ...tab,
@@ -34,7 +34,10 @@ export const SettingsTab = ({ tab }: { tab: ContentTab }) => {
     formState: { isValid, isDirty, isSubmitted },
   } = useForm<ContentTab>({ mode: 'onChange', defaultValues: formTab as ContentTab });
 
-  const onDelete = () => dispatch(removeContentTab(tab.id));
+  const onDelete = async () => {
+    await onRemove(tab.id);
+    dispatch(removeContentTab(tab.id));
+  };
 
   const onSubmit = (form: ContentTab) => {
     dispatch(saveContentTab({ ...form, color: getLevelFromColor(form.color) ?? ColorLevel.primary }));

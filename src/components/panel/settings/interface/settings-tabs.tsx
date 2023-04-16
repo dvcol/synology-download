@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -18,7 +18,11 @@ import { SettingsTab } from './settings-tab';
 const saskStatuses = Object.values(TaskStatus).map(String);
 export const SettingsTabs = () => {
   const dispatch = useDispatch();
+
   const tabs = useSelector<StoreState, ContentTab[]>(getTabs);
+  const state = useState<string | false>(false);
+  const setExpanded = state[1];
+
   const i18n = useI18n();
 
   const addNew = (id: string) => {
@@ -34,6 +38,7 @@ export const SettingsTabs = () => {
 
   return (
     <SettingsAccordion
+      state={state}
       title={InterfaceHeader.tabs}
       list={tabs}
       summary={t => (
@@ -52,7 +57,17 @@ export const SettingsTabs = () => {
           </Typography>
         </>
       )}
-      detail={t => <SettingsTab tab={t} />}
+      detail={t => (
+        <SettingsTab
+          tab={t}
+          onRemove={() => {
+            setExpanded(false);
+            return new Promise(r => {
+              setTimeout(r, 500);
+            });
+          }}
+        />
+      )}
       addNew={addNew}
       reset={reset}
       onChange={onChange}

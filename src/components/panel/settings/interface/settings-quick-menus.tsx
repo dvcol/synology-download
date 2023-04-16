@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -19,6 +19,8 @@ export const SettingsQuickMenus = () => {
   const i18n = useI18n('panel', 'settings', 'quick_menus');
   const dispatch = useDispatch();
   const menus = useSelector<StoreState, QuickMenu[]>(getQuick);
+  const state = useState<string | false>(false);
+  const setExpanded = state[1];
 
   const addNew = (id: string) => {
     const newMenu = { ...defaultQuickMenu, id };
@@ -31,6 +33,7 @@ export const SettingsQuickMenus = () => {
 
   return (
     <SettingsAccordion
+      state={state}
       title={InterfaceHeader.quickMenu}
       list={menus}
       summary={m => (
@@ -48,7 +51,17 @@ export const SettingsQuickMenus = () => {
           </Typography>
         </>
       )}
-      detail={m => <SettingsQuickMenu menu={m} />}
+      detail={m => (
+        <SettingsQuickMenu
+          menu={m}
+          onRemove={() => {
+            setExpanded(false);
+            return new Promise(r => {
+              setTimeout(r, 500);
+            });
+          }}
+        />
+      )}
       addNew={addNew}
       reset={reset}
       onChange={onChange}

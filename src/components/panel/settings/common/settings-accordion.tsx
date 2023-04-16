@@ -10,6 +10,8 @@ import { ButtonWithConfirm, SortableList } from '@src/components';
 import type { InterfaceHeader } from '@src/models';
 import { useI18n } from '@src/utils';
 
+import type { Dispatch, SetStateAction } from 'react';
+
 export const SettingsAccordion = <T extends { id: string }>({
   title,
   list,
@@ -18,6 +20,7 @@ export const SettingsAccordion = <T extends { id: string }>({
   addNew,
   reset,
   onChange,
+  state,
 }: {
   title: InterfaceHeader;
   list: T[];
@@ -26,9 +29,10 @@ export const SettingsAccordion = <T extends { id: string }>({
   addNew?: (id: string) => void;
   reset?: () => void;
   onChange?: (item: T[]) => void;
+  state: [string | false, Dispatch<SetStateAction<string | false>>];
 }) => {
   const i18n = useI18n('panel', 'settings', 'accordion');
-  const [expanded, setExpanded] = React.useState<string | false>(false);
+  const [expanded, setExpanded] = state;
 
   const handleExpand = (id: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
     setExpanded(isExpanded ? id : false);
