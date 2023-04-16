@@ -47,7 +47,7 @@ const Component: ForwardRefRenderFunction<HTMLDivElement, ComponentProps> = (
   return null;
 };
 
-const duration = { enter: 500, exit: 300 };
+const duration = { enter: 300, exit: 300 };
 const STAGGER = 50;
 type StylingProps = { state: TransitionStatus; index: number };
 const StyledComponent = styled(forwardRef(Component))<StylingProps>`

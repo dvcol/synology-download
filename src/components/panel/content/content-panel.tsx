@@ -27,12 +27,11 @@ export const ContentPanel = () => {
 
   useEffect(() => {
     if (firstMount) firstMount = false;
-    console.info(tab?.name);
     setExpanded(false);
   }, [tab]);
 
   const items = (
-    <TransitionGroup component={null} appear enter exit>
+    <TransitionGroup component={null} appear={!firstMount} enter exit>
       {contents.map((item, index) => (
         <ContentItemInstance
           key={item.key ?? item.id}
