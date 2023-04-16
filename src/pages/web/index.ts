@@ -1,3 +1,7 @@
+import type { StandaloneAppWc } from '@src/components';
+
+import type { ContentAppWc } from '@src/pages/content/components';
+
 import { defineComponents } from './modules';
 
 import type {
@@ -25,6 +29,11 @@ declare global {
     _fetchIntercept?: FetchIntercept;
     /** Reducer for intercepted fetch responses */
     _fetchInterceptResponse?: FetchInterceptResponse;
+    /** synology download wc instances */
+    _synology: {
+      content?: ContentAppWc;
+      standalone?: StandaloneAppWc;
+    };
   }
 
   interface HTMLElementTagNameMap {

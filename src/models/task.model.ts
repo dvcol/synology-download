@@ -196,7 +196,7 @@ export interface TaskCount {
 
 export type TaskStatistics = DownloadStationStatistic;
 
-export const mapToTask = (task: Task, stoppingIds: TaskComplete['taskId'][]): Task => {
+export const mapToTask = (task: Task, stoppingIds: TaskComplete['taskId'][] = []): Task => {
   const folder = task.additional?.detail?.destination ?? undefined;
   const received = task.additional?.transfer?.size_downloaded ?? 0;
   const speed = task.additional?.transfer?.speed_download ?? undefined;

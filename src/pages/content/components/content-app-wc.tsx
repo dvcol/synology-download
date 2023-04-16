@@ -23,6 +23,7 @@ export class ContentAppWc extends HTMLElement {
   private async connectedCallback() {
     this.init();
     this.render();
+    this.attach();
   }
 
   private init(storeProxy: StoreOrProxy = store) {
@@ -31,6 +32,11 @@ export class ContentAppWc extends HTMLElement {
     QueryService.init(storeProxy, ServiceInstance.Content);
     NotificationService.init(storeProxy, ServiceInstance.Content);
     PollingService.init(storeProxy);
+  }
+
+  private attach() {
+    if (!window._synology) window._synology = {};
+    window._synology.content = this;
   }
 
   /**

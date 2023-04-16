@@ -1,3 +1,5 @@
+import type { Task } from '../../../models/task.model';
+
 import type { Store } from 'redux';
 
 export enum WebComponents {
@@ -27,4 +29,5 @@ export interface ContentAppHtmlElement extends HTMLElement {
 export interface StandaloneAppHtmlElement extends HTMLElement {
   basename?: string;
   render: (root?: Element, store?: Store) => void;
+  add: (tsk: Task) => void;
 }

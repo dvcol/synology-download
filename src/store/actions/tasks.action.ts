@@ -15,6 +15,7 @@ const {
   resetFiles,
   setTaskForm,
   clearTaskForm,
+  addTasks,
 } = tasksSlice.actions;
 
 // Export as named constants
@@ -32,4 +33,5 @@ export {
   resetFiles,
   setTaskForm,
   clearTaskForm,
+  addTasks,
 };

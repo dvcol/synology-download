@@ -4,10 +4,11 @@ import React from 'react';
 import { render } from 'react-dom';
 
 import { StandaloneApp } from '@src/components';
-import type { StoreOrProxy } from '@src/models';
-import { AppInstance, ServiceInstance } from '@src/models';
+import type { StoreOrProxy, Task } from '@src/models';
+import { AppInstance, mapToTask, ServiceInstance } from '@src/models';
 import { BaseLoggerService, DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { store } from '@src/store';
+import { addTasks } from '@src/store/actions';
 
 export class StandaloneAppWc extends HTMLElement {
   get store() {
@@ -25,6 +26,7 @@ export class StandaloneAppWc extends HTMLElement {
   private async connectedCallback() {
     this.init();
     this.render();
+    this.attach();
   }
 
   private init(storeProxy: StoreOrProxy = store) {
@@ -33,6 +35,11 @@ export class StandaloneAppWc extends HTMLElement {
     QueryService.init(storeProxy, ServiceInstance.Standalone);
     NotificationService.init(storeProxy, ServiceInstance.Standalone);
     PollingService.init(storeProxy);
+  }
+
+  private attach() {
+    if (!window._synology) window._synology = {};
+    window._synology.standalone = this;
   }
 
   /**
@@ -53,5 +60,14 @@ export class StandaloneAppWc extends HTMLElement {
     const cache = createCache({ key: `${AppInstance.standalone}-cache`, container });
 
     return render(<StandaloneApp store={storeOrProxy} cache={cache} routerProps={{ basename: this.basename }} />, app);
+  }
+
+  /**
+   * Add tasks to the store instance
+   * @param tasks
+   */
+  add(tasks: Task | Task[]) {
+    const _tasks = Array.isArray(tasks) ? tasks?.map(t => mapToTask(t)) : [mapToTask(tasks)];
+    this.store.dispatch(addTasks(_tasks));
   }
 }

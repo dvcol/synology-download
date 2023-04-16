@@ -12,6 +12,7 @@ export interface TasksReducers<S = TasksSlice> extends SliceCaseReducers<S> {
   removeStopping: CaseReducer<S, PayloadAction<TaskComplete['taskId'] | TaskComplete['taskId'][]>>;
   resetStopping: CaseReducer<S>;
   setTasks: CaseReducer<S, PayloadAction<Task[]>>;
+  addTasks: CaseReducer<S, PayloadAction<Task[]>>;
   spliceTasks: CaseReducer<S, PayloadAction<Task['id'] | Task['id'][]>>;
   setTaskStats: CaseReducer<S, PayloadAction<TaskStatistics>>;
   resetTasks: CaseReducer<S>;
@@ -47,6 +48,7 @@ export const tasksSlice = createSlice<TasksSlice, TasksReducers, 'tasks'>({
       return _state;
     },
     resetStopping: state => ({ ...state, stopping: initialState.stopping }),
+    addTasks: (state, { payload, type }) => syncTaskReducer(state, { payload: [...Object.values(state.tasks), ...payload], type }),
     setTasks: syncTaskReducer,
     spliceTasks: (state, { payload: ids }) => {
       const _ids = Array.isArray(ids) ? ids : [ids];
