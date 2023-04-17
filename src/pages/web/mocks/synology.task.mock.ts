@@ -13,16 +13,18 @@ import type { FetchInputs } from '../models';
  * @todo: move from faker to a three-shakable smaller lib
  */
 export const generateTask = (_task: Partial<Task> = {}): Task => {
-  const status = _task.status ?? faker.helpers.arrayElement(Object.values(TaskStatus));
+  const status =
+    _task.status ??
+    faker.helpers.arrayElement([...Object.values(TaskStatus), ...Array(10).fill([TaskStatus.downloading, TaskStatus.waiting]).flat()]);
   const size = _task.size ?? faker.datatype.number({ min: 1000, max: 1000000000 });
 
   const create_time = _task?.additional?.detail?.create_time ?? faker.date.recent().getTime();
   const started_time = _task?.additional?.detail?.started_time ?? faker.date.between(create_time, new Date()).getTime();
   const elapsed = (new Date().getTime() - started_time) / 1000;
 
-  let size_downloaded = _task?.additional?.transfer?.size_downloaded ?? faker.datatype.number({ min: 0, max: size / 1.5 });
+  let size_downloaded = _task?.additional?.transfer?.size_downloaded ?? faker.datatype.number({ min: 0, max: size / 10 });
   if ([TaskStatus.finished, TaskStatus.seeding, TaskStatus.extracting, TaskStatus.finishing].includes(status)) size_downloaded = size;
-  const size_uploaded = _task?.additional?.transfer?.size_uploaded ?? faker.datatype.number({ min: 0, max: size / 1.5 });
+  const size_uploaded = _task?.additional?.transfer?.size_uploaded ?? faker.datatype.number({ min: 0, max: size / 10 });
   const speed_download = Math.round(_task?.additional?.transfer?.speed_download ?? (size - Number(size_downloaded)) / elapsed);
   const speed_upload = Math.round(_task?.additional?.transfer?.speed_upload ?? (size - Number(size_uploaded)) / elapsed);
   return {
@@ -86,6 +88,88 @@ export class TaskMock {
     return delete this.entities[id];
   }
 }
+
+const changeStatus = (task: Task, status: TaskStatus, threshold = 500): Task => {
+  if (faker.datatype.number(1000) > threshold) task.status = status;
+  return task;
+};
+
+const failTask = (task: Task) => changeStatus(task, TaskStatus.error, 999);
+
+const computeSpeed = (task: Task) => {
+  const started_time = task?.additional?.detail?.started_time;
+  const size_downloaded = task?.additional?.transfer?.size_downloaded;
+  const size_uploaded = task?.additional?.transfer?.size_uploaded;
+
+  if (started_time === undefined || size_downloaded === undefined || size_uploaded === undefined) return { speed_download: 0, speed_upload: 0 };
+
+  const elapsed = (new Date().getTime() - started_time) / 1000;
+
+  const speed_download = Math.round(task.size - Number(size_downloaded) / elapsed);
+  const speed_upload = Math.round(task.size - Number(size_uploaded) / elapsed);
+  return { speed_download, speed_upload };
+};
+
+const progress = (task: Task) => {
+  if (!task.additional?.transfer.size_downloaded) return task;
+  const total = task.size;
+  const downloaded = Number(task.additional.transfer.size_downloaded);
+  if (total / downloaded < 1.05) {
+    task.status = TaskStatus.finished;
+    task.additional.transfer.size_downloaded = total;
+    task.additional.transfer.speed_download = 0;
+    return task;
+  }
+  if (faker.datatype.number(100) > 20) {
+    const max = (total - downloaded) / faker.datatype.number({ min: 2, max: 100 });
+    const size_downloaded = downloaded + faker.datatype.number({ max });
+    const { speed_upload, speed_download } = computeSpeed(task);
+    task.additional.transfer = { ...task.additional.transfer, size_downloaded, speed_download, speed_upload };
+  }
+  return task;
+};
+
+const seed = (task: Task) => {
+  if (!task.additional?.transfer.size_uploaded) return task;
+  if (faker.datatype.number(100) > 20) {
+    task.additional.transfer.size_uploaded = faker.datatype.number({ max: task.size / 4 });
+    task.additional.transfer.speed_upload = computeSpeed(task).speed_upload;
+  }
+  return task;
+};
+
+export const activateDemo = (task: TaskMock, interval = 100) => {
+  return setInterval(() => {
+    task.tasks.forEach(_task => {
+      switch (_task.status) {
+        case TaskStatus.downloading:
+          failTask(_task);
+          progress(_task);
+          break;
+        case TaskStatus.seeding:
+          failTask(_task);
+          seed(_task);
+          break;
+        case TaskStatus.extracting:
+        case TaskStatus.finishing:
+          failTask(_task);
+          changeStatus(_task, TaskStatus.finished);
+          break;
+        case TaskStatus.waiting:
+        case TaskStatus.hash_checking:
+        case TaskStatus.filehosting_waiting:
+          failTask(_task);
+          changeStatus(_task, TaskStatus.downloading);
+          break;
+        case TaskStatus.error:
+        case TaskStatus.paused:
+        case TaskStatus.finished:
+        default:
+          break;
+      }
+    });
+  }, interval);
+};
 
 export const patchTasks = (_global = window): TaskMock => {
   if (!_global._synology) _global._synology = {};

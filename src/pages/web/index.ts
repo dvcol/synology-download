@@ -1,4 +1,4 @@
-import { generateTask } from './mocks';
+import { activateDemo, generateTask } from './mocks';
 
 import { defineComponents } from './modules';
 
@@ -37,6 +37,6 @@ declare global {
 export * from './modules';
 export * from './models';
 
-export { generateTask };
+export { generateTask, activateDemo };
 
 export default defineComponents;
