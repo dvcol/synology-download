@@ -17,11 +17,18 @@ export const getPopup = createSelector(getModal, (modal: StateSlice['modal']) =>
 
 export const getOption = createSelector(getModal, (modal: StateSlice['modal']) => modal?.option);
 
+export const getStandalone = createSelector(getModal, (modal: StateSlice['modal']) => modal?.standalone);
+
 export const getLogged = createSelector(getState, (state: StateSlice) => state?.logged);
 
 export const getSid = createSelector(getState, (state: StateSlice) => state?.sid);
 
-export const isModalOpen = createSelector(getPopup, getOption, (popup: boolean, option: boolean) => popup || option);
+export const isModalOpen = createSelector(
+  getPopup,
+  getOption,
+  getStandalone,
+  (popup: boolean, option: boolean, standalone: boolean) => popup || option || standalone,
+);
 
 export const getLoading = createSelector(getState, (state: StateSlice) => state.loading);
 

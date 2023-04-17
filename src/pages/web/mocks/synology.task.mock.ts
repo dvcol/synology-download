@@ -1,7 +1,12 @@
 import { faker } from '@faker-js/faker/locale/en';
 
-import type { Task } from '@src/models';
-import { TaskPriority, TaskStatus, TaskType } from '@src/models';
+import { TaskPriority, TaskStatus, TaskType } from '../../../models';
+
+import { FetchIntercept } from '../models';
+
+import type { Task } from '../../../models';
+
+import type { FetchInputs } from '../models';
 
 /**
  * Generate a Task
@@ -15,7 +20,8 @@ export const generateTask = (_task: Partial<Task> = {}): Task => {
   const started_time = _task?.additional?.detail?.started_time ?? faker.date.between(create_time, new Date()).getTime();
   const elapsed = (new Date().getTime() - started_time) / 1000;
 
-  const size_downloaded = _task?.additional?.transfer?.size_downloaded ?? faker.datatype.number({ min: 0, max: size / 1.5 });
+  let size_downloaded = _task?.additional?.transfer?.size_downloaded ?? faker.datatype.number({ min: 0, max: size / 1.5 });
+  if ([TaskStatus.finished, TaskStatus.seeding, TaskStatus.extracting, TaskStatus.finishing].includes(status)) size_downloaded = size;
   const size_uploaded = _task?.additional?.transfer?.size_uploaded ?? faker.datatype.number({ min: 0, max: size / 1.5 });
   const speed_download = Math.round(_task?.additional?.transfer?.speed_download ?? (size - Number(size_downloaded)) / elapsed);
   const speed_upload = Math.round(_task?.additional?.transfer?.speed_upload ?? (size - Number(size_uploaded)) / elapsed);
@@ -55,4 +61,61 @@ export const generateTask = (_task: Partial<Task> = {}): Task => {
       },
     },
   } as Task;
+};
+
+const resolveUrl = (input: FetchInputs[0]): string | undefined => {
+  let url: string | undefined;
+  if (typeof input === 'string') url = input;
+  else if (input instanceof URL) url = input.toString();
+  else if (input instanceof Request) url = input.url;
+  return url;
+};
+
+export class TaskMock {
+  readonly entities: Record<string, Task> = {};
+
+  get tasks(): Task[] {
+    return Object.values(this.entities);
+  }
+
+  add(task: Task = generateTask()) {
+    this.entities[task.id] = task;
+    return this.entities;
+  }
+  remove(id: Task['id']) {
+    return delete this.entities[id];
+  }
+}
+
+export const patchTasks = (_global = window): TaskMock => {
+  if (!_global._synology) _global._synology = {};
+  if (!_global._synology.mock) _global._synology.mock = {};
+  if (!_global._synology.mock.task) _global._synology.mock.task = new TaskMock();
+  const { task } = _global._synology.mock;
+
+  if (!_global._fetchIntercept) _global._fetchIntercept = new FetchIntercept();
+
+  // list
+  _global._fetchIntercept?.push([
+    (input, init) => {
+      if (!resolveUrl(input)?.endsWith('DownloadStation/task.cgi')) return false;
+      return !!init?.body?.toString()?.includes('api=SYNO.DownloadStation.Task&method=list');
+    },
+    () => ({ offset: 0, tasks: task.tasks, total: 1 }),
+  ]);
+
+  // delete
+  _global._fetchIntercept?.push([
+    (input, init) => {
+      if (!resolveUrl(input)?.endsWith('DownloadStation/task.cgi')) return false;
+      return !!init?.body?.toString()?.includes('api=SYNO.DownloadStation.Task&method=delete');
+    },
+    (_, init) => {
+      const id = init?.body?.toString()?.match(/id=(.*?(?=&|$))/)?.[1];
+      if (id) task.remove(id);
+      return { error: 0, id };
+    },
+  ]);
+
+  return task;
 };

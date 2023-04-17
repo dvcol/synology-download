@@ -29,6 +29,7 @@ export interface StateSlice {
   modal: {
     popup: boolean;
     option: boolean;
+    standalone: boolean;
   };
   content: {
     menu: boolean;

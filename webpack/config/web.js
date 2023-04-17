@@ -34,6 +34,7 @@ const getWebConfig = (common = getCommonConfig()) => {
       ...common.plugins,
       new HtmlWebpackPlugin({
         template: path.join(__dirname, ROOT_DIR, 'src', 'pages', 'web', 'index.html'),
+        favicon: path.join(__dirname, ROOT_DIR, 'src', 'assets', 'favicon.ico'),
         chunks: 'main',
         filename: 'index.html',
         scriptLoading: 'module',

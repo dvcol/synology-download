@@ -20,7 +20,7 @@ export class ContentAppWc extends HTMLElement {
     return BaseLoggerService;
   }
 
-  private async connectedCallback() {
+  private connectedCallback() {
     this.init();
     this.render();
     this.attach();
@@ -28,9 +28,9 @@ export class ContentAppWc extends HTMLElement {
 
   private init(storeProxy: StoreOrProxy = store) {
     LoggerService.init({ store: storeProxy, source: ServiceInstance.Content });
-    DownloadService.init(storeProxy);
-    QueryService.init(storeProxy, ServiceInstance.Content);
     NotificationService.init(storeProxy, ServiceInstance.Content);
+    QueryService.init(storeProxy, ServiceInstance.Content);
+    DownloadService.init(storeProxy);
     PollingService.init(storeProxy);
   }
 

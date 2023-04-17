@@ -3,12 +3,15 @@ import createCache from '@emotion/cache';
 import React from 'react';
 import { render } from 'react-dom';
 
+import { forkJoin, lastValueFrom } from 'rxjs';
+
 import { StandaloneApp } from '@src/components';
 import type { StoreOrProxy, Task } from '@src/models';
 import { AppInstance, mapToTask, ServiceInstance } from '@src/models';
+import { restoreLocalSate, restoreSettings, restoreTaskSlice } from '@src/pages/background/modules';
 import { BaseLoggerService, DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { store } from '@src/store';
-import { addTasks } from '@src/store/actions';
+import { addTasks, setStandalone } from '@src/store/actions';
 
 export class StandaloneAppWc extends HTMLElement {
   get store() {
@@ -24,16 +27,30 @@ export class StandaloneAppWc extends HTMLElement {
   }
 
   private async connectedCallback() {
-    this.init();
+    await this.init();
     this.render();
     this.attach();
   }
 
-  private init(storeProxy: StoreOrProxy = store) {
+  private async init(storeProxy: StoreOrProxy = store) {
     LoggerService.init({ store: storeProxy, source: ServiceInstance.Standalone });
-    DownloadService.init(storeProxy);
-    QueryService.init(storeProxy, ServiceInstance.Standalone);
+
+    // Restore settings & polling
+    await lastValueFrom(restoreSettings(store));
+
     NotificationService.init(storeProxy, ServiceInstance.Standalone);
+    QueryService.init(storeProxy, ServiceInstance.Standalone);
+    DownloadService.init(storeProxy);
+
+    // Restore State
+    await lastValueFrom(restoreLocalSate(store));
+
+    // Restore Tasks
+    await lastValueFrom(restoreTaskSlice(store));
+
+    // Set standalone to open
+    store.dispatch(setStandalone(true));
+
     PollingService.init(storeProxy);
   }
 
@@ -69,5 +86,12 @@ export class StandaloneAppWc extends HTMLElement {
   add(tasks: Task | Task[]) {
     const _tasks = Array.isArray(tasks) ? tasks?.map(t => mapToTask(t)) : [mapToTask(tasks)];
     this.store.dispatch(addTasks(_tasks));
+  }
+
+  /**
+   * Trigger a polling event
+   */
+  poll() {
+    return lastValueFrom(forkJoin([QueryService.listTasks(), QueryService.getStatistic(), DownloadService.searchAll()]));
   }
 }

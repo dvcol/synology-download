@@ -18,7 +18,21 @@ export type ContentAppTaskForm = {
   create_list?: boolean;
 };
 export type ContentAppAnchorPayload = { event: MouseEvent; anchor: Element | null; form: ContentAppTaskForm };
-export type ContentAppTaskDialogPayload = { open: boolean; form?: ContentAppTaskForm; intercept?: () => void };
+export type ContentAppInterceptResponse = {
+  success: boolean;
+  payload?: {
+    folder?: string;
+    aborted: boolean;
+    resume?: boolean;
+    message?: string;
+  };
+  error?: Error;
+};
+export type ContentAppTaskDialogPayload = {
+  open: boolean;
+  form?: ContentAppTaskForm;
+  intercept?: { callback: (response?: ContentAppInterceptResponse) => void };
+};
 
 export interface ContentAppHtmlElement extends HTMLElement {
   render: (root?: Element, store?: Store) => void;
@@ -30,4 +44,5 @@ export interface StandaloneAppHtmlElement extends HTMLElement {
   basename?: string;
   render: (root?: Element, store?: Store) => void;
   add: (tsk: Task) => void;
+  poll: () => Promise<any>;
 }
