@@ -1,7 +1,7 @@
 import { AppInstance, ServiceInstance } from '@src/models';
 import { ContentAppWc } from '@src/pages/content/components/content-app-wc';
 import { clickListener$, listenToScrapEvents } from '@src/pages/content/modules';
-import { LoggerService, NotificationService, QueryService } from '@src/services';
+import { ContainerService, LoggerService, NotificationService, QueryService } from '@src/services';
 import { storeProxy } from '@src/store';
 import { getManifest, portConnect } from '@src/utils';
 
@@ -77,6 +77,9 @@ const connect = () => {
 export const injectContentApp = async (): Promise<void> => {
   // if page is not a valid html document with body, skip injection
   if (!document.body) return;
+
+  // set component instance
+  ContainerService.setInstance(AppInstance.content);
 
   // init store
   await storeProxy.ready();

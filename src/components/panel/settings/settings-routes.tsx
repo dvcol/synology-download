@@ -5,7 +5,10 @@ import React, { lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { SuspenseLoader } from '@src/components';
-import { SettingHeader } from '@src/models';
+import { AppInstance, SettingHeader } from '@src/models';
+
+import { ContainerService } from '@src/services';
+import { useAnchor } from '@src/utils';
 
 import type { FC } from 'react';
 import type { PathRouteProps } from 'react-router/lib/components';
@@ -18,6 +21,11 @@ const SettingsNotifications = lazy(() => import(/* webpackChunkName: "SettingsNo
 const SettingsTasks = lazy(() => import(/* webpackChunkName: "SettingsTasks" */ './tasks/settings-tasks'));
 
 export const SettingsRoutes: FC = () => {
+  // added to support shadow dom anchor routing, offset is for navbar
+  if (ContainerService.getInstance() === AppInstance.standalone) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks -- only inject hooks if in WC (render are consistent)
+    useAnchor('settings-scroll-container', -60);
+  }
   const routes: PathRouteProps[] = [
     { path: '/*', element: <SettingsConnection /> },
     { path: SettingHeader.downloads, element: <SettingsDownloads /> },
@@ -27,7 +35,7 @@ export const SettingsRoutes: FC = () => {
     { path: SettingHeader.advanced, element: <SettingsAdvanced /> },
   ];
   return (
-    <Container sx={{ p: '0 1.5rem', overflow: 'auto', '& .MuiCard-root': { mb: '1rem' } }}>
+    <Container id="settings-scroll-container" sx={{ p: '0 1.5rem', overflow: 'auto', '& .MuiCard-root': { mb: '1rem' } }}>
       <Routes>
         {routes?.map(({ path, element }, index) => (
           <Route key={index} path={path} element={<SuspenseLoader element={element} />} />

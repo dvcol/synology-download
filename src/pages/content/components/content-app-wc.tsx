@@ -8,7 +8,15 @@ import { AppInstance, ServiceInstance } from '@src/models';
 import { ContentApp } from '@src/pages/content/components/content-app';
 import type { AnchorPayload, TaskDialogPayload } from '@src/pages/content/service';
 import { anchor$, taskDialog$ } from '@src/pages/content/service';
-import { BaseLoggerService, DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
+import {
+  BaseLoggerService,
+  ContainerService,
+  DownloadService,
+  LoggerService,
+  NotificationService,
+  PollingService,
+  QueryService,
+} from '@src/services';
 import { store } from '@src/store';
 
 export class ContentAppWc extends HTMLElement {
@@ -27,6 +35,7 @@ export class ContentAppWc extends HTMLElement {
   }
 
   private init(storeProxy: StoreOrProxy = store) {
+    ContainerService.setInstance(AppInstance.content);
     LoggerService.init({ store: storeProxy, source: ServiceInstance.Content });
     NotificationService.init(storeProxy, ServiceInstance.Content);
     QueryService.init(storeProxy, ServiceInstance.Content);

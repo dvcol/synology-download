@@ -9,7 +9,15 @@ import { StandaloneApp } from '@src/components';
 import type { StoreOrProxy, Task } from '@src/models';
 import { AppInstance, mapToTask, ServiceInstance } from '@src/models';
 import { restoreLocalSate, restoreSettings, restoreTaskSlice } from '@src/pages/background/modules';
-import { BaseLoggerService, DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
+import {
+  BaseLoggerService,
+  ContainerService,
+  DownloadService,
+  LoggerService,
+  NotificationService,
+  PollingService,
+  QueryService,
+} from '@src/services';
 import { store } from '@src/store';
 import { addTasks, setStandalone } from '@src/store/actions';
 
@@ -33,6 +41,7 @@ export class StandaloneAppWc extends HTMLElement {
   }
 
   private async init(storeProxy: StoreOrProxy = store) {
+    ContainerService.setInstance(AppInstance.standalone);
     LoggerService.init({ store: storeProxy, source: ServiceInstance.Standalone });
 
     // Restore settings & polling
