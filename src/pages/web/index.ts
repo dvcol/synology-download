@@ -4,7 +4,7 @@ import { defineComponents } from './modules';
 
 import type { BadgeMock, TaskMock } from './mocks';
 
-import type { ContentAppHtmlElement, FetchIntercept, Locales, LocalesFetch, StandaloneAppHtmlElement, WebComponents } from './models';
+import type { ContentAppHtmlElement, FetchIntercept, Locales, LocalesFetch, StandaloneAppHtmlElement, Synology, WebComponents } from './models';
 
 declare global {
   interface Window {
@@ -19,14 +19,7 @@ declare global {
     /** Selector for intercepted fetch calls */
     _fetchIntercept?: FetchIntercept;
     /** synology download wc instances */
-    _synology: {
-      content?: ContentAppHtmlElement;
-      standalone?: StandaloneAppHtmlElement;
-      mock?: {
-        task?: TaskMock;
-        badge?: BadgeMock;
-      };
-    };
+    _synology: Synology;
   }
 
   interface HTMLElementTagNameMap {
@@ -39,5 +32,6 @@ export * from './modules';
 export * from './models';
 
 export { generateTask, activateDemo };
+export type { TaskMock, BadgeMock };
 
 export default defineComponents;

@@ -4,7 +4,9 @@ import { WebComponents } from '../models';
 
 import type { PatchOptions } from '../models';
 
-export const defineComponents = async (options?: PatchOptions, _global = window) => {
+export type DefineComponentsOptions = PatchOptions & { components?: Partial<Record<WebComponents, string>> };
+
+export const defineComponents = async (options?: DefineComponentsOptions, _global = window) => {
   await patchApi({ patch: false, ...options });
 
   /* eslint-disable @typescript-eslint/no-var-requires, global-require -- necessary for mocking global */
@@ -14,11 +16,12 @@ export const defineComponents = async (options?: PatchOptions, _global = window)
   };
   /* eslint-enable @typescript-eslint/no-var-requires, global-require */
 
-  Object.keys(components)?.forEach(component => {
-    if (customElements.get(component)) {
-      console.warn(`Custom element '${component}' is already defined.`);
+  Object.keys(options?.components ?? components)?.forEach(component => {
+    const _name: string = options?.components?.[component as WebComponents] ?? component;
+    if (customElements.get(_name)) {
+      console.warn(`Custom element '${_name}' is already defined.`);
     } else {
-      customElements.define(component, components[component]);
+      customElements.define(_name, components[component]);
     }
   });
 };
