@@ -2,7 +2,7 @@ import { activateDemo, generateTask } from './mocks';
 
 import { defineComponents } from './modules';
 
-import type { TaskMock } from './mocks';
+import type { BadgeMock, TaskMock } from './mocks';
 
 import type { ContentAppHtmlElement, FetchIntercept, Locales, LocalesFetch, StandaloneAppHtmlElement, WebComponents } from './models';
 
@@ -24,6 +24,7 @@ declare global {
       standalone?: StandaloneAppHtmlElement;
       mock?: {
         task?: TaskMock;
+        badge?: BadgeMock;
       };
     };
   }
