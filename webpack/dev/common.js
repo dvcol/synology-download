@@ -38,7 +38,7 @@ const server = async (getConfig, mode = 'development') => {
       https: false,
       hot: false,
       client: false,
-      host: 'localhost',
+      host: '0.0.0.0',
       port: env.PORT,
       static: {
         directory: path.join(__dirname, ROOT_DIR, 'dist'),
