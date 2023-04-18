@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.3.0](https://github.com/dvcol/synology-download/compare/v3.1.1...v3.3.0) (2023-04-18)
+
+
+### Features
+
+* **wc:** add demo mode for task progress ([3ede0d1](https://github.com/dvcol/synology-download/commit/3ede0d16f5d8ac3bea8a53da4275dc99f4f635c4))
+* **wc:** add support to task mocking ([60a0bb5](https://github.com/dvcol/synology-download/commit/60a0bb59337a0e849b21688c2119d7146d77cf2f))
+* **wc:** adds badge mock value ([4220a4f](https://github.com/dvcol/synology-download/commit/4220a4ffc7d000a42b2ac6e62c6ae1f1189b2a31))
+
+
+### Bug Fixes
+
+* **settings:** adds support for hash anchors in shadow dom ([1d2c929](https://github.com/dvcol/synology-download/commit/1d2c9294f410366f89a191e86b0adb69bed1b8a3))
+* **wc:** fix exported types ([2ddf8fc](https://github.com/dvcol/synology-download/commit/2ddf8fc147b168486994ec4b3a4133304cbb2fa2))
+
 ### [3.1.1](https://github.com/dvcol/synology-download/compare/v3.0.23...v3.1.1) (2023-04-16)
 
 
