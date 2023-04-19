@@ -42,7 +42,10 @@ export const SettingsGlobal = () => {
         background: true,
       },
       navbar: state.navbar ?? defaultGlobal.navbar,
-      interface: state.interface ?? defaultGlobal.interface,
+      interface: {
+        ...defaultGlobal.interface,
+        ...(state.interface ?? {}),
+      },
     },
   });
 
@@ -136,6 +139,14 @@ export const SettingsGlobal = () => {
               ))}
             </FormInput>
           }
+          sx={{ p: '0.5rem 0' }}
+        />
+        <CardHeader
+          title={i18n('interface_pull_title')}
+          subheader={i18n('interface_pull_subheader')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          action={<FormSwitch controllerProps={{ name: 'interface.pullToRefresh', control }} formControlLabelProps={{ label: '' }} />}
           sx={{ p: '0.5rem 0' }}
         />
         <CardHeader

@@ -222,6 +222,7 @@ export interface GlobalSettings {
   navbar: { buttons: NavbarButtonType[] };
   interface: {
     size: InterfaceSize | number;
+    pullToRefresh: boolean;
   };
 }
 
@@ -240,6 +241,7 @@ export const defaultGlobal = {
   navbar: { buttons: [NavbarButtonType.Refresh, NavbarButtonType.Clear] },
   interface: {
     size: InterfaceSize.normal,
+    pullToRefresh: false,
   },
 };
 

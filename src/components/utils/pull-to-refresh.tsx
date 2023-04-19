@@ -96,8 +96,6 @@ export const usePullToRefresh = (options: Options = {}) => {
   const [offset, setOffset] = useState(0);
   const progress = offset / loaderHeight;
 
-  useEffect(() => setHeight(loaderRef.current?.clientHeight ?? initialHeight), [loaderRef.current]);
-
   const clearOffset = () => {
     setStart(0);
     setOffset(0);

@@ -13,7 +13,7 @@ import type { Content } from '@src/models';
 import { ErrorType, LoginError } from '@src/models';
 import { DownloadService, NotificationService, QueryService } from '@src/services';
 import type { StoreState } from '@src/store';
-import { getContentsForActiveTab, getLogged, getSettingsDownloadsEnabled, getTabOrFirst } from '@src/store/selectors';
+import { getContentsForActiveTab, getInterfacePullToRefresh, getLogged, getSettingsDownloadsEnabled, getTabOrFirst } from '@src/store/selectors';
 
 import { useI18n } from '@src/utils';
 
@@ -51,7 +51,8 @@ export const ContentPanel = () => {
 
   const logged = useSelector(getLogged);
   const downloadEnabled = useSelector(getSettingsDownloadsEnabled);
-  const disabled = useRef<boolean>(!logged && !downloadEnabled);
+  const pullToRefreshEnabled = useSelector(getInterfacePullToRefresh);
+  const disabled = useRef<boolean>(!pullToRefreshEnabled || (!logged && !downloadEnabled));
 
   const onRefresh: Options['onRefresh'] = () => {
     if (downloadEnabled) DownloadService.searchAll().subscribe(handleError('download', 'refresh'));

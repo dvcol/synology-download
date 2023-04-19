@@ -32,6 +32,12 @@
   "panel__settings__global__actions_label": {
     "message": "Scope"
   },
+  "panel__settings__global__interface_pull_title": {
+    "message": "Pull to refresh"
+  },
+  "panel__settings__global__interface_pull_subheader": {
+    "message": "Enabled/disabled pull to refresh in panels.."
+  },
   "panel__settings__global__loading_title": {
     "message": "Loading bar"
   },

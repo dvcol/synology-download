@@ -146,6 +146,11 @@ export const getInterfaceSize = createSelector(
   (_interface: GlobalSettings['interface']) => _interface?.size ?? defaultGlobal.interface?.size,
 );
 
+export const getInterfacePullToRefresh = createSelector(
+  getInterface,
+  (_interface: GlobalSettings['interface']) => _interface?.pullToRefresh ?? defaultGlobal.interface.pullToRefresh,
+);
+
 export const getSettingsDownloads = createSelector(getSettings, (setting: SettingsSlice) => setting?.downloads ?? defaultDownloads);
 
 export const getSettingsDownloadsEnabled = createSelector(
