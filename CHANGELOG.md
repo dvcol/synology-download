@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.5.3](https://github.com/dvcol/synology-download/compare/v3.5.2...v3.5.3) (2023-04-19)
+
+
+### Features
+
+* **mocks:** add create task ([8f635aa](https://github.com/dvcol/synology-download/commit/8f635aafcdc9502e6528b0f73f918a9447848353))
+* **mocks:** add resume and pause mocks ([4ffbb82](https://github.com/dvcol/synology-download/commit/4ffbb8205f1ab2dab776ea2c997351a8e531c2a2))
+
+
+### Bug Fixes
+
+* **pull:** fix scale down pull to refresh ([0ddfc3c](https://github.com/dvcol/synology-download/commit/0ddfc3cac4438da0d1b0e84104e07abe62c8396d))
+* **wc:** fix notification service ([41d3255](https://github.com/dvcol/synology-download/commit/41d3255b6ba7e0ddb79214658b49b06cc7ffbf7f))
+
 ### [3.5.2](https://github.com/dvcol/synology-download/compare/v3.5.1...v3.5.2) (2023-04-19)
 
 
