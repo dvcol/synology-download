@@ -1,18 +1,37 @@
 import { Box, CircularProgress, styled } from '@mui/material';
 
-import React, { useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useRef, useState } from 'react';
 
 import { pullToRefresh } from '@src/utils';
 
 import type { BoxProps } from '@mui/material';
-import type { FC, TouchEventHandler, WheelEventHandler } from 'react';
+import type { FC, ForwardRefRenderFunction, MutableRefObject, TouchEventHandler, WheelEventHandler } from 'react';
 
+const animationSpeed = 250;
 export type State = { start: number; offset: number; progress: number };
-export type Options = { onRefresh?: (state: State) => void };
+export type Options = {
+  onRefresh?: (state: State) => void;
+  disabled?: MutableRefObject<boolean>;
+  initialHeight?: number;
+  loaderContent?: JSX.Element;
+  animationSpeed?: number;
+};
 
-type LoaderProps = { refreshed: boolean } & State & BoxProps;
-const Loader: FC<LoaderProps> = ({ refreshed, start, offset, className, sx, progress, ...props }) => {
-  const margin = offset - 88;
+type SpinnerProps = Pick<LoaderProps, 'refreshed' | 'offset' | 'progress'>;
+const Spinner: FC<SpinnerProps> = ({ progress }) => {
+  return (
+    <Box sx={{ transform: `scale(${progress <= 1 ? progress : 1})` }}>
+      <CircularProgress variant="indeterminate" />
+    </Box>
+  );
+};
+
+type LoaderProps = { refreshed: boolean; height: number } & State & BoxProps;
+const Loader: ForwardRefRenderFunction<HTMLDivElement, LoaderProps> = (
+  { refreshed, height, start, offset, className, sx, progress, children, ...props },
+  ref,
+) => {
+  const margin = offset - height;
   const classNames = [className];
 
   if (!offset) classNames.push('closing');
@@ -20,6 +39,7 @@ const Loader: FC<LoaderProps> = ({ refreshed, start, offset, className, sx, prog
 
   return (
     <Box
+      ref={ref}
       className={classNames.filter(Boolean).join(' ')}
       sx={{
         display: 'flex',
@@ -31,43 +51,48 @@ const Loader: FC<LoaderProps> = ({ refreshed, start, offset, className, sx, prog
     >
       <Box
         sx={{
-          p: '24px',
+          p: '18px',
           mb: `${margin > 0 ? margin : 0}px`,
-          transition: !offset ? 'margin-bottom 500ms ease' : '',
+          transition: !offset ? `margin-bottom ${animationSpeed}ms ease` : '',
           display: 'flex',
           alignItems: 'center',
           flexDirection: 'column',
         }}
       >
-        <CircularProgress variant="indeterminate" />
+        {children || <Spinner offset={offset} refreshed={refreshed} progress={progress} />}
       </Box>
     </Box>
   );
 };
 
-const StyledLoader = styled(Loader)`
+const StyledLoader = styled(forwardRef(Loader))`
   &.closing {
-    transition: margin-top 500ms ease, margin-top 500ms ease;
+    transition: margin-top ${animationSpeed}ms ease, margin-top ${animationSpeed}ms ease;
   }
   &.refreshed {
     animation-name: ${pullToRefresh};
-    animation-duration: 1000ms;
+    animation-duration: ${animationSpeed * 2}ms;
     animation-timing-function: ease-in-out;
   }
 `;
 
-export const usePullToRefresh = ({ onRefresh }: Options = {}) => {
-  const ref = useRef<HTMLDivElement>(null);
+export const usePullToRefresh = (options: Options = {}) => {
+  const { onRefresh, disabled, initialHeight, loaderContent } = { initialHeight: 76, ...options };
+  const containerRef = useRef<HTMLDivElement>(null);
+  const loaderRef = useRef<HTMLDivElement>(null);
 
   const [refreshed, setRefreshed] = useState(false);
   const [start, setStart] = useState(0);
   const [offset, setOffset] = useState(0);
-  const progress = offset / 88;
+  const [height, setHeight] = useState(initialHeight);
+  const progress = offset / height;
+
+  useEffect(() => setHeight(loaderRef.current?.clientHeight ?? initialHeight), [loaderRef.current]);
 
   const clearOffset = () => {
-    setRefreshed(false);
-    setOffset(0);
     setStart(0);
+    setOffset(0);
+    setRefreshed(false);
   };
 
   const timeout = useRef<NodeJS.Timeout>();
@@ -79,9 +104,10 @@ export const usePullToRefresh = ({ onRefresh }: Options = {}) => {
   };
 
   const onWheel: WheelEventHandler = e => {
+    if (disabled?.current) return clearOffset();
     // if we are not a scroll top, reset timer and set start
-    if (ref?.current?.scrollTop !== 0) {
-      setStart(ref.current!.scrollTop);
+    if (containerRef?.current?.scrollTop !== 0) {
+      setStart(containerRef.current!.scrollTop);
       return resetTimeout();
     }
     // If we have start reset timer to prevent inertial scroll
@@ -105,12 +131,14 @@ export const usePullToRefresh = ({ onRefresh }: Options = {}) => {
   };
 
   const onTouchStart: TouchEventHandler = e => {
+    if (disabled?.current) return clearOffset();
     setRefreshed(false);
     setStart(e.touches[0].screenY);
   };
 
   const onTouchMove: TouchEventHandler = e => {
-    if (ref?.current?.scrollTop !== 0) return; // not container scroll top
+    if (disabled?.current) return clearOffset();
+    if (containerRef?.current?.scrollTop !== 0) return; // not container scroll top
     const current = e.touches[0].screenY;
     const delta = start - current;
     if (delta > 0) return; // moving up
@@ -118,6 +146,7 @@ export const usePullToRefresh = ({ onRefresh }: Options = {}) => {
   };
 
   const onTouchEnd: TouchEventHandler = () => {
+    if (disabled?.current) return clearOffset();
     if (progress >= 1) {
       onRefresh?.({ start, offset, progress });
       setRefreshed(true);
@@ -128,9 +157,14 @@ export const usePullToRefresh = ({ onRefresh }: Options = {}) => {
   };
 
   return {
-    ref,
+    containerRef,
+    loaderRef,
     handlers: { onWheel, onTouchStart, onTouchMove, onTouchEnd },
-    Loader: <StyledLoader refreshed={refreshed} start={start} offset={offset} progress={progress} />,
+    Loader: (
+      <StyledLoader ref={loaderRef} height={height} refreshed={refreshed} start={start} offset={offset} progress={progress}>
+        {loaderContent}
+      </StyledLoader>
+    ),
     refreshed,
     progress,
     offset,

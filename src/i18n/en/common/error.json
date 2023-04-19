@@ -74,6 +74,9 @@
     "message": "Invalid argument"
   },
 
+  "common__error__download_refresh_fail": {
+    "message": "Refresh download failed"
+  },
   "common__error__download_erase_fail": {
     "message": "Erase download failed"
   },

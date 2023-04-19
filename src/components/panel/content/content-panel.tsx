@@ -1,22 +1,28 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import { Container } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { useSelector } from 'react-redux';
 
 import { TransitionGroup } from 'react-transition-group';
 
-import type { ConfirmationState, TaskEditState } from '@src/components';
-import { ConfirmationDialog, TaskEdit } from '@src/components';
+import type { ConfirmationState, Options, TaskEditState } from '@src/components';
+import { ConfirmationDialog, TaskEdit, usePullToRefresh } from '@src/components';
 
 import { ContentItemInstance } from '@src/components/panel/content/content-item-instance';
 import type { Content } from '@src/models';
+import { ErrorType, LoginError } from '@src/models';
+import { DownloadService, NotificationService, QueryService } from '@src/services';
 import type { StoreState } from '@src/store';
-import { getContentsForActiveTab, getTabOrFirst } from '@src/store/selectors';
+import { getContentsForActiveTab, getLogged, getSettingsDownloadsEnabled, getTabOrFirst } from '@src/store/selectors';
+
+import { useI18n } from '@src/utils';
 
 import { ContentEmpty } from './content-empty';
 
 let firstMount = true;
 
 export const ContentPanel = () => {
+  const i18n = useI18n('content', 'panel');
   const tab = useSelector(getTabOrFirst);
   const contents = useSelector<StoreState, Content[]>(getContentsForActiveTab);
 
@@ -29,6 +35,29 @@ export const ContentPanel = () => {
     if (firstMount) firstMount = false;
     setExpanded(false);
   }, [tab]);
+
+  const handleError = (type: 'task' | 'download', action: string) => ({
+    error: (error: any) => {
+      if (error instanceof LoginError || ErrorType.Login === error?.type) {
+        NotificationService.loginRequired();
+      } else if (error) {
+        NotificationService.error({
+          title: i18n(`${type}_${action}_fail`, 'common', 'error'),
+          message: error?.message ?? error?.name ?? '',
+        });
+      }
+    },
+  });
+
+  const logged = useSelector(getLogged);
+  const downloadEnabled = useSelector(getSettingsDownloadsEnabled);
+  const disabled = useRef<boolean>(!logged && !downloadEnabled);
+
+  const onRefresh: Options['onRefresh'] = () => {
+    if (downloadEnabled) DownloadService.searchAll().subscribe(handleError('download', 'refresh'));
+    if (logged) QueryService.listTasks().subscribe(handleError('task', 'refresh'));
+  };
+  const { containerRef, handlers, Loader } = usePullToRefresh({ onRefresh, disabled });
 
   const items = (
     <TransitionGroup component={null} appear={!firstMount} enter exit>
@@ -47,8 +76,16 @@ export const ContentPanel = () => {
       ))}
     </TransitionGroup>
   );
+
   return (
-    <Fragment>
+    <Container
+      id="content-container"
+      ref={containerRef}
+      {...handlers}
+      sx={{ height: '100%', overflow: 'auto', overscrollBehaviorY: 'contain' }}
+      disableGutters
+    >
+      {Loader}
       {contents?.length ? items : <ContentEmpty />}
 
       {taskEdit?.task && (
@@ -72,7 +109,7 @@ export const ContentPanel = () => {
           }}
         />
       )}
-    </Fragment>
+    </Container>
   );
 };
 

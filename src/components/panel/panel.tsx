@@ -40,7 +40,7 @@ export const Panel: FC<{ redirect?: string }> = ({ redirect }) => {
   }, [redirect]);
 
   return (
-    <Container disableGutters maxWidth={false} sx={{ overflow: 'auto', height: 'calc(100% - 3em)' }}>
+    <Container disableGutters maxWidth={false} sx={{ overflow: 'auto', height: 'calc(100% - 3em)', overscrollBehaviorY: 'contain' }}>
       <Routes>
         {routes?.map(({ path, element }, index) => (
           <Route key={index} path={path} element={<SuspenseLoader element={element} />} />

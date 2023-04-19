@@ -47,13 +47,13 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
   const handleClose = () => setAnchorEl(null);
   const handleClearTab = () => dispatch(setNavbar());
   const handleUrl = () => createTab({ url });
-  const handleError = (button: string) => ({
+  const handleError = (button: string, type: 'task' | 'download' = 'task') => ({
     error: (error: any) => {
       if (error instanceof LoginError || ErrorType.Login === error?.type) {
         NotificationService.loginRequired();
       } else if (error) {
         NotificationService.error({
-          title: i18n(`task_${button}_fail`, 'common', 'error'),
+          title: i18n(`${type}_${button}_fail`, 'common', 'error'),
           message: error?.message ?? error?.name ?? '',
         });
       }
@@ -112,7 +112,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
   const [prompt, setPrompt] = React.useState(false);
   const onErase = <T extends React.MouseEvent>($event: T) =>
     getOnClick({
-      shift: () => DownloadService.cancelAll().subscribe(),
+      shift: () => DownloadService.cancelAll().subscribe(handleError('cancel', 'download')),
       alt: () => QueryService.deleteAllTasks().subscribe(handleError('delete')),
     })($event);
 
@@ -144,10 +144,10 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
         both: () => {
           dispatch(resetDownloads());
           dispatch(resetTasks());
-          if (downloadButtons) DownloadService.searchAll().subscribe();
+          if (downloadButtons) DownloadService.searchAll().subscribe(handleError('refresh', 'download'));
           if (logged) QueryService.listTasks().subscribe(handleError('refresh'));
         },
-        shift: () => DownloadService.searchAll().subscribe(),
+        shift: () => DownloadService.searchAll().subscribe(handleError('refresh', 'download')),
         alt: () => QueryService.listTasks().subscribe(handleError('refresh')),
       }),
       hoverTooltip: getHoverTooltip({ both: i18n('tooltip__clean') }),
@@ -159,7 +159,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       color: 'success',
       disabled: !downloadEnabled && !logged,
       onClick: getOnClick({
-        shift: () => DownloadService.resumeAll().subscribe(),
+        shift: () => DownloadService.resumeAll().subscribe(handleError('resume', 'download')),
         alt: () => QueryService.resumeAllTasks().subscribe(handleError('resume')),
       }),
       hoverTooltip,
@@ -171,7 +171,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       color: 'warning',
       disabled: !downloadEnabled && !logged,
       onClick: getOnClick({
-        shift: () => DownloadService.pauseAll().subscribe(),
+        shift: () => DownloadService.pauseAll().subscribe(handleError('pause', 'download')),
         alt: () => QueryService.pauseAllTasks().subscribe(handleError('pause')),
       }),
       hoverTooltip,
@@ -193,10 +193,10 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       disabled: !downloadEnabled && !logged,
       onClick: getOnClick({
         both: () => {
-          if (downloadButtons) DownloadService.eraseAll().subscribe();
+          if (downloadButtons) DownloadService.eraseAll().subscribe(handleError('erase', 'download'));
           if (logged) QueryService.deleteFinishedAndErrorTasks().subscribe(handleError('clear'));
         },
-        shift: () => DownloadService.eraseAll().subscribe(),
+        shift: () => DownloadService.eraseAll().subscribe(handleError('erase', 'download')),
         alt: () => QueryService.deleteFinishedTasks().subscribe(handleError('clear')),
       }),
       hoverTooltip: getHoverTooltip({ both: i18n('tooltip__synology_error_finished') }),
@@ -226,7 +226,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       label: i18n('menu_open_downloads'),
       icon: <DriveFileMoveIcon />,
       color: 'primary',
-      onClick: () => DownloadService.show().subscribe(),
+      onClick: () => DownloadService.show().subscribe(handleError('open', 'download')),
       hide: !downloadEnabled,
       divider: true,
     },
