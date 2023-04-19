@@ -22,7 +22,12 @@ export const generateTask = (_task: Partial<Task> = {}): Task => {
   const started_time = _task?.additional?.detail?.started_time ?? faker.date.between(create_time, new Date()).getTime();
   const elapsed = (new Date().getTime() - started_time) / 1000;
 
-  let size_downloaded = _task?.additional?.transfer?.size_downloaded ?? faker.datatype.number({ min: 0, max: size / 10 });
+  let size_downloaded =
+    _task?.additional?.transfer?.size_downloaded ??
+    faker.datatype.number({
+      min: 0,
+      max: size / 10,
+    });
   if ([TaskStatus.finished, TaskStatus.seeding, TaskStatus.extracting, TaskStatus.finishing].includes(status)) size_downloaded = size;
   const size_uploaded = _task?.additional?.transfer?.size_uploaded ?? faker.datatype.number({ min: 0, max: size / 10 });
   const speed_download = Math.round(_task?.additional?.transfer?.speed_download ?? (size - Number(size_downloaded)) / elapsed);
@@ -84,8 +89,35 @@ export class TaskMock {
     this.entities[task.id] = task;
     return this.entities;
   }
+
   remove(id: Task['id']) {
     return delete this.entities[id];
+  }
+
+  resume(id: Task['id']) {
+    const task = this.entities[id];
+    if (!task) return;
+    switch (task.status) {
+      case TaskStatus.paused:
+        task.status = TaskStatus.downloading;
+        break;
+      case TaskStatus.finished:
+        task.status = TaskStatus.seeding;
+        break;
+      case TaskStatus.error:
+        task.status = TaskStatus.downloading;
+        if (task.additional?.transfer) task.additional.transfer.size_downloaded = 0;
+        break;
+      default:
+        break;
+    }
+  }
+
+  pause(id: Task['id']) {
+    const task = this.entities[id];
+    if (!task) return;
+    if ([TaskStatus.finished, TaskStatus.error, TaskStatus.paused].includes(task.status)) return;
+    task.status = TaskStatus.paused;
   }
 }
 
@@ -101,7 +133,11 @@ const computeSpeed = (task: Task) => {
   const size_downloaded = task?.additional?.transfer?.size_downloaded;
   const size_uploaded = task?.additional?.transfer?.size_uploaded;
 
-  if (started_time === undefined || size_downloaded === undefined || size_uploaded === undefined) return { speed_download: 0, speed_upload: 0 };
+  if (started_time === undefined || size_downloaded === undefined || size_uploaded === undefined)
+    return {
+      speed_download: 0,
+      speed_upload: 0,
+    };
 
   const elapsed = (new Date().getTime() - started_time) / 1000;
 
@@ -197,6 +233,32 @@ export const patchTasks = (_global = window): TaskMock => {
     (_, init) => {
       const id = init?.body?.toString()?.match(/id=(.*?(?=&|$))/)?.[1];
       if (id) id.split('%2C')?.forEach(_id => task.remove(_id));
+      return { error: 0, id };
+    },
+  ]);
+
+  // resume
+  _global._fetchIntercept?.push([
+    (input, init) => {
+      if (!resolveUrl(input)?.endsWith('DownloadStation/task.cgi')) return false;
+      return !!init?.body?.toString()?.includes('api=SYNO.DownloadStation.Task&method=resume');
+    },
+    (_, init) => {
+      const id = init?.body?.toString()?.match(/id=(.*?(?=&|$))/)?.[1];
+      if (id) id.split('%2C')?.forEach(_id => task.resume(_id));
+      return { error: 0, id };
+    },
+  ]);
+
+  // pause
+  _global._fetchIntercept?.push([
+    (input, init) => {
+      if (!resolveUrl(input)?.endsWith('DownloadStation/task.cgi')) return false;
+      return !!init?.body?.toString()?.includes('api=SYNO.DownloadStation.Task&method=pause');
+    },
+    (_, init) => {
+      const id = init?.body?.toString()?.match(/id=(.*?(?=&|$))/)?.[1];
+      if (id) id.split('%2C')?.forEach(_id => task.pause(_id));
       return { error: 0, id };
     },
   ]);

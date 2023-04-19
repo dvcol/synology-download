@@ -14,7 +14,7 @@
   "common__model__task_type__ftp": {
     "message": "File Transfer Protocol (ftp)"
   },
-  "common__model__task_type__emule": {
+  "common__model__task_type__eMule": {
     "message": "eMule"
   }
 }

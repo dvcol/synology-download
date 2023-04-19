@@ -121,7 +121,7 @@ export const usePullToRefresh = (options: Options = {}) => {
     if (progress >= 1 && !refreshed) {
       onRefresh?.({ start, offset, progress });
       setRefreshed(true);
-      return resetTimeout(animationSpeed * 2);
+      return resetTimeout(animationSpeed);
     }
     // else update the offset
     if (!refreshed) {
@@ -151,7 +151,7 @@ export const usePullToRefresh = (options: Options = {}) => {
     if (progress >= 1) {
       onRefresh?.({ start, offset, progress });
       setRefreshed(true);
-      return resetTimeout(animationSpeed * 2);
+      return resetTimeout(animationSpeed);
     }
 
     clearOffset();
