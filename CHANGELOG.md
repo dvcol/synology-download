@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.5.2](https://github.com/dvcol/synology-download/compare/v3.5.1...v3.5.2) (2023-04-19)
+
+
+### Bug Fixes
+
+* **mock:** fix task delete mock ([602f33f](https://github.com/dvcol/synology-download/commit/602f33f0363da6ea3a7cdeb326711785d3aa68ab))
+
 ### [3.5.1](https://github.com/dvcol/synology-download/compare/v3.3.0...v3.5.1) (2023-04-19)
 
 
