@@ -14,7 +14,7 @@ const SortableListItemComponent: ForwardRefRenderFunction<HTMLDivElement, Sortab
   { id, box, children, onClick, className },
   forward,
 ) => {
-  const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
+  const { attributes, listeners, setNodeRef, transform, transition, active, over } = useSortable({ id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -28,7 +28,18 @@ const SortableListItemComponent: ForwardRefRenderFunction<HTMLDivElement, Sortab
   };
 
   return (
-    <Box className={className} {...box} ref={_setRef} style={style} onClick={onClick} {...attributes} {...listeners}>
+    <Box
+      className={className}
+      {...box}
+      sx={{ boxShadow: active?.id === id ? 10 : 1, ...box?.sx }}
+      data-drag-active={active?.id === id}
+      data-drag-over={over?.id === id}
+      ref={_setRef}
+      style={style}
+      onClick={onClick}
+      {...attributes}
+      {...listeners}
+    >
       {children}
     </Box>
   );

@@ -45,3 +45,15 @@ export const slideDownAnimation = keyframes`
       transform: translateY(0);
     }
 `;
+
+export const pullToRefresh = keyframes`
+    0% {
+    margin-top: initial;
+    }
+    50% {
+      margin-top: 0;
+    }
+    100% {
+      margin-top: -91px;
+    }
+`;

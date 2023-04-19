@@ -35,7 +35,10 @@ export const SettingsRoutes: FC = () => {
     { path: SettingHeader.advanced, element: <SettingsAdvanced /> },
   ];
   return (
-    <Container id="settings-scroll-container" sx={{ p: '0 1.5rem', overflow: 'auto', '& .MuiCard-root': { mb: '1rem' } }}>
+    <Container
+      id="settings-scroll-container"
+      sx={{ p: '0 1.5rem', overflow: 'auto', overscrollBehaviorY: 'contain', '& .MuiCard-root': { mb: '1rem' } }}
+    >
       <Routes>
         {routes?.map(({ path, element }, index) => (
           <Route key={index} path={path} element={<SuspenseLoader element={element} />} />

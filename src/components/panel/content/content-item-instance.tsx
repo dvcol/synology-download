@@ -1,6 +1,6 @@
 import { styled } from '@mui/material';
 
-import React, { createRef, forwardRef } from 'react';
+import React, { forwardRef, useRef } from 'react';
 
 import { CSSTransition } from 'react-transition-group';
 
@@ -75,7 +75,7 @@ const StyledItemComponent = styled(forwardRef(ItemComponent))<StylingProps>`
 
 type ItemTransitionProps = { content: ItemComponentProps & Pick<StylingProps, 'index'> } & Partial<CSSTransitionProps>;
 const TransitionComponent: FC<ItemTransitionProps> = props => {
-  const ref = createRef<HTMLDivElement>();
+  const ref = useRef<HTMLDivElement>(null);
   const { content, ..._props } = props;
   const { index, item } = content;
   return (

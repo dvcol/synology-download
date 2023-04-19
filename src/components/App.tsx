@@ -41,7 +41,7 @@ export const App: FC<AppProps> = ({ store, redirect, cache, routerProps }) => {
 
   let Main = (
     <ThemeProvider theme={theme}>
-      <Box id="synology-download-app-container" sx={{ ...background, height: '100%' }} ref={containerRef}>
+      <Box id="synology-download-app-container" sx={{ ...background, height: '100%', scrollBehavior: 'smooth' }} ref={containerRef}>
         <NotificationStack maxSnack={2} />
         <SettingsInjector />
         <Router {...routerProps}>

@@ -1,6 +1,6 @@
 import { styled } from '@mui/material';
 
-import React, { createRef } from 'react';
+import React, { useRef } from 'react';
 
 import { CSSTransition } from 'react-transition-group';
 
@@ -30,11 +30,15 @@ const StyledComponent = styled(SortableListItem)<StylingProps>`
     animation-timing-function: ease-in-out;
     transition: max-height ${duration.exit}ms ease-in-out;
   }
+
+  &[data-drag-active='true'] {
+    position: relative;
+  }
 `;
 
 type TransitionProps = PropsWithChildren<{ item: Omit<SortableItemProps, 'children'> & Pick<StylingProps, 'index'> } & Partial<CSSTransitionProps>>;
 export const SortableListItemTransition: FC<TransitionProps> = props => {
-  const ref = createRef<HTMLDivElement>();
+  const ref = useRef<HTMLDivElement>(null);
   const { children, item, ..._props } = props;
   return (
     <CSSTransition key={item.id} classNames="slide" nodeRef={ref} timeout={duration} unmountOnExit {..._props}>
