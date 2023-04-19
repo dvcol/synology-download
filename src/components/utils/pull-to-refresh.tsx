@@ -1,6 +1,6 @@
 import { Box, CircularProgress, styled } from '@mui/material';
 
-import React, { forwardRef, useEffect, useRef, useState } from 'react';
+import React, { forwardRef, useRef, useState } from 'react';
 
 import { pullToRefresh } from '@src/utils';
 
@@ -12,7 +12,7 @@ export type State = { start: number; offset: number; progress: number };
 export type Options = {
   onRefresh?: (state: State) => void;
   disabled?: MutableRefObject<boolean>;
-  initialHeight?: number;
+  loaderHeight?: number;
   loaderContent?: JSX.Element;
   animationSpeed?: number;
 };
@@ -20,7 +20,16 @@ export type Options = {
 type SpinnerProps = Pick<LoaderProps, 'refreshed' | 'offset' | 'progress'>;
 const Spinner: FC<SpinnerProps> = ({ progress }) => {
   return (
-    <Box sx={{ transform: `scale(${progress <= 1 ? progress : 1})` }}>
+    <Box
+      sx={{
+        transform: `scale(${progress <= 1 ? progress : 1})`,
+        height: '48px',
+        width: ' 48px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
       <CircularProgress variant="indeterminate" />
     </Box>
   );
@@ -44,6 +53,7 @@ const Loader: ForwardRefRenderFunction<HTMLDivElement, LoaderProps> = (
       sx={{
         display: 'flex',
         justifyContent: 'center',
+        minHeight: height,
         mt: `${margin <= 0 ? margin : 0}px`,
         ...sx,
       }}
@@ -51,7 +61,7 @@ const Loader: ForwardRefRenderFunction<HTMLDivElement, LoaderProps> = (
     >
       <Box
         sx={{
-          p: '18px',
+          p: '14px',
           mb: `${margin > 0 ? margin : 0}px`,
           transition: !offset ? `margin-bottom ${animationSpeed}ms ease` : '',
           display: 'flex',
@@ -77,15 +87,14 @@ const StyledLoader = styled(forwardRef(Loader))`
 `;
 
 export const usePullToRefresh = (options: Options = {}) => {
-  const { onRefresh, disabled, initialHeight, loaderContent } = { initialHeight: 76, ...options };
+  const { onRefresh, disabled, loaderHeight, loaderContent } = { loaderHeight: 76, ...options };
   const containerRef = useRef<HTMLDivElement>(null);
   const loaderRef = useRef<HTMLDivElement>(null);
 
   const [refreshed, setRefreshed] = useState(false);
   const [start, setStart] = useState(0);
   const [offset, setOffset] = useState(0);
-  const [height, setHeight] = useState(initialHeight);
-  const progress = offset / height;
+  const progress = offset / loaderHeight;
 
   useEffect(() => setHeight(loaderRef.current?.clientHeight ?? initialHeight), [loaderRef.current]);
 
@@ -161,7 +170,7 @@ export const usePullToRefresh = (options: Options = {}) => {
     loaderRef,
     handlers: { onWheel, onTouchStart, onTouchMove, onTouchEnd },
     Loader: (
-      <StyledLoader ref={loaderRef} height={height} refreshed={refreshed} start={start} offset={offset} progress={progress}>
+      <StyledLoader ref={loaderRef} height={loaderHeight} refreshed={refreshed} start={start} offset={offset} progress={progress}>
         {loaderContent}
       </StyledLoader>
     ),
