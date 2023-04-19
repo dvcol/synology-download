@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.5.1](https://github.com/dvcol/synology-download/compare/v3.3.0...v3.5.1) (2023-04-19)
+
+
+### Features
+
+* **scroll:** add support for pull to refresh ([3a8c2d1](https://github.com/dvcol/synology-download/commit/3a8c2d1d71d88f53ced118a1c3f75ee0d36f7c57))
+* **scroll:** adds pull/scroll to refresh to content ([170fbe9](https://github.com/dvcol/synology-download/commit/170fbe96626f833fdaa61ab2b1a76467826d2a0a))
+
+
+### Bug Fixes
+
+* **build:** expose web build to lan ([7efcd32](https://github.com/dvcol/synology-download/commit/7efcd32fa0e6cbfa5e382c7c7f2d46cdbadfcc90))
+* **scroll:** fix height ([b5b4e66](https://github.com/dvcol/synology-download/commit/b5b4e66b379bf6bc01bd4adb927dd3ac686d419d))
+* **wc:** fix typing ([c0e7660](https://github.com/dvcol/synology-download/commit/c0e7660561122464985f9bf428e78686a268df65))
+
 ## [3.3.0](https://github.com/dvcol/synology-download/compare/v3.1.1...v3.3.0) (2023-04-18)
 
 
