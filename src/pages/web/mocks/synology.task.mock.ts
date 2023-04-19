@@ -9,10 +9,17 @@ import type { Task } from '../../../models';
 import type { FetchInputs } from '../models';
 
 /**
+ * Extends Partial to make all own properties also Partial
+ */
+export type RecursivePartial<T> = {
+  [P in keyof T]?: RecursivePartial<T[P]> | T[P];
+};
+
+/**
  * Generate a Task
  * @todo: move from faker to a three-shakable smaller lib
  */
-export const generateTask = (_task: Partial<Task> = {}): Task => {
+export const generateTask = (_task: RecursivePartial<Task> = {}): Task => {
   const status =
     _task.status ??
     faker.helpers.arrayElement([...Object.values(TaskStatus), ...Array(10).fill([TaskStatus.downloading, TaskStatus.waiting]).flat()]);
@@ -260,6 +267,20 @@ export const patchTasks = (_global = window): TaskMock => {
       const id = init?.body?.toString()?.match(/id=(.*?(?=&|$))/)?.[1];
       if (id) id.split('%2C')?.forEach(_id => task.pause(_id));
       return { error: 0, id };
+    },
+  ]);
+
+  // create
+  _global._fetchIntercept?.push([
+    (input, init) => {
+      if (!resolveUrl(input)?.endsWith('DownloadStation/task.cgi')) return false;
+      return !!init?.body?.toString()?.includes('api=SYNO.DownloadStation.Task&method=create');
+    },
+    (_, init) => {
+      const uri = init?.body?.toString()?.match(/uri=(.*?(?=&|$))/)?.[1];
+      const destination = init?.body?.toString()?.match(/destination=(.*?(?=&|$))/)?.[1];
+      if (uri) uri.split('%2C')?.forEach(_uri => task.add(generateTask({ additional: { detail: { destination, uri: decodeURIComponent(_uri) } } })));
+      return { error: 0 };
     },
   ]);
 

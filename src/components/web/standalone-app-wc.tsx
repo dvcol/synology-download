@@ -47,7 +47,7 @@ export class StandaloneAppWc extends HTMLElement {
     // Restore settings & polling
     await lastValueFrom(restoreSettings(store));
 
-    NotificationService.init(storeProxy, ServiceInstance.Standalone);
+    NotificationService.init(storeProxy, ServiceInstance.Standalone, true);
     QueryService.init(storeProxy, ServiceInstance.Standalone);
     DownloadService.init(storeProxy);
 
