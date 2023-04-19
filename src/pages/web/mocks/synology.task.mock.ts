@@ -196,7 +196,7 @@ export const patchTasks = (_global = window): TaskMock => {
     },
     (_, init) => {
       const id = init?.body?.toString()?.match(/id=(.*?(?=&|$))/)?.[1];
-      if (id) task.remove(id);
+      if (id) id.split('%2C')?.forEach(_id => task.remove(_id));
       return { error: 0, id };
     },
   ]);
