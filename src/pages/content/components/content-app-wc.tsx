@@ -28,7 +28,7 @@ export class ContentAppWc extends HTMLElement {
 
   private init(storeProxy: StoreOrProxy = store) {
     LoggerService.init({ store: storeProxy, source: ServiceInstance.Content });
-    NotificationService.init(storeProxy, ServiceInstance.Content);
+    NotificationService.init(storeProxy, ServiceInstance.Content, true);
     QueryService.init(storeProxy, ServiceInstance.Content);
     DownloadService.init(storeProxy);
     PollingService.init(storeProxy);

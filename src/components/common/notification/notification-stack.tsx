@@ -14,6 +14,7 @@ import type { FC } from 'react';
 // TODO move to custom snack for next notistack version, see https://github.com/iamhosseindhv/notistack/issues/242
 export const NotificationStack: FC<Pick<SnackbarProviderProps, 'maxSnack'>> = ({ maxSnack }) => {
   const [stack, setStack] = useState<Record<SnackbarKey, boolean>>({});
+
   const handleEntered = (_node: HTMLElement, _isAppearing: boolean, key: SnackbarKey) =>
     setStack(_stack => {
       Object.keys(_stack)?.forEach(k => {
