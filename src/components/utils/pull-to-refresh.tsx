@@ -7,7 +7,7 @@ import { pullToRefresh } from '@src/utils';
 import type { BoxProps } from '@mui/material';
 import type { FC, ForwardRefRenderFunction, MutableRefObject, TouchEventHandler, WheelEventHandler } from 'react';
 
-const animationSpeed = 250;
+const animationSpeed = 300;
 export type State = { start: number; offset: number; progress: number };
 export type Options = {
   onRefresh?: (state: State) => void;
@@ -18,16 +18,20 @@ export type Options = {
 };
 
 type SpinnerProps = Pick<LoaderProps, 'refreshed' | 'offset' | 'progress'>;
-const Spinner: FC<SpinnerProps> = ({ progress }) => {
+const Spinner: FC<SpinnerProps> = ({ offset, progress }) => {
   return (
     <Box
       sx={{
-        transform: `scale(${progress <= 1 ? progress : 1})`,
+        position: 'absolute',
+        top: '48px',
         height: '48px',
         width: ' 48px',
+        margin: '14px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        transform: `scale(${progress <= 1 ? progress : 1})`,
+        transition: offset ? '' : `transform ${animationSpeed}ms ease`,
       }}
     >
       <CircularProgress variant="indeterminate" />
@@ -59,25 +63,14 @@ const Loader: ForwardRefRenderFunction<HTMLDivElement, LoaderProps> = (
       }}
       {...props}
     >
-      <Box
-        sx={{
-          p: '14px',
-          mb: `${margin > 0 ? margin : 0}px`,
-          transition: !offset ? `margin-bottom ${animationSpeed}ms ease` : '',
-          display: 'flex',
-          alignItems: 'center',
-          flexDirection: 'column',
-        }}
-      >
-        {children || <Spinner offset={offset} refreshed={refreshed} progress={progress} />}
-      </Box>
+      {children || <Spinner offset={offset} refreshed={refreshed} progress={progress} />}
     </Box>
   );
 };
 
 const StyledLoader = styled(forwardRef(Loader))`
   &.closing {
-    transition: margin-top ${animationSpeed}ms ease, margin-top ${animationSpeed}ms ease;
+    transition: margin-top ${animationSpeed}ms ease;
   }
   &.refreshed {
     animation-name: ${pullToRefresh};
@@ -103,11 +96,11 @@ export const usePullToRefresh = (options: Options = {}) => {
   };
 
   const timeout = useRef<NodeJS.Timeout>();
-  const resetTimeout = () => {
+  const resetTimeout = (speed = 100) => {
     if (timeout.current) clearTimeout(timeout.current);
     timeout.current = setTimeout(() => {
       clearOffset();
-    }, 100);
+    }, speed);
   };
 
   const onWheel: WheelEventHandler = e => {
@@ -128,9 +121,10 @@ export const usePullToRefresh = (options: Options = {}) => {
     if (progress >= 1 && !refreshed) {
       onRefresh?.({ start, offset, progress });
       setRefreshed(true);
+      return resetTimeout(animationSpeed * 2);
     }
     // else update the offset
-    else if (!refreshed) {
+    if (!refreshed) {
       setOffset(_offset => _offset + Math.abs(e.deltaY / 3));
     }
 
@@ -157,10 +151,10 @@ export const usePullToRefresh = (options: Options = {}) => {
     if (progress >= 1) {
       onRefresh?.({ start, offset, progress });
       setRefreshed(true);
+      return resetTimeout(animationSpeed * 2);
     }
 
-    setStart(0);
-    setOffset(0);
+    clearOffset();
   };
 
   return {

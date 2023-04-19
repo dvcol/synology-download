@@ -241,7 +241,7 @@ export const defaultGlobal = {
   navbar: { buttons: [NavbarButtonType.Refresh, NavbarButtonType.Clear] },
   interface: {
     size: InterfaceSize.normal,
-    pullToRefresh: false,
+    pullToRefresh: true,
   },
 };
 
