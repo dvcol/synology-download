@@ -37,8 +37,8 @@ export const generateTask = (_task: RecursivePartial<Task> = {}): Task => {
     });
   if ([TaskStatus.finished, TaskStatus.seeding, TaskStatus.extracting, TaskStatus.finishing].includes(status)) size_downloaded = size;
   const size_uploaded = _task?.additional?.transfer?.size_uploaded ?? faker.datatype.number({ min: 0, max: size / 10 });
-  const speed_download = Math.round(_task?.additional?.transfer?.speed_download ?? (size - Number(size_downloaded)) / elapsed);
-  const speed_upload = Math.round(_task?.additional?.transfer?.speed_upload ?? (size - Number(size_uploaded)) / elapsed);
+  const speed_download = Math.round(_task?.additional?.transfer?.speed_download ?? Number(size_downloaded) / elapsed);
+  const speed_upload = Math.round(_task?.additional?.transfer?.speed_upload ?? Number(size_uploaded) / elapsed);
   return {
     id: `dbid_${faker.datatype.uuid()}`,
     size,
@@ -120,12 +120,12 @@ export class TaskMock {
   }
 }
 
-const changeStatus = (task: Task, status: TaskStatus, threshold = 500): Task => {
-  if (faker.datatype.number(1000) > threshold) task.status = status;
+const changeStatus = (task: Task, status: TaskStatus, threshold = 50000): Task => {
+  if (faker.datatype.number(100000) > threshold) task.status = status;
   return task;
 };
 
-const failTask = (task: Task) => changeStatus(task, TaskStatus.error, 999);
+const failTask = (task: Task) => changeStatus(task, TaskStatus.error, 99999);
 
 const computeSpeed = (task: Task) => {
   const started_time = task?.additional?.detail?.started_time;
@@ -140,8 +140,8 @@ const computeSpeed = (task: Task) => {
 
   const elapsed = (new Date().getTime() - started_time) / 1000;
 
-  const speed_download = Math.round(task.size - Number(size_downloaded) / elapsed);
-  const speed_upload = Math.round(task.size - Number(size_uploaded) / elapsed);
+  const speed_download = Math.round(Number(size_downloaded) / elapsed);
+  const speed_upload = Math.round(Number(size_uploaded) / elapsed);
   return { speed_download, speed_upload };
 };
 
@@ -156,7 +156,7 @@ const progress = (task: Task) => {
     return task;
   }
   if (faker.datatype.number(100) > 20) {
-    const max = (total - downloaded) / faker.datatype.number({ min: 2, max: 100 });
+    const max = (total - downloaded) / faker.datatype.number({ min: 5, max: 500 });
     const size_downloaded = downloaded + faker.datatype.number({ max });
     const { speed_upload, speed_download } = computeSpeed(task);
     task.additional.transfer = { ...task.additional.transfer, size_downloaded, speed_download, speed_upload };
@@ -271,7 +271,14 @@ export const patchTasks = (_global = window): TaskMock => {
     (_, init) => {
       const uri = init?.body?.toString()?.match(/uri=(.*?(?=&|$))/)?.[1];
       const destination = init?.body?.toString()?.match(/destination=(.*?(?=&|$))/)?.[1];
-      if (uri) uri.split('%2C')?.forEach(_uri => task.add(generateTask({ additional: { detail: { destination, uri: decodeURIComponent(_uri) } } })));
+      if (uri)
+        uri.split('%2C')?.forEach(_uri =>
+          task.add(
+            generateTask({
+              additional: { detail: { destination: destination ? decodeURIComponent(destination) : destination, uri: decodeURIComponent(_uri) } },
+            }),
+          ),
+        );
       return { error: 0 };
     },
   ]);
