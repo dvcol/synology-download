@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.6.2](https://github.com/dvcol/synology-download/compare/v3.6.1...v3.6.2) (2023-04-20)
+
+
+### Bug Fixes
+
+* **mocks:** add listener support for mocks ([9f96593](https://github.com/dvcol/synology-download/commit/9f96593237c39400ead1aa4293c82cbce278ba4b))
+
 ### [3.6.1](https://github.com/dvcol/synology-download/compare/v3.6.0...v3.6.1) (2023-04-20)
 
 
