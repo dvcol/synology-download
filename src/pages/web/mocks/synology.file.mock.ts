@@ -1,6 +1,6 @@
 import type { File, FileAdditional } from '@src/models';
 import { FetchIntercept } from '@src/pages/web';
-import { resolveUrl } from '@src/pages/web/mocks/utils.mock';
+import { AbstractMock, resolveUrl } from '@src/pages/web/mocks/utils.mock';
 
 type FileEntities = { shares: Record<string, File>; files: Record<string, File> };
 
@@ -21,15 +21,24 @@ const defaultFile: FileEntities = {
   },
 };
 
-export class FileMock {
+export class FileMock extends AbstractMock {
   readonly entities: FileEntities;
 
   constructor(entities: Partial<FileEntities> = defaultFile) {
+    super();
     this.entities = { shares: {}, files: {}, ...entities };
   }
 
   get shares(): File[] {
     return Object.values(this.entities.shares);
+  }
+
+  ids(key: keyof FileEntities): string[] {
+    return Object.keys(this.entities[key]);
+  }
+
+  length(key: keyof FileEntities): number {
+    return this.ids(key).length;
   }
 
   files(path?: string): File[] {
@@ -39,11 +48,13 @@ export class FileMock {
 
   addShare(file: File) {
     this.entities.shares[file.name] = file;
+    super.publish();
     return this.shares;
   }
 
   add(file: File) {
     this.entities.files[file.path] = { additional, ...file };
+    super.publish();
     return this.files;
   }
 
@@ -62,6 +73,7 @@ export class FileMock {
         }
       });
     }
+    super.publish();
     return this.entities.files[path];
   }
 }

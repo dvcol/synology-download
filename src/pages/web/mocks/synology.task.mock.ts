@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker/locale/en';
 
-import { resolveUrl } from '@src/pages/web/mocks/utils.mock';
+import { AbstractMock, resolveUrl } from '@src/pages/web/mocks/utils.mock';
 
 import { TaskPriority, TaskStatus, TaskType } from '../../../models';
 
@@ -77,19 +77,29 @@ export const generateTask = (_task: RecursivePartial<Task> = {}): Task => {
   } as Task;
 };
 
-export class TaskMock {
+export class TaskMock extends AbstractMock {
   readonly entities: Record<string, Task> = {};
+
+  get ids(): string[] {
+    return Object.keys(this.entities);
+  }
 
   get tasks(): Task[] {
     return Object.values(this.entities);
   }
 
+  get length(): number {
+    return this.ids.length;
+  }
+
   add(task: Task = generateTask()) {
     this.entities[task.id] = task;
+    super.publish();
     return this.entities;
   }
 
   remove(id: Task['id']) {
+    super.publish();
     return delete this.entities[id];
   }
 
