@@ -37,15 +37,15 @@ export interface File {
 }
 
 export interface FileAdditional {
-  real_path: string;
-  size: number;
+  real_path?: string;
+  size?: number;
   owner?: FolderOwner;
   time?: FolderTime;
   /** File permission information. */
   perm?: FilePermission;
-  mount_point_type: string;
+  mount_point_type?: string;
   /** Real path of a shared folder in a volume space. */
-  type: string;
+  type?: string;
 }
 
 export enum FileListOption {

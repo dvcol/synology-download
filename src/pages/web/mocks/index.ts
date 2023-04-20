@@ -8,4 +8,6 @@ export * from './chrome.runtime.mock';
 export * from './chrome.storage.mock';
 export * from './chrome.tabs.mock';
 export * from './fetch.mock';
+export * from './synology.file.mock';
 export * from './synology.task.mock';
+export * from './utils.mock';

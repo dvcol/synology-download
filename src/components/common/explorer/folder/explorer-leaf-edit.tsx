@@ -13,7 +13,7 @@ import { i18n } from '@src/utils';
 import type { ButtonProps } from '@mui/material';
 
 import type { InputProps as StandardInputProps } from '@mui/material/Input/Input';
-import type { FC } from 'react';
+import type { FC, KeyboardEventHandler, ReactEventHandler } from 'react';
 
 export type ExplorerLeafEditProps = {
   folder: Partial<Folder | File>;
@@ -22,7 +22,7 @@ export type ExplorerLeafEditProps = {
   disabled?: boolean;
   onChange?: (newFolder?: Folder | File, oldFolder?: Partial<Folder | File>) => void;
   onCancel?: ButtonProps['onClick'];
-  onSave?: ButtonProps['onClick'];
+  onSave?: ReactEventHandler;
 };
 
 export const ExplorerLeafEdit: FC<ExplorerLeafEditProps> = ({ folder, isEditing, placeholder, disabled, onChange, onCancel, onSave }) => {
@@ -50,7 +50,7 @@ export const ExplorerLeafEdit: FC<ExplorerLeafEditProps> = ({ folder, isEditing,
     onCancel?.(event);
   };
 
-  const onCreateOrRename: ButtonProps['onClick'] = event => {
+  const onCreateOrRename: ReactEventHandler = event => {
     event.stopPropagation();
     if (!disabled && folder?.path && name) {
       if (folder.name) {
@@ -74,6 +74,11 @@ export const ExplorerLeafEdit: FC<ExplorerLeafEditProps> = ({ folder, isEditing,
     }
   };
 
+  const onKeydown: KeyboardEventHandler = event => {
+    event.stopPropagation();
+    if (event.key === 'Enter') onCreateOrRename(event);
+  };
+
   const isDirty = name !== folder.name;
 
   return (
@@ -88,6 +93,8 @@ export const ExplorerLeafEdit: FC<ExplorerLeafEditProps> = ({ folder, isEditing,
           fullWidth={true}
           onChange={onInputChange}
           onClick={onClick}
+          onKeyDown={onKeydown}
+          autoFocus
         />
       ) : (
         <Tooltip arrow title={folder?.name ?? ''} PopperProps={{ disablePortal: true, sx: { wordBreak: 'break-all' } }} enterDelay={1000}>

@@ -43,5 +43,11 @@ module.exports = {
     ],
     'react-hooks/exhaustive-deps': 'off',
     'class-methods-use-this': 'off',
+    'jsx-a11y/no-autofocus': [
+      2,
+      {
+        ignoreNonDOM: true,
+      },
+    ],
   },
 };

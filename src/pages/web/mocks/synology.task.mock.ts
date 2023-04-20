@@ -1,12 +1,12 @@
 import { faker } from '@faker-js/faker/locale/en';
 
+import { resolveUrl } from '@src/pages/web/mocks/utils.mock';
+
 import { TaskPriority, TaskStatus, TaskType } from '../../../models';
 
 import { FetchIntercept } from '../models';
 
 import type { Task } from '../../../models';
-
-import type { FetchInputs } from '../models';
 
 /**
  * Extends Partial to make all own properties also Partial
@@ -75,14 +75,6 @@ export const generateTask = (_task: RecursivePartial<Task> = {}): Task => {
       },
     },
   } as Task;
-};
-
-const resolveUrl = (input: FetchInputs[0]): string | undefined => {
-  let url: string | undefined;
-  if (typeof input === 'string') url = input;
-  else if (input instanceof URL) url = input.toString();
-  else if (input instanceof Request) url = input.url;
-  return url;
 };
 
 export class TaskMock {

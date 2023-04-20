@@ -4,6 +4,7 @@ import {
   patchContextMenus,
   patchDownloads,
   patchFetch,
+  patchFiles,
   patchI18n,
   patchLocales,
   patchNotifications,
@@ -33,6 +34,7 @@ export const patchApi = async ({ patch, locales }: PatchOptions, _global = windo
 
   patchFetch(_global);
 
+  patchFiles(_global);
   patchTasks(_global);
 
   patchLocales(locales, _global);
