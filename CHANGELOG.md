@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.6.0](https://github.com/dvcol/synology-download/compare/v3.5.3...v3.6.0) (2023-04-20)
+
+
+### Features
+
+* **mock:** add mock support for files ([39907b9](https://github.com/dvcol/synology-download/commit/39907b974ab570a213a0b498acfb478754949f2c))
+
+
+### Bug Fixes
+
+* **scroll:** contain scroll events on pull-to-refresh ([991efbc](https://github.com/dvcol/synology-download/commit/991efbc9978c8ad58504404b35c962559ae6977e))
+
 ### [3.5.3](https://github.com/dvcol/synology-download/compare/v3.5.2...v3.5.3) (2023-04-19)
 
 
