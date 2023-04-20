@@ -9,8 +9,9 @@ import type { FC, ForwardRefRenderFunction, MutableRefObject, TouchEventHandler,
 
 const animationSpeed = 300;
 export type State = { start: number; offset: number; progress: number };
+export type OnRefreshCallback = (state: State) => void;
 export type Options = {
-  onRefresh?: (state: State) => void;
+  onRefresh?: OnRefreshCallback;
   disabled?: MutableRefObject<boolean>;
   loaderHeight?: number;
   loaderContent?: JSX.Element;
@@ -104,10 +105,13 @@ export const usePullToRefresh = (options: Options = {}) => {
   };
 
   const onWheel: WheelEventHandler = e => {
+    // stop propagation to parent containers
+    e.stopPropagation();
+
     if (disabled?.current) return clearOffset();
     // if we are not a scroll top, reset timer and set start
-    if (containerRef?.current?.scrollTop !== 0) {
-      setStart(containerRef.current!.scrollTop);
+    if (containerRef?.current && containerRef.current.scrollTop !== 0) {
+      setStart(containerRef.current.scrollTop);
       return resetTimeout();
     }
     // If we have start reset timer to prevent inertial scroll
@@ -132,12 +136,18 @@ export const usePullToRefresh = (options: Options = {}) => {
   };
 
   const onTouchStart: TouchEventHandler = e => {
+    // stop propagation to parent containers
+    e.stopPropagation();
+
     if (disabled?.current) return clearOffset();
     setRefreshed(false);
     setStart(e.touches[0].screenY);
   };
 
   const onTouchMove: TouchEventHandler = e => {
+    // stop propagation to parent containers
+    e.stopPropagation();
+
     if (disabled?.current) return clearOffset();
     if (containerRef?.current?.scrollTop !== 0) return; // not container scroll top
     const current = e.touches[0].screenY;
@@ -146,7 +156,10 @@ export const usePullToRefresh = (options: Options = {}) => {
     setOffset(Math.abs(delta));
   };
 
-  const onTouchEnd: TouchEventHandler = () => {
+  const onTouchEnd: TouchEventHandler = e => {
+    // stop propagation to parent containers
+    e.stopPropagation();
+
     if (disabled?.current) return clearOffset();
     if (progress >= 1) {
       onRefresh?.({ start, offset, progress });

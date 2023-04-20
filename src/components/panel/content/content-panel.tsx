@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 import { TransitionGroup } from 'react-transition-group';
 
-import type { ConfirmationState, Options, TaskEditState } from '@src/components';
+import type { ConfirmationState, TaskEditState, OnRefreshCallback } from '@src/components';
 import { ConfirmationDialog, TaskEdit, usePullToRefresh } from '@src/components';
 
 import { ContentItemInstance } from '@src/components/panel/content/content-item-instance';
@@ -54,7 +54,7 @@ export const ContentPanel = () => {
   const pullToRefreshEnabled = useSelector(getInterfacePullToRefresh);
   const disabled = useRef<boolean>(!pullToRefreshEnabled || (!logged && !downloadEnabled));
 
-  const onRefresh: Options['onRefresh'] = () => {
+  const onRefresh: OnRefreshCallback = () => {
     if (downloadEnabled) DownloadService.searchAll().subscribe(handleError('download', 'refresh'));
     if (logged) QueryService.listTasks().subscribe(handleError('task', 'refresh'));
   };
