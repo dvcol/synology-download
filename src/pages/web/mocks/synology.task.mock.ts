@@ -1,12 +1,11 @@
 import { faker } from '@faker-js/faker/locale/en';
 
-import { AbstractMock, resolveUrl } from '@src/pages/web/mocks/utils.mock';
-
-import { TaskPriority, TaskStatus, TaskType } from '../../../models';
+import type { Task } from '@src/models';
+import { TaskPriority, TaskStatus, TaskType } from '@src/models';
 
 import { FetchIntercept } from '../models';
 
-import type { Task } from '../../../models';
+import { AbstractMock, resolveUrl } from './utils.mock';
 
 /**
  * Extends Partial to make all own properties also Partial
@@ -285,7 +284,12 @@ export const patchTasks = (_global = window): TaskMock => {
         uri.split('%2C')?.forEach(_uri =>
           task.add(
             generateTask({
-              additional: { detail: { destination: destination ? decodeURIComponent(destination) : destination, uri: decodeURIComponent(_uri) } },
+              additional: {
+                detail: {
+                  destination: destination ? decodeURIComponent(destination) : destination,
+                  uri: decodeURIComponent(_uri),
+                },
+              },
             }),
           ),
         );

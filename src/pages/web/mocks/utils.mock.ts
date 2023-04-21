@@ -1,4 +1,4 @@
-import type { FetchInputs } from '@src/pages/web';
+import type { FetchInputs } from '../models';
 
 export const resolveUrl = (input: FetchInputs[0]): string | undefined => {
   let url: string | undefined;
@@ -9,6 +9,7 @@ export const resolveUrl = (input: FetchInputs[0]): string | undefined => {
 };
 
 export type MockListener<T> = (mock: T) => void;
+
 export class AbstractMock {
   protected listeners: MockListener<this>[] = [];
 

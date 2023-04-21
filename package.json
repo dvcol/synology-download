@@ -38,8 +38,9 @@
   "sideEffects": false,
   "scripts": {
     "prepare": "husky install",
+    "build:tsc-alias": "tsc-alias -p tsconfig.json",
     "build:web-types": "node webpack/build/web-types.js",
-    "build:web": "node webpack/build/web.js",
+    "build:web": "node webpack/build/web.js && yarn build:tsc-alias",
     "build:web:analyse": "ANALYSE_BUNDLE=true yarn build:web",
     "build:extension": "node webpack/build/extension.js",
     "build:extension:analyse": "ANALYSE_BUNDLE=true yarn build:extension",
@@ -146,6 +147,7 @@
     "terser-webpack-plugin": "^5.3.1",
     "ts-jest": "^27.1.3",
     "ts-loader": "^9.2.6",
+    "tsc-alias": "^1.8.5",
     "typescript": "^4.9.5",
     "webpack": "^5.76.3",
     "webpack-bundle-analyzer": "^4.8.0",

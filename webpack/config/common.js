@@ -46,7 +46,7 @@ const getCommonConfig = () => {
             {
               loader: 'sass-loader',
               options: {
-                sourceMap: true,
+                sourceMap: process.env.NODE_ENV === 'development',
               },
             },
           ],
@@ -64,7 +64,16 @@ const getCommonConfig = () => {
           loader: 'html-loader',
           exclude: /node_modules/,
         },
-        { test: /\.(ts|tsx)$/, loader: 'ts-loader', exclude: /node_modules/ },
+        {
+          test: /\.(ts|tsx)$/,
+          loader: 'ts-loader',
+          exclude: /node_modules/,
+          options: {
+            compilerOptions: {
+              declarationMap: process.env.NODE_ENV === 'development',
+            },
+          },
+        },
         {
           test: /\.(js|jsx)$/,
           use: [
@@ -112,7 +121,7 @@ const getCommonConfig = () => {
   }
 
   if (process.env.NODE_ENV === 'development') {
-    options.devtool = 'cheap-module-source-map';
+    options.devtool = 'eval-source-map';
     options.optimization = {};
   } else {
     options.optimization = {

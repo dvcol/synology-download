@@ -1,10 +1,18 @@
 import type { File, FileAdditional } from '@src/models';
-import { FetchIntercept } from '@src/pages/web';
-import { AbstractMock, resolveUrl } from '@src/pages/web/mocks/utils.mock';
+
+import { FetchIntercept } from '../models';
+
+import { AbstractMock, resolveUrl } from './utils.mock';
 
 type FileEntities = { shares: Record<string, File>; files: Record<string, File> };
 
-const additional: FileAdditional = { perm: { acl: { append: true, del: true, exec: true, read: true, write: true }, is_acl_mode: true, posix: 700 } };
+const additional: FileAdditional = {
+  perm: {
+    acl: { append: true, del: true, exec: true, read: true, write: true },
+    is_acl_mode: true,
+    posix: 700,
+  },
+};
 
 const defaultFile: FileEntities = {
   shares: {

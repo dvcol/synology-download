@@ -1,5 +1,6 @@
-import { FetchIntercept } from '@src/pages/web';
 import { BaseLoggerService } from '@src/services';
+
+import { FetchIntercept } from '../models';
 
 export const patchFetch = (_global = window) => {
   if (!_global._fetchIntercept) _global._fetchIntercept = new FetchIntercept();

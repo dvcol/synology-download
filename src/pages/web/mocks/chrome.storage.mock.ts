@@ -11,7 +11,14 @@ export const patchStorage = (_global = window) => {
     const local = JSON.parse(localStorage.getItem('synology.local') ?? '{}');
     let result = {};
     if (typeof keys === 'string') result = { [keys]: local?.[keys] };
-    else if (Array.isArray(keys)) result = (keys as string[]).reduce<Record<string, any>>((arr, key) => ({ ...arr, [key]: local?.[key] }), {});
+    else if (Array.isArray(keys))
+      result = (keys as string[]).reduce<Record<string, any>>(
+        (arr, key) => ({
+          ...arr,
+          [key]: local?.[key],
+        }),
+        {},
+      );
     BaseLoggerService.debug('chrome.storage.local.set', keys);
     return Promise.resolve(result);
   };
@@ -26,7 +33,14 @@ export const patchStorage = (_global = window) => {
     const local = JSON.parse(localStorage.getItem('synology.sync') ?? '{}');
     let result = {};
     if (typeof keys === 'string') result = { [keys]: local?.[keys] };
-    else if (Array.isArray(keys)) result = (keys as string[]).reduce<Record<string, any>>((arr, key) => ({ ...arr, [key]: local?.[key] }), {});
+    else if (Array.isArray(keys))
+      result = (keys as string[]).reduce<Record<string, any>>(
+        (arr, key) => ({
+          ...arr,
+          [key]: local?.[key],
+        }),
+        {},
+      );
     BaseLoggerService.debug('chrome.storage.sync.set', keys);
     return Promise.resolve(result);
   };

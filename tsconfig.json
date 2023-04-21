@@ -18,6 +18,7 @@
     "declaration": true,
     "declarationMap": true,
     "declarationDir": "dist/types",
+    "outDir": "dist",
     "baseUrl": "src",
     "sourceMap": true,
     "paths": {

@@ -1,6 +1,6 @@
-import { patchApi } from '@src/pages/web/modules/patch-api';
-
 import { WebComponents } from '../models';
+
+import { patchApi } from './patch-api';
 
 import type { PatchOptions } from '../models';
 

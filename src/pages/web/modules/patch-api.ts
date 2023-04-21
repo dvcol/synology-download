@@ -1,3 +1,5 @@
+import { BaseLoggerService } from '@src/services';
+
 import {
   patchAction,
   patchChrome,
@@ -12,9 +14,9 @@ import {
   patchStorage,
   patchTabs,
   patchTasks,
-} from '@src/pages/web/mocks';
-import type { PatchOptions } from '@src/pages/web/models';
-import { BaseLoggerService } from '@src/services';
+} from '../mocks';
+
+import type { PatchOptions } from '../models';
 
 export const patchApi = async ({ patch, locales }: PatchOptions, _global = window) => {
   if (!patch) return;
