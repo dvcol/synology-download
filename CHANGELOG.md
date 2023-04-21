@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.6.5](https://github.com/dvcol/synology-download/compare/v3.6.3...v3.6.5) (2023-04-21)
+
+
+### Bug Fixes
+
+* **build:** fix exported files ([3b61174](https://github.com/dvcol/synology-download/commit/3b611740eb9189e1f328668b5c7f462f802d26b2))
+* **container:** fix container handling and switch to context ([cce0416](https://github.com/dvcol/synology-download/commit/cce0416255f3ebd8c64bf8b3e45843ca04c25a80))
+
 ### [3.6.3](https://github.com/dvcol/synology-download/compare/v3.6.2...v3.6.3) (2023-04-21)
 
 
