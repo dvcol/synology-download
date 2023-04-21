@@ -25,6 +25,7 @@
     "dist/json",
     "dist/entry",
     "dist/_locales",
+    "dist/types/models/index.d.ts",
     "dist/types/models/task.model.d.ts",
     "dist/types/pages/web/mocks",
     "dist/types/pages/web/models",
