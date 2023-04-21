@@ -1,6 +1,6 @@
 {
   "name": "@dvcol/synology-extension",
-  "version": "3.6.3",
+  "version": "3.6.4",
   "packageManager": "yarn@3.5.0",
   "description": "A basic synology download station client chrome extension",
   "keywords": [
