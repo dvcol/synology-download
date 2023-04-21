@@ -4,7 +4,7 @@ import { render } from 'react-dom';
 import { App } from '@src/components';
 import type { AppInstance, AppRoute, QueryAutoLoginOptions, RootSlice, ServiceInstance } from '@src/models';
 import { ChromeMessageType } from '@src/models';
-import { ContainerService, DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
+import { DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { storeProxy } from '@src/store';
 import { onMessage, portConnect, store$ } from '@src/utils';
 
@@ -14,9 +14,6 @@ export const initApp = async (
   getter: (state: RootSlice) => boolean,
   redirect?: AppRoute,
 ): Promise<void> => {
-  // Set app Instance
-  ContainerService.setInstance(appInstance);
-
   // init store
   await storeProxy.ready();
 
@@ -41,5 +38,5 @@ export const initApp = async (
   );
 
   // Render the app
-  render(<App store={storeProxy} redirect={redirect} />, window.document.querySelector(`#${appInstance}-app-container`));
+  render(<App store={storeProxy} redirect={redirect} instance={appInstance} />, window.document.querySelector(`#${appInstance}-app-container`));
 };

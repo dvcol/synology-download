@@ -4,7 +4,7 @@ import React from 'react';
 import { render } from 'react-dom';
 
 import type { StoreOrProxy } from '@src/models';
-import { AppInstance, ServiceInstance } from '@src/models';
+import { ServiceInstance, AppInstance } from '@src/models';
 import { ContentApp } from '@src/pages/content/components/content-app';
 import type { AnchorPayload, TaskDialogPayload } from '@src/pages/content/service';
 import { anchor$, taskDialog$ } from '@src/pages/content/service';
@@ -43,20 +43,21 @@ export class ContentAppWc extends HTMLElement {
    * Render the web component
    * @param root
    * @param storeOrProxy
+   * @param instance
    */
-  render(root: Element = this, storeOrProxy: StoreOrProxy = store) {
+  render(root: Element = this, storeOrProxy: StoreOrProxy = store, instance = AppInstance.content) {
     const shadowRoot = root.attachShadow({ mode: 'closed' });
     shadowRoot.innerHTML = `
-      <div id="${AppInstance.content}-container">
-          <div id="${AppInstance.content}-app"></div>
+      <div id="${instance}-container">
+          <div id="${instance}-app"></div>
       </div>
     `;
 
-    const container = shadowRoot.querySelector(`#${AppInstance.content}-container`) as HTMLElement;
-    const app = shadowRoot.querySelector(`#${AppInstance.content}-app`);
-    const cache = createCache({ key: `${AppInstance.content}-cache`, container });
+    const container = shadowRoot.querySelector(`#${instance}-container`) as HTMLElement;
+    const app = shadowRoot.querySelector(`#${instance}-app`);
+    const cache = createCache({ key: `${instance}-cache`, container });
 
-    return render(<ContentApp storeOrProxy={storeOrProxy} cache={cache} container={container} />, app);
+    return render(<ContentApp storeOrProxy={storeOrProxy} cache={cache} container={container} instance={instance} />, app);
   }
 
   /**

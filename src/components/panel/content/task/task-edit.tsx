@@ -17,7 +17,7 @@ import {
   Tabs,
 } from '@mui/material';
 
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 
@@ -28,8 +28,9 @@ import { finalize, lastValueFrom } from 'rxjs';
 import { FormExplorer, FormInput, IconLoader } from '@src/components';
 import type { FormRules, RootSlice, Task, TaskBtEditRequest, TaskFile } from '@src/models';
 import { TaskPriority, TaskStatus, TaskType } from '@src/models';
-import { ContainerService, LoggerService, NotificationService, QueryService } from '@src/services';
+import { LoggerService, NotificationService, QueryService } from '@src/services';
 
+import { ContainerContext } from '@src/store';
 import { getDownloadStation2APITaskBt, getTaskFilesById } from '@src/store/selectors';
 import { before, useDebounceObservable, useI18n } from '@src/utils';
 
@@ -52,6 +53,8 @@ export const TaskEdit = ({
   onFormSubmit?: (form: TaskEditForm) => void;
 }) => {
   const i18n = useI18n('panel', 'content', 'task', 'edit');
+
+  const { containerRef } = useContext(ContainerContext);
 
   const taskFiles = useSelector<RootSlice, TaskFile[]>(getTaskFilesById(task.id));
 
@@ -200,7 +203,7 @@ export const TaskEdit = ({
       aria-labelledby="confirm-delete-dialog"
       maxWidth={'md'}
       PaperProps={{ sx: { maxHeight: 'calc(100% - 1em)' } }}
-      container={ContainerService.getContainer.bind(ContainerService)}
+      container={containerRef?.current}
     >
       <DialogTitle>{i18n('destination_folder')}</DialogTitle>
       <DialogContent sx={{ display: 'flex', flexDirection: 'column' }}>

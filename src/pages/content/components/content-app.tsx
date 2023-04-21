@@ -2,11 +2,12 @@ import { CacheProvider } from '@emotion/react';
 
 import { ThemeProvider } from '@mui/material';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Provider } from 'react-redux';
 
-import { NotificationStack } from '@src/components';
+import { ContainerContextProvider, NotificationStack } from '@src/components';
+import type { AppInstance } from '@src/models';
 import type { StoreOrProxy } from '@src/models/store.model';
 import { ContentTaskDialog, QuickMenuDialog } from '@src/pages/content/components';
 import { store } from '@src/store';
@@ -15,7 +16,17 @@ import { getThemeFromStore, subscribeToTheme } from '@src/themes';
 import type { EmotionCache } from '@emotion/utils';
 import type { Theme } from '@mui/material';
 
-export const ContentApp = ({ storeOrProxy, cache, container }: { storeOrProxy: StoreOrProxy; cache: EmotionCache; container: HTMLElement }) => {
+export const ContentApp = ({
+  storeOrProxy,
+  cache,
+  container,
+  instance,
+}: {
+  storeOrProxy: StoreOrProxy;
+  cache: EmotionCache;
+  container: HTMLElement;
+  instance: AppInstance;
+}) => {
   const [theme, setTheme] = useState<Theme>(getThemeFromStore(store));
 
   const _store = storeOrProxy;
@@ -25,16 +36,20 @@ export const ContentApp = ({ storeOrProxy, cache, container }: { storeOrProxy: S
     return () => sub.unsubscribe();
   }, []);
 
+  const containerRef = useRef(container);
+
   return (
     <React.StrictMode>
       <Provider store={_store}>
-        <CacheProvider value={cache}>
-          <ThemeProvider theme={theme}>
-            <NotificationStack maxSnack={5} />
-            <QuickMenuDialog container={container} />
-            <ContentTaskDialog container={container} />
-          </ThemeProvider>
-        </CacheProvider>
+        <ContainerContextProvider instance={instance} containerRef={containerRef}>
+          <CacheProvider value={cache}>
+            <ThemeProvider theme={theme}>
+              <NotificationStack maxSnack={5} />
+              <QuickMenuDialog container={container} />
+              <ContentTaskDialog container={container} />
+            </ThemeProvider>
+          </CacheProvider>
+        </ContainerContextProvider>
       </Provider>
     </React.StrictMode>
   );

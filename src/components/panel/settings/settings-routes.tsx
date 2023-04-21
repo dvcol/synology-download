@@ -1,13 +1,12 @@
 import { Container } from '@mui/material';
 
-import React, { lazy } from 'react';
+import React, { lazy, useContext } from 'react';
 
 import { Route, Routes } from 'react-router-dom';
 
 import { SuspenseLoader } from '@src/components';
 import { AppInstance, SettingHeader } from '@src/models';
-
-import { ContainerService } from '@src/services';
+import { ContainerContext } from '@src/store';
 import { useAnchor } from '@src/utils';
 
 import type { FC } from 'react';
@@ -21,8 +20,9 @@ const SettingsNotifications = lazy(() => import(/* webpackChunkName: "SettingsNo
 const SettingsTasks = lazy(() => import(/* webpackChunkName: "SettingsTasks" */ './tasks/settings-tasks'));
 
 export const SettingsRoutes: FC = () => {
+  const context = useContext(ContainerContext);
   // added to support shadow dom anchor routing, offset is for navbar
-  if (ContainerService.getInstance() === AppInstance.standalone) {
+  if (context.instance === AppInstance.standalone) {
     // eslint-disable-next-line react-hooks/rules-of-hooks -- only inject hooks if in WC (render are consistent)
     useAnchor('settings-scroll-container', -60);
   }

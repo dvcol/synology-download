@@ -16,7 +16,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 
@@ -24,7 +24,8 @@ import { finalize, lastValueFrom } from 'rxjs';
 
 import { FormCheckbox, IconLoader } from '@src/components';
 import type { FormRules, TaskListDownloadRequest, TaskListResponse } from '@src/models';
-import { ContainerService, LoggerService, NotificationService, QueryService } from '@src/services';
+import { LoggerService, NotificationService, QueryService } from '@src/services';
+import { ContainerContext } from '@src/store';
 import { before, useI18n } from '@src/utils';
 
 import type { FC } from 'react';
@@ -43,6 +44,8 @@ export const TaskAddSelect: FC<TaskAddSelectProp> = ({ open, list_id, source, de
   const [loading, setLoading] = useState<number>(0);
 
   const [response, setResponse] = useState<TaskListResponse>();
+
+  const { containerRef } = useContext(ContainerContext);
 
   const {
     handleSubmit,
@@ -138,7 +141,7 @@ export const TaskAddSelect: FC<TaskAddSelectProp> = ({ open, list_id, source, de
       aria-labelledby="confirm-delete-dialog"
       maxWidth={'md'}
       PaperProps={{ sx: { maxHeight: 'calc(100% - 1em)' } }}
-      container={ContainerService.getContainer.bind(ContainerService)}
+      container={containerRef?.current}
     >
       <DialogTitle>
         {i18n('select_files')}

@@ -13,7 +13,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import TuneIcon from '@mui/icons-material/Tune';
 import { DialogContentText, Divider, IconButton, Menu, Tooltip } from '@mui/material';
 
-import React from 'react';
+import React, { useContext } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -22,7 +22,8 @@ import { Link } from 'react-router-dom';
 import { ConfirmationDialog, TooltipHoverChange } from '@src/components';
 import type { NavbarButton } from '@src/models';
 import { AppLinks, AppRoute, ErrorType, LoginError, NavbarButtonType } from '@src/models';
-import { ContainerService, DownloadService, NotificationService, QueryService } from '@src/services';
+import { DownloadService, NotificationService, QueryService } from '@src/services';
+import { ContainerContext } from '@src/store';
 import { resetDownloads, resetTasks, setNavbar } from '@src/store/actions';
 import { getGlobalNavbarButton, getLogged, getSettingsDownloadsButtons, getSettingsDownloadsEnabled, getUrl } from '@src/store/selectors';
 import { createTab, useI18n } from '@src/utils';
@@ -39,6 +40,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
   const logged = useSelector(getLogged);
   const downloadEnabled = useSelector(getSettingsDownloadsEnabled);
   const downloadButtons = useSelector(getSettingsDownloadsButtons);
+  const { containerRef } = useContext(ContainerContext);
 
   const [anchorEl, setAnchorEl] = React.useState<undefined | null | Element>(null);
   const open = Boolean(anchorEl);
@@ -291,7 +293,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
         id="dropdown-menu"
         anchorEl={anchorEl}
         open={open}
-        container={ContainerService.getContainer.bind(ContainerService)}
+        container={containerRef?.current}
         onClose={handleClose}
         onClick={handleClose}
         MenuListProps={{ 'aria-labelledby': 'dropdown-menu' }}

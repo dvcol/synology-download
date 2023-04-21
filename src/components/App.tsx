@@ -7,9 +7,8 @@ import { Provider } from 'react-redux';
 
 import { HashRouter as Router } from 'react-router-dom';
 
-import { SettingsInjector } from '@src/components/panel';
-import type { StoreOrProxy } from '@src/models';
-import { ContainerService } from '@src/services';
+import { ContainerContextProvider, SettingsInjector } from '@src/components';
+import type { AppInstance, StoreOrProxy } from '@src/models';
 import { darkTheme, getThemeFromStore, subscribeToTheme } from '@src/themes';
 
 import { NotificationStack } from './common';
@@ -21,18 +20,14 @@ import type { Theme } from '@mui/material';
 import type { FC } from 'react';
 import type { HashRouterProps } from 'react-router-dom';
 
-export type AppProps = { store: StoreOrProxy; cache?: EmotionCache; redirect?: string; routerProps?: HashRouterProps };
-export const App: FC<AppProps> = ({ store, redirect, cache, routerProps }) => {
+export type AppProps = { store: StoreOrProxy; cache?: EmotionCache; redirect?: string; routerProps?: HashRouterProps; instance: AppInstance };
+export const App: FC<AppProps> = ({ store, redirect, cache, routerProps, instance }) => {
   const [theme, setTheme] = useState<Theme>(getThemeFromStore(store));
   const isDark = theme === darkTheme;
 
   const background = isDark ? { color: '#bdbdbd', backgroundColor: '#20262D' } : { color: '#1f2020', backgroundColor: '#eaeef2' };
 
-  const containerRef = useRef(null);
-
-  useEffect(() => {
-    ContainerService.setContainer(containerRef.current);
-  }, [containerRef.current]);
+  const containerRef = useRef<Element>(null);
 
   useEffect(() => {
     const sub = subscribeToTheme(store, theme, setTheme);
@@ -42,13 +37,15 @@ export const App: FC<AppProps> = ({ store, redirect, cache, routerProps }) => {
   let Main = (
     <ThemeProvider theme={theme}>
       <Box id="synology-download-app-container" sx={{ ...background, height: '100%', scrollBehavior: 'smooth' }} ref={containerRef}>
-        <NotificationStack maxSnack={2} />
-        <SettingsInjector />
-        <Router {...routerProps}>
-          <CssBaseline />
-          <Navbar />
-          <Panel redirect={redirect} />
-        </Router>
+        <ContainerContextProvider containerRef={containerRef} instance={instance}>
+          <NotificationStack maxSnack={2} />
+          <SettingsInjector />
+          <Router {...routerProps}>
+            <CssBaseline />
+            <Navbar />
+            <Panel redirect={redirect} />
+          </Router>
+        </ContainerContextProvider>
       </Box>
     </ThemeProvider>
   );

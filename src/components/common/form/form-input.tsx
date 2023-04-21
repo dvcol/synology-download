@@ -1,10 +1,10 @@
 import { Grid, TextField } from '@mui/material';
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
 import { Controller } from 'react-hook-form';
 
-import { ContainerService } from '@src/services';
+import { ContainerContext } from '@src/store';
 
 import { FormInputFile } from './form-input-file';
 
@@ -29,6 +29,7 @@ export const FormInput = <TFieldValues extends FieldValues = FieldValues, TName 
   inputFileProps?: Omit<FormInputFileProps, 'onChange'>;
 }>) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const { containerRef } = useContext(ContainerContext);
 
   const render: ControllerProps['render'] = ({ field, fieldState: { invalid, error } }) => {
     const _textFieldProps: TextFieldProps = {
@@ -84,7 +85,7 @@ export const FormInput = <TFieldValues extends FieldValues = FieldValues, TName 
 
     _textFieldProps.SelectProps = {
       MenuProps: {
-        container: ContainerService.getContainer.bind(ContainerService),
+        container: containerRef?.current,
       },
     };
 

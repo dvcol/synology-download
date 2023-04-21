@@ -1,10 +1,10 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
-import React from 'react';
+import React, { useContext } from 'react';
 
 import type { TooltipHoverChangeProps } from '@src/components/common/tooltip/tooltip-hover-change';
 import TooltipHoverChange from '@src/components/common/tooltip/tooltip-hover-change';
-import { ContainerService } from '@src/services';
+import { ContainerContext } from '@src/store';
 import { useI18n } from '@src/utils';
 
 import type { ButtonProps } from '@mui/material';
@@ -19,6 +19,7 @@ export type ConfirmationDialogProps = {
 };
 export const ConfirmationDialog = ({ open, title, description, tooltip, onCancel, onConfirm }: ConfirmationDialogProps) => {
   const i18n = useI18n('common', 'buttons');
+  const { containerRef } = useContext(ContainerContext);
 
   const onCancelHandler: ButtonProps['onClick'] = $event => {
     onCancel?.($event);
@@ -27,13 +28,7 @@ export const ConfirmationDialog = ({ open, title, description, tooltip, onCancel
     onConfirm?.($event);
   };
   return (
-    <Dialog
-      open={open}
-      onClose={onCancelHandler}
-      aria-labelledby="confirm-delete-dialog"
-      maxWidth={'xs'}
-      container={ContainerService.getContainer.bind(ContainerService)}
-    >
+    <Dialog open={open} onClose={onCancelHandler} aria-labelledby="confirm-delete-dialog" maxWidth={'xs'} container={containerRef?.current}>
       <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
       <DialogContent sx={{ whiteSpace: 'pre-line' }}>{description}</DialogContent>
       <DialogActions>

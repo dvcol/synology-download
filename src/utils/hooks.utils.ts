@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { debounce, Subject, timer } from 'rxjs';
 
 import { defaultGlobal } from '@src/models';
-import { ContainerService } from '@src/services';
+import { ContainerContext } from '@src/store';
 import { getGlobalLoading } from '@src/store/selectors';
 
 import type { DependencyList } from 'react';
@@ -40,11 +40,12 @@ export const usePrevious = <T>(value: T, deps: DependencyList[] = []): [T | unde
   return [ref.current, setRef];
 };
 
-export const useAnchor = (scrollContainerId: string, offset = 0, document = ContainerService.getContainer()) => {
+export const useAnchor = (scrollContainerId: string, offset = 0) => {
+  const { containerRef } = useContext(ContainerContext);
   const location = useLocation();
   useEffect(() => {
     let scroll: number | undefined;
-    if (location.hash) scroll = document?.querySelector<HTMLDivElement>(location.hash)?.offsetTop;
-    if (scroll !== undefined) document?.querySelector(`#${scrollContainerId}`)?.scrollTo({ top: scroll + offset });
+    if (location.hash) scroll = containerRef?.current?.querySelector<HTMLDivElement>(location.hash)?.offsetTop;
+    if (scroll !== undefined) containerRef?.current?.querySelector(`#${scrollContainerId}`)?.scrollTo({ top: scroll + offset });
   }, [location]);
 };

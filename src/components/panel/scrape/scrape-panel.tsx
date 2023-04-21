@@ -5,7 +5,7 @@ import { Button, ButtonGroup, Card, CardContent, CardHeader } from '@mui/materia
 
 import { DataGrid, GridFooter, GridFooterContainer, useGridApiContext } from '@mui/x-data-grid';
 
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -14,7 +14,8 @@ import { forkJoin } from 'rxjs';
 import { TaskDialog } from '@src/components';
 import type { RootSlice, ScrapedContent, ScrapedSlice, TaskForm } from '@src/models';
 import { ChromeMessageType, ColorLevel } from '@src/models';
-import { ContainerService, DownloadService, LoggerService } from '@src/services';
+import { DownloadService, LoggerService } from '@src/services';
+import { ContainerContext } from '@src/store';
 import { clearScrapedContents } from '@src/store/actions';
 import { getScrapedPage, getScrappedRows } from '@src/store/selectors';
 
@@ -28,6 +29,8 @@ type ScrapePanelProps = { cardProps?: CardProps };
 export const ScrapePanel: FC<ScrapePanelProps> = ({ cardProps }) => {
   const i18n = useI18n('panel', 'scrape');
   const dispatch = useDispatch();
+
+  const { containerRef } = useContext(ContainerContext);
 
   const page = useSelector<RootSlice, ScrapedSlice['page']>(getScrapedPage);
   const rows = useSelector<RootSlice, GridRowsProp<ScrapedContent>>(getScrappedRows);
@@ -164,7 +167,7 @@ export const ScrapePanel: FC<ScrapePanelProps> = ({ cardProps }) => {
         onClose={onFormClose}
         onCancel={onFormClose}
         onSubmit={onFormClose}
-        container={ContainerService.getContainer.bind(ContainerService)}
+        container={containerRef?.current}
       />
     </Card>
   );
