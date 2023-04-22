@@ -121,8 +121,9 @@ export class TaskMock extends AbstractMock<TaskEntities> {
   }
 
   remove(id: Task['id']) {
+    const result = delete this.entities[id];
     super.publish();
-    return delete this.entities[id];
+    return result;
   }
 
   resume(id: Task['id']) {
