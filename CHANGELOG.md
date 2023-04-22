@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.7.1](https://github.com/dvcol/synology-download/compare/v3.7.0...v3.7.1) (2023-04-22)
+
+
+### Bug Fixes
+
+* **mock:** move publish after delete ([acd564b](https://github.com/dvcol/synology-download/commit/acd564b95797bf9d67a810792c1f3ac954e44adf))
+
 ## [3.7.0](https://github.com/dvcol/synology-download/compare/v3.6.5...v3.7.0) (2023-04-22)
 
 
