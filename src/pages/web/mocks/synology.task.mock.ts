@@ -76,8 +76,31 @@ export const generateTask = (_task: RecursivePartial<Task> = {}): Task => {
   } as Task;
 };
 
-export class TaskMock extends AbstractMock {
-  readonly entities: Record<string, Task> = {};
+type TaskEntities = Record<string, Task>;
+
+const defaultTasks: TaskEntities = Array(5)
+  .fill(undefined)
+  .reduce(acc => {
+    const _task = generateTask();
+    acc[_task.id] = _task;
+    return acc;
+  }, {});
+
+const storageKey = 'synology.mock.task';
+
+const getTasks = (): TaskEntities => {
+  const storage = localStorage.getItem(storageKey);
+  if (storage) return JSON.parse(storage);
+  localStorage.setItem(storageKey, JSON.stringify(defaultTasks));
+  return defaultTasks;
+};
+
+export class TaskMock extends AbstractMock<TaskEntities> {
+  readonly key = storageKey;
+
+  constructor(entities = getTasks()) {
+    super(entities);
+  }
 
   get ids(): string[] {
     return Object.keys(this.entities);

@@ -14,7 +14,7 @@ const additional: FileAdditional = {
   },
 };
 
-const defaultFile: FileEntities = {
+const defaultFiles: FileEntities = {
   shares: {
     Books: { isdir: true, name: 'Books', path: '/Books' },
     Music: { isdir: true, name: 'Music', path: '/Music' },
@@ -29,12 +29,20 @@ const defaultFile: FileEntities = {
   },
 };
 
-export class FileMock extends AbstractMock {
-  readonly entities: FileEntities;
+const storageKey = 'synology.mock.file';
 
-  constructor(entities: Partial<FileEntities> = defaultFile) {
-    super();
-    this.entities = { shares: {}, files: {}, ...entities };
+const getFiles = (): FileEntities => {
+  const storage = localStorage.getItem(storageKey);
+  if (storage) return JSON.parse(storage);
+  localStorage.setItem(storageKey, JSON.stringify(defaultFiles));
+  return defaultFiles;
+};
+
+export class FileMock extends AbstractMock<FileEntities> {
+  readonly key = storageKey;
+
+  constructor(entities: Partial<FileEntities> = getFiles()) {
+    super({ shares: {}, files: {}, ...entities });
   }
 
   get shares(): File[] {

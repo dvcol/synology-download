@@ -10,10 +10,17 @@ export const resolveUrl = (input: FetchInputs[0]): string | undefined => {
 
 export type MockListener<T> = (mock: T) => void;
 
-export class AbstractMock {
+export class AbstractMock<T> {
   protected listeners: MockListener<this>[] = [];
+  readonly entities: T;
+  readonly key?: string;
+
+  constructor(entities: T = {} as T) {
+    this.entities = entities;
+  }
 
   protected publish() {
+    if (this.key) localStorage.setItem(this.key, JSON.stringify(this.entities));
     this.listeners.forEach(cb => cb(this));
   }
 

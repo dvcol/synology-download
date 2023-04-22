@@ -97,7 +97,7 @@ export const SettingsCredentials = () => {
     lastValueFrom(QueryService.info(baseUrl, true).pipe(loadingOperator))
       .then(res => {
         setInfo(res);
-        const _version = res[CommonAPI.Auth].maxVersion;
+        const _version = res[CommonAPI.Auth]?.maxVersion ?? defaultConnection.authVersion;
         setValue('authVersion', _version);
         if (_version < 6) setValue('enable_device_token', false);
         return _version;
