@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.8.1](https://github.com/dvcol/synology-download/compare/v3.7.1...v3.8.1) (2023-04-23)
+
+
+### Features
+
+* **mock:** adds download support ([b8e2cc3](https://github.com/dvcol/synology-download/commit/b8e2cc30a27ad9a722c0c1329cff2ffe8cf01ca6))
+
+
+### Bug Fixes
+
+* **card:** fix responsive tasks ([0a3c5c7](https://github.com/dvcol/synology-download/commit/0a3c5c7b8c1ba78df3d47334874076c2723083bd))
+* **task:** remove hover background on tasks ([2184701](https://github.com/dvcol/synology-download/commit/21847012bfdfe71e97572bda106063fdcb1d8269))
+
 ### [3.7.1](https://github.com/dvcol/synology-download/compare/v3.7.0...v3.7.1) (2023-04-22)
 
 
