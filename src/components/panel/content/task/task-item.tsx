@@ -144,7 +144,6 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
   const background: ProgressBackgroundProps = showBackground
     ? {
         primary: `${ColorLevelMap[taskStatusToColor(task)]}${hover ? 30 : 20}`,
-        secondary: hover ? '#99999910' : 'transparent',
         progress: task.progress ?? 0,
       }
     : {};
