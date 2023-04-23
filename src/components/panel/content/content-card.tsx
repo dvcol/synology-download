@@ -33,7 +33,7 @@ export const ContentCard: FC<ContentCardProps> = ({
   hover,
 }) => {
   return (
-    <ListItem sx={{ minWidth: '40rem', padding: '0.5rem 1rem' }} dense={true}>
+    <ListItem sx={{ padding: '0.5rem 1rem' }} dense={true}>
       <ListItemAvatar sx={{ minWidth: '4.125rem' }}>
         <Avatar sx={{ width: '3.125rem', height: '3.125rem', bgcolor: iconBackground ?? blue[100] }} variant={iconVariant ?? 'circular'}>
           {icon}

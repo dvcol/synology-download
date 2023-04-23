@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 import { TransitionGroup } from 'react-transition-group';
 
-import type { ConfirmationState, TaskEditState, OnRefreshCallback } from '@src/components';
+import type { ConfirmationState, OnRefreshCallback, TaskEditState } from '@src/components';
 import { ConfirmationDialog, TaskEdit, usePullToRefresh } from '@src/components';
 
 import { ContentItemInstance } from '@src/components/panel/content/content-item-instance';
@@ -85,6 +85,7 @@ export const ContentPanel = () => {
       {...handlers}
       sx={{ height: '100%', overflow: 'auto', overscrollBehaviorY: 'contain' }}
       disableGutters
+      maxWidth={false}
     >
       {Loader}
       {contents?.length ? items : <ContentEmpty />}
