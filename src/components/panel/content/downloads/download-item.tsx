@@ -7,7 +7,7 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReplayIcon from '@mui/icons-material/Replay';
 import { Button, Dialog, DialogContent, Tooltip } from '@mui/material';
 
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useContext, useState } from 'react';
 
 import { useSelector } from 'react-redux';
 
@@ -22,6 +22,7 @@ import { ColorLevel, ColorLevelMap, DownloadStatus, downloadStatusToColor } from
 import { DownloadService, InterceptService, LoggerService, NotificationService } from '@src/services';
 
 import type { StoreState } from '@src/store';
+import { ContainerContext } from '@src/store';
 import { getGlobalDownload, getSettingsDownloadsTransfer } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
 
@@ -50,6 +51,7 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
   const [dialog, toggleDialog] = React.useState(false);
   const [form] = React.useState<TaskForm>({ uri: download.finalUrl, source: download.referrer });
   const { erase, resume, modal } = useSelector(getSettingsDownloadsTransfer);
+  const { containerRef } = useContext(ContainerContext);
 
   const close = (_erase = false) => {
     toggleDialog(false);
@@ -157,7 +159,14 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
         }}
         details={<DownloadDetail download={download} buttons={detailsButtons} onclick={handleClick} />}
       />
-      <Dialog open={dialog} fullWidth={true} onClose={() => close()} maxWidth={'md'} PaperProps={{ sx: { maxHeight: 'calc(100% - 1em)' } }}>
+      <Dialog
+        open={dialog}
+        fullWidth={true}
+        onClose={() => close()}
+        maxWidth={'md'}
+        PaperProps={{ sx: { maxHeight: 'calc(100% - 1em)' } }}
+        container={containerRef?.current}
+      >
         <DialogContent sx={{ p: '0', fontSize: '1rem' }}>
           <TaskAdd form={form} withCancel={true} onFormCancel={() => close()} onFormSubmit={() => close(erase)} />
         </DialogContent>

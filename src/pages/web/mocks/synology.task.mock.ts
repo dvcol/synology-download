@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker/locale/en';
 
-import type { Task } from '@src/models';
+import type { Task, TaskAdditional, TaskTransfer } from '@src/models';
 import { TaskPriority, TaskStatus, TaskType } from '@src/models';
 
 import { FetchIntercept } from '../models';
@@ -179,7 +179,9 @@ const computeSpeed = (task: Task) => {
 };
 
 const progress = (task: Task) => {
-  if (!task.additional?.transfer.size_downloaded) return task;
+  if (!task.additional) task.additional = {} as TaskAdditional;
+  if (!task.additional.transfer) task.additional.transfer = {} as TaskTransfer;
+  if (!task.additional.transfer.size_downloaded) task.additional.transfer.size_downloaded = 0;
   const total = task.size;
   const downloaded = Number(task.additional.transfer.size_downloaded);
   if (total / downloaded < 1.05) {
@@ -206,7 +208,7 @@ const seed = (task: Task) => {
   return task;
 };
 
-export const activateDemo = (task: TaskMock, interval = 100) => {
+export const activateTaskDemo = (task: TaskMock, interval = 100) => {
   return setInterval(() => {
     task.tasks.forEach(_task => {
       switch (_task.status) {
@@ -253,7 +255,7 @@ export const patchTasks = (_global = window): TaskMock => {
       if (!resolveUrl(input)?.endsWith('DownloadStation/task.cgi')) return false;
       return !!init?.body?.toString()?.includes('api=SYNO.DownloadStation.Task&method=list');
     },
-    () => ({ offset: 0, tasks: task.tasks, total: 1 }),
+    () => ({ offset: 0, tasks: task?.tasks ?? [], total: 1 }),
   ]);
 
   // delete
@@ -264,7 +266,7 @@ export const patchTasks = (_global = window): TaskMock => {
     },
     (_, init) => {
       const id = init?.body?.toString()?.match(/id=(.*?(?=&|$))/)?.[1];
-      if (id) id.split('%2C')?.forEach(_id => task.remove(_id));
+      if (id) id.split('%2C')?.forEach(_id => task?.remove(_id));
       return { error: 0, id };
     },
   ]);
@@ -290,7 +292,7 @@ export const patchTasks = (_global = window): TaskMock => {
     },
     (_, init) => {
       const id = init?.body?.toString()?.match(/id=(.*?(?=&|$))/)?.[1];
-      if (id) id.split('%2C')?.forEach(_id => task.pause(_id));
+      if (id) id.split('%2C')?.forEach(_id => task?.pause(_id));
       return { error: 0, id };
     },
   ]);
@@ -306,7 +308,7 @@ export const patchTasks = (_global = window): TaskMock => {
       const destination = init?.body?.toString()?.match(/destination=(.*?(?=&|$))/)?.[1];
       if (uri)
         uri.split('%2C')?.forEach(_uri =>
-          task.add(
+          task?.add(
             generateTask({
               additional: {
                 detail: {

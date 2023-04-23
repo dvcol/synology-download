@@ -1,9 +1,10 @@
 import type { ContentAppHtmlElement, StandaloneAppHtmlElement } from './components.model';
-import type { BadgeMock, FileMock, TaskMock } from '../mocks';
+import type { BadgeMock, DownloadMock, FileMock, TaskMock } from '../mocks';
 
 export type SynologyMock = {
-  file?: FileMock;
+  download?: DownloadMock;
   task?: TaskMock;
+  file?: FileMock;
   badge?: BadgeMock;
 };
 

@@ -1,8 +1,8 @@
-import { activateDemo, generateTask } from './mocks';
+import { activateDownloadDemo, activateTaskDemo, generateDownload, generateTask } from './mocks';
 
 import { defineComponents } from './modules';
 
-import type { BadgeMock, TaskMock } from './mocks';
+import type { BadgeMock, DownloadMock, FileMock, TaskMock } from './mocks';
 
 import type { ContentAppHtmlElement, FetchIntercept, Locales, LocalesFetch, StandaloneAppHtmlElement, Synology, WebComponents } from './models';
 
@@ -31,7 +31,12 @@ declare global {
 export * from './modules';
 export * from './models';
 
-export { generateTask, activateDemo };
-export type { TaskMock, BadgeMock };
+const activateDemo = ({ task, download }: { task: Parameters<typeof activateTaskDemo>; download: Parameters<typeof activateDownloadDemo> }) => ({
+  task: activateTaskDemo(...task),
+  download: activateDownloadDemo(...download),
+});
+
+export { generateTask, generateDownload, activateTaskDemo, activateDownloadDemo, activateDemo };
+export type { TaskMock, FileMock, DownloadMock, BadgeMock };
 
 export default defineComponents;
