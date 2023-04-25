@@ -5,13 +5,13 @@ import { BaseLoggerService } from '@src/services';
 import type { DownloadItem } from '@src/utils';
 
 export const generateDownload = (_download: Partial<DownloadItem> = {}): DownloadItem => {
+  const state = faker.helpers.arrayElement([...Array(8).fill('in_progress'), 'interrupted', 'complete']);
+
   const totalBytes = _download?.totalBytes ?? faker.datatype.number({ min: 1000, max: 1000000000 });
-  const bytesReceived = _download?.bytesReceived ?? faker.datatype.number({ min: 0, max: totalBytes / 10 });
+  const bytesReceived = _download?.bytesReceived ?? state === 'completed' ? totalBytes : faker.datatype.number({ min: 0, max: totalBytes / 10 });
 
   const filename = faker.system.filePath();
   const url = `${faker.internet.url()}/${filename.split('/').pop()}`;
-
-  const state = faker.helpers.arrayElement([...Array(8).fill('in_progress'), 'interrupted', 'complete']);
 
   return {
     totalBytes,
