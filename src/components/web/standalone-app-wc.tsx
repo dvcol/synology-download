@@ -10,6 +10,7 @@ import type { StoreOrProxy, Task } from '@src/models';
 import { AppInstance, mapToTask, ServiceInstance } from '@src/models';
 import { restoreLocalSate, restoreSettings, restoreTaskSlice } from '@src/pages/background/modules';
 import type { StandaloneAppCredentials } from '@src/pages/web';
+import { WcEvents } from '@src/pages/web';
 import { BaseLoggerService, DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { store } from '@src/store';
 import { addTasks, setStandalone, syncConnection } from '@src/store/actions';
@@ -32,6 +33,11 @@ export class StandaloneAppWc extends HTMLElement {
     await this.init();
     this.render();
     this.attach();
+    this.dispatchEvent(new CustomEvent(WcEvents.connected, { detail: this }));
+  }
+
+  private disconnectedCallback() {
+    this.dispatchEvent(new CustomEvent(WcEvents.disconnected, { detail: this }));
   }
 
   private async init(storeProxy: StoreOrProxy = store) {

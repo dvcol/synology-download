@@ -6,16 +6,24 @@
   </head>
   <body>
     <div id="synology-download-web-app-container" data-context="web">
-      <wc-synology-download-standalone>
+      <wc-synology-download-standalone id="wc-synology-download-standalone">
         <div id="app-skeleton-navbar"></div>
         <div id="app-skeleton-content">
           <span id="app-skeleton-loader">Loading application ...</span>
         </div>
       </wc-synology-download-standalone>
     </div>
-    <wc-synology-download-content></wc-synology-download-content>
+    <wc-synology-download-content id="wc-synology-download-content"></wc-synology-download-content>
   </body>
 </html>
+
+<script>
+  document.getElementById('wc-synology-download-standalone').addEventListener('connected', (e)=> console.info('Standalone Web Component connected', e) )
+  document.getElementById('wc-synology-download-standalone').addEventListener('disconnected', (e)=> console.info('Standalone Web Component disconnected', e) )
+
+  document.getElementById('wc-synology-download-content').addEventListener('connected', (e)=> console.info('Standalone Web Component connected', e) )
+  document.getElementById('wc-synology-download-content').addEventListener('disconnected', (e)=> console.info('Standalone Web Component disconnected', e) )
+</script>
 
 <style>
   body {

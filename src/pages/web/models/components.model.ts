@@ -56,3 +56,11 @@ export interface StandaloneAppHtmlElement extends HTMLElement {
   poll: () => Promise<any>;
   login: (credentials?: StandaloneAppCredentials) => Promise<any>;
 }
+
+export enum WcEvents {
+  connected = 'connected',
+  disconnected = 'disconnected',
+}
+
+export type ContentConnectedEvent = CustomEvent<ContentAppHtmlElement>;
+export type StandaloneConnectedEvent = CustomEvent<StandaloneAppHtmlElement>;

@@ -4,10 +4,11 @@ import React from 'react';
 import { render } from 'react-dom';
 
 import type { StoreOrProxy } from '@src/models';
-import { ServiceInstance, AppInstance } from '@src/models';
+import { AppInstance, ServiceInstance } from '@src/models';
 import { ContentApp } from '@src/pages/content/components/content-app';
 import type { AnchorPayload, TaskDialogPayload } from '@src/pages/content/service';
 import { anchor$, taskDialog$ } from '@src/pages/content/service';
+import { WcEvents } from '@src/pages/web';
 import { BaseLoggerService, DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { store } from '@src/store';
 
@@ -24,6 +25,11 @@ export class ContentAppWc extends HTMLElement {
     this.init();
     this.render();
     this.attach();
+    this.dispatchEvent(new CustomEvent(WcEvents.connected, { detail: this }));
+  }
+
+  private disconnectedCallback() {
+    this.dispatchEvent(new CustomEvent(WcEvents.disconnected, { detail: this }));
   }
 
   private init(storeProxy: StoreOrProxy = store) {
