@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.8.2](https://github.com/dvcol/synology-download/compare/v3.8.1...v3.8.2) (2023-05-01)
+
+
+### Bug Fixes
+
+* **mock:** fix download completed mock ([1c04258](https://github.com/dvcol/synology-download/commit/1c0425832fef88338f27bd099487eab41b42a640))
+* **mocks:** adds login support to standalone wc ([a77ac6d](https://github.com/dvcol/synology-download/commit/a77ac6deffe23069dda13f6a3e19a69d47b1a454))
+
 ### [3.8.1](https://github.com/dvcol/synology-download/compare/v3.7.1...v3.8.1) (2023-04-23)
 
 
