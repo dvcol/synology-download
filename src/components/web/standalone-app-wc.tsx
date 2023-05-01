@@ -9,9 +9,11 @@ import { StandaloneApp } from '@src/components';
 import type { StoreOrProxy, Task } from '@src/models';
 import { AppInstance, mapToTask, ServiceInstance } from '@src/models';
 import { restoreLocalSate, restoreSettings, restoreTaskSlice } from '@src/pages/background/modules';
+import type { StandaloneAppCredentials } from '@src/pages/web';
 import { BaseLoggerService, DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { store } from '@src/store';
-import { addTasks, setStandalone } from '@src/store/actions';
+import { addTasks, setStandalone, syncConnection } from '@src/store/actions';
+import { getConnection } from '@src/store/selectors';
 
 export class StandaloneAppWc extends HTMLElement {
   get store() {
@@ -96,5 +98,16 @@ export class StandaloneAppWc extends HTMLElement {
    */
   poll() {
     return lastValueFrom(forkJoin([QueryService.listTasks(), QueryService.getStatistic(), DownloadService.searchAll()]));
+  }
+
+  /**
+   * Trigger a login event. Default login/pwd is admin/@dm1n.
+   * @param credentials
+   */
+  login(credentials?: StandaloneAppCredentials) {
+    const connection = getConnection(this.store.getState());
+    const merged = { ...connection, ...credentials, password: credentials?.password ?? (connection.password || '@dm1n') };
+    this.store.dispatch(syncConnection(merged));
+    return lastValueFrom(QueryService.login(merged));
   }
 }

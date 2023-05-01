@@ -40,9 +40,19 @@ export interface ContentAppHtmlElement extends HTMLElement {
   dialog: (payload: ContentAppTaskDialogPayload) => void;
 }
 
+export type StandaloneAppCredentials = {
+  username?: string;
+  password?: string;
+  rememberMe?: boolean;
+  autoLogin?: boolean;
+  path?: string;
+  port?: number;
+};
+
 export interface StandaloneAppHtmlElement extends HTMLElement {
   basename?: string;
   render: (root?: Element, store?: Store) => void;
   add: (tsk: Task) => void;
   poll: () => Promise<any>;
+  login: (credentials?: StandaloneAppCredentials) => Promise<any>;
 }
