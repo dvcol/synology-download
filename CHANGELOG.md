@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.8.3](https://github.com/dvcol/synology-download/compare/v3.8.2...v3.8.3) (2023-05-01)
+
+
+### Bug Fixes
+
+* **wc:** adds event dispatch when component are donnected/disconnected ([8fb3ffb](https://github.com/dvcol/synology-download/commit/8fb3ffbfbe881fb21dea404375566eb07d29eca7))
+
 ### [3.8.2](https://github.com/dvcol/synology-download/compare/v3.8.1...v3.8.2) (2023-05-01)
 
 
