@@ -17,7 +17,7 @@ export type ContentAppTaskForm = {
   torrent?: string;
   create_list?: boolean;
 };
-export type ContentAppAnchorPayload = { event: MouseEvent; anchor: Element | null; form: ContentAppTaskForm };
+export type ContentAppAnchorPayload = { event?: MouseEvent; anchor?: Element | null; form: ContentAppTaskForm };
 export type ContentAppInterceptResponse = {
   success: boolean;
   payload?: {
