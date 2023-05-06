@@ -160,6 +160,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
         'aria-labelledby': 'basic-button',
       }}
       sx={{ zIndex: `${zIndexMax} !important` }}
+      disableScrollLock
     >
       {!isLogged && (
         <MenuItem sx={{ fontSize: '1em' }} disableRipple disableTouchRipple>
