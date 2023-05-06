@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.8.5](https://github.com/dvcol/synology-download/compare/v3.8.3...v3.8.5) (2023-05-06)
+
+
+### Bug Fixes
+
+* **menus:** add disable scroll-lock to lessen interfering with the page ([02e399c](https://github.com/dvcol/synology-download/commit/02e399c1d49b987b4c11621eb33911bc8ccb756c))
+* **quick-menu:** fix anchor payload type signature ([fdcdd86](https://github.com/dvcol/synology-download/commit/fdcdd868b5510cccdbfee5e6a812732f33bc9365))
+
 ### [3.8.3](https://github.com/dvcol/synology-download/compare/v3.8.2...v3.8.3) (2023-05-01)
 
 
