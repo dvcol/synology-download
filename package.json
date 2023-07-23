@@ -42,6 +42,7 @@
     "build:tsc-alias": "tsc-alias -p tsconfig.json",
     "build:web-types": "node webpack/build/web-types.js",
     "build:web": "node webpack/build/web.js && yarn build:tsc-alias",
+    "build:web:ci": "ASSET_PATH=/synology-download/ node webpack/build/web.js && yarn build:tsc-alias",
     "build:web:analyse": "ANALYSE_BUNDLE=true yarn build:web",
     "build:extension": "node webpack/build/extension.js",
     "build:extension:analyse": "ANALYSE_BUNDLE=true yarn build:extension",

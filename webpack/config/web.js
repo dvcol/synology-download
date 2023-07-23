@@ -9,7 +9,7 @@ const { getCommonConfig } = require('./common');
 const ROOT_DIR = '../../';
 
 const getWebConfig = (common = getCommonConfig()) => {
-  const ASSET_PATH = process.env.ASSET_PATH || '/synology-download/';
+  const ASSET_PATH = process.env.ASSET_PATH || '/';
 
   const options = {
     ...common,

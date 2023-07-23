@@ -142,7 +142,7 @@ jobs:
         uses: ./.github/actions/build
         with:
           node_version: ${{ env.node_version }}
-          mode: web
+          mode: web:ci
 
       - name: Publish to npm
         env:
