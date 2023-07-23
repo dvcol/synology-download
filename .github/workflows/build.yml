@@ -26,17 +26,11 @@ jobs:
       - name: Checkout branch ${{ github.ref }}
         uses: actions/checkout@v3
 
-      - name: Setup Node.js ${{ env.node_version }}
-        uses: actions/setup-node@v3
+      - name: Build
+        uses: ./.github/actions/build
         with:
-          node-version: ${{ env.node_version }}
-          cache: 'yarn'
-
-      - name: Clean install
-        run: yarn install
-
-      - name: Build extension
-        run: yarn build:extension
+          node_version: ${{ env.node_version }}
+          mode: extension
 
       - name: Linting (eslint)
         run: yarn lint
@@ -60,15 +54,21 @@ jobs:
           node-version: ${{ env.node_version }}
           cache: 'yarn'
 
-      - name: Clean install
-        run: yarn install
-
-      - name: Build web
-        run: yarn build:web
+      - name: Build
+        uses: ./.github/actions/build
+        with:
+          node_version: ${{ env.node_version }}
+          mode: web
 
       - name: Linting (eslint)
-        run: yarn lint
+        run: |
+          # ================= Install =================
+          
+          yarn lint
 
       - name: Unit tests
-        run: yarn test:unit
         if: github.event_name == 'push' && github.ref == 'ref/head/main'
+        run: |
+          # ================= Install =================
+          
+          yarn test:unit

@@ -1,0 +1,62 @@
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Deploy - Github Pages
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-deploy
+  cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+env:
+  node_version: 18.x
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+
+jobs:
+  deploy:
+    name: Deploy Github Pages
+    runs-on: ubuntu-latest
+
+    environment:
+      name: synology-download
+      url: https://dvcol.github.io/synology-download/
+
+    steps:
+      - uses: actions/cache/restore@v3
+        id: cache
+        with:
+          path: dist
+          key: ${{ github.ref }}-${{ github.run_id }}-build
+
+      - name: Checkout branch ${{ github.ref }}
+        if: ${{ steps.cache.outputs.cache-hit != 'true' }}
+        uses: actions/checkout@v3
+
+      - name: Build
+        if: ${{ steps.cache.outputs.cache-hit != 'true' }}
+        uses: ./.github/actions/build
+        with:
+          node_version: ${{ env.node_version }}
+          mode: web
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          # Upload entire repository
+          path: dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
+

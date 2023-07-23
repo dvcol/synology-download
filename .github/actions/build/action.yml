@@ -1,0 +1,35 @@
+name: Build
+description: Install and build the repo
+
+inputs:
+  mode:
+    description: 'Build the monorepo'
+    required: true
+    default: web
+  node_version:
+    description: 'Node version to use'
+    required: true
+
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Node.js ${{ inputs.node_version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ inputs.node_version }}
+        cache: 'yarn'
+
+    - name: Install dependencies
+      shell: bash
+      run: |
+        # ================= Install =================
+        
+        yarn install
+
+    - name: Build sources
+      shell: bash
+      run: |
+        # =================  Build  =================
+
+        yarn build:${{ inputs.mode }}

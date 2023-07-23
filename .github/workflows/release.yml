@@ -35,10 +35,15 @@ jobs:
           cache: 'yarn'
 
       - name: Clean install dependencies
-        run: yarn install
+        run: |
+          # =================  Install  =================
+          
+          yarn install
 
       - name: Tag and bump Release
         run: |
+          # =================  Tab and bump  =================
+          
           # setup git creds
           git config user.name "GitHub Release Bot"
           git config user.email "<>"
@@ -48,6 +53,8 @@ jobs:
 
       - name: Push to remote
         run: |
+          # =================  Push to remote  =================
+          
           # Check status
           git status
           git diff --color -U0 | cat
@@ -67,20 +74,16 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js ${{ env.node_version }}
-        uses: actions/setup-node@v3
+      - name: Build
+        uses: ./.github/actions/build
         with:
-          node-version: ${{ env.node_version }}
-          cache: 'yarn'
-
-      - name: Clean install dependencies
-        run: yarn install
-
-      - name: Build application
-        run: yarn build:extension
+          node_version: ${{ env.node_version }}
+          mode: extension
 
       - name: Zip build folder
         run: |
+          # =================  Zipping build folder  =================
+          
           # Zipping build folder for artifact upload
           cd build;
           zip -r synology-download.zip *
@@ -97,6 +100,8 @@ jobs:
         if: ${{ github.event_name == 'workflow_run' || (github.event_name == 'workflow_dispatch' && github.event.inputs.tagName == '') }}
         id: latest-tag
         run: |
+          # =================  Fetch tags  =================
+          
           tag_name=$(git describe --abbrev=0)
           echo "Tag found: '$tag_name'"
           echo "::set-output name=TAG_NAME::$tag_name"
@@ -115,6 +120,8 @@ jobs:
           CHROME_WEB_STORE_CLIENT_SECRET: ${{ secrets.CHROME_WEB_STORE_CLIENT_SECRET }}
           CHROME_WEB_STORE_REFRESH_TOKEN: ${{ secrets.CHROME_WEB_STORE_REFRESH_TOKEN }}
         run: |
+          # =================  Publish to Chrome store  =================
+          
           # Uploadind zip to web store
           yarn dlx -q chrome-webstore-upload-cli upload --source build/synology-download.zip --extension-id "$CHROME_WEB_STORE_EXTENSION_ID" --client-id "$CHROME_WEB_STORE_CLIENT_ID" --client-secret "$CHROME_WEB_STORE_CLIENT_SECRET" --refresh-token "$CHROME_WEB_STORE_REFRESH_TOKEN"
 
@@ -131,20 +138,28 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js ${{ env.node_version }}
-        uses: actions/setup-node@v3
+      - name: Build
+        uses: ./.github/actions/build
         with:
-          node-version: ${{ env.node_version }}
-          registry-url: 'https://registry.npmjs.org'
-          cache: 'yarn'
-
-      - name: Clean install dependencies
-        run: yarn install
-
-      - name: Build application
-        run: yarn build:web
+          node_version: ${{ env.node_version }}
+          mode: web
 
       - name: Publish to npm
-        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          # =================  Publish  =================
+          
+          npm publish
+
+      - uses: actions/cache/save@v3
+        id: cache
+        with:
+          path: dist
+          key: ${{ github.ref }}-${{ github.run_id }}-build
+
+  deploy:
+    name: Deploy
+    needs: publish-npm
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
