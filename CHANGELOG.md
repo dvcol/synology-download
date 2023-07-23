@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.8.6](https://github.com/dvcol/synology-download/compare/v3.8.5...v3.8.6) (2023-07-23)
+
+
+### Bug Fixes
+
+* **wc:** exported types and public path ([39d85d1](https://github.com/dvcol/synology-download/commit/39d85d13a33168912aaafa799a54109e848a7ef2))
+
 ### [3.8.5](https://github.com/dvcol/synology-download/compare/v3.8.3...v3.8.5) (2023-05-06)
 
 
