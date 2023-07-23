@@ -15,7 +15,7 @@ on:
         required: false
 
 env:
-  node_version: 18.x
+  node_version: 20.x
 
 jobs:
   release:
