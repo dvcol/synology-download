@@ -35,6 +35,8 @@ export class PollingService {
   }
 
   static init(store: StoreOrProxy, isProxy = false) {
+    this.destroy();
+
     this.store = store;
     this.isProxy = isProxy;
 
@@ -84,6 +86,10 @@ export class PollingService {
   static destroy() {
     this._destroy$.next();
     this._destroy$.complete();
+
+    // Restore subject for subsequent-init
+    this._destroy$ = new Subject();
+
     LoggerService.debug('Polling service destroyed');
   }
 

@@ -20,6 +20,7 @@ export class LoggerService extends BaseLoggerService {
 
   static init({ source, store, isProxy }: { store: StoreOrProxy; source: ServiceInstance; isProxy?: boolean }) {
     super.init({ source, color: ServiceInstanceColorsMap[source] });
+    this.destroy();
 
     ProxyLogger.init(this);
 
@@ -50,6 +51,10 @@ export class LoggerService extends BaseLoggerService {
   static destroy() {
     this._destroy$.next();
     this._destroy$.complete();
+
+    // Restore subject for subsequent-init
+    this._destroy$ = new Subject();
+
     ProxyLogger.reset();
   }
 

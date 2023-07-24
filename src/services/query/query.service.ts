@@ -104,6 +104,8 @@ export class QueryService {
   private static _destroy$ = new Subject<void>();
 
   static init(store: StoreOrProxy, source: ServiceInstance, isProxy = false) {
+    this.destroy();
+
     this.store = store;
     this.source = source;
     this.isProxy = isProxy;
@@ -142,6 +144,10 @@ export class QueryService {
   static destroy() {
     this._destroy$.next();
     this._destroy$.complete();
+
+    // Restore subject for subsequent-init
+    this._destroy$ = new Subject();
+
     LoggerService.debug('Query service destroyed');
   }
 

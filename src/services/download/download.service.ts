@@ -48,6 +48,8 @@ export class DownloadService {
   }
 
   static init(store: StoreOrProxy, isProxy = false) {
+    this.destroy();
+
     this.store = store;
     this.isProxy = isProxy;
 
@@ -59,6 +61,10 @@ export class DownloadService {
   static destroy() {
     this._destroy$.next();
     this._destroy$.complete();
+
+    // Restore subject for subsequent-init
+    this._destroy$ = new Subject();
+
     LoggerService.debug('Download service destroyed');
   }
 

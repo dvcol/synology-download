@@ -69,6 +69,8 @@ export class NotificationService {
   private static _destroy$ = new Subject<void>();
 
   static init(store: StoreOrProxy, source: ServiceInstance, isProxy = false): void {
+    this.destroy();
+
     this.store = store;
     this.source = source;
     this.isProxy = isProxy;
@@ -102,6 +104,10 @@ export class NotificationService {
   static destroy() {
     this._destroy$.next();
     this._destroy$.complete();
+
+    // Restore subject for subsequent-init
+    this._destroy$ = new Subject();
+
     LoggerService.debug('Notification service destroyed');
   }
 
