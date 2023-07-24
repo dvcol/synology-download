@@ -1,3 +1,5 @@
+import { Subject, takeUntil } from 'rxjs';
+
 import type { Log, ServiceInstance, StoreOrProxy } from '@src/models';
 import { ChromeMessageType, defaultLoggingLevels, LoggingLevel, ServiceInstanceColorsMap } from '@src/models';
 import { BaseLoggerService } from '@src/services';
@@ -14,6 +16,8 @@ export class LoggerService extends BaseLoggerService {
   private static history = false;
   private static historyMax = 1000;
 
+  private static _destroy$ = new Subject<void>();
+
   static init({ source, store, isProxy }: { store: StoreOrProxy; source: ServiceInstance; isProxy?: boolean }) {
     super.init({ source, color: ServiceInstanceColorsMap[source] });
 
@@ -22,21 +26,31 @@ export class LoggerService extends BaseLoggerService {
     this.store = store;
     this.isProxy = isProxy ?? false;
 
-    store$(store, getAdvancedSettingsLogging).subscribe(settings => {
-      this.level = (settings.levels ?? defaultLoggingLevels)[this.source] ?? this.level;
-      this.enabled = !!settings.enabled;
-      this.history = settings.history ?? this.history;
-      this.historyMax = settings.historyMax ?? this.historyMax;
-    });
+    store$(store, getAdvancedSettingsLogging)
+      .pipe(takeUntil(this._destroy$))
+      .subscribe(settings => {
+        this.level = (settings.levels ?? defaultLoggingLevels)[this.source] ?? this.level;
+        this.enabled = !!settings.enabled;
+        this.history = settings.history ?? this.history;
+        this.historyMax = settings.historyMax ?? this.historyMax;
+      });
 
     if (!this.isProxy) {
-      onMessage<Log>([ChromeMessageType.logger]).subscribe(({ message: { payload }, sendResponse }) => {
-        if (payload) this.dispatch(payload);
-        sendResponse();
-      });
+      onMessage<Log>([ChromeMessageType.logger])
+        .pipe(takeUntil(this._destroy$))
+        .subscribe(({ message: { payload }, sendResponse }) => {
+          if (payload) this.dispatch(payload);
+          sendResponse();
+        });
     }
 
     console.debug(...this.timestamp, 'Logger service initialized');
+  }
+
+  static destroy() {
+    this._destroy$.next();
+    this._destroy$.complete();
+    ProxyLogger.reset();
   }
 
   private static dispatch(log: Log) {

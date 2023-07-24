@@ -1,4 +1,4 @@
-import { filter, map, Subject, tap } from 'rxjs';
+import { filter, map, Subject, takeUntil, tap } from 'rxjs';
 
 import type {
   ChromeNotification,
@@ -66,29 +66,43 @@ export class NotificationService {
         tap(n => n && createNotification(n)),
       );
 
+  private static _destroy$ = new Subject<void>();
+
   static init(store: StoreOrProxy, source: ServiceInstance, isProxy = false): void {
     this.store = store;
     this.source = source;
     this.isProxy = isProxy;
 
     if (!isProxy) {
-      this.notify$.pipe(this.bufferStopStart('Notification')).subscribe();
-      this.error$.pipe(this.bufferStopStart('Errors')).subscribe();
+      this.notify$.pipe(this.bufferStopStart('Notification'), takeUntil(this._destroy$)).subscribe();
+      this.error$.pipe(this.bufferStopStart('Errors'), takeUntil(this._destroy$)).subscribe();
 
-      store$<StateSlice['badge']>(this.store, getStateBadge).subscribe(count => this.store.dispatch(setBadge(count)));
+      store$<StateSlice['badge']>(this.store, getStateBadge)
+        .pipe(takeUntil(this._destroy$))
+        .subscribe(count => this.store.dispatch(setBadge(count)));
 
-      onMessage<ChromeNotification>([ChromeMessageType.notificationBanner]).subscribe(({ message: { payload }, sendResponse }) => {
-        this.sendBannerOrForward(payload);
-        sendResponse();
-      });
+      onMessage<ChromeNotification>([ChromeMessageType.notificationBanner])
+        .pipe(takeUntil(this._destroy$))
+        .subscribe(({ message: { payload }, sendResponse }) => {
+          this.sendBannerOrForward(payload);
+          sendResponse();
+        });
     } else {
-      onMessage<SnackNotification>([ChromeMessageType.notificationSnack]).subscribe(({ message: { payload }, sendResponse }) => {
-        this.sendSnackOrForward(payload);
-        sendResponse();
-      });
+      onMessage<SnackNotification>([ChromeMessageType.notificationSnack])
+        .pipe(takeUntil(this._destroy$))
+        .subscribe(({ message: { payload }, sendResponse }) => {
+          this.sendSnackOrForward(payload);
+          sendResponse();
+        });
     }
 
     LoggerService.debug('Notification service initialized', { isProxy });
+  }
+
+  static destroy() {
+    this._destroy$.next();
+    this._destroy$.complete();
+    LoggerService.debug('Notification service destroyed');
   }
 
   static get snackNotifications$(): Observable<SnackNotification> {

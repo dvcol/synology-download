@@ -1,4 +1,4 @@
-import { catchError, EMPTY, forkJoin, from, map, of, tap, throwError } from 'rxjs';
+import { catchError, EMPTY, forkJoin, from, map, of, Subject, takeUntil, tap, throwError } from 'rxjs';
 
 import type { Download, DownloadQueryPayload, StoreOrProxy } from '@src/models';
 import { ChromeMessageType, mapToDownload } from '@src/models';
@@ -19,20 +19,25 @@ export class DownloadService {
   private static key = 'DownloadService';
   private static store: any | StoreOrProxy;
   private static isProxy: boolean;
+  private static _destroy$ = new Subject<void>();
 
   static listen(name = this.key): void {
-    onMessage<DownloadQueryPayload>([ChromeMessageType.download]).subscribe(({ message: { payload }, sendResponse }) => {
-      if (payload?.id === name) {
-        const { method, args } = payload;
-        this.do(method, ...(args ?? []))
-          .pipe(
-            map(response => ({ success: true, payload: response })),
-            catchError(error => of({ success: false, error })),
-          )
-          .subscribe(response => sendResponse(response));
-      }
-    });
+    onMessage<DownloadQueryPayload>([ChromeMessageType.download])
+      .pipe(takeUntil(this._destroy$))
+      .subscribe(({ message: { payload }, sendResponse }) => {
+        if (payload?.id === name) {
+          const { method, args } = payload;
+          this.do(method, ...(args ?? []))
+            .pipe(
+              map(response => ({ success: true, payload: response })),
+              catchError(error => of({ success: false, error })),
+              takeUntil(this._destroy$),
+            )
+            .subscribe(response => sendResponse(response));
+        }
+      });
   }
+
   static forward<T>(method: DownloadQueryPayload['method'], ...args: DownloadQueryPayload['args']): Observable<T> {
     return sendMessage<DownloadQueryPayload, T>({ type: ChromeMessageType.download, payload: { id: this.key, method, args } });
   }
@@ -49,6 +54,12 @@ export class DownloadService {
     if (!isProxy) this.listen();
 
     LoggerService.debug('Download service initialized', { isProxy });
+  }
+
+  static destroy() {
+    this._destroy$.next();
+    this._destroy$.complete();
+    LoggerService.debug('Download service destroyed');
   }
 
   static search(query: DownloadQuery = {}): Observable<Download[]> {

@@ -1,4 +1,4 @@
-import { catchError, EMPTY, exhaustMap, finalize, map, of, retry, Subject, switchMap, take, tap, throttleTime, throwError } from 'rxjs';
+import { catchError, EMPTY, exhaustMap, finalize, map, of, retry, Subject, switchMap, take, takeUntil, tap, throttleTime, throwError } from 'rxjs';
 
 import type {
   CommonResponse,
@@ -101,6 +101,7 @@ export class QueryService {
   private static downloadClient: SynologyDownloadService;
   private static download2Client: SynologyDownload2Service;
   private static baseUrl: string;
+  private static _destroy$ = new Subject<void>();
 
   static init(store: StoreOrProxy, source: ServiceInstance, isProxy = false) {
     this.store = store;
@@ -113,24 +114,35 @@ export class QueryService {
     this.downloadClient = new SynologyDownloadService(isProxy);
     this.download2Client = new SynologyDownload2Service(isProxy);
 
-    store$<string>(store, getUrl).subscribe(url => this.setBaseUrl(url));
-    store$<string | undefined>(store, getSid).subscribe(sid => this.setSid(sid));
+    store$<string>(store, getUrl)
+      .pipe(takeUntil(this._destroy$))
+      .subscribe(url => this.setBaseUrl(url));
+    store$<string | undefined>(store, getSid)
+      .pipe(takeUntil(this._destroy$))
+      .subscribe(sid => this.setSid(sid));
 
     // subscribe to exhaust map for polling
-    this.infoHandler.subscribe();
-    this.listTaskHandler.subscribe();
-    this.listTaskFilesHandler.subscribe();
-    this.taskStatisticsHandler.subscribe();
+    this.infoHandler.pipe(takeUntil(this._destroy$)).subscribe();
+    this.listTaskHandler.pipe(takeUntil(this._destroy$)).subscribe();
+    this.listTaskFilesHandler.pipe(takeUntil(this._destroy$)).subscribe();
+    this.taskStatisticsHandler.pipe(takeUntil(this._destroy$)).subscribe();
 
     // TODO - remove this if HTTPS is fixed
     this.autologinQueue
       .pipe(
         throttleTime(1000),
         tap(options => this.autoLogin(options).subscribe()),
+        takeUntil(this._destroy$),
       )
       .subscribe();
 
     LoggerService.debug('Query service initialized', { isProxy });
+  }
+
+  static destroy() {
+    this._destroy$.next();
+    this._destroy$.complete();
+    LoggerService.debug('Query service destroyed');
   }
 
   static setBaseUrl(baseUrl: string): void {

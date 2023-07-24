@@ -37,7 +37,16 @@ export class StandaloneAppWc extends HTMLElement {
   }
 
   private disconnectedCallback() {
+    this.destroy();
     this.dispatchEvent(new CustomEvent(WcEvents.disconnected, { detail: this }));
+  }
+
+  private destroy() {
+    PollingService.destroy();
+    DownloadService.destroy();
+    QueryService.destroy();
+    NotificationService.destroy();
+    LoggerService.destroy();
   }
 
   private async init(storeProxy: StoreOrProxy = store) {

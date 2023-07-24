@@ -1,4 +1,4 @@
-import { combineLatest, distinctUntilChanged, Subject, switchMap, timer, withLatestFrom } from 'rxjs';
+import { combineLatest, distinctUntilChanged, Subject, switchMap, takeUntil, timer, withLatestFrom } from 'rxjs';
 
 import type { ChromeNotification, StoreOrProxy } from '@src/models';
 import { ChromeMessageType, defaultPolling } from '@src/models';
@@ -19,6 +19,8 @@ export class PollingService {
 
   private static readonly change$ = new Subject<number>();
 
+  private static _destroy$ = new Subject<void>();
+
   static readonly timer$ = this.change$.pipe(
     distinctUntilChanged(),
     switchMap(interval => timer(0, interval).pipe(skipUntilRepeat(() => !this.isReady(), this.stop$, this.start$))),
@@ -36,41 +38,53 @@ export class PollingService {
     this.store = store;
     this.isProxy = isProxy;
 
-    onMessage<ChromeNotification>([ChromeMessageType.polling]).subscribe(({ message: { payload }, sendResponse }) => {
-      (payload ? this.start$ : this.stop$).next();
-      sendResponse();
-    });
+    onMessage<ChromeNotification>([ChromeMessageType.polling])
+      .pipe(takeUntil(this._destroy$))
+      .subscribe(({ message: { payload }, sendResponse }) => {
+        (payload ? this.start$ : this.stop$).next();
+        sendResponse();
+      });
 
     if (!this.isProxy) {
       this.timer$
-        .pipe(withLatestFrom(store$(this.store, getLogged), store$(this.store, getSettingsDownloadsEnabled)))
+        .pipe(withLatestFrom(store$(this.store, getLogged), store$(this.store, getSettingsDownloadsEnabled)), takeUntil(this._destroy$))
         .subscribe(([_, logged, download]) => {
-          if (download) DownloadService.searchAll().subscribe();
+          if (download) DownloadService.searchAll().pipe(takeUntil(this._destroy$)).subscribe();
           if (logged) {
-            QueryService.listTasks().subscribe({
-              error: err => {
-                this.stop();
-                LoggerService.error('Polling service failed to fetch list', err);
-              },
-            });
-            QueryService.getStatistic().subscribe({
-              error: err => {
-                this.stop();
-                LoggerService.error('Polling service failed to fetch statistics', err);
-              },
-            });
+            QueryService.listTasks()
+              .pipe(takeUntil(this._destroy$))
+              .subscribe({
+                error: err => {
+                  this.stop();
+                  LoggerService.error('Polling service failed to fetch list', err);
+                },
+              });
+            QueryService.getStatistic()
+              .pipe(takeUntil(this._destroy$))
+              .subscribe({
+                error: err => {
+                  this.stop();
+                  LoggerService.error('Polling service failed to fetch statistics', err);
+                },
+              });
           }
         });
 
-      store$<number>(this.store, getPollingInterval).subscribe(() => this.change(this.interval()));
-      combineLatest([
-        store$(this.store, getPollingEnabled),
-        store$(this.store, getLogged),
-        store$(this.store, getSettingsDownloadsEnabled),
-      ]).subscribe(([enabled, logged, download]) => (enabled && (download || logged) ? this.start() : this.stop()));
+      store$<number>(this.store, getPollingInterval)
+        .pipe(takeUntil(this._destroy$))
+        .subscribe(() => this.change(this.interval()));
+      combineLatest([store$(this.store, getPollingEnabled), store$(this.store, getLogged), store$(this.store, getSettingsDownloadsEnabled)])
+        .pipe(takeUntil(this._destroy$))
+        .subscribe(([enabled, logged, download]) => (enabled && (download || logged) ? this.start() : this.stop()));
     }
 
     LoggerService.debug('Polling service initialized', { isProxy });
+  }
+
+  static destroy() {
+    this._destroy$.next();
+    this._destroy$.complete();
+    LoggerService.debug('Polling service destroyed');
   }
 
   static start(): void {
