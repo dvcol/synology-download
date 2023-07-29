@@ -59,7 +59,8 @@
     "style": "stylelint src/**/*.{css,scss,less,html}",
     "style:fix": "yarn style --fix",
     "version": "standard-version --skip.changelog --skip.commit --skip.tag",
-    "release": "git tag -d $(git tag -l \"v*-rc\") && standard-version --skip.bump",
+    "clean:tags": "git tag -d $(git tag -l \"v*-rc\")",
+    "release": "yarn clean:tags && standard-version --skip.bump",
     "release:changelog": "extract-changelog-release > RELEASE.md"
   },
   "engines": {
