@@ -15,7 +15,7 @@ env:
   node_version: 20.x
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -59,4 +59,18 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
+
+      - name: Setup credentials
+        run: |
+          # ================= Setup credentials =================
+          
+          git config user.name "GitHub Release Bot"
+          git config user.email "<>"
+
+      - name: Tag deployment
+        run: |
+          # ================= Tag deployment =================
+          
+          git tag -fa deployed -m 'Deployed on github pages'
+          git push origin --tags --force
 
