@@ -1,0 +1,14 @@
+{
+  "panel__settings__task_form__title": {
+    "message": "任务表单"
+  },
+  "panel__settings__task_form__subheader": {
+    "message": "任务创建表单的特定设置和选项。"
+  },
+  "panel__settings__task_form__clear_on_exist__title": {
+    "message": "退出时清除"
+  },
+  "panel__settings__task_form__clear_on_exist__subheader": {
+    "message": "在未提交的情况下退出任务创建界面时清除表单内容。"
+  }
+}

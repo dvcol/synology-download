@@ -1,0 +1,71 @@
+{
+  "panel__settings__connection": {
+    "message": "连接"
+  },
+  "panel__settings__connection_credentials": {
+    "message": "凭据"
+  },
+  "panel__settings__connection_polling": {
+    "message": "轮询"
+  },
+  "panel__settings__tasks": {
+    "message": "任务"
+  },
+  "panel__settings__tasks_form": {
+    "message": "任务表单"
+  },
+  "panel__settings__downloads": {
+    "message": "下载"
+  },
+  "panel__settings__downloads_general": {
+    "message": "常规"
+  },
+  "panel__settings__downloads_intercept": {
+    "message": "拦截"
+  },
+  "panel__settings__downloads_history": {
+    "message": "历史"
+  },
+  "panel__settings__interface": {
+    "message": "界面"
+  },
+  "panel__settings__interface_global": {
+    "message": "全局"
+  },
+  "panel__settings__interface_tabs": {
+    "message": "标签页"
+  },
+  "panel__settings__interface_quick_menu": {
+    "message": "快速菜单"
+  },
+  "panel__settings__interface_context_menu": {
+    "message": "上下文菜单"
+  },
+  "panel__settings__notification": {
+    "message": "通知"
+  },
+  "panel__settings__notification_snack": {
+    "message": "Snackbar"
+  },
+  "panel__settings__notification_banner": {
+    "message": "横幅"
+  },
+  "panel__settings__notification_count": {
+    "message": "徽章计数"
+  },
+  "panel__settings__banner__save__success": {
+    "message": "设置已保存"
+  },
+  "panel__settings__advanced": {
+    "message": "高级"
+  },
+  "panel__settings__advanced_logging": {
+    "message": "日志记录"
+  },
+  "panel__settings__advanced_redux": {
+    "message": "Redux"
+  },
+  "panel__settings__advanced_storage": {
+    "message": "存储"
+  }
+}

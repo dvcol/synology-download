@@ -1,0 +1,8 @@
+{
+  "common__model__protocol__http": {
+    "message": "http"
+  },
+  "common__model__protocol__https": {
+    "message": "https"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "panel__settings__quick_menu__name_title": {
+    "message": "快捷菜单名称"
+  },
+  "panel__settings__quick_menu__name_subheader": {
+    "message": "更改快捷菜单的名称。"
+  },
+  "panel__settings__quick_menu__name_label": {
+    "message": "菜单名称"
+  },
+  "panel__settings__quick_menu__icon_title": {
+    "message": "菜单图标"
+  },
+  "panel__settings__quick_menu__icon_subheader": {
+    "message": "更改快捷菜单的图标。"
+  },
+  "panel__settings__quick_menu__icon_label": {
+    "message": "图标"
+  },
+  "panel__settings__quick_menu__type_title": {
+    "message": "菜单类型"
+  },
+  "panel__settings__quick_menu__type_subheader": {
+    "message": "更改下拉菜单的范围（Synology 任务或本地下载）。"
+  },
+  "panel__settings__quick_menu__type_label": {
+    "message": "类型"
+  },
+  "panel__settings__quick_menu__max_title": {
+    "message": "最近的目标位置"
+  },
+  "panel__settings__quick_menu__max_subheader": {
+    "message": "设置下拉菜单中要显示的最大目标位置数（默认为 5）。"
+  },
+  "panel__settings__quick_menu__max_label": {
+    "message": "最大值"
+  },
+  "panel__settings__quick_menu__modal_title": {
+    "message": "打开完整模态框"
+  },
+  "panel__settings__quick_menu__modal_subheader": {
+    "message": "切换以打开完整模态框而不是快捷方式。"
+  },
+  "panel__settings__quick_menu__destination_title": {
+    "message": "目标文件夹"
+  },
+  "panel__settings__quick_menu__destination_subheader": {
+    "message": "更改默认的目标文件夹。"
+  }
+}

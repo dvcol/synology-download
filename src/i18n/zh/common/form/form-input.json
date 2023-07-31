@@ -1,0 +1,9 @@
+{
+  "common__form__input__toggle_password_visibility": {
+    "message": "切换密码可见性",
+    "description": "密码可见性切换按钮的ARIA标签。"
+  },
+  "common__form__input__upload": {
+    "message": "上传"
+  }
+}

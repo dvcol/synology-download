@@ -1,0 +1,23 @@
+{
+  "common__model__download_status__downloading_in_progress": {
+    "message": "下载中"
+  },
+  "common__model__download_status__paused_in_progress": {
+    "message": "已暂停"
+  },
+  "common__model__download_status__error_interrupted": {
+    "message": "错误"
+  },
+  "common__model__download_status__cancelled_interrupted": {
+    "message": "已取消"
+  },
+  "common__model__download_status__finished_complete": {
+    "message": "已完成"
+  },
+  "common__model__download_status__finished_deleted": {
+    "message": "已删除"
+  },
+  "common__model__download_status__unknown": {
+    "message": "未知"
+  }
+}

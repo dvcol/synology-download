@@ -1,0 +1,11 @@
+{
+  "common__explorer__breadcrumb__home": {
+    "message": "首页"
+  },
+  "common__explorer__breadcrumb__show__recent": {
+    "message": "显示最近的目标位置"
+  },
+  "common__explorer__breadcrumb__show__explorer": {
+    "message": "显示目标位置浏览器"
+  }
+}

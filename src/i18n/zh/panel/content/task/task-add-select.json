@@ -1,0 +1,11 @@
+{
+  "panel__content__task__add__select__select_files": {
+    "message": "选择要下载的文件"
+  },
+  "panel__content__task__add__select__title": {
+    "message": "标题"
+  },
+  "panel__content__task__add__select__required": {
+    "message": "请至少选择一个要下载的文件。"
+  }
+}

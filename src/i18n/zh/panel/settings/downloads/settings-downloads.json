@@ -1,0 +1,38 @@
+{
+  "panel__settings__downloads__title": {
+    "message": "下载"
+  },
+  "panel__settings__downloads__subheader": {
+    "message": "启用对本地浏览器下载的支持。"
+  },
+  "panel__settings__downloads__buttons__title": {
+    "message": "菜单按钮"
+  },
+  "panel__settings__downloads__buttons__subheader": {
+    "message": "导航栏批量按钮也适用于下载。"
+  },
+  "panel__settings__downloads__notifications__title": {
+    "message": "通知"
+  },
+  "panel__settings__downloads__notifications__subheader": {
+    "message": "启用本地下载的通知功能。"
+  },
+  "panel__settings__downloads__transfer__erase__title": {
+    "message": "传输后擦除"
+  },
+  "panel__settings__downloads__transfer__erase__subheader": {
+    "message": "在弹出窗口中擦除已传输的下载。"
+  },
+  "panel__settings__downloads__transfer__resume__title": {
+    "message": "传输错误后继续下载"
+  },
+  "panel__settings__downloads__transfer__resume__subheader": {
+    "message": "在弹出窗口中传输失败时继续下载。"
+  },
+  "panel__settings__downloads__transfer__modal__title": {
+    "message": "传输时打开模态框"
+  },
+  "panel__settings__downloads__transfer__modal__subheader": {
+    "message": "在弹出窗口中的传输下载时打开任务创建模态框。"
+  }
+}

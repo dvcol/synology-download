@@ -1,0 +1,20 @@
+{
+  "panel__settings__downloads__history__title": {
+    "message": "下载历史"
+  },
+  "panel__settings__downloads__history__subheader": {
+    "message": "保留最近下载的文件夹目标的历史记录。"
+  },
+  "panel__settings__downloads__history__warning": {
+    "message": "请注意，由于Chrome下载API的限制，仅支持默认下载文件夹的子文件夹。"
+  },
+  "panel__settings__downloads__history__default_folder__title": {
+    "message": "默认下载文件夹"
+  },
+  "panel__settings__downloads__history__default_folder__subheader": {
+    "message": "请设置默认的文件夹目标以启用最近下载的解析。"
+  },
+  "panel__settings__downloads__history__default_folder__label": {
+    "message": "文件夹"
+  }
+}

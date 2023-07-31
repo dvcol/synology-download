@@ -1,0 +1,14 @@
+{
+  "common__model__quick_menu_type__task": {
+    "message": "任务"
+  },
+  "common__model__quick_menu_type__download": {
+    "message": "下载"
+  },
+  "common__model__quick_menu_type__recent": {
+    "message": "最近任务"
+  },
+  "common__model__quick_menu_type__recent_download": {
+    "message": "最近下载"
+  }
+}

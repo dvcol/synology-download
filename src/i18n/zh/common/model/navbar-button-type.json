@@ -1,0 +1,38 @@
+{
+  "common__model__navbar_button_type__add": {
+    "message": "添加"
+  },
+  "common__model__navbar_button_type__scrape": {
+    "message": "抓取"
+  },
+  "common__model__navbar_button_type__refresh": {
+    "message": "刷新"
+  },
+  "common__model__navbar_button_type__resume": {
+    "message": "恢复"
+  },
+  "common__model__navbar_button_type__pause": {
+    "message": "暂停"
+  },
+  "common__model__navbar_button_type__remove": {
+    "message": "移除"
+  },
+  "common__model__navbar_button_type__clear": {
+    "message": "清除"
+  },
+  "common__model__navbar_button_type__configs": {
+    "message": "配置"
+  },
+  "common__model__navbar_button_type__settings": {
+    "message": "设置"
+  },
+  "common__model__navbar_button_type__openSynology": {
+    "message": "打开 Synology"
+  },
+  "common__model__navbar_button_type__openDownloads": {
+    "message": "打开下载"
+  },
+  "common__model__navbar_button_type__about": {
+    "message": "关于"
+  }
+}

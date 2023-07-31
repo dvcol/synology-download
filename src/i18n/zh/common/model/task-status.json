@@ -1,0 +1,35 @@
+{
+  "common__model__task_status__downloading": {
+    "message": "下载中"
+  },
+  "common__model__task_status__paused": {
+    "message": "已暂停"
+  },
+  "common__model__task_status__error": {
+    "message": "错误"
+  },
+  "common__model__task_status__seeding": {
+    "message": "做种中"
+  },
+  "common__model__task_status__waiting": {
+    "message": "等待中"
+  },
+  "common__model__task_status__extracting": {
+    "message": "解压中"
+  },
+  "common__model__task_status__finishing": {
+    "message": "完成中"
+  },
+  "common__model__task_status__finished": {
+    "message": "已完成"
+  },
+  "common__model__task_status__hash_checking": {
+    "message": "哈希校验中"
+  },
+  "common__model__task_status__filehosting_waiting": {
+    "message": "文件主机等待中"
+  },
+  "common__model__task_status__stopping": {
+    "message": "停止中"
+  }
+}

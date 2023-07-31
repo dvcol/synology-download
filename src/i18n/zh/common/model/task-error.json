@@ -1,0 +1,80 @@
+{
+  "common__model__task_error__broken_link": {
+    "message": "链接已损坏"
+  },
+  "common__model__task_error__destination_not_exist": {
+    "message": "目标不存在"
+  },
+  "common__model__task_error__destination_denied": {
+    "message": "目标被拒绝"
+  },
+  "common__model__task_error__disk_full": {
+    "message": "磁盘已满"
+  },
+  "common__model__task_error__quota_reached": {
+    "message": "已达配额上限"
+  },
+  "common__model__task_error__timeout": {
+    "message": "超时"
+  },
+  "common__model__task_error__exceed_max_file_system_size": {
+    "message": "超过最大文件系统大小"
+  },
+  "common__model__task_error__exceed_max_destination_size": {
+    "message": "超过最大目标大小"
+  },
+  "common__model__task_error__exceed_max_temp_size": {
+    "message": "超过最大临时文件大小"
+  },
+  "common__model__task_error__encrypted_name_too_long": {
+    "message": "加密名称过长"
+  },
+  "common__model__task_error__name_too_long": {
+    "message": "名称过长"
+  },
+  "common__model__task_error__torrent_duplicate": {
+    "message": "种子重复"
+  },
+  "common__model__task_error__file_not_exist": {
+    "message": "文件不存在"
+  },
+  "common__model__task_error__required_premium_account": {
+    "message": "需要高级账户"
+  },
+  "common__model__task_error__not_supported_type": {
+    "message": "不支持的类型"
+  },
+  "common__model__task_error__try_it_later": {
+    "message": "请稍后重试"
+  },
+  "common__model__task_error__task_encryption": {
+    "message": "任务加密"
+  },
+  "common__model__task_error__missing_python": {
+    "message": "缺少 Python"
+  },
+  "common__model__task_error__private_video": {
+    "message": "私人视频"
+  },
+  "common__model__task_error__ftp_encryption_not_supported_type": {
+    "message": "不支持的 FTP 加密类型"
+  },
+  "common__model__task_error__extract_failed": {
+    "message": "解压失败"
+  },
+  "common__model__task_error__extract_failed_wrong_password": {
+    "message": "解压失败，密码错误"
+  },
+  "common__model__task_error__extract_failed_invalid_archive": {
+    "message": "解压失败，无效的压缩文件"
+  },
+  "common__model__task_error__extract_failed_quota_reached": {
+    "message": "解压失败，已达配额上限"
+  },
+  "common__model__task_error__extract_failed_disk_full": {
+    "message": "解压失败，磁盘已满"
+  },
+  "common__model__task_error__unknown": {
+    "message": "未知错误"
+  }
+}

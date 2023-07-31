@@ -1,0 +1,38 @@
+{
+  "common__form__tab__base_template_title": {
+    "message": "基础模板"
+  },
+  "common__form__tab__base_template_subheader": {
+    "message": "选择一个模板以过滤任务状态。"
+  },
+  "common__form__tab__base_template_label": {
+    "message": "模板"
+  },
+  "common__form__tab__badge_color_title": {
+    "message": "徽章颜色"
+  },
+  "common__form__tab__badge_color_subheader": {
+    "message": "更改徽章颜色以反映任务类型。"
+  },
+  "common__form__tab__badge_color_default": {
+    "message": "Chrome 默认"
+  },
+  "common__form__tab__content_status_title": {
+    "message": "状态"
+  },
+  "common__form__tab__content_status_subheader": {
+    "message": "选择要包含在选择中的状态。"
+  },
+  "common__form__tab__task_status_title": {
+    "message": "Synology 任务状态"
+  },
+  "common__form__tab__download_status_title": {
+    "message": "本地下载状态"
+  },
+  "common__form__tab__direction_title": {
+    "message": "目标文件夹"
+  },
+  "common__form__tab__direction_subheader": {
+    "message": "选择一个目标文件夹以过滤任务。"
+  }
+}

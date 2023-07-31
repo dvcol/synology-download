@@ -1,0 +1,11 @@
+{
+  "common__model__theme_mode__light": {
+    "message": "明亮"
+  },
+  "common__model__theme_mode__dark": {
+    "message": "暗黑"
+  },
+  "common__model__theme_mode__auto": {
+    "message": "自动"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "panel__settings__advanced__redux__title": {
+    "message": "Redux Store snapshot"
+  },
+  "panel__settings__advanced__redux__subheader": {
+    "message": "This is an advanced settings, it is purely technical and does not impact features."
+  },
+
+  "panel__settings__advanced__redux__export": {
+    "message": "Export snapshot"
+  }
+}

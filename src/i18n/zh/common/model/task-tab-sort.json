@@ -1,0 +1,23 @@
+{
+  "common__model__task_tab_sort__creation": {
+    "message": "创建时间"
+  },
+  "common__model__task_tab_sort__destination": {
+    "message": "目标位置"
+  },
+  "common__model__task_tab_sort__speed": {
+    "message": "下载速度"
+  },
+  "common__model__task_tab_sort__size": {
+    "message": "文件大小"
+  },
+  "common__model__task_tab_sort__status": {
+    "message": "状态"
+  },
+  "common__model__task_tab_sort__title": {
+    "message": "标题"
+  },
+  "common__model__task_tab_sort__progress": {
+    "message": "进度"
+  }
+}

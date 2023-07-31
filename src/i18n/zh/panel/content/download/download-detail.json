@@ -1,0 +1,11 @@
+{
+  "panel__content__download__detail__url": {
+    "message": "网址"
+  },
+  "panel__content__download__detail__created": {
+    "message": "创建时间"
+  },
+  "panel__content__download__detail__destination": {
+    "message": "目标位置"
+  }
+}

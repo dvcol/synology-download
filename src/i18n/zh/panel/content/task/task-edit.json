@@ -1,0 +1,71 @@
+{
+  "panel__content__task__edit__destination_folder": {
+    "message": "修改任务或文件下载设置"
+  },
+  "panel__content__task__edit__destination__tab_label": {
+    "message": "目标文件夹"
+  },
+  "panel__content__task__edit__task__tab_label": {
+    "message": "任务"
+  },
+  "panel__content__task__edit__task_files__tab_label": {
+    "message": "文件"
+  },
+  "panel__content__task__edit__priority__title": {
+    "message": "任务优先级"
+  },
+  "panel__content__task__edit__priority__subheader": {
+    "message": "分配带宽的优先级。"
+  },
+  "panel__content__task__edit__priority__label": {
+    "message": "优先级"
+  },
+  "panel__content__task__edit__max_peers__title": {
+    "message": "最大同时连接数"
+  },
+  "panel__content__task__edit__max_peers__subheader": {
+    "message": "每个种子文件允许的最大同时连接数。"
+  },
+  "panel__content__task__edit__max_peers__label": {
+    "message": "最大连接数"
+  },
+  "panel__content__task__edit__max_download_rate__title": {
+    "message": "最大下载速度"
+  },
+  "panel__content__task__edit__max_download_rate__subheader": {
+    "message": "最大下载速度（默认为0，表示无限制）。"
+  },
+  "panel__content__task__edit__max_download_rate__label": {
+    "message": "下载速度"
+  },
+  "panel__content__task__edit__max_upload_rate__title": {
+    "message": "最大上传速度"
+  },
+  "panel__content__task__edit__max_upload_rate__subheader": {
+    "message": "最大上传速度（默认为0，表示无限制）。"
+  },
+  "panel__content__task__edit__max_upload_rate__label": {
+    "message": "上传速度"
+  },
+  "panel__content__task__edit__seeding_interval__title": {
+    "message": "做种时间"
+  },
+  "panel__content__task__edit__seeding_interval__subheader": {
+    "message": "在完成任务之前需要达到的做种时间（以分钟为单位，0表示无，-1表示无限）。"
+  },
+  "panel__content__task__edit__seeding_interval__label": {
+    "message": "做种时间"
+  },
+  "panel__content__task__edit__seeding_ratio__title": {
+    "message": "做种比例"
+  },
+  "panel__content__task__edit__seeding_ratio__subheader": {
+    "message": "在完成任务之前需要达到的分享比例（以百分比表示，0表示无）。"
+  },
+  "panel__content__task__edit__seeding_ratio__label": {
+    "message": "做种比例"
+  },
+  "panel__content__task__edit__seeding_info": {
+    "message": "当满足以下两个条件时，此任务将自动停止做种。将分享比例和做种时间设置为'0'，以在下载完成时立即停止做种。"
+  }
+}

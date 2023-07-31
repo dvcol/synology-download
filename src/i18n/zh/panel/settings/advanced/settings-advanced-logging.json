@@ -1,0 +1,65 @@
+{
+  "panel__settings__advanced__logging__title": {
+    "message": "启用扩展的控制台日志记录。"
+  },
+  "panel__settings__advanced__logging__subheader": {
+    "message": "这是一个高级设置，纯粹是技术性的，不影响功能。"
+  },
+  "panel__settings__advanced__logging__levels__background__title": {
+    "message": "后台日志记录级别"
+  },
+  "panel__settings__advanced__logging__levels__background__subheader": {
+    "message": "后台脚本的日志记录级别（默认为错误级别）。"
+  },
+  "panel__settings__advanced__logging__levels__popup__title": {
+    "message": "弹出窗口日志记录级别"
+  },
+  "panel__settings__advanced__logging__levels__popup__subheader": {
+    "message": "弹出窗口的日志记录级别（默认为错误级别）。"
+  },
+  "panel__settings__advanced__logging__levels__option__title": {
+    "message": "选项页面日志记录级别"
+  },
+  "panel__settings__advanced__logging__levels__option__subheader": {
+    "message": "选项页面的日志记录级别（默认为错误级别）。"
+  },
+  "panel__settings__advanced__logging__levels__content__title": {
+    "message": "内容脚本日志记录级别"
+  },
+  "panel__settings__advanced__logging__levels__content__subheader": {
+    "message": "内容脚本的日志记录级别（默认为错误级别）。"
+  },
+  "panel__settings__advanced__logging__levels__standalone__title": {
+    "message": "独立应用日志记录级别"
+  },
+  "panel__settings__advanced__logging__levels__standalone__subheader": {
+    "message": "独立应用的日志记录级别（默认为错误级别）。"
+  },
+  "panel__settings__advanced__logging__level__label": {
+    "message": "日志记录级别"
+  },
+  "panel__settings__advanced__logging__history__title": {
+    "message": "保留历史记录"
+  },
+  "panel__settings__advanced__logging__history__subheader": {
+    "message": "在内存中保留日志记录历史。"
+  },
+  "panel__settings__advanced__logging__history__export": {
+    "message": "导出"
+  },
+  "panel__settings__advanced__logging__history__clear": {
+    "message": "清除"
+  },
+  "panel__settings__advanced__logging__history_max__title": {
+    "message": "最大历史记录"
+  },
+  "panel__settings__advanced__logging__history_max__subheader": {
+    "message": "在内存中保留的最大行数。\n请注意，行数过多可能会影响性能。"
+  },
+  "panel__settings__advanced__logging__history_max__label": {
+    "message": "最大值"
+  },
+  "panel__settings__advanced__logging__history_max__unit": {
+    "message": "行"
+  }
+}
