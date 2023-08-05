@@ -1,0 +1,35 @@
+{
+  "common__notification__notification": {
+    "message": "通知"
+  },
+  "common__notification__errors": {
+    "message": "错误"
+  },
+  "common__notification__title": {
+    "message": "标题："
+  },
+  "common__notification__destination_folder": {
+    "message": "文件夹："
+  },
+  "common__notification__error_message": {
+    "message": "错误信息："
+  },
+  "common__notification__task_created": {
+    "message": "任务创建成功"
+  },
+  "common__notification__task_finished": {
+    "message": "任务完成"
+  },
+  "common__notification__task_error": {
+    "message": "任务失败"
+  },
+  "common__notification__download_created": {
+    "message": "下载创建成功"
+  },
+  "common__notification__download_finished": {
+    "message": "下载完成"
+  },
+  "common__notification__download_error": {
+    "message": "下载失败"
+  }
+}

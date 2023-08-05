@@ -1,0 +1,62 @@
+{
+  "common__buttons__cancel": {
+    "message": "取消"
+  },
+  "common__buttons__continue": {
+    "message": "继续"
+  },
+  "common__buttons__discard": {
+    "message": "放弃"
+  },
+  "common__buttons__confirm": {
+    "message": "确认"
+  },
+  "common__buttons__save": {
+    "message": "保存"
+  },
+  "common__buttons__create": {
+    "message": "创建"
+  },
+  "common__buttons__delete": {
+    "message": "删除"
+  },
+  "common__buttons__restore": {
+    "message": "恢复"
+  },
+  "common__buttons__add": {
+    "message": "添加"
+  },
+  "common__buttons__add_new": {
+    "message": "添加新的"
+  },
+  "common__buttons__seed": {
+    "message": "种子"
+  },
+  "common__buttons__play": {
+    "message": "播放"
+  },
+  "common__buttons__pause": {
+    "message": "暂停"
+  },
+  "common__buttons__stop": {
+    "message": "停止"
+  },
+  "common__buttons__edit": {
+    "message": "编辑"
+  },
+  "common__buttons__erase": {
+    "message": "擦除"
+  },
+  "common__buttons__retry": {
+    "message": "重试"
+  },
+  "common__buttons__resume": {
+    "message": "恢复"
+  },
+  "common__buttons__open": {
+    "message": "打开"
+  },
+  "common__buttons__transfer": {
+    "message": "传输"
+  }
+}

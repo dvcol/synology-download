@@ -1,0 +1,35 @@
+{
+  "panel__settings__polling__title": {
+    "message": "轮询"
+  },
+  "panel__settings__polling__subheader": {
+    "message": "定期轮询DiskStation以获取任务。"
+  },
+  "panel__settings__polling__popup_title": {
+    "message": "弹出窗口"
+  },
+  "panel__settings__polling__popup_subheader": {
+    "message": "在弹出窗口打开时启用或禁用轮询。"
+  },
+  "panel__settings__polling__background_title": {
+    "message": "后台"
+  },
+  "panel__settings__polling__background_subheader_line_1": {
+    "message": "在后台打开时启用或禁用轮询。"
+  },
+  "panel__settings__polling__background_subheader_line_2": {
+    "message": "请注意，后台轮询对于通知和图标计数是必要的。"
+  },
+  "panel__settings__polling__interval_title": {
+    "message": "间隔"
+  },
+  "panel__settings__polling__interval_subheader": {
+    "message": "更改任务获取的轮询间隔。"
+  },
+  "panel__settings__polling__interval_popup_label": {
+    "message": "弹出窗口间隔"
+  },
+  "panel__settings__polling__interval_background_label": {
+    "message": "后台间隔"
+  }
+}

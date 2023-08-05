@@ -1,0 +1,8 @@
+{
+  "common__model__sync_mode__sync": {
+    "message": "同步"
+  },
+  "common__model__sync_mode__local": {
+    "message": "本地"
+  }
+}

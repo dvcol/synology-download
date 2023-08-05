@@ -1,0 +1,32 @@
+{
+  "panel__scrape__create__task": {
+    "message": "创建任务"
+  },
+  "panel__scrape__download": {
+    "message": "下载"
+  },
+  "panel__scrape__column__type__label": {
+    "message": "类型"
+  },
+  "panel__scrape__column__type__description": {
+    "message": "媒体类型或通用标签类型"
+  },
+  "panel__scrape__column__title__label": {
+    "message": "标题"
+  },
+  "panel__scrape__column__title__description": {
+    "message": "标签上的标题或别名（在页面上显示）"
+  },
+  "panel__scrape__column__name__label": {
+    "message": "名称"
+  },
+  "panel__scrape__column__name__description": {
+    "message": "解析后的文件名、路径名或源URL"
+  },
+  "panel__scrape__column__url__label": {
+    "message": "URL"
+  },
+  "panel__scrape__column__url__description": {
+    "message": "源URL（src、href等）"
+  }
+}

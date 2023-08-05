@@ -1,0 +1,50 @@
+{
+  "panel__settings__snack__title": {
+    "message": "Snackbar"
+  },
+  "panel__settings__snack__subheader": {
+    "message": "请注意，Snackbar 横幅通知依赖于内容脚本注入到选项卡中。"
+  },
+  "panel__settings__snack__position_title": {
+    "message": "定位"
+  },
+  "panel__settings__snack__position_subheader": {
+    "message": "更改 Snackbar 通知显示的位置。"
+  },
+  "panel__settings__snack__position_vertical_label": {
+    "message": "垂直位置"
+  },
+  "panel__settings__snack__position_horizontal_label": {
+    "message": "水平位置"
+  },
+  "panel__settings__snack__timeout_title": {
+    "message": "通知超时"
+  },
+  "panel__settings__snack__timeout_subheader": {
+    "message": "定义通知显示多长时间后被关闭。"
+  },
+  "panel__settings__snack__timeout_label": {
+    "message": "显示超时"
+  },
+  "panel__settings__snack__level_title": {
+    "message": "通知级别"
+  },
+  "panel__settings__snack__level_subheader": {
+    "message": "级别是累积的，会显示较低级别的所有通知。"
+  },
+  "panel__settings__snack__level_label": {
+    "message": "通知级别"
+  },
+  "panel__settings__snack__popup_title": {
+    "message": "弹出窗口"
+  },
+  "panel__settings__snack__popup_subheader": {
+    "message": "启用或禁用弹出窗口内的 Snackbar 通知。"
+  },
+  "panel__settings__snack__tab_title": {
+    "message": "选项卡"
+  },
+  "panel__settings__snack__tab_subheader": {
+    "message": "启用或禁用活动选项卡内的 Snackbar 通知。"
+  }
+}

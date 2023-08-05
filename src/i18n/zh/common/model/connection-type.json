@@ -1,0 +1,11 @@
+{
+  "common__model__connection_type__local": {
+    "message": "本地"
+  },
+  "common__model__connection_type__quick_connect": {
+    "message": "快速连接"
+  },
+  "common__model__connection_type__two_factor": {
+    "message": "双因素"
+  }
+}

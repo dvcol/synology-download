@@ -1,0 +1,14 @@
+{
+  "common__model__task_priority__low": {
+    "message": "低"
+  },
+  "common__model__task_priority__normal": {
+    "message": "普通"
+  },
+  "common__model__task_priority__high": {
+    "message": "高"
+  },
+  "common__model__task_priority__skip": {
+    "message": "跳过"
+  }
+}

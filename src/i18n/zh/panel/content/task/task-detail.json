@@ -1,0 +1,32 @@
+{
+  "panel__content__task__detail__url": {
+    "message": "URL"
+  },
+  "panel__content__task__detail__destination": {
+    "message": "目标文件夹"
+  },
+  "panel__content__task__detail__type": {
+    "message": "类型"
+  },
+  "panel__content__task__detail__created": {
+    "message": "创建时间"
+  },
+  "panel__content__task__detail__created_by": {
+    "message": "由 $1 创建"
+  },
+  "panel__content__task__detail__downloaded": {
+    "message": "已下载 $1 / $2"
+  },
+  "panel__content__task__detail__confirmation_title": {
+    "message": "请确认"
+  },
+  "panel__content__task__detail__delete__confirmation_description": {
+    "message": "此操作将永久删除此任务。"
+  },
+  "panel__content__task__detail__stop__confirmation_description": {
+    "message": "此操作将永久停止此任务并将部分下载移动到其目标文件夹。"
+  },
+  "panel__content__task__detail__files_limit": {
+    "message": "请注意，仅显示前100个文件。要查看完整列表，请使用DSM界面。"
+  }
+}

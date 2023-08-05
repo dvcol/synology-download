@@ -1,0 +1,8 @@
+{
+  "common__dialog__confirm__title": {
+    "message": "请确认"
+  },
+  "common__dialog__confirm__description": {
+    "message": "此操作需要确认。\n您确定要继续吗？"
+  }
+}

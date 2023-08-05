@@ -1,0 +1,26 @@
+{
+  "common__model__task_tab_type__all": {
+    "message": "全部"
+  },
+  "common__model__task_tab_type__downloading": {
+    "message": "下载中"
+  },
+  "common__model__task_tab_type__completed": {
+    "message": "已完成"
+  },
+  "common__model__task_tab_type__active": {
+    "message": "进行中"
+  },
+  "common__model__task_tab_type__inactive": {
+    "message": "未激活"
+  },
+  "common__model__task_tab_type__stopped": {
+    "message": "已停止"
+  },
+  "common__model__task_tab_type__tasks": {
+    "message": "任务"
+  },
+  "common__model__task_tab_type__downloads": {
+    "message": "本地"
+  }
+}

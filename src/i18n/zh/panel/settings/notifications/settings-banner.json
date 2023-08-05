@@ -1,0 +1,41 @@
+{
+  "panel__settings__banner__toggle_title": {
+    "message": "横幅"
+  },
+  "panel__settings__banner__toggle_subheader": {
+    "message": "请注意，通知横幅使用并受特定操作系统 API 的限制。"
+  },
+  "panel__settings__banner__level_title": {
+    "message": "通知级别"
+  },
+  "panel__settings__banner__level_subheader": {
+    "message": "级别是累积的，会显示较低级别的所有通知。"
+  },
+  "panel__settings__banner__level_label": {
+    "message": "通知级别"
+  },
+  "panel__settings__banner__background_title": {
+    "message": "背景"
+  },
+  "panel__settings__banner__background_subheader": {
+    "message": "启用或禁用背景横幅通知。"
+  },
+  "panel__settings__banner__popup_title": {
+    "message": "弹出窗口"
+  },
+  "panel__settings__banner__popup_subheader": {
+    "message": "启用或禁用在弹出窗口打开时显示横幅通知。"
+  },
+  "panel__settings__banner__completed_title": {
+    "message": "已完成的任务"
+  },
+  "panel__settings__banner__completed_subheader": {
+    "message": "启用或禁用已完成任务的横幅通知。"
+  },
+  "panel__settings__banner__failed_title": {
+    "message": "失败的任务"
+  },
+  "panel__settings__banner__failed_subheader": {
+    "message": "启用或禁用失败任务的横幅通知。"
+  }
+}

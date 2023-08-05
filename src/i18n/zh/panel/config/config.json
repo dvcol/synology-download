@@ -1,0 +1,107 @@
+{
+  "panel__config__title": {
+    "message": "下载站设置"
+  },
+  "panel__config__subheader_line_1": {
+    "message": "当前 http_max_download 和 ftp_max_download 共享相同的配置值。当同时请求设置这两个参数时，请求的 ftp_max_download 速率将覆盖请求的 http_max_download 速率。"
+  },
+  "panel__config__subheader_line_2": {
+    "message": "考虑到相同的速率可能同时被下载站以外的其他软件包使用，HTTP 和 FTP 的最大下载速率不会影响当前状态为“下载中”的任务。新的速率只会应用于新增/恢复的 HTTP/FTP 任务。"
+  },
+  "panel__config__not_admin": {
+    "message": "只有具有管理员权限的用户才能更改下载站设置。请使用具有适当权限的帐户登录。"
+  },
+  "panel__config__set_config__success": {
+    "message": "设置已成功更改"
+  },
+  "panel__config__set_config__fail": {
+    "message": "设置更改失败"
+  },
+  "panel__config__bt_max_download__title": {
+    "message": "BT 最大下载速度"
+  },
+  "panel__config__bt_max_download__subheader": {
+    "message": "BT 的最大下载速度（单位为 KB/s，设置为“0”表示无限制）"
+  },
+  "panel__config__bt_max_download__label": {
+    "message": "下载速度"
+  },
+  "panel__config__bt_max_upload__title": {
+    "message": "BT 最大上传速度"
+  },
+  "panel__config__bt_max_upload__subheader": {
+    "message": "BT 的最大上传速度（单位为 KB/s，设置为“0”表示无限制）"
+  },
+  "panel__config__bt_max_upload__label": {
+    "message": "上传速度"
+  },
+  "panel__config__emule_max_download__title": {
+    "message": "eMule 最大下载速度"
+  },
+  "panel__config__emule_max_download__subheader": {
+    "message": "eMule 的最大下载速度（单位为 KB/s，设置为“0”表示无限制）"
+  },
+  "panel__config__emule_max_download__label": {
+    "message": "下载速度"
+  },
+  "panel__config__emule_max_upload__title": {
+    "message": "eMule 最大上传速度"
+  },
+  "panel__config__emule_max_upload__subheader": {
+    "message": "eMule 的最大上传速度（单位为 KB/s，设置为“0”表示无限制）"
+  },
+  "panel__config__emule_max_upload__label": {
+    "message": "上传速度"
+  },
+  "panel__config__nzb_max_download__title": {
+    "message": "NZB 最大下载速度"
+  },
+  "panel__config__nzb_max_download__subheader": {
+    "message": "NZB 的最大下载速度（单位为 KB/s，设置为“0”表示无限制）"
+  },
+  "panel__config__nzb_max_download__label": {
+    "message": "下载速度"
+  },
+  "panel__config__http_max_download__title": {
+    "message": "HTTP 最大下载速度"
+  },
+  "panel__config__http_max_download__subheader": {
+    "message": "HTTP 的最大下载速度（单位为 KB/s，设置为“0”表示无限制）"
+  },
+  "panel__config__http_max_download__label": {
+    "message": "下载速度"
+  },
+  "panel__config__ftp_max_download__title": {
+    "message": "FTP 最大下载速度"
+  },
+  "panel__config__ftp_max_download__subheader": {
+    "message": "FTP 的最大下载速度（单位为 KB/s，设置为“0”表示无限制）"
+  },
+  "panel__config__ftp_max_download__label": {
+    "message": "下载速度"
+  },
+  "panel__config__emule_enabled__title": {
+    "message": "eMule 服务"
+  },
+  "panel__config__emule_enabled__subheader": {
+    "message": "如果启用 eMule 服务"
+  },
+  "panel__config__unzip_service_enabled__title": {
+    "message": "自动解压服务"
+  },
+  "panel__config__unzip_service_enabled__subheader": {
+    "message": "如果启用自动解压服务（除管理员或管理员组外的用户）"
+  },
+  "panel__config__default_destination__title": {
+    "message": "默认目标位置"
+  },
+  "panel__config__default_destination__subheader": {
+    "message": "新下载任务的默认目标位置。"
+  },
+  "panel__config__emule_default_destination__title": {
+    "message": "eMule 默认目标位置"
+  },
+  "panel__config__emule_default_destination__subheader": {
+    "message": "新 eMule 下载任务的默认目标位置。"
+  }
+}

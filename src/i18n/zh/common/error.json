@@ -1,0 +1,128 @@
+{
+  "common__error__query_service_not_ready": {
+    "message": "查询服务未就绪（基本 URL 无效或缺失）"
+  },
+  "common__error__query_service_not_logged_in": {
+    "message": "查询服务未登录"
+  },
+  "common__error__login_password_required": {
+    "message": "缺少必需的用户名 '$1' 或密码 '$2'"
+  },
+  "common__error__otp_code_device_required": {
+    "message": "缺少必需的 2FA 代码 '$1' 或设备名称 '$2'"
+  },
+  "common__error__create_task_fail": {
+    "message": "创建下载任务失败"
+  },
+  "common__error__login_required": {
+    "message": "需要登录"
+  },
+  "common__error__fetch_failed": {
+    "message": "获取失败，如果您使用的是 HTTPS，可能需要重新打开弹出窗口。"
+  },
+  "common__error__fetch_failed_auto_login": {
+    "message": "获取失败，尝试自动登录..."
+  },
+  "common__error__please_login": {
+    "message": "请登录以访问此功能。"
+  },
+  "common__error__task_play_fail": {
+    "message": "任务恢复失败"
+  },
+  "common__error__task_pause_fail": {
+    "message": "任务暂停失败"
+  },
+  "common__error__task_stop_fail": {
+    "message": "任务停止失败"
+  },
+  "common__error__task_delete_fail": {
+    "message": "任务删除失败"
+  },
+  "common__error__task_resume_fail": {
+    "message": "任务恢复失败"
+  },
+  "common__error__task_refresh_fail": {
+    "message": "任务刷新失败"
+  },
+  "common__error__task_clear_fail": {
+    "message": "已完成任务清除失败"
+  },
+  "common__error__task_edit_get_fail": {
+    "message": "获取任务编辑信息失败。"
+  },
+  "common__error__task_file_edit_set_fail": {
+    "message": "编辑任务文件失败。"
+  },
+  "common__error__task_edit_set_fail": {
+    "message": "编辑任务信息失败。"
+  },
+  "common__error__task_list_fail": {
+    "message": "列出任务文件失败"
+  },
+  "common__error__task_list_files_fail": {
+    "message": "获取文件列表失败"
+  },
+  "common__error__task_list_delete_fail": {
+    "message": "删除任务列表失败"
+  },
+  "common__error__task_list_set_download_fail": {
+    "message": "设置下载文件列表失败"
+  },
+  "common__error__invalid_argument": {
+    "message": "无效的参数"
+  },
+  "common__error__download_refresh_fail": {
+    "message": "刷新下载失败"
+  },
+  "common__error__download_erase_fail": {
+    "message": "擦除下载失败"
+  },
+  "common__error__download_cancel_fail": {
+    "message": "取消下载失败"
+  },
+  "common__error__download_retry_fail": {
+    "message": "重试下载失败"
+  },
+  "common__error__download_pause_fail": {
+    "message": "暂停下载失败"
+  },
+  "common__error__download_resume_fail": {
+    "message": "恢复下载失败"
+  },
+  "common__error__download_open_fail": {
+    "message": "打开下载失败"
+  },
+  "common__error__download_transfer_fail": {
+    "message": "传输下载失败"
+  },
+  "common__error__list_folders_fail": {
+    "message": "加载文件夹失败。"
+  },
+  "common__error__list_files_fail": {
+    "message": "加载文件失败。"
+  },
+  "common__error": {
+    "message": "错误"
+  },
+  "common__error__manual_login_required": {
+    "message": "需要手动登录。"
+  },
+  "common__error__auto_login": {
+    "message": "自动登录失败，错误信息：\n $1"
+  },
+  "common__error__required": {
+    "message": "缺少必需值"
+  },
+  "common__error__min": {
+    "message": "最小值为 $1"
+  },
+  "common__error__max": {
+    "message": "最大值为 $1"
+  },
+  "common__error__min_short": {
+    "message": "最小值为 $1"
+  },
+  "common__error__max_short": {
+    "message": "最大值为 $1"
+  }
+}

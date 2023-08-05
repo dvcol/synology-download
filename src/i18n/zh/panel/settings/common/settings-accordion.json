@@ -1,0 +1,11 @@
+{
+  "panel__settings__accordion__title__tabs": {
+    "message": "标签页"
+  },
+  "panel__settings__accordion__title__quick_menu": {
+    "message": "快速菜单"
+  },
+  "panel__settings__accordion__title__context_menu": {
+    "message": "上下文菜单"
+  }
+}

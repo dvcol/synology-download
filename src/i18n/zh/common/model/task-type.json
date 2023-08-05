@@ -1,0 +1,20 @@
+{
+  "common__model__task_type__bt": {
+    "message": "BitTorrent"
+  },
+  "common__model__task_type__nzb": {
+    "message": "Newzbin (nzb)"
+  },
+  "common__model__task_type__http": {
+    "message": "超文本传输协议（http）"
+  },
+  "common__model__task_type__https": {
+    "message": "超文本传输协议（https）"
+  },
+  "common__model__task_type__ftp": {
+    "message": "文件传输协议（ftp）"
+  },
+  "common__model__task_type__eMule": {
+    "message": "eMule"
+  }
+}

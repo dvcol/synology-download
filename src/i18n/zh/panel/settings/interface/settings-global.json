@@ -1,0 +1,86 @@
+{
+  "panel__settings__global__title": {
+    "message": "全局设置"
+  },
+  "panel__settings__global__subheader": {
+    "message": "各种界面元素的全局设置。"
+  },
+  "panel__settings__global__theme_title": {
+    "message": "主题"
+  },
+  "panel__settings__global__theme_subheader": {
+    "message": "选择您的主题，'auto' 将根据操作系统设置推断主题。"
+  },
+  "panel__settings__global__theme_label": {
+    "message": "主题"
+  },
+  "panel__settings__global__actions_title": {
+    "message": "菜单操作"
+  },
+  "panel__settings__global__actions_subheader": {
+    "message": "选择菜单操作的范围（清除、播放、暂停等）。"
+  },
+  "panel__settings__global__interface_size_title": {
+    "message": "界面大小"
+  },
+  "panel__settings__global__interface_size_subheader": {
+    "message": "选择界面的缩放比例（小、中、大）。"
+  },
+  "panel__settings__global__interface_size_label": {
+    "message": "缩放比例"
+  },
+  "panel__settings__global__actions_label": {
+    "message": "范围"
+  },
+  "panel__settings__global__interface_pull_title": {
+    "message": "下拉刷新"
+  },
+  "panel__settings__global__interface_pull_subheader": {
+    "message": "在面板中启用/禁用下拉刷新。"
+  },
+  "panel__settings__global__loading_title": {
+    "message": "加载进度条"
+  },
+  "panel__settings__global__loading_subheader": {
+    "message": "在获取数据时显示加载进度条指示器。"
+  },
+  "panel__settings__global__loading_threshold_title": {
+    "message": "加载进度条阈值"
+  },
+  "panel__settings__global__loading_threshold_subheader": {
+    "message": "设置长时间查询后显示加载进度条的阈值（以毫秒为单位）。"
+  },
+  "panel__settings__global__loading_threshold_label": {
+    "message": "阈值"
+  },
+  "panel__settings__global__task__progress_bar_title": {
+    "message": "任务进度条"
+  },
+  "panel__settings__global__task__progress_bar_subheader": {
+    "message": "在任务卡片内显示进度条指示器。"
+  },
+  "panel__settings__global__task__background_title": {
+    "message": "任务背景进度"
+  },
+  "panel__settings__global__task__background_subheader": {
+    "message": "在卡片背景中显示活动下载任务的进度。"
+  },
+  "panel__settings__global__download__progress_bar_title": {
+    "message": "下载进度条"
+  },
+  "panel__settings__global__download__progress_bar_subheader": {
+    "message": "在下载卡片内显示进度条指示器。"
+  },
+  "panel__settings__global__download__background_title": {
+    "message": "下载背景进度"
+  },
+  "panel__settings__global__download__background_subheader": {
+    "message": "在卡片背景中显示活动下载的进度。"
+  },
+  "panel__settings__global__navbar__buttons_title": {
+    "message": "导航栏按钮"
+  },
+  "panel__settings__global__navbar__buttons_subheader": {
+    "message": "在导航栏中显示的快捷按钮。"
+  }
+}

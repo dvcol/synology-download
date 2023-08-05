@@ -1,0 +1,89 @@
+{
+  "common__model__download_error__file_failed": {
+    "message": "文件下载失败"
+  },
+  "common__model__download_error__file_access_denied": {
+    "message": "文件访问被拒绝"
+  },
+  "common__model__download_error__file_no_space": {
+    "message": "文件空间不足"
+  },
+  "common__model__download_error__file_name_too_long": {
+    "message": "文件名过长"
+  },
+  "common__model__download_error__file_too_large": {
+    "message": "文件过大"
+  },
+  "common__model__download_error__file_virus_infected": {
+    "message": "文件受到病毒感染"
+  },
+  "common__model__download_error__file_transient_error": {
+    "message": "文件临时错误"
+  },
+  "common__model__download_error__file_blocked": {
+    "message": "文件被阻止"
+  },
+  "common__model__download_error__file_security_check_failed": {
+    "message": "文件安全检查失败"
+  },
+  "common__model__download_error__file_too_short": {
+    "message": "文件过短"
+  },
+  "common__model__download_error__file_hash_mismatch": {
+    "message": "文件哈希不匹配"
+  },
+  "common__model__download_error__file_same_as_source": {
+    "message": "文件与源文件相同"
+  },
+  "common__model__download_error__network_failed": {
+    "message": "网络连接失败"
+  },
+  "common__model__download_error__network_timeout": {
+    "message": "网络超时"
+  },
+  "common__model__download_error__network_disconnected": {
+    "message": "网络断开连接"
+  },
+  "common__model__download_error__network_server_down": {
+    "message": "网络服务器宕机"
+  },
+  "common__model__download_error__network_invalid_request": {
+    "message": "网络请求无效"
+  },
+  "common__model__download_error__network_server_failed": {
+    "message": "服务器错误"
+  },
+  "common__model__download_error__server_no_range": {
+    "message": "服务器不支持范围请求"
+  },
+  "common__model__download_error__server_bad_content": {
+    "message": "服务器返回的内容有误"
+  },
+  "common__model__download_error__server_unauthorized": {
+    "message": "服务器未授权"
+  },
+  "common__model__download_error__server_cert_problem": {
+    "message": "服务器证书问题"
+  },
+  "common__model__download_error__server_forbidden": {
+    "message": "服务器禁止访问"
+  },
+  "common__model__download_error__server_unreachable": {
+    "message": "服务器无法访问"
+  },
+  "common__model__download_error__server_content_length_mismatch": {
+    "message": "服务器返回的内容长度不匹配"
+  },
+  "common__model__download_error__server_cross_origin_redirect": {
+    "message": "服务器进行了跨域重定向"
+  },
+  "common__model__download_error__user_canceled": {
+    "message": "用户取消"
+  },
+  "common__model__download_error__user_shutdown": {
+    "message": "用户关闭"
+  },
+  "common__model__download_error__crash": {
+    "message": "程序崩溃"
+  }
+}

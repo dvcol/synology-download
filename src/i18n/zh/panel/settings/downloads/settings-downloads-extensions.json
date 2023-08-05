@@ -1,0 +1,20 @@
+{
+  "panel__settings__downloads__extensions__ext": {
+    "message": "扩展名"
+  },
+  "panel__settings__downloads__extensions__mime": {
+    "message": "媒体类型"
+  },
+  "panel__settings__downloads__extensions__required": {
+    "message": "此字段为必填项"
+  },
+  "panel__settings__downloads__extensions__min_length": {
+    "message": "值过短"
+  },
+  "panel__settings__downloads__extensions__starts_with": {
+    "message": "应以'.'开头"
+  },
+  "panel__settings__downloads__extensions__duplicate": {
+    "message": "值已存在"
+  }
+}

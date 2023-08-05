@@ -1,0 +1,20 @@
+{
+  "panel__content__empty__no_task_found": {
+    "message": "未找到此标签页的任务。"
+  },
+  "panel__content__empty__create_or_settings": {
+    "message": "创建新任务或更改此标签页的设置。"
+  },
+  "panel__content__empty__please_login": {
+    "message": "请登录以管理任务。"
+  },
+  "panel__content__empty__create_task": {
+    "message": "创建任务"
+  },
+  "panel__content__empty__go_to_settings": {
+    "message": "前往设置"
+  },
+  "panel__content__empty__auto_login": {
+    "message": "自动登录"
+  }
+}

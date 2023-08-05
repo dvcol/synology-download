@@ -1,0 +1,50 @@
+{
+  "panel__content__task__add__url_required": {
+    "message": "URL是必填项"
+  },
+  "panel__content__task__add__file_required": {
+    "message": "文件是必填项"
+  },
+  "panel__content__task__add__title": {
+    "message": "添加自定义下载任务"
+  },
+  "panel__content__task__add__subheader": {
+    "message": "提交的任务将添加到您的下载站。"
+  },
+  "panel__content__task__add__urls": {
+    "message": "URLs"
+  },
+  "panel__content__task__add__source_title": {
+    "message": "来源"
+  },
+  "panel__content__task__add__source_subheader": {
+    "message": "每一行被视为一个独立的URL，并将创建一个任务。"
+  },
+  "panel__content__task__add__torrent_file_label": {
+    "message": "要上传的种子文件"
+  },
+  "panel__content__task__add__torrent_file_placeholder": {
+    "message": "种子文件的路径"
+  },
+  "panel__content__task__add__create_list_label": {
+    "message": "选择要下载的文件"
+  },
+  "panel__content__task__add__url_label": {
+    "message": "下载URL或磁力链接"
+  },
+  "panel__content__task__add__username_label": {
+    "message": "FTP或HTTP用户名"
+  },
+  "panel__content__task__add__ftp_password_label": {
+    "message": "FTP或HTTP密码"
+  },
+  "panel__content__task__add__zip_password_label": {
+    "message": "解压密码"
+  },
+  "panel__content__task__add__destination_title": {
+    "message": "目标文件夹"
+  },
+  "panel__content__task__add__destination_subheader": {
+    "message": "更改默认的目标文件夹。"
+  }
+}

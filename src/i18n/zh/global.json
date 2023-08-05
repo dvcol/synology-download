@@ -1,0 +1,18 @@
+{
+  "global__app_name": {
+    "message": "下载站客户端",
+    "description": "扩展名称。"
+  },
+  "global__app_title": {
+    "message": "群晖下载客户端",
+    "description": "扩展标题。"
+  },
+  "global__app_title_popup": {
+    "message": "群晖下载客户端弹出窗口",
+    "description": "弹出窗口页面标题字段。"
+  },
+  "global__app_title_options": {
+    "message": "群晖下载客户端选项",
+    "description": "选项页面标题字段。"
+  }
+}

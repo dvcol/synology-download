@@ -1,0 +1,35 @@
+{
+  "panel__settings__tab__name_title": {
+    "message": "标签名称"
+  },
+  "panel__settings__tab__name_subheader": {
+    "message": "更改标签的名称。"
+  },
+  "panel__settings__tab__name_label": {
+    "message": "标签名称"
+  },
+  "panel__settings__tab__sort_title": {
+    "message": "任务排序顺序"
+  },
+  "panel__settings__tab__sort_subheader": {
+    "message": "选择一个排序策略来对任务进行排序。"
+  },
+  "panel__settings__tab__sort_label": {
+    "message": "排序"
+  },
+  "panel__settings__tab__reverse_title": {
+    "message": "排序方向"
+  },
+  "panel__settings__tab__reverse_subheader": {
+    "message": "选择一个排序方向来对任务进行排序。"
+  },
+  "panel__settings__tab__reverse_label": {
+    "message": "顺序"
+  },
+  "panel__settings__tab__reverse_ascendant": {
+    "message": "升序"
+  },
+  "panel__settings__tab__reverse_descendant": {
+    "message": "降序"
+  }
+}

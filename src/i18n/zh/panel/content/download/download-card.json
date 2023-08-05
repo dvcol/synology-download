@@ -1,0 +1,8 @@
+{
+  "panel__content__download__card__remaining": {
+    "message": "剩余"
+  },
+  "panel__content__download__card__no_estimates": {
+    "message": "无法估计"
+  }
+}

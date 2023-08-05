@@ -1,0 +1,8 @@
+{
+  "common__explorer__explorer_loading__content": {
+    "message": "正在加载文件夹内容"
+  },
+  "common__explorer__explorer_loading__empty": {
+    "message": "该文件夹不包含任何子文件夹。"
+  }
+}

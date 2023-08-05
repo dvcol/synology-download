@@ -1,0 +1,59 @@
+{
+  "panel__about__title": {
+    "message": "关于下载站（适用于群晖 NAS）"
+  },
+  "panel__about__chip_version": {
+    "message": "版本"
+  },
+  "panel__about__chip_user_languages": {
+    "message": "用户语言"
+  },
+  "panel__about__chip_supported_languages": {
+    "message": "支持的语言"
+  },
+  "panel__about__description_title": {
+    "message": "描述"
+  },
+  "panel__about__description_body_p1": {
+    "message": "群晖下载是一个基于React的Chrome扩展程序，可直接从浏览器管理群晖下载站任务。它允许从此弹出窗口直接进行下载任务的查阅、创建、删除、编辑和暂停。它还允许通过任何磁力链接或浏览器内的上下文菜单快速创建任务。"
+  },
+  "panel__about__description_body_p2": {
+    "message": "有关当前支持的功能的更多信息，请参阅下面的链接中的GitHub页面。"
+  },
+  "panel__about__limitations_title": {
+    "message": "限制"
+  },
+  "panel__about__limitations_body_p1": {
+    "message": "由于缺乏官方API文档，目前不支持快速连接登录。"
+  },
+  "panel__about__limitations_body_p2": {
+    "message": "目前，快速操作菜单仅支持磁力链接。"
+  },
+  "panel__about__limitations_body_p3": {
+    "message": "请注意，先前版本的Chrome（100及以下）上的翻译可能只支持横幅通知的部分功能。"
+  },
+  "panel__about__limitations_body_p4": {
+    "message": "由于MV3的当前限制，服务工作者通过定期在活动标签页上发送消息来保持唤醒状态，如果过去5分钟没有活动标签页，则服务工作者和相关功能可能会暂停，直到唤醒事件发生。"
+  },
+  "panel__about__contribute_title": {
+    "message": "贡献"
+  },
+  "panel__about__contribute_body": {
+    "message": "如果您希望支持此应用程序的开发，您可以进行小额捐赠，在Web商店中留下评论，为代码库做出贡献，报告问题或在GitHub上建议新功能。使用下面的链接进行支持。"
+  },
+  "panel__about__button_donate": {
+    "message": "捐赠"
+  },
+  "panel__about__button_contribute": {
+    "message": "贡献"
+  },
+  "panel__about__button_support": {
+    "message": "支持"
+  },
+  "panel__about__button_privacy": {
+    "message": "隐私"
+  },
+  "panel__about__button_store": {
+    "message": "商店"
+  }
+}

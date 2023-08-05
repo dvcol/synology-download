@@ -1,0 +1,8 @@
+{
+  "common__model__task_create_type__file": {
+    "message": "文件"
+  },
+  "common__model__task_create_type__url": {
+    "message": "链接"
+  }
+}

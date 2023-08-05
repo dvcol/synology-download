@@ -1,0 +1,17 @@
+{
+  "common__model__logging__level__trace": {
+    "message": "跟踪"
+  },
+  "common__model__logging__level__debug": {
+    "message": "调试"
+  },
+  "common__model__logging__level__info": {
+    "message": "信息"
+  },
+  "common__model__logging__level__warn": {
+    "message": "警告"
+  },
+  "common__model__logging__level__error": {
+    "message": "错误"
+  }
+}
