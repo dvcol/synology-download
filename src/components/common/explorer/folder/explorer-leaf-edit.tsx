@@ -82,7 +82,7 @@ export const ExplorerLeafEdit: FC<ExplorerLeafEditProps> = ({ folder, isEditing,
   const isDirty = name !== folder.name;
 
   return (
-    <Stack direction="row" sx={{ flex: '1 1 auto' }} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
+    <Stack direction="row" sx={{ flex: '1 1 auto', fontSize: '1.25em' }} onMouseOver={() => setHover(true)} onMouseLeave={() => setHover(false)}>
       {editing && !disabled ? (
         <TextField
           id="standard-basic"
@@ -95,6 +95,10 @@ export const ExplorerLeafEdit: FC<ExplorerLeafEditProps> = ({ folder, isEditing,
           onClick={onClick}
           onKeyDown={onKeydown}
           autoFocus
+          sx={{
+            fontSize: '0.75em',
+            mt: '0.2em',
+          }}
         />
       ) : (
         <Tooltip arrow title={folder?.name ?? ''} PopperProps={{ disablePortal: true, sx: { wordBreak: 'break-all' } }} enterDelay={1000}>
@@ -104,7 +108,8 @@ export const ExplorerLeafEdit: FC<ExplorerLeafEditProps> = ({ folder, isEditing,
               overflow: 'hidden',
               whiteSpace: 'nowrap',
               textOverflow: 'ellipsis',
-              fontSize: '0.875em',
+              fontSize: editing ? '1em' : '0.875em',
+              mb: editing ? '0.25em' : 0,
             }}
           >
             {folder?.name}

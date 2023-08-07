@@ -35,7 +35,7 @@ export const ExplorerLeafAdd: FC<ExplorerLeafAddProps> = ({ nodeId, path, disabl
   };
 
   return (
-    <Stack direction="row" sx={{ flex: '1 1 auto', m: '0.2em 0' }}>
+    <Stack direction="row" sx={{ flex: '1 1 auto' }}>
       {editing ? (
         <Stack direction="row" sx={{ flex: '1 1 auto', p: '0 0.5em', alignItems: 'center' }}>
           <CreateNewFolderOutlinedIcon sx={{ mr: '0.25em', ml: '-0.125em', width: '1em', fontSize: '1.25em' }} />

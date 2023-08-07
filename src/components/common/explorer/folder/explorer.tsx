@@ -1,9 +1,10 @@
+import ClearIcon from '@mui/icons-material/Clear';
 import FolderIcon from '@mui/icons-material/Folder';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import { TreeView } from '@mui/lab';
-import { Container } from '@mui/material';
+import { Button, Container, Stack, TextField, Tooltip } from '@mui/material';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { useSelector } from 'react-redux';
 
@@ -33,6 +34,7 @@ export type ExplorerProps = {
   startPath?: string;
   onChange?: (event: ExplorerEvent) => void;
   editable?: boolean;
+  search?: boolean;
 };
 
 export type ExplorerEvent = {
@@ -42,13 +44,13 @@ export type ExplorerEvent = {
 };
 
 // TODO implement virtual scroll
-export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disabled, readonly, fileType, startPath, onChange, editable }) => {
+export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disabled, readonly, fileType, startPath, onChange, editable, search }) => {
   const i18n = useI18n('common', 'explorer');
 
   const [showDestinations, setShowDestinations] = useState(false);
   const recentDestinations = useSelector<RootSlice, string[]>(getDestinationsHistory);
 
-  const [tree, setTree] = useState<Record<string, File[] | Folder[]>>({});
+  const [tree, setTree] = useState<Record<string, (Folder | File)[]>>({});
   const [loading, setLoading] = useState<Record<string, boolean>>({
     root: true,
   });
@@ -56,6 +58,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
   const [selectedPath, setSelectedPath] = useState<string | undefined>(startPath);
   const [expanded, setExpanded] = useState<string[]>([]);
   const [crumbs, setCrumbs] = useState<string[]>([]);
+  const [filter, setFilter] = useState<string>('');
 
   useEffect(() => {
     if (QueryService.isLoggedIn) {
@@ -110,6 +113,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
   };
 
   const selectNode = (nodeId: string) => {
+    setFilter('');
     if (selected !== nodeId) {
       const ids = nodeId.split('-');
       const index = Number(ids.pop());
@@ -139,6 +143,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
         selectNode(ids.join('-'));
       }
     } else {
+      setFilter('');
       setSelected('root');
       setExpanded([]);
       setCrumbs([]);
@@ -174,8 +179,28 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
 
   const onSelect = ($event: React.SyntheticEvent, nodeId: string) => selectNode(nodeId);
   const onExpand = ($event: React.SyntheticEvent, nodeIds: string[]) => !flatten && setExpanded(nodeIds);
+
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const listener = (e: KeyboardEvent) => {
+    if ((e.target as HTMLElement).tagName === 'INPUT') return;
+    if (e.key === 'Backspace') setFilter(_prev => _prev.slice(0, -1));
+    else setFilter(_prev => `${_prev}${e.key}`);
+  };
+
+  useEffect(() => {
+    if (disabled) {
+      containerRef?.current?.removeEventListener('keydown', listener);
+      setFilter('');
+    } else containerRef?.current?.addEventListener('keydown', listener);
+    return () => containerRef?.current?.removeEventListener('keydown', listener);
+  }, [containerRef, disabled]);
+
+  const showFilter = search || (!disabled && !!filter);
+  const doFilter = (f: File | Folder) => disabled || !filter || f?.name?.trim()?.toLowerCase()?.includes(filter?.trim()?.toLowerCase());
+
   return (
-    <Container disableGutters maxWidth={false} sx={{ height: '100%' }}>
+    <Container ref={containerRef} disableGutters maxWidth={false} sx={{ height: '100%', outline: 'none' }} tabIndex={0}>
       <ExplorerBreadCrumbs
         crumbs={crumbs}
         showDestinations={showDestinations}
@@ -206,7 +231,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
           disableSelection={disabled}
           sx={{
             overflow: 'auto',
-            height: 'calc(100% - 2.0625em)',
+            height: `calc(100% - ${showFilter ? 4.5 : 2.0625}em)`,
           }}
         >
           {
@@ -218,32 +243,61 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
           {flatten && <ExplorerLoading loading={loading[selected]} empty={!tree[selected]?.length} />}
           {flatten &&
             !loading[selected] &&
-            tree[selected]?.map((f, i) => (
-              <ExplorerLeaf
-                key={`${i}-${disabled}`}
-                nodeId={`${selected}-${i}`}
-                folder={f}
-                tree={tree}
-                loading={loading}
-                disabled={disabled}
-                editable={editable}
-                spliceTree={spliceTree}
-              />
-            ))}
+            tree[selected]
+              ?.filter(doFilter)
+              .map((f, i) => (
+                <ExplorerLeaf
+                  key={`${i}-${disabled}`}
+                  nodeId={`${selected}-${i}`}
+                  folder={f}
+                  tree={tree}
+                  loading={loading}
+                  disabled={disabled}
+                  editable={editable}
+                  spliceTree={spliceTree}
+                />
+              ))}
           {!flatten &&
-            tree?.root?.map((f, i) => (
-              <ExplorerLeaf
-                key={`${i}-${disabled}`}
-                nodeId={`root-${i}`}
-                folder={f}
-                tree={tree}
-                loading={loading}
-                disabled={disabled}
-                editable={editable}
-                spliceTree={spliceTree}
-              />
-            ))}
+            tree?.root
+              ?.filter(doFilter)
+              ?.map((f, i) => (
+                <ExplorerLeaf
+                  key={`${i}-${disabled}`}
+                  nodeId={`root-${i}`}
+                  folder={f}
+                  tree={tree}
+                  loading={loading}
+                  disabled={disabled}
+                  editable={editable}
+                  spliceTree={spliceTree}
+                />
+              ))}
         </TreeView>
+      )}
+      {showFilter && (
+        <Stack direction="row" sx={{ flex: '1 1 auto', alignItems: 'center', p: '0 0.25em' }}>
+          <TextField
+            placeholder={'Search'}
+            variant="standard"
+            fullWidth={true}
+            value={filter}
+            disabled={disabled}
+            onChange={e => setFilter(e.target.value)}
+          />
+          <Tooltip arrow title={i18n('cancel', 'common', 'buttons')} PopperProps={{ disablePortal: true }}>
+            <span>
+              <Button
+                key="cancel"
+                color="error"
+                sx={{ display: 'flex', flex: '1 1 auto', minWidth: '0', p: '0.5em', fontSize: '0.75em' }}
+                disabled={disabled || !filter}
+                onClick={() => setFilter('')}
+              >
+                <ClearIcon fontSize="small" sx={{ width: '1em', fontSize: '1.125em' }} />
+              </Button>
+            </span>
+          </Tooltip>
+        </Stack>
       )}
     </Container>
   );
