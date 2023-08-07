@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.9.0](https://github.com/dvcol/synology-download/compare/v3.8.6...v3.9.0) (2023-08-07)
+
+
+### Features
+
+* **explorer:** add search bar in file explorer ([cc4d6a9](https://github.com/dvcol/synology-download/commit/cc4d6a94a2a065349fe659686bb596f8f34e0705))
+
+
+### Bug Fixes
+
+* **wc:** adds destroy hook to static services ([dd07027](https://github.com/dvcol/synology-download/commit/dd07027c13c1436ddcddafbda098789277054461))
+* **wc:** reset destroy subject for re-init ([af8364c](https://github.com/dvcol/synology-download/commit/af8364ced55b8978406dbe0c92825752af2eec0b))
+
 ### [3.8.6](https://github.com/dvcol/synology-download/compare/v3.8.5...v3.8.6) (2023-07-23)
 
 
