@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.9.1](https://github.com/dvcol/synology-download/compare/v3.9.0...v3.9.1) (2023-08-07)
+
+
+### Bug Fixes
+
+* **ci:** fix npm url ([a89d3cd](https://github.com/dvcol/synology-download/commit/a89d3cde605187025bd5123587dd1d8cc0c14364))
+
 ## [3.9.0](https://github.com/dvcol/synology-download/compare/v3.8.6...v3.9.0) (2023-08-07)
 
 
