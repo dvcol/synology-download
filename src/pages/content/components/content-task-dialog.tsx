@@ -45,9 +45,11 @@ export const ContentTaskDialog: FC<{ container?: PortalProps['container'] }> = (
       .subscribe(({ message, sendResponse }) => {
         if (message?.payload) {
           const {
-            info: { linkUrl: uri, pageUrl: source },
+            info: { linkUrl, pageUrl: source, selectionText },
             menu: { modal, destination },
           } = message.payload;
+
+          const uri = linkUrl ?? selectionText;
 
           if (uri && QueryService.isLoggedIn) {
             if (modal) {
