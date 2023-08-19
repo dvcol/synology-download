@@ -43,6 +43,8 @@ export type ExplorerEvent = {
   folder?: File | Folder;
 };
 
+type Tree = Record<string, (Folder | File)[]>;
+
 // TODO implement virtual scroll
 export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disabled, readonly, fileType, startPath, onChange, editable, search }) => {
   const i18n = useI18n('common', 'explorer');
@@ -50,7 +52,8 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
   const [showDestinations, setShowDestinations] = useState(false);
   const recentDestinations = useSelector<RootSlice, string[]>(getDestinationsHistory);
 
-  const [tree, setTree] = useState<Record<string, (Folder | File)[]>>({});
+  const [tree, setTree] = useState<Tree>({});
+  const [filteredTree, setFilteredTree] = useState<Tree>({});
   const [loading, setLoading] = useState<Record<string, boolean>>({
     root: true,
   });
@@ -59,6 +62,20 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
   const [expanded, setExpanded] = useState<string[]>([]);
   const [crumbs, setCrumbs] = useState<string[]>([]);
   const [filter, setFilter] = useState<string>('');
+
+  const showFilter = search || (!disabled && !!filter);
+  const doFilter = (f: File | Folder) => disabled || !filter || f?.name?.trim()?.toLowerCase()?.includes(filter?.trim()?.toLowerCase());
+  useEffect(() => {
+    if (showFilter && tree) {
+      const filtered = Object.entries(tree).reduce((curr, [key, value]) => {
+        curr[key] = value?.filter(doFilter);
+        return curr;
+      }, {} as Tree);
+      setFilteredTree(filtered);
+    } else {
+      setFilteredTree(tree);
+    }
+  }, [tree, search, disabled, filter]);
 
   useEffect(() => {
     if (QueryService.isLoggedIn) {
@@ -117,17 +134,17 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
     if (selected !== nodeId) {
       const ids = nodeId.split('-');
       const index = Number(ids.pop());
-      const folder = tree[ids?.join('-')][index];
+      const folder = filteredTree[ids?.join('-')][index];
       const path = folder.path.split('/')?.slice(1);
 
       if (!flatten && collapseOnSelect) {
         setExpanded([...expanded.filter(id => nodeId.startsWith(id)), nodeId]);
       }
 
-      if (!tree[nodeId] && flatten) {
+      if (!filteredTree[nodeId] && flatten) {
         onSelectChange(nodeId, path);
         listFiles(folder.path, nodeId).subscribe();
-      } else if (!tree[nodeId]) {
+      } else if (!filteredTree[nodeId]) {
         listFiles(folder.path, nodeId).subscribe(() => onSelectChange(nodeId, path, folder));
       } else {
         onSelectChange(nodeId, path, folder);
@@ -196,9 +213,6 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
     return () => containerRef?.current?.removeEventListener('keydown', listener);
   }, [containerRef, disabled]);
 
-  const showFilter = search || (!disabled && !!filter);
-  const doFilter = (f: File | Folder) => disabled || !filter || f?.name?.trim()?.toLowerCase()?.includes(filter?.trim()?.toLowerCase());
-
   return (
     <Container ref={containerRef} disableGutters maxWidth={false} sx={{ height: '100%', outline: 'none' }} tabIndex={0}>
       <ExplorerBreadCrumbs
@@ -240,38 +254,34 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
               <ExplorerLeafAdd nodeId={selected} path={selectedPath} disabled={disabled} spliceTree={spliceTree} />
             )
           }
-          {flatten && <ExplorerLoading loading={loading[selected]} empty={!tree[selected]?.length} />}
+          {flatten && <ExplorerLoading loading={loading[selected]} empty={!filteredTree[selected]?.length} />}
           {flatten &&
             !loading[selected] &&
-            tree[selected]
-              ?.filter(doFilter)
-              .map((f, i) => (
-                <ExplorerLeaf
-                  key={`${i}-${disabled}`}
-                  nodeId={`${selected}-${i}`}
-                  folder={f}
-                  tree={tree}
-                  loading={loading}
-                  disabled={disabled}
-                  editable={editable}
-                  spliceTree={spliceTree}
-                />
-              ))}
+            filteredTree[selected].map((f, i) => (
+              <ExplorerLeaf
+                key={`${i}-${disabled}`}
+                nodeId={`${selected}-${i}`}
+                folder={f}
+                tree={filteredTree}
+                loading={loading}
+                disabled={disabled}
+                editable={editable}
+                spliceTree={spliceTree}
+              />
+            ))}
           {!flatten &&
-            tree?.root
-              ?.filter(doFilter)
-              ?.map((f, i) => (
-                <ExplorerLeaf
-                  key={`${i}-${disabled}`}
-                  nodeId={`root-${i}`}
-                  folder={f}
-                  tree={tree}
-                  loading={loading}
-                  disabled={disabled}
-                  editable={editable}
-                  spliceTree={spliceTree}
-                />
-              ))}
+            filteredTree?.root?.map((f, i) => (
+              <ExplorerLeaf
+                key={`${i}-${disabled}`}
+                nodeId={`root-${i}`}
+                folder={f}
+                tree={filteredTree}
+                loading={loading}
+                disabled={disabled}
+                editable={editable}
+                spliceTree={spliceTree}
+              />
+            ))}
         </TreeView>
       )}
       {showFilter && (
