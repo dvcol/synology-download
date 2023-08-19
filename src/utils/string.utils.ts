@@ -15,6 +15,7 @@ export const stringifyParams = _stringifyParams;
  */
 export const parseMagnetLink = (uri: string, fallback?: string): string => {
   // TODO Handle more than just magnet URL
+  if (!uri?.startsWith('magnet:?')) return fallback ?? uri;
   if (!uri?.includes('dn=')) return fallback ?? uri;
   try {
     const url = new URL(uri);

@@ -6,6 +6,7 @@ import React from 'react';
 
 import type { ProgressBarProps } from '@src/components';
 import { ProgressBar } from '@src/components';
+import { parseMagnetLink } from '@src/utils';
 
 import type { AvatarProps } from '@mui/material';
 import type { FC } from 'react';
@@ -41,7 +42,7 @@ export const ContentCard: FC<ContentCardProps> = ({
       </ListItemAvatar>
       <ListItemText
         sx={{ maxWidth: '100%', whiteSpace: 'nowrap' }}
-        primary={title}
+        primary={parseMagnetLink(title)}
         primaryTypographyProps={{
           component: 'span',
           sx: {
