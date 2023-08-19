@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.10.0](https://github.com/dvcol/synology-download/compare/v3.9.1...v3.10.0) (2023-08-19)
+
+
+### Features
+
+* **content:** parse magnet link with waiting status ([a89687d](https://github.com/dvcol/synology-download/commit/a89687d623e65a6b124f752f62e9e3b15bcc4efc))
+* **context:** adds arbitrary text url creation ([9bfd41b](https://github.com/dvcol/synology-download/commit/9bfd41b2670d870a78c7d99025c8aed0e8e43f6c))
+
+
+### Bug Fixes
+
+* **explorer:** fix filter ([84113b1](https://github.com/dvcol/synology-download/commit/84113b1b3db5cb4b9c82ad57da62f2be3a5ccfae))
+
 ### [3.9.1](https://github.com/dvcol/synology-download/compare/v3.9.0...v3.9.1) (2023-08-07)
 
 
