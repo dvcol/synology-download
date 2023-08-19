@@ -37,7 +37,6 @@ jobs:
           key: ${{ github.ref }}-${{ github.run_id }}-build
 
       - name: Checkout branch ${{ github.ref }}
-        if: ${{ steps.cache.outputs.cache-hit != 'true' }}
         uses: actions/checkout@v3
 
       - name: Build
