@@ -102,7 +102,7 @@ jobs:
         run: |
           # =================  Fetch tags  =================
           
-          tag_name=$(git describe --abbrev=0)
+          tag_name=$(git describe --abbrev=0 --match 'v*')
           echo "Tag found: '$tag_name'"
           echo "::set-output name=TAG_NAME::$tag_name"
 
