@@ -35,6 +35,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overscroll-behavior-y: none;
+    transition: color 0.5s, background-color 0.5s;
+    will-change: color, background-color;
   }
 
   code {
@@ -45,17 +47,20 @@
   #synology-download-web-app-container {
     height: 100%;
     overflow: hidden;
-    color: #1f2020;
-    background-color: #eaeef2;
-    transition: width 1s, height 2s;
+    color: #bdbdbd;
+    background-color: #20262d;
+    transition: width 1s, height 2s, color 0.5s, background-color 0.5s;
+    will-change: width, height, color, background-color;
   }
 
   #app-skeleton-navbar {
     width: 100%;
     height: 48px;
-    background-color: white;
+    background-color: #272727;
     box-shadow: 0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%),
       0 1px 10px 0 rgb(0 0 0 / 12%);
+    transition: color 0.5s, background-color 0.5s;
+    will-change: color, background-color;
   }
 
   #app-skeleton-content {
@@ -65,7 +70,19 @@
     height: 100%;
   }
 
-  @media (prefers-color-scheme: dark) {
+  @media (prefers-color-scheme: light) {
+      #synology-download-web-app-container,
+      body {
+          color: #1f2020;
+          background-color: #eaeef2;
+      }
+
+      #app-skeleton-navbar {
+          background-color: white;
+      }
+  }
+
+  @media (prefers-color-scheme: light) {
     #synology-download-web-app-container,
     body {
       color: #bdbdbd;
