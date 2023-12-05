@@ -34,7 +34,7 @@ export const ContentCard: FC<ContentCardProps> = ({
   hover,
 }) => {
   return (
-    <ListItem sx={{ padding: '0.5rem 1rem' }} dense={true}>
+    <ListItem sx={{ padding: '0.5rem 1rem', pr: !expanded && hover ? '0.2rem' : undefined }} dense={true}>
       <ListItemAvatar sx={{ minWidth: '4.125rem' }}>
         <Avatar sx={{ width: '3.125rem', height: '3.125rem', bgcolor: iconBackground ?? blue[100] }} variant={iconVariant ?? 'circular'}>
           {icon}
@@ -47,8 +47,9 @@ export const ContentCard: FC<ContentCardProps> = ({
           component: 'span',
           sx: {
             maxWidth: !expanded && !hover ? 'calc(100% - 2.5rem)' : '100%',
-            display: '-webkit-box',
             WebkitLineClamp: expanded ? undefined : '2',
+            paddingRight: expanded ? '2rem' : undefined,
+            display: '-webkit-box',
             WebkitBoxOrient: 'vertical',
             wordBreak: 'break-word',
           },

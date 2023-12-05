@@ -5,7 +5,7 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReplayIcon from '@mui/icons-material/Replay';
-import { Button, Dialog, DialogContent, Tooltip } from '@mui/material';
+import { Dialog, DialogContent } from '@mui/material';
 
 import React, { forwardRef, useContext, useState } from 'react';
 
@@ -16,6 +16,7 @@ import { forkJoin } from 'rxjs';
 import type { ProgressBackgroundProps } from '@src/components';
 import { TaskAdd } from '@src/components';
 
+import { ContentButton } from '@src/components/panel/content/content-button';
 import type { Download, GlobalSettings, TaskForm } from '@src/models';
 import { ColorLevel, ColorLevelMap, DownloadStatus, downloadStatusToColor } from '@src/models';
 
@@ -140,19 +141,20 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
           buttons: (
             <>
               {buttons?.map(button => (
-                <Tooltip
-                  arrow
+                <ContentButton
                   key={button.key}
-                  title={i18n(button.key, 'common', 'buttons')}
-                  placement={'left'}
-                  PopperProps={{ disablePortal: true }}
+                  TooltipProps={{
+                    title: i18n(button.key, 'common', 'buttons'),
+                  }}
+                  ButtonProps={{
+                    key: button.key,
+                    sx: ButtonStyle,
+                    onClick: $event => handleClick($event, button.key),
+                    color: button.color,
+                  }}
                 >
-                  <span>
-                    <Button key={button.key} sx={ButtonStyle} onClick={$event => handleClick($event, button.key)} color={button.color}>
-                      {button.icon}
-                    </Button>
-                  </span>
-                </Tooltip>
+                  {button.icon}
+                </ContentButton>
               ))}
             </>
           ),
