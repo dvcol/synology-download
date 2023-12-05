@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.10.1](https://github.com/dvcol/synology-download/compare/v3.10.0...v3.10.1) (2023-12-05)
+
+
+### Bug Fixes
+
+* **content:** adjust buttons sizing ([09961b5](https://github.com/dvcol/synology-download/commit/09961b5c637890acef29a79931b7adb96c1bf20e))
+* **content:** prevent card header ellipsis to hide buttons ([bea23f7](https://github.com/dvcol/synology-download/commit/bea23f70db41482167a46e0780dbb0557187ca9a))
+
 ## [3.10.0](https://github.com/dvcol/synology-download/compare/v3.9.1...v3.10.0) (2023-08-19)
 
 
