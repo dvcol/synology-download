@@ -48,8 +48,9 @@ export const ContentCard: FC<ContentCardProps> = ({
           sx: {
             maxWidth: !expanded && !hover ? 'calc(100% - 2.5rem)' : '100%',
             display: '-webkit-box',
-            WebkitLineClamp: expanded ? undefined : '3',
+            WebkitLineClamp: expanded ? undefined : '2',
             WebkitBoxOrient: 'vertical',
+            wordBreak: 'break-word',
           },
         }}
         secondary={
