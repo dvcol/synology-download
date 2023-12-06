@@ -144,6 +144,13 @@ jobs:
           node_version: ${{ env.node_version }}
           mode: web:ci
 
+      - name: Debug Dist
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-cache
+          path: dist
+          retention-days: 1
+
       - uses: actions/cache/save@v3
         id: cache
         with:
