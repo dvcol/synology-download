@@ -1,7 +1,7 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Release - Tag, release and publish package
+name: 📦 Release - Tag, release and publish package
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -19,30 +19,29 @@ env:
 
 jobs:
   release:
-    name: Release
+    name: 📦 Release
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout branch ${{ github.ref }}
+      - name: ⛙ Checkout branch ${{ github.ref }}
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js ${{ env.node_version }}
+      - name: 🏗️ Setup Node.js ${{ env.node_version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.node_version }}
           cache: 'yarn'
 
-      - name: Clean install dependencies
+      - name: 🏗️ Install dependencies
         run: |
-          # =================  Install  =================
-          
+          # ================= 🏗️ Install dependencies =================
           yarn install
 
-      - name: Tag and bump Release
+      - name: 🏷️ Tag and bump Release
         run: |
-          # =================  Tab and bump  =================
+          # =================  🏷️ Tab and bump  =================
           
           # setup git creds
           git config user.name "GitHub Release Bot"
@@ -51,9 +50,9 @@ jobs:
           # generate release
           yarn release
 
-      - name: Push to remote
+      - name: ⛙ Push to remote
         run: |
-          # =================  Push to remote  =================
+          # =================  ⛙ Push to remote  =================
           
           # Check status
           git status
@@ -64,25 +63,25 @@ jobs:
 
   publish-store:
     needs: release
-    name: Publish extension
+    name: 🔌 Publish extension
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion != 'failure' }}
 
     steps:
-      - name: Checkout branch ${{ github.ref }}
+      - name: ⛙ Checkout branch ${{ github.ref }}
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Build
+      - name: 🚧 Build
         uses: ./.github/actions/build
         with:
           node_version: ${{ env.node_version }}
           mode: extension
 
-      - name: Zip build folder
+      - name: 🗃️ Zip build folder
         run: |
-          # =================  Zipping build folder  =================
+          # =================  🗃️ Zipping build folder  =================
           
           # Zipping build folder for artifact upload
           cd build;
@@ -93,27 +92,29 @@ jobs:
           ls -l  synology-download.zip
           cd ..
 
-      - name: Generate Release changelog
-        run: yarn release:changelog
+      - name: 📝 Generate Release changelog
+        run: |
+          # =================  📝 Generate Release changelog  =================
+          yarn release:changelog
 
-      - name: Fetch latest tag
+      - name: 🏷️ Fetch latest tag
         if: ${{ github.event_name == 'workflow_run' || (github.event_name == 'workflow_dispatch' && github.event.inputs.tagName == '') }}
         id: latest-tag
         run: |
-          # =================  Fetch tags  =================
+          # =================  🏷️ Fetch tags  =================
           
           tag_name=$(git describe --abbrev=0 --match 'v*')
           echo "Tag found: '$tag_name'"
           echo "::set-output name=TAG_NAME::$tag_name"
 
-      - name: Push Release to github
+      - name: 📦 Push Release to github
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ github.event.inputs.tagName || steps.latest-tag.outputs.TAG_NAME || github.ref}}
           body_path: RELEASE.md
           files: build/synology-download.zip
 
-      - name: Publish to Chrome webstore
+      - name: 🔌 Publish to Chrome webstore
         env:
           CHROME_WEB_STORE_EXTENSION_ID: ebbdkledlkjpgbbmmopgbnnjmklnkcef
           CHROME_WEB_STORE_CLIENT_ID: ${{ secrets.CHROME_WEB_STORE_CLIENT_ID }}
@@ -128,45 +129,39 @@ jobs:
 
   publish-npm:
     needs: release
-    name: Publish npm
+    name: ☁️ Publish npm
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion != 'failure' }}
 
     steps:
-      - name: Checkout branch ${{ github.ref }}
+      - name: ⛙ Checkout branch ${{ github.ref }}
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Build
+      - name: 🚧 Build
         uses: ./.github/actions/build
         with:
           node_version: ${{ env.node_version }}
           mode: web:ci
 
-      - name: Debug Dist
-        uses: actions/upload-artifact@v3
-        with:
-          name: dist-cache
-          path: dist
-          retention-days: 1
+      - name: ☁️ Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          # =================  ☁️ Publish to npm =================
+          
+          npm publish
 
-      - uses: actions/cache/save@v3
+      - name: 💾 Caching build artefacts
+        uses: actions/cache/save@v3
         id: cache
         with:
           path: dist
           key: ${{ github.ref }}-${{ github.run_id }}-build
 
-      - name: Publish to npm
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          # =================  Publish  =================
-          
-          npm publish
-
   deploy:
-    name: Deploy
+    name: 🚀 Deploy
     needs: publish-npm
     uses: ./.github/workflows/deploy.yml
     secrets: inherit

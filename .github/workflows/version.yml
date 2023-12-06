@@ -1,7 +1,7 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Bumps - Semver version
+name: 📈 Bumps - Semver version
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -26,17 +26,18 @@ jobs:
       new_version: ''
 
     steps:
-      - uses: actions/checkout@v4
+      - name: ⛙ Checkout branch ${{ github.ref }}
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js ${{ env.node_version }}
+      - name: 🏗️ Setup Node.js ${{ env.node_version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.node_version }}
           cache: 'yarn'
 
-      - name: Bump version
+      - name: 📈 Bump version
         run: |
-          # =================  Bump package version  =================
+          # =================  📈 Bump package version  =================
           
           # Save old version to env
           echo "old_version=$(jq -r .version package.json)" >> $GITHUB_ENV
@@ -53,9 +54,9 @@ jobs:
           # Save new version to env
           echo "new_version=$(jq -r .version package.json)" >> $GITHUB_ENV
 
-      - name: Write version to manifest.json
+      - name: 📈 Write version to manifest.json
         run: |
-          # =================  Bump manifest.json  =================
+          # =================  📈 Bump manifest.json  =================
           
           # Move to src folder
           cd ./src
@@ -67,9 +68,9 @@ jobs:
 
           echo "Manifest version changed from '$manifest_version' to '$(jq -r .version manifest.json)'"
 
-      - name: Commit files
+      - name: ⛙ Commit files
         run: |
-          # =================  Commit changes  =================
+          # =================  ⛙ Commit changes  =================
           
           # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
           git config user.name "GitHub Bump Version Bot"
@@ -82,9 +83,9 @@ jobs:
           git commit -m "chore(version): bumping version from '${{ env.old_version }}' to '${{ env.new_version }}'"
           git push origin
 
-      - name: Tag release candidate
+      - name: 🏷️ Tag release candidate
         run: |
-          # =================  Tag release candidate  =================
+          # =================  🏷️ Tag release candidate  =================
           
           old_tag="v${{ env.old_version }}-rc"
           new_tag="v${{ env.new_version }}-rc"
