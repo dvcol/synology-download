@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.10.2](https://github.com/dvcol/synology-download/compare/v3.10.1...v3.10.2) (2023-12-06)
+
+
+### Features
+
+* **icon:** change icon and add logged-out icon ([eb0aaa0](https://github.com/dvcol/synology-download/commit/eb0aaa032ab75c18e9993fbda29763d1de4b93c9))
+
 ### [3.10.1](https://github.com/dvcol/synology-download/compare/v3.10.0...v3.10.1) (2023-12-05)
 
 
