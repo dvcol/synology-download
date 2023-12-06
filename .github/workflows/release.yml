@@ -144,6 +144,12 @@ jobs:
           node_version: ${{ env.node_version }}
           mode: web:ci
 
+      - uses: actions/cache/save@v3
+        id: cache
+        with:
+          path: dist
+          key: ${{ github.ref }}-${{ github.run_id }}-build
+
       - name: Publish to npm
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -151,12 +157,6 @@ jobs:
           # =================  Publish  =================
           
           npm publish
-
-      - uses: actions/cache/save@v3
-        id: cache
-        with:
-          path: dist
-          key: ${{ github.ref }}-${{ github.run_id }}-build
 
   deploy:
     name: Deploy
