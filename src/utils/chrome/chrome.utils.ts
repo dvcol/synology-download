@@ -1,6 +1,9 @@
 /** @see chrome.notifications.NotificationOptions */
 export type NotificationOptions<T extends boolean = false> = chrome.notifications.NotificationOptions<T>;
 
+/** @see chrome.action.setIcon */
+export const setIcon = chrome?.action?.setIcon;
+
 /** @see chrome.action.setBadgeText */
 export const setBadgeText = chrome?.action?.setBadgeText;
 

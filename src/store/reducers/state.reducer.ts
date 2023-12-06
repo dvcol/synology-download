@@ -1,6 +1,6 @@
 import type { ContentCount, Log, StateSlice, TaskStatistics } from '@src/models';
 import { LoggerService } from '@src/services';
-import { localSet, formatBytes, setBadgeText, setTitle } from '@src/utils';
+import { formatBytes, localSet, setBadgeText, setIcon, setTitle } from '@src/utils';
 
 import { stateSlice } from '../slices/state.slice';
 
@@ -47,6 +47,18 @@ export const syncStateReducer = (state: StateSlice): StateSlice => {
 };
 
 export const syncLoggedReducer: StateReducers['setLogged'] = (state, { payload: logged }) => {
+  if (state.logged !== logged) {
+    const icon = `icon${logged ? '' : '-disabled'}`;
+    setIcon({
+      path: {
+        16: `../assets/icons/${icon}-16.png`,
+        32: `../assets/icons/${icon}-32.png`,
+        64: `../assets/icons/${icon}-64.png`,
+        128: `../assets/icons/${icon}-128.png`,
+        256: `../assets/icons/${icon}-256.png`,
+      },
+    });
+  }
   return syncStateReducer({ ...state, logged });
 };
 
