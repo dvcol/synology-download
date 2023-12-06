@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.10.3](https://github.com/dvcol/synology-download/compare/v3.10.2...v3.10.3) (2023-12-06)
+
+
+### Bug Fixes
+
+* **ci:** fix cache and add emoji ([f88770f](https://github.com/dvcol/synology-download/commit/f88770f9c53738b7cb65cff740e943a9c8aa62d4))
+* **favicon:** fix transparency ([be8808d](https://github.com/dvcol/synology-download/commit/be8808de67b9e408004cc3040ea84f29cd597120))
+* **pages:** fix default body background in index.html ([d4d77e7](https://github.com/dvcol/synology-download/commit/d4d77e7fe178569276b6bf3e038819102cc4c021))
+
 ### [3.10.2](https://github.com/dvcol/synology-download/compare/v3.10.1...v3.10.2) (2023-12-06)
 
 
