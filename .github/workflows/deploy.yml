@@ -1,7 +1,7 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
-name: Deploy - Github Pages
+name: 🚀 Deploy - Github Pages
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-deploy
@@ -22,7 +22,7 @@ permissions:
 
 jobs:
   deploy:
-    name: Deploy Github Pages
+    name: 🚀 Deploy Github Pages
     runs-on: ubuntu-latest
 
     environment:
@@ -30,45 +30,46 @@ jobs:
       url: https://dvcol.github.io/synology-download/
 
     steps:
-      - uses: actions/cache/restore@v3
+      - name: ⛙ Checkout branch ${{ github.ref }}
+        uses: actions/checkout@v4
+
+      - name: 💾 Restore build artefacts
+        uses: actions/cache/restore@v3
         id: cache
         with:
           path: dist
           key: ${{ github.ref }}-${{ github.run_id }}-build
 
-      - name: Checkout branch ${{ github.ref }}
-        uses: actions/checkout@v4
-
-      - name: Build
+      - name: 🚧 Build
         if: ${{ steps.cache.outputs.cache-hit != 'true' }}
         uses: ./.github/actions/build
         with:
           node_version: ${{ env.node_version }}
           mode: web:ci
 
-      - name: Setup Pages
+      - name: 🏗️ Setup Pages
         uses: actions/configure-pages@v4
 
-      - name: Upload artifact
+      - name: 📦 Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
           # Upload entire repository
           path: dist
 
-      - name: Deploy to GitHub Pages
+      - name: 🚀 Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v3
 
-      - name: Setup credentials
+      - name: ⛙ Setup credentials
         run: |
-          # ================= Setup credentials =================
+          # =================  ⛙ Setup credentials =================
           
           git config user.name "GitHub Release Bot"
           git config user.email "<>"
 
-      - name: Tag deployment
+      - name: 🏷️ Tag deployment
         run: |
-          # ================= Tag deployment =================
+          # =================  🏷️ Tag deployment =================
           
           git tag -fa deployed -m 'Deployed on github pages'
           git push origin --tags --force

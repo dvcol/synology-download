@@ -1,4 +1,4 @@
-name: Build
+name: 🚧 Build
 description: Install and build the repo
 
 inputs:
@@ -14,23 +14,23 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Setup Node.js ${{ inputs.node_version }}
+    - name: 🏗️ Setup Node.js ${{ inputs.node_version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ inputs.node_version }}
         registry-url: 'https://registry.npmjs.org'
         cache: 'yarn'
 
-    - name: Install dependencies
+    - name: 🏗️ Install dependencies
       shell: bash
       run: |
-        # ================= Install =================
+        # ================= 🏗️ Install dependencies =================
         
         yarn install
 
-    - name: Build sources
+    - name: 🚧 Build sources
       shell: bash
       run: |
-        # =================  Build  =================
+        # =================  🚧 Build  =================
 
         yarn build:${{ inputs.mode }}
