@@ -1,96 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Synology Download standalone web component</title>
-  </head>
-  <body>
-    <div id="synology-download-web-app-container" data-context="web">
-      <wc-synology-download-standalone id="wc-synology-download-standalone">
-        <div id="app-skeleton-navbar"></div>
-        <div id="app-skeleton-content">
-          <span id="app-skeleton-loader">Loading application ...</span>
-        </div>
-      </wc-synology-download-standalone>
+<head>
+  <meta charset="UTF-8"/>
+  <title>Synology Download standalone web component</title>
+</head>
+<body>
+<div id="synology-download-web-app-container" data-context="web">
+  <wc-synology-download-standalone id="wc-synology-download-standalone">
+    <div id="app-skeleton-navbar"></div>
+    <div id="app-skeleton-content">
+      <span id="app-skeleton-loader">Loading application ...</span>
     </div>
-    <wc-synology-download-content id="wc-synology-download-content"></wc-synology-download-content>
-  </body>
+  </wc-synology-download-standalone>
+</div>
+<wc-synology-download-content id="wc-synology-download-content"></wc-synology-download-content>
+</body>
 </html>
 
 <script>
-  document.getElementById('wc-synology-download-standalone').addEventListener('connected', (e)=> console.info('Standalone Web Component connected', e) )
-  document.getElementById('wc-synology-download-standalone').addEventListener('disconnected', (e)=> console.info('Standalone Web Component disconnected', e) )
+    document.getElementById('wc-synology-download-standalone').addEventListener('connected', (e) => console.info('Standalone Web Component connected', e))
+    document.getElementById('wc-synology-download-standalone').addEventListener('disconnected', (e) => console.info('Standalone Web Component disconnected', e))
 
-  document.getElementById('wc-synology-download-content').addEventListener('connected', (e)=> console.info('Standalone Web Component connected', e) )
-  document.getElementById('wc-synology-download-content').addEventListener('disconnected', (e)=> console.info('Standalone Web Component disconnected', e) )
+    document.getElementById('wc-synology-download-content').addEventListener('connected', (e) => console.info('Standalone Web Component connected', e))
+    document.getElementById('wc-synology-download-content').addEventListener('disconnected', (e) => console.info('Standalone Web Component disconnected', e))
 </script>
 
 <style>
-  body {
-    height: 100dvh;
-    margin: 0;
-    font-size: 1rem;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-      Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    overscroll-behavior-y: none;
-    transition: color 0.5s, background-color 0.5s;
-    will-change: color, background-color;
-  }
-
-  code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-      monospace;
-  }
-
-  #synology-download-web-app-container {
-    height: 100%;
-    overflow: hidden;
-    color: #bdbdbd;
-    background-color: #20262d;
-    transition: width 1s, height 2s, color 0.5s, background-color 0.5s;
-    will-change: width, height, color, background-color;
-  }
-
-  #app-skeleton-navbar {
-    width: 100%;
-    height: 48px;
-    background-color: #272727;
-    box-shadow: 0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%),
-      0 1px 10px 0 rgb(0 0 0 / 12%);
-    transition: color 0.5s, background-color 0.5s;
-    will-change: color, background-color;
-  }
-
-  #app-skeleton-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-  }
-
-  @media (prefers-color-scheme: light) {
-      #synology-download-web-app-container,
-      body {
-          color: #1f2020;
-          background-color: #eaeef2;
-      }
-
-      #app-skeleton-navbar {
-          background-color: white;
-      }
-  }
-
-  @media (prefers-color-scheme: light) {
-    #synology-download-web-app-container,
     body {
-      color: #bdbdbd;
-      background-color: #20262d;
+        height: 100dvh;
+        margin: 0;
+        color: #bdbdbd;
+        font-size: 1rem;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        overscroll-behavior-y: none;
+        transition: color 0.5s, background-color 0.5s;
+        will-change: color, background-color;
+    }
+
+    code {
+        font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+        monospace;
+    }
+
+    #synology-download-web-app-container {
+        height: 100%;
+        overflow: hidden;
+        color: #bdbdbd;
+        background-color: #20262d;
+        transition: width 1s, height 2s, color 0.5s, background-color 0.5s;
+        will-change: width, height, color, background-color;
     }
 
     #app-skeleton-navbar {
-      background-color: #272727;
+        width: 100%;
+        height: 48px;
+        background-color: #272727;
+        box-shadow: 0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%),
+        0 1px 10px 0 rgb(0 0 0 / 12%);
+        transition: color 0.5s, background-color 0.5s;
+        will-change: color, background-color;
     }
-  }
+
+    #app-skeleton-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+    }
+
+    @media (prefers-color-scheme: light) {
+        #synology-download-web-app-container,
+        body {
+            color: #1f2020;
+            background-color: #eaeef2;
+        }
+
+        #app-skeleton-navbar {
+            background-color: white;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        #synology-download-web-app-container,
+        body {
+            color: #bdbdbd;
+            background-color: #20262d;
+        }
+
+        #app-skeleton-navbar {
+            background-color: #272727;
+        }
+    }
 </style>
