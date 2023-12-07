@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.10.4](https://github.com/dvcol/synology-download/compare/v3.10.3...v3.10.4) (2023-12-07)
+
+
+### Bug Fixes
+
+* **pages:** defaults body to dark mode ([f1f23a2](https://github.com/dvcol/synology-download/commit/f1f23a2aac10814430b129cfa0907f1c9e047b9e))
+
 ### [3.10.3](https://github.com/dvcol/synology-download/compare/v3.10.2...v3.10.3) (2023-12-06)
 
 
