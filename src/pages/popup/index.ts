@@ -3,6 +3,13 @@ import { initApp } from '@src/pages/common';
 import { LoggerService } from '@src/services';
 import { getPopup } from '@src/store/selectors';
 
+const root = document?.getElementById('synology-download-popup-app-container');
+
+if (root) {
+  root.style.width = `${window.innerWidth}px`;
+  root.style.height = `${window.innerHeight}px`;
+}
+
 initApp(ServiceInstance.Popup, AppInstance.popup, getPopup)
   .then(() => LoggerService.debug('Popup app initialised.'))
   .catch(err => LoggerService.debug('Popup app failed to initialised.', err));
