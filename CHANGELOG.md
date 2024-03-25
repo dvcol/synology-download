@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.10.5](https://github.com/dvcol/synology-download/compare/v3.10.4...v3.10.5) (2024-03-25)
+
+
+### Bug Fixes
+
+* **ui:** auto-resize based on window inner width/height ([b615400](https://github.com/dvcol/synology-download/commit/b6154000cae30870d97f37ea6ed5c4c1a7fa658d))
+
 ### [3.10.4](https://github.com/dvcol/synology-download/compare/v3.10.3...v3.10.4) (2023-12-07)
 
 
