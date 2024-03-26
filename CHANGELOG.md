@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.10.6](https://github.com/dvcol/synology-download/compare/v3.10.5...v3.10.6) (2024-03-26)
+
+
+### Bug Fixes
+
+* **ui:** resize popup after initialisation to prevent undersized window ([b7b7df9](https://github.com/dvcol/synology-download/commit/b7b7df96f238d777c1d73845d0513a41a63803e3))
+
 ### [3.10.5](https://github.com/dvcol/synology-download/compare/v3.10.4...v3.10.5) (2024-03-25)
 
 
