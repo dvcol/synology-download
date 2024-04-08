@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.10.7](https://github.com/dvcol/synology-download/compare/v3.10.6...v3.10.7) (2024-04-08)
+
+
+### Bug Fixes
+
+* **popup:** restrict max size for non mac OS popups ([230a6f8](https://github.com/dvcol/synology-download/commit/230a6f8bd5d677e9b00fc6e87aa0ad04ba9b2f8b))
+
 ### [3.10.6](https://github.com/dvcol/synology-download/compare/v3.10.5...v3.10.6) (2024-03-26)
 
 
