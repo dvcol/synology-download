@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.10.9](https://github.com/dvcol/synology-download/compare/v3.10.7...v3.10.9) (2024-04-08)
+
+
+### Bug Fixes
+
+* **scroll:** adjust max width to prevent scrollbars ([a5c24bf](https://github.com/dvcol/synology-download/commit/a5c24bfcae1b135fd943710d6e7f4aa2c402c596))
+* **scroll:** restore max size, adds overflow hidden instead ([39cb337](https://github.com/dvcol/synology-download/commit/39cb3377a5e854edd8b3200909d31cd1fb7bccbc))
+
 ### [3.10.7](https://github.com/dvcol/synology-download/compare/v3.10.6...v3.10.7) (2024-04-08)
 
 
