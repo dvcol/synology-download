@@ -1,98 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8"/>
-  <title>Synology Download Client Popup</title>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Synology Download Client Popup</title>
+  </head>
 
-<body>
-<div id="synology-download-popup-app-container" data-context="popup">
-  <div id="app-skeleton-container">
-    <div id="app-skeleton-navbar"></div>
-    <div id="app-skeleton-content">
-      <span id="app-skeleton-loader">Loading application ...</span>
+  <body>
+    <div id="synology-download-popup-app-container" data-context="popup">
+      <div id="app-skeleton-container">
+        <div id="app-skeleton-navbar"></div>
+        <div id="app-skeleton-content">
+          <span id="app-skeleton-loader">Loading application ...</span>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-</body>
+  </body>
 </html>
 
 <style>
-    html {
-     overflow: hidden;
-    }
+  html {
+    overflow: hidden;
+    scrollbar-width: none;
+  }
 
-    #synology-download-popup-app-container {
-        width: 800px;
-        max-width: 800px;
-        height:600px;
-        max-height: 600px;
-        overflow: hidden;
-    }
+  #synology-download-popup-app-container {
+    width: 800px;
+    max-width: 800px;
+    height: 600px;
+    max-height: 600px;
+    overflow: hidden;
+  }
 
-    body {
-        margin: 0;
-        color: #bdbdbd;
-        font-size: 1rem;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-        Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        transition: color 0.5s, background-color 0.5s;
-        will-change: color, background-color;
-    }
+  body {
+    margin: 0;
+    color: #bdbdbd;
+    font-size: 1rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+      Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: color 0.5s, background-color 0.5s;
+    will-change: color, background-color;
+  }
 
-    code {
-        font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-        monospace;
-    }
+  code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+      monospace;
+  }
 
+  #app-skeleton-container {
+    height: 100%;
+    color: #bdbdbd;
+    background-color: #20262d;
+    transition: color 0.5s, background-color 0.5s;
+    will-change: color, background-color;
+  }
+
+  #app-skeleton-navbar {
+    width: 100%;
+    height: 48px;
+    background-color: #272727;
+    box-shadow: 0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%),
+      0 1px 10px 0 rgb(0 0 0 / 12%);
+    transition: color 0.5s, background-color 0.5s;
+    will-change: color, background-color;
+  }
+
+  #app-skeleton-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+  @media (prefers-color-scheme: light) {
+    body,
     #app-skeleton-container {
-        height: 100%;
-        color: #bdbdbd;
-        background-color: #20262D;
-        transition: color 0.5s, background-color 0.5s;
-        will-change: color, background-color;
+      color: #1f2020;
+      background-color: rgb(234 238 243);
     }
 
     #app-skeleton-navbar {
-        width: 100%;
-        height: 48px;
-        background-color: #272727;
-        box-shadow: 0 2px 4px -1px rgb(0 0 0 / 20%), 0 4px 5px 0 rgb(0 0 0 / 14%),
-        0 1px 10px 0 rgb(0 0 0 / 12%);
-        transition: color 0.5s, background-color 0.5s;
-        will-change: color, background-color;
+      background-color: white;
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    body,
+    #app-skeleton-container {
+      color: #bdbdbd;
+      background-color: #20262d;
     }
 
-    #app-skeleton-content {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100%;
+    #app-skeleton-navbar {
+      background-color: #272727;
     }
-
-    @media (prefers-color-scheme: light) {
-        body,
-        #app-skeleton-container {
-            color: #1f2020;
-            background-color: rgb(234 238 243);
-        }
-
-        #app-skeleton-navbar {
-            background-color: white;
-        }
-    }
-
-    @media (prefers-color-scheme: dark) {
-        body,
-        #app-skeleton-container {
-            color: #bdbdbd;
-            background-color: #20262D;
-        }
-
-        #app-skeleton-navbar {
-            background-color: #272727;
-        }
-    }
+  }
 </style>
