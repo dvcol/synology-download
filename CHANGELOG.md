@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.10.10](https://github.com/dvcol/synology-download/compare/v3.10.9...v3.10.10) (2024-04-15)
+
+
+### Bug Fixes
+
+* **scroll:** remove native scrollbar altogether ([ebdc46a](https://github.com/dvcol/synology-download/commit/ebdc46aaf5b30b0d5b38aea4aaa12ebff1e3647d))
+
 ### [3.10.9](https://github.com/dvcol/synology-download/compare/v3.10.7...v3.10.9) (2024-04-08)
 
 
