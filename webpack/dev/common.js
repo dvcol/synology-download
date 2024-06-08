@@ -35,7 +35,6 @@ const server = async (getConfig, mode = 'development') => {
 
   const devServer = new WebpackDevServer(
     {
-      https: false,
       hot: false,
       client: false,
       host: '0.0.0.0',
