@@ -203,6 +203,8 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
     if ((e.target as HTMLElement).tagName === 'INPUT') return;
     if (e.key === 'Backspace') setFilter(_prev => _prev.slice(0, -1));
     else setFilter(_prev => `${_prev}${e.key}`);
+    e.stopPropagation();
+    e.preventDefault();
   };
 
   useEffect(() => {
