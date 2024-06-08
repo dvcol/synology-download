@@ -5,13 +5,13 @@ import React from 'react';
 
 import { useI18n } from '@src/utils';
 
-export const ExplorerLoading = ({ loading, empty }: { loading?: boolean; empty?: boolean }) => {
-  const i18n = useI18n('common', 'explorer', 'explorer_loading');
+export const ExplorerLoading = ({ loading, empty, text = 'folder' }: { loading?: boolean; empty?: boolean; text?: string }) => {
+  const i18n = useI18n('common', 'explorer', 'explorer_loading', text);
   return (
     <React.Fragment>
       {loading && (
         <Typography sx={{ m: '0.25em 0', fontSize: '0.875em' }}>
-          <Box component={'span'} sx={{ m: '0 0.375em 0 0.75em' }}>
+          <Box component={'span'} sx={{ m: '0 0.75em 0 0.75em' }}>
             <CircularProgress size={'0.6em'} />
           </Box>
           <span>{i18n('content')}</span>

@@ -1,9 +1,15 @@
 {
-  "common__explorer__explorer_loading__content": {
-    "message": "Loading folder content"
+  "common__explorer__explorer_loading__folder__content": {
+    "message": "Loading folder content ..."
+  },
+  "common__explorer__explorer_loading__path__content": {
+    "message": "Loading path ..."
   },
 
-  "common__explorer__explorer_loading__empty": {
+  "common__explorer__explorer_loading__folder__empty": {
     "message": "This folder does not contain any sub-folders."
+  },
+  "common__explorer__explorer_loading__path__empty": {
+    "message": "This path does not contain any sub-folders."
   }
 }

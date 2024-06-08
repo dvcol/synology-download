@@ -8,13 +8,15 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { catchError, finalize, tap } from 'rxjs';
+import { catchError, finalize, lastValueFrom, map, tap } from 'rxjs';
 
 import type { File, FileList, Folder, RootSlice } from '@src/models';
 
 import { LoggerService, NotificationService, QueryService } from '@src/services';
 import { getDestinationsHistory } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
+
+import { useDebounce } from '@src/utils/debounce.utils';
 
 import { ExplorerBreadCrumbs } from './explorer-breadcrumb';
 import { ExplorerLeaf } from './explorer-leaf';
@@ -54,63 +56,60 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
 
   const [tree, setTree] = useState<Tree>({});
   const [filteredTree, setFilteredTree] = useState<Tree>({});
-  const [loading, setLoading] = useState<Record<string, boolean>>({
-    root: true,
-  });
+  const [loading, setLoading] = useState<Record<string, boolean>>({ root: true });
+  const [pathLoading, setPathLoading] = useState<boolean>(false);
   const [selected, setSelected] = useState<string>('root');
   const [selectedPath, setSelectedPath] = useState<string | undefined>(startPath);
   const [expanded, setExpanded] = useState<string[]>([]);
   const [crumbs, setCrumbs] = useState<string[]>([]);
   const [filter, setFilter] = useState<string>('');
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const showFilter = search || (!disabled && !!filter);
   const doFilter = (f: File | Folder) => disabled || !filter || f?.name?.trim()?.toLowerCase()?.includes(filter?.trim()?.toLowerCase());
-  useEffect(() => {
-    if (showFilter && tree) {
-      const filtered = Object.entries(tree).reduce((curr, [key, value]) => {
-        curr[key] = value?.filter(doFilter);
-        return curr;
-      }, {} as Tree);
-      setFilteredTree(filtered);
-    } else {
-      setFilteredTree(tree);
-    }
-  }, [tree, search, disabled, filter]);
 
-  useEffect(() => {
-    if (QueryService.isLoggedIn) {
-      QueryService.listFolders(readonly ?? true).subscribe({
-        next: list => {
-          setTree({ root: list?.shares ?? [] });
-          setLoading(_loading => ({ ..._loading, root: false }));
-        },
-        error: error => {
-          LoggerService.error(`Failed load folders.`, error);
-          NotificationService.error({
-            title: i18n(`list_folders_fail`, 'common', 'error'),
-            message: error?.message ?? error?.name ?? '',
-          });
-        },
-      });
-    }
-  }, []);
+  const isLoginCheck = () => {
+    if (QueryService.isLoggedIn) return QueryService.isLoggedIn;
 
-  const selectPath = (path: string) => {
-    setCrumbs(path?.includes('/') ? path?.split('/') : [path]);
-    setSelectedPath(path);
+    const error = new Error('User not logged in.');
+    LoggerService.error(`User not logged in.`, error);
+    NotificationService.error({
+      title: i18n('login_required', 'common', 'error'),
+      message: i18n('please_login', 'common', 'error'),
+    });
+    throw error;
   };
 
-  useEffect(() => {
-    if (startPath?.length) selectPath(startPath);
-  }, [startPath]);
-
-  const listFiles = (path: string, key: string): Observable<FileList> => {
-    setLoading({ ...loading, [key]: true });
-    return QueryService.listFiles(path, fileType ?? 'dir').pipe(
-      tap((list: FileList) => setTree({ ...tree, [key]: list?.files ?? [] })),
-      finalize(() => {
-        setTimeout(() => setLoading({ ...loading, [key]: false }), 200);
+  const fetchFolders = (_tree = tree): Observable<Tree> => {
+    isLoginCheck();
+    return QueryService.listFolders(readonly ?? true).pipe(
+      map(list => ({ ..._tree, root: list?.shares ?? [] })),
+      catchError(error => {
+        LoggerService.error(`Failed load folders.`, error);
+        NotificationService.error({
+          title: i18n(`list_folders_fail`, 'common', 'error'),
+          message: error?.message ?? error?.name ?? '',
+        });
+        throw error;
       }),
+    );
+  };
+
+  const loadFoldersIntoTree = () => {
+    setLoading(_loading => ({ ..._loading, root: true }));
+    return fetchFolders().pipe(
+      tap(_tree => setTree(old => ({ ...old, ..._tree }))),
+      finalize(() => {
+        setTimeout(() => setLoading(_loading => ({ ..._loading, root: false })), 200);
+      }),
+    );
+  };
+
+  const fetchFiles = (path: string, key: string, _tree = tree): Observable<Tree> => {
+    isLoginCheck();
+    return QueryService.listFiles(path, fileType ?? 'dir').pipe(
+      map((list: FileList) => ({ ..._tree, [key]: list?.files ?? [] })),
       catchError(error => {
         LoggerService.error(`Failed load files for path '${path}'.`, { path, key, error });
         NotificationService.error({
@@ -122,6 +121,16 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
     );
   };
 
+  const loadFilesIntoTree = (path: string, key: string): Observable<Tree> => {
+    setLoading({ ...loading, [key]: true });
+    return fetchFiles(path, key).pipe(
+      tap(_tree => setTree(old => ({ ...old, ..._tree }))),
+      finalize(() => {
+        setTimeout(() => setLoading({ ...loading, [key]: false }), 200);
+      }),
+    );
+  };
+
   const onSelectChange = (id: string, path: string[], folder?: File | Folder) => {
     setSelected(id);
     setCrumbs(path);
@@ -129,41 +138,44 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
     onChange?.({ id, path: path.join('/'), folder });
   };
 
-  const selectNode = (nodeId: string) => {
+  const selectNode = async (nodeId: string): Promise<Tree> => {
+    if (selected === nodeId) return tree;
     setFilter('');
-    if (selected !== nodeId) {
-      const ids = nodeId.split('-');
-      const index = Number(ids.pop());
-      const folder = filteredTree[ids?.join('-')][index];
-      const path = folder.path.split('/')?.slice(1);
 
-      if (!flatten && collapseOnSelect) {
-        setExpanded([...expanded.filter(id => nodeId.startsWith(id)), nodeId]);
-      }
+    const ids = nodeId.split('-');
+    const index = Number(ids.pop());
+    const folder = filteredTree[ids?.join('-')][index];
+    const path = folder.path.split('/')?.slice(1);
 
-      if (!filteredTree[nodeId] && flatten) {
-        onSelectChange(nodeId, path);
-        listFiles(folder.path, nodeId).subscribe();
-      } else if (!filteredTree[nodeId]) {
-        listFiles(folder.path, nodeId).subscribe(() => onSelectChange(nodeId, path, folder));
-      } else {
-        onSelectChange(nodeId, path, folder);
-      }
+    if (!flatten && collapseOnSelect) {
+      setExpanded([...expanded.filter(id => nodeId.startsWith(id)), nodeId]);
     }
+
+    if (!filteredTree[nodeId] && flatten) {
+      onSelectChange(nodeId, path);
+      return lastValueFrom(loadFilesIntoTree(folder.path, nodeId));
+    }
+    if (!filteredTree[nodeId]) {
+      const _tree = await lastValueFrom(loadFilesIntoTree(folder.path, nodeId));
+      onSelectChange(nodeId, path, folder);
+      return _tree;
+    }
+    onSelectChange(nodeId, path, folder);
+    return tree;
   };
 
   const crumbSelect = (index?: number) => {
-    if (index) {
-      const ids = selected.split('-');
-      if (index < (ids?.length ?? 0) - 1) {
-        ids.pop();
-        selectNode(ids.join('-'));
-      }
-    } else {
+    if (!index) {
       setFilter('');
       setSelected('root');
       setExpanded([]);
       setCrumbs([]);
+      return;
+    }
+    const ids = selected.split('-');
+    if (index < (ids?.length ?? 0) - 1) {
+      ids.pop();
+      return selectNode(ids.join('-'));
     }
   };
 
@@ -197,7 +209,58 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
   const onSelect = ($event: React.SyntheticEvent, nodeId: string) => selectNode(nodeId);
   const onExpand = ($event: React.SyntheticEvent, nodeIds: string[]) => !flatten && setExpanded(nodeIds);
 
-  const containerRef = useRef<HTMLDivElement>(null);
+  const loadNestedPath = async (path: string) => {
+    const _crumbs = path?.includes('/') ? path?.split('/') : [path];
+
+    let _tree = tree;
+    if (!_tree?.root?.length) {
+      _tree = await lastValueFrom(fetchFolders(_tree));
+    }
+
+    if (!_crumbs?.length) return;
+
+    setPathLoading(true);
+
+    let _selected = selected;
+    let _folder = tree?.[selected]?.find(_f => _f?.name === _crumbs[0]);
+    for (let i = 0; i < _crumbs.length; i += 1) {
+      const _leaf = _tree?.[_selected]?.findIndex(_f => _f?.name === _crumbs[i]);
+
+      if (_leaf < 0) break;
+
+      _folder = _tree?.[_selected]?.[_leaf];
+      _selected = `${_selected}-${_leaf}`;
+      // eslint-disable-next-line no-await-in-loop -- pathing requires sequential loading
+      _tree = await lastValueFrom(fetchFiles(_folder?.path, _selected, _tree));
+    }
+
+    setTree(old => ({ ...old, ..._tree }));
+    onSelectChange(_selected, _crumbs, _folder);
+
+    setLoading(_loading => ({ ...loading, root: false }));
+    setPathLoading(false);
+  };
+
+  const debounceLoadTree = useDebounce(async () => {
+    if (startPath?.length) await loadNestedPath(startPath);
+    else if (!tree.root?.length) await lastValueFrom(loadFoldersIntoTree());
+  }, 500);
+
+  useEffect(() => {
+    debounceLoadTree().catch(LoggerService.error);
+  }, [startPath]);
+
+  useEffect(() => {
+    if (showFilter && tree) {
+      const filtered = Object.entries(tree).reduce((curr, [key, value]) => {
+        curr[key] = value?.filter(doFilter);
+        return curr;
+      }, {} as Tree);
+      setFilteredTree(filtered);
+    } else {
+      setFilteredTree(tree);
+    }
+  }, [tree, search, disabled, filter]);
 
   const listener = (e: KeyboardEvent) => {
     if ((e.target as HTMLElement).tagName === 'INPUT') return;
@@ -221,15 +284,15 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
         hasDestinations={!!recentDestinations?.length}
         onClick={(_, i) => crumbSelect(i)}
         onRecent={() => setShowDestinations(_show => !_show)}
-        disabled={disabled}
+        disabled={disabled || pathLoading}
       />
       {showDestinations ? (
         <ExplorerRecent
           selected={selectedPath}
           destinations={recentDestinations}
-          onSelect={destination => {
-            selectPath(destination);
-            onChange?.({ path: destination });
+          onSelect={_path => {
+            setShowDestinations(_show => !_show);
+            return loadNestedPath(_path);
           }}
         />
       ) : (
@@ -242,7 +305,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
           onNodeSelect={onSelect}
           expanded={expanded}
           onNodeToggle={onExpand}
-          disableSelection={disabled}
+          disableSelection={disabled || pathLoading}
           sx={{
             overflow: 'auto',
             height: `calc(100% - ${showFilter ? 4.5 : 2.0625}em)`,
@@ -250,12 +313,13 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
         >
           {
             // only > 1 so that we do not allow creation of shares
-            flatten && editable && !loading[selected] && selected?.split('-')?.length > 1 && selectedPath && (
+            flatten && editable && !pathLoading && !loading[selected] && selected?.split('-')?.length > 1 && selectedPath && (
               <ExplorerLeafAdd nodeId={selected} path={selectedPath} disabled={disabled} spliceTree={spliceTree} />
             )
           }
-          {flatten && <ExplorerLoading loading={loading[selected]} empty={!filteredTree[selected]?.length} />}
+          {flatten && <ExplorerLoading loading={pathLoading || loading[selected]} empty={!filteredTree[selected]?.length} />}
           {flatten &&
+            !pathLoading &&
             !loading[selected] &&
             filteredTree[selected].map((f, i) => (
               <ExplorerLeaf
@@ -270,6 +334,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
               />
             ))}
           {!flatten &&
+            !pathLoading &&
             filteredTree?.root?.map((f, i) => (
               <ExplorerLeaf
                 key={`${i}-${disabled}`}
