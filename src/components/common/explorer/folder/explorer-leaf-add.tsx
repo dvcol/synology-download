@@ -26,11 +26,13 @@ export const ExplorerLeafAdd: FC<ExplorerLeafAddProps> = ({ nodeId, path, disabl
 
   const onClick: ButtonProps['onClick'] = event => {
     event.stopPropagation();
+    if (disabled) return;
     setEditing(true);
   };
 
   const onCancel: ButtonProps['onClick'] = event => {
     event.stopPropagation();
+    if (disabled) return;
     setEditing(false);
   };
 
@@ -61,6 +63,7 @@ export const ExplorerLeafAdd: FC<ExplorerLeafAddProps> = ({ nodeId, path, disabl
             textTransform: 'none',
             fontSize: '0.875em',
           }}
+          disabled={disabled}
           onClick={onClick}
         >
           <Typography
