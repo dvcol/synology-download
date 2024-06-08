@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.11.0](https://github.com/dvcol/synology-download/compare/v3.10.10...v3.11.0) (2024-06-08)
+
+
+### Features
+
+* **explorer:** support lazy loading nested paths ([7774cae](https://github.com/dvcol/synology-download/commit/7774cae51842b798478a6015d31a22d09f64cbba))
+
 ### [3.10.10](https://github.com/dvcol/synology-download/compare/v3.10.9...v3.10.10) (2024-04-15)
 
 
