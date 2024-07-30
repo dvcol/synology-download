@@ -64,9 +64,12 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
   const [crumbs, setCrumbs] = useState<string[]>([]);
   const [filter, setFilter] = useState<string>('');
 
+  const [filterRef, setFilterRef] = useState<HTMLDivElement | null>(null);
+  const [filterFocus, setFilterFocus] = useState<boolean>(false);
+
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const showFilter = search || (!disabled && !!filter);
+  const showFilter = filterFocus || search || (!disabled && !!filter);
   const doFilter = (f: File | Folder) => disabled || !filter || f?.name?.trim()?.toLowerCase()?.includes(filter?.trim()?.toLowerCase());
 
   const isLoginCheck = () => {
@@ -262,9 +265,23 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
     }
   }, [tree, search, disabled, filter]);
 
-  const listener = (e: KeyboardEvent) => {
+  const listener = async (e: KeyboardEvent) => {
+    // if an input is focused, do not filter
     if ((e.target as HTMLElement).tagName === 'INPUT') return;
-    if (e.key === 'Backspace') setFilter(_prev => _prev.slice(0, -1));
+    // if any modifier keys are pressed without any other key, do not filter
+    if (e.key === 'Control' || e.key === 'Shift' || e.key === 'Alt' || e.key === 'Meta') return;
+    // if ctrl+v or cmd+v is pressed and clipboard is not empty, paste clipboard
+    if ((e.ctrlKey || e.metaKey) && e.key === 'v' && navigator.clipboard) {
+      const clip = await navigator.clipboard.readText();
+      if (clip) setFilter(_prev => `${_prev}${clip}`);
+    }
+    // if ctrl+f or cmd+f is pressed, focus the filter
+    else if (!filter?.length && (e.ctrlKey || e.metaKey) && e.key === 'f') {
+      const input = filterRef?.querySelector('input');
+      if (input) input.focus();
+    }
+    // if backspace is pressed, remove last character
+    else if (e.key === 'Backspace') setFilter(_prev => _prev.slice(0, -1));
     else setFilter(_prev => `${_prev}${e.key}`);
     e.stopPropagation();
     e.preventDefault();
@@ -351,31 +368,32 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
             ))}
         </TreeView>
       )}
-      {showFilter && (
-        <Stack direction="row" sx={{ flex: '1 1 auto', alignItems: 'center', p: '0 0.25em' }}>
-          <TextField
-            placeholder={'Search'}
-            variant="standard"
-            fullWidth={true}
-            value={filter}
-            disabled={disabled}
-            onChange={e => setFilter(e.target.value)}
-          />
-          <Tooltip arrow title={i18n('cancel', 'common', 'buttons')} PopperProps={{ disablePortal: true }}>
-            <span>
-              <Button
-                key="cancel"
-                color="error"
-                sx={{ display: 'flex', flex: '1 1 auto', minWidth: '0', p: '0.5em', fontSize: '0.75em' }}
-                disabled={disabled || !filter}
-                onClick={() => setFilter('')}
-              >
-                <ClearIcon fontSize="small" sx={{ width: '1em', fontSize: '1.125em' }} />
-              </Button>
-            </span>
-          </Tooltip>
-        </Stack>
-      )}
+      <Stack hidden={!showFilter} direction="row" sx={{ flex: '1 1 auto', alignItems: 'center', p: '0 0.25em' }}>
+        <TextField
+          ref={setFilterRef}
+          placeholder={'Search'}
+          variant="standard"
+          fullWidth={true}
+          value={filter}
+          disabled={disabled}
+          onChange={e => setFilter(e.target.value)}
+          onFocus={() => setFilterFocus(true)}
+          onBlur={() => setFilterFocus(false)}
+        />
+        <Tooltip arrow title={i18n('cancel', 'common', 'buttons')} PopperProps={{ disablePortal: true }}>
+          <span>
+            <Button
+              key="cancel"
+              color="error"
+              sx={{ display: 'flex', flex: '1 1 auto', minWidth: '0', p: '0.5em', fontSize: '0.75em' }}
+              disabled={disabled || !filter}
+              onClick={() => setFilter('')}
+            >
+              <ClearIcon fontSize="small" sx={{ width: '1em', fontSize: '1.125em' }} />
+            </Button>
+          </span>
+        </Tooltip>
+      </Stack>
     </Container>
   );
 };
