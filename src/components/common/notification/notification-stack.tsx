@@ -4,9 +4,10 @@ import { SnackbarProvider } from 'notistack';
 
 import React, { useState } from 'react';
 
+import { zIndexMax } from '@dvcol/web-extension-utils';
+
 import { Notifier, SnackNotificationCard } from '@src/components';
 import type { SnackMessage } from '@src/models';
-import { zIndexMax } from '@src/utils';
 
 import type { SnackbarKey, SnackbarProviderProps } from 'notistack';
 import type { FC } from 'react';
