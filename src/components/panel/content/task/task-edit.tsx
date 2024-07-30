@@ -223,7 +223,7 @@ export const TaskEdit = ({
           </Tabs>
         </AppBar>
         <Card sx={{ height: '30em', width: '35em', overflow: 'auto' }}>
-          <Box hidden={tab !== 0} sx={{ p: '0.5rem' }}>
+          <Box hidden={tab !== 0} sx={{ p: '0.5rem', height: '100%' }}>
             <FormExplorer
               controllerProps={{ name: 'destination', control }}
               explorerProps={{ flatten: true, startPath: task?.additional?.detail?.destination }}
