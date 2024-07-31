@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.11.2](https://github.com/dvcol/synology-download/compare/v3.11.0...v3.11.2) (2024-07-31)
+
+
+### Features
+
+* **panel:** implement main panel filter ([965d79b](https://github.com/dvcol/synology-download/commit/965d79b5cf4d6e0845279d9765c754c7833b8f3e))
+* **search:** refactor search input and clean up css ([b6c5371](https://github.com/dvcol/synology-download/commit/b6c5371b90cbbda1b1627c40caf7e6005b4eb003))
+
+
+### Bug Fixes
+
+* **ci:** uses release commit hash for publish ([77bf093](https://github.com/dvcol/synology-download/commit/77bf093ac87ef3ef765ea57fd31e59bf8f65ec98))
+* **explorer:** correctly size explorer and overflow ([443dde5](https://github.com/dvcol/synology-download/commit/443dde52cbf27f9adf5ddccb8c2ee6efce9c747f))
+* **explorer:** ignore modifier keys and support pasting in search filter ([9f932c8](https://github.com/dvcol/synology-download/commit/9f932c86926500ba1d23c5986df384221dffde7e))
+* **explorer:** improve filter performances ([b760f34](https://github.com/dvcol/synology-download/commit/b760f344c106b7c6d6f5a07df5edd678fbd5e9b8))
+* **search:** widen listener scope for content panel search ([2c96f60](https://github.com/dvcol/synology-download/commit/2c96f6058d6417737f0b77da6499fb009273422f))
+
 ## [3.11.0](https://github.com/dvcol/synology-download/compare/v3.10.10...v3.11.0) (2024-06-08)
 
 
