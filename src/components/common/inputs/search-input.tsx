@@ -4,8 +4,12 @@ import { Button, Stack, TextField, Tooltip } from '@mui/material';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { useI18n } from '@src/utils';
+import { KeyboardKeyCode, KeyboardKeyName } from '@src/utils/keyboard.utils';
 
 import type { FC } from 'react';
+
+const ModifierKeyNames = Object.values(KeyboardKeyName).filter(k => k !== KeyboardKeyName.Backspace);
+const ModifierKeyCodes = Object.values(KeyboardKeyCode).filter(k => k !== KeyboardKeyCode.Backspace);
 
 type SearchInputProps = {
   containerRef: React.RefObject<HTMLDivElement>;
@@ -27,7 +31,7 @@ export const SearchInput: FC<SearchInputProps> = ({ containerRef, containerGette
     // if an input is focused, do not filter
     if ((e.target as HTMLElement).tagName === 'INPUT') return;
     // if any modifier keys are pressed without any other key, do not filter
-    if (e.key === 'Control' || e.key === 'Shift' || e.key === 'Alt' || e.key === 'Meta') return;
+    if (ModifierKeyNames.includes(e.key) || ModifierKeyCodes.includes(e.keyCode)) return;
     // if ctrl+v or cmd+v is pressed and clipboard is not empty, paste clipboard
     if ((e.ctrlKey || e.metaKey) && e.key === 'v' && navigator.clipboard) {
       const clip = await navigator.clipboard.readText();
