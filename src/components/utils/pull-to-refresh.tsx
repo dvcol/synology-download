@@ -14,74 +14,11 @@ export type Options = {
   onRefresh?: OnRefreshCallback;
   disabled?: MutableRefObject<boolean>;
   loaderHeight?: number;
-  loaderContent?: JSX.Element;
   animationSpeed?: number;
 };
 
-type SpinnerProps = Pick<LoaderProps, 'refreshed' | 'offset' | 'progress'>;
-const Spinner: FC<SpinnerProps> = ({ offset, progress }) => {
-  return (
-    <Box
-      sx={{
-        position: 'absolute',
-        top: '48px',
-        height: '48px',
-        width: ' 48px',
-        margin: '14px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        transform: `scale(${progress <= 1 ? progress : 1})`,
-        transition: offset ? '' : `transform ${animationSpeed}ms ease`,
-      }}
-    >
-      <CircularProgress variant="indeterminate" />
-    </Box>
-  );
-};
-
-type LoaderProps = { refreshed: boolean; height: number } & State & BoxProps;
-const Loader: ForwardRefRenderFunction<HTMLDivElement, LoaderProps> = (
-  { refreshed, height, start, offset, className, sx, progress, children, ...props },
-  ref,
-) => {
-  const margin = offset - height;
-  const classNames = [className];
-
-  if (!offset) classNames.push('closing');
-  if (!offset && refreshed) classNames.push('refreshed');
-
-  return (
-    <Box
-      ref={ref}
-      className={classNames.filter(Boolean).join(' ')}
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        minHeight: height,
-        mt: `${margin <= 0 ? margin : 0}px`,
-        ...sx,
-      }}
-      {...props}
-    >
-      {children || <Spinner offset={offset} refreshed={refreshed} progress={progress} />}
-    </Box>
-  );
-};
-
-const StyledLoader = styled(forwardRef(Loader))`
-  &.closing {
-    transition: margin-top ${animationSpeed}ms ease;
-  }
-  &.refreshed {
-    animation-name: ${pullToRefresh};
-    animation-duration: ${animationSpeed * 2}ms;
-    animation-timing-function: ease-in-out;
-  }
-`;
-
 export const usePullToRefresh = (options: Options = {}) => {
-  const { onRefresh, disabled, loaderHeight, loaderContent } = { loaderHeight: 76, ...options };
+  const { onRefresh, disabled, loaderHeight } = { loaderHeight: 76, ...options };
   const containerRef = useRef<HTMLDivElement>(null);
   const loaderRef = useRef<HTMLDivElement>(null);
 
@@ -171,17 +108,91 @@ export const usePullToRefresh = (options: Options = {}) => {
   };
 
   return {
+    handlers: { onWheel, onTouchStart, onTouchMove, onTouchEnd },
     containerRef,
     loaderRef,
-    handlers: { onWheel, onTouchStart, onTouchMove, onTouchEnd },
-    Loader: (
-      <StyledLoader ref={loaderRef} height={loaderHeight} refreshed={refreshed} start={start} offset={offset} progress={progress}>
-        {loaderContent}
-      </StyledLoader>
-    ),
+    loaderHeight,
     refreshed,
     progress,
     offset,
     start,
   };
+};
+
+type LoaderProps = { refreshed: boolean; height: number; top?: number } & State & BoxProps;
+type SpinnerProps = Pick<LoaderProps, 'refreshed' | 'offset' | 'progress' | 'top'>;
+const Spinner: FC<SpinnerProps> = ({ offset, progress, top }) => {
+  return (
+    <Box
+      sx={{
+        position: 'absolute',
+        top: top ? `${top + 48}px` : '48px',
+        height: '48px',
+        width: ' 48px',
+        margin: '14px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        transform: `scale(${progress <= 1 ? progress : 1})`,
+        transition: offset ? '' : `transform ${animationSpeed}ms ease`,
+      }}
+    >
+      <CircularProgress variant="indeterminate" />
+    </Box>
+  );
+};
+
+const Loader: ForwardRefRenderFunction<HTMLDivElement, LoaderProps> = (
+  { refreshed, height, start, offset, className, sx, progress, top, children, ...props },
+  ref,
+) => {
+  const margin = offset - height;
+  const classNames = [className];
+
+  if (!offset) classNames.push('closing');
+  if (!offset && refreshed) classNames.push('refreshed');
+
+  return (
+    <Box
+      ref={ref}
+      className={classNames.filter(Boolean).join(' ')}
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        minHeight: height,
+        mt: `${margin <= 0 ? margin : 0}px`,
+        ...sx,
+      }}
+      {...props}
+    >
+      {children || <Spinner offset={offset} refreshed={refreshed} progress={progress} top={top} />}
+    </Box>
+  );
+};
+
+const StyledLoader = styled(forwardRef(Loader))`
+  &.closing {
+    transition: margin-top ${animationSpeed}ms ease;
+  }
+  &.refreshed {
+    animation-name: ${pullToRefresh};
+    animation-duration: ${animationSpeed * 2}ms;
+    animation-timing-function: ease-in-out;
+  }
+`;
+
+export type RefreshLoaderProps = {
+  loaderRef: React.RefObject<HTMLDivElement>;
+  loaderHeight: number;
+  loaderContent?: JSX.Element;
+  loaderTop?: number;
+  refreshed: boolean;
+} & State;
+
+export const RefreshLoader: FC<RefreshLoaderProps> = ({ loaderRef, loaderTop, loaderHeight, loaderContent, start, refreshed, progress, offset }) => {
+  return (
+    <StyledLoader ref={loaderRef} height={loaderHeight} top={loaderTop} refreshed={refreshed} start={start} offset={offset} progress={progress}>
+      {loaderContent}
+    </StyledLoader>
+  );
 };
