@@ -3,7 +3,7 @@ import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import { TreeView } from '@mui/lab';
 import { Container } from '@mui/material';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useSelector } from 'react-redux';
 
@@ -55,7 +55,6 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
   const recentDestinations = useSelector<RootSlice, string[]>(getDestinationsHistory);
 
   const [tree, setTree] = useState<Tree>({});
-  const [filteredTree, setFilteredTree] = useState<Tree>({});
   const [loading, setLoading] = useState<Record<string, boolean>>({ root: true });
   const [pathLoading, setPathLoading] = useState<boolean>(false);
   const [selected, setSelected] = useState<string>('root');
@@ -69,6 +68,14 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
   const [filterVisible, setFilterVisible] = useState<boolean>(!!search);
 
   const doFilter = (f: File | Folder) => disabled || !filter || f?.name?.trim()?.toLowerCase()?.includes(filter?.trim()?.toLowerCase());
+
+  const filteredTree = useMemo(() => {
+    if (!filterVisible || !tree) return tree;
+    return Object.entries(tree).reduce((curr, [key, value]) => {
+      curr[key] = value?.filter(doFilter);
+      return curr;
+    }, {} as Tree);
+  }, [tree, search, disabled, filter, filterVisible]);
 
   const isLoginCheck = () => {
     if (QueryService.isLoggedIn) return QueryService.isLoggedIn;
@@ -250,18 +257,6 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
   useEffect(() => {
     debounceLoadTree().catch(LoggerService.error);
   }, [startPath]);
-
-  useEffect(() => {
-    if (filterVisible && tree) {
-      const filtered = Object.entries(tree).reduce((curr, [key, value]) => {
-        curr[key] = value?.filter(doFilter);
-        return curr;
-      }, {} as Tree);
-      setFilteredTree(filtered);
-    } else {
-      setFilteredTree(tree);
-    }
-  }, [tree, search, disabled, filter, filterVisible]);
 
   return (
     <Container ref={containerRef} disableGutters maxWidth={false} sx={{ height: '100%', outline: 'none' }} tabIndex={0}>
