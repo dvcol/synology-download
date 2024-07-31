@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.11.3](https://github.com/dvcol/synology-download/compare/v3.11.2...v3.11.3) (2024-07-31)
+
+
+### Bug Fixes
+
+* **search:** widen ignore list ([3004ebb](https://github.com/dvcol/synology-download/commit/3004ebbb71ef0411b28ec8ce7de8585cad27795d))
+
 ### [3.11.2](https://github.com/dvcol/synology-download/compare/v3.11.0...v3.11.2) (2024-07-31)
 
 
