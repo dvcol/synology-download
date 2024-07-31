@@ -121,6 +121,7 @@ export const ContentPanel = () => {
           backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09))',
         }}
         containerRef={containerRef}
+        containerGetter={ref => document?.querySelector<HTMLElement>('[id$="app-container"]') ?? ref.current}
         filter={filter}
         setFilter={setFilter}
         setVisible={setVisible}

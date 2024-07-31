@@ -9,6 +9,7 @@ import type { FC } from 'react';
 
 type SearchInputProps = {
   containerRef: React.RefObject<HTMLDivElement>;
+  containerGetter?: (ref: React.RefObject<HTMLDivElement>) => HTMLElement | null | undefined;
   filter: string;
   setFilter: React.Dispatch<React.SetStateAction<string>>;
   showFilter?: boolean;
@@ -16,7 +17,7 @@ type SearchInputProps = {
   disabled?: boolean;
   sx?: React.CSSProperties;
 };
-export const SearchInput: FC<SearchInputProps> = ({ containerRef, filter, setFilter, showFilter, setVisible, disabled, sx }) => {
+export const SearchInput: FC<SearchInputProps> = ({ containerRef, containerGetter, filter, setFilter, showFilter, setVisible, disabled, sx }) => {
   const i18n = useI18n('common', 'search-input');
 
   const [filterRef, setFilterRef] = useState<HTMLDivElement | null>(null);
@@ -45,11 +46,12 @@ export const SearchInput: FC<SearchInputProps> = ({ containerRef, filter, setFil
   };
 
   useEffect(() => {
+    const container = containerGetter ? containerGetter(containerRef) : containerRef.current;
     if (disabled) {
-      containerRef?.current?.removeEventListener('keydown', listener);
+      container?.removeEventListener('keydown', listener);
       setFilter('');
-    } else containerRef?.current?.addEventListener('keydown', listener);
-    return () => containerRef?.current?.removeEventListener('keydown', listener);
+    } else container?.addEventListener('keydown', listener);
+    return () => container?.removeEventListener('keydown', listener);
   }, [containerRef, disabled]);
 
   const visible = useMemo(() => showFilter || filterFocus || (!disabled && !!filter), [showFilter, filterFocus, disabled, filter]);
