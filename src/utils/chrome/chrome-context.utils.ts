@@ -18,7 +18,7 @@ export type OnClickData = chrome.contextMenus.OnClickData;
  */
 export function saveContextMenu(menu: ContextMenu, update?: boolean): Observable<void> {
   // custom fields modal from menu for type casting
-  const { modal, destination, ...create } = menu;
+  const { modal, popup, destination, ...create } = menu;
   return _saveContextMenu(
     {
       ...create,

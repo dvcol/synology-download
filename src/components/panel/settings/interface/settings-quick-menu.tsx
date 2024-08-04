@@ -10,7 +10,7 @@ import { FormExplorer, FormInput, FormSwitch, MuiIcon } from '@src/components/co
 import type { QuickMenu } from '@src/models';
 import { MaterialIcon, MaterialIconMap, QuickMenuType } from '@src/models';
 import { removeQuickMenu, saveQuickMenu } from '@src/store/actions';
-import { useI18n } from '@src/utils';
+import { openPopup, useI18n } from '@src/utils';
 
 export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemove: (id: QuickMenu['id']) => Promise<void> }) => {
   const i18n = useI18n('panel', 'settings', 'quick_menu');
@@ -20,12 +20,14 @@ export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemov
     reset,
     control,
     getValues,
+    setValue,
     formState: { isValid, isDirty, isSubmitted },
   } = useForm<QuickMenu>({
     mode: 'onChange',
     defaultValues: {
       ...menu,
       modal: menu.modal ?? false,
+      popup: (menu.popup ?? false) && !!openPopup && !menu.modal,
       destination: { custom: menu.destination?.custom ?? false, path: menu.destination?.path ?? '' },
       type: menu.type ?? QuickMenuType.Download,
     },
@@ -159,6 +161,32 @@ export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemov
             <FormSwitch
               controllerProps={{ name: 'modal', control }}
               formControlLabelProps={{ label: '', disabled: getValues()?.type !== QuickMenuType.Task }}
+              switchProps={{
+                onChange: (_, checked) => {
+                  if (checked && getValues()?.popup) setValue('popup', false);
+                },
+              }}
+            />
+          }
+          sx={{ p: '0.5rem 0' }}
+        />
+        <CardHeader
+          title={i18n('popup_title')}
+          subheader={i18n('popup_subheader')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          action={
+            <FormSwitch
+              controllerProps={{ name: 'popup', control }}
+              formControlLabelProps={{
+                label: '',
+                disabled: getValues()?.type !== QuickMenuType.Task || !openPopup,
+              }}
+              switchProps={{
+                onChange: (_, checked) => {
+                  if (checked && getValues()?.modal) setValue('modal', false);
+                },
+              }}
             />
           }
           sx={{ p: '0.5rem 0' }}

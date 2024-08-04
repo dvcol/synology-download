@@ -6,6 +6,7 @@ export interface Menu {
   id: string;
   title: string;
   modal: boolean;
+  popup: boolean;
   destination: { custom: boolean; path?: string };
 }
 
@@ -27,6 +28,7 @@ export const defaultQuickMenu: QuickMenu = {
   title: 'Send to Synology',
   icon: MaterialIcon.server,
   modal: false,
+  popup: false,
   destination: { custom: false },
   max: 5,
   type: QuickMenuType.Task,
@@ -37,6 +39,7 @@ export const defaultModalQuickMenu: QuickMenu = {
   title: 'Open custom modal',
   icon: MaterialIcon.server,
   modal: true,
+  popup: false,
   destination: { custom: false },
   max: 5,
   type: QuickMenuType.Task,
@@ -47,6 +50,7 @@ export const defaultRecentQuickMenu: QuickMenu = {
   title: 'Recent destinations',
   icon: MaterialIcon.history,
   modal: false,
+  popup: false,
   destination: { custom: false },
   max: 5,
   type: QuickMenuType.Recent,
@@ -57,6 +61,7 @@ export const defaultDownloadQuickMenu: QuickMenu = {
   title: 'Save to disk (local)',
   icon: MaterialIcon.download,
   modal: false,
+  popup: false,
   destination: { custom: false },
   max: 5,
   type: QuickMenuType.Download,
@@ -67,6 +72,7 @@ export const defaultRecentDownloadQuickMenu: QuickMenu = {
   title: 'Recent folders (local)',
   icon: MaterialIcon.historyAlt,
   modal: false,
+  popup: false,
   destination: { custom: false },
   max: 5,
   type: QuickMenuType.RecentDownload,
@@ -100,5 +106,6 @@ export const defaultContextMenu: ContextMenu = {
   title: 'Add to Synology Diskstation',
   contexts: [ContextType.link, ContextType.audio, ContextType.video, ContextType.image, ContextType.selection],
   modal: true,
+  popup: false,
   destination: { custom: false },
 };

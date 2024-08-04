@@ -27,3 +27,6 @@ export type QueryInfo = chrome.tabs.QueryInfo;
 
 /** @see chrome.tabs.Tab */
 export type Tab = chrome.tabs.Tab;
+
+/** @see chrome.action.openPopup */
+export const openPopup: typeof chrome.action.openPopup | undefined = chrome?.action?.openPopup;

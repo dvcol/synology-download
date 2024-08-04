@@ -22,8 +22,11 @@ export const FormSwitch = <TFieldValues extends FieldValues = FieldValues, TName
       checked: field.value,
       sx: { marginLeft: '0' },
       size: 'small',
-      onChange: e => field.onChange(e.target.checked),
       ...switchProps,
+      onChange: (e, checked) => {
+        field.onChange(checked);
+        switchProps?.onChange?.(e, checked);
+      },
     };
     const _formControlLabelProps: FormControlLabelProps = {
       label: controllerProps.name,
