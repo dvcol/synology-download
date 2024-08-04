@@ -10,7 +10,7 @@ import { FormExplorer, FormInput, FormSwitch } from '@src/components/common';
 import type { ContextMenu } from '@src/models';
 import { ChromeMessageType } from '@src/models';
 import { removeContextMenu, saveContextMenu } from '@src/store/actions';
-import { sendMessage, useI18n } from '@src/utils';
+import { openPopup, sendMessage, useI18n } from '@src/utils';
 
 export const SettingsContextMenu = ({ menu, onRemove }: { menu: ContextMenu; onRemove: (id: ContextMenu['id']) => Promise<void> }) => {
   const i18n = useI18n('panel', 'settings', 'context_menu');
@@ -20,12 +20,14 @@ export const SettingsContextMenu = ({ menu, onRemove }: { menu: ContextMenu; onR
     reset,
     control,
     getValues,
+    setValue,
     formState: { isValid, isDirty, isSubmitted },
   } = useForm<ContextMenu>({
     mode: 'onChange',
     defaultValues: {
       ...menu,
       modal: menu.modal ?? false,
+      popup: (menu.popup ?? false) && !!openPopup && !menu.modal,
       destination: { custom: menu.destination?.custom ?? false, path: menu.destination?.path ?? '' },
     },
   });
@@ -75,7 +77,35 @@ export const SettingsContextMenu = ({ menu, onRemove }: { menu: ContextMenu; onR
         subheader={i18n('modal_subheader')}
         titleTypographyProps={{ variant: 'subtitle2' }}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
-        action={<FormSwitch controllerProps={{ name: 'modal', control }} formControlLabelProps={{ label: '' }} />}
+        action={
+          <FormSwitch
+            controllerProps={{ name: 'modal', control }}
+            formControlLabelProps={{ label: '' }}
+            switchProps={{
+              onChange: (_, checked) => {
+                if (checked && getValues()?.popup) setValue('popup', false);
+              },
+            }}
+          />
+        }
+        sx={{ p: '0.5rem 0' }}
+      />
+      <CardHeader
+        title={i18n('popup_title')}
+        subheader={i18n('popup_subheader')}
+        titleTypographyProps={{ variant: 'subtitle2' }}
+        subheaderTypographyProps={{ variant: 'subtitle2' }}
+        action={
+          <FormSwitch
+            controllerProps={{ name: 'popup', control }}
+            formControlLabelProps={{ label: '', disabled: !openPopup }}
+            switchProps={{
+              onChange: (_, checked) => {
+                if (checked && getValues()?.modal) setValue('modal', false);
+              },
+            }}
+          />
+        }
         sx={{ p: '0.5rem 0' }}
       />
       <CardHeader
