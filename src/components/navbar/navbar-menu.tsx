@@ -5,6 +5,7 @@ import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 import ImageSearchIcon from '@mui/icons-material/ImageSearch';
 import InfoIcon from '@mui/icons-material/Info';
 import LaunchIcon from '@mui/icons-material/Launch';
+import ManageSearchIcon from '@mui/icons-material/ManageSearch';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PowerOffIcon from '@mui/icons-material/PowerOff';
@@ -13,16 +14,17 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import TuneIcon from '@mui/icons-material/Tune';
 import { DialogContentText, Divider, IconButton, Menu, Tooltip } from '@mui/material';
 
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import { ConfirmationDialog, TooltipHoverChange } from '@src/components';
 import type { NavbarButton } from '@src/models';
 import { AppLinks, AppRoute, ErrorType, LoginError, NavbarButtonType } from '@src/models';
 import { DownloadService, NotificationService, QueryService } from '@src/services';
+import { PanelService } from '@src/services/panel/panel.service';
 import { ContainerContext } from '@src/store';
 import { resetDownloads, resetTasks, setNavbar } from '@src/store/actions';
 import { getGlobalNavbarButton, getLogged, getSettingsDownloadsButtons, getSettingsDownloadsEnabled, getUrl } from '@src/store/selectors';
@@ -41,6 +43,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
   const downloadEnabled = useSelector(getSettingsDownloadsEnabled);
   const downloadButtons = useSelector(getSettingsDownloadsButtons);
   const { containerRef } = useContext(ContainerContext);
+  const location = useLocation();
 
   const [anchorEl, setAnchorEl] = React.useState<undefined | null | Element>(null);
   const open = Boolean(anchorEl);
@@ -118,8 +121,19 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       alt: () => QueryService.deleteAllTasks().subscribe(handleError('delete')),
     })($event);
 
+  const isPanel = useMemo(() => location.pathname === AppRoute.Panel, [location.pathname]);
+
   // Button list
   const buttons: NavbarButton[] = [
+    {
+      type: NavbarButtonType.Search,
+      label: i18n('menu_search'),
+      icon: <ManageSearchIcon />,
+      color: 'info',
+      disabled: !isPanel,
+      divider: true,
+      onClick: () => PanelService.focus(),
+    },
     {
       type: NavbarButtonType.Add,
       label: i18n('menu_add'),

@@ -20,6 +20,9 @@
   "navbar__menu__menu_add": {
     "message": "添加下载任务"
   },
+  "navbar__menu__menu_search": {
+    "message": "搜索面板任务"
+  },
   "navbar__menu__menu_scrape": {
     "message": "提取页面内容"
   },

@@ -4,6 +4,7 @@ import type { ForwardRefExoticComponent, MouseEventHandler } from 'react';
 
 export enum NavbarButtonType {
   Add = 'add',
+  Search = 'search',
   Refresh = 'refresh',
   Resume = 'resume',
   Pause = 'pause',

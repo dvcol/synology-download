@@ -1,15 +1,25 @@
 import ClearIcon from '@mui/icons-material/Clear';
 import { Button, Stack, TextField, Tooltip } from '@mui/material';
 
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 
 import { useI18n } from '@src/utils';
 import { KeyboardKeyCode, KeyboardKeyName } from '@src/utils/keyboard.utils';
 
-import type { FC } from 'react';
+import type { ForwardRefRenderFunction } from 'react';
 
 const ModifierKeyNames = Object.values(KeyboardKeyName).filter(k => k !== KeyboardKeyName.Backspace);
 const ModifierKeyCodes = Object.values(KeyboardKeyCode).filter(k => k !== KeyboardKeyCode.Backspace);
+
+export type SearchInputRef = {
+  visible: boolean;
+  focused: boolean;
+  focus: () => Promise<void>;
+  blur: () => Promise<void>;
+  clear: () => void;
+  setFilter: React.Dispatch<React.SetStateAction<string>>;
+  inputRef: React.RefObject<HTMLInputElement>;
+};
 
 type SearchInputProps = {
   containerRef: React.RefObject<HTMLDivElement>;
@@ -22,17 +32,10 @@ type SearchInputProps = {
   focusOnChange?: boolean;
   sx?: React.CSSProperties;
 };
-export const SearchInput: FC<SearchInputProps> = ({
-  focusOnChange,
-  containerRef,
-  containerGetter,
-  filter,
-  setFilter,
-  showFilter,
-  setVisible,
-  disabled,
-  sx,
-}) => {
+const _SearchInput: ForwardRefRenderFunction<SearchInputRef, SearchInputProps> = (
+  { focusOnChange, containerRef, containerGetter, filter, setFilter, showFilter, setVisible, disabled, sx },
+  ref,
+) => {
   const i18n = useI18n('common', 'search-input');
 
   const filterRef = useRef<HTMLInputElement>(null);
@@ -42,6 +45,16 @@ export const SearchInput: FC<SearchInputProps> = ({
   const focusInput = async (input = filterRef.current?.querySelector('input')) => {
     if (!input) return;
     input.focus();
+  };
+
+  const blurInput = async (input = filterRef.current?.querySelector('input')) => {
+    if (!input) return;
+    input.blur();
+  };
+
+  const clear = async () => {
+    setFilter('');
+    return blurInput();
   };
 
   const forceFocusVisible = () => {
@@ -84,12 +97,29 @@ export const SearchInput: FC<SearchInputProps> = ({
     if (setVisible) setVisible(visible);
   }, [visible]);
 
+  useImperativeHandle(ref, () => {
+    return {
+      get visible() {
+        return filterRef.current?.dataset.visible === 'true';
+      },
+      get focused() {
+        return filterRef.current?.dataset.focused === 'true';
+      },
+      setFilter,
+      clear,
+      blur: async () => blurInput(),
+      focus: async () => (visible ? focusInput() : forceFocusVisible()),
+      inputRef: filterRef,
+    };
+  });
   return (
     <Stack direction="row" sx={{ display: visible ? 'flex' : 'none', flex: '1 1 auto', alignItems: 'center', p: '0 0.25em', ...sx }}>
       <TextField
         ref={filterRef}
         placeholder={'Search'}
         variant="standard"
+        data-visible={visible}
+        data-focused={filterFocus}
         fullWidth={true}
         value={filter}
         disabled={disabled}
@@ -113,3 +143,5 @@ export const SearchInput: FC<SearchInputProps> = ({
     </Stack>
   );
 };
+
+export const SearchInput = forwardRef(_SearchInput);

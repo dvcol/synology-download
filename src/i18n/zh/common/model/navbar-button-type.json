@@ -2,6 +2,9 @@
   "common__model__navbar_button_type__add": {
     "message": "添加"
   },
+  "common__model__navbar_button_type__search": {
+    "message": "搜索"
+  },
   "common__model__navbar_button_type__scrape": {
     "message": "抓取"
   },

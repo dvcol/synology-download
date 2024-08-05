@@ -22,6 +22,9 @@
   "navbar__menu__menu_add": {
     "message": "Add download task"
   },
+  "navbar__menu__menu_search": {
+    "message": "Search panel tasks"
+  },
   "navbar__menu__menu_scrape": {
     "message": "Scrape page content"
   },

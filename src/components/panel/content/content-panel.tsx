@@ -8,11 +8,13 @@ import { TransitionGroup } from 'react-transition-group';
 import type { ConfirmationState, OnRefreshCallback, TaskEditState } from '@src/components';
 import { ConfirmationDialog, RefreshLoader, TaskEdit, usePullToRefresh } from '@src/components';
 
+import type { SearchInputRef } from '@src/components/common/inputs/search-input';
 import { SearchInput } from '@src/components/common/inputs/search-input';
 import { ContentItemInstance } from '@src/components/panel/content/content-item-instance';
 import type { Content } from '@src/models';
 import { ErrorType, LoginError } from '@src/models';
 import { DownloadService, NotificationService, QueryService } from '@src/services';
+import { PanelService } from '@src/services/panel/panel.service';
 import type { StoreState } from '@src/store';
 import { getContentsForActiveTab, getInterfacePullToRefresh, getLogged, getSettingsDownloadsEnabled, getTabOrFirst } from '@src/store/selectors';
 
@@ -70,6 +72,12 @@ export const ContentPanel = () => {
   }, [contents, visible, filter]);
 
   const { containerRef, handlers, ...loaderProps } = usePullToRefresh({ onRefresh, disabled });
+  const searchInputRef = useRef<SearchInputRef>(null);
+
+  useEffect(() => {
+    if (searchInputRef.current) PanelService.init(searchInputRef.current);
+    return () => PanelService.destroy();
+  }, [searchInputRef]);
 
   const items = (
     <TransitionGroup component={null} appear={!firstMount} enter exit>
@@ -105,6 +113,7 @@ export const ContentPanel = () => {
       maxWidth={false}
     >
       <SearchInput
+        ref={searchInputRef}
         sx={{
           position: 'fixed',
           top: '3.125rem',
