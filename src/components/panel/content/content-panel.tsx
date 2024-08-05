@@ -64,11 +64,10 @@ export const ContentPanel = () => {
   const [filter, setFilter] = useState<string>('');
 
   const loaderTop = useMemo(() => (visible ? 40 : 0), [visible]);
-  const disabledFilter = useMemo(() => !!taskEdit?.task || !!confirmation?.callback, [taskEdit, confirmation]);
   const filteredContents = useMemo(() => {
-    if (!visible || disabledFilter || !contents?.length || !filter?.length) return contents;
+    if (!visible || !contents?.length || !filter?.length) return contents;
     return contents.filter(content => content.title?.trim()?.toLowerCase()?.includes(filter?.trim()?.toLowerCase()));
-  }, [contents, visible, disabledFilter, filter]);
+  }, [contents, visible, filter]);
 
   const { containerRef, handlers, ...loaderProps } = usePullToRefresh({ onRefresh, disabled });
 
@@ -125,7 +124,7 @@ export const ContentPanel = () => {
         filter={filter}
         setFilter={setFilter}
         setVisible={setVisible}
-        disabled={disabledFilter}
+        focusOnChange
       />
       <RefreshLoader {...loaderProps} loaderTop={loaderTop} />
       {filteredContents?.length ? items : <ContentEmpty />}

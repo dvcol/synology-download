@@ -1,7 +1,7 @@
 import ClearIcon from '@mui/icons-material/Clear';
 import { Button, Stack, TextField, Tooltip } from '@mui/material';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useI18n } from '@src/utils';
 import { KeyboardKeyCode, KeyboardKeyName } from '@src/utils/keyboard.utils';
@@ -19,13 +19,35 @@ type SearchInputProps = {
   showFilter?: boolean;
   setVisible?: React.Dispatch<React.SetStateAction<boolean>>;
   disabled?: boolean;
+  focusOnChange?: boolean;
   sx?: React.CSSProperties;
 };
-export const SearchInput: FC<SearchInputProps> = ({ containerRef, containerGetter, filter, setFilter, showFilter, setVisible, disabled, sx }) => {
+export const SearchInput: FC<SearchInputProps> = ({
+  focusOnChange,
+  containerRef,
+  containerGetter,
+  filter,
+  setFilter,
+  showFilter,
+  setVisible,
+  disabled,
+  sx,
+}) => {
   const i18n = useI18n('common', 'search-input');
 
-  const [filterRef, setFilterRef] = useState<HTMLDivElement | null>(null);
+  const filterRef = useRef<HTMLInputElement>(null);
+
   const [filterFocus, setFilterFocus] = useState<boolean>(false);
+
+  const focusInput = async (input = filterRef.current?.querySelector('input')) => {
+    if (!input) return;
+    input.focus();
+  };
+
+  const forceFocusVisible = () => {
+    setFilterFocus(true);
+    setTimeout(() => focusInput(), 200); // await animation time
+  };
 
   const listener = async (e: KeyboardEvent) => {
     // if an input is focused, do not filter
@@ -38,13 +60,11 @@ export const SearchInput: FC<SearchInputProps> = ({ containerRef, containerGette
       if (clip) setFilter(_prev => `${_prev}${clip}`);
     }
     // if ctrl+f or cmd+f is pressed, focus the filter
-    else if (!filter?.length && (e.ctrlKey || e.metaKey) && e.key === 'f') {
-      const input = filterRef?.querySelector('input');
-      if (input) input.focus();
-    }
+    else if (!filter?.length && (e.ctrlKey || e.metaKey) && e.key === 'f') forceFocusVisible();
     // if backspace is pressed, remove last character
     else if (e.key === 'Backspace') setFilter(_prev => _prev.slice(0, -1));
     else setFilter(_prev => `${_prev}${e.key}`);
+    if (focusOnChange && !filterFocus) await focusInput();
     e.stopPropagation();
     e.preventDefault();
   };
@@ -67,7 +87,7 @@ export const SearchInput: FC<SearchInputProps> = ({ containerRef, containerGette
   return (
     <Stack direction="row" sx={{ display: visible ? 'flex' : 'none', flex: '1 1 auto', alignItems: 'center', p: '0 0.25em', ...sx }}>
       <TextField
-        ref={setFilterRef}
+        ref={filterRef}
         placeholder={'Search'}
         variant="standard"
         fullWidth={true}

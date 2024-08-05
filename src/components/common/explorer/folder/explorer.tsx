@@ -339,6 +339,10 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
         showFilter={search}
         setVisible={setFilterVisible}
         disabled={disabled}
+        sx={{
+          transition: 'max-height 0.2s ease-in-out',
+          maxHeight: filterVisible ? '5rem' : 0,
+        }}
       />
     </Container>
   );
