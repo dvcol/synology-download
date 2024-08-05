@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.12.0](https://github.com/dvcol/synology-download/compare/v3.11.3...v3.12.0) (2024-08-05)
+
+
+### Features
+
+* **popup:** adds open in popup settings ([b7b7da3](https://github.com/dvcol/synology-download/commit/b7b7da3f3289c7dc47a7af8749ad23d54d888bef))
+* **popup:** open task and scrap panel from context/menu ([5cd4138](https://github.com/dvcol/synology-download/commit/5cd41384401d2e96a6c226d2291ea0e4522bdfe6))
+
 ### [3.11.3](https://github.com/dvcol/synology-download/compare/v3.11.2...v3.11.3) (2024-07-31)
 
 
