@@ -6,5 +6,6 @@ export * from './form';
 export * from './loader';
 export * from './material';
 export * from './notification';
+export * from './router';
 export * from './sortable';
 export * from './tooltip';

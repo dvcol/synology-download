@@ -1,5 +1,7 @@
 import { v4 as uuid } from 'uuid';
 
+import type { ContextMenuCreate as ChromeContextMenu } from '@dvcol/web-extension-utils';
+
 import { MaterialIcon } from './material-ui.model';
 
 export interface Menu {
@@ -108,4 +110,10 @@ export const defaultContextMenu: ContextMenu = {
   modal: true,
   popup: false,
   destination: { custom: false },
+};
+
+export const scrapeContextMenu: ChromeContextMenu = {
+  id: uuid(),
+  title: 'Scrape Page',
+  contexts: [ContextType.page],
 };

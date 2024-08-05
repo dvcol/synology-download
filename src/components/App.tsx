@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 
 import { HashRouter as Router } from 'react-router-dom';
 
-import { ContainerContextProvider, SettingsInjector } from '@src/components';
+import { ContainerContextProvider, ExternalRouterProvider, SettingsInjector } from '@src/components';
 import type { AppInstance, StoreOrProxy } from '@src/models';
 import { darkTheme, getThemeFromStore, subscribeToTheme } from '@src/themes';
 
@@ -44,6 +44,7 @@ export const App: FC<AppProps> = ({ store, redirect, cache, routerProps, instanc
             <CssBaseline />
             <Navbar />
             <Panel redirect={redirect} />
+            <ExternalRouterProvider />
           </Router>
         </ContainerContextProvider>
       </Box>
