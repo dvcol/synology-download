@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.14.0](https://github.com/dvcol/synology-download/compare/v3.13.0...v3.14.0) (2024-08-05)
+
+
+### Features
+
+* **search:** adds filter mode select and support multi step filters ([21b5dde](https://github.com/dvcol/synology-download/commit/21b5dde2e120415fdaf680cab7ad53e2ccd9001f))
+
 ## [3.13.0](https://github.com/dvcol/synology-download/compare/v3.12.0...v3.13.0) (2024-08-05)
 
 
