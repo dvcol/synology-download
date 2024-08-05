@@ -1,4 +1,4 @@
-import { Container } from '@mui/material';
+import { Container, MenuItem } from '@mui/material';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { useSelector } from 'react-redux';
@@ -22,10 +22,22 @@ import { useI18n } from '@src/utils';
 
 import { ContentEmpty } from './content-empty';
 
+const FilterMode: Record<string, keyof Content | 'all'> = {
+  title: 'title',
+  folder: 'folder',
+  Status: 'status',
+  All: 'all',
+} as const;
+
+type FilterModes = typeof FilterMode[keyof typeof FilterMode];
+type FilterModesWithoutAll = Exclude<FilterModes, 'all'>;
+
+const isNotAll = (mode: FilterModes): mode is FilterModesWithoutAll => mode !== FilterMode.All;
+
 let firstMount = true;
 
 export const ContentPanel = () => {
-  const i18n = useI18n('content', 'panel');
+  const i18n = useI18n('panel', 'content');
   const tab = useSelector(getTabOrFirst);
   const contents = useSelector<StoreState, Content[]>(getContentsForActiveTab);
 
@@ -66,10 +78,19 @@ export const ContentPanel = () => {
   const [filter, setFilter] = useState<string>('');
 
   const loaderTop = useMemo(() => (visible ? 40 : 0), [visible]);
+
+  const [filterMode, setFilterMode] = useState<FilterModes>(FilterMode.All);
   const filteredContents = useMemo(() => {
     if (!visible || !contents?.length || !filter?.length) return contents;
-    return contents.filter(content => content.title?.trim()?.toLowerCase()?.includes(filter?.trim()?.toLowerCase()));
-  }, [contents, visible, filter]);
+    if (isNotAll(filterMode)) {
+      return contents.filter(content => content[filterMode]?.toString().trim()?.toLowerCase()?.includes(filter?.trim()?.toLowerCase()));
+    }
+    const _titleFilter = contents.filter(content => content.title?.trim()?.toLowerCase()?.includes(filter?.trim()?.toLowerCase()));
+    if (_titleFilter?.length) return _titleFilter;
+    const _destinationFilter = contents.filter(content => content.folder?.trim()?.toLowerCase()?.includes(filter?.trim()?.toLowerCase()));
+    if (_destinationFilter?.length) return _destinationFilter;
+    return contents.filter(content => content.status?.trim()?.toLowerCase()?.includes(filter?.trim()?.toLowerCase()));
+  }, [contents, visible, filter, filterMode]);
 
   const { containerRef, handlers, ...loaderProps } = usePullToRefresh({ onRefresh, disabled });
   const searchInputRef = useRef<SearchInputRef>(null);
@@ -131,10 +152,21 @@ export const ContentPanel = () => {
         containerRef={containerRef}
         containerGetter={ref => document?.querySelector<HTMLElement>('[id$="app-container"]') ?? ref.current}
         filter={filter}
-        setFilter={setFilter}
-        setVisible={setVisible}
+        onChangeFilter={setFilter}
+        onChangeVisible={setVisible}
         focusOnChange
-      />
+        selectProps={{
+          value: filterMode,
+          label: i18n('filter_label'),
+          onChange: ({ target: { value } }) => setFilterMode(value as FilterModes),
+        }}
+      >
+        {Object.entries(FilterMode).map(([key, value]) => (
+          <MenuItem key={key} value={value}>
+            {i18n(`filter_mode__${value}`)}
+          </MenuItem>
+        ))}
+      </SearchInput>
       <RefreshLoader {...loaderProps} loaderTop={loaderTop} />
       {filteredContents?.length ? items : <ContentEmpty />}
 

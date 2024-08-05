@@ -1,0 +1,22 @@
+{
+  "panel__content__filter_label": {
+    "message": "筛选",
+    "description": "Label for the filter select."
+  },
+  "panel__content__filter_mode__all": {
+    "message": "全部",
+    "description": "Filter mode to filter all tasks."
+  },
+  "panel__content__filter_mode__title": {
+    "message": "标题",
+    "description": "Filter mode to filter tasks by title."
+  },
+  "panel__content__filter_mode__folder": {
+    "message": "文件夹",
+    "description": "Filter mode to filter tasks by folder."
+  },
+  "panel__content__filter_mode__status": {
+    "message": "状态",
+    "description": "Filter mode to filter tasks by status."
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "panel__content__filter_label": {
+    "message": "Filter",
+    "description": "Label for the filter select."
+  },
+  "panel__content__filter_mode__all": {
+    "message": "All",
+    "description": "Filter mode to filter all tasks."
+  },
+  "panel__content__filter_mode__title": {
+    "message": "Title",
+    "description": "Filter mode to filter tasks by title."
+  },
+  "panel__content__filter_mode__folder": {
+    "message": "Folder",
+    "description": "Filter mode to filter tasks by folder."
+  },
+  "panel__content__filter_mode__status": {
+    "message": "Status",
+    "description": "Filter mode to filter tasks by status."
+  }
+}
