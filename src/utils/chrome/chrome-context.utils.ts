@@ -1,3 +1,5 @@
+import { forkJoin } from 'rxjs';
+
 import {
   buildContextMenu as _buildContextMenu,
   removeContextMenu as _removeContextMenu,
@@ -5,13 +7,26 @@ import {
 } from '@dvcol/web-extension-utils';
 
 import type { ContextMenu, ContextMenuOnClickPayload } from '@src/models';
-import { ChromeMessageType } from '@src/models';
+import { ChromeMessageType, scrapeContextMenu } from '@src/models';
+import { LoggerService } from '@src/services';
 import type { Tab } from '@src/utils';
-import { sendTabMessage } from '@src/utils';
+import { openPopup, sendMessage, sendTabMessage } from '@src/utils';
 
 import type { Observable } from 'rxjs';
 
 export type OnClickData = chrome.contextMenus.OnClickData;
+
+export const addScrapeContextMenu = () =>
+  _saveContextMenu({
+    ...scrapeContextMenu,
+    onclick: async (info: OnClickData) => {
+      if (info.menuItemId === scrapeContextMenu.id) {
+        if (!openPopup) return LoggerService.error('Open popup is not available');
+        await openPopup();
+        sendMessage({ type: ChromeMessageType.routeScrapePage }).subscribe();
+      }
+    },
+  });
 
 /**
  * Add or update a context menu to chrome with the given options
@@ -25,7 +40,7 @@ export function saveContextMenu(menu: ContextMenu, update?: boolean): Observable
       onclick: (info: OnClickData, tab?: Tab) => {
         if (info.menuItemId === menu.id && tab?.id !== undefined) {
           sendTabMessage<ContextMenuOnClickPayload>(tab.id, {
-            type: ChromeMessageType.popup,
+            type: ChromeMessageType.clickMenu,
             payload: { info, menu },
           }).subscribe();
         }
@@ -44,4 +59,5 @@ export const removeContextMenu = _removeContextMenu;
  * Build context menu for the menu options given
  * @param options the options
  */
-export const buildContextMenu = (options: ContextMenu[] | undefined) => _buildContextMenu(options, saveContextMenu);
+export const buildContextMenu = (options: ContextMenu[] | undefined) =>
+  forkJoin([_buildContextMenu(options, saveContextMenu), addScrapeContextMenu()]);

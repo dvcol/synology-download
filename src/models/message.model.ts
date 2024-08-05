@@ -1,4 +1,5 @@
 import type { ScrapedContents, ScrapedPage } from '@src/models';
+import type { TaskDialogIntercept } from '@src/pages/content/service';
 import type { OnClickData } from '@src/utils';
 
 import type { DownloadQueryPayload } from './download.model';
@@ -12,7 +13,10 @@ import type { TaskForm } from './task.model';
  * Enumeration for message types
  */
 export enum ChromeMessageType {
-  popup = 'popup',
+  openTaskPopup = 'openTaskPopup',
+  routeTaskForm = 'routeTaskForm',
+  routeScrapePage = 'routeScrapePage',
+  clickMenu = 'clickMenu',
   addMenu = 'addMenu',
   updateMenu = 'updateMenu',
   removeMenu = 'removeMenu',
@@ -50,6 +54,11 @@ export type ContextMenuOnClickPayload = {
   menu: ContextMenu;
 };
 
+export type OpenPopupPayload = {
+  form: TaskForm;
+  intercept?: TaskDialogIntercept;
+};
+
 /**
  * Type union of possible message payloads
  */
@@ -65,7 +74,8 @@ export type ChromeMessagePayload =
   | SnackNotification
   | InterceptPayload
   | QueryAutoLoginOptions
-  | ScrapedContentsPayload;
+  | ScrapedContentsPayload
+  | OpenPopupPayload;
 
 /**
  * Message interface for communication between content & background

@@ -4,7 +4,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { zIndexMax } from '@dvcol/web-extension-utils';
 
 import { TaskDialog } from '@src/components';
-import type { ContextMenuOnClickPayload, InterceptResponse, TaskForm } from '@src/models';
+import type { ContextMenuOnClickPayload, InterceptResponse, OpenPopupPayload, TaskForm } from '@src/models';
 import { ChromeMessageType } from '@src/models';
 import type { TaskDialogIntercept } from '@src/pages/content/service/dialog.service';
 import { taskDialog$ } from '@src/pages/content/service/dialog.service';
@@ -42,19 +42,24 @@ export const ContentTaskDialog: FC<{ container?: PortalProps['container'] }> = (
 
   useEffect(() => {
     const abort$ = new Subject<void>();
-    onMessage<ContextMenuOnClickPayload>([ChromeMessageType.popup])
+    onMessage<ContextMenuOnClickPayload>([ChromeMessageType.clickMenu])
       .pipe(takeUntil(abort$))
       .subscribe(({ message, sendResponse }) => {
         if (message?.payload) {
           const {
             info: { linkUrl, pageUrl: source, selectionText },
-            menu: { modal, destination },
+            menu: { modal, popup, destination },
           } = message.payload;
 
           const uri = linkUrl ?? selectionText;
 
           if (uri && QueryService.isLoggedIn) {
-            if (modal) {
+            if (popup) {
+              sendMessage<OpenPopupPayload>({
+                type: ChromeMessageType.openTaskPopup,
+                payload: { form: { uri, source, destination } },
+              }).subscribe();
+            } else if (modal) {
               setForm({ uri, source, destination });
               _setOpen(true);
             } else {
