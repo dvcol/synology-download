@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.13.0](https://github.com/dvcol/synology-download/compare/v3.12.0...v3.13.0) (2024-08-05)
+
+
+### Features
+
+* **search:** adds search button to navbar ([2a98c39](https://github.com/dvcol/synology-download/commit/2a98c39b9d42c8981f640cf9bcd770cea57c1ccf))
+
+
+### Bug Fixes
+
+* **search:** keep filter active on panel action & fix meta+f search ([5085791](https://github.com/dvcol/synology-download/commit/5085791ccf5d8bd17396e5d18ae854e6b3f9a1c8))
+
 ## [3.12.0](https://github.com/dvcol/synology-download/compare/v3.11.3...v3.12.0) (2024-08-05)
 
 
