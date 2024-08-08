@@ -2,6 +2,9 @@
   "common__model__connection_type__local": {
     "message": "本地"
   },
+  "common__model__connection_type__custom": {
+    "message": "自定义网址"
+  },
   "common__model__connection_type__quick_connect": {
     "message": "快速连接"
   },
