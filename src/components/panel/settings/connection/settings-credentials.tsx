@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { finalize, lastValueFrom } from 'rxjs';
 
 import { ButtonWithConfirm, FormCheckbox, FormInput, FormSwitch } from '@src/components';
+import Show from '@src/components/common/utils/show';
 import type { ConnectionSettings, Credentials, FormRules, InfoResponse, LoginResponse } from '@src/models';
 import { AppLinks, ColorLevel, ColorLevelMap, CommonAPI, ConnectionHeader, ConnectionType, defaultConnection, Protocol } from '@src/models';
 import { LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
@@ -17,9 +18,10 @@ import { syncConnection } from '@src/store/actions';
 import { getConnection, getLogged, urlReducer } from '@src/store/selectors';
 import { before, createTab, useDebounceObservable, useI18n } from '@src/utils';
 
+import type { FC } from 'react';
 import type { Observable } from 'rxjs';
 
-export const SettingsCredentials = () => {
+export const SettingsCredentials: FC = () => {
   const i18n = useI18n('panel', 'settings', 'credentials');
 
   const dispatch = useDispatch();
@@ -52,6 +54,7 @@ export const SettingsCredentials = () => {
   const type = watch('type');
   const isQC = type === ConnectionType.quickConnect;
   const is2FA = type === ConnectionType.twoFactor;
+  const isCustom = type === ConnectionType.custom;
   const port = watch('port');
   const protocol = watch('protocol');
 
@@ -60,7 +63,7 @@ export const SettingsCredentials = () => {
     protocol: { required: { value: true, message: i18n('required', 'common', 'error') } },
     path: { required: { value: true, message: i18n('required', 'common', 'error') } },
     port: {
-      required: { value: !isQC, message: i18n('required', 'common', 'error') },
+      required: { value: !isQC && !isCustom, message: i18n('required', 'common', 'error') },
       min: { value: 0, message: i18n({ key: 'min_short', substitutions: ['0'] }, 'common', 'error') },
       max: { value: 65535, message: i18n({ key: 'max_short', substitutions: ['65535'] }, 'common', 'error') },
     },
@@ -252,41 +255,53 @@ export const SettingsCredentials = () => {
           </Typography>
         </Collapse>
         <Card component="form" sx={{ p: '0.5rem', '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">
-          <Grid container direction={'row'} sx={{ alignItems: 'center' }}>
-            <FormInput
-              controllerProps={{ name: 'protocol', control, rules: rules.protocol }}
-              textFieldProps={{
-                select: true,
-                label: i18n('protocol'),
-                sx: { flex: '0 0 6rem' },
-                disabled: isQC,
-                onChange: ({ target: { value } }) => {
-                  if (!dirtyFields.port) setValue('port', value === Protocol.http ? 5000 : 5001);
-                },
-              }}
-            >
-              {Object.values(Protocol)?.map(_type => (
-                <MenuItem key={_type} value={_type}>
-                  {i18n(_type, 'common', 'model', 'protocol')}
-                </MenuItem>
-              ))}
-            </FormInput>
+          <Show show={isCustom}>
+            <Grid container direction={'row'} sx={{ alignItems: 'center' }}>
+              <FormInput
+                controllerProps={{ name: 'path', control, rules: rules.path }}
+                textFieldProps={{
+                  type: 'text',
+                  label: i18n('path'),
+                  sx: { flex: '1 1 auto' },
+                }}
+              />
+            </Grid>
+          </Show>
+          <Show show={!isCustom}>
+            <Grid container direction={'row'} sx={{ alignItems: 'center' }}>
+              <FormInput
+                controllerProps={{ name: 'protocol', control, rules: rules.protocol }}
+                textFieldProps={{
+                  select: true,
+                  label: i18n('protocol'),
+                  sx: { flex: '0 0 6rem' },
+                  disabled: isQC,
+                  onChange: ({ target: { value } }) => {
+                    if (!dirtyFields.port) setValue('port', value === Protocol.http ? 5000 : 5001);
+                  },
+                }}
+              >
+                {Object.values(Protocol)?.map(_type => (
+                  <MenuItem key={_type} value={_type}>
+                    {i18n(_type, 'common', 'model', 'protocol')}
+                  </MenuItem>
+                ))}
+              </FormInput>
 
-            <Typography id="protocol-path-slash" variant="body2" color="text.secondary">
-              ://
-            </Typography>
+              <Typography id="protocol-path-slash" variant="body2" color="text.secondary">
+                ://
+              </Typography>
 
-            <FormInput
-              controllerProps={{ name: 'path', control, rules: rules.path }}
-              textFieldProps={{
-                type: 'text',
-                label: i18n('path'),
-                sx: { flex: '1 1 auto' },
-              }}
-            />
+              <FormInput
+                controllerProps={{ name: 'path', control, rules: rules.path }}
+                textFieldProps={{
+                  type: 'text',
+                  label: i18n('path'),
+                  sx: { flex: '1 1 auto' },
+                }}
+              />
 
-            {!isQC && (
-              <>
+              <Show show={!isQC}>
                 <Typography id="path-port-dot" variant="body2" color="text.secondary">
                   :
                 </Typography>
@@ -299,14 +314,16 @@ export const SettingsCredentials = () => {
                     disabled: isQC,
                   }}
                 />
-              </>
-            )}
-            {isQC && (
-              <Typography id="path-port-dot" variant="body2" color="text.secondary" sx={{ mr: '0.75rem', flex: '0 0 0 14ch' }}>
-                .quickconnect.to
-              </Typography>
-            )}
-          </Grid>
+              </Show>
+
+              <Show show={isQC}>
+                <Typography id="path-port-dot" variant="body2" color="text.secondary" sx={{ mr: '0.75rem', flex: '0 0 0 14ch' }}>
+                  .quickconnect.to
+                </Typography>
+              </Show>
+            </Grid>
+          </Show>
+
           <Grid container direction={'row'} sx={{ alignItems: 'center' }}>
             <FormInput
               controllerProps={{ name: 'username', control, rules: rules.username }}

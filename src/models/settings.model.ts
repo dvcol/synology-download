@@ -76,6 +76,7 @@ export enum ConnectionType {
   local = 'local',
   quickConnect = 'quick_connect', // No functioning API
   twoFactor = 'two_factor',
+  custom = 'custom',
 }
 
 export enum Protocol {

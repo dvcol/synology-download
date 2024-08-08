@@ -74,11 +74,10 @@ const shouldAutoLogin = (connection: ConnectionSettings) => {
 export const getShouldAutoLogin = createSelector(getConnection, shouldAutoLogin);
 
 export const urlReducer = (connection: ConnectionSettings) => {
-  if (connection?.protocol && connection?.path && connection?.port) {
-    const { type, protocol, path, port } = connection;
-    if (ConnectionType.quickConnect === type) return new URL(`${protocol}://${path}.quickconnect.to`).toString();
-    return new URL(`${protocol}://${path}:${port}`).toString();
-  }
+  const { type, protocol, path, port } = connection;
+  if (ConnectionType.custom === type && path) return new URL(path).toString();
+  if (ConnectionType.quickConnect === type && protocol && path) return new URL(`${protocol}://${path}.quickconnect.to`).toString();
+  if (protocol && path && port) return new URL(`${protocol}://${path}:${port}`).toString();
   return '';
 };
 
