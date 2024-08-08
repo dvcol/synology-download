@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.14.1](https://github.com/dvcol/synology-download/compare/v3.14.0...v3.14.1) (2024-08-08)
+
+
+### Bug Fixes
+
+* **explorer:** fix min width on folder select ([1ac385c](https://github.com/dvcol/synology-download/commit/1ac385c24dafb58316b9740e3d1f28ada1dcc86f))
+
 ## [3.14.0](https://github.com/dvcol/synology-download/compare/v3.13.0...v3.14.0) (2024-08-05)
 
 
