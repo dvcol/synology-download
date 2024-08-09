@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.15.0](https://github.com/dvcol/synology-download/compare/v3.14.1...v3.15.0) (2024-08-09)
+
+
+### Features
+
+* **connection:** support custom url schemes ([19b5b2a](https://github.com/dvcol/synology-download/commit/19b5b2a590a872b8825d7db553074453bc1987c4))
+
 ### [3.14.1](https://github.com/dvcol/synology-download/compare/v3.14.0...v3.14.1) (2024-08-08)
 
 
