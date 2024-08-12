@@ -212,6 +212,10 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
       }
       return _new;
     });
+    // if old folder exit
+    if (oldFolder?.name) return;
+    // else select new folder
+    return selectNode(`${nodeId}-${(filteredTree[nodeId]?.length ?? 1) - 1}`);
   };
 
   const onSelect = ($event: React.SyntheticEvent, nodeId: string) => selectNode(nodeId);
@@ -304,7 +308,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
           {flatten &&
             !pathLoading &&
             !loading[selected] &&
-            filteredTree[selected].map((f, i) => (
+            filteredTree[selected]?.map((f, i) => (
               <ExplorerLeaf
                 key={`${i}-${disabled}`}
                 nodeId={`${selected}-${i}`}
