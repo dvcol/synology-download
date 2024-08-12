@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.16.1](https://github.com/dvcol/synology-download/compare/v3.15.0...v3.16.1) (2024-08-12)
+
+
+### Features
+
+* **explorer:** select folder on create ([05c8fe1](https://github.com/dvcol/synology-download/commit/05c8fe1b6c86fd6557db08a3ff74414d564ba7d7))
+
+
+### Bug Fixes
+
+* **explorer:** adjust css for un-flatten view and loading leaf ([424c474](https://github.com/dvcol/synology-download/commit/424c474229314943ec252148c0fb6cae4dff6b56))
+* **explorer:** fix crumb select to navigate up the tree instead of -1 ([59216d4](https://github.com/dvcol/synology-download/commit/59216d4f3b5524c91fdf4faed27d084a1013be51))
+
 ## [3.15.0](https://github.com/dvcol/synology-download/compare/v3.14.1...v3.15.0) (2024-08-09)
 
 
