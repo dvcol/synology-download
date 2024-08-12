@@ -48,16 +48,24 @@ export const ExplorerLeaf = ({
         textOverflow: 'ellipsis',
         fontSize: '0.875em',
         minWidth: 'fit-content',
-        width: '100%',
+        width: flatten ? '100%' : 'max-content',
       }}
-      ContentProps={{ style: { overflow: 'hidden' } }}
+      ContentProps={{ style: { overflow: 'hidden', marginBottom: 'auto' } }}
     >
-      {!flatten && folder?.isdir && <ExplorerLoading loading={isLoading} empty={!children?.length} />}
+      {!flatten && folder?.isdir && <ExplorerLoading loading={isLoading} empty={!children?.length} flatten={flatten} />}
       {!flatten &&
         folder?.isdir &&
         !isLoading &&
         children?.map((sf, i) => (
-          <ExplorerLeaf key={`${nodeId}-${i}-${disabled}`} nodeId={`${nodeId}-${i}`} folder={sf} tree={tree} loading={loading} disabled={disabled} />
+          <ExplorerLeaf
+            key={`${nodeId}-${i}-${disabled}`}
+            nodeId={`${nodeId}-${i}`}
+            folder={sf}
+            tree={tree}
+            loading={loading}
+            disabled={disabled}
+            flatten={flatten}
+          />
         ))}
     </TreeItem>
   );
