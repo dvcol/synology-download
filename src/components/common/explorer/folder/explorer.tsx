@@ -181,10 +181,9 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
       return;
     }
     const ids = selected.split('-');
-    if (index < (ids?.length ?? 0) - 1) {
-      ids.pop();
-      return selectNode(ids.join('-'));
-    }
+    if (!ids?.length) return;
+    if (index > ids.length) return;
+    return selectNode(ids.slice(0, index + 1).join('-'));
   };
 
   const spliceTree = (nodeId: string, newFolder?: Folder | File, oldFolder?: Partial<Folder | File>) => {
