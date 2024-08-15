@@ -1,6 +1,6 @@
 {
   "name": "Download Station (client for Synology NAS)",
-  "version": "3.16.1",
+  "version": "3.16.2",
   "description": "Chrome extension for Synology Download Station",
   "manifest_version": 3,
   "default_locale": "en",
