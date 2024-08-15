@@ -136,13 +136,13 @@ export const ContentPanel = () => {
       <SearchInput
         ref={searchInputRef}
         sx={{
-          position: 'fixed',
-          top: '3.125rem',
+          position: 'absolute',
+          top: '3rem',
           width: '100%',
           zIndex: 100,
           display: 'flex',
           overflow: 'hidden',
-          padding: visible ? '0.125rem 0.25rem 0.5rem 0.5rem' : 0,
+          padding: visible ? '0.25rem 0.25rem 0.5rem 0.5rem' : 0,
           maxHeight: visible ? '5rem' : 0,
           transition: 'max-height 0.2s ease-in-out, padding 0.2 ease-in-out',
           backgroundColor: 'rgb(6 6 6)',
