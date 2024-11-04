@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.16.3](https://github.com/dvcol/synology-download/compare/v3.16.1...v3.16.3) (2024-11-04)
+
+
+### Bug Fixes
+
+* **eMule:** skip new URL check for eMule links [#232](https://github.com/dvcol/synology-download/issues/232) ([ecd06b5](https://github.com/dvcol/synology-download/commit/ecd06b5989b83a565b24423733c10ce2883d324f))
+* **web:** make search bar absolute instead of fixed ([2bec81a](https://github.com/dvcol/synology-download/commit/2bec81a5a2ebdf5528142c40aed1cfd15cece78a))
+
 ### [3.16.1](https://github.com/dvcol/synology-download/compare/v3.15.0...v3.16.1) (2024-08-12)
 
 
