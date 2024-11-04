@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.16.4](https://github.com/dvcol/synology-download/compare/v3.16.3...v3.16.4) (2024-11-04)
+
+
+### Bug Fixes
+
+* **eMule:** encode eMule uri links ([2381680](https://github.com/dvcol/synology-download/commit/238168042371a82f3d115cb642465cc99f4cbab6))
+
 ### [3.16.3](https://github.com/dvcol/synology-download/compare/v3.16.1...v3.16.3) (2024-11-04)
 
 
