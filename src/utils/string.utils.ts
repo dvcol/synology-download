@@ -8,6 +8,17 @@ export const stringifyKeys = _stringifyKeys;
 
 export const stringifyParams = _stringifyParams;
 
+export const eMuleRegex = /^ed2k:\/\/\|file\|[^|]+\|\d+\|[a-fA-F0-9]{32}\|(h=[a-zA-Z0-9]{32}\|)?\/$/;
+
+const commaRegex = /,/g;
+const commaReplacement = '%2C';
+
+const pipeRegex = /\|/g;
+const pipeReplacement = '%7C';
+
+export const sanitizeUrl = (url: string): string =>
+  new URL(url.toString().replace(commaRegex, commaReplacement).replace(pipeRegex, pipeReplacement)).toString();
+
 /**
  * Parse magnet link to extract name parameter
  * @param uri a valid uri

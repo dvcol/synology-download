@@ -202,11 +202,17 @@ export const FileErrorCode = {
   1200: 'Failed to rename it. More information in <errors> object',
 };
 
+export const EMuleErrorCode = {
+  1901: 'Invalid eMule link',
+  1906: 'eMule service is not enabled.',
+  1915: 'Duplicate eMule task',
+};
+
 export const ErrorMap: Record<string, Record<number, string>> = {
   [CommonAPI.Info]: CommonErrorCode,
   [CommonAPI.Auth]: { ...CommonErrorCode, ...AuthErrorCode },
-  ...Object.values(DownloadStationAPI).reduce((codes, v) => ({ ...codes, [v]: { ...CommonErrorCode, ...TaskErrorCode } }), {}),
-  ...Object.values(DownloadStation2API).reduce((codes, v) => ({ ...codes, [v]: { ...CommonErrorCode, ...TaskErrorCode } }), {}),
+  ...Object.values(DownloadStationAPI).reduce((codes, v) => ({ ...codes, [v]: { ...CommonErrorCode, ...TaskErrorCode, ...EMuleErrorCode } }), {}),
+  ...Object.values(DownloadStation2API).reduce((codes, v) => ({ ...codes, [v]: { ...CommonErrorCode, ...TaskErrorCode, ...EMuleErrorCode } }), {}),
   ...Object.values(FileStationAPI).reduce((codes, v) => ({ ...codes, [v]: { ...CommonErrorCode, ...FileErrorCode } }), {}),
 };
 

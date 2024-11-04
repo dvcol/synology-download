@@ -21,7 +21,7 @@ import type {
 import { DownloadStation2API, Endpoint, EntryAPI, EntryMethod, Task2Method } from '@src/models';
 import { SynologyService } from '@src/services/http';
 import type { HttpParameters } from '@src/utils';
-import { buildFormData, HttpMethod, stringifyKeys } from '@src/utils';
+import { buildFormData, HttpMethod, sanitizeUrl, stringifyKeys } from '@src/utils';
 
 import type { Observable } from 'rxjs';
 
@@ -37,8 +37,8 @@ export class SynologyDownload2Service extends SynologyService {
    *
    * @see https://global.download.synology.com/download/Document/Software/DeveloperGuide/Package/DownloadStation/All/enu/Synology_Download_Station_Web_API.pdf
    */
-  private static _sanitizeUrl(url: string): URL {
-    return new URL(url.toString().replace(/,/g, '%2C'));
+  private static _sanitizeUrl(url: string): string {
+    return sanitizeUrl(url);
   }
 
   constructor(isProxy = false, name = 'SynologyDownloadService2') {
@@ -67,7 +67,7 @@ export class SynologyDownload2Service extends SynologyService {
     try {
       const { url, file, torrent, ..._request } = request;
       const params: HttpParameters = stringifyKeys(_request, true);
-      if (url?.length) params.url = JSON.stringify(url?.map(_url => SynologyDownload2Service._sanitizeUrl(_url).toString()));
+      if (url?.length) params.url = JSON.stringify(url?.map(_url => SynologyDownload2Service._sanitizeUrl(_url)));
 
       const options: SynologyQueryOptions = {
         api: DownloadStation2API.Task,

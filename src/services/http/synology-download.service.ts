@@ -12,7 +12,7 @@ import type {
 import { Controller, DownloadStationAPI, Endpoint, TaskMethod } from '@src/models';
 import { SynologyService } from '@src/services/http';
 import type { HttpParameters } from '@src/utils';
-import { HttpMethod } from '@src/utils';
+import { HttpMethod, sanitizeUrl } from '@src/utils';
 
 import type { Observable } from 'rxjs';
 
@@ -28,8 +28,8 @@ export class SynologyDownloadService extends SynologyService {
    *
    * @see https://global.download.synology.com/download/Document/Software/DeveloperGuide/Package/DownloadStation/All/enu/Synology_Download_Station_Web_API.pdf
    */
-  private static _sanitizeUrl(url: string): URL {
-    return new URL(url.toString().replace(/,/g, '%2C'));
+  private static _sanitizeUrl(url: string): string {
+    return sanitizeUrl(url);
   }
 
   constructor(isProxy = false, name = 'SynologyDownloadService', prefix = Controller.DownloadStation) {
@@ -78,7 +78,7 @@ export class SynologyDownloadService extends SynologyService {
     const { url, destination, username, password, extract_password } = request;
     try {
       const params: HttpParameters = { method: TaskMethod.create };
-      if (url?.length) params.uri = url?.map(_url => SynologyDownloadService._sanitizeUrl(_url).toString())?.join(',');
+      if (url?.length) params.uri = url?.map(_url => SynologyDownloadService._sanitizeUrl(_url))?.join(',');
 
       if (destination) params.destination = destination;
       if (username) params.username = username;
