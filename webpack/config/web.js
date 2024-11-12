@@ -50,6 +50,10 @@ const getWebConfig = (common = getCommonConfig()) => {
             from: path.join(__dirname, ROOT_DIR, 'src', 'manifest.json'),
             to: path.join(__dirname, ROOT_DIR, 'dist', 'json', 'manifest.json'),
           },
+          {
+            from: path.join(__dirname, ROOT_DIR, 'screenshots'),
+            to: path.join(__dirname, ROOT_DIR, 'dist', 'screenshots'),
+          },
         ],
       }),
     ],
