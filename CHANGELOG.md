@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.17.0](https://github.com/dvcol/synology-download/compare/v3.16.4...v3.17.0) (2025-02-06)
+
+
+### Features
+
+* **login:** support SID or cookie sessions ([d650911](https://github.com/dvcol/synology-download/commit/d650911746529235ea0623766df3c8de966faa09))
+
 ### [3.16.4](https://github.com/dvcol/synology-download/compare/v3.16.3...v3.16.4) (2024-11-04)
 
 
