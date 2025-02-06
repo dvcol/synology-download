@@ -1,0 +1,8 @@
+{
+  "common__model__session_format__cookie": {
+    "message": "Cookie"
+  },
+  "common__model__session_format__sid": {
+    "message": "SID"
+  }
+}

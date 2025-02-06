@@ -2,6 +2,8 @@ import { DownloadStatus } from '@src/models/download.model';
 import { LoggingLevel } from '@src/models/logger.model';
 import { NavbarButtonType } from '@src/models/navbar.model';
 
+import type { LoginRequest } from '@src/models/synology.model';
+
 import {
   defaultContextMenu,
   defaultDownloadQuickMenu,
@@ -79,6 +81,11 @@ export enum ConnectionType {
   custom = 'custom',
 }
 
+export const ConnectionFormat: Record<string, Required<LoginRequest>['format']> = {
+  cookie: 'cookie',
+  sid: 'sid',
+} as const;
+
 export enum Protocol {
   http = 'http',
   https = 'https',
@@ -86,6 +93,7 @@ export enum Protocol {
 
 export interface Credentials {
   type?: ConnectionType;
+  format?: Required<LoginRequest>['format'];
   authVersion?: number;
   username?: string;
   password?: string;
@@ -97,6 +105,7 @@ export interface Credentials {
 
 export const defaultCredentials: Credentials = {
   type: ConnectionType.local,
+  format: 'cookie',
   authVersion: 3,
   username: 'admin',
   password: '',

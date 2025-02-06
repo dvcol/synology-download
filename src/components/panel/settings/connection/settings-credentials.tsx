@@ -12,7 +12,17 @@ import { finalize, lastValueFrom } from 'rxjs';
 import { ButtonWithConfirm, FormCheckbox, FormInput, FormSwitch } from '@src/components';
 import Show from '@src/components/common/utils/show';
 import type { ConnectionSettings, Credentials, FormRules, InfoResponse, LoginResponse } from '@src/models';
-import { AppLinks, ColorLevel, ColorLevelMap, CommonAPI, ConnectionHeader, ConnectionType, defaultConnection, Protocol } from '@src/models';
+import {
+  AppLinks,
+  ColorLevel,
+  ColorLevelMap,
+  CommonAPI,
+  ConnectionFormat,
+  ConnectionHeader,
+  ConnectionType,
+  defaultConnection,
+  Protocol,
+} from '@src/models';
 import { LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { syncConnection } from '@src/store/actions';
 import { getConnection, getLogged, urlReducer } from '@src/store/selectors';
@@ -60,6 +70,7 @@ export const SettingsCredentials: FC = () => {
 
   const rules: FormRules<ConnectionSettings> = {
     type: { required: { value: true, message: i18n('required', 'common', 'error') } },
+    format: { required: { value: true, message: i18n('required', 'common', 'error') } },
     protocol: { required: { value: true, message: i18n('required', 'common', 'error') } },
     path: { required: { value: true, message: i18n('required', 'common', 'error') } },
     port: {
@@ -218,7 +229,7 @@ export const SettingsCredentials: FC = () => {
               textFieldProps={{
                 select: true,
                 label: i18n('type'),
-                sx: { flex: '1 0 8rem' },
+                sx: { flex: '0 1 12rem' },
                 onChange: ({ target: { value } }) => {
                   if (value === ConnectionType.quickConnect) setValue('protocol', Protocol.https);
                 },
@@ -227,6 +238,30 @@ export const SettingsCredentials: FC = () => {
               {Object.values(ConnectionType)?.map(_type => (
                 <MenuItem key={_type} value={_type}>
                   {i18n(_type, 'common', 'model', 'connection_type')}
+                </MenuItem>
+              ))}
+            </FormInput>
+          }
+          sx={{ p: '0.5rem 0' }}
+        />
+
+        <CardHeader
+          title={i18n('format__title')}
+          subheader={i18n('format__subheader')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          action={
+            <FormInput
+              controllerProps={{ name: 'format', control, rules: rules.format }}
+              textFieldProps={{
+                select: true,
+                label: i18n('format'),
+                sx: { flex: '0 1 12rem' },
+              }}
+            >
+              {Object.values(ConnectionFormat)?.map(_format => (
+                <MenuItem key={_format} value={_format}>
+                  {i18n(_format, 'common', 'model', 'session_format')}
                 </MenuItem>
               ))}
             </FormInput>

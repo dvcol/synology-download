@@ -295,7 +295,7 @@ export class QueryService {
     credentials = getCredentials(this.store.getState()),
     { baseUrl, doNotProxy }: { baseUrl?: string; doNotProxy?: boolean },
   ): Observable<LoginResponse> {
-    const { username, password, authVersion } = credentials;
+    const { username, password, authVersion, format } = credentials;
     if (!username || !password) {
       const error = new Error(
         i18n({
@@ -305,7 +305,7 @@ export class QueryService {
       );
       return throwError(() => error);
     }
-    let request: LoginRequest = { account: username, passwd: password, baseUrl };
+    let request: LoginRequest = { account: username, passwd: password, baseUrl, format };
 
     if (ConnectionType.twoFactor === credentials?.type) {
       try {
