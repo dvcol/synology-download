@@ -82,5 +82,11 @@
   },
   "panel__settings__global__navbar__buttons_subheader": {
     "message": "Shortcut buttons to display in the navbar."
+  },
+  "panel__settings__global__panel_enabled_title": {
+    "message": "Side Panel"
+  },
+  "panel__settings__global__panel_enabled_subheader": {
+    "message": "Open Side Panel instead of Popup when action button is pressed."
   }
 }

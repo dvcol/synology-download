@@ -234,6 +234,9 @@ export interface GlobalSettings {
     size: InterfaceSize | number;
     pullToRefresh: boolean;
   };
+  panel: {
+    enabled: boolean;
+  };
 }
 
 export const defaultGlobal = {
@@ -252,6 +255,9 @@ export const defaultGlobal = {
   interface: {
     size: InterfaceSize.normal,
     pullToRefresh: true,
+  },
+  panel: {
+    enabled: false,
   },
 };
 

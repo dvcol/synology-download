@@ -82,5 +82,11 @@
   },
   "panel__settings__global__navbar__buttons_subheader": {
     "message": "在导航栏中显示的快捷按钮。"
+  },
+  "panel__settings__global__panel_enabled_title": {
+    "message": "侧面板"
+  },
+  "panel__settings__global__panel_enabled_subheader": {
+    "message": "按下操作按钮时打开侧面板而不是弹出窗口。"
   }
 }

@@ -6,6 +6,7 @@ import type {
   ContextMenu,
   DownloadSettings,
   DownloadsIntercept,
+  GlobalSettings,
   NotificationSettings,
   QuickMenu,
   SettingsSlice,
@@ -130,5 +131,15 @@ export const removeFrom = <P extends Payloads, K extends Keys>(oldSettings: Sett
 export const setSyncSettingsReducer: CaseReducer<SettingsSlice, PayloadAction<Partial<SyncSettings>>> = (state, { payload: sync }) => {
   const newState = { ...state, sync: { ...state.sync, ...sync } };
   saveSettings(newState);
+  return newState;
+};
+
+export const syncInterfaceReducer: CaseReducer<SettingsSlice, PayloadAction<Partial<GlobalSettings>>> = (state, { payload }) => {
+  const newState = syncNestedReducer<GlobalSettings>(state, payload, 'global');
+  if (payload.panel?.enabled !== undefined) {
+    chrome.sidePanel
+      .setPanelBehavior({ openPanelOnActionClick: newState.global.panel.enabled })
+      .catch(e => LoggerService.error('Failed to set panel behavior', e));
+  }
   return newState;
 };

@@ -46,6 +46,10 @@ export const SettingsGlobal = () => {
         ...defaultGlobal.interface,
         ...(state.interface ?? {}),
       },
+      panel: {
+        ...defaultGlobal.panel,
+        ...(state.panel ?? {}),
+      },
     },
   });
 
@@ -70,6 +74,14 @@ export const SettingsGlobal = () => {
         sx={{ p: '1rem 1rem 0' }}
       />
       <CardContent>
+        <CardHeader
+          title={i18n('panel_enabled_title')}
+          subheader={i18n('panel_enabled_subheader')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          action={<FormSwitch controllerProps={{ name: 'panel.enabled', control }} formControlLabelProps={{ label: '' }} />}
+          sx={{ p: '0.5rem 0' }}
+        />
         <CardHeader
           title={i18n('theme_title')}
           subheader={i18n('theme_subheader')}

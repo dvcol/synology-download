@@ -27,6 +27,7 @@ import {
   syncAdvancedLoggingReducer,
   syncConnectionReducer,
   syncInterceptReducer,
+  syncInterfaceReducer,
   syncNestedReducer,
   syncReducer,
 } from '../reducers/settings.reducer';
@@ -114,7 +115,7 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
         type: 'sync',
         payload: { quick: defaultSettings.quick },
       }),
-    syncInterface: (oldSettings, { payload }) => syncNestedReducer<GlobalSettings>(oldSettings, payload, 'global'),
+    syncInterface: syncInterfaceReducer,
     syncDownloads: (oldSettings, { payload }) => syncNestedReducer<DownloadSettings>(oldSettings, payload, 'downloads'),
     syncDownloadsIntercept: syncInterceptReducer,
     syncAdvanced: (oldSettings, { payload }) => syncNestedReducer<AdvancedSettings>(oldSettings, payload, 'advanced'),
