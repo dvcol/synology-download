@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.18.0](https://github.com/dvcol/synology-download/compare/v3.17.0...v3.18.0) (2025-03-17)
+
+
+### Features
+
+* **panel:** adds action button toggle in settings ([89624e2](https://github.com/dvcol/synology-download/commit/89624e27993417d0c2450f7b96b24c0b1eba1a95))
+* **panel:** adds basic panel support ([458491d](https://github.com/dvcol/synology-download/commit/458491db38434e72082dc6dce97488fe98cfb9ef))
+* **panel:** open tasks in side panels ([af9a74f](https://github.com/dvcol/synology-download/commit/af9a74feb9840c60de3706cbf959035e123d5dac))
+
+
+### Bug Fixes
+
+* **panel:** adjust css for panel view ([c03226a](https://github.com/dvcol/synology-download/commit/c03226a3b6dcce6fdc6bfdf49ffa16e150f52da6))
+
 ## [3.17.0](https://github.com/dvcol/synology-download/compare/v3.16.4...v3.17.0) (2025-02-06)
 
 
