@@ -26,39 +26,21 @@
       "256": "assets/icons/icon-256.png"
     }
   },
+  "side_panel": {
+    "default_path": "panel.html"
+  },
   "content_scripts": [
     {
-      "matches": [
-        "http://*/*",
-        "https://*/*"
-      ],
-      "js": [
-        "entry/contentScript.entry.js"
-      ]
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["entry/contentScript.entry.js"]
     }
   ],
-  "permissions": [
-    "scripting",
-    "contextMenus",
-    "notifications",
-    "storage",
-    "tabs",
-    "downloads",
-    "downloads.open",
-    "clipboardRead"
-  ],
-  "host_permissions": [
-    "http://*/*",
-    "https://*/*"
-  ],
+  "permissions": ["scripting", "contextMenus", "notifications", "storage", "tabs", "downloads", "downloads.open", "clipboardRead", "sidePanel"],
+  "host_permissions": ["http://*/*", "https://*/*"],
   "web_accessible_resources": [
     {
-      "resources": [
-        "*.html"
-      ],
-      "matches": [
-        "<all_urls>"
-      ]
+      "resources": ["*.html"],
+      "matches": ["<all_urls>"]
     }
   ],
   "content_security_policy": {

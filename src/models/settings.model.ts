@@ -337,6 +337,7 @@ export enum ServiceInstance {
   Background = 'background',
   Content = 'content',
   Popup = 'popup',
+  Panel = 'panel',
   Option = 'option',
   Standalone = 'standalone',
 }
@@ -345,6 +346,7 @@ export enum ServiceInstanceColors {
   Background = '#7dffc7',
   Content = '#ccbbff',
   Popup = '#42e9ff',
+  Panel = '#4284ff',
   Option = '#42ffb7',
   Standalone = '#42ff78',
 }
@@ -353,6 +355,7 @@ export const ServiceInstanceColorsMap: Record<ServiceInstance, ServiceInstanceCo
   [ServiceInstance.Background]: ServiceInstanceColors.Background,
   [ServiceInstance.Content]: ServiceInstanceColors.Content,
   [ServiceInstance.Popup]: ServiceInstanceColors.Popup,
+  [ServiceInstance.Panel]: ServiceInstanceColors.Panel,
   [ServiceInstance.Option]: ServiceInstanceColors.Option,
   [ServiceInstance.Standalone]: ServiceInstanceColors.Standalone,
 };

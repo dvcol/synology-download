@@ -434,6 +434,13 @@ const chromePatch = {
       UPDATE_AVAILABLE: 'chrome.runtime.RequestUpdateCheckStatus.UPDATE_AVAILABLE',
     },
   },
+  sidePanel: {
+    open: logger('chrome.sidePanel.open'),
+    getOptions: logger('chrome.sidePanel.getOptions'),
+    setOptions: logger('chrome.sidePanel.setOptions'),
+    getPanelBehavior: logger('chrome.sidePanel.getPanelBehavior'),
+    setPanelBehavior: logger('chrome.sidePanel.setPanelBehavior'),
+  },
   scripting: {
     executeScript: logger('chrome.scripting.executeScript'),
     getRegisteredContentScripts: logger('chrome.scripting.getRegisteredContentScripts'),

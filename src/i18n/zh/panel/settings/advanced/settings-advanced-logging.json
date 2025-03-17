@@ -17,6 +17,12 @@
   "panel__settings__advanced__logging__levels__popup__subheader": {
     "message": "弹出窗口的日志记录级别（默认为错误级别）。"
   },
+  "panel__settings__advanced__logging__levels__panel__title": {
+    "message": "面板日志记录级别"
+  },
+  "panel__settings__advanced__logging__levels__panel__subheader": {
+    "message": "面板的累积日志记录级别（默认为错误级别）。"
+  },
   "panel__settings__advanced__logging__levels__option__title": {
     "message": "选项页面日志记录级别"
   },

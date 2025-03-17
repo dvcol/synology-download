@@ -9,6 +9,7 @@ export interface Menu {
   title: string;
   modal: boolean;
   popup: boolean;
+  panel: boolean;
   destination: { custom: boolean; path?: string };
 }
 
@@ -31,6 +32,7 @@ export const defaultQuickMenu: QuickMenu = {
   icon: MaterialIcon.server,
   modal: false,
   popup: false,
+  panel: false,
   destination: { custom: false },
   max: 5,
   type: QuickMenuType.Task,
@@ -42,6 +44,7 @@ export const defaultModalQuickMenu: QuickMenu = {
   icon: MaterialIcon.server,
   modal: true,
   popup: false,
+  panel: false,
   destination: { custom: false },
   max: 5,
   type: QuickMenuType.Task,
@@ -53,6 +56,7 @@ export const defaultRecentQuickMenu: QuickMenu = {
   icon: MaterialIcon.history,
   modal: false,
   popup: false,
+  panel: false,
   destination: { custom: false },
   max: 5,
   type: QuickMenuType.Recent,
@@ -64,6 +68,7 @@ export const defaultDownloadQuickMenu: QuickMenu = {
   icon: MaterialIcon.download,
   modal: false,
   popup: false,
+  panel: false,
   destination: { custom: false },
   max: 5,
   type: QuickMenuType.Download,
@@ -75,6 +80,7 @@ export const defaultRecentDownloadQuickMenu: QuickMenu = {
   icon: MaterialIcon.historyAlt,
   modal: false,
   popup: false,
+  panel: false,
   destination: { custom: false },
   max: 5,
   type: QuickMenuType.RecentDownload,
@@ -109,6 +115,7 @@ export const defaultContextMenu: ContextMenu = {
   contexts: [ContextType.link, ContextType.audio, ContextType.video, ContextType.image, ContextType.selection],
   modal: true,
   popup: false,
+  panel: false,
   destination: { custom: false },
 };
 

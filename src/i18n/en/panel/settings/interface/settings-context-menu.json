@@ -21,6 +21,12 @@
   "panel__settings__context_menu__popup_subheader": {
     "message": "Toggle to open in popup instead of shortcut."
   },
+  "panel__settings__context_menu__panel_title": {
+    "message": "Open in panel"
+  },
+  "panel__settings__context_menu__panel_subheader": {
+    "message": "Toggle to open in panel instead of shortcut."
+  },
 
   "panel__settings__context_menu__destination_title": {
     "message": "Destination folder"

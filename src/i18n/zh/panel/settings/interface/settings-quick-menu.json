@@ -47,6 +47,12 @@
   "panel__settings__quick_menu__popup_subheader": {
     "message": "切换到在弹出窗口而不是快捷方式中打开\n。"
   },
+  "panel__settings__quick_menu__panel_title": {
+    "message": "在面板中打开"
+  },
+  "panel__settings__quick_menu__panel_subheader": {
+    "message": "切换为在面板而不是快捷方式中打开。"
+  },
   "panel__settings__quick_menu__destination_title": {
     "message": "目标文件夹"
   },

@@ -10,7 +10,7 @@ import { FormExplorer, FormInput, FormSwitch, MuiIcon } from '@src/components/co
 import type { QuickMenu } from '@src/models';
 import { MaterialIcon, MaterialIconMap, QuickMenuType } from '@src/models';
 import { removeQuickMenu, saveQuickMenu } from '@src/store/actions';
-import { openPopup, useI18n } from '@src/utils';
+import { openPanel, openPopup, useI18n } from '@src/utils';
 
 export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemove: (id: QuickMenu['id']) => Promise<void> }) => {
   const i18n = useI18n('panel', 'settings', 'quick_menu');
@@ -27,7 +27,8 @@ export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemov
     defaultValues: {
       ...menu,
       modal: menu.modal ?? false,
-      popup: (menu.popup ?? false) && !!openPopup && !menu.modal,
+      popup: (menu.popup ?? false) && !!openPopup && !menu.modal && !menu.panel,
+      panel: (menu.panel ?? false) && !!openPanel && !menu.modal && !menu.popup,
       destination: { custom: menu.destination?.custom ?? false, path: menu.destination?.path ?? '' },
       type: menu.type ?? QuickMenuType.Download,
     },
@@ -164,6 +165,7 @@ export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemov
               switchProps={{
                 onChange: (_, checked) => {
                   if (checked && getValues()?.popup) setValue('popup', false);
+                  if (checked && getValues()?.panel) setValue('panel', false);
                 },
               }}
             />
@@ -185,6 +187,29 @@ export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemov
               switchProps={{
                 onChange: (_, checked) => {
                   if (checked && getValues()?.modal) setValue('modal', false);
+                  if (checked && getValues()?.panel) setValue('panel', false);
+                },
+              }}
+            />
+          }
+          sx={{ p: '0.5rem 0' }}
+        />
+        <CardHeader
+          title={i18n('panel_title')}
+          subheader={i18n('panel_subheader')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          action={
+            <FormSwitch
+              controllerProps={{ name: 'panel', control }}
+              formControlLabelProps={{
+                label: '',
+                disabled: getValues()?.type !== QuickMenuType.Task || !openPanel,
+              }}
+              switchProps={{
+                onChange: (_, checked) => {
+                  if (checked && getValues()?.modal) setValue('modal', false);
+                  if (checked && getValues()?.popup) setValue('popup', false);
                 },
               }}
             />

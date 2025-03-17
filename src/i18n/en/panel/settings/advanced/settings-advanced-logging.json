@@ -18,6 +18,12 @@
   "panel__settings__advanced__logging__levels__popup__subheader": {
     "message": "The cumulative level of logging for the popup (defaults to error)."
   },
+  "panel__settings__advanced__logging__levels__panel__title": {
+    "message": "Panel logging level"
+  },
+  "panel__settings__advanced__logging__levels__panel__subheader": {
+    "message": "The cumulative level of logging for the panel (defaults to error)."
+  },
   "panel__settings__advanced__logging__levels__option__title": {
     "message": "Option logging level"
   },

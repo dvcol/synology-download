@@ -15,6 +15,8 @@ export const getModal = createSelector(getState, (state: StateSlice) => state.mo
 
 export const getPopup = createSelector(getModal, (modal: StateSlice['modal']) => modal?.popup);
 
+export const getPanel = createSelector(getModal, (modal: StateSlice['modal']) => modal?.panel);
+
 export const getOption = createSelector(getModal, (modal: StateSlice['modal']) => modal?.option);
 
 export const getStandalone = createSelector(getModal, (modal: StateSlice['modal']) => modal?.standalone);
@@ -25,9 +27,10 @@ export const getSid = createSelector(getState, (state: StateSlice) => state?.sid
 
 export const isModalOpen = createSelector(
   getPopup,
+  getPanel,
   getOption,
   getStandalone,
-  (popup: boolean, option: boolean, standalone: boolean) => popup || option || standalone,
+  (popup: boolean, panel: boolean, option: boolean, standalone: boolean) => popup || panel || option || standalone,
 );
 
 export const getLoading = createSelector(getState, (state: StateSlice) => state.loading);

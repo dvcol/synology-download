@@ -232,7 +232,7 @@ export class QueryService {
     // mark as logged out
     this.store.dispatch(setLogged(false));
 
-    if ([ServiceInstance.Popup, ServiceInstance.Option].includes(this.source)) {
+    if ([ServiceInstance.Popup, ServiceInstance.Panel, ServiceInstance.Option].includes(this.source)) {
       LoggerService.error('Fetch error caught, attempting auto-login locally in ', this.source);
       this.autologinQueue.next({ notify: false, logged: false });
       return new FetchError(err, i18n('fetch_failed_auto_login', 'common', 'error'));

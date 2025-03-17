@@ -12,6 +12,7 @@ const getExtensionConfig = (common = getCommonConfig()) => ({
   ...common,
   entry: {
     popup: path.join(__dirname, ROOT_DIR, 'src', 'pages', 'popup'),
+    panel: path.join(__dirname, ROOT_DIR, 'src', 'pages', 'panel'),
     options: path.join(__dirname, ROOT_DIR, 'src', 'pages', 'options'),
     background: path.join(__dirname, ROOT_DIR, 'src', 'pages', 'background'),
     contentScript: path.join(__dirname, ROOT_DIR, 'src', 'pages', 'content'),
@@ -52,6 +53,12 @@ const getExtensionConfig = (common = getCommonConfig()) => ({
       template: path.join(__dirname, ROOT_DIR, 'src', 'pages', 'options', 'index.html'),
       filename: 'options.html',
       chunks: ['options'],
+      cache: false,
+    }),
+    new HtmlWebpackPlugin({
+      template: path.join(__dirname, ROOT_DIR, 'src', 'pages', 'panel', 'index.html'),
+      filename: 'panel.html',
+      chunks: ['panel'],
       cache: false,
     }),
     new HtmlWebpackPlugin({

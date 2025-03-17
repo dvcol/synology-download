@@ -20,6 +20,7 @@ export interface StateReducers<S = StateSlice> extends SliceCaseReducers<S> {
   setLogged: CaseReducer<S, PayloadAction<boolean>>;
   setSid: CaseReducer<S, PayloadAction<string | undefined>>;
   setPopup: CaseReducer<S, PayloadAction<boolean>>;
+  setPanel: CaseReducer<S, PayloadAction<boolean>>;
   setOption: CaseReducer<S, PayloadAction<boolean>>;
   setStandalone: CaseReducer<S, PayloadAction<boolean>>;
   setContentMenu: CaseReducer<S, PayloadAction<boolean>>;
@@ -41,6 +42,7 @@ export const initialState: StateSlice = {
   sid: undefined,
   modal: {
     popup: false,
+    panel: false,
     option: false,
     standalone: false,
   },
@@ -70,6 +72,7 @@ export const stateSlice = createSlice<StateSlice, StateReducers, 'state'>({
     setLogged: syncLoggedReducer,
     setSid: (state, { payload: sid }) => ({ ...state, sid }),
     setPopup: (state, { payload: popup }) => ({ ...state, modal: { ...state.modal, popup } }),
+    setPanel: (state, { payload: panel }) => ({ ...state, modal: { ...state.modal, panel } }),
     setOption: (state, { payload: option }) => ({ ...state, modal: { ...state.modal, option } }),
     setStandalone: (state, { payload: standalone }) => ({ ...state, modal: { ...state.modal, standalone } }),
     setContentMenu: (state, { payload: menu }) => ({ ...state, content: { ...state.content, menu } }),

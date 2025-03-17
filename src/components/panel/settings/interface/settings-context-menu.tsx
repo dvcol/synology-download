@@ -10,7 +10,7 @@ import { FormExplorer, FormInput, FormSwitch } from '@src/components/common';
 import type { ContextMenu } from '@src/models';
 import { ChromeMessageType } from '@src/models';
 import { removeContextMenu, saveContextMenu } from '@src/store/actions';
-import { openPopup, sendMessage, useI18n } from '@src/utils';
+import { openPanel, openPopup, sendMessage, useI18n } from '@src/utils';
 
 export const SettingsContextMenu = ({ menu, onRemove }: { menu: ContextMenu; onRemove: (id: ContextMenu['id']) => Promise<void> }) => {
   const i18n = useI18n('panel', 'settings', 'context_menu');
@@ -27,7 +27,8 @@ export const SettingsContextMenu = ({ menu, onRemove }: { menu: ContextMenu; onR
     defaultValues: {
       ...menu,
       modal: menu.modal ?? false,
-      popup: (menu.popup ?? false) && !!openPopup && !menu.modal,
+      popup: (menu.popup ?? false) && !!openPopup && !menu.modal && !menu.panel,
+      panel: (menu.panel ?? false) && !!openPanel && !menu.modal && !menu.popup,
       destination: { custom: menu.destination?.custom ?? false, path: menu.destination?.path ?? '' },
     },
   });
@@ -84,6 +85,7 @@ export const SettingsContextMenu = ({ menu, onRemove }: { menu: ContextMenu; onR
             switchProps={{
               onChange: (_, checked) => {
                 if (checked && getValues()?.popup) setValue('popup', false);
+                if (checked && getValues()?.panel) setValue('panel', false);
               },
             }}
           />
@@ -102,6 +104,26 @@ export const SettingsContextMenu = ({ menu, onRemove }: { menu: ContextMenu; onR
             switchProps={{
               onChange: (_, checked) => {
                 if (checked && getValues()?.modal) setValue('modal', false);
+                if (checked && getValues()?.panel) setValue('panel', false);
+              },
+            }}
+          />
+        }
+        sx={{ p: '0.5rem 0' }}
+      />
+      <CardHeader
+        title={i18n('panel_title')}
+        subheader={i18n('panel_subheader')}
+        titleTypographyProps={{ variant: 'subtitle2' }}
+        subheaderTypographyProps={{ variant: 'subtitle2' }}
+        action={
+          <FormSwitch
+            controllerProps={{ name: 'popup', control }}
+            formControlLabelProps={{ label: '', disabled: !openPanel }}
+            switchProps={{
+              onChange: (_, checked) => {
+                if (checked && getValues()?.modal) setValue('modal', false);
+                if (checked && getValues()?.popup) setValue('popup', false);
               },
             }}
           />
