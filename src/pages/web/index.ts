@@ -4,7 +4,16 @@ import { defineComponents } from './modules';
 
 import type { BadgeMock, DownloadMock, FileMock, TaskMock } from './mocks';
 
-import type { ContentAppHtmlElement, FetchIntercept, Locales, LocalesFetch, StandaloneAppHtmlElement, Synology, WebComponents } from './models';
+import type {
+  AppInstance,
+  ContentAppHtmlElement,
+  FetchIntercept,
+  Locales,
+  LocalesFetch,
+  StandaloneAppHtmlElement,
+  Synology,
+  WebComponents,
+} from './models';
 import type { patchApi } from './modules';
 
 declare global {
@@ -21,6 +30,8 @@ declare global {
     _fetchIntercept?: FetchIntercept;
     /** synology download wc instances */
     _synology: Synology;
+    /** app instance (popup, panel, etc.) */
+    _instance: AppInstance;
   }
 
   interface HTMLElementTagNameMap {

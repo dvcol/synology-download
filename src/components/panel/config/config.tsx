@@ -251,7 +251,7 @@ export const Config: FC<{
             subheaderTypographyProps={{ variant: 'subtitle2' }}
             sx={{ p: '0.5rem 0' }}
           />
-          <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: '12rem' }}>
+          <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: 'clamp(12rem, 20vh, 20vh)' }}>
             <FormExplorer
               controllerProps={{ name: 'default_destination', control }}
               explorerProps={{ flatten: true, disabled: !isAdmin, startPath: getValues()?.default_destination }}
@@ -315,7 +315,7 @@ export const Config: FC<{
               subheaderTypographyProps={{ variant: 'subtitle2' }}
               sx={{ p: '0.5rem 0' }}
             />
-            <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: '12rem' }}>
+            <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: 'clamp(12rem, 20vh, 20vh)' }}>
               <FormExplorer
                 controllerProps={{ name: 'emule_default_destination', control }}
                 explorerProps={{

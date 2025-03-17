@@ -68,7 +68,7 @@ export const initServiceWorker = async () => {
   onOpenPopupEvent();
 
   // Listen to panel events
-  onOpenPanelEvent();
+  onOpenPanelEvent(store);
 
   // Init polling
   PollingService.init(store);

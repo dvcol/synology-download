@@ -11,7 +11,7 @@ import { finalize, lastValueFrom, tap } from 'rxjs';
 
 import { FormCheckbox, FormExplorer, FormInput, FormSwitch, IconLoader } from '@src/components';
 import type { FormRules, TaskCreateRequest, TaskForm, TaskListDownloadRequest } from '@src/models';
-import { ColorLevel, TaskCreateType, torrentExtension } from '@src/models';
+import { AppInstance, ColorLevel, isInstance, TaskCreateType, torrentExtension } from '@src/models';
 import { LoggerService, QueryService } from '@src/services';
 import { clearTaskForm, setTaskForm } from '@src/store/actions';
 import { getClearOnExitTaskSettings, getDownloadStation2APITask, getTaskForm } from '@src/store/selectors';
@@ -70,6 +70,8 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
   const clearOnExist = useSelector(getClearOnExitTaskSettings);
   const taskForm = useSelector(getTaskForm);
   const dispatch = useDispatch();
+
+  const height = isInstance(AppInstance.panel) ? 'calc(100vh - 270px)' : '21em';
 
   const hasDownload2Api = useSelector(getDownloadStation2APITask);
 
@@ -235,7 +237,6 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
                 display: 'flex',
                 flexDirection: 'column',
                 flex: '1 1 auto',
-                justifyContent: 'space-around',
                 gap: '1em',
                 p: '0.5em 0',
                 fontSize: '0.9em',
@@ -252,6 +253,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
                       inputProps: { style: { fontSize: '0.875em' } },
                       disabled: !isFile,
                       onChange: ($event: ChangeEvent<HTMLInputElement>) => setFile($event.target?.files?.[0]),
+                      sx: { flexGrow: 0 },
                     }}
                     inputFileProps={{ split: true, accept: `${torrentExtension.mime},.torrent` }}
                   >
@@ -278,6 +280,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
                     onChange: e => setUrls(parseUrls(e.target.value)),
                     inputProps: { style: { fontSize: '0.875em', wordBreak: 'break-all' } },
                     disabled: isFile,
+                    sx: { flexGrow: 0 },
                   }}
                 />
               )}
@@ -286,6 +289,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
                 textFieldProps={{
                   label: i18n('username_label'),
                   inputProps: { style: { fontSize: '0.875em' } },
+                  sx: { flexGrow: 0 },
                 }}
               />
               <FormInput
@@ -294,6 +298,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
                   type: 'password',
                   label: i18n('ftp_password_label'),
                   inputProps: { style: { fontSize: '0.875em' } },
+                  sx: { flexGrow: 0 },
                 }}
                 iconProps={{ sx: { fontSize: '1em' } }}
               />
@@ -303,6 +308,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
                   type: 'password',
                   label: i18n('zip_password_label'),
                   inputProps: { style: { fontSize: '0.875em' } },
+                  sx: { flexGrow: 0 },
                 }}
                 iconProps={{ sx: { fontSize: '1em' } }}
               />
@@ -317,7 +323,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
               action={<FormSwitch controllerProps={{ name: 'destination.custom', control }} formControlLabelProps={{ label: '' }} />}
               sx={{ p: '0.5em 0' }}
             />
-            <Card sx={{ p: '0.5em', flex: '1 1 auto', m: '0.5em 0', height: '20em' }}>
+            <Card sx={{ p: '0.5em', flex: '1 1 auto', m: '0.5em 0', height }}>
               <FormExplorer
                 controllerProps={{ name: 'destination.path', control }}
                 explorerProps={{

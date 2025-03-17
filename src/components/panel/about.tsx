@@ -27,7 +27,7 @@ export const About: FC<{
   }, []);
 
   return (
-    <Card raised={true} {...cardProps}>
+    <Card raised={true} {...cardProps} sx={{ maxWidth: '800px', height: 'fit-content', alignSelf: 'center', ...cardProps?.sx }}>
       <CardHeader
         title={i18n('title')}
         subheader={

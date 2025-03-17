@@ -1,4 +1,4 @@
-import { firstValueFrom, forkJoin } from 'rxjs';
+import { firstValueFrom, forkJoin, timeout } from 'rxjs';
 
 import {
   buildContextMenu as _buildContextMenu,
@@ -25,7 +25,11 @@ export const addScrapeContextMenu = () =>
         if (info.menuItemId === scrapeContextMenu.id) {
           if (sidePanel && openPanel) {
             await openPanel({ windowId: tab.windowId });
-            await firstValueFrom(onConnect([AppInstance.panel]));
+            try {
+              await firstValueFrom(onConnect([AppInstance.panel]).pipe(timeout(100)));
+            } catch (error) {
+              LoggerService.warn('Panel opening error', error);
+            }
           } else {
             if (sidePanel && !openPanel) LoggerService.error('Open panel is not available');
             if (!openPopup) return LoggerService.error('Open popup is not available');

@@ -183,7 +183,7 @@ export const FormTab = ({
         sx={{ p: '0.5rem 0' }}
       />
       <Collapse in={getValues()?.destination?.enabled} unmountOnExit>
-        <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: '12rem' }}>
+        <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: 'clamp(12rem, 20vh, 20vh)' }}>
           <FormExplorer
             controllerProps={{ name: 'destination.folder', control }}
             explorerProps={{ flatten: true, disabled: !getValues()?.destination?.enabled }}

@@ -1,6 +1,8 @@
-import type { Task } from '@src/models';
+import type { Task } from '@src/models/task.model';
 
 import type { Store } from 'redux';
+
+export type { AppInstance } from '@src/models/app-instance.model';
 
 export enum WebComponents {
   StandaloneApp = `wc-synology-download-standalone`,

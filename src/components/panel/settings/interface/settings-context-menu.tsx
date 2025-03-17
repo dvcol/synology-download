@@ -139,7 +139,7 @@ export const SettingsContextMenu = ({ menu, onRemove }: { menu: ContextMenu; onR
         sx={{ p: '0.5rem 0' }}
       />
       <Collapse in={getValues()?.destination?.custom} unmountOnExit>
-        <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: '12rem' }}>
+        <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: 'clamp(12rem, 20vh, 20vh)' }}>
           <FormExplorer
             controllerProps={{ name: 'destination.path', control }}
             explorerProps={{

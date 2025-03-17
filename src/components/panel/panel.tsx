@@ -31,8 +31,8 @@ const routes: RouteFragment[] = [
   },
   { path: `${AppRoute.Scrape}/*`, element: <ScrapePanel cardProps={{ sx: { m: '0.5rem' } }} /> },
   { path: `${AppRoute.Settings}/*`, element: <Settings /> },
-  { path: `${AppRoute.Config}/*`, element: <Config cardProps={{ sx: { m: '0.3rem' } }} /> },
-  { path: `${AppRoute.About}/*`, element: <About cardProps={{ sx: { m: '0.3rem' } }} /> },
+  { path: `${AppRoute.Config}/*`, element: <Config cardProps={{ sx: { m: '0.5rem' } }} /> },
+  { path: `${AppRoute.About}/*`, element: <About cardProps={{ sx: { m: '0.5rem' } }} /> },
 ];
 
 export const Panel: FC<{ redirect?: string }> = ({ redirect }) => {
@@ -48,7 +48,17 @@ export const Panel: FC<{ redirect?: string }> = ({ redirect }) => {
   }, [redirect]);
 
   return (
-    <Container disableGutters maxWidth={false} sx={{ overflow: 'auto', height: 'calc(100% - 3em)', overscrollBehaviorY: 'contain' }}>
+    <Container
+      disableGutters
+      maxWidth={false}
+      sx={{
+        overflow: 'auto',
+        height: 'calc(100% - 3em)',
+        overscrollBehaviorY: 'contain',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
       <Routes>
         {routes?.map(({ path, element, render }, index) => (
           <Route key={index} path={path} element={<SuspenseLoader element={render?.({ state: location.state }) ?? element} />} />

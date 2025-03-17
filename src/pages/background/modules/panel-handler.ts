@@ -1,11 +1,14 @@
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, timeout } from 'rxjs';
 
 import type { OpenPanelPayload, OpenPopupPayload } from '@src/models';
 import { AppInstance, ChromeMessageType } from '@src/models';
 import { LoggerService } from '@src/services';
+import { getPanel } from '@src/store/selectors';
 import { getCurrentWindow, onConnect, onMessage, openPanel, sendMessage } from '@src/utils';
 
-export const onOpenPanelEvent = () => {
+import type { Store } from 'redux';
+
+export const onOpenPanelEvent = (store: Store) => {
   LoggerService.debug('Subscribing to open popup events.');
 
   onMessage<OpenPanelPayload>([ChromeMessageType.openTaskPanel]).subscribe(async ({ message }) => {
@@ -21,9 +24,14 @@ export const onOpenPanelEvent = () => {
       return getCurrentWindow(async active => {
         if (!openPanel) return LoggerService.error('Open panel is not available', message);
         if (!active.id) return LoggerService.error('Active window is not available', message);
-        console.info('Opening panel with active window', active);
         await openPanel({ windowId: active.id });
-        await firstValueFrom(onConnect([AppInstance.panel]));
+
+        try {
+          if (!getPanel(store.getState())) await firstValueFrom(onConnect([AppInstance.panel]).pipe(timeout(1000)));
+        } catch (error) {
+          LoggerService.warn('Panel opening error', error);
+        }
+
         sendMessage<OpenPopupPayload>({
           type: ChromeMessageType.routeTaskForm,
           payload,
