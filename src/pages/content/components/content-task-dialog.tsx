@@ -4,7 +4,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { zIndexMax } from '@dvcol/web-extension-utils';
 
 import { TaskDialog } from '@src/components';
-import type { ContextMenuOnClickPayload, InterceptResponse, OpenPopupPayload, TaskForm } from '@src/models';
+import type { ContextMenuOnClickPayload, InterceptResponse, OpenPanelPayload, OpenPopupPayload, TaskForm } from '@src/models';
 import { ChromeMessageType } from '@src/models';
 import type { TaskDialogIntercept } from '@src/pages/content/service/dialog.service';
 import { taskDialog$ } from '@src/pages/content/service/dialog.service';
@@ -48,13 +48,18 @@ export const ContentTaskDialog: FC<{ container?: PortalProps['container'] }> = (
         if (message?.payload) {
           const {
             info: { linkUrl, pageUrl: source, selectionText },
-            menu: { modal, popup, destination },
+            menu: { modal, popup, panel, destination },
           } = message.payload;
 
           const uri = linkUrl ?? selectionText;
 
           if (uri && QueryService.isLoggedIn) {
-            if (popup) {
+            if (panel) {
+              sendMessage<OpenPanelPayload>({
+                type: ChromeMessageType.openTaskPanel,
+                payload: { form: { uri, source, destination } },
+              }).subscribe();
+            } else if (popup) {
               sendMessage<OpenPopupPayload>({
                 type: ChromeMessageType.openTaskPopup,
                 payload: { form: { uri, source, destination } },

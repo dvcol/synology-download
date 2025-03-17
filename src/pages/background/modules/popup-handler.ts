@@ -9,7 +9,7 @@ export const onOpenPopupEvent = () => {
   onMessage<OpenPopupPayload>([ChromeMessageType.openTaskPopup]).subscribe(async ({ message }) => {
     LoggerService.debug('Open popup events received', message);
 
-    if (!openPopup) return LoggerService.error('Open popup is not available');
+    if (!openPopup) return LoggerService.error('Open popup is not available', message);
     await openPopup();
     sendMessage<OpenPopupPayload>({
       type: ChromeMessageType.routeTaskForm,

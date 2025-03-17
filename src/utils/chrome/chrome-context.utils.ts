@@ -1,4 +1,4 @@
-import { forkJoin } from 'rxjs';
+import { firstValueFrom, forkJoin } from 'rxjs';
 
 import {
   buildContextMenu as _buildContextMenu,
@@ -7,25 +7,33 @@ import {
 } from '@dvcol/web-extension-utils';
 
 import type { ContextMenu, ContextMenuOnClickPayload } from '@src/models';
-import { ChromeMessageType, scrapeContextMenu } from '@src/models';
+import { AppInstance, ChromeMessageType, scrapeContextMenu } from '@src/models';
 import { LoggerService } from '@src/services';
 import type { Tab } from '@src/utils';
-import { openPopup, sendMessage, sendTabMessage } from '@src/utils';
+import { isSidePanelEnabledCb, onConnect, openPanel, openPopup, sendMessage, sendTabMessage } from '@src/utils';
 
 import type { Observable } from 'rxjs';
 
 export type OnClickData = chrome.contextMenus.OnClickData;
+export type TabInfo = chrome.tabs.Tab;
 
 export const addScrapeContextMenu = () =>
   _saveContextMenu({
     ...scrapeContextMenu,
-    onclick: async (info: OnClickData) => {
-      if (info.menuItemId === scrapeContextMenu.id) {
-        if (!openPopup) return LoggerService.error('Open popup is not available');
-        await openPopup();
-        sendMessage({ type: ChromeMessageType.routeScrapePage }).subscribe();
-      }
-    },
+    onclick: async (info: OnClickData, tab: TabInfo) =>
+      isSidePanelEnabledCb(async sidePanel => {
+        if (info.menuItemId === scrapeContextMenu.id) {
+          if (sidePanel && openPanel) {
+            await openPanel({ windowId: tab.windowId });
+            await firstValueFrom(onConnect([AppInstance.panel]));
+          } else {
+            if (sidePanel && !openPanel) LoggerService.error('Open panel is not available');
+            if (!openPopup) return LoggerService.error('Open popup is not available');
+            await openPopup();
+          }
+          sendMessage({ type: ChromeMessageType.routeScrapePage }).subscribe();
+        }
+      }),
   });
 
 /**
@@ -33,7 +41,7 @@ export const addScrapeContextMenu = () =>
  */
 export function saveContextMenu(menu: ContextMenu, update?: boolean): Observable<void> {
   // custom fields modal from menu for type casting
-  const { modal, popup, destination, ...create } = menu;
+  const { modal, popup, panel, destination, ...create } = menu;
   return _saveContextMenu(
     {
       ...create,

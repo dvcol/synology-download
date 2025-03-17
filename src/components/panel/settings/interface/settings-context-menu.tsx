@@ -118,7 +118,7 @@ export const SettingsContextMenu = ({ menu, onRemove }: { menu: ContextMenu; onR
         subheaderTypographyProps={{ variant: 'subtitle2' }}
         action={
           <FormSwitch
-            controllerProps={{ name: 'popup', control }}
+            controllerProps={{ name: 'panel', control }}
             formControlLabelProps={{ label: '', disabled: !openPanel }}
             switchProps={{
               onChange: (_, checked) => {

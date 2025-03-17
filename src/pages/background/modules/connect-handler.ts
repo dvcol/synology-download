@@ -2,12 +2,12 @@ import { tap } from 'rxjs';
 
 import { AppInstance, ChromeMessageType } from '@src/models';
 import { LoggerService } from '@src/services';
-import { resetLoading, setContentDialog, setContentMenu, setOption, setPopup } from '@src/store/actions';
+import { resetLoading, setContentDialog, setContentMenu, setOption, setPanel, setPopup } from '@src/store/actions';
 import { onConnect, onMessage } from '@src/utils';
 
 import type { Store } from 'redux';
 
-const onAppConnect = (store: Store, instance: AppInstance, dispatch: typeof setOption | typeof setPopup) =>
+const onAppConnect = (store: Store, instance: AppInstance, dispatch: typeof setOption | typeof setPopup | typeof setPanel) =>
   onConnect([instance]).pipe(
     tap(port => {
       LoggerService.debug(`connecting ${port.name}`, { id: port?.sender?.tab?.id, name: port.name });
@@ -34,6 +34,9 @@ export const onPortEvents = (store: Store) => {
 
   // Dropdown popup
   onAppConnect(store, AppInstance.popup, setPopup).subscribe();
+
+  // Panel page
+  onAppConnect(store, AppInstance.panel, setPanel).subscribe();
 
   // Option page
   onAppConnect(store, AppInstance.option, setOption).subscribe();

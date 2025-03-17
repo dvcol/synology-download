@@ -9,7 +9,7 @@ import { Subscription, withLatestFrom } from 'rxjs';
 
 import { zIndexMax } from '@dvcol/web-extension-utils';
 
-import type { InterceptPayload, InterceptResponse, OpenPopupPayload, QuickMenu, TaskForm } from '@src/models';
+import type { InterceptPayload, InterceptResponse, OpenPanelPayload, OpenPopupPayload, QuickMenu, TaskForm } from '@src/models';
 import { ChromeMessageType, ColorLevel, QuickMenuType } from '@src/models';
 
 import { anchor$, lastClick$ } from '@src/pages/content/service/anchor.service';
@@ -58,9 +58,14 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
     }
   };
 
-  const createTask = (form: TaskForm, { modal, popup }: { modal?: boolean; popup?: boolean } = {}) => {
+  const createTask = (form: TaskForm, { modal, popup, panel }: { modal?: boolean; popup?: boolean; panel?: boolean } = {}) => {
     if (form?.uri && QueryService.isLoggedIn) {
-      if (popup) {
+      if (panel) {
+        sendMessage<OpenPanelPayload>({
+          type: ChromeMessageType.openTaskPanel,
+          payload: { form, intercept },
+        }).subscribe();
+      } else if (popup) {
         sendMessage<OpenPopupPayload>({
           type: ChromeMessageType.openTaskPopup,
           payload: { form, intercept },
@@ -90,7 +95,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
     if (response) onIntercept({ success: true, payload: response });
   };
 
-  const handleClick = ({ destination, modal, popup, type, id }: QuickMenu, path?: string) => {
+  const handleClick = ({ destination, modal, popup, panel, type, id }: QuickMenu, path?: string) => {
     if (type === QuickMenuType.Download) return handleClose({ aborted: true, resume: true, message: `Quick menu '${id}' clicked.` });
     if (type === QuickMenuType.RecentDownload) {
       return handleClose({
@@ -102,7 +107,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
     }
     handleClose();
     const _destination: QuickMenu['destination'] = path ? { custom: true, path } : destination;
-    createTask({ ..._form, destination: _destination }, { modal, popup });
+    createTask({ ..._form, destination: _destination }, { modal, popup, panel });
   };
 
   const onEvent = (
@@ -115,8 +120,8 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
       setForm(form);
       setState(anchor ?? null, position);
     } else if (quickMenus?.length === 1) {
-      const { modal, popup, destination } = quickMenus[0];
-      createTask({ ...form, destination }, { modal, popup });
+      const { modal, popup, panel, destination } = quickMenus[0];
+      createTask({ ...form, destination }, { modal, popup, panel });
     } else {
       createTask(form);
     }

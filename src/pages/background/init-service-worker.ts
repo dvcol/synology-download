@@ -2,6 +2,7 @@ import { lastValueFrom } from 'rxjs';
 import { wrapStore } from 'webext-redux';
 
 import { ServiceInstance, StorePortName } from '@src/models';
+import { onOpenPanelEvent } from '@src/pages/background/modules/panel-handler';
 import { onOpenPopupEvent } from '@src/pages/background/modules/popup-handler';
 import { DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { store } from '@src/store';
@@ -65,6 +66,9 @@ export const initServiceWorker = async () => {
 
   // Listen to popup events
   onOpenPopupEvent();
+
+  // Listen to panel events
+  onOpenPanelEvent();
 
   // Init polling
   PollingService.init(store);

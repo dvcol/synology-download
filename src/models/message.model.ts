@@ -9,11 +9,14 @@ import type { QueryAutoLoginOptions } from './query.model';
 import type { SynologyQueryPayload } from './synology.model';
 import type { TaskForm } from './task.model';
 
+import OpenOptions = chrome.sidePanel.OpenOptions;
+
 /**
  * Enumeration for message types
  */
 export enum ChromeMessageType {
   openTaskPopup = 'openTaskPopup',
+  openTaskPanel = 'openTaskPanel',
   routeTaskForm = 'routeTaskForm',
   routeScrapePage = 'routeScrapePage',
   clickMenu = 'clickMenu',
@@ -59,6 +62,12 @@ export type OpenPopupPayload = {
   intercept?: TaskDialogIntercept;
 };
 
+export type OpenPanelPayload = {
+  options?: OpenOptions;
+  form: TaskForm;
+  intercept?: TaskDialogIntercept;
+};
+
 /**
  * Type union of possible message payloads
  */
@@ -75,7 +84,8 @@ export type ChromeMessagePayload =
   | InterceptPayload
   | QueryAutoLoginOptions
   | ScrapedContentsPayload
-  | OpenPopupPayload;
+  | OpenPopupPayload
+  | OpenPanelPayload;
 
 /**
  * Message interface for communication between content & background

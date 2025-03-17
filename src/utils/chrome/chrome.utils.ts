@@ -30,3 +30,23 @@ export type Tab = chrome.tabs.Tab;
 
 /** @see chrome.action.openPopup */
 export const openPopup: typeof chrome.action.openPopup | undefined = chrome?.action?.openPopup;
+
+/** @see chrome.sidePanel.open */
+export const openPanel: typeof chrome.sidePanel.open | undefined = chrome?.sidePanel?.open;
+
+/**
+ * Check if the side panel is set to open on action click
+ */
+export function isSidePanelEnabledCb(cb: (enabled?: boolean) => unknown) {
+  if (!chrome?.sidePanel) return cb();
+  return chrome.sidePanel.getPanelBehavior(({ openPanelOnActionClick }) => cb(openPanelOnActionClick));
+}
+
+export async function isSidePanelEnabled() {
+  if (!chrome?.sidePanel) return false;
+  const behavior = await chrome.sidePanel.getPanelBehavior();
+  return behavior.openPanelOnActionClick;
+}
+
+/** @see chrome.windows.getCurrent */
+export const getCurrentWindow: typeof chrome.windows.getCurrent | undefined = chrome?.windows?.getCurrent;
