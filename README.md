@@ -105,7 +105,7 @@ Give a ⭐️ if this project helped you!
 * [Download Station (client for Synology NAS)](https://chrome.google.com/webstore/detail/download-station-client-f/ebbdkledlkjpgbbmmopgbnnjmklnkcef)
 
  <a href="https://chrome.google.com/webstore/detail/download-station-client-f/ebbdkledlkjpgbbmmopgbnnjmklnkcef" target="_blank">
-    <img alt="chrome-webstore" src="https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/mPGKYBIR2uCP0ApchDXE.png" />
+    <img alt="chrome-webstore" src="https://dvcol.github.io/synology-download/public/chrome-store.svg" />
  </a>
 
 

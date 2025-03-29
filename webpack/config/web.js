@@ -54,6 +54,10 @@ const getWebConfig = (common = getCommonConfig()) => {
             from: path.join(__dirname, ROOT_DIR, 'screenshots'),
             to: path.join(__dirname, ROOT_DIR, 'dist', 'screenshots'),
           },
+          {
+            from: path.join(__dirname, ROOT_DIR, 'public'),
+            to: path.join(__dirname, ROOT_DIR, 'dist', 'public'),
+          },
         ],
       }),
     ],
