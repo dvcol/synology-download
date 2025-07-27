@@ -12,6 +12,7 @@ import type {
   NotificationSettings,
   PollingSettings,
   QuickMenu,
+  ScrapeSettings,
   SettingsSlice,
   SyncSettings,
   TaskSettings,
@@ -60,6 +61,7 @@ interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   syncAdvancedLogging: CaseReducer<S, PayloadAction<AdvancedLogging>>;
   setSyncSettings: CaseReducer<S, PayloadAction<Partial<SyncSettings>>>;
   syncTasksSettings: CaseReducer<S, PayloadAction<TaskSettings>>;
+  syncScrapeSettings: CaseReducer<S, PayloadAction<Partial<ScrapeSettings>>>;
 }
 
 export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'settings'>({
@@ -120,5 +122,6 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
     syncAdvancedLogging: syncAdvancedLoggingReducer,
     setSyncSettings: setSyncSettingsReducer,
     syncTasksSettings: (oldSettings, { payload }) => syncNestedReducer<TaskSettings>(oldSettings, payload, 'tasks'),
+    syncScrapeSettings: (oldSettings, { payload }) => syncNestedReducer<ScrapeSettings>(oldSettings, payload, 'scrape'),
   },
 });

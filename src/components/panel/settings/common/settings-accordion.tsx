@@ -15,6 +15,7 @@ import type { Dispatch, SetStateAction } from 'react';
 export const SettingsAccordion = <T extends { id: string }>({
   title,
   list,
+  header,
   detail,
   summary,
   addNew,
@@ -24,6 +25,7 @@ export const SettingsAccordion = <T extends { id: string }>({
 }: {
   title: InterfaceHeader;
   list: T[];
+  header?: JSX.Element;
   summary: (item: T) => JSX.Element;
   detail: (item: T) => JSX.Element;
   addNew?: (id: string) => void;
@@ -53,6 +55,7 @@ export const SettingsAccordion = <T extends { id: string }>({
         title={i18n(`title__${title}`)}
         titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
         sx={{ p: '1rem 1rem 0' }}
+        subheader={header}
       />
       <CardContent>
         <SortableList

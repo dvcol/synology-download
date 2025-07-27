@@ -15,6 +15,7 @@ import type {
   Log,
   NotificationSettings,
   PollingSettings,
+  ScrapeSettings,
   SyncSettings,
   TaskSettings,
 } from './settings.model';
@@ -89,6 +90,7 @@ export interface SettingsSlice {
   downloads: DownloadSettings;
   advanced: AdvancedSettings;
   sync: SyncSettings;
+  scrape: ScrapeSettings;
 }
 
 export interface RootSlice {

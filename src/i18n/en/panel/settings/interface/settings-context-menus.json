@@ -1,5 +1,11 @@
 {
   "panel__settings__context_menus__default_folder": {
     "message": "Default folder"
+  },
+  "panel__settings__context_menus__scrape_menu_title": {
+    "message": "Scape context menu"
+  },
+  "panel__settings__context_menus__scrape_menu_subheader": {
+    "message": "Enable/disable the scrape context menu."
   }
 }

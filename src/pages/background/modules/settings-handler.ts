@@ -1,11 +1,11 @@
-import { catchError, finalize, from, lastValueFrom, of, switchMap } from 'rxjs';
+import { catchError, finalize, from, of, switchMap } from 'rxjs';
 
 import type { SettingsSlice } from '@src/models';
 import { defaultSettings, SyncSettingMode } from '@src/models';
 import { LoggerService } from '@src/services';
 import { setNavbar, setSettings } from '@src/store/actions';
 import { settingsSlice } from '@src/store/slices/settings.slice';
-import { localGet, syncGet, buildContextMenu, setBadgeBackgroundColor } from '@src/utils';
+import { buildContextMenu, localGet, setBadgeBackgroundColor, syncGet } from '@src/utils';
 
 import type { Store } from 'redux';
 
@@ -25,7 +25,7 @@ const dispatchRestoreSettings = async (store: Store, settings: SettingsSlice) =>
   if (settings?.tabs?.length) await store.dispatch(setNavbar(settings?.tabs[0]));
 
   // restore context menu
-  await lastValueFrom(buildContextMenu(settings?.menus || defaultSettings.menus));
+  await buildContextMenu({ menus: settings?.menus || defaultSettings.menus, scrape: settings?.scrape?.menu });
   return settings;
 };
 

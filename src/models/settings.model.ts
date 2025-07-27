@@ -416,6 +416,14 @@ export const defaultSyncSettings: SyncSettings = {
   mode: SyncSettingMode.sync,
 };
 
+export interface ScrapeSettings {
+  menu: boolean;
+}
+
+export const defaultScrapeSettings: ScrapeSettings = {
+  menu: true,
+};
+
 export interface TaskSettings {
   clearOnExist: boolean;
 }
@@ -436,4 +444,5 @@ export const defaultSettings: SettingsSlice = {
   downloads: defaultDownloads,
   advanced: defaultAdvancedSettings,
   sync: defaultSyncSettings,
+  scrape: defaultScrapeSettings,
 };
