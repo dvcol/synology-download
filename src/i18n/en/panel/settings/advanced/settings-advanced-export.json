@@ -1,0 +1,17 @@
+{
+  "panel__settings__advanced__export__title": {
+    "message": "Settings Store snapshot"
+  },
+  "panel__settings__advanced__export__subheader": {
+    "message": "This is an advanced setting meant for debugging purposes only."
+  },
+  "panel__settings__advanced__export__warning": {
+    "message": "⚠\uFE0F Warning: Importing a settings snapshot will overwrite your current settings. Please make sure to back up your existing settings before proceeding.\n\n\uD83D\uDEAB Caution: Importing a malformed or incompatible snapshot may cause unexpected behavior or data loss. In some cases, recovery may not be possible, and all data could be wiped and reinitialized."
+  },
+  "panel__settings__advanced__export__failed": {
+    "message": "File Import failed."
+  },
+  "panel__settings__advanced__export__success": {
+    "message": "File Import successful."
+  }
+}

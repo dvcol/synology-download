@@ -1,5 +1,6 @@
 // eslint-disable-next-line import/no-extraneous-dependencies -- only added in dev mode
 import { devToolsEnhancer } from '@redux-devtools/remote';
+
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 import type { RootSlice } from '@src/models';
@@ -14,7 +15,7 @@ import { settingsSlice } from './slices/settings.slice';
 import { stateSlice } from './slices/state.slice';
 import { tasksSlice } from './slices/tasks.slice';
 
-import type { ConfigureStoreOptions } from '@reduxjs/toolkit/src/configureStore';
+import type { ConfigureStoreOptions } from '@reduxjs/toolkit';
 
 import type { ReducersMapObject, Store } from 'redux';
 

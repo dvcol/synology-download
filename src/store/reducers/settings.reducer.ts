@@ -23,8 +23,7 @@ import {
 import { LoggerService } from '@src/services';
 import { localSet, setBadgeBackgroundColor, syncSet } from '@src/utils';
 
-import type { PayloadAction } from '@reduxjs/toolkit';
-import type { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
+import type { CaseReducer, PayloadAction } from '@reduxjs/toolkit';
 
 const localSettings = (settings: SettingsSlice): void => {
   // TODO : move to thunk ?

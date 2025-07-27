@@ -58,5 +58,12 @@
   },
   "common__buttons__transfer": {
     "message": "传输"
+  },
+
+  "common__buttons__export": {
+    "message": "导出"
+  },
+  "common__buttons__import": {
+    "message": "导入"
   }
 }

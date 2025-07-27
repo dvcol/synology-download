@@ -11,9 +11,7 @@ import {
   syncLogHistoryReducer,
 } from '@src/store/reducers/state.reducer';
 
-import type { PayloadAction } from '@reduxjs/toolkit';
-import type { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
-import type { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
+import type { CaseReducer, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
 
 export interface StateReducers<S = StateSlice> extends SliceCaseReducers<S> {
   restoreState: CaseReducer<S, PayloadAction<Partial<S>>>;
