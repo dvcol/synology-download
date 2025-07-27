@@ -70,7 +70,7 @@ export const FormInput = <TFieldValues extends FieldValues = FieldValues, TName 
               </Grid>
             </Grid>
             <Grid container direction="row" wrap="nowrap">
-              <TextField {...field} {..._textFieldProps} />
+              <TextField fullWidth {...field} {..._textFieldProps} />
             </Grid>
           </Grid>
         );

@@ -142,7 +142,7 @@ export class NotificationService {
       iconUrl: 'assets/icons/icon-64.png',
       items: array.map(({ message: mMessage, title: mTitle }) => ({
         title: mTitle,
-        message: `${mMessage?.slice(0, 30)}...` ?? '',
+        message: `${mMessage?.slice(0, 30)}...`,
       })),
     };
   }

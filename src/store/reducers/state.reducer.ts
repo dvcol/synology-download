@@ -5,8 +5,7 @@ import { formatBytes, localSet, setBadgeText, setIcon, setTitle } from '@src/uti
 import { stateSlice } from '../slices/state.slice';
 
 import type { StateReducers } from '../slices/state.slice';
-import type { PayloadAction } from '@reduxjs/toolkit';
-import type { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
+import type { CaseReducer, PayloadAction } from '@reduxjs/toolkit';
 
 export const setCountAndStats = (count?: ContentCount, stats?: TaskStatistics) => {
   // TODO : move to thunk ?

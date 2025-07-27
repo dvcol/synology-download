@@ -25,6 +25,6 @@
       "@src/*": ["*"]
     }
   },
-  "include": ["src", "webpack", ".eslintrc.js"],
+  "include": ["./src", "webpack", ".eslintrc.js"],
   "exclude": ["**/*.spec.ts", "**/*.spec.tsx", "**/*.test.ts", "**/*.test.tsx", "build", "node_modules"]
 }

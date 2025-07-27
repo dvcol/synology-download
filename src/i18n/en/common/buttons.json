@@ -60,5 +60,12 @@
   },
   "common__buttons__transfer": {
     "message": "Transfer"
+  },
+
+  "common__buttons__export": {
+    "message": "Export"
+  },
+  "common__buttons__import": {
+    "message": "Import"
   }
 }

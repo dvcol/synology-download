@@ -3,10 +3,10 @@
     "message": "Redux Store snapshot"
   },
   "panel__settings__advanced__redux__subheader": {
-    "message": "This is an advanced settings, it is purely technical and does not impact features."
+    "message": "This is an advanced setting meant for debugging purposes only."
   },
 
   "panel__settings__advanced__redux__export": {
-    "message": "Export snapshot"
+    "message": "Export"
   }
 }

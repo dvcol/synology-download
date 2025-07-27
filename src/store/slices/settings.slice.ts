@@ -32,9 +32,7 @@ import {
   syncReducer,
 } from '../reducers/settings.reducer';
 
-import type { PayloadAction } from '@reduxjs/toolkit';
-import type { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
-import type { SliceCaseReducers } from '@reduxjs/toolkit/src/createSlice';
+import type { CaseReducer, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
 
 interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   setSettings: CaseReducer<S, PayloadAction<S>>;
