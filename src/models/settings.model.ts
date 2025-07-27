@@ -105,7 +105,7 @@ export interface Credentials {
 
 export const defaultCredentials: Credentials = {
   type: ConnectionType.local,
-  format: 'cookie',
+  format: ConnectionFormat.sid,
   authVersion: 3,
   username: 'admin',
   password: '',
