@@ -9,7 +9,7 @@ import { Subscription, withLatestFrom } from 'rxjs';
 
 import { zIndexMax } from '@dvcol/web-extension-utils';
 
-import type { InterceptPayload, InterceptResponse, OpenPanelPayload, OpenPopupPayload, QuickMenu, TaskForm } from '@src/models';
+import type { InterceptPayload, InterceptResponse, OpenPanelPayload, OpenPopupPayload, QuickMenu, TaskForm, ThemeMode } from '@src/models';
 import { ChromeMessageType, ColorLevel, QuickMenuType } from '@src/models';
 
 import { anchor$, lastClick$ } from '@src/pages/content/service/anchor.service';
@@ -17,7 +17,8 @@ import type { TaskDialogIntercept } from '@src/pages/content/service/dialog.serv
 import { taskDialog$ } from '@src/pages/content/service/dialog.service';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
 import type { StoreState } from '@src/store';
-import { getDestinationsHistory, getFolderHistory, getLogged, getQuick } from '@src/store/selectors';
+import { getDestinationsHistory, getFolderHistory, getLogged, getQuick, getThemeMode } from '@src/store/selectors';
+import { preferDark } from '@src/themes/media-query';
 import type { ChromeResponse } from '@src/utils';
 import { onMessage, sendMessage, useI18n } from '@src/utils';
 
@@ -160,6 +161,8 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
   const destinations = useSelector<StoreState, string[]>(getDestinationsHistory);
   const folders = useSelector<StoreState, string[]>(getFolderHistory);
   const logged = useSelector<StoreState, boolean>(getLogged);
+  const theme = useSelector<StoreState, ThemeMode>(getThemeMode);
+  const isDark = preferDark(theme);
 
   return (
     <Menu
@@ -172,6 +175,13 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
       onClose={() => handleClose({ aborted: true, message: `Quick menu cancelled.` })}
       MenuListProps={{
         'aria-labelledby': 'basic-button',
+      }}
+      PaperProps={{
+        sx: {
+          borderRadius: '1em',
+          backgroundColor: isDark ? 'rgb(5 5 10 / 0.8)' : 'rgba(234 238 242 / 0.8)',
+          backdropFilter: 'blur(2px)',
+        },
       }}
       sx={{ zIndex: `${zIndexMax} !important` }}
       disableScrollLock
@@ -186,10 +196,16 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
         <QuickMenuRecent
           key={m.id}
           menu={m}
+          isDark={isDark}
           logged={logged}
           folders={folders}
           destinations={destinations}
           onClick={(_, { menu, destination }) => handleClick(menu, destination)}
+          onToggle={(_, _open) => {
+            if (!_open) return;
+            // If the menu is opened, we need to trigger a resize event to ensure the menu is positioned correctly
+            window.dispatchEvent(new CustomEvent('resize'));
+          }}
         />
       ))}
     </Menu>

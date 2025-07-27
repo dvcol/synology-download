@@ -99,7 +99,14 @@ export const ContentTaskDialog: FC<{ container?: PortalProps['container'] }> = (
       open={open}
       taskForm={form}
       container={container}
-      dialogProps={{ sx: { zIndex: `${zIndexMax} !important`, fontSize: '16px' } }}
+      dialogProps={{
+        sx: { zIndex: `${zIndexMax} !important`, fontSize: '16px' },
+        PaperProps: {
+          sx: {
+            borderRadius: '1em',
+          },
+        },
+      }}
       onClose={() => onClose(true)}
       onCancel={() => onClose(true)}
       onSubmit={() => onClose(false)}

@@ -1,6 +1,7 @@
 import { fromEventPattern } from 'rxjs';
 
 import type { StoreOrProxy } from '@src/models';
+import { ThemeMode } from '@src/models';
 import { getTheme } from '@src/store/selectors';
 import { darkTheme, lightTheme } from '@src/themes/themes';
 
@@ -31,3 +32,8 @@ export const subscribeToTheme = (store: StoreOrProxy, theme: Theme, setTheme: Di
 
   return subscription;
 };
+
+export function preferDark(mode?: ThemeMode): boolean {
+  if (!mode || mode === ThemeMode.auto) return isDarkTheme();
+  return mode === ThemeMode.dark;
+}

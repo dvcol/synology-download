@@ -25,7 +25,12 @@ export const App: FC<AppProps> = ({ store, redirect, cache, routerProps, instanc
   const [theme, setTheme] = useState<Theme>(getThemeFromStore(store));
   const isDark = theme === darkTheme;
 
-  const background = isDark ? { color: '#bdbdbd', backgroundColor: '#20262D' } : { color: '#1f2020', backgroundColor: '#eaeef2' };
+  const background = {
+    '--syn-color': isDark ? '#bdbdbd' : '#1f2020',
+    '--syn-bg-color': isDark ? '#20262D' : '#eaeef2',
+    color: 'var(--syn-color)',
+    backgroundColor: 'var(--syn-bg-color)',
+  };
 
   const containerRef = useRef<Element>(null);
 

@@ -28,13 +28,15 @@ const isDisabled = (type: QuickMenuType, logged: boolean, folders: boolean, dest
 };
 
 type QuickMenuRecentProps = {
+  isDark?: boolean;
   menu: QuickMenu;
   logged: boolean;
   folders?: string[];
   destinations?: string[];
   onClick: ($event: MouseEvent, payload: { menu: QuickMenu; destination?: string }) => void;
+  onToggle?: ($event: MouseEvent, open: boolean) => void;
 };
-export const QuickMenuRecent: FC<QuickMenuRecentProps> = ({ menu, logged, folders, destinations, onClick }) => {
+export const QuickMenuRecent: FC<QuickMenuRecentProps> = ({ isDark, menu, logged, folders, destinations, onClick, onToggle }) => {
   const [expand, setExpand] = React.useState(false);
 
   const disabled = isDisabled(menu.type, logged, !folders?.length, !destinations?.length);
@@ -45,8 +47,11 @@ export const QuickMenuRecent: FC<QuickMenuRecentProps> = ({ menu, logged, folder
 
   if (isRecent && !history?.length) return null;
 
-  const toggle = () => setExpand(_expand => !_expand);
-  const _onClick = ($event: MouseEvent) => (isRecent ? toggle() : onClick($event, { menu }));
+  const toggle = ($event: MouseEvent) => {
+    setExpand(_expand => !_expand);
+    onToggle?.($event, !expand);
+  };
+  const _onClick = ($event: MouseEvent) => (isRecent ? toggle($event) : onClick($event, { menu }));
 
   const ExpandIcon: FC<SvgIconProps> = props => (expand ? <ExpandLess {...props} /> : <ExpandMore {...props} />);
   return (
@@ -56,7 +61,14 @@ export const QuickMenuRecent: FC<QuickMenuRecentProps> = ({ menu, logged, folder
         <ListItemText primary={menu.title} primaryTypographyProps={{ sx: { fontSize: '0.75em', ml: '0.75em' } }} />
         {isRecent && <ExpandIcon sx={{ ml: '0.5em', fontSize: '1em', width: '1em', height: '1em' }} />}
       </MenuItem>
-      <Collapse in={expand} timeout="auto" unmountOnExit>
+      <Collapse
+        in={expand}
+        timeout="auto"
+        unmountOnExit
+        sx={{
+          backgroundColor: `rgba(5, 5, 10, ${isDark ? 0.4 : 0.075})`,
+        }}
+      >
         {history?.slice(0, menu?.max ?? 5)?.map((destination, i) => (
           <MenuItem key={i} sx={{ pl: '1.5em', fontSize: '1em' }} onClick={$event => onClick($event, { menu, destination })}>
             <FolderIcon sx={{ fontSize: '0.875em', width: '1.25em', height: '1.25em' }} />
