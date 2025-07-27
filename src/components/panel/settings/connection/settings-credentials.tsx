@@ -84,7 +84,7 @@ export const SettingsCredentials: FC = () => {
     device_name: { required: { value: !!(is2FA && getValues().enable_device_token), message: i18n('required', 'common', 'error') } },
   };
 
-  type LoginError = { test?: boolean; login?: boolean };
+  type LoginError = { test?: boolean; login?: boolean; permissions?: boolean };
   const [loginError, setLoginError] = useState<LoginError>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingBar, setLoadingBar] = useState<boolean>(false);
@@ -181,6 +181,12 @@ export const SettingsCredentials: FC = () => {
   };
 
   const testLogin = (data: ConnectionSettings) => syncOnSubscribe(data, QueryService.loginTest, 'login_test');
+
+  const testPermission = async () => {
+    const { file, download } = await lastValueFrom(QueryService.permissions());
+    if (file && download) return NotificationService.info({ title: i18n('permissions'), message: i18n('permissions_success'), success: true });
+    setLoginError({ ...loginError, permissions: false });
+  };
 
   const loginLogout = (data: ConnectionSettings) =>
     syncOnSubscribe(data, logged ? QueryService.logout : QueryService.login, logged ? 'logout' : 'login');
@@ -497,14 +503,6 @@ export const SettingsCredentials: FC = () => {
         >
           <Button
             variant="outlined"
-            color={getColor('test')}
-            disabled={loading || !isValid || (logged && is2FA && !getValues()?.otp_code)}
-            onClick={handleSubmit(testLogin)}
-          >
-            {i18n('login_test')}
-          </Button>
-          <Button
-            variant="outlined"
             color={getColor('login')}
             sx={{ width: '5rem' }}
             type="submit"
@@ -513,6 +511,25 @@ export const SettingsCredentials: FC = () => {
           >
             {i18n(logged ? 'logout' : 'login')}
           </Button>
+          {logged ? (
+            <Button
+              variant="outlined"
+              color={getColor('permissions')}
+              disabled={!logged || loading || !isValid}
+              onClick={handleSubmit(testPermission)}
+            >
+              {i18n('permissions')}
+            </Button>
+          ) : (
+            <Button
+              variant="outlined"
+              color={getColor('test')}
+              disabled={loading || !isValid || (logged && is2FA && !getValues()?.otp_code)}
+              onClick={handleSubmit(testLogin)}
+            >
+              {i18n('login_test')}
+            </Button>
+          )}
         </Stack>
         <Stack
           direction="row"

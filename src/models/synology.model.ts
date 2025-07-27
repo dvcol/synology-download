@@ -115,6 +115,7 @@ export enum Task2Method {
 }
 
 export enum FileMethod {
+  get = 'get',
   list = 'list',
   listShare = 'list_share',
   create = 'create',
@@ -436,4 +437,33 @@ export type SynologyQueryArgs = [SynologyQueryOptions];
 export interface SynologyQueryPayload {
   id: string;
   args: SynologyQueryArgs;
+}
+
+export interface SynologyDownloadStationInfo {
+  /** Build number of Download Station 1 and later */
+  version: number;
+  /** Full version string of Download Station 1 and later */
+  version_string: string;
+  /** If the logged in user is manager */
+  is_manager: boolean;
+}
+
+export interface SynologyFileStationInfo {
+  enable_list_usergrp: boolean;
+  enable_send_email_attachment: boolean;
+  enable_view_google: boolean;
+  enable_view_microsoft: boolean;
+  hostname: string;
+  is_manager: boolean;
+  items: { gid: number }[];
+  support_file_request: boolean;
+  support_sharing: boolean;
+  support_vfs: boolean;
+  support_virtual: {
+    enable_iso_mount: boolean;
+    enable_remote_mount: boolean;
+  };
+  support_virtual_protocol: string[];
+  system_codepage: string;
+  uid: number;
 }

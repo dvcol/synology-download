@@ -31,7 +31,7 @@ export const SettingsExport = () => {
       const imported = await readJsonFile<SettingsSlice>(file);
       // Process the imported settings
       dispatch(syncSettings(imported));
-      NotificationService.info({ title: i18n('success'), message: file.name });
+      NotificationService.info({ title: i18n('success'), message: file.name, success: true });
       // Reset input
       event.target.value = '';
     } catch (error) {

@@ -1,8 +1,17 @@
-import type { FileList, FileListOption, FileSortBy, FolderList, FolderListOption, FolderSortBy, NewFolderList } from '@src/models';
+import type {
+  FileList,
+  FileListOption,
+  FileSortBy,
+  FolderList,
+  FolderListOption,
+  FolderSortBy,
+  NewFolderList,
+  SynologyFileStationInfo,
+} from '@src/models';
 import { Endpoint, FileMethod, FileStationAPI } from '@src/models';
 import { SynologyService } from '@src/services/http';
-import { HttpMethod } from '@src/utils';
 import type { HttpParameters } from '@src/utils';
+import { HttpMethod } from '@src/utils';
 
 import type { Observable } from 'rxjs';
 
@@ -121,5 +130,14 @@ export class SynologyFileService extends SynologyService {
     if (additional?.length) params.additional = `${additional}`;
     if (search_taskid) params.search_taskid = `${search_taskid}`;
     return this._do(HttpMethod.POST, params, '2', FileStationAPI.Rename);
+  }
+
+  /**
+   * Get information about the File Station service.
+   * @returns Observable containing SynologyFileStationInfo
+   */
+  info(): Observable<SynologyFileStationInfo> {
+    const params: HttpParameters = { method: FileMethod.get };
+    return this._do(HttpMethod.POST, params, '2', FileStationAPI.Info);
   }
 }

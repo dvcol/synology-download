@@ -5,6 +5,7 @@ import type {
   DownloadStationConfig,
   DownloadStationInfo,
   DownloadStationStatistic,
+  SynologyFileStationInfo,
   TaskCreateRequest,
   TaskList,
   TaskListOption,
@@ -122,5 +123,13 @@ export class SynologyDownloadService extends SynologyService {
       },
       '2',
     );
+  }
+  /**
+   * Get information about the Download Station service.
+   * @returns Observable containing SynologyFileStationInfo
+   */
+  info(): Observable<SynologyFileStationInfo> {
+    const params: HttpParameters = { method: TaskMethod.getInfo };
+    return this._do(HttpMethod.POST, params, '1', DownloadStationAPI.Info, Endpoint.Info);
   }
 }

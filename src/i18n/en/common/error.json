@@ -130,5 +130,11 @@
   },
   "common__error__max_short": {
     "message": "max is $1"
+  },
+  "common__error__invalid_permission_file": {
+    "message": "FileStation API inaccessible."
+  },
+  "common__error__invalid_permission_download": {
+    "message": "DownloadStation API inaccessible."
   }
 }

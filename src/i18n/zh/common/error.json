@@ -124,5 +124,11 @@
   },
   "common__error__max_short": {
     "message": "最大值为 $1"
+  },
+  "common__error__invalid_permission_file": {
+    "message": "FileStation API 无法访问。"
+  },
+  "common__error__invalid_permission_download": {
+    "message": "DownloadStation API 无法访问。"
   }
 }

@@ -1,4 +1,20 @@
-import { catchError, EMPTY, exhaustMap, finalize, map, of, retry, Subject, switchMap, take, takeUntil, tap, throttleTime, throwError } from 'rxjs';
+import {
+  catchError,
+  EMPTY,
+  exhaustMap,
+  finalize,
+  forkJoin,
+  map,
+  of,
+  retry,
+  Subject,
+  switchMap,
+  take,
+  takeUntil,
+  tap,
+  throttleTime,
+  throwError,
+} from 'rxjs';
 
 import type {
   CommonResponse,
@@ -15,6 +31,7 @@ import type {
   NewFolderList,
   QueryAutoLoginOptions,
   StoreOrProxy,
+  SynologyFileStationInfo,
   Task,
   TaskBtEditRequest,
   TaskComplete,
@@ -407,6 +424,31 @@ export class QueryService {
         },
       }),
     );
+  }
+
+  static permissions(): Observable<{ file: boolean | SynologyFileStationInfo; download: boolean | SynologyFileStationInfo }> {
+    return forkJoin([
+      this.fileClient.info().pipe(
+        catchError(err => {
+          LoggerService.warn('Failed to fetch file info', err);
+          NotificationService.error({
+            title: i18n('invalid_permission_file'),
+            message: err?.message ?? err?.name,
+          });
+          return of(false);
+        }),
+      ),
+      this.downloadClient.info().pipe(
+        catchError(err => {
+          LoggerService.warn('Failed to fetch download info', err);
+          NotificationService.error({
+            title: i18n('invalid_permission_download'),
+            message: err?.message ?? err?.name,
+          });
+          return of(false);
+        }),
+      ),
+    ]).pipe(map(([fileInfo, downloadInfo]) => ({ file: fileInfo, download: downloadInfo })));
   }
 
   static listFolders(readonly = true): Observable<FolderList> {
