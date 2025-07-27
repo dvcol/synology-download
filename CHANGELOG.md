@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.21.0](https://github.com/dvcol/synology-download/compare/v3.18.0...v3.21.0) (2025-07-27)
+
+
+### Features
+
+* **connection:** adds permissions testing ([24fa1c5](https://github.com/dvcol/synology-download/commit/24fa1c54dd3024022198ab4d71926a724364a079))
+* **context:** make scrape menu toggle-able [#240](https://github.com/dvcol/synology-download/issues/240) ([#242](https://github.com/dvcol/synology-download/issues/242)) ([35f2fcc](https://github.com/dvcol/synology-download/commit/35f2fcc18dbce493e42d81006b14915f184dba97))
+* **settings:** support export/import settings slice [#239](https://github.com/dvcol/synology-download/issues/239) ([#241](https://github.com/dvcol/synology-download/issues/241)) ([dbd5971](https://github.com/dvcol/synology-download/commit/dbd5971c7b2e1eeb0e0642e99ed33ea63ac72771))
+
+
+### Bug Fixes
+
+* **connection:** switch to default to sid for multi session users ([8885923](https://github.com/dvcol/synology-download/commit/88859235ddff5dac6beda2cd3369573dc08adbc8))
+* **content:** force menu position update on open ([6857f09](https://github.com/dvcol/synology-download/commit/6857f09fdac65439e9b7848418c54b95c7195995))
+
 ## [3.18.0](https://github.com/dvcol/synology-download/compare/v3.17.0...v3.18.0) (2025-03-17)
 
 
