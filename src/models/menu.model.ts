@@ -119,7 +119,7 @@ export const defaultContextMenu: ContextMenu = {
   destination: { custom: false },
 };
 
-export const scrapeContextMenu: ChromeContextMenu = {
+export const scrapeContextMenu: ChromeContextMenu & { id: string } = {
   id: uuid(),
   title: 'Scrape Page',
   contexts: [ContextType.page],

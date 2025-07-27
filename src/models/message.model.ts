@@ -24,6 +24,7 @@ export enum ChromeMessageType {
   updateMenu = 'updateMenu',
   removeMenu = 'removeMenu',
   resetMenu = 'resetMenu',
+  toggleScrapeMenu = 'toggleScrapeMenu',
   notificationBanner = 'notificationBanner',
   notificationSnack = 'notificationSnack',
   polling = 'polling',
@@ -68,6 +69,11 @@ export type OpenPanelPayload = {
   intercept?: TaskDialogIntercept;
 };
 
+export type ResetMenuPayload = {
+  menus: ContextMenu[];
+  scrape?: boolean;
+};
+
 /**
  * Type union of possible message payloads
  */
@@ -75,7 +81,7 @@ export type ChromeMessagePayload =
   | boolean
   | string
   | ContextMenu
-  | ContextMenu[]
+  | ResetMenuPayload
   | ChromeNotification
   | SynologyQueryPayload
   | DownloadQueryPayload

@@ -1,5 +1,11 @@
 {
   "panel__settings__context_menus__default_folder": {
     "message": "默认文件夹"
+  },
+  "panel__settings__context_menus__scrape_menu_title": {
+    "message": "抓取上下文菜单"
+  },
+  "panel__settings__context_menus__scrape_menu_subheader": {
+    "message": "启用/禁用抓取上下文菜单。"
   }
 }

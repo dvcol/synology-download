@@ -21,6 +21,7 @@ import {
   defaultDownloads,
   defaultGlobal,
   defaultLoggingLevels,
+  defaultScrapeSettings,
   defaultTaskSettings,
   TaskStatus,
   ThemeMode,
@@ -107,6 +108,8 @@ export const getNotificationsBannerLevel = createSelector(getNotificationsBanner
 export const getNotificationsBannerFailedEnabled = createSelector(getNotificationsBanner, (banner: NotificationsBanner) => banner?.scope.failed);
 
 export const getNotificationsBannerFinishedEnabled = createSelector(getNotificationsBanner, (banner: NotificationsBanner) => banner?.scope.finished);
+
+export const getScrapeSettings = createSelector(getSettings, (setting: SettingsSlice) => setting?.scrape ?? defaultScrapeSettings);
 
 export const getGlobal = createSelector(getSettings, (setting: SettingsSlice) => setting?.global);
 
