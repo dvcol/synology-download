@@ -51,6 +51,11 @@ export class SynologyService extends BaseHttpService {
     if (this.sid && params?.method !== AuthMethod.login) _params._sid = this.sid;
 
     const _body = httpBody ?? stringifyParams({ api, method, version, ..._params });
+    // BodyInit | string | Blob | ArrayBufferView | ArrayBuffer | FormData | URLSearchParams | ReadableStream<Uint8Array> | null | undefined;
+    if (this.sid && params?.method !== AuthMethod.login && httpBody) {
+      if (httpBody instanceof FormData || httpBody instanceof URLSearchParams) httpBody.set('_sid', this.sid);
+      else if (typeof httpBody === 'object' && !Array.isArray(httpBody)) Object.assign(httpBody, { _sid: this.sid });
+    }
 
     const headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*', [CustomHeader.SynologyDownloadApp]: this.name };
     if (this.sid) headers.Credentials = 'omit';
