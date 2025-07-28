@@ -1,14 +1,16 @@
-import { Typography } from '@mui/material';
+import { CardHeader, Typography } from '@mui/material';
 
 import React, { useState } from 'react';
 
+import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
-import type { QuickMenu } from '@src/models';
-import { defaultQuickMenu, InterfaceHeader } from '@src/models';
+import { FormSwitch } from '@src/components';
+import type { ContentSettings, QuickMenu } from '@src/models';
+import { defaultContentSettings, defaultQuickMenu, InterfaceHeader } from '@src/models';
 import type { StoreState } from '@src/store';
-import { resetQuickMenus, saveQuickMenu, setQuickMenus } from '@src/store/actions';
-import { getQuick } from '@src/store/selectors';
+import { resetQuickMenus, saveQuickMenu, setQuickMenus, syncContentSettings } from '@src/store/actions';
+import { getContentSettings, getQuick } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
 
 import { SettingsAccordion } from '../common';
@@ -31,11 +33,41 @@ export const SettingsQuickMenus = () => {
 
   const onChange = (_menus: QuickMenu[]) => dispatch(setQuickMenus(_menus));
 
+  const contentSettings = useSelector<StoreState, ContentSettings>(getContentSettings);
+
+  const { control } = useForm<ContentSettings>({
+    mode: 'onChange',
+    defaultValues: {
+      ...contentSettings,
+      intercept: contentSettings.intercept ?? defaultContentSettings.intercept,
+    },
+  });
+
+  async function toggleIntercept(enabled = true) {
+    dispatch(syncContentSettings({ intercept: enabled }));
+  }
+
   return (
     <SettingsAccordion
       state={state}
       title={InterfaceHeader.quickMenu}
       list={menus}
+      header={
+        <CardHeader
+          title={i18n('enabled_title')}
+          subheader={i18n('enabled_subheader')}
+          titleTypographyProps={{ variant: 'subtitle2' }}
+          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          action={
+            <FormSwitch
+              controllerProps={{ name: 'intercept', control }}
+              formControlLabelProps={{ label: '' }}
+              switchProps={{ onChange: (_, checked) => toggleIntercept(checked) }}
+            />
+          }
+          sx={{ p: '0.5rem 0' }}
+        />
+      }
       summary={m => (
         <>
           <Typography sx={{ width: '40%', flexShrink: 0 }}>{m.title}</Typography>
