@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.22.1](https://github.com/dvcol/synology-download/compare/v3.22.0...v3.22.1) (2025-07-28)
+
+
+### Bug Fixes
+
+* **upload:** inject _sid in body when uploading files ([976e03f](https://github.com/dvcol/synology-download/commit/976e03f7e765bf201a8459e7afc496c255404d7b))
+
 ## [3.22.0](https://github.com/dvcol/synology-download/compare/v3.21.0...v3.22.0) (2025-07-28)
 
 
