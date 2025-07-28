@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.22.0](https://github.com/dvcol/synology-download/compare/v3.21.0...v3.22.0) (2025-07-28)
+
+
+### Features
+
+* **quick-menu:** add setting to toggle on/off quick menus. [#243](https://github.com/dvcol/synology-download/issues/243) ([#244](https://github.com/dvcol/synology-download/issues/244)) ([36de889](https://github.com/dvcol/synology-download/commit/36de8897c4e0a01dd4fe5bb6142024d9f49bc5b4))
+
 ## [3.21.0](https://github.com/dvcol/synology-download/compare/v3.18.0...v3.21.0) (2025-07-27)
 
 
