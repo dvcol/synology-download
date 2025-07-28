@@ -10,6 +10,7 @@ import type { ContextMenu, QuickMenu } from './menu.model';
 import type {
   AdvancedSettings,
   ConnectionSettings,
+  ContentSettings,
   DownloadSettings,
   GlobalSettings,
   Log,
@@ -91,6 +92,7 @@ export interface SettingsSlice {
   advanced: AdvancedSettings;
   sync: SyncSettings;
   scrape: ScrapeSettings;
+  content: ContentSettings;
 }
 
 export interface RootSlice {

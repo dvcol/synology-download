@@ -4,6 +4,7 @@ import type {
   AdvancedLogging,
   AdvancedSettings,
   ConnectionSettings,
+  ContentSettings,
   ContentTab,
   ContextMenu,
   DownloadSettings,
@@ -62,6 +63,7 @@ interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   setSyncSettings: CaseReducer<S, PayloadAction<Partial<SyncSettings>>>;
   syncTasksSettings: CaseReducer<S, PayloadAction<TaskSettings>>;
   syncScrapeSettings: CaseReducer<S, PayloadAction<Partial<ScrapeSettings>>>;
+  syncContentSettings: CaseReducer<S, PayloadAction<Partial<ContentSettings>>>;
 }
 
 export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'settings'>({
@@ -123,5 +125,6 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
     setSyncSettings: setSyncSettingsReducer,
     syncTasksSettings: (oldSettings, { payload }) => syncNestedReducer<TaskSettings>(oldSettings, payload, 'tasks'),
     syncScrapeSettings: (oldSettings, { payload }) => syncNestedReducer<ScrapeSettings>(oldSettings, payload, 'scrape'),
+    syncContentSettings: (oldSettings, { payload }) => syncNestedReducer<ContentSettings>(oldSettings, payload, 'content'),
   },
 });

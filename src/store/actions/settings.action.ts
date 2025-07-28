@@ -29,6 +29,7 @@ const {
   setSyncSettings,
   syncTasksSettings,
   syncScrapeSettings,
+  syncContentSettings,
 } = settingsSlice.actions;
 
 // Export as named constants
@@ -60,4 +61,5 @@ export {
   setSyncSettings,
   syncTasksSettings,
   syncScrapeSettings,
+  syncContentSettings,
 };

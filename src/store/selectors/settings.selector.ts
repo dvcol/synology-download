@@ -18,6 +18,7 @@ import {
   ConnectionType,
   defaultAdvancedSettings,
   defaultConnection,
+  defaultContentSettings,
   defaultDownloads,
   defaultGlobal,
   defaultLoggingLevels,
@@ -110,6 +111,8 @@ export const getNotificationsBannerFailedEnabled = createSelector(getNotificatio
 export const getNotificationsBannerFinishedEnabled = createSelector(getNotificationsBanner, (banner: NotificationsBanner) => banner?.scope.finished);
 
 export const getScrapeSettings = createSelector(getSettings, (setting: SettingsSlice) => setting?.scrape ?? defaultScrapeSettings);
+
+export const getContentSettings = createSelector(getSettings, (setting: SettingsSlice) => setting?.content ?? defaultContentSettings);
 
 export const getGlobal = createSelector(getSettings, (setting: SettingsSlice) => setting?.global);
 

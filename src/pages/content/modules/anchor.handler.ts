@@ -1,6 +1,7 @@
 import { fromEventPattern } from 'rxjs';
 
 import { anchor$, lastClick$ } from '@src/pages/content/service/anchor.service';
+import { storeProxy } from '@src/store';
 
 /**
  * List of supported protocols
@@ -45,20 +46,20 @@ function recursivelyFindAnchorAncestor(e: HTMLElement | null, depth = 10): HTMLA
 const listener = async (event: MouseEvent) => {
   const anchor = recursivelyFindAnchorAncestor(event.target as HTMLElement);
   lastClick$.next({ event, anchor });
+  if (storeProxy.getState()?.settings?.content?.intercept === false) return;
   // Left clicks only
-  if (event.button === 0) {
-    if (anchor != null && anchor.href && startsWithAnyProtocol(anchor.href, DOWNLOAD_ONLY_PROTOCOLS)) {
-      anchor$.next({
-        event,
-        anchor,
-        form: {
-          uri: anchor.href,
-          source: document.URL,
-        },
-      });
-      event.preventDefault();
-    }
-  }
+  if (event.button !== 0) return;
+  if (!anchor?.href) return;
+  if (!startsWithAnyProtocol(anchor.href, DOWNLOAD_ONLY_PROTOCOLS)) return;
+  anchor$.next({
+    event,
+    anchor,
+    form: {
+      uri: anchor.href,
+      source: document.URL,
+    },
+  });
+  event.preventDefault();
 };
 
 const addAnchorClickListener = () => {

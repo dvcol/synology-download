@@ -424,6 +424,14 @@ export const defaultScrapeSettings: ScrapeSettings = {
   menu: true,
 };
 
+export interface ContentSettings {
+  intercept: boolean;
+}
+
+export const defaultContentSettings: ContentSettings = {
+  intercept: true,
+};
+
 export interface TaskSettings {
   clearOnExist: boolean;
 }
@@ -445,4 +453,5 @@ export const defaultSettings: SettingsSlice = {
   advanced: defaultAdvancedSettings,
   sync: defaultSyncSettings,
   scrape: defaultScrapeSettings,
+  content: defaultContentSettings,
 };

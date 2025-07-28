@@ -1,5 +1,11 @@
 {
   "panel__settings__quick_menus__default_folder": {
     "message": "Default folder"
+  },
+  "panel__settings__quick_menus__enabled_title": {
+    "message": "Quick menu interception"
+  },
+  "panel__settings__quick_menus__enabled_subheader": {
+    "message": "Enable/disable the quick menu interception feature."
   }
 }
