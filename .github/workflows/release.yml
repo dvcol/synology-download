@@ -124,7 +124,7 @@ jobs:
           echo "::set-output name=TAG_NAME::$tag_name"
 
       - name: 📦 Push Release to github
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.tagName || needs.release.outputs.tag_name || github.ref}}
           body_path: RELEASE.md
