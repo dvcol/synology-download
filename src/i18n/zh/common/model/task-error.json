@@ -38,6 +38,9 @@
   "common__model__task_error__file_not_exist": {
     "message": "文件不存在"
   },
+  "common_model_task_error_torrent_invalid": {
+    "message": "无效的 torrent"
+  },
   "common__model__task_error__required_premium_account": {
     "message": "需要高级账户"
   },
