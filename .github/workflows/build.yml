@@ -35,13 +35,13 @@ jobs:
       - name: 🧹 Linting (eslint)
         run: |
           # ================= 🧹 Linting (eslint) =================
-          yarn lint
+          pnpm lint
 
       - name: 🧪 Unit tests
         if: github.event_name == 'push' && github.ref == 'ref/head/main'
         run: |
           # ================= 🧪 Unit tests =================
-          yarn test:unit
+          pnpm test:unit
 
   build-web:
     name: ☁️ Build web
@@ -56,7 +56,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.node_version }}
-          cache: 'yarn'
+          cache: 'pnpm'
 
       - name: 🚧 Build
         uses: ./.github/actions/build
@@ -67,10 +67,10 @@ jobs:
       - name: 🧹 Linting (eslint)
         run: |
           # ================= 🧹 Linting (eslint) =================
-          yarn lint
+          pnpm lint
 
       - name: 🧪 Unit tests
         if: github.event_name == 'push' && github.ref == 'ref/head/main'
         run: |
           # ================= 🧪 Unit tests =================
-          yarn test:unit
+          pnpm test:unit

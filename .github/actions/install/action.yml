@@ -1,0 +1,29 @@
+name: Install
+description: Install dependencies using pnpm
+
+inputs:
+  node_version:
+    description: Node version to use
+    required: false
+    default: 20.x
+
+runs:
+  using: composite
+  steps:
+    - name: 🏗️ Setup pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 9.4.0
+
+    - name: 🏗️ Setup Node.js ${{ inputs.node_version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node_version }}
+        registry-url: 'https://registry.npmjs.org'
+        cache: pnpm
+
+    - name: 🧱 Install dependencies
+      shell: bash
+      run: |
+        # ================= 🧱 Install =================
+        pnpm install

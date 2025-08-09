@@ -14,23 +14,14 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: 🏗️ Setup Node.js ${{ inputs.node_version }}
-      uses: actions/setup-node@v4
+    - name: 🧱 Install
+      uses: ./.github/actions/install
       with:
-        node-version: ${{ inputs.node_version }}
-        registry-url: 'https://registry.npmjs.org'
-        cache: 'yarn'
-
-    - name: 🏗️ Install dependencies
-      shell: bash
-      run: |
-        # ================= 🏗️ Install dependencies =================
-        
-        yarn install
+        node_version: ${{ inputs.node_version }}
 
     - name: 🚧 Build sources
       shell: bash
       run: |
         # =================  🚧 Build  =================
 
-        yarn build:${{ inputs.mode }}
+        pnpm build:${{ inputs.mode }}
