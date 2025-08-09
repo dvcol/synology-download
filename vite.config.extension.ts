@@ -37,6 +37,37 @@ function mergeI18nPlugin() {
   };
 }
 
+// Plugin to handle HTML file placement
+function htmlPlacementPlugin() {
+  return {
+    name: 'html-placement',
+    writeBundle() {
+      // Post-build step to move HTML files to the root of build directory
+      const fs = require('fs-extra');
+      const path = require('path');
+      
+      const htmlFiles = [
+        { from: 'build/src/pages/popup/index.html', to: 'build/popup.html' },
+        { from: 'build/src/pages/panel/index.html', to: 'build/panel.html' },
+        { from: 'build/src/pages/options/index.html', to: 'build/options.html' }
+      ];
+      
+      htmlFiles.forEach(({ from, to }) => {
+        if (fs.existsSync(from)) {
+          fs.moveSync(from, to);
+        }
+      });
+      
+      // Clean up empty directories
+      try {
+        fs.removeSync('build/src');
+      } catch (err) {
+        // Ignore errors if directory doesn't exist or can't be removed
+      }
+    }
+  };
+}
+
 // Plugin to handle manifest and assets
 function extensionAssetsPlugin() {
   return {
@@ -74,6 +105,7 @@ export default defineConfig({
   plugins: [
     react(),
     mergeI18nPlugin(),
+    htmlPlacementPlugin(),
     extensionAssetsPlugin(),
   ],
   resolve: {
