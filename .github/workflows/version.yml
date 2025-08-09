@@ -33,7 +33,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.node_version }}
-          cache: 'yarn'
+          cache: 'pnpm'
 
       - name: 📈 Bump version
         run: |
@@ -46,10 +46,10 @@ jobs:
           message=$(git log -1 --pretty=format:"%s")
 
           # install standard-version
-          yarn add global standard-version
+          pnpm add global standard-version
 
           # bump version
-          yarn version
+          pnpm version
 
           # Save new version to env
           echo "new_version=$(jq -r .version package.json)" >> $GITHUB_ENV
@@ -79,7 +79,7 @@ jobs:
           # Stage the file, commit and push
           git status
           git diff --color -U0 | cat
-          git add package.json yarn.lock src/manifest.json
+          git add package.json pnpm-lock.yaml src/manifest.json
           git commit -m "chore(version): bumping version from '${{ env.old_version }}' to '${{ env.new_version }}'"
           git push origin
 

@@ -35,12 +35,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.node_version }}
-          cache: 'yarn'
+          cache: 'pnpm'
 
       - name: 🏗️ Install dependencies
         run: |
           # ================= 🏗️ Install dependencies =================
-          yarn install
+          pnpm install
 
       - name: 🏷️ Tag and bump Release
         run: |
@@ -51,7 +51,7 @@ jobs:
           git config user.email "<>"
           
           # generate release
-          yarn release
+          pnpm release
 
       - name: ⛙ Push to remote
         id: push-tag
@@ -111,7 +111,7 @@ jobs:
       - name: 📝 Generate Release changelog
         run: |
           # =================  📝 Generate Release changelog  =================
-          yarn release:changelog
+          pnpm release:changelog
 
       - name: 🏷️ Fetch latest tag
         if: ${{ github.event.inputs.tagName == '' || needs.release.outputs.tag_name == '' }}
@@ -140,7 +140,7 @@ jobs:
           # =================  Publish to Chrome store  =================
           
           # Uploadind zip to web store
-          yarn dlx -q chrome-webstore-upload-cli upload --source build/synology-download.zip --extension-id "$CHROME_WEB_STORE_EXTENSION_ID" --client-id "$CHROME_WEB_STORE_CLIENT_ID" --client-secret "$CHROME_WEB_STORE_CLIENT_SECRET" --refresh-token "$CHROME_WEB_STORE_REFRESH_TOKEN"
+          pnpm dlx -q chrome-webstore-upload-cli upload --source build/synology-download.zip --extension-id "$CHROME_WEB_STORE_EXTENSION_ID" --client-id "$CHROME_WEB_STORE_CLIENT_ID" --client-secret "$CHROME_WEB_STORE_CLIENT_SECRET" --refresh-token "$CHROME_WEB_STORE_REFRESH_TOKEN"
 
 
   publish-npm:
