@@ -24,5 +24,3 @@ initApp(ServiceInstance.Popup, AppInstance.popup, getPopup)
     LoggerService.debug('Popup app initialised.');
   })
   .catch(err => LoggerService.debug('Popup app failed to initialised.', err));
-
-if (module.hot) module.hot.accept();

@@ -6,5 +6,3 @@ import { getOption } from '@src/store/selectors';
 initApp(ServiceInstance.Option, AppInstance.option, getOption, AppRoute.Settings)
   .then(() => LoggerService.debug('Options app initialised.'))
   .catch(err => LoggerService.debug('Options app failed to initialised.', err));
-
-if (module.hot) module.hot.accept();
