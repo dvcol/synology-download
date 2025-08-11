@@ -24,7 +24,7 @@ jobs:
 
     steps:
       - name: ⛙ Checkout branch ${{ github.ref }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 🚧 Build
         uses: ./.github/actions/build
@@ -50,7 +50,7 @@ jobs:
 
     steps:
       - name: ⛙ Checkout branch ${{ github.ref }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 🏗️ Setup Node.js ${{ env.node_version }}
         uses: actions/setup-node@v4
