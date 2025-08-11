@@ -27,7 +27,7 @@ jobs:
 
     steps:
       - name: ⛙ Checkout branch ${{ github.ref }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -84,7 +84,7 @@ jobs:
 
     steps:
       - name: ⛙ Checkout branch ${{ github.ref }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           ref: ${{ needs.release.outputs.commit_hash || 'main' }}
@@ -124,7 +124,7 @@ jobs:
           echo "::set-output name=TAG_NAME::$tag_name"
 
       - name: 📦 Push Release to github
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.tagName || needs.release.outputs.tag_name || github.ref}}
           body_path: RELEASE.md
@@ -151,7 +151,7 @@ jobs:
 
     steps:
       - name: ⛙ Checkout branch ${{ github.ref }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
           ref: ${{ needs.release.outputs.commit_hash || 'main' }}
