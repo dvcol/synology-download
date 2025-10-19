@@ -1,23 +1,19 @@
-import { catchError, EMPTY, forkJoin, from, map, of, Subject, takeUntil, tap, throwError } from 'rxjs';
+import type { Observable } from 'rxjs';
 
 import type { Download, DownloadQueryPayload, StoreOrProxy } from '@src/models';
+import type { DownloadOptions, DownloadQuery } from '@src/utils';
+
+import { catchError, EMPTY, forkJoin, from, map, of, Subject, takeUntil, tap, throwError } from 'rxjs';
+
 import { ChromeMessageType, mapToDownload } from '@src/models';
 import { LoggerService } from '@src/services';
 import { setDownloads } from '@src/store/actions';
-import {
-  getActiveDownloadIdsByActionScope,
-  getDownloadingDownloadIdsByActionScope,
-  getFinishedDownloadIdsByActionScope,
-  getPausedDownloadIdsByActionScope,
-} from '@src/store/selectors';
-import type { DownloadOptions, DownloadQuery } from '@src/utils';
+import { getActiveDownloadIdsByActionScope, getDownloadingDownloadIdsByActionScope, getFinishedDownloadIdsByActionScope, getPausedDownloadIdsByActionScope } from '@src/store/selectors';
 import { cancel, download, erase, getFileIcon, onMessage, open, pause, resume, search, sendMessage, show, showDefaultFolder } from '@src/utils';
-
-import type { Observable } from 'rxjs';
 
 export class DownloadService {
   private static key = 'DownloadService';
-  private static store: any | StoreOrProxy;
+  private static store: StoreOrProxy;
   private static isProxy: boolean;
   private static _destroy$ = new Subject<void>();
 
@@ -29,8 +25,8 @@ export class DownloadService {
           const { method, args } = payload;
           this.do(method, ...(args ?? []))
             .pipe(
-              map(response => ({ success: true, payload: response })),
-              catchError(error => of({ success: false, error })),
+              map((response: DownloadQueryPayload) => ({ success: true, payload: response })),
+              catchError((error: Error) => of({ success: false, error })),
               takeUntil(this._destroy$),
             )
             .subscribe(response => sendResponse(response));
@@ -44,7 +40,7 @@ export class DownloadService {
 
   static do(method: DownloadQueryPayload['method'], ...args: DownloadQueryPayload['args']): Observable<any> {
     if (!(method in this)) return throwError(() => new Error(`Method '${method}' is unknown.`));
-    return this[method].bind(this)(...(args as [any]));
+    return this[method].bind(this)(...(args as [DownloadQuery & number & number[] & DownloadOptions]));
   }
 
   static init(store: StoreOrProxy, isProxy = false) {
@@ -77,7 +73,7 @@ export class DownloadService {
     if (this.isProxy) return this.forward<Download[]>('searchAll');
     return from(search({})).pipe(
       map(items => items.map(mapToDownload)),
-      tap(items => this.store.dispatch(setDownloads(items))),
+      tap(async items => this.store.dispatch(setDownloads(items))),
     );
   }
 

@@ -2,7 +2,7 @@ import { BaseLoggerService } from '@src/services';
 
 import { FetchIntercept } from '../models';
 
-export const patchFetch = (_global = window) => {
+export function patchFetch(_global = window) {
   if (!_global._fetchIntercept) _global._fetchIntercept = new FetchIntercept();
 
   _global._fetch = _global.fetch;
@@ -17,4 +17,4 @@ export const patchFetch = (_global = window) => {
     }
     return _global._fetch(input, init);
   };
-};
+}

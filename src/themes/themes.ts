@@ -1,11 +1,11 @@
+import type { Theme } from '@mui/material';
+import type { CSSProperties } from 'react';
+
 import { createTheme } from '@mui/material';
 
-import type { Theme } from '@mui/material';
-import type { Property } from 'csstype';
-
 const scrollbar: Record<string, any> = {
-  scrollbarWidth: 'thin',
-  scrollbarColor: 'rgb(150 150 150 / 50%) transparent',
+  'scrollbarWidth': 'thin',
+  'scrollbarColor': 'rgb(150 150 150 / 50%) transparent',
   '&::-webkit-scrollbar': {
     width: '0.25em',
     height: '0.25em',
@@ -98,7 +98,7 @@ const common = {
           padding: '0.75rem 1rem',
           minHeight: '1rem',
           minWidth: '5rem',
-          textTransform: 'capitalize' as Property.TextTransform,
+          textTransform: 'capitalize' as CSSProperties['textTransform'],
         },
       },
     },
@@ -161,7 +161,7 @@ const common = {
     MuiTypography: {
       styleOverrides: {
         root: {
-          whiteSpace: 'pre-line' as Property.WhiteSpace,
+          whiteSpace: 'pre-line' as CSSProperties['whiteSpace'],
         },
       },
     },

@@ -1,15 +1,15 @@
-import { fromEventPattern } from 'rxjs';
-
-import type { StoreOrProxy } from '@src/models';
-import { ThemeMode } from '@src/models';
-import { getTheme } from '@src/store/selectors';
-import { darkTheme, lightTheme } from '@src/themes/themes';
-
-import { store$ } from '@src/utils';
-
 import type { Theme } from '@mui/material';
 import type { Dispatch, SetStateAction } from 'react';
 import type { Subscription } from 'rxjs';
+
+import type { StoreOrProxy } from '@src/models';
+
+import { fromEventPattern } from 'rxjs';
+
+import { ThemeMode } from '@src/models';
+import { getTheme } from '@src/store/selectors';
+import { darkTheme, lightTheme } from '@src/themes/themes';
+import { store$ } from '@src/utils';
 
 export const isDarkTheme = (): boolean => window.matchMedia('(prefers-color-scheme: dark)').matches;
 
@@ -18,12 +18,12 @@ export const isDarkTheme$ = fromEventPattern<MediaQueryListEvent>(
   handler => window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', handler),
 );
 
-export const getThemeFromStore = (store?: StoreOrProxy, isDark: boolean = isDarkTheme()) => {
+export function getThemeFromStore(store?: StoreOrProxy, isDark: boolean = isDarkTheme()) {
   if (store) return getTheme(store.getState()) ?? isDark ? darkTheme : lightTheme;
   return isDark ? darkTheme : lightTheme;
-};
+}
 
-export const subscribeToTheme = (store: StoreOrProxy, theme: Theme, setTheme: Dispatch<SetStateAction<Theme>>): Subscription => {
+export function subscribeToTheme(store: StoreOrProxy, theme: Theme, setTheme: Dispatch<SetStateAction<Theme>>): Subscription {
   // On Os theme change
   const subscription = isDarkTheme$.subscribe(({ matches }) => setTheme(getThemeFromStore(store, matches)));
 
@@ -31,7 +31,7 @@ export const subscribeToTheme = (store: StoreOrProxy, theme: Theme, setTheme: Di
   subscription.add(store$<Theme | null>(store, getTheme).subscribe(_theme => setTheme(_theme ?? getThemeFromStore())));
 
   return subscription;
-};
+}
 
 export function preferDark(mode?: ThemeMode): boolean {
   if (!mode || mode === ThemeMode.auto) return isDarkTheme();

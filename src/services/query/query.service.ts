@@ -1,116 +1,22 @@
-import {
-  catchError,
-  EMPTY,
-  exhaustMap,
-  finalize,
-  forkJoin,
-  map,
-  of,
-  retry,
-  Subject,
-  switchMap,
-  take,
-  takeUntil,
-  tap,
-  throttleTime,
-  throwError,
-} from 'rxjs';
+import type { Observable } from 'rxjs';
 
-import type {
-  CommonResponse,
-  ContentStatusTypeId,
-  Credentials,
-  DownloadStationConfig,
-  DownloadStationInfo,
-  DownloadStationStatistic,
-  FileList,
-  FolderList,
-  InfoResponse,
-  LoginRequest,
-  LoginResponse,
-  NewFolderList,
-  QueryAutoLoginOptions,
-  StoreOrProxy,
-  SynologyFileStationInfo,
-  Task,
-  TaskBtEditRequest,
-  TaskComplete,
-  TaskCompleteResponse,
-  TaskCreateRequest,
-  TaskCreateResponse,
-  TaskEditResponse,
-  TaskFileEditRequest,
-  TaskList,
-  TaskListDeleteResponse,
-  TaskListDownloadRequest,
-  TaskListDownloadResponse,
-  TaskListFilesRequest,
-  TaskListFilesResponse,
-  TaskListResponse,
-} from '@src/models';
-import {
-  ChromeMessageType,
-  ConnectionType,
-  FetchError,
-  FileListOption,
-  LoginError,
-  mapToTask,
-  NotReadyError,
-  Order,
-  ServiceInstance,
-  TaskCreateType,
-  TaskListFilesOrderBy,
-  TaskListOption,
-  TaskStatus,
-  TaskType,
-} from '@src/models';
+import type { CommonResponse, ContentStatusTypeId, Credentials, DownloadStationConfig, DownloadStationInfo, DownloadStationStatistic, FileList, FolderList, InfoResponse, LoginRequest, LoginResponse, NewFolderList, QueryAutoLoginOptions, StoreOrProxy, SynologyFileStationInfo, Task, TaskBtEditRequest, TaskComplete, TaskCompleteResponse, TaskCreateRequest, TaskCreateResponse, TaskEditResponse, TaskFileEditRequest, TaskList, TaskListDeleteResponse, TaskListDownloadRequest, TaskListDownloadResponse, TaskListFilesRequest, TaskListFilesResponse, TaskListResponse } from '@src/models';
+
+import { catchError, EMPTY, exhaustMap, finalize, forkJoin, map, of, retry, Subject, switchMap, take, takeUntil, tap, throttleTime, throwError } from 'rxjs';
+
+import { ChromeMessageType, ConnectionType, FetchError, FileListOption, LoginError, mapToTask, NotReadyError, Order, ServiceInstance, TaskCreateType, TaskListFilesOrderBy, TaskListOption, TaskStatus, TaskType } from '@src/models';
 import { LoggerService, NotificationService } from '@src/services';
 import { SynologyAuthService, SynologyDownload2Service, SynologyDownloadService, SynologyFileService, SynologyInfoService } from '@src/services/http';
-import {
-  addDestinationHistory,
-  addLoading,
-  addStopping,
-  removeLoading,
-  removeStopping,
-  resetStopping,
-  setApi,
-  setFiles,
-  setLogged,
-  setSid,
-  setTasks,
-  setTaskStats,
-  spliceTasks,
-} from '@src/store/actions';
-import {
-  getActiveAndWaitingTasksIdsByActionScope,
-  getApi,
-  getCredentials,
-  getDownloadStation2APITask,
-  getFinishedAnErrorTasksIdsByActionScope,
-  getFinishedTasksIdsByActionScope,
-  getLogged,
-  getNotificationsBannerFailedEnabled,
-  getNotificationsBannerFinishedEnabled,
-  getOption,
-  getPausedTasksIdsByActionScope,
-  getPopup,
-  getShouldAutoLogin,
-  getSid,
-  getStoppingIds,
-  getTasksIdsByActionScope,
-  getTasksIdsByStatusType,
-  getUrl,
-} from '@src/store/selectors';
+import { addDestinationHistory, addLoading, addStopping, removeLoading, removeStopping, resetStopping, setApi, setFiles, setLogged, setSid, setTasks, setTaskStats, spliceTasks } from '@src/store/actions';
+import { getActiveAndWaitingTasksIdsByActionScope, getApi, getCredentials, getDownloadStation2APITask, getFinishedAnErrorTasksIdsByActionScope, getFinishedTasksIdsByActionScope, getLogged, getNotificationsBannerFailedEnabled, getNotificationsBannerFinishedEnabled, getOption, getPausedTasksIdsByActionScope, getPopup, getShouldAutoLogin, getSid, getStoppingIds, getTasksIdsByActionScope, getTasksIdsByStatusType, getUrl } from '@src/store/selectors';
 import { before, sendMessage, store$, useI18n } from '@src/utils';
-
-import type { Observable } from 'rxjs';
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
 const i18n = useI18n('common', 'error');
 
 export class QueryService {
   private static source: ServiceInstance;
-  private static store: any | StoreOrProxy;
+  private static store: StoreOrProxy;
   private static isProxy: boolean;
   private static infoClient: SynologyInfoService;
   private static authClient: SynologyAuthService;
@@ -198,10 +104,10 @@ export class QueryService {
     if (logged && !this.isLoggedIn) throw new LoginError(i18n('query_service_not_logged_in'));
   }
 
-  private static readyCheckOperator =
-    ({ logged, ready }: { logged?: boolean; ready?: boolean } = {}) =>
-    <T>(source: Observable<T>) =>
-      source.pipe(before(() => this.readyCheck(logged, ready)));
+  private static readyCheckOperator
+    = ({ logged, ready }: { logged?: boolean; ready?: boolean } = {}) =>
+      <T>(source: Observable<T>) =>
+        source.pipe(before(() => this.readyCheck(logged, ready)));
 
   private static apiCheckOperator = <T>(source: Observable<T>) =>
     source.pipe(
@@ -211,14 +117,14 @@ export class QueryService {
       }),
     );
 
-  private static loadingOperator =
-    ({ logged, ready }: { logged?: boolean; ready?: boolean } = {}) =>
-    <T>(source: Observable<T>) =>
-      source.pipe(
-        this.readyCheckOperator({ logged, ready }),
-        before(() => this.store.dispatch(addLoading())),
-        finalize(() => this.store.dispatch(removeLoading())),
-      );
+  private static loadingOperator
+    = ({ logged, ready }: { logged?: boolean; ready?: boolean } = {}) =>
+      <T>(source: Observable<T>) =>
+        source.pipe(
+          this.readyCheckOperator({ logged, ready }),
+          before(async () => this.store.dispatch(addLoading())),
+          finalize(async () => this.store.dispatch(removeLoading())),
+        );
 
   /**
    * This handles errors in a generic way
@@ -226,7 +132,7 @@ export class QueryService {
    */
   private static handleErrors = <T>(source: Observable<T>) =>
     source.pipe(
-      catchError(error => {
+      catchError((error: Error) => {
         throw this.catchAutoLogin(error);
       }),
     );
@@ -247,7 +153,7 @@ export class QueryService {
     if (err.message !== 'Failed to fetch') return err;
 
     // mark as logged out
-    this.store.dispatch(setLogged(false));
+    void this.store.dispatch(setLogged(false));
 
     if ([ServiceInstance.Popup, ServiceInstance.Panel, ServiceInstance.Option].includes(this.source)) {
       LoggerService.error('Fetch error caught, attempting auto-login locally in ', this.source);
@@ -259,7 +165,7 @@ export class QueryService {
     if (getPopup(this.store.getState()) || getOption(this.store.getState())) {
       LoggerService.error('Fetch error caught, sending auto-login to popup/option');
       sendMessage({ type: ChromeMessageType.autoLogin }).subscribe({
-        error: e => {
+        error: (e) => {
           LoggerService.error('Auto-login failed to send.', e);
           this.autologinQueue.next({ logged: false });
         },
@@ -282,9 +188,9 @@ export class QueryService {
     exhaustMap(({ baseUrl, doNotProxy }) => this.doInfo(baseUrl, doNotProxy)),
     tap({
       next: response => this.infoResponse.next(response),
-      error: error => this.infoResponse.next(error),
+      error: (error: InfoResponse) => this.infoResponse.next(error),
     }),
-    retry(), // re subscribe on error
+    retry(), // re-subscribe on error
   );
 
   private static doInfo(baseUrl?: string, doNotProxy?: boolean): Observable<InfoResponse> {
@@ -292,7 +198,7 @@ export class QueryService {
       this.readyCheckOperator({ logged: false, ready: !baseUrl?.length }),
       this.handleErrors,
       tap({
-        next: info => this.store.dispatch(setApi(info)),
+        next: async info => this.store.dispatch(setApi(info)),
       }),
     );
   }
@@ -301,7 +207,7 @@ export class QueryService {
     this.infoRequest.next({ baseUrl, doNotProxy });
     return this.infoResponse.pipe(
       take(1),
-      map(res => {
+      map((res) => {
         if (res instanceof Error) throw res;
         return res;
       }),
@@ -363,13 +269,13 @@ export class QueryService {
   static login(credentials?: Credentials, baseUrl?: string, doNotProxy = true): Observable<LoginResponse> {
     return this.doLogin(credentials, { baseUrl, doNotProxy }).pipe(
       tap({
-        next: res => {
-          this.store.dispatch(setSid(res?.sid));
-          this.store.dispatch(setLogged(true));
+        next: (res) => {
+          void this.store.dispatch(setSid(res?.sid));
+          void this.store.dispatch(setLogged(true));
         },
         error: () => {
-          this.store.dispatch(setSid(undefined));
-          this.store.dispatch(setLogged(false));
+          void this.store.dispatch(setSid(undefined));
+          void this.store.dispatch(setLogged(false));
         },
       }),
     );
@@ -379,8 +285,8 @@ export class QueryService {
     return this.authClient.logout().pipe(
       this.readyCheckOperator(),
       tap(() => {
-        this.store.dispatch(setSid(undefined));
-        this.store.dispatch(setLogged(false));
+        void this.store.dispatch(setSid(undefined));
+        void this.store.dispatch(setLogged(false));
       }),
     );
   }
@@ -411,13 +317,13 @@ export class QueryService {
       this.loadingOperator({ logged: false, ready: true }),
       tap({
         next: () => LoggerService.debug('Auto-login attempt successful'),
-        error: err => {
+        error: (err: Error) => {
           LoggerService.warn('Auto-login failed.', err);
 
           if (notify) {
             NotificationService.error({
               title: i18n('manual_login_required'),
-              message: i18n({ key: `auto_login`, substitutions: [err?.message ?? err?.name ?? ''] }),
+              message: i18n({ key: 'auto_login', substitutions: [err?.message ?? err?.name ?? ''] }),
               contextMessage: getUrl(this.store.getState()),
             });
           }
@@ -429,7 +335,7 @@ export class QueryService {
   static permissions(): Observable<{ file: boolean | SynologyFileStationInfo; download: boolean | SynologyFileStationInfo }> {
     return forkJoin([
       this.fileClient.info().pipe(
-        catchError(err => {
+        catchError((err: Error) => {
           LoggerService.warn('Failed to fetch file info', err);
           NotificationService.error({
             title: i18n('invalid_permission_file'),
@@ -439,7 +345,7 @@ export class QueryService {
         }),
       ),
       this.downloadClient.info().pipe(
-        catchError(err => {
+        catchError((err: Error) => {
           LoggerService.warn('Failed to fetch download info', err);
           NotificationService.error({
             title: i18n('invalid_permission_download'),
@@ -495,17 +401,17 @@ export class QueryService {
     exhaustMap(() => this.doGetStatistic()),
     tap({
       next: response => this.taskStatisticsResponse.next(response),
-      error: error => this.taskStatisticsResponse.next(error),
+      error: (error: DownloadStationStatistic) => this.taskStatisticsResponse.next(error),
     }),
-    retry(), // re subscribe on error
+    retry(), // re-subscribe on error
   );
 
   private static doGetStatistic(): Observable<DownloadStationStatistic> {
     return this.downloadClient.getStatistic().pipe(
       this.loadingOperator(),
       this.handleErrors,
-      tap(stats => {
-        this.store.dispatch(setTaskStats(stats));
+      tap((stats) => {
+        void this.store.dispatch(setTaskStats(stats));
       }),
     );
   }
@@ -514,7 +420,7 @@ export class QueryService {
     this.taskStatisticsRequest.next();
     return this.taskStatisticsResponse.pipe(
       take(1),
-      map(res => {
+      map((res) => {
         if (res instanceof Error) throw res;
         return res;
       }),
@@ -527,7 +433,7 @@ export class QueryService {
     exhaustMap(() => this.doListTasks()),
     tap({
       next: response => this.listTaskResponse.next(response),
-      error: error => this.listTaskResponse.next(error),
+      error: (error: TaskList) => this.listTaskResponse.next(error),
     }),
     retry(), // re subscribe on error
   );
@@ -536,7 +442,7 @@ export class QueryService {
     this.listTaskRequest.next();
     return this.listTaskResponse.pipe(
       take(1),
-      map(res => {
+      map((res) => {
         if (res instanceof Error) throw res;
         return res;
       }),
@@ -550,19 +456,19 @@ export class QueryService {
       this.loadingOperator(),
       this.apiCheckOperator,
       this.handleErrors,
-      tap(({ tasks }) => {
+      tap(async ({ tasks }) => {
         const _stoppingIds = getStoppingIds(this.store.getState());
         const _tasks = tasks?.map(t => mapToTask(t, _stoppingIds));
         // notify if we have tasks
         this.notifyTasks(extract, _tasks);
-        this.updateStopping(_tasks, _stoppingIds);
-        this.store.dispatch(setTasks(_tasks));
+        await this.updateStopping(_tasks, _stoppingIds);
+        await this.store.dispatch(setTasks(_tasks));
       }),
     );
   }
 
   private static notifyTasks({ finished, error }: ContentStatusTypeId<Task['id']>, tasks: Task[], state = this.store.getState()): void {
-    tasks?.forEach(t => {
+    tasks?.forEach((t) => {
       if (getNotificationsBannerFinishedEnabled(state) && TaskStatus.finished === t.status && !finished.has(t.id)) {
         NotificationService.taskFinished(t);
       } else if (getNotificationsBannerFailedEnabled(state) && TaskStatus.error === t.status && !error.has(t.id)) {
@@ -577,7 +483,7 @@ export class QueryService {
     exhaustMap(request => this.doListTaskFiles(request)),
     tap({
       next: response => this.listTaskFilesResponse.next(response),
-      error: error => this.listTaskFilesResponse.next(error),
+      error: (error: TaskListFilesResponse) => this.listTaskFilesResponse.next(error),
     }),
     retry(), // re subscribe on error
   );
@@ -588,9 +494,9 @@ export class QueryService {
       this.handleErrors,
       tap({
         next: ({ items }) => {
-          this.store.dispatch(setFiles({ taskId: request.task_id, files: items }));
+          void this.store.dispatch(setFiles({ taskId: request.task_id, files: items }));
         },
-        error: error =>
+        error: (error: Error) =>
           LoggerService.error(`Failed to fetch files for task '${request.task_id}'`, {
             request,
             error,
@@ -610,14 +516,14 @@ export class QueryService {
     });
     return this.listTaskFilesResponse.pipe(
       take(1),
-      map(res => {
+      map((res) => {
         if (res instanceof Error) throw res;
         return res;
       }),
     );
   }
 
-  private static updateStopping(tasks: Task[], stoppingIds: TaskComplete['taskId'][]) {
+  private static async updateStopping(tasks: Task[], stoppingIds: TaskComplete['taskId'][]) {
     const ids = tasks?.map(({ id }) => id);
 
     if (!ids?.length) return this.store.dispatch(resetStopping());
@@ -625,7 +531,7 @@ export class QueryService {
     const toRemove = stoppingIds?.filter(id => !ids.includes(id));
 
     if (!toRemove?.length) return;
-    this.store.dispatch(removeStopping(toRemove));
+    await this.store.dispatch(removeStopping(toRemove));
   }
 
   static resumeTask(id: string | string[]): Observable<CommonResponse[]> {
@@ -674,10 +580,10 @@ export class QueryService {
       tap({
         complete: () => {
           this.listTasks().subscribe();
-          if (request.destination?.trim()) this.store.dispatch(addDestinationHistory(request.destination?.trim()));
+          if (request.destination?.trim()) void this.store.dispatch(addDestinationHistory(request.destination?.trim()));
           if (!request?.create_list) NotificationService.taskCreated(torrent?.name ?? request?.url ?? 'unknown', source, request.destination);
         },
-        error: error => {
+        error: (error: Error) => {
           NotificationService.error({
             title: i18n('create_task_fail'),
             message: error?.message ?? error?.name ?? '',
@@ -708,7 +614,7 @@ export class QueryService {
           this.listTasks().subscribe();
           NotificationService.taskCreated(name, source, request.destination);
         },
-        error: error => {
+        error: (error: Error) => {
           NotificationService.error({
             title: i18n('create_task_fail'),
             message: error?.message ?? error?.name ?? '',
@@ -724,7 +630,7 @@ export class QueryService {
       this.loadingOperator(),
       this.handleErrors,
       tap(({ task_id }) => {
-        this.store.dispatch(addStopping({ id: task_id, taskId: id }));
+        void this.store.dispatch(addStopping({ id: task_id, taskId: id }));
         this.listTasks().subscribe();
       }),
     );
@@ -746,7 +652,7 @@ export class QueryService {
       this.loadingOperator(),
       this.handleErrors,
       finalize(() => {
-        if (request.destination?.trim()) this.store.dispatch(addDestinationHistory(request.destination?.trim()));
+        if (request.destination?.trim()) void this.store.dispatch(addDestinationHistory(request.destination?.trim()));
       }),
       switchMap(res => this.listTasks().pipe(map(() => res))),
     );
@@ -765,7 +671,7 @@ export class QueryService {
       this.loadingOperator(),
       this.handleErrors,
       tap(() => {
-        this.store.dispatch(spliceTasks(id));
+        void this.store.dispatch(spliceTasks(id));
         this.listTasks().subscribe();
       }),
     );

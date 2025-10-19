@@ -1,15 +1,16 @@
-import { Paper, Tab, Tabs } from '@mui/material';
+/* eslint-disable react/no-array-index-key  -- tab can have duplicate labels */
+import type { FC, SyntheticEvent } from 'react';
 
+import type { SettingsPanelTab } from '@src/models';
+
+import { Paper, Tab, Tabs } from '@mui/material';
 import React from 'react';
 import { HashLink as Link } from 'react-router-hash-link';
 
-import type { SettingsPanelTab } from '@src/models';
 import { SettingHeader } from '@src/models';
 import { useI18n } from '@src/utils';
 
-import type { FC, SyntheticEvent } from 'react';
-
-type SettingsNavbarProps = { tabs: SettingsPanelTab[] };
+interface SettingsNavbarProps { tabs: SettingsPanelTab[] }
 export const SettingsNavbar: FC<SettingsNavbarProps> = ({ tabs }) => {
   const i18n = useI18n('panel', 'settings');
 
@@ -24,12 +25,12 @@ export const SettingsNavbar: FC<SettingsNavbarProps> = ({ tabs }) => {
         value={tab}
         onChange={handleChange}
         sx={{
-          flex: '1 1 auto',
+          'flex': '1 1 auto',
           '& .MuiTab-root': {
             alignItems: 'flex-start',
             minWidth: '9rem',
           },
-          overflow: 'auto',
+          'overflow': 'auto',
         }}
       >
         {tabs.map(({ label, anchor, links }, i) => [
@@ -64,3 +65,4 @@ export const SettingsNavbar: FC<SettingsNavbarProps> = ({ tabs }) => {
     </Paper>
   );
 };
+/* eslint-enable react/no-array-index-key */

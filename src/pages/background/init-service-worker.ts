@@ -19,7 +19,7 @@ import {
   restoreTaskSlice,
 } from './modules';
 
-export const initServiceWorker = async () => {
+export async function initServiceWorker() {
   // Wrap proxy store see https://github.com/tshaddix/webext-redux
   wrapStore(store, {
     portName: StorePortName,
@@ -72,4 +72,4 @@ export const initServiceWorker = async () => {
 
   // Init polling
   PollingService.init(store);
-};
+}

@@ -1,22 +1,20 @@
+import type { AdvancedLogging, RootSlice } from '@src/models';
+
 import DownloadIcon from '@mui/icons-material/Download';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Button, Card, CardActions, CardContent, CardHeader, Collapse, InputAdornment, MenuItem, Stack } from '@mui/material';
-
 import React from 'react';
-
 import { useForm } from 'react-hook-form';
-
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ButtonWithConfirm, FormInput, FormSwitch, JsonExplorer } from '@src/components';
-import type { AdvancedLogging, RootSlice } from '@src/models';
 import { AdvancedHeader, ColorLevel, defaultAdvancedLogging, LoggingLevel, LoggingLevelLevelKeys, ServiceInstance } from '@src/models';
 import { resetLogHistory, syncAdvancedLogging } from '@src/store/actions';
 import { getAdvancedSettingsLogging, getLogHistory } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
 import { downloadJson } from '@src/utils/downlaod.utils';
 
-export const SettingsLogging = () => {
+export function SettingsLogging() {
   const i18n = useI18n('panel', 'settings', 'advanced', 'logging');
   const logs = useSelector(getLogHistory);
 
@@ -76,7 +74,7 @@ export const SettingsLogging = () => {
               subheader={i18n(`levels__${instance}__subheader`)}
               titleTypographyProps={{ variant: 'subtitle2' }}
               subheaderTypographyProps={{ variant: 'subtitle2' }}
-              action={
+              action={(
                 <FormInput
                   controllerProps={{ name: `levels.${instance}`, control }}
                   textFieldProps={{
@@ -92,7 +90,7 @@ export const SettingsLogging = () => {
                     </MenuItem>
                   ))}
                 </FormInput>
-              }
+              )}
               sx={{ p: '0.5rem 0' }}
             />
           ))}
@@ -111,7 +109,7 @@ export const SettingsLogging = () => {
             subheader={i18n('history_max__subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={
+            action={(
               <FormInput
                 controllerProps={{ name: 'historyMax', control, rules }}
                 textFieldProps={{
@@ -124,12 +122,12 @@ export const SettingsLogging = () => {
                   sx: { flex: '0 0 10rem' },
                 }}
               />
-            }
+            )}
             sx={{ p: '0.5rem 0' }}
           />
           <Collapse in={getValues()?.enabled && getValues()?.history}>
             <Card sx={{ p: '0.5rem', m: '0.5rem 0', maxHeight: '30rem', overflow: 'auto' }}>
-              <JsonExplorer data={logs} name={'logs'} />
+              <JsonExplorer data={logs} name="logs" />
             </Card>
           </Collapse>
         </Collapse>
@@ -172,4 +170,4 @@ export const SettingsLogging = () => {
       </CardActions>
     </Card>
   );
-};
+}

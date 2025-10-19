@@ -1,3 +1,11 @@
+import type { ForwardRefRenderFunction } from 'react';
+
+import type { ProgressBackgroundProps } from '@src/components';
+import type { Download, GlobalSettings, TaskForm } from '@src/models';
+import type { StoreState } from '@src/store';
+
+import type { ContentItemAccordionProps } from '../content-item';
+
 import CloudSyncIcon from '@mui/icons-material/CloudSync';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FileDownloadOffIcon from '@mui/icons-material/FileDownloadOff';
@@ -6,41 +14,28 @@ import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReplayIcon from '@mui/icons-material/Replay';
 import { Dialog, DialogContent } from '@mui/material';
-
 import React, { forwardRef, useContext, useState } from 'react';
-
 import { useSelector } from 'react-redux';
-
 import { forkJoin } from 'rxjs';
 
-import type { ProgressBackgroundProps } from '@src/components';
 import { TaskAdd } from '@src/components';
-
 import { ContentButton } from '@src/components/panel/content/content-button';
-import type { Download, GlobalSettings, TaskForm } from '@src/models';
 import { ColorLevel, ColorLevelMap, DownloadStatus, downloadStatusToColor } from '@src/models';
-
 import { DownloadService, InterceptService, LoggerService, NotificationService } from '@src/services';
-
-import type { StoreState } from '@src/store';
 import { ContainerContext } from '@src/store';
 import { getGlobalDownload, getSettingsDownloadsTransfer } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
 
 import { ContentItem } from '../content-item';
-
 import { DownloadCard } from './download-card';
 import { DownloadDetail } from './download-detail';
 
-import type { ContentItemAccordionProps } from '../content-item';
-import type { ForwardRefRenderFunction } from 'react';
-
-type DownloadItemProps = { download: Download; hideStatus?: boolean; accordion: ContentItemAccordionProps; className?: string };
-export type DownloadItemButton = {
+interface DownloadItemProps { download: Download; hideStatus?: boolean; accordion: ContentItemAccordionProps; className?: string }
+export interface DownloadItemButton {
   key: 'erase' | 'cancel' | 'retry' | 'pause' | 'resume' | 'open' | 'transfer';
   icon: JSX.Element;
   color: ColorLevel;
-};
+}
 
 const ButtonStyle = { display: 'flex', flex: '1 1 auto', minHeight: '2.5rem' };
 const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadItemProps> = ({ download, hideStatus, accordion, className }, ref) => {
@@ -94,7 +89,7 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
     },
   });
 
-  const handleClick = ($event: React.MouseEvent, key: DownloadItemButton['key']) => {
+  const handleClick = ($event: React.MouseEvent, key: DownloadItemButton['key'] | string) => {
     $event.stopPropagation();
     switch (key) {
       case 'erase':
@@ -165,9 +160,9 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
         open={dialog}
         fullWidth={true}
         onClose={() => close()}
-        maxWidth={'md'}
+        maxWidth="md"
         PaperProps={{ sx: { maxHeight: 'calc(100% - 1em)' } }}
-        container={containerRef?.current}
+        container={() => containerRef?.current ?? null}
       >
         <DialogContent sx={{ p: '0', fontSize: '1rem' }}>
           <TaskAdd form={form} withCancel={true} onFormCancel={() => close()} onFormSubmit={() => close(erase)} />

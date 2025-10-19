@@ -1,7 +1,8 @@
-import type { BaseHttpRequest, HttpBody, HttpHeaders, HttpParameters } from '@src/utils';
-import { HttpMethod, rxFetch } from '@src/utils';
-
 import type { Observable } from 'rxjs';
+
+import type { BaseHttpRequest, HttpBody, HttpHeaders, HttpParameters } from '@src/utils';
+
+import { HttpMethod, rxFetch } from '@src/utils';
 
 /** Base Http request class implementation */
 export class BaseHttpService {

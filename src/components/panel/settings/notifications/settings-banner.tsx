@@ -1,20 +1,18 @@
+import type { NotificationsBanner, NotificationSettings } from '@src/models';
+
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Button, Card, CardActions, CardContent, CardHeader, Collapse, MenuItem, Stack } from '@mui/material';
-
 import React from 'react';
-
 import { useForm } from 'react-hook-form';
-
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ButtonWithConfirm, FormInput, FormSwitch } from '@src/components';
-import type { NotificationsBanner, NotificationSettings } from '@src/models';
 import { defaultNotifications, NotificationHeader, NotificationLevel, NotificationLevelKeys } from '@src/models';
 import { syncNotifications } from '@src/store/actions';
 import { getNotifications } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
 
-export const SettingsBanner = () => {
+export function SettingsBanner() {
   const i18n = useI18n('panel', 'settings', 'banner');
   const dispatch = useDispatch();
   const notifications: NotificationSettings = useSelector(getNotifications);
@@ -54,7 +52,7 @@ export const SettingsBanner = () => {
             subheader={i18n('level_subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={
+            action={(
               <FormInput
                 controllerProps={{ name: 'level', control }}
                 textFieldProps={{
@@ -70,7 +68,7 @@ export const SettingsBanner = () => {
                   </MenuItem>
                 ))}
               </FormInput>
-            }
+            )}
             sx={{ p: '0.5rem 0' }}
           />
 
@@ -80,12 +78,12 @@ export const SettingsBanner = () => {
               subheader={i18n('background_subheader')}
               titleTypographyProps={{ variant: 'subtitle2' }}
               subheaderTypographyProps={{ variant: 'subtitle2' }}
-              action={
+              action={(
                 <FormSwitch
                   controllerProps={{ name: 'scope.background', control }}
                   formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
                 />
-              }
+              )}
               sx={{ p: '0.5rem 0' }}
             />
             <CardHeader
@@ -93,12 +91,12 @@ export const SettingsBanner = () => {
               subheader={i18n('popup_subheader')}
               titleTypographyProps={{ variant: 'subtitle2' }}
               subheaderTypographyProps={{ variant: 'subtitle2' }}
-              action={
+              action={(
                 <FormSwitch
                   controllerProps={{ name: 'scope.popup', control }}
                   formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
                 />
-              }
+              )}
               sx={{ p: '0.5rem 0' }}
             />
             <CardHeader
@@ -106,12 +104,12 @@ export const SettingsBanner = () => {
               subheader={i18n('completed_subheader')}
               titleTypographyProps={{ variant: 'subtitle2' }}
               subheaderTypographyProps={{ variant: 'subtitle2' }}
-              action={
+              action={(
                 <FormSwitch
                   controllerProps={{ name: 'scope.finished', control }}
                   formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
                 />
-              }
+              )}
               sx={{ p: '0.5rem 0' }}
             />
             <CardHeader
@@ -119,12 +117,12 @@ export const SettingsBanner = () => {
               subheader={i18n('failed_subheader')}
               titleTypographyProps={{ variant: 'subtitle2' }}
               subheaderTypographyProps={{ variant: 'subtitle2' }}
-              action={
+              action={(
                 <FormSwitch
                   controllerProps={{ name: 'scope.failed', control }}
                   formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
                 />
-              }
+              )}
               sx={{ p: '0.5rem 0' }}
             />
           </Card>
@@ -151,4 +149,4 @@ export const SettingsBanner = () => {
       </CardActions>
     </Card>
   );
-};
+}

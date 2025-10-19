@@ -1,46 +1,24 @@
-import { createSelector } from '@reduxjs/toolkit';
+import type { Theme } from '@mui/material';
 
-import type {
-  AdvancedLogging,
-  AdvancedSettings,
-  ConnectionSettings,
-  Credentials,
-  DownloadSettings,
-  DownloadsIntercept,
-  GlobalSettings,
-  NotificationsBanner,
-  NotificationSettings,
-  NotificationsSnack,
-  SettingsSlice,
-  TaskSettings,
-} from '@src/models';
-import {
-  ConnectionType,
-  defaultAdvancedSettings,
-  defaultConnection,
-  defaultContentSettings,
-  defaultDownloads,
-  defaultGlobal,
-  defaultLoggingLevels,
-  defaultScrapeSettings,
-  defaultTaskSettings,
-  TaskStatus,
-  ThemeMode,
-} from '@src/models';
-import { LoggerService } from '@src/services';
-import { darkTheme, lightTheme } from '@src/themes';
+import type { AdvancedLogging, AdvancedSettings, ConnectionSettings, ContentSettings, Credentials, DownloadSettings, DownloadsIntercept, GlobalSettings, NotificationsBanner, NotificationSettings, NotificationsSnack, PollingSettings, ScrapeSettings, SettingsSlice, SyncSettings, TaskSettings } from '@src/models';
 
 import type { StoreState } from '../store';
 
-export const getSettings = createSelector(
+import { createSelector } from '@reduxjs/toolkit';
+
+import { ConnectionType, defaultAdvancedSettings, defaultConnection, defaultContentSettings, defaultDownloads, defaultGlobal, defaultLoggingLevels, defaultNotifications, defaultPolling, defaultScrapeSettings, defaultSyncSettings, defaultTaskSettings, TaskStatus, ThemeMode } from '@src/models';
+import { LoggerService } from '@src/services';
+import { darkTheme, lightTheme } from '@src/themes';
+
+export const getSettings: (state: StoreState) => SettingsSlice = createSelector(
   (state: StoreState) => state,
   state => state.settings,
 );
 
-export const getTabs = createSelector(getSettings, (setting: SettingsSlice) => setting?.tabs);
+export const getTabs: (state: StoreState) => SettingsSlice['tabs'] = createSelector(getSettings, (setting: SettingsSlice) => setting?.tabs);
 
 const taskStatuses = Object.values(TaskStatus).map(String);
-export const getActiveTabs = createSelector(getSettings, (setting: SettingsSlice) => {
+export const getActiveTabs: (state: StoreState) => SettingsSlice['tabs'] = createSelector(getSettings, (setting: SettingsSlice) => {
   if (!setting.downloads.enabled) {
     return setting?.tabs?.filter(tab => tab.status?.some(s => taskStatuses.includes(s)));
   }
@@ -48,17 +26,17 @@ export const getActiveTabs = createSelector(getSettings, (setting: SettingsSlice
   return setting?.tabs;
 });
 
-export const getMenus = createSelector(getSettings, (setting: SettingsSlice) => setting?.menus);
+export const getMenus: (state: StoreState) => SettingsSlice['menus'] = createSelector(getSettings, (setting: SettingsSlice) => setting?.menus ?? []);
 
-export const getQuick = createSelector(getSettings, (setting: SettingsSlice) => setting?.quick);
+export const getQuick: (state: StoreState) => SettingsSlice['quick'] = createSelector(getSettings, (setting: SettingsSlice) => setting?.quick ?? []);
 
-export const getConnection = createSelector(getSettings, (setting: SettingsSlice) => setting?.connection ?? defaultConnection);
+export const getConnection: (state: StoreState) => ConnectionSettings = createSelector(getSettings, (setting: SettingsSlice) => setting?.connection ?? defaultConnection);
 
 /**
  * Returns true if we should attempt an auto-login
  * @param connection the connection slice
  */
-const shouldAutoLogin = (connection: ConnectionSettings) => {
+function shouldAutoLogin(connection: ConnectionSettings) {
   // If missing username
   if (!connection?.username) return false;
   // If missing password
@@ -71,58 +49,58 @@ const shouldAutoLogin = (connection: ConnectionSettings) => {
   if (connection?.type === ConnectionType.twoFactor && !connection?.enable_device_token) return false;
   // If device token for 2FA but no device id saved
   return !(connection?.type === ConnectionType.twoFactor && !connection?.device_id);
-};
+}
 
-export const getShouldAutoLogin = createSelector(getConnection, shouldAutoLogin);
+export const getShouldAutoLogin: (state: StoreState) => boolean = createSelector(getConnection, shouldAutoLogin);
 
-export const urlReducer = (connection: ConnectionSettings) => {
+export function urlReducer(connection: ConnectionSettings) {
   const { type, protocol, path, port } = connection;
   if (ConnectionType.custom === type && path) return new URL(path).toString();
   if (ConnectionType.quickConnect === type && protocol && path) return new URL(`${protocol}://${path}.quickconnect.to`).toString();
   if (protocol && path && port) return new URL(`${protocol}://${path}:${port}`).toString();
   return '';
-};
+}
 
-export const getUrl = createSelector(getConnection, urlReducer);
+export const getUrl: (state: StoreState) => string = createSelector(getConnection, urlReducer);
 
-export const getCredentials = createSelector(
+export const getCredentials: (state: StoreState) => Credentials = createSelector(
   getConnection,
   ({ rememberMe, protocol, path, port, ...credentials }: ConnectionSettings) => credentials as Credentials,
 );
 
-export const getType = createSelector(getConnection, (connection: ConnectionSettings) => connection?.type);
+export const getType: (state: StoreState) => ConnectionSettings['type'] = createSelector(getConnection, (connection: ConnectionSettings) => connection?.type);
 
-export const getPolling = createSelector(getSettings, (setting: SettingsSlice) => setting?.polling);
+export const getPolling: (state: StoreState) => PollingSettings = createSelector(getSettings, (setting: SettingsSlice) => setting?.polling ?? defaultPolling);
 
-export const getNotifications = createSelector(getSettings, (setting: SettingsSlice) => setting?.notifications);
+export const getNotifications: (state: StoreState) => NotificationSettings = createSelector(getSettings, (setting: SettingsSlice) => setting?.notifications ?? defaultNotifications);
 
-export const getNotificationsCount = createSelector(getNotifications, (notifications: NotificationSettings) => notifications?.count);
+export const getNotificationsCount: (state: StoreState) => NotificationSettings['count'] = createSelector(getNotifications, (notifications: NotificationSettings) => notifications?.count ?? defaultNotifications.count);
 
-export const getNotificationsSnack = createSelector(getNotifications, (notifications: NotificationSettings) => notifications?.snack);
+export const getNotificationsSnack: (state: StoreState) => NotificationsSnack = createSelector(getNotifications, (notifications: NotificationSettings) => notifications?.snack ?? defaultNotifications.snack);
 
-export const getNotificationsSnackLevel = createSelector(getNotificationsSnack, (snack: NotificationsSnack) => snack?.level);
+export const getNotificationsSnackLevel: (state: StoreState) => NotificationsSnack['level'] = createSelector(getNotificationsSnack, (snack: NotificationsSnack) => snack?.level ?? defaultNotifications.snack.level);
 
-export const getNotificationsBanner = createSelector(getNotifications, (notifications: NotificationSettings) => notifications?.banner);
+export const getNotificationsBanner: (state: StoreState) => NotificationsBanner = createSelector(getNotifications, (notifications: NotificationSettings) => notifications?.banner ?? defaultNotifications.banner);
 
-export const getNotificationsBannerLevel = createSelector(getNotificationsBanner, (banner: NotificationsBanner) => banner?.level);
+export const getNotificationsBannerLevel: (state: StoreState) => NotificationsBanner['level'] = createSelector(getNotificationsBanner, (banner: NotificationsBanner) => banner?.level ?? defaultNotifications.banner.level);
 
-export const getNotificationsBannerFailedEnabled = createSelector(getNotificationsBanner, (banner: NotificationsBanner) => banner?.scope.failed);
+export const getNotificationsBannerFailedEnabled: (state: StoreState) => boolean = createSelector(getNotificationsBanner, (banner: NotificationsBanner) => banner?.scope?.failed ?? defaultNotifications.banner.scope.failed);
 
-export const getNotificationsBannerFinishedEnabled = createSelector(getNotificationsBanner, (banner: NotificationsBanner) => banner?.scope.finished);
+export const getNotificationsBannerFinishedEnabled: (state: StoreState) => boolean = createSelector(getNotificationsBanner, (banner: NotificationsBanner) => banner?.scope?.finished ?? defaultNotifications.banner.scope.finished);
 
-export const getScrapeSettings = createSelector(getSettings, (setting: SettingsSlice) => setting?.scrape ?? defaultScrapeSettings);
+export const getScrapeSettings: (state: StoreState) => ScrapeSettings = createSelector(getSettings, (setting: SettingsSlice) => setting?.scrape ?? defaultScrapeSettings);
 
-export const getContentSettings = createSelector(getSettings, (setting: SettingsSlice) => setting?.content ?? defaultContentSettings);
+export const getContentSettings: (state: StoreState) => ContentSettings = createSelector(getSettings, (setting: SettingsSlice) => setting?.content ?? defaultContentSettings);
 
-export const getGlobal = createSelector(getSettings, (setting: SettingsSlice) => setting?.global);
+export const getGlobal: (state: StoreState) => GlobalSettings = createSelector(getSettings, (setting: SettingsSlice) => setting?.global ?? defaultGlobal);
 
-export const getGlobalLoading = createSelector(getGlobal, (_global: GlobalSettings) => _global?.loading);
+export const getGlobalLoading: (state: StoreState) => GlobalSettings['loading'] = createSelector(getGlobal, (_global: GlobalSettings) => _global?.loading ?? defaultGlobal.loading);
 
-export const getActionScope = createSelector(getGlobal, (_global: GlobalSettings) => _global?.actions);
+export const getActionScope: (state: StoreState) => GlobalSettings['actions'] = createSelector(getGlobal, (_global: GlobalSettings) => _global?.actions ?? defaultGlobal.actions);
 
-export const getThemeMode = createSelector(getGlobal, (_global: GlobalSettings) => _global?.theme);
+export const getThemeMode: (state: StoreState) => ThemeMode = createSelector(getGlobal, (_global: GlobalSettings) => _global?.theme ?? defaultGlobal.theme);
 
-export const getTheme = createSelector(getThemeMode, (theme: ThemeMode) => {
+export const getTheme: (state: StoreState) => Theme | null = createSelector(getThemeMode, (theme: ThemeMode) => {
   switch (theme) {
     case ThemeMode.dark:
       return darkTheme;
@@ -131,83 +109,83 @@ export const getTheme = createSelector(getThemeMode, (theme: ThemeMode) => {
     case ThemeMode.auto:
       return null;
     default:
-      LoggerService.warn(`Theme '${theme}' not supported, falling back to ${ThemeMode.auto}`);
+      LoggerService.warn(`Theme '${theme as string}' not supported, falling back to ${ThemeMode.auto}`);
       return null;
   }
 });
 
-export const getGlobalTask = createSelector(getGlobal, (_global: GlobalSettings) => _global?.task ?? defaultGlobal.task);
+export const getGlobalTask: (state: StoreState) => GlobalSettings['task'] = createSelector(getGlobal, (_global: GlobalSettings) => _global?.task ?? defaultGlobal.task);
 
-export const getGlobalDownload = createSelector(getGlobal, (_global: GlobalSettings) => _global?.download ?? defaultGlobal.download);
-export const getGlobalNavbarButton = createSelector(
+export const getGlobalDownload: (state: StoreState) => GlobalSettings['download'] = createSelector(getGlobal, (_global: GlobalSettings) => _global?.download ?? defaultGlobal.download);
+export const getGlobalNavbarButton: (state: StoreState) => GlobalSettings['navbar']['buttons'] = createSelector(
   getGlobal,
   (_global: GlobalSettings) => _global?.navbar?.buttons ?? defaultGlobal.navbar?.buttons,
 );
 
-export const getInterface = createSelector(getGlobal, (_global: GlobalSettings) => _global?.interface);
+export const getInterface: (state: StoreState) => GlobalSettings['interface'] = createSelector(getGlobal, (_global: GlobalSettings) => _global?.interface ?? defaultGlobal.interface);
 
-export const getInterfaceSize = createSelector(
+export const getInterfaceSize: (state: StoreState) => GlobalSettings['interface']['size'] = createSelector(
   getInterface,
   (_interface: GlobalSettings['interface']) => _interface?.size ?? defaultGlobal.interface?.size,
 );
 
-export const getInterfacePullToRefresh = createSelector(
+export const getInterfacePullToRefresh: (state: StoreState) => boolean = createSelector(
   getInterface,
   (_interface: GlobalSettings['interface']) => _interface?.pullToRefresh ?? defaultGlobal.interface.pullToRefresh,
 );
 
-export const getSettingsDownloads = createSelector(getSettings, (setting: SettingsSlice) => setting?.downloads ?? defaultDownloads);
+export const getSettingsDownloads: (state: StoreState) => DownloadSettings = createSelector(getSettings, (setting: SettingsSlice) => setting?.downloads ?? defaultDownloads);
 
-export const getSettingsDownloadsEnabled = createSelector(
+export const getSettingsDownloadsEnabled: (state: StoreState) => boolean = createSelector(
   getSettingsDownloads,
   (downloads: DownloadSettings) => downloads.enabled ?? defaultDownloads.enabled,
 );
 
-export const getSettingsDownloadsButtons = createSelector(
+export const getSettingsDownloadsButtons: (state: StoreState) => DownloadSettings['buttons'] | false = createSelector(
   getSettingsDownloads,
   getSettingsDownloadsEnabled,
   (downloads: DownloadSettings, enabled: boolean) => enabled && (downloads.buttons ?? defaultDownloads.buttons),
 );
-export const getSettingsDownloadsNotifications = createSelector(
+export const getSettingsDownloadsNotifications: (state: StoreState) => DownloadSettings['notifications'] | false = createSelector(
   getSettingsDownloads,
   getSettingsDownloadsEnabled,
   (downloads: DownloadSettings, enabled: boolean) => enabled && (downloads.notifications ?? defaultDownloads.notifications),
 );
-export const getSettingsDownloadsTransfer = createSelector(
+export const getSettingsDownloadsTransfer: (state: StoreState) => DownloadSettings['transfer'] = createSelector(
   getSettingsDownloads,
   (downloads: DownloadSettings) => downloads.transfer ?? defaultDownloads.transfer,
 );
 
-export const getSettingsDownloadsIntercept = createSelector(
+export const getSettingsDownloadsIntercept: (state: StoreState) => DownloadsIntercept = createSelector(
   getSettingsDownloads,
   (downloads: DownloadSettings) => downloads.intercept ?? defaultDownloads.intercept,
 );
 
-export const getSettingsDownloadsInterceptEnabled = createSelector(
+export const getSettingsDownloadsInterceptEnabled: (state: StoreState) => boolean = createSelector(
   getSettingsDownloadsIntercept,
   getSettingsDownloadsEnabled,
   (intercept: DownloadsIntercept, enabled) => enabled && intercept?.enabled,
 );
 
-export const getAdvancedSettings = createSelector(getSettings, (settings: SettingsSlice) => settings?.advanced ?? defaultAdvancedSettings);
+export const getAdvancedSettings: (state: StoreState) => AdvancedSettings = createSelector(getSettings, (settings: SettingsSlice) => settings?.advanced ?? defaultAdvancedSettings);
 
-export const getAdvancedSettingsLogging = createSelector(
+export const getAdvancedSettingsLogging: (state: StoreState) => AdvancedLogging = createSelector(
   getAdvancedSettings,
   (settings: AdvancedSettings) => settings?.logging ?? defaultAdvancedSettings.logging,
 );
 
-export const getAdvancedSettingsLoggingEnabled = createSelector(
+export const getAdvancedSettingsLoggingEnabled: (state: StoreState) => boolean = createSelector(
   getAdvancedSettingsLogging,
-  (logging: AdvancedLogging) => logging?.enabled ?? defaultAdvancedSettings.logging?.enabled,
+  (logging: AdvancedLogging) => logging?.enabled ?? defaultAdvancedSettings.logging?.enabled ?? false,
 );
 
-export const getAdvancedSettingsLoggingLevel = createSelector(
+export const getAdvancedSettingsLoggingLevel: (state: StoreState) => AdvancedLogging['levels'] = createSelector(
   getAdvancedSettingsLogging,
   (logging: AdvancedLogging) => logging?.levels ?? defaultLoggingLevels,
 );
 
-export const getSyncSettings = createSelector(getSettings, (setting: SettingsSlice) => setting?.sync);
+export const getSyncSettings: (state: StoreState) => SyncSettings = createSelector(getSettings, (setting: SettingsSlice) => setting?.sync ?? defaultSyncSettings);
 
-export const getTaskSettings = createSelector(getSettings, (setting: SettingsSlice) => setting?.tasks ?? defaultTaskSettings);
+export const getTaskSettings: (state: StoreState) => TaskSettings = createSelector(getSettings, (setting: SettingsSlice) => setting?.tasks ?? defaultTaskSettings);
 
-export const getClearOnExitTaskSettings = createSelector(getTaskSettings, (setting: TaskSettings) => setting.clearOnExist);
+export const getClearOnExitTaskSettings: (state: StoreState) => TaskSettings['clearOnExist'] = createSelector(getTaskSettings, (setting: TaskSettings) => setting.clearOnExist);

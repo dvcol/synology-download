@@ -1,15 +1,14 @@
-import { Card, Grid, Stack, Typography } from '@mui/material';
-
-import React from 'react';
-
 import type { FC } from 'react';
 
-type ContentDetailProps = {
+import { Card, Grid, Stack, Typography } from '@mui/material';
+import React from 'react';
+
+interface ContentDetailProps {
   title?: JSX.Element;
   info: JSX.Element;
   buttons: JSX.Element;
   content?: JSX.Element;
-};
+}
 export const ContentDetail: FC<ContentDetailProps> = ({ title, info, buttons, content }) => {
   return (
     <Typography component="span" variant="body2">

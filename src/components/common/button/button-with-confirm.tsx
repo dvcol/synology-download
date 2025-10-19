@@ -1,3 +1,8 @@
+import type { ButtonProps } from '@mui/material';
+import type { FC } from 'react';
+
+import type { ConfirmationDialogProps } from '../dialog';
+
 import { Button } from '@mui/material';
 import React, { useState } from 'react';
 
@@ -5,12 +10,7 @@ import { useI18n } from '@src/utils';
 
 import { ConfirmationDialog } from '../dialog';
 
-import type { ConfirmationDialogProps } from '../dialog';
-import type { ButtonProps } from '@mui/material';
-
-import type { FC } from 'react';
-
-type ButtonWithConfirmProps = {
+interface ButtonWithConfirmProps {
   buttonLabel?: JSX.Element | string;
   buttonProps?: ButtonProps;
   dialogTitle?: ConfirmationDialogProps['title'];
@@ -18,7 +18,7 @@ type ButtonWithConfirmProps = {
   onButtonClick?: ConfirmationDialogProps['onConfirm'];
   onDialogCancel?: ConfirmationDialogProps['onConfirm'];
   onDialogConfirm?: ConfirmationDialogProps['onConfirm'];
-};
+}
 export const ButtonWithConfirm: FC<ButtonWithConfirmProps> = ({
   buttonLabel,
   buttonProps,

@@ -1,21 +1,19 @@
+import type { GlobalSettings } from '@src/models';
+import type { StoreState } from '@src/store';
+
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Button, Card, CardActions, CardContent, CardHeader, Collapse, Grid, InputAdornment, MenuItem, Stack } from '@mui/material';
-
 import React from 'react';
-
 import { useForm } from 'react-hook-form';
-
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ButtonWithConfirm, FormCheckbox, FormInput, FormSwitch } from '@src/components';
-import type { GlobalSettings } from '@src/models';
 import { ActionScope, defaultGlobal, InterfaceHeader, InterfaceSize, NavbarButtonType, ThemeMode } from '@src/models';
-import type { StoreState } from '@src/store';
 import { syncInterface } from '@src/store/actions';
 import { getGlobal } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
 
-export const SettingsGlobal = () => {
+export function SettingsGlobal() {
   const i18n = useI18n('panel', 'settings', 'global');
   const dispatch = useDispatch();
   const state = useSelector<StoreState, GlobalSettings>(getGlobal);
@@ -87,7 +85,7 @@ export const SettingsGlobal = () => {
           subheader={i18n('theme_subheader')}
           titleTypographyProps={{ variant: 'subtitle2' }}
           subheaderTypographyProps={{ variant: 'subtitle2' }}
-          action={
+          action={(
             <FormInput
               controllerProps={{ name: 'theme', control }}
               textFieldProps={{
@@ -102,7 +100,7 @@ export const SettingsGlobal = () => {
                 </MenuItem>
               ))}
             </FormInput>
-          }
+          )}
           sx={{ p: '0.5rem 0' }}
         />
         <CardHeader
@@ -110,7 +108,7 @@ export const SettingsGlobal = () => {
           subheader={i18n('interface_size_subheader')}
           titleTypographyProps={{ variant: 'subtitle2' }}
           subheaderTypographyProps={{ variant: 'subtitle2' }}
-          action={
+          action={(
             <FormInput
               controllerProps={{ name: 'interface.size', control }}
               textFieldProps={{
@@ -127,7 +125,7 @@ export const SettingsGlobal = () => {
                   </MenuItem>
                 ))}
             </FormInput>
-          }
+          )}
           sx={{ p: '0.5rem 0' }}
         />
         <CardHeader
@@ -135,7 +133,7 @@ export const SettingsGlobal = () => {
           subheader={i18n('actions_subheader')}
           titleTypographyProps={{ variant: 'subtitle2' }}
           subheaderTypographyProps={{ variant: 'subtitle2' }}
-          action={
+          action={(
             <FormInput
               controllerProps={{ name: 'actions', control }}
               textFieldProps={{
@@ -150,7 +148,7 @@ export const SettingsGlobal = () => {
                 </MenuItem>
               ))}
             </FormInput>
-          }
+          )}
           sx={{ p: '0.5rem 0' }}
         />
         <CardHeader
@@ -175,7 +173,7 @@ export const SettingsGlobal = () => {
             subheader={i18n('loading_threshold_subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={
+            action={(
               <FormInput
                 controllerProps={{
                   name: 'loading.threshold',
@@ -195,7 +193,7 @@ export const SettingsGlobal = () => {
                   sx: { flex: '0 0 10rem', ml: '0.5rem' },
                 }}
               />
-            }
+            )}
             sx={{ p: '0.5rem 0', mt: '0.5rem' }}
           />
         </Collapse>
@@ -248,7 +246,7 @@ export const SettingsGlobal = () => {
                     formControlLabelProps={{ label: i18n(t, 'common', 'model', 'navbar_button_type'), sx: { textTransform: 'capitalize' } }}
                     checkboxProps={{
                       multiple: true,
-                      value: t,
+                      value: t as unknown as boolean,
                     }}
                   />
                 </Button>
@@ -279,4 +277,4 @@ export const SettingsGlobal = () => {
       </CardActions>
     </Card>
   );
-};
+}

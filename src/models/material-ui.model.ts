@@ -34,9 +34,9 @@ export const ColorLevelMap: Record<ColorLevel, string> = {
 /**
  * get hex color from color level
  */
-export const getColorFromLevel = (color?: ColorLevel): string | undefined => {
+export function getColorFromLevel(color?: ColorLevel): string | undefined {
   return color ? ColorLevelMap[color] : color;
-};
+}
 
 export const ColorMap: Record<string, ColorLevel> = {
   '#ce93d8': ColorLevel.secondary,
@@ -50,9 +50,9 @@ export const ColorMap: Record<string, ColorLevel> = {
 /**
  * get colorLevel from color level
  */
-export const getLevelFromColor = (color: string): ColorLevel | undefined => {
+export function getLevelFromColor(color: string): ColorLevel | undefined {
   return ColorMap[color];
-};
+}
 
 export enum MaterialIcon {
   add = 'add',

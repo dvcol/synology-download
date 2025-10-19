@@ -1,8 +1,14 @@
+import type { OptionsObject } from 'notistack';
+
+import type { LoginRequest } from '@src/models/synology.model';
+
+import type { BannerNotificationScope, SnackNotificationScope } from './notification.model';
+import type { SettingsSlice } from './store.model';
+import type { Tab } from './tab.model';
+
 import { DownloadStatus } from '@src/models/download.model';
 import { LoggingLevel } from '@src/models/logger.model';
 import { NavbarButtonType } from '@src/models/navbar.model';
-
-import type { LoginRequest } from '@src/models/synology.model';
 
 import {
   defaultContextMenu,
@@ -12,18 +18,9 @@ import {
   defaultRecentDownloadQuickMenu,
   defaultRecentQuickMenu,
 } from './menu.model';
-
 import { NotificationLevel } from './notification.model';
-
 import { defaultTabs, TabTemplate } from './tab.model';
-
 import { TaskStatus } from './task.model';
-
-import type { BannerNotificationScope, SnackNotificationScope } from './notification.model';
-import type { SettingsSlice } from './store.model';
-import type { Tab } from './tab.model';
-
-import type { OptionsObject } from 'notistack';
 
 export enum SettingHeader {
   connection = 'connection',

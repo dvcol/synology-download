@@ -1,19 +1,18 @@
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import FolderIcon from '@mui/icons-material/Folder';
-
-import { Collapse, ListItemText, MenuItem } from '@mui/material';
-
-import React from 'react';
-
-import { MuiIcon } from '@src/components';
-import type { QuickMenu } from '@src/models';
-import { MaterialIcon, QuickMenuType } from '@src/models';
-
 import type { SvgIconProps } from '@mui/material';
 import type { FC, MouseEvent } from 'react';
 
-const isDisabled = (type: QuickMenuType, logged: boolean, folders: boolean, destinations: boolean): boolean => {
+import type { QuickMenu } from '@src/models';
+
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import FolderIcon from '@mui/icons-material/Folder';
+import { Collapse, ListItemText, MenuItem } from '@mui/material';
+import React from 'react';
+
+import { MuiIcon } from '@src/components';
+import { MaterialIcon, QuickMenuType } from '@src/models';
+
+function isDisabled(type: QuickMenuType, logged: boolean, folders: boolean, destinations: boolean): boolean {
   switch (type) {
     case QuickMenuType.Download:
       return false;
@@ -25,9 +24,11 @@ const isDisabled = (type: QuickMenuType, logged: boolean, folders: boolean, dest
     default:
       return !logged;
   }
-};
+}
 
-type QuickMenuRecentProps = {
+const ExpandIcon: FC<SvgIconProps & { expand?: boolean }> = ({ expand, ...props }) => (expand ? <ExpandLess {...props} /> : <ExpandMore {...props} />);
+
+interface QuickMenuRecentProps {
   isDark?: boolean;
   menu: QuickMenu;
   logged: boolean;
@@ -35,7 +36,7 @@ type QuickMenuRecentProps = {
   destinations?: string[];
   onClick: ($event: MouseEvent, payload: { menu: QuickMenu; destination?: string }) => void;
   onToggle?: ($event: MouseEvent, open: boolean) => void;
-};
+}
 export const QuickMenuRecent: FC<QuickMenuRecentProps> = ({ isDark, menu, logged, folders, destinations, onClick, onToggle }) => {
   const [expand, setExpand] = React.useState(false);
 
@@ -53,13 +54,12 @@ export const QuickMenuRecent: FC<QuickMenuRecentProps> = ({ isDark, menu, logged
   };
   const _onClick = ($event: MouseEvent) => (isRecent ? toggle($event) : onClick($event, { menu }));
 
-  const ExpandIcon: FC<SvgIconProps> = props => (expand ? <ExpandLess {...props} /> : <ExpandMore {...props} />);
   return (
     <>
       <MenuItem onClick={_onClick} disabled={disabled} sx={{ fontSize: '1em' }}>
         <MuiIcon icon={menu.icon ?? MaterialIcon.download} props={{ sx: { fontSize: '0.875em', width: '1.25em', height: '1.25em' } }} />
         <ListItemText primary={menu.title} primaryTypographyProps={{ sx: { fontSize: '0.75em', ml: '0.75em' } }} />
-        {isRecent && <ExpandIcon sx={{ ml: '0.5em', fontSize: '1em', width: '1em', height: '1em' }} />}
+        {isRecent && <ExpandIcon expand={expand} sx={{ ml: '0.5em', fontSize: '1em', width: '1em', height: '1em' }} />}
       </MenuItem>
       <Collapse
         in={expand}
@@ -70,6 +70,7 @@ export const QuickMenuRecent: FC<QuickMenuRecentProps> = ({ isDark, menu, logged
         }}
       >
         {history?.slice(0, menu?.max ?? 5)?.map((destination, i) => (
+          // eslint-disable-next-line react/no-array-index-key -- history is an ordered list that can contain duplicates
           <MenuItem key={i} sx={{ pl: '1.5em', fontSize: '1em' }} onClick={$event => onClick($event, { menu, destination })}>
             <FolderIcon sx={{ fontSize: '0.875em', width: '1.25em', height: '1.25em' }} />
             <ListItemText primary={destination} primaryTypographyProps={{ sx: { fontSize: '0.75em', ml: '1em' } }} />

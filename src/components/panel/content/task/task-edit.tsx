@@ -1,47 +1,27 @@
+import type { SyntheticEvent } from 'react';
+import type { Subscription } from 'rxjs';
+
+import type { FormRules, RootSlice, Task, TaskBtEditRequest, TaskFile } from '@src/models';
+
 import SaveIcon from '@mui/icons-material/Save';
-import {
-  AppBar,
-  Box,
-  Button,
-  Card,
-  CardHeader,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  InputAdornment,
-  LinearProgress,
-  MenuItem,
-  Stack,
-  Tab,
-  Tabs,
-} from '@mui/material';
-
+import { AppBar, Box, Button, Card, CardHeader, Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment, LinearProgress, MenuItem, Stack, Tab, Tabs } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
-
 import { useForm } from 'react-hook-form';
-
 import { useSelector } from 'react-redux';
-
 import { finalize, lastValueFrom } from 'rxjs';
 
 import { FormExplorer, FormInput, IconLoader } from '@src/components';
-import type { FormRules, RootSlice, Task, TaskBtEditRequest, TaskFile } from '@src/models';
 import { TaskPriority, TaskStatus, TaskType } from '@src/models';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
-
 import { ContainerContext } from '@src/store';
 import { getDownloadStation2APITaskBt, getTaskFilesById } from '@src/store/selectors';
 import { before, useDebounceObservable, useI18n } from '@src/utils';
 
 import { TaskEditFiles } from './task-edit-files';
 
-import type { SyntheticEvent } from 'react';
-import type { Subscription } from 'rxjs';
-
 type TaskEditForm = TaskBtEditRequest;
 
-export const TaskEdit = ({
+export function TaskEdit({
   open,
   task,
   onFormCancel,
@@ -51,7 +31,7 @@ export const TaskEdit = ({
   task: Task;
   onFormCancel?: (form: TaskEditForm) => void;
   onFormSubmit?: (form: TaskEditForm) => void;
-}) => {
+}) {
   const i18n = useI18n('panel', 'content', 'task', 'edit');
 
   const { containerRef } = useContext(ContainerContext);
@@ -110,6 +90,7 @@ export const TaskEdit = ({
   const hasDownload2Api = useSelector(getDownloadStation2APITaskBt);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect --  TODO - investigate if this is still needed
     setTab(0);
     reset(getNewForm());
     let sub: Subscription;
@@ -127,7 +108,7 @@ export const TaskEdit = ({
           }),
         )
         .subscribe({
-          next: response => {
+          next: (response) => {
             const { extract_password, is_active_torrent, ..._response } = response;
             setIsActive(is_active_torrent);
             reset({
@@ -135,10 +116,10 @@ export const TaskEdit = ({
               ..._response,
             });
           },
-          error: error => {
+          error: (error: Error) => {
             LoggerService.error(`Failed to fetch edit data for task '${task.id}'`, { task, error });
             NotificationService.error({
-              title: i18n(`task_edit_get_fail`, 'common', 'error'),
+              title: i18n('task_edit_get_fail', 'common', 'error'),
               message: error?.message ?? error?.name ?? '',
             });
           },
@@ -147,13 +128,14 @@ export const TaskEdit = ({
     return () => {
       if (!sub?.closed) sub?.unsubscribe();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only want to run this when open changes
   }, [open]);
 
   const onCancel = (data: TaskEditForm) => {
     onFormCancel?.(data);
   };
 
-  const onSubmit = (data: TaskEditForm) => {
+  const onSubmit = async (data: TaskEditForm) => {
     if (!isDirty) {
       reset(data);
       onFormSubmit?.(data);
@@ -176,10 +158,10 @@ export const TaskEdit = ({
         reset(data);
         onFormSubmit?.(data);
       })
-      .catch(error => {
+      .catch((error: Error) => {
         LoggerService.error(`Failed to edit data for task '${task.id}'`, { data, task, error });
         NotificationService.error({
-          title: i18n(`task_edit_set_fail`, 'common', 'error'),
+          title: i18n('task_edit_set_fail', 'common', 'error'),
           message: error?.message ?? error?.name ?? '',
         });
       });
@@ -201,14 +183,14 @@ export const TaskEdit = ({
       open={open}
       onClose={() => handleSubmit(onCancel)}
       aria-labelledby="confirm-delete-dialog"
-      maxWidth={'md'}
+      maxWidth="md"
       PaperProps={{ sx: { maxHeight: 'calc(100% - 1em)' } }}
-      container={containerRef?.current}
+      container={() => containerRef?.current ?? null}
     >
       <DialogTitle>{i18n('destination_folder')}</DialogTitle>
       <DialogContent sx={{ display: 'flex', flexDirection: 'column' }}>
         <LinearProgress
-          variant={'indeterminate'}
+          variant="indeterminate"
           sx={{
             height: '0.125rem',
             transition: 'opacity 0.3s linear',
@@ -235,7 +217,7 @@ export const TaskEdit = ({
               subheader={i18n('priority__subheader')}
               titleTypographyProps={{ variant: 'subtitle2' }}
               subheaderTypographyProps={{ variant: 'subtitle2' }}
-              action={
+              action={(
                 <FormInput
                   controllerProps={{ name: 'priority', control }}
                   textFieldProps={{
@@ -251,7 +233,7 @@ export const TaskEdit = ({
                     </MenuItem>
                   ))}
                 </FormInput>
-              }
+              )}
               sx={{ p: '0.5rem 0' }}
             />
             <CardHeader
@@ -259,7 +241,7 @@ export const TaskEdit = ({
               subheader={i18n('max_peers__subheader')}
               titleTypographyProps={{ variant: 'subtitle2' }}
               subheaderTypographyProps={{ variant: 'subtitle2' }}
-              action={
+              action={(
                 <FormInput
                   controllerProps={{
                     name: 'max_peers',
@@ -276,7 +258,7 @@ export const TaskEdit = ({
                     sx: { flex: '0 0 14rem', ml: '0.5rem' },
                   }}
                 />
-              }
+              )}
               sx={{ p: '0.5rem 0', mt: '0.5rem' }}
             />
             <CardHeader
@@ -284,7 +266,7 @@ export const TaskEdit = ({
               subheader={i18n('max_download_rate__subheader')}
               titleTypographyProps={{ variant: 'subtitle2' }}
               subheaderTypographyProps={{ variant: 'subtitle2' }}
-              action={
+              action={(
                 <FormInput
                   controllerProps={{
                     name: 'max_download_rate',
@@ -301,7 +283,7 @@ export const TaskEdit = ({
                     sx: { flex: '0 0 14rem', ml: '0.5rem' },
                   }}
                 />
-              }
+              )}
               sx={{ p: '0.5rem 0', mt: '0.5rem' }}
             />
             <CardHeader
@@ -309,7 +291,7 @@ export const TaskEdit = ({
               subheader={i18n('max_upload_rate__subheader')}
               titleTypographyProps={{ variant: 'subtitle2' }}
               subheaderTypographyProps={{ variant: 'subtitle2' }}
-              action={
+              action={(
                 <FormInput
                   controllerProps={{
                     name: 'max_upload_rate',
@@ -326,7 +308,7 @@ export const TaskEdit = ({
                     sx: { flex: '0 0 14rem', ml: '0.5rem' },
                   }}
                 />
-              }
+              )}
               sx={{ p: '0.5rem 0', mt: '0.5rem' }}
             />
             <CardHeader subheader={i18n('seeding_info')} subheaderTypographyProps={{ variant: 'subtitle2' }} sx={{ p: '0.5rem 0', mt: '0.5rem' }} />
@@ -335,7 +317,7 @@ export const TaskEdit = ({
               subheader={i18n('seeding_interval__subheader')}
               titleTypographyProps={{ variant: 'subtitle2' }}
               subheaderTypographyProps={{ variant: 'subtitle2' }}
-              action={
+              action={(
                 <FormInput
                   controllerProps={{
                     name: 'seeding_interval',
@@ -352,7 +334,7 @@ export const TaskEdit = ({
                     sx: { flex: '0 0 14rem', ml: '0.5rem' },
                   }}
                 />
-              }
+              )}
               sx={{ p: '0.5rem 0', mt: '0.5rem' }}
             />
             <CardHeader
@@ -360,7 +342,7 @@ export const TaskEdit = ({
               subheader={i18n('seeding_ratio__subheader')}
               titleTypographyProps={{ variant: 'subtitle2' }}
               subheaderTypographyProps={{ variant: 'subtitle2' }}
-              action={
+              action={(
                 <FormInput
                   controllerProps={{
                     name: 'seeding_ratio',
@@ -377,7 +359,7 @@ export const TaskEdit = ({
                     sx: { flex: '0 0 14rem', ml: '0.5rem' },
                   }}
                 />
-              }
+              )}
               sx={{ p: '0.5rem 0', mt: '0.5rem' }}
             />
           </Box>
@@ -388,7 +370,7 @@ export const TaskEdit = ({
       </DialogContent>
       <DialogActions sx={{ justifyContent: 'flex-end', padding: '0 1rem 1rem' }}>
         <Stack direction="row" spacing={2}>
-          <Button variant="outlined" color={'secondary'} sx={{ width: '5rem' }} onClick={() => onCancel(getValues())}>
+          <Button variant="outlined" color="secondary" sx={{ width: '5rem' }} onClick={() => onCancel(getValues())}>
             {i18n('cancel', 'common', 'buttons')}
           </Button>
           <Button
@@ -405,4 +387,4 @@ export const TaskEdit = ({
       </DialogActions>
     </Dialog>
   );
-};
+}

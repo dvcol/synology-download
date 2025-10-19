@@ -1,1 +1,1 @@
-export type QueryAutoLoginOptions = { logged?: boolean; notify?: boolean };
+export interface QueryAutoLoginOptions { logged?: boolean; notify?: boolean }

@@ -66,4 +66,4 @@ export const KeyboardKeyCode: Record<KeyboardKeyNames, number> = {
   F12: 123,
 } as const;
 
-export type KeyboardKeyCodes = typeof KeyboardKeyCode[keyof typeof KeyboardKeyCode];
+export type KeyboardKeyCodes = (typeof KeyboardKeyCode)[keyof typeof KeyboardKeyCode];

@@ -1,6 +1,6 @@
-import { v4 as uuid } from 'uuid';
-
 import type { ContextMenuCreate as ChromeContextMenu } from '@dvcol/web-extension-utils';
+
+import { v4 as uuid } from 'uuid';
 
 import { MaterialIcon } from './material-ui.model';
 

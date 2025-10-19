@@ -1,14 +1,15 @@
-import { catchError, map, of } from 'rxjs';
+import type { Observable } from 'rxjs';
 
 import type { HttpResponse, SynologyQueryArgs, SynologyQueryOptions, SynologyQueryPayload } from '@src/models';
+import type { BaseHttpRequest, HttpHeaders } from '@src/utils';
+
+import { catchError, map, of } from 'rxjs';
+
 import { AuthMethod, ChromeMessageType, Controller, CustomHeader, SynologyError } from '@src/models';
 import { LoggerService } from '@src/services';
-import type { BaseHttpRequest, HttpHeaders } from '@src/utils';
 import { HttpMethod, onMessage, sendMessage, stringifyParams } from '@src/utils';
 
 import { BaseHttpService } from './base-http.service';
-
-import type { Observable } from 'rxjs';
 
 export class SynologyService extends BaseHttpService {
   protected sid?: string;
@@ -25,7 +26,7 @@ export class SynologyService extends BaseHttpService {
         this.query(...(payload?.args ?? []))
           .pipe(
             map(response => ({ success: true, payload: response })),
-            catchError(error => {
+            catchError((error: Error) => {
               LoggerService.error('Forwarded method failed.', { payload, error });
               return of({ success: false, error: { name: error?.name, message: error?.message } });
             }),
@@ -83,10 +84,10 @@ export class SynologyService extends BaseHttpService {
   }
 
   do<T>(options: SynologyQueryOptions, doNotProxy?: boolean): Observable<T> {
-    return (!doNotProxy && this.isProxy ? this.forward : this.query)
+    return (!doNotProxy && this.isProxy ? this.forward.bind(this) : this.query.bind(this))
       .bind(this)<T>(options)
       .pipe(
-        map(response => {
+        map((response) => {
           if (response?.success === true) {
             return response.data;
           }

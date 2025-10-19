@@ -1,3 +1,5 @@
+import type { NavbarButton } from '@src/models';
+
 import AddLinkIcon from '@mui/icons-material/AddLink';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
@@ -13,15 +15,11 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import SettingsIcon from '@mui/icons-material/Settings';
 import TuneIcon from '@mui/icons-material/Tune';
 import { DialogContentText, Divider, IconButton, Menu, Tooltip } from '@mui/material';
-
 import React, { useContext, useMemo } from 'react';
-
 import { useDispatch, useSelector } from 'react-redux';
-
 import { Link, useLocation } from 'react-router-dom';
 
 import { ConfirmationDialog, TooltipHoverChange } from '@src/components';
-import type { NavbarButton } from '@src/models';
 import { AppLinks, AppRoute, ErrorType, LoginError, NavbarButtonType } from '@src/models';
 import { DownloadService, NotificationService, QueryService } from '@src/services';
 import { PanelService } from '@src/services/panel/panel.service';
@@ -32,9 +30,9 @@ import { createTab, useI18n } from '@src/utils';
 
 import NavbarMenuIcon from './navbar-menu-icon';
 
-type NavbarMenuProps = { menuIcon: React.ReactNode };
+interface NavbarMenuProps { menuIcon: React.ReactNode }
 
-export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
+export function NavbarMenu({ menuIcon }: NavbarMenuProps) {
   const i18n = useI18n('navbar', 'menu');
   const dispatch = useDispatch();
   const url = useSelector(getUrl) + AppLinks.DownloadStation;
@@ -51,9 +49,9 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
   const handleClick = <T extends Element>(event: React.MouseEvent<T>) => setAnchorEl(event.currentTarget);
   const handleClose = () => setAnchorEl(null);
   const handleClearTab = () => dispatch(setNavbar());
-  const handleUrl = () => createTab({ url });
+  const handleUrl = async () => createTab({ url });
   const handleError = (button: string, type: 'task' | 'download' = 'task') => ({
-    error: (error: any) => {
+    error: (error: Error & { type?: string }) => {
       if (error instanceof LoginError || ErrorType.Login === error?.type) {
         NotificationService.loginRequired();
       } else if (error) {
@@ -66,22 +64,22 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
   });
 
   // buttons helpers
-  const getOnClick: <T extends () => void>(callbacks?: { both?: T; shift?: T; alt?: T }) => NonNullable<NavbarButton['onClick']> =
-    ({ both, shift, alt } = {}) =>
-    ({ altKey, shiftKey }) => {
+  const getOnClick: <T extends () => void>(callbacks?: { both?: T; shift?: T; alt?: T }) => NonNullable<NavbarButton['onClick']>
+    = ({ both, shift, alt } = {}) =>
+      ({ altKey, shiftKey }) => {
       // if both are pressed
-      if (shiftKey && altKey) both?.();
+        if (shiftKey && altKey) both?.();
 
-      // if download disabled, but task enabled fall back and exit
-      if (!downloadButtons && logged) return alt?.();
-      // if task disabled, but download enabled fall back and exit
-      if (!logged && downloadButtons) return shift?.();
+        // if download disabled, but task enabled fall back and exit
+        if (!downloadButtons && logged) return alt?.();
+        // if task disabled, but download enabled fall back and exit
+        if (!logged && downloadButtons) return shift?.();
 
-      // if download enable and shift, only do download
-      if (downloadButtons && !altKey) shift?.();
-      // if task enable and alt, only do tasks
-      if (logged && !shiftKey) alt?.();
-    };
+        // if download enable and shift, only do download
+        if (downloadButtons && !altKey) shift?.();
+        // if task enable and alt, only do tasks
+        if (logged && !shiftKey) alt?.();
+      };
 
   const getHoverTooltip: (tooltips?: { both?: string; shift?: string; alt?: string; none?: string }) => NonNullable<NavbarButton['hoverTooltip']> = (
     tooltips = {},
@@ -132,7 +130,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       color: 'info',
       disabled: !isPanel,
       divider: true,
-      onClick: () => PanelService.focus(),
+      onClick: async () => PanelService.focus(),
     },
     {
       type: NavbarButtonType.Add,
@@ -220,7 +218,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
     },
     {
       type: NavbarButtonType.Configs,
-      label: i18n(`menu_configs`),
+      label: i18n('menu_configs'),
       icon: <SettingsIcon />,
       color: 'primary',
       component: Link,
@@ -259,8 +257,8 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
 
   return (
     <React.Fragment>
-      {(logged || downloadEnabled) &&
-        buttons
+      {(logged || downloadEnabled)
+        && buttons
           ?.filter(({ type }) => navbarButtons?.includes(type))
           ?.map(({ type, icon, label, hoverTooltip: bHoverTooltip, divider, hide, ..._props }) => (
             <TooltipHoverChange title={label} hoverTooltip={modifiers => (bHoverTooltip ? `${label} ${bHoverTooltip(modifiers)}` : label)} key={type}>
@@ -273,12 +271,12 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
           ))}
 
       {!logged && (
-        <Tooltip arrow title={i18n('menu_login')} key={'login'} PopperProps={{ disablePortal: true }}>
+        <Tooltip arrow title={i18n('menu_login')} key="login" PopperProps={{ disablePortal: true }}>
           <span>
             <IconButton
-              id={`login-pinned`}
-              aria-controls={`login-pinned-button`}
-              color={'error'}
+              id="login-pinned"
+              aria-controls="login-pinned-button"
+              color="error"
               component={Link}
               to={AppRoute.Settings}
               onClick={handleClearTab}
@@ -307,7 +305,7 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
         id="dropdown-menu"
         anchorEl={anchorEl}
         open={open}
-        container={containerRef?.current}
+        container={() => containerRef?.current ?? null}
         onClose={handleClose}
         onClick={handleClose}
         MenuListProps={{ 'aria-labelledby': 'dropdown-menu' }}
@@ -327,15 +325,15 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       <ConfirmationDialog
         open={prompt}
         title={i18n('confirmation_title')}
-        description={
+        description={(
           <React.Fragment>
             <DialogContentText id="alert-dialog-description">{i18n('confirmation_line_1')}</DialogContentText>
             <br />
             <DialogContentText id="alert-dialog-description">{i18n('confirmation_line_2')}</DialogContentText>
           </React.Fragment>
-        }
+        )}
         onCancel={() => setPrompt(false)}
-        onConfirm={$event => {
+        onConfirm={($event) => {
           setPrompt(false);
           onErase($event);
         }}
@@ -346,6 +344,6 @@ export const NavbarMenu = ({ menuIcon }: NavbarMenuProps) => {
       />
     </React.Fragment>
   );
-};
+}
 
 export default NavbarMenu;

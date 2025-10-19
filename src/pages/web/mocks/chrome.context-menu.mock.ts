@@ -1,6 +1,6 @@
 import { BaseLoggerService } from '@src/services';
 
-export const patchContextMenus = (_global = window) => {
+export function patchContextMenus(_global = window) {
   _global.chrome.contextMenus.create = (createProperties, cb) => {
     BaseLoggerService.debug('chrome.contextMenus.create', { createProperties });
     cb?.();
@@ -17,10 +17,10 @@ export const patchContextMenus = (_global = window) => {
     cb?.();
   }) as typeof chrome.contextMenus.remove;
 
-  _global.chrome.contextMenus.removeAll = (cb => {
+  _global.chrome.contextMenus.removeAll = ((cb) => {
     BaseLoggerService.debug('chrome.contextMenus.removeAll');
     cb?.();
   }) as typeof chrome.contextMenus.removeAll;
 
   return _global.chrome.contextMenus;
-};
+}

@@ -1,15 +1,14 @@
-import createCache from '@emotion/cache';
+import type { StoreOrProxy, Task } from '@src/models';
+import type { StandaloneAppCredentials } from '@src/pages/web';
 
+import createCache from '@emotion/cache';
 import React from 'react';
 import { render } from 'react-dom';
-
 import { forkJoin, lastValueFrom } from 'rxjs';
 
 import { StandaloneApp } from '@src/components';
-import type { StoreOrProxy, Task } from '@src/models';
 import { AppInstance, mapToTask, ServiceInstance } from '@src/models';
 import { restoreLocalSate, restoreSettings, restoreTaskSlice } from '@src/pages/background/modules';
-import type { StandaloneAppCredentials } from '@src/pages/web';
 import { WcEvents } from '@src/pages/web';
 import { BaseLoggerService, DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { store } from '@src/store';
@@ -66,7 +65,7 @@ export class StandaloneAppWc extends HTMLElement {
     await lastValueFrom(restoreTaskSlice(store));
 
     // Set standalone to open
-    store.dispatch(setStandalone(true));
+    void store.dispatch(setStandalone(true));
 
     PollingService.init(storeProxy);
   }
@@ -93,6 +92,7 @@ export class StandaloneAppWc extends HTMLElement {
     const app = shadowRoot.querySelector(`#${AppInstance.standalone}-app`);
     const cache = createCache({ key: `${AppInstance.standalone}-cache`, container });
 
+    // eslint-disable-next-line react-dom/no-render-return-value -- we need to return the rendered instance for web component usage
     return render(
       <StandaloneApp store={storeOrProxy} cache={cache} routerProps={{ basename: this.basename }} instance={AppInstance.standalone} />,
       app,
@@ -105,13 +105,13 @@ export class StandaloneAppWc extends HTMLElement {
    */
   add(tasks: Task | Task[]) {
     const _tasks = Array.isArray(tasks) ? tasks?.map(t => mapToTask(t)) : [mapToTask(tasks)];
-    this.store.dispatch(addTasks(_tasks));
+    void this.store.dispatch(addTasks(_tasks));
   }
 
   /**
    * Trigger a polling event
    */
-  poll() {
+  async poll() {
     return lastValueFrom(forkJoin([QueryService.listTasks(), QueryService.getStatistic(), DownloadService.searchAll()]));
   }
 
@@ -119,10 +119,10 @@ export class StandaloneAppWc extends HTMLElement {
    * Trigger a login event. Default login/pwd is admin/@dm1n.
    * @param credentials
    */
-  login(credentials?: StandaloneAppCredentials) {
+  async login(credentials?: StandaloneAppCredentials) {
     const connection = getConnection(this.store.getState());
     const merged = { ...connection, ...credentials, password: credentials?.password ?? (connection.password || '@dm1n') };
-    this.store.dispatch(syncConnection(merged));
+    void this.store.dispatch(syncConnection(merged));
     return lastValueFrom(QueryService.login(merged));
   }
 }

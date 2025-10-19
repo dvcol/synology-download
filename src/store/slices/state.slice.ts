@@ -1,6 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit';
+import type { CaseReducer, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
 
 import type { InfoResponse, Log, StateSlice } from '@src/models';
+
+import { createSlice } from '@reduxjs/toolkit';
 
 import {
   setBadgeReducer,
@@ -10,8 +12,6 @@ import {
   syncLoggedReducer,
   syncLogHistoryReducer,
 } from '@src/store/reducers/state.reducer';
-
-import type { CaseReducer, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
 
 export interface StateReducers<S = StateSlice> extends SliceCaseReducers<S> {
   restoreState: CaseReducer<S, PayloadAction<Partial<S>>>;

@@ -1,14 +1,14 @@
-import { Dialog, DialogContent } from '@mui/material';
-
-import React, { useEffect } from 'react';
-
-import type { TaskAddProps } from '@src/components';
-import { TaskAdd } from '@src/components';
-import type { TaskForm } from '@src/models';
-
 import type { PortalProps } from '@mui/base/Portal';
 import type { DialogProps } from '@mui/material';
 import type { FC } from 'react';
+
+import type { TaskAddProps } from '@src/components';
+import type { TaskForm } from '@src/models';
+
+import { Dialog, DialogContent } from '@mui/material';
+import React, { useEffect } from 'react';
+
+import { TaskAdd } from '@src/components';
 
 export const TaskDialog: FC<{
   container?: PortalProps['container'];
@@ -23,6 +23,7 @@ export const TaskDialog: FC<{
   const [form, setForm] = React.useState<TaskForm>(taskForm ?? {});
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect,react-hooks-extra/no-direct-set-state-in-use-effect -- TODO investigate if this can be avoided
     setForm(taskForm ?? {});
   }, [taskForm]);
 
@@ -32,7 +33,7 @@ export const TaskDialog: FC<{
       open={open}
       container={container}
       fullWidth={true}
-      maxWidth={'md'}
+      maxWidth="md"
       {...dialogProps}
       onClose={() => {
         onClose?.(form);

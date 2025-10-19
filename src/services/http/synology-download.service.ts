@@ -1,21 +1,13 @@
+import type { Observable } from 'rxjs';
+
+import type { CommonResponse, DownloadStationConfig, DownloadStationInfo, DownloadStationStatistic, SynologyFileStationInfo, TaskCreateRequest, TaskList, TaskListOption } from '@src/models';
+import type { HttpParameters } from '@src/utils';
+
 import { throwError } from 'rxjs';
 
-import type {
-  CommonResponse,
-  DownloadStationConfig,
-  DownloadStationInfo,
-  DownloadStationStatistic,
-  SynologyFileStationInfo,
-  TaskCreateRequest,
-  TaskList,
-  TaskListOption,
-} from '@src/models';
 import { Controller, DownloadStationAPI, Endpoint, TaskMethod } from '@src/models';
 import { SynologyService } from '@src/services/http';
-import type { HttpParameters } from '@src/utils';
 import { HttpMethod, sanitizeUrl } from '@src/utils';
-
-import type { Observable } from 'rxjs';
 
 export class SynologyDownloadService extends SynologyService {
   /**
@@ -69,7 +61,7 @@ export class SynologyDownloadService extends SynologyService {
    */
   listTasks(offset?: number, limit?: number, additional?: TaskListOption[]): Observable<TaskList> {
     const params: HttpParameters = { method: TaskMethod.list };
-    if (additional?.length) params.additional = `${additional}`;
+    if (additional?.length) params.additional = additional?.toString();
     if (offset) params.offset = `${offset}`;
     if (limit) params.limit = `${limit}`;
     return this._do<TaskList>(HttpMethod.POST, params);
@@ -124,6 +116,7 @@ export class SynologyDownloadService extends SynologyService {
       '2',
     );
   }
+
   /**
    * Get information about the Download Station service.
    * @returns Observable containing SynologyFileStationInfo

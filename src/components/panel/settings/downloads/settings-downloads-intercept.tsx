@@ -1,24 +1,21 @@
+import type { DownloadExtension, DownloadsIntercept } from '@src/models';
+import type { StoreState } from '@src/store';
+
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Button, Card, CardActions, CardContent, CardHeader, Collapse, Grid, Stack, Tooltip, Typography } from '@mui/material';
-
 import React from 'react';
-
 import { useForm } from 'react-hook-form';
-
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ButtonWithConfirm, FormCheckbox, FormSwitch } from '@src/components';
-
-import type { DownloadExtension, DownloadsIntercept } from '@src/models';
 import { ColorLevel, ColorLevelMap, defaultDownloads, DownloadsHeader } from '@src/models';
-import type { StoreState } from '@src/store';
 import { syncDownloadsIntercept } from '@src/store/actions';
 import { getSettingsDownloadsEnabled, getSettingsDownloadsIntercept } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
 
 import { SettingsDownloadsExtensions } from './settings-downloads-extensions';
 
-export const SettingsDownloadsIntercept = () => {
+export function SettingsDownloadsIntercept() {
   const i18n = useI18n('panel', 'settings', 'downloads', 'intercept');
   const dispatch = useDispatch();
   const downloadEnabled = useSelector<StoreState, boolean>(getSettingsDownloadsEnabled);
@@ -82,10 +79,10 @@ export const SettingsDownloadsIntercept = () => {
       />
       <CardContent>
         <Collapse in={getValues()?.enabled && downloadEnabled} unmountOnExit>
-          <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem', maxWidth: '80%' }}>
+          <Typography color={ColorLevelMap[ColorLevel.warning]} variant="subtitle2" sx={{ m: '0 0 0.75rem', fontSize: '0.7rem', maxWidth: '80%' }}>
             {i18n('warning')}
           </Typography>
-          <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem', maxWidth: '80%' }}>
+          <Typography color={ColorLevelMap[ColorLevel.warning]} variant="subtitle2" sx={{ m: '0 0 0.75rem', fontSize: '0.7rem', maxWidth: '80%' }}>
             {i18n('alpha__warning')}
           </Typography>
           <CardHeader
@@ -93,12 +90,12 @@ export const SettingsDownloadsIntercept = () => {
             subheader={i18n('erase__subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
             subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
-            action={
+            action={(
               <FormSwitch
                 controllerProps={{ name: 'erase', control }}
                 formControlLabelProps={{ label: '', disabled: !getValues()?.enabled || !getValues()?.enabled }}
               />
-            }
+            )}
             sx={{ p: '0.5rem 0' }}
           />
           <CardHeader
@@ -122,7 +119,7 @@ export const SettingsDownloadsIntercept = () => {
             sx={{ p: '0.5rem 0' }}
           />
           <Collapse in={getValues().modal} unmountOnExit={true}>
-            <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
+            <Typography color={ColorLevelMap[ColorLevel.warning]} variant="subtitle2" sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
               {i18n('modal__warning')}
             </Typography>
           </Collapse>
@@ -131,12 +128,12 @@ export const SettingsDownloadsIntercept = () => {
             subheader={i18n('all__subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
             subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
-            action={
+            action={(
               <FormSwitch
                 controllerProps={{ name: 'all', control }}
                 formControlLabelProps={{ label: '', disabled: !getValues()?.enabled || !getValues()?.enabled }}
               />
-            }
+            )}
             sx={{ p: '0.5rem 0' }}
           />
 
@@ -176,7 +173,7 @@ export const SettingsDownloadsIntercept = () => {
                         }}
                         checkboxProps={{
                           multiple: true,
-                          value: extension,
+                          value: extension as unknown as boolean,
                           color: getHighlightColor(extension),
                           disabled: !getValues()?.enabled || !getValues()?.enabled || getValues()?.all,
                         }}
@@ -212,4 +209,4 @@ export const SettingsDownloadsIntercept = () => {
       </CardActions>
     </Card>
   );
-};
+}

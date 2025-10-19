@@ -1,30 +1,30 @@
 {
   "compilerOptions": {
     "target": "es2021",
+    "jsx": "react",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": false,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
     "experimentalDecorators": true,
+    "baseUrl": "src",
     "module": "esnext",
     "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "noEmit": false,
-    "jsx": "react",
-    "declaration": true,
-    "declarationMap": true,
-    "declarationDir": "dist/types",
-    "outDir": "dist",
-    "baseUrl": "src",
-    "sourceMap": true,
     "paths": {
       "@src/*": ["*"]
-    }
+    },
+    "resolveJsonModule": true,
+    "allowJs": false,
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "declaration": true,
+    "declarationDir": "dist/types",
+    "declarationMap": true,
+    "noEmit": false,
+    "outDir": "dist",
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
   },
   "include": ["./src", "webpack", ".eslintrc.js"],
-  "exclude": ["**/*.spec.ts", "**/*.spec.tsx", "**/*.test.ts", "**/*.test.tsx", "build", "node_modules"]
+  "exclude": ["build", "node_modules"]
 }

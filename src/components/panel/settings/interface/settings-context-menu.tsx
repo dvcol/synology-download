@@ -1,18 +1,16 @@
+import type { ContextMenu } from '@src/models';
+
 import { AccordionDetails, Button, Card, CardActions, CardHeader, Collapse, Stack } from '@mui/material';
-
 import React from 'react';
-
 import { useForm } from 'react-hook-form';
-
 import { useDispatch } from 'react-redux';
 
 import { FormExplorer, FormInput, FormSwitch } from '@src/components/common';
-import type { ContextMenu } from '@src/models';
 import { ChromeMessageType } from '@src/models';
 import { removeContextMenu, saveContextMenu } from '@src/store/actions';
 import { openPanel, openPopup, sendMessage, useI18n } from '@src/utils';
 
-export const SettingsContextMenu = ({ menu, onRemove }: { menu: ContextMenu; onRemove: (id: ContextMenu['id']) => Promise<void> }) => {
+export function SettingsContextMenu({ menu, onRemove }: { menu: ContextMenu; onRemove: (id: ContextMenu['id']) => Promise<void> }) {
   const i18n = useI18n('panel', 'settings', 'context_menu');
   const dispatch = useDispatch();
   const {
@@ -62,7 +60,7 @@ export const SettingsContextMenu = ({ menu, onRemove }: { menu: ContextMenu; onR
         subheader={i18n('name_subheader')}
         titleTypographyProps={{ variant: 'subtitle2' }}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
-        action={
+        action={(
           <FormInput
             controllerProps={{ name: 'title', control }}
             textFieldProps={{
@@ -70,7 +68,7 @@ export const SettingsContextMenu = ({ menu, onRemove }: { menu: ContextMenu; onR
               sx: { flex: '0 0 14rem', textTransform: 'capitalize' },
             }}
           />
-        }
+        )}
         sx={{ p: '0.5rem 0' }}
       />
       <CardHeader
@@ -78,7 +76,7 @@ export const SettingsContextMenu = ({ menu, onRemove }: { menu: ContextMenu; onR
         subheader={i18n('modal_subheader')}
         titleTypographyProps={{ variant: 'subtitle2' }}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
-        action={
+        action={(
           <FormSwitch
             controllerProps={{ name: 'modal', control }}
             formControlLabelProps={{ label: '' }}
@@ -89,7 +87,7 @@ export const SettingsContextMenu = ({ menu, onRemove }: { menu: ContextMenu; onR
               },
             }}
           />
-        }
+        )}
         sx={{ p: '0.5rem 0' }}
       />
       <CardHeader
@@ -97,7 +95,7 @@ export const SettingsContextMenu = ({ menu, onRemove }: { menu: ContextMenu; onR
         subheader={i18n('popup_subheader')}
         titleTypographyProps={{ variant: 'subtitle2' }}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
-        action={
+        action={(
           <FormSwitch
             controllerProps={{ name: 'popup', control }}
             formControlLabelProps={{ label: '', disabled: !openPopup }}
@@ -108,7 +106,7 @@ export const SettingsContextMenu = ({ menu, onRemove }: { menu: ContextMenu; onR
               },
             }}
           />
-        }
+        )}
         sx={{ p: '0.5rem 0' }}
       />
       <CardHeader
@@ -116,7 +114,7 @@ export const SettingsContextMenu = ({ menu, onRemove }: { menu: ContextMenu; onR
         subheader={i18n('panel_subheader')}
         titleTypographyProps={{ variant: 'subtitle2' }}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
-        action={
+        action={(
           <FormSwitch
             controllerProps={{ name: 'panel', control }}
             formControlLabelProps={{ label: '', disabled: !openPanel }}
@@ -127,7 +125,7 @@ export const SettingsContextMenu = ({ menu, onRemove }: { menu: ContextMenu; onR
               },
             }}
           />
-        }
+        )}
         sx={{ p: '0.5rem 0' }}
       />
       <CardHeader
@@ -169,4 +167,4 @@ export const SettingsContextMenu = ({ menu, onRemove }: { menu: ContextMenu; onR
       </CardActions>
     </AccordionDetails>
   );
-};
+}

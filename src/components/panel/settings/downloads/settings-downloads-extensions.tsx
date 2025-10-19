@@ -1,15 +1,14 @@
+import type { FC } from 'react';
+
+import type { DownloadExtension } from '@src/models';
+
 import AddIcon from '@mui/icons-material/Add';
 import { Button, Grid } from '@mui/material';
-
 import React from 'react';
-
 import { useForm } from 'react-hook-form';
 
 import { FormInput } from '@src/components';
-import type { DownloadExtension } from '@src/models';
 import { useI18n } from '@src/utils';
-
-import type { FC } from 'react';
 
 const empty: DownloadExtension = { ext: '', mime: '' };
 

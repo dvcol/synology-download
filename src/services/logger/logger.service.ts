@@ -1,6 +1,7 @@
+import type { Log, ServiceInstance, StoreOrProxy } from '@src/models';
+
 import { Subject, takeUntil } from 'rxjs';
 
-import type { Log, ServiceInstance, StoreOrProxy } from '@src/models';
 import { ChromeMessageType, defaultLoggingLevels, LoggingLevel, ServiceInstanceColorsMap } from '@src/models';
 import { BaseLoggerService } from '@src/services';
 import { addLogHistory } from '@src/store/actions';
@@ -10,7 +11,7 @@ import { onMessage, ProxyLogger, sendMessage, store$ } from '@src/utils';
 export class LoggerService extends BaseLoggerService {
   protected static source: ServiceInstance;
 
-  private static store: any | StoreOrProxy;
+  private static store: StoreOrProxy;
   private static isProxy: boolean;
 
   private static history = false;
@@ -29,7 +30,7 @@ export class LoggerService extends BaseLoggerService {
 
     store$(store, getAdvancedSettingsLogging)
       .pipe(takeUntil(this._destroy$))
-      .subscribe(settings => {
+      .subscribe((settings) => {
         this.level = (settings.levels ?? defaultLoggingLevels)[this.source] ?? this.level;
         this.enabled = !!settings.enabled;
         this.history = settings.history ?? this.history;
@@ -45,7 +46,7 @@ export class LoggerService extends BaseLoggerService {
         });
     }
 
-    console.debug(...this.timestamp, 'Logger service initialized');
+    console.info(...this.timestamp, 'Logger service initialized');
   }
 
   static destroy() {
@@ -59,7 +60,7 @@ export class LoggerService extends BaseLoggerService {
   }
 
   private static dispatch(log: Log) {
-    this.store?.dispatch(addLogHistory({ log, max: this.historyMax }));
+    void this.store?.dispatch(addLogHistory({ log, max: this.historyMax }));
   }
 
   /**
@@ -69,11 +70,11 @@ export class LoggerService extends BaseLoggerService {
    * @param params any parameters
    * @private
    */
-  private static capture(level: LoggingLevel, value: any, params?: any[]) {
+  private static capture(level: LoggingLevel, value: unknown, params?: any[]) {
     if (!this.history || !this.store) return;
     if (level < LoggingLevel.info) return;
 
-    const log: Log = { timestamp: new Date().toISOString(), level, source: this.source, value: value?.toString(), params: params?.toString() };
+    const log: Log = { timestamp: new Date().toISOString(), level, source: this.source, value: value?.toString() ?? 'undefined', params: params?.toString() };
 
     if (this.isProxy) {
       return sendMessage<Log>({
@@ -86,30 +87,28 @@ export class LoggerService extends BaseLoggerService {
     this.dispatch(log);
   }
 
-  /* eslint-disable no-console */
   static trace(message?: any, ...params: any[]) {
     this.capture(LoggingLevel.trace, message, params);
-    return super.trace(message, ...params);
+    return super.trace(message, ...(params as [any]));
   }
 
   static debug(message?: any, ...params: any[]) {
     this.capture(LoggingLevel.debug, message, params);
-    return super.debug(message, ...params);
+    return super.debug(message, ...(params as [any]));
   }
 
   static info(message?: any, ...params: any[]) {
     this.capture(LoggingLevel.info, message, params);
-    return super.info(message, ...params);
+    return super.info(message, ...(params as [any]));
   }
 
   static warn(message?: any, ...params: any[]) {
     this.capture(LoggingLevel.warn, message, params);
-    return super.warn(message, ...params);
+    return super.warn(message, ...(params as [any]));
   }
 
   static error(message?: any, ...params: any[]) {
     this.capture(LoggingLevel.error, message, params);
-    return super.error(message, ...params);
+    return super.error(message, ...(params as [any]));
   }
-  /* eslint-enable no-console */
 }

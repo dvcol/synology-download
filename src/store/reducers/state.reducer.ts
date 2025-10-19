@@ -1,13 +1,15 @@
+import type { CaseReducer, PayloadAction } from '@reduxjs/toolkit';
+
 import type { ContentCount, Log, StateSlice, TaskStatistics } from '@src/models';
+
+import type { StateReducers } from '../slices/state.slice';
+
 import { LoggerService } from '@src/services';
 import { formatBytes, localSet, setBadgeText, setIcon, setTitle } from '@src/utils';
 
 import { stateSlice } from '../slices/state.slice';
 
-import type { StateReducers } from '../slices/state.slice';
-import type { CaseReducer, PayloadAction } from '@reduxjs/toolkit';
-
-export const setCountAndStats = (count?: ContentCount, stats?: TaskStatistics) => {
+export async function setCountAndStats(count?: ContentCount, stats?: TaskStatistics) {
   // TODO : move to thunk ?
   let text = '';
   let title = 'No tasks found or task count disabled.';
@@ -16,39 +18,38 @@ export const setCountAndStats = (count?: ContentCount, stats?: TaskStatistics) =
     title = `Badge:  ${count.badge ?? 0} task${count.badge > 1 ? 's' : ''}`;
     title += `\nTotal:  ${count.badge ?? 0} task${count.badge > 1 ? 's' : ''}\n`;
 
-    Object.keys(count.tabs)?.forEach(tab => {
+    Object.keys(count.tabs)?.forEach((tab) => {
       title += `\n${tab}: ${count.tabs[tab] ?? 0} task${count.tabs[tab] > 1 ? 's' : ''}`;
     });
   }
 
   if (stats) {
     if (title) title += '\n';
-    (Object.keys(stats) as (keyof TaskStatistics)[])?.forEach(key => {
+    (Object.keys(stats) as (keyof TaskStatistics)[])?.forEach((key) => {
       title += `\n${key?.replaceAll('_', ' ')}: ${formatBytes(stats[key])}/s`;
     });
   }
 
-  setBadgeText({ text }).then();
-  setTitle({ title }).then();
-};
+  return Promise.all([setBadgeText({ text }).then(), setTitle({ title }).then()]);
+}
 
 export const setBadgeReducer: StateReducers['setBadge'] = (state, { payload: { count, stats } }) => {
-  setCountAndStats(count, stats);
+  void setCountAndStats(count, stats);
   return { ...state, count };
 };
 
 type PartialState = Pick<StateSlice, 'logged' | 'history' | 'download'>;
-export const syncStateReducer = (state: StateSlice): StateSlice => {
+export function syncStateReducer(state: StateSlice): StateSlice {
   const { logged, history, download } = state;
   // TODO : move to thunk ?
   localSet<PartialState>(stateSlice.name, { logged, history, download }).subscribe(_state => LoggerService.debug('State local sync success', _state));
   return state;
-};
+}
 
 export const syncLoggedReducer: StateReducers['setLogged'] = (state, { payload: logged }) => {
   if (state.logged !== logged) {
     const icon = `icon${logged ? '' : '-disabled'}`;
-    setIcon({
+    void setIcon({
       path: {
         16: `../assets/icons/${icon}-16.png`,
         32: `../assets/icons/${icon}-32.png`,

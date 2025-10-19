@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import type { CaseReducer, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
 
 import type {
   AdvancedLogging,
@@ -18,6 +18,9 @@ import type {
   SyncSettings,
   TaskSettings,
 } from '@src/models';
+
+import { createSlice } from '@reduxjs/toolkit';
+
 import { defaultSettings, SettingsSliceName } from '@src/models';
 
 import {
@@ -33,8 +36,6 @@ import {
   syncNestedReducer,
   syncReducer,
 } from '../reducers/settings.reducer';
-
-import type { CaseReducer, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
 
 interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
   setSettings: CaseReducer<S, PayloadAction<S>>;

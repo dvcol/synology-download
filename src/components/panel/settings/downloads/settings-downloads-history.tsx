@@ -1,16 +1,14 @@
+import type { StateSlice } from '@src/models';
+import type { StoreState } from '@src/store';
+
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Button, Card, CardActions, CardContent, CardHeader, Collapse, Stack, Typography } from '@mui/material';
-
 import React from 'react';
-
 import { useForm } from 'react-hook-form';
-
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ButtonWithConfirm, FormInput, FormSwitch } from '@src/components';
-import type { StateSlice } from '@src/models';
 import { ColorLevel, ColorLevelMap, DownloadsHeader } from '@src/models';
-import type { StoreState } from '@src/store';
 import { syncDownloadState } from '@src/store/actions';
 import { getDownloadState } from '@src/store/selectors';
 import { initialState } from '@src/store/slices/state.slice';
@@ -18,7 +16,7 @@ import { useI18n } from '@src/utils';
 
 type StateDownload = StateSlice['download'];
 
-export const SettingsDownloadsHistory = () => {
+export function SettingsDownloadsHistory() {
   const i18n = useI18n('panel', 'settings', 'downloads', 'history');
   const dispatch = useDispatch();
   const state = useSelector<StoreState, StateDownload>(getDownloadState);
@@ -75,7 +73,7 @@ export const SettingsDownloadsHistory = () => {
       />
       <CardContent>
         <Collapse in={getValues()?.enabled} unmountOnExit>
-          <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
+          <Typography color={ColorLevelMap[ColorLevel.warning]} variant="subtitle2" sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
             {i18n('warning')}
           </Typography>
           <CardHeader
@@ -117,4 +115,4 @@ export const SettingsDownloadsHistory = () => {
       </CardActions>
     </Card>
   );
-};
+}

@@ -1,35 +1,22 @@
+import type { FC } from 'react';
+import type { Observable } from 'rxjs';
+
+import type { ConnectionSettings, Credentials, FormRules, InfoResponse, LoginResponse } from '@src/models';
+
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Button, Card, CardActions, CardContent, CardHeader, Collapse, Grid, LinearProgress, MenuItem, Stack, Typography } from '@mui/material';
-
-import React, { useEffect, useState } from 'react';
-
+import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-
 import { useDispatch, useSelector } from 'react-redux';
-
 import { finalize, lastValueFrom } from 'rxjs';
 
 import { ButtonWithConfirm, FormCheckbox, FormInput, FormSwitch } from '@src/components';
 import Show from '@src/components/common/utils/show';
-import type { ConnectionSettings, Credentials, FormRules, InfoResponse, LoginResponse } from '@src/models';
-import {
-  AppLinks,
-  ColorLevel,
-  ColorLevelMap,
-  CommonAPI,
-  ConnectionFormat,
-  ConnectionHeader,
-  ConnectionType,
-  defaultConnection,
-  Protocol,
-} from '@src/models';
+import { AppLinks, ColorLevel, ColorLevelMap, CommonAPI, ConnectionFormat, ConnectionHeader, ConnectionType, defaultConnection, Protocol } from '@src/models';
 import { LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { syncConnection } from '@src/store/actions';
 import { getConnection, getLogged, urlReducer } from '@src/store/selectors';
 import { before, createTab, useDebounceObservable, useI18n } from '@src/utils';
-
-import type { FC } from 'react';
-import type { Observable } from 'rxjs';
 
 export const SettingsCredentials: FC = () => {
   const i18n = useI18n('panel', 'settings', 'credentials');
@@ -84,7 +71,7 @@ export const SettingsCredentials: FC = () => {
     device_name: { required: { value: !!(is2FA && getValues().enable_device_token), message: i18n('required', 'common', 'error') } },
   };
 
-  type LoginError = { test?: boolean; login?: boolean; permissions?: boolean };
+  interface LoginError { test?: boolean; login?: boolean; permissions?: boolean }
   const [loginError, setLoginError] = useState<LoginError>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingBar, setLoadingBar] = useState<boolean>(false);
@@ -92,7 +79,7 @@ export const SettingsCredentials: FC = () => {
   // Loading observable for debounce
   const [, next] = useDebounceObservable<boolean>(setLoadingBar);
 
-  const loadingOperator = (source: Observable<any>) =>
+  const loadingOperator = useCallback((source: Observable<any>) =>
     source.pipe(
       before(() => {
         setLoginError({});
@@ -104,24 +91,28 @@ export const SettingsCredentials: FC = () => {
         setLoadingBar(false); // So there is no delay
         next(false); // So that observable data is not stale
       }),
-    );
+    ), [next]);
 
   const [hasInfo, setInfo] = useState<InfoResponse>();
-  const queryInfo = (baseUrl?: string) =>
+  const queryInfo = useCallback(async (baseUrl?: string) =>
     lastValueFrom(QueryService.info(baseUrl, true).pipe(loadingOperator))
-      .then(res => {
+      .then((res: InfoResponse) => {
         setInfo(res);
         const _version = res[CommonAPI.Auth]?.maxVersion ?? defaultConnection.authVersion;
         setValue('authVersion', _version);
         if (_version < 6) setValue('enable_device_token', false);
         return _version;
       })
-      .catch(err => LoggerService.error('Failed to query info', err));
+      .catch((err) => {
+        LoggerService.error('Failed to query info', err);
+        return undefined;
+      }), [loadingOperator, setValue]);
 
   useEffect(() => {
     PollingService.stop();
-    if (QueryService.isReady) queryInfo().then();
+    if (QueryService.isReady) void queryInfo().then();
     return () => PollingService.start();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only run on mount
   }, []);
 
   const buildUrl = (data: ConnectionSettings, _type: keyof LoginError): string | undefined => {
@@ -145,13 +136,12 @@ export const SettingsCredentials: FC = () => {
       .bind(QueryService)(data, baseUrl)
       .pipe<T>(loadingOperator)
       .subscribe({
-        next: res => {
-          // Update device_id if found
+        next: (res) => {
           if (_type === 'login' && (res?.did || res?.device_id)) {
+            // Update device_id if found
             data.device_id = res.did ?? res?.device_id;
-          }
-          // Purge device_id on logout
-          else if (_type === 'logout') {
+          } else if (_type === 'logout') {
+            // Purge device_id on logout
             data.device_id = '';
           }
           reset(data);
@@ -180,7 +170,7 @@ export const SettingsCredentials: FC = () => {
       });
   };
 
-  const testLogin = (data: ConnectionSettings) => syncOnSubscribe(data, QueryService.loginTest, 'login_test');
+  const testLogin = async (data: ConnectionSettings) => syncOnSubscribe(data, QueryService.loginTest.bind(QueryService), 'login_test');
 
   const testPermission = async () => {
     const { file, download } = await lastValueFrom(QueryService.permissions());
@@ -188,8 +178,8 @@ export const SettingsCredentials: FC = () => {
     setLoginError({ ...loginError, permissions: false });
   };
 
-  const loginLogout = (data: ConnectionSettings) =>
-    syncOnSubscribe(data, logged ? QueryService.logout : QueryService.login, logged ? 'logout' : 'login');
+  const loginLogout = async (data: ConnectionSettings) =>
+    syncOnSubscribe(data, logged ? QueryService.logout.bind(QueryService) : QueryService.login.bind(QueryService), logged ? 'logout' : 'login');
 
   const getColor = (_type: keyof LoginError) => {
     if (loginError[_type] === undefined || isDirty) return 'info';
@@ -229,7 +219,7 @@ export const SettingsCredentials: FC = () => {
           subheader={i18n('type__subheader')}
           titleTypographyProps={{ variant: 'subtitle2' }}
           subheaderTypographyProps={{ variant: 'subtitle2' }}
-          action={
+          action={(
             <FormInput
               controllerProps={{ name: 'type', control, rules: rules.type }}
               textFieldProps={{
@@ -247,7 +237,7 @@ export const SettingsCredentials: FC = () => {
                 </MenuItem>
               ))}
             </FormInput>
-          }
+          )}
           sx={{ p: '0.5rem 0' }}
         />
 
@@ -256,7 +246,7 @@ export const SettingsCredentials: FC = () => {
           subheader={i18n('format__subheader')}
           titleTypographyProps={{ variant: 'subtitle2' }}
           subheaderTypographyProps={{ variant: 'subtitle2' }}
-          action={
+          action={(
             <FormInput
               controllerProps={{ name: 'format', control, rules: rules.format }}
               textFieldProps={{
@@ -271,7 +261,7 @@ export const SettingsCredentials: FC = () => {
                 </MenuItem>
               ))}
             </FormInput>
-          }
+          )}
           sx={{ p: '0.5rem 0' }}
         />
 
@@ -283,21 +273,21 @@ export const SettingsCredentials: FC = () => {
           sx={{ p: '0.5rem 0' }}
         />
         <Collapse in={isQC} unmountOnExit={true}>
-          <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
+          <Typography color={ColorLevelMap[ColorLevel.warning]} variant="subtitle2" sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
             {i18n('quick_connect__alpha')}
           </Typography>
-          <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
+          <Typography color={ColorLevelMap[ColorLevel.warning]} variant="subtitle2" sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
             {i18n('quick_connect__no_auto_login')}
           </Typography>
         </Collapse>
         <Collapse in={!!port && port <= 1025} unmountOnExit={true}>
-          <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
+          <Typography color={ColorLevelMap[ColorLevel.warning]} variant="subtitle2" sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
             {i18n('quick_connect__port_min')}
           </Typography>
         </Collapse>
-        <Card component="form" sx={{ p: '0.5rem', '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">
+        <Card component="form" sx={{ 'p': '0.5rem', '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">
           <Show show={isCustom}>
-            <Grid container direction={'row'} sx={{ alignItems: 'center' }}>
+            <Grid container direction="row" sx={{ alignItems: 'center' }}>
               <FormInput
                 controllerProps={{ name: 'path', control, rules: rules.path }}
                 textFieldProps={{
@@ -309,7 +299,7 @@ export const SettingsCredentials: FC = () => {
             </Grid>
           </Show>
           <Show show={!isCustom}>
-            <Grid container direction={'row'} sx={{ alignItems: 'center' }}>
+            <Grid container direction="row" sx={{ alignItems: 'center' }}>
               <FormInput
                 controllerProps={{ name: 'protocol', control, rules: rules.protocol }}
                 textFieldProps={{
@@ -365,7 +355,7 @@ export const SettingsCredentials: FC = () => {
             </Grid>
           </Show>
 
-          <Grid container direction={'row'} sx={{ alignItems: 'center' }}>
+          <Grid container direction="row" sx={{ alignItems: 'center' }}>
             <FormInput
               controllerProps={{ name: 'username', control, rules: rules.username }}
               textFieldProps={{
@@ -385,7 +375,7 @@ export const SettingsCredentials: FC = () => {
         </Card>
 
         <Collapse in={protocol === Protocol.https} unmountOnExit={true}>
-          <Typography color={ColorLevelMap[ColorLevel.primary]} variant={'subtitle2'} sx={{ m: '0', fontSize: '0.7rem' }}>
+          <Typography color={ColorLevelMap[ColorLevel.primary]} variant="subtitle2" sx={{ m: '0', fontSize: '0.7rem' }}>
             {i18n('https_certificate')}
           </Typography>
 
@@ -398,18 +388,18 @@ export const SettingsCredentials: FC = () => {
               p: '1rem',
             }}
           >
-            <Button variant="outlined" color={ColorLevel.primary} onClick={() => createTab({ url: AppLinks.HowToCertificate })}>
+            <Button variant="outlined" color={ColorLevel.primary} onClick={async () => createTab({ url: AppLinks.HowToCertificate })}>
               {i18n('https_how_to')}
             </Button>
-            <Button variant="outlined" color={ColorLevel.warning} onClick={() => createTab({ url: urlReducer(getValues()) })}>
+            <Button variant="outlined" color={ColorLevel.warning} onClick={async () => createTab({ url: urlReducer(getValues()) })}>
               {i18n('https_link')}
             </Button>
           </Stack>
 
-          <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
+          <Typography color={ColorLevelMap[ColorLevel.warning]} variant="subtitle2" sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
             {i18n('https_override')}
           </Typography>
-          <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
+          <Typography color={ColorLevelMap[ColorLevel.warning]} variant="subtitle2" sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
             {i18n('https_auto_login')}
           </Typography>
         </Collapse>
@@ -419,26 +409,26 @@ export const SettingsCredentials: FC = () => {
             subheader={i18n('2fa__subheader')}
             titleTypographyProps={{ variant: 'subtitle2', mb: '0.75rem' }}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={
+            action={(
               <FormCheckbox
                 controllerProps={{ name: 'enable_device_token', control, rules: rules.enable_device_token }}
                 formControlLabelProps={{ label: i18n('enable_device_token'), disabled: !is2FA || !isAuthV6 }}
               />
-            }
+            )}
             sx={{ p: '0.5rem 0' }}
           />
           <Collapse in={is2FA && !getValues().enable_device_token} unmountOnExit={true}>
-            <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
+            <Typography color={ColorLevelMap[ColorLevel.warning]} variant="subtitle2" sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
               {i18n('2fa__warning')}
             </Typography>
           </Collapse>
           <Collapse in={is2FA && !isAuthV6} unmountOnExit={true}>
-            <Typography color={ColorLevelMap[ColorLevel.warning]} variant={'subtitle2'} sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
+            <Typography color={ColorLevelMap[ColorLevel.warning]} variant="subtitle2" sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
               {i18n('auth_v6__warning')}
             </Typography>
           </Collapse>
-          <Card component="form" sx={{ p: '0.5rem', '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">
-            <Grid container direction={'row'} sx={{ alignItems: 'center' }}>
+          <Card component="form" sx={{ 'p': '0.5rem', '& .MuiFormControl-root': { m: '0.5rem' } }} noValidate autoComplete="off">
+            <Grid container direction="row" sx={{ alignItems: 'center' }}>
               <FormInput
                 controllerProps={{ name: 'device_id', control }}
                 textFieldProps={{
@@ -448,7 +438,7 @@ export const SettingsCredentials: FC = () => {
                 }}
               />
             </Grid>
-            <Grid container direction={'row'} sx={{ alignItems: 'center' }}>
+            <Grid container direction="row" sx={{ alignItems: 'center' }}>
               <FormInput
                 controllerProps={{ name: 'otp_code', control, rules: rules.otp_code }}
                 textFieldProps={{
@@ -511,25 +501,27 @@ export const SettingsCredentials: FC = () => {
           >
             {i18n(logged ? 'logout' : 'login')}
           </Button>
-          {logged ? (
-            <Button
-              variant="outlined"
-              color={getColor('permissions')}
-              disabled={!logged || loading || !isValid}
-              onClick={handleSubmit(testPermission)}
-            >
-              {i18n('permissions')}
-            </Button>
-          ) : (
-            <Button
-              variant="outlined"
-              color={getColor('test')}
-              disabled={loading || !isValid || (logged && is2FA && !getValues()?.otp_code)}
-              onClick={handleSubmit(testLogin)}
-            >
-              {i18n('login_test')}
-            </Button>
-          )}
+          {logged
+            ? (
+                <Button
+                  variant="outlined"
+                  color={getColor('permissions')}
+                  disabled={!logged || loading || !isValid}
+                  onClick={handleSubmit(testPermission)}
+                >
+                  {i18n('permissions')}
+                </Button>
+              )
+            : (
+                <Button
+                  variant="outlined"
+                  color={getColor('test')}
+                  disabled={loading || !isValid || (logged && is2FA && !getValues()?.otp_code)}
+                  onClick={handleSubmit(testLogin)}
+                >
+                  {i18n('login_test')}
+                </Button>
+              )}
         </Stack>
         <Stack
           direction="row"

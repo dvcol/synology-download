@@ -1,3 +1,8 @@
+import type { FC } from 'react';
+
+import type { GlobalSettings, Task } from '@src/models';
+import type { StoreState } from '@src/store';
+
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import DownloadIcon from '@mui/icons-material/Download';
 import DownloadDoneIcon from '@mui/icons-material/DownloadDone';
@@ -7,23 +12,16 @@ import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
 import UploadIcon from '@mui/icons-material/Upload';
 import { blue, green, orange, purple, red } from '@mui/material/colors';
-
 import React from 'react';
-
 import { useSelector } from 'react-redux';
 
-import type { GlobalSettings, Task } from '@src/models';
 import { TaskStatus, taskStatusToColor } from '@src/models';
-
-import type { StoreState } from '@src/store';
 import { getGlobalTask } from '@src/store/selectors';
 import { formatBytes, useI18n } from '@src/utils';
 
 import { ContentCard } from '../content-card';
 
-import type { FC } from 'react';
-
-type TaskCardProps = { task: Task; hideStatus?: boolean; expanded?: boolean; hover?: boolean };
+interface TaskCardProps { task: Task; hideStatus?: boolean; expanded?: boolean; hover?: boolean }
 export const TaskCard: FC<TaskCardProps> = ({ task, hideStatus, expanded, hover }) => {
   const i18n = useI18n('panel', 'content', 'task', 'card');
 
@@ -42,6 +40,10 @@ export const TaskCard: FC<TaskCardProps> = ({ task, hideStatus, expanded, hover 
         return <UploadIcon />;
       case TaskStatus.error:
         return <ErrorOutlineIcon />;
+      case TaskStatus.extracting:
+      case TaskStatus.finishing:
+      case TaskStatus.hash_checking:
+      case TaskStatus.filehosting_waiting:
       default:
         return <LoopIcon />;
     }
@@ -60,6 +62,11 @@ export const TaskCard: FC<TaskCardProps> = ({ task, hideStatus, expanded, hover 
         return purple[500];
       case TaskStatus.error:
         return red[500];
+      case TaskStatus.waiting:
+      case TaskStatus.extracting:
+      case TaskStatus.finishing:
+      case TaskStatus.hash_checking:
+      case TaskStatus.filehosting_waiting:
       default:
         return blue[100];
     }
@@ -69,7 +76,12 @@ export const TaskCard: FC<TaskCardProps> = ({ task, hideStatus, expanded, hover 
     if (!_task.speed) return;
     const bytes = formatBytes(_task.speed);
     if (!bytes) return;
-    return <span>{bytes}/s</span>;
+    return (
+      <span>
+        {bytes}
+        /s
+      </span>
+    );
   };
 
   const showProgressBar = useSelector<StoreState, GlobalSettings['task']>(getGlobalTask)?.progressBar;
@@ -80,7 +92,7 @@ export const TaskCard: FC<TaskCardProps> = ({ task, hideStatus, expanded, hover 
       title={task.title}
       icon={statusIcon(task)}
       iconBackground={avatarBgColor(task)}
-      description={
+      description={(
         <>
           {!hideStatus && (
             <React.Fragment>
@@ -88,7 +100,7 @@ export const TaskCard: FC<TaskCardProps> = ({ task, hideStatus, expanded, hover 
               <span> – </span>
             </React.Fragment>
           )}
-          {task.status_extra?.error_detail && (
+          {!!task.status_extra?.error_detail && (
             <React.Fragment>
               <span>{i18n(task.status_extra.error_detail.toLowerCase(), 'common', 'model', 'task_error')}</span>
               <span> – </span>
@@ -101,10 +113,15 @@ export const TaskCard: FC<TaskCardProps> = ({ task, hideStatus, expanded, hover 
             </React.Fragment>
           )}
           <span>
-            {formatBytes(task.received)} of {formatBytes(task.size)} downloaded
+            {formatBytes(task.received)}
+            {' '}
+            of
+            {formatBytes(task.size)}
+            {' '}
+            downloaded
           </span>
         </>
-      }
+      )}
       progress={getEstimatedSpeed(task)}
       progressBar={
         showProgressBar

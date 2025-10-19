@@ -4,4 +4,4 @@ import { navbarSlice } from '../slices/navbar.slice';
 const { setNavbar, resetNavbar } = navbarSlice.actions;
 
 // Export as named constants
-export { setNavbar, resetNavbar };
+export { resetNavbar, setNavbar };

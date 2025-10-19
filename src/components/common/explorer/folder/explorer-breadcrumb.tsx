@@ -7,7 +7,7 @@ import React from 'react';
 import { ExplorerLoading } from '@src/components/common/explorer/folder/explorer-loading';
 import { useI18n } from '@src/utils';
 
-export const ExplorerBreadCrumbs = ({
+export function ExplorerBreadCrumbs({
   crumbs,
   onClick,
   onRecent,
@@ -24,21 +24,23 @@ export const ExplorerBreadCrumbs = ({
   hasDestinations?: boolean;
 
   showDestinations?: boolean;
-}) => {
+}) {
   const i18n = useI18n('common', 'explorer', 'breadcrumb');
   return (
     <Breadcrumbs aria-label="breadcrumb" maxItems={3} sx={{ mb: '0.125em', overflow: 'auto', fontSize: '0.875em', minHeight: '2em' }}>
-      {loading && <ExplorerLoading loading={loading} text={'path'} />}
+      {loading && <ExplorerLoading loading={loading} text="path" />}
       {!loading && !crumbs?.length && hasDestinations && (
         <Button
           key={`recent-${disabled}`}
           variant="text"
           startIcon={
-            showDestinations ? (
-              <HomeIcon sx={{ width: '0.9375em', height: '0.9375em' }} />
-            ) : (
-              <HistoryIcon sx={{ width: '0.9375em', height: '0.9375em' }} />
-            )
+            showDestinations
+              ? (
+                  <HomeIcon sx={{ width: '0.9375em', height: '0.9375em' }} />
+                )
+              : (
+                  <HistoryIcon sx={{ width: '0.9375em', height: '0.9375em' }} />
+                )
           }
           sx={{ textTransform: 'none', minWidth: '0', fontSize: '1em' }}
           onClick={$event => onRecent?.($event)}
@@ -47,7 +49,7 @@ export const ExplorerBreadCrumbs = ({
           {i18n(showDestinations ? 'show__explorer' : 'show__recent')}
         </Button>
       )}
-      {!loading && (crumbs?.length || !hasDestinations) && (
+      {!loading && (!!crumbs?.length || !hasDestinations) && (
         <Tooltip arrow title={i18n('home')} PopperProps={{ disablePortal: true }}>
           <span>
             <Button
@@ -61,9 +63,9 @@ export const ExplorerBreadCrumbs = ({
           </span>
         </Tooltip>
       )}
-      {!loading &&
-        crumbs?.map((folder, i) => (
-          <Tooltip key={`${i}-${disabled}`} title={folder} PopperProps={{ disablePortal: true, sx: { wordBreak: 'break-all' } }} enterDelay={500}>
+      {!loading
+        && crumbs?.map((folder, i) => (
+          <Tooltip key={`${folder}-${disabled}`} title={folder} PopperProps={{ disablePortal: true, sx: { wordBreak: 'break-all' } }} enterDelay={500}>
             <span>
               <Button
                 variant="text"
@@ -73,7 +75,7 @@ export const ExplorerBreadCrumbs = ({
                 disabled={disabled}
               >
                 <Typography
-                  component={'span'}
+                  component="span"
                   sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: '0.875em', mt: '0.4em' }}
                 >
                   {folder}
@@ -84,4 +86,4 @@ export const ExplorerBreadCrumbs = ({
         ))}
     </Breadcrumbs>
   );
-};
+}

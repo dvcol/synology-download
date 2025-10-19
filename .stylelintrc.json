@@ -1,3 +1,0 @@
-{
-  "extends": ["@dvcol/stylelint-plugin-presets/config/scss"]
-}

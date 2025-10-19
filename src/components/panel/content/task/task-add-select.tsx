@@ -1,44 +1,27 @@
+import type { FC } from 'react';
+import type { Subscription } from 'rxjs';
+
+import type { FormRules, TaskListDownloadRequest, TaskListResponse } from '@src/models';
+
 import SaveIcon from '@mui/icons-material/Save';
-import {
-  Button,
-  Card,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormHelperText,
-  LinearProgress,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Stack,
-  Typography,
-} from '@mui/material';
-
+import { Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, FormHelperText, LinearProgress, List, ListItem, ListItemButton, ListItemText, Stack, Typography } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
-
 import { useForm } from 'react-hook-form';
-
 import { finalize, lastValueFrom } from 'rxjs';
 
 import { FormCheckbox, IconLoader } from '@src/components';
-import type { FormRules, TaskListDownloadRequest, TaskListResponse } from '@src/models';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
 import { ContainerContext } from '@src/store';
 import { before, useI18n } from '@src/utils';
 
-import type { FC } from 'react';
-import type { Subscription } from 'rxjs';
-
-type TaskAddSelectProp = {
+interface TaskAddSelectProp {
   open: boolean;
   list_id: string;
   source: string;
   destination?: string;
   onFormCancel?: (form: TaskListDownloadRequest) => void;
   onFormSubmit?: (form: TaskListDownloadRequest) => void;
-};
+}
 export const TaskAddSelect: FC<TaskAddSelectProp> = ({ open, list_id, source, destination, onFormCancel, onFormSubmit }) => {
   const i18n = useI18n('panel', 'content', 'task', 'add', 'select');
   const [loading, setLoading] = useState<number>(0);
@@ -78,10 +61,10 @@ export const TaskAddSelect: FC<TaskAddSelectProp> = ({ open, list_id, source, de
         )
         .subscribe({
           next: _response => setResponse(_response),
-          error: error => {
+          error: (error: Error) => {
             LoggerService.error(`Failed to fetch files for list '${list_id}'`, { list_id, error });
             NotificationService.error({
-              title: i18n(`task_list_fail`, 'common', 'error'),
+              title: i18n('task_list_fail', 'common', 'error'),
               message: error?.message ?? error?.name ?? '',
             });
           },
@@ -90,9 +73,10 @@ export const TaskAddSelect: FC<TaskAddSelectProp> = ({ open, list_id, source, de
     return () => {
       if (!sub?.closed) sub?.unsubscribe();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only want to trigger on open state
   }, [open]);
 
-  const onCancel = (data: TaskListDownloadRequest) => {
+  const onCancel = async (data: TaskListDownloadRequest) => {
     return lastValueFrom(
       QueryService.deleteTaskList(list_id).pipe(
         before(() => setLoading(_loading => _loading + 1)),
@@ -101,16 +85,16 @@ export const TaskAddSelect: FC<TaskAddSelectProp> = ({ open, list_id, source, de
           onFormCancel?.(data);
         }),
       ),
-    ).catch(error => {
+    ).catch((error: Error) => {
       LoggerService.error(`Failed to delete list '${list_id}'`, { list_id, error });
       NotificationService.error({
-        title: i18n(`task_list_delete_fail`, 'common', 'error'),
+        title: i18n('task_list_delete_fail', 'common', 'error'),
         message: error?.message ?? error?.name ?? '',
       });
     });
   };
 
-  const onSubmit = (data: TaskListDownloadRequest) => {
+  const onSubmit = async (data: TaskListDownloadRequest) => {
     if (!isDirty) return;
     return lastValueFrom(
       QueryService.setTaskListDownload(data, { name: response?.title ?? 'unkown', source }).pipe(
@@ -120,10 +104,10 @@ export const TaskAddSelect: FC<TaskAddSelectProp> = ({ open, list_id, source, de
           onFormSubmit?.(data);
         }),
       ),
-    ).catch(error => {
+    ).catch((error: Error) => {
       LoggerService.error(`Failed to set download list '${list_id}'`, { list_id, error });
       NotificationService.error({
-        title: i18n(`task_list_set_download_fail`, 'common', 'error'),
+        title: i18n('task_list_set_download_fail', 'common', 'error'),
         message: error?.message ?? error?.name ?? '',
       });
     });
@@ -139,22 +123,24 @@ export const TaskAddSelect: FC<TaskAddSelectProp> = ({ open, list_id, source, de
       open={open}
       onClose={() => handleSubmit(onCancel)}
       aria-labelledby="confirm-delete-dialog"
-      maxWidth={'md'}
+      maxWidth="md"
       PaperProps={{ sx: { maxHeight: 'calc(100% - 1em)' } }}
-      container={containerRef?.current}
+      container={() => containerRef?.current ?? null}
     >
       <DialogTitle>
         {i18n('select_files')}
-        {response?.title && (
+        {!!response?.title && (
           <Typography variant="subtitle1" sx={{ mt: '0.5rem' }}>
-            {i18n('title')}: {response.title}
+            {i18n('title')}
+            :
+            {response.title}
           </Typography>
         )}
         {isDirty && !isValid && <FormHelperText error={true}>{i18n('required')}</FormHelperText>}
       </DialogTitle>
       <DialogContent sx={{ display: 'flex', flexDirection: 'column' }}>
         <LinearProgress
-          variant={'indeterminate'}
+          variant="indeterminate"
           sx={{
             height: '0.125rem',
             transition: 'opacity 0.3s linear',
@@ -163,20 +149,20 @@ export const TaskAddSelect: FC<TaskAddSelectProp> = ({ open, list_id, source, de
         />
         <Card sx={{ maxHeight: '30em', maxWidth: '35em', minHeight: '22em', minWidth: '30em', overflow: 'auto' }}>
           <List>
-            {response?.files?.map(file => {
+            {response?.files?.map((file) => {
               return (
                 <ListItem
                   key={file.index}
-                  secondaryAction={
+                  secondaryAction={(
                     <FormCheckbox
                       controllerProps={{ name: 'selected', control, rules: rules.selected }}
                       checkboxProps={{
                         multiple: true,
-                        value: file.index,
+                        value: !!file.index,
                         disabled: loading > 0,
                       }}
                     />
-                  }
+                  )}
                   disablePadding
                 >
                   <ListItemButton>
@@ -190,7 +176,7 @@ export const TaskAddSelect: FC<TaskAddSelectProp> = ({ open, list_id, source, de
       </DialogContent>
       <DialogActions sx={{ justifyContent: 'flex-end', padding: '0 1rem 1rem' }}>
         <Stack direction="row" spacing={2}>
-          <Button variant="outlined" color={'secondary'} sx={{ width: '5rem' }} onClick={() => onCancel(getValues())}>
+          <Button variant="outlined" color="secondary" sx={{ width: '5rem' }} onClick={async () => onCancel(getValues())}>
             {i18n('cancel', 'common', 'buttons')}
           </Button>
           <Button

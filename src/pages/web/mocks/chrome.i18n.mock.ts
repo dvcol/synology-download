@@ -1,7 +1,8 @@
-import type { Locales } from '@src/pages/web/models';
+import type { Locale, Locales } from '@src/pages/web/models';
+
 import { deepMerge } from '@src/utils/object.utils';
 
-export const patchI18n = async (_global: Window = window, lang = 'en') => {
+export async function patchI18n(_global: Window = window, lang = 'en') {
   _global.chrome.i18n.getMessage = (key: string) => _global._locales?.[lang]?.[key]?.message ?? key;
 
   if (!_global._localesFetch) _global._localesFetch = {};
@@ -11,10 +12,10 @@ export const patchI18n = async (_global: Window = window, lang = 'en') => {
   if (locale) return;
 
   let locale$ = _global._localesFetch?.[lang];
-  if (!locale$) {
+  if (locale$ !== undefined) {
     locale$ = fetch(`_locales/${lang}/messages.json`)
-      .then(res => res.json())
-      .catch(err => {
+      .then(async res => res.json() as Promise<Locale>)
+      .catch((err: Error) => {
         console.error('failed to load locales', { lang, err });
         return {};
       });
@@ -23,10 +24,10 @@ export const patchI18n = async (_global: Window = window, lang = 'en') => {
   _global._locales[lang] = await locale$;
 
   return _global._locales[lang];
-};
+}
 
-export const patchLocales = (locales?: Locales, _global: Window = window) => {
+export function patchLocales(locales?: Locales, _global: Window = window) {
   if (!_global._locales) _global._locales = {};
   if (locales) _global._locales = deepMerge(_global._locales, locales);
   return _global._locales;
-};
+}

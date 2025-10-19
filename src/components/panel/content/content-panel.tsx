@@ -1,23 +1,21 @@
+import type { ConfirmationState, TaskEditState } from '@src/components';
+import type { SearchInputRef } from '@src/components/common/inputs/search-input';
+import type { OnRefreshCallback } from '@src/components/utils/use-pull-to-refresh';
+import type { Content } from '@src/models';
+import type { StoreState } from '@src/store';
+
 import { Container, MenuItem } from '@mui/material';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-
 import { useSelector } from 'react-redux';
-
 import { TransitionGroup } from 'react-transition-group';
 
-import type { ConfirmationState, OnRefreshCallback, TaskEditState } from '@src/components';
 import { ConfirmationDialog, RefreshLoader, TaskEdit, usePullToRefresh } from '@src/components';
-
-import type { SearchInputRef } from '@src/components/common/inputs/search-input';
 import { SearchInput } from '@src/components/common/inputs/search-input';
 import { ContentItemInstance } from '@src/components/panel/content/content-item-instance';
-import type { Content } from '@src/models';
 import { ErrorType, LoginError } from '@src/models';
 import { DownloadService, NotificationService, QueryService } from '@src/services';
 import { PanelService } from '@src/services/panel/panel.service';
-import type { StoreState } from '@src/store';
 import { getContentsForActiveTab, getInterfacePullToRefresh, getLogged, getSettingsDownloadsEnabled, getTabOrFirst } from '@src/store/selectors';
-
 import { useI18n } from '@src/utils';
 
 import { ContentEmpty } from './content-empty';
@@ -29,14 +27,14 @@ const FilterMode: Record<string, keyof Content | 'all'> = {
   All: 'all',
 } as const;
 
-type FilterModes = typeof FilterMode[keyof typeof FilterMode];
+type FilterModes = (typeof FilterMode)[keyof typeof FilterMode];
 type FilterModesWithoutAll = Exclude<FilterModes, 'all'>;
 
 const isNotAll = (mode: FilterModes): mode is FilterModesWithoutAll => mode !== FilterMode.All;
 
 let firstMount = true;
 
-export const ContentPanel = () => {
+export function ContentPanel() {
   const i18n = useI18n('panel', 'content');
   const tab = useSelector(getTabOrFirst);
   const contents = useSelector<StoreState, Content[]>(getContentsForActiveTab);
@@ -48,11 +46,12 @@ export const ContentPanel = () => {
 
   useEffect(() => {
     if (firstMount) firstMount = false;
+    // eslint-disable-next-line react-hooks/set-state-in-effect,react-hooks-extra/no-direct-set-state-in-use-effect -- TODO investigate if this can be avoided
     setExpanded(false);
   }, [tab]);
 
   const handleError = (type: 'task' | 'download', action: string) => ({
-    error: (error: any) => {
+    error: (error: Error & { type?: string }) => {
       if (error instanceof LoginError || ErrorType.Login === error?.type) {
         NotificationService.loginRequired();
       } else if (error) {
@@ -193,6 +192,6 @@ export const ContentPanel = () => {
       )}
     </Container>
   );
-};
+}
 
 export default ContentPanel;

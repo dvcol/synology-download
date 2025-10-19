@@ -1,40 +1,37 @@
+import type { FC, ForwardRefRenderFunction } from 'react';
+import type { Observable } from 'rxjs';
+
+import type { ProgressBackgroundProps, TaskDetailProps } from '@src/components';
+import type { GlobalSettings, Task } from '@src/models';
+import type { StoreState } from '@src/store';
+import type { i18n } from '@src/utils';
+
+import type { ContentItemAccordionProps } from '../content-item';
+
 import DeleteIcon from '@mui/icons-material/Delete';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReplayIcon from '@mui/icons-material/Replay';
-
 import React, { forwardRef, useState } from 'react';
-
 import { useSelector } from 'react-redux';
-
 import { finalize } from 'rxjs';
 
-import type { ProgressBackgroundProps, TaskDetailProps } from '@src/components';
 import { IconLoader } from '@src/components';
-
 import { ContentButton } from '@src/components/panel/content/content-button';
-import type { GlobalSettings, Task } from '@src/models';
 import { ColorLevel, ColorLevelMap, ErrorType, LoginError, TaskStatus, taskStatusToColor } from '@src/models';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
-import type { StoreState } from '@src/store';
 import { getGlobalTask } from '@src/store/selectors';
-import type { i18n } from '@src/utils';
 import { before, useDebounceObservable, useI18n } from '@src/utils';
 
 import { ContentItem } from '../content-item';
-
 import TaskCard from './task-card';
 import TaskDetail from './task-detail';
-
-import type { ContentItemAccordionProps } from '../content-item';
-import type { FC, ForwardRefRenderFunction } from 'react';
-import type { Observable } from 'rxjs';
 
 const ButtonStyle = { display: 'flex', flex: '1 1 auto', minHeight: '2.5rem' };
 
 type TaskItemsOnClick = <T>(button: string, request: Observable<T>, $event?: React.MouseEvent) => void;
 
-type TaskItemsButtonProp = { task: Task; isDisabled: boolean; loadingIcon: Record<string, boolean>; onClick: TaskItemsOnClick; i18n: typeof i18n };
+interface TaskItemsButtonProp { task: Task; isDisabled: boolean; loadingIcon: Record<string, boolean>; onClick: TaskItemsOnClick; i18n: typeof i18n }
 
 const PlayOrRetry: FC<TaskItemsButtonProp> = ({ task, isDisabled, loadingIcon, onClick, i18n }) => {
   if (![TaskStatus.paused, TaskStatus.finished, TaskStatus.error].includes(task.status)) return null;
@@ -88,14 +85,14 @@ const PauseButton: FC<TaskItemsButtonProp> = ({ task, isDisabled, loadingIcon, o
   );
 };
 
-export type TaskItemProps = {
+export interface TaskItemProps {
   task: Task;
   setTaskEdit: TaskDetailProps['setTaskEdit'];
   setConfirmation: TaskDetailProps['setConfirmation'];
   hideStatus?: boolean;
   accordion: ContentItemAccordionProps;
   className?: string;
-};
+}
 const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps> = (
   { task, hideStatus, setTaskEdit, setConfirmation, accordion, className },
   ref,
@@ -126,7 +123,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
         }),
       )
       .subscribe({
-        error: error => {
+        error: (error: Error & { type?: string }) => {
           if (error instanceof LoginError || error.type === ErrorType.Login) {
             NotificationService.loginRequired();
           } else if (error) {
@@ -160,7 +157,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
         sx: ButtonStyle,
         color: ColorLevel.error,
         disabled: isDisabled,
-        onClick: $event => {
+        onClick: ($event) => {
           $event.stopPropagation();
           setConfirmation({
             open: true,
@@ -180,8 +177,8 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
   const buttons = (
     <>
       {DeleteButton}
-      {<PauseButton {...buttonProps} isDisabled={task.stopping || isDisabled} />}
-      {<PlayOrRetry {...buttonProps} isDisabled={task.stopping || isDisabled} />}
+      <PauseButton {...buttonProps} isDisabled={task.stopping || isDisabled} />
+      <PlayOrRetry {...buttonProps} isDisabled={task.stopping || isDisabled} />
     </>
   );
 
@@ -197,7 +194,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
         card: <TaskCard task={task} hideStatus={hideStatus} expanded={expanded} hover={hover} />,
         buttons,
       }}
-      details={
+      details={(
         <TaskDetail
           task={task}
           isDisabled={isDisabled}
@@ -206,7 +203,7 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
           setTaskEdit={setTaskEdit}
           setConfirmation={setConfirmation}
         />
-      }
+      )}
     />
   );
 };

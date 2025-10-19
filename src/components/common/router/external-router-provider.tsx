@@ -1,11 +1,13 @@
+import type { FC } from 'react';
+
+import type { OpenPopupPayload } from '@src/models';
+
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { AppRoute, ChromeMessageType, type OpenPopupPayload } from '@src/models';
+import { AppRoute, ChromeMessageType } from '@src/models';
 import { LoggerService } from '@src/services';
 import { onMessage } from '@src/utils';
-
-import type { FC } from 'react';
 
 export const ExternalRouterProvider: FC = () => {
   const navigate = useNavigate();
@@ -18,6 +20,6 @@ export const ExternalRouterProvider: FC = () => {
     });
 
     return () => sub.unsubscribe();
-  }, []);
+  }, [navigate]);
   return <div hidden aria-hidden id="external-router-provider"></div>;
 };

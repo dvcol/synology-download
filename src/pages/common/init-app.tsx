@@ -1,19 +1,15 @@
+import type { AppInstance, AppRoutes, QueryAutoLoginOptions, RootSlice, ServiceInstance } from '@src/models';
+
 import React from 'react';
 import { render } from 'react-dom';
 
 import { App } from '@src/components';
-import type { AppInstance, AppRoute, QueryAutoLoginOptions, RootSlice, ServiceInstance } from '@src/models';
 import { ChromeMessageType, setInstance } from '@src/models';
 import { DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
 import { storeProxy } from '@src/store';
 import { onMessage, portConnect, store$ } from '@src/utils';
 
-export const initApp = async (
-  logInstance: ServiceInstance,
-  appInstance: AppInstance,
-  getter: (state: RootSlice) => boolean,
-  redirect?: AppRoute,
-): Promise<void> => {
+export async function initApp(logInstance: ServiceInstance, appInstance: AppInstance, getter: (state: RootSlice) => boolean, redirect?: AppRoutes): Promise<void> {
   // Set global instance
   setInstance(appInstance);
 
@@ -31,7 +27,7 @@ export const initApp = async (
   portConnect({ name: appInstance });
 
   // attempt auto-login on open
-  store$<boolean>(storeProxy, getter).subscribe(open => {
+  store$<boolean>(storeProxy, getter).subscribe((open) => {
     if (open && QueryService.isReady) QueryService.autoLogin().subscribe();
   });
 
@@ -42,4 +38,4 @@ export const initApp = async (
 
   // Render the app
   render(<App store={storeProxy} redirect={redirect} instance={appInstance} />, window.document.querySelector(`#${appInstance}-app-container`));
-};
+}

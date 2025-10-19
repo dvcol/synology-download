@@ -1,9 +1,4 @@
-import { activateDownloadDemo, activateTaskDemo, generateDownload, generateTask } from './mocks';
-
-import { defineComponents } from './modules';
-
 import type { BadgeMock, DownloadMock, FileMock, TaskMock } from './mocks';
-
 import type {
   AppInstance,
   ContentAppHtmlElement,
@@ -15,6 +10,9 @@ import type {
   WebComponents,
 } from './models';
 import type { patchApi } from './modules';
+
+import { activateDownloadDemo, activateTaskDemo, generateDownload, generateTask } from './mocks';
+import { defineComponents } from './modules';
 
 declare global {
   interface Window {
@@ -40,12 +38,14 @@ declare global {
   }
 }
 
-const activateDemo = ({ task, download }: { task: Parameters<typeof activateTaskDemo>; download: Parameters<typeof activateDownloadDemo> }) => ({
-  task: activateTaskDemo(...task),
-  download: activateDownloadDemo(...download),
-});
+function activateDemo({ task, download }: { task: Parameters<typeof activateTaskDemo>; download: Parameters<typeof activateDownloadDemo> }) {
+  return {
+    task: activateTaskDemo(...task),
+    download: activateDownloadDemo(...download),
+  };
+}
 
-type SynologyDownload = {
+interface SynologyDownload {
   generateTask: typeof generateTask;
   generateDownload: typeof generateDownload;
   activateTaskDemo: typeof activateTaskDemo;
@@ -53,14 +53,14 @@ type SynologyDownload = {
   activateDemo: typeof activateDemo;
   patchApi: typeof patchApi;
   defineComponents: typeof defineComponents;
-};
+}
 
 const baseUrl = 'synology-download';
 
-export * from './modules';
 export * from './models';
+export * from './modules';
 
-export { generateTask, generateDownload, activateTaskDemo, activateDownloadDemo, activateDemo, baseUrl };
-export type { TaskMock, FileMock, DownloadMock, BadgeMock, SynologyDownload };
+export { activateDemo, activateDownloadDemo, activateTaskDemo, baseUrl, generateDownload, generateTask };
+export type { BadgeMock, DownloadMock, FileMock, SynologyDownload, TaskMock };
 
 export default defineComponents;

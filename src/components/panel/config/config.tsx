@@ -1,34 +1,19 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  Collapse,
-  Container,
-  InputAdornment,
-  LinearProgress,
-  Stack,
-  Typography,
-} from '@mui/material';
-
-import React, { useEffect, useState } from 'react';
-
-import { useForm } from 'react-hook-form';
-
-import { finalize, forkJoin } from 'rxjs';
-
-import { FormExplorer, FormInput, FormSwitch } from '@src/components';
-import type { DownloadStationConfig, DownloadStationInfo } from '@src/models';
-import { ColorLevel, ColorLevelMap, defaultConfig } from '@src/models';
-import { NotificationService, QueryService } from '@src/services';
-import { before, useDebounceObservable, useI18n } from '@src/utils';
-
 import type { CardProps } from '@mui/material';
 import type { FC } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import type { Observable } from 'rxjs';
+
+import type { DownloadStationConfig, DownloadStationInfo } from '@src/models';
+
+import { Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, Container, InputAdornment, LinearProgress, Stack, Typography } from '@mui/material';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { finalize, forkJoin } from 'rxjs';
+
+import { FormExplorer, FormInput, FormSwitch } from '@src/components';
+import { ColorLevel, ColorLevelMap, defaultConfig } from '@src/models';
+import { NotificationService, QueryService } from '@src/services';
+import { before, useDebounceObservable, useI18n } from '@src/utils';
 
 export const Config: FC<{
   cardProps?: CardProps;
@@ -57,7 +42,7 @@ export const Config: FC<{
 
   // Loading observable for debounce
   const [, next] = useDebounceObservable<boolean>(setLoadingBar);
-  const loadingOperator = <T,>(source: Observable<T>) =>
+  const loadingOperator = useCallback(<T,>(source: Observable<T>) =>
     source.pipe<T, T>(
       before(() => {
         setError(undefined);
@@ -69,7 +54,7 @@ export const Config: FC<{
         setLoadingBar(false); // So there is no delay
         next(false); // So that observable data is not stale
       }),
-    );
+    ), [next]);
 
   useEffect(() => {
     if (QueryService.isLoggedIn) {
@@ -80,9 +65,10 @@ export const Config: FC<{
           setAdmin(!!_info?.is_manager);
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only run on mount
   }, []);
 
-  const onSubmit: SubmitHandler<DownloadStationConfig> = config => {
+  const onSubmit: SubmitHandler<DownloadStationConfig> = (config) => {
     QueryService.setConfig(config)
       .pipe(loadingOperator)
       .subscribe({
@@ -91,7 +77,7 @@ export const Config: FC<{
           reset(config);
           NotificationService.info({ title: i18n('set_config__success'), success: true });
         },
-        error: message => {
+        error: (message?: string) => {
           setError(true);
           NotificationService.error({ title: i18n('set_config__fail'), message });
         },
@@ -115,7 +101,7 @@ export const Config: FC<{
         />
         <CardHeader
           title={i18n('title')}
-          subheader={
+          subheader={(
             <Box sx={{ mt: '0.5rem' }}>
               {!loading && !isAdmin && (
                 <Typography color={ColorLevelMap[ColorLevel.warning]} sx={{ mb: '0.5rem' }}>
@@ -125,7 +111,7 @@ export const Config: FC<{
               <Typography sx={{ mb: '0.5rem' }}>{i18n('subheader_line_1')}</Typography>
               <Typography sx={{ mb: '0.5rem' }}>{i18n('subheader_line_2')}</Typography>
             </Box>
-          }
+          )}
           titleTypographyProps={{ variant: 'h6', color: 'text.primary', fontSize: '1rem' }}
           subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '0.875rem' }}
           sx={{ p: '1rem 1rem 0' }}
@@ -136,7 +122,7 @@ export const Config: FC<{
             subheader={i18n('bt_max_download__subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={
+            action={(
               <FormInput
                 controllerProps={{ name: 'bt_max_download', control, rules }}
                 textFieldProps={{
@@ -149,7 +135,7 @@ export const Config: FC<{
                   sx: { flex: '0 0 14rem' },
                 }}
               />
-            }
+            )}
             sx={{ p: '0.5rem 0' }}
           />
           <CardHeader
@@ -157,7 +143,7 @@ export const Config: FC<{
             subheader={i18n('bt_max_upload__subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={
+            action={(
               <FormInput
                 controllerProps={{ name: 'bt_max_upload', control, rules }}
                 textFieldProps={{
@@ -170,7 +156,7 @@ export const Config: FC<{
                   sx: { flex: '0 0 14rem' },
                 }}
               />
-            }
+            )}
             sx={{ p: '0.5rem 0' }}
           />
           <CardHeader
@@ -178,7 +164,7 @@ export const Config: FC<{
             subheader={i18n('nzb_max_download__subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={
+            action={(
               <FormInput
                 controllerProps={{ name: 'nzb_max_download', control, rules }}
                 textFieldProps={{
@@ -191,7 +177,7 @@ export const Config: FC<{
                   sx: { flex: '0 0 14rem' },
                 }}
               />
-            }
+            )}
             sx={{ p: '0.5rem 0' }}
           />
           <CardHeader
@@ -199,7 +185,7 @@ export const Config: FC<{
             subheader={i18n('http_max_download__subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={
+            action={(
               <FormInput
                 controllerProps={{ name: 'http_max_download', control, rules }}
                 textFieldProps={{
@@ -212,7 +198,7 @@ export const Config: FC<{
                   sx: { flex: '0 0 14rem' },
                 }}
               />
-            }
+            )}
             sx={{ p: '0.5rem 0' }}
           />
           <CardHeader
@@ -220,7 +206,7 @@ export const Config: FC<{
             subheader={i18n('ftp_max_download__subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={
+            action={(
               <FormInput
                 controllerProps={{ name: 'ftp_max_download', control, rules }}
                 textFieldProps={{
@@ -233,7 +219,7 @@ export const Config: FC<{
                   sx: { flex: '0 0 14rem' },
                 }}
               />
-            }
+            )}
             sx={{ p: '0.5rem 0' }}
           />
           <CardHeader
@@ -271,7 +257,7 @@ export const Config: FC<{
               subheader={i18n('emule_max_download__subheader')}
               titleTypographyProps={{ variant: 'subtitle2' }}
               subheaderTypographyProps={{ variant: 'subtitle2' }}
-              action={
+              action={(
                 <FormInput
                   controllerProps={{ name: 'emule_max_download', control, rules }}
                   textFieldProps={{
@@ -284,7 +270,7 @@ export const Config: FC<{
                     sx: { flex: '0 0 14rem' },
                   }}
                 />
-              }
+              )}
               sx={{ p: '0.5rem 0' }}
             />
             <CardHeader
@@ -292,7 +278,7 @@ export const Config: FC<{
               subheader={i18n('emule_max_upload__subheader')}
               titleTypographyProps={{ variant: 'subtitle2' }}
               subheaderTypographyProps={{ variant: 'subtitle2' }}
-              action={
+              action={(
                 <FormInput
                   controllerProps={{ name: 'emule_max_upload', control, rules }}
                   textFieldProps={{
@@ -305,7 +291,7 @@ export const Config: FC<{
                     sx: { flex: '0 0 14rem' },
                   }}
                 />
-              }
+              )}
               sx={{ p: '0.5rem 0' }}
             />
             <CardHeader

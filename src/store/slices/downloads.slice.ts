@@ -1,8 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit';
+import type { CaseReducer, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
 
 import type { Download, DownloadsSlice } from '@src/models';
 
-import type { CaseReducer, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 export interface DownloadsReducers<S = DownloadsSlice> extends SliceCaseReducers<S> {
   setDownloads: CaseReducer<S, PayloadAction<Download[]>>;

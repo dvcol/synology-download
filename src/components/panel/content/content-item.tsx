@@ -1,25 +1,23 @@
-import { Accordion, AccordionDetails, AccordionSummary, ButtonGroup } from '@mui/material';
-
-import React, { forwardRef, useState } from 'react';
-
-import { useSelector } from 'react-redux';
-
-import type { ProgressBackgroundProps } from '@src/components';
-import { ProgressBackground } from '@src/components';
-
-import type { GlobalSettings } from '@src/models';
-import type { StoreState } from '@src/store';
-import { getGlobalTask } from '@src/store/selectors';
-
 import type { Dispatch, ForwardRefRenderFunction, SetStateAction } from 'react';
 
-export type ContentItemAccordionProps = {
+import type { ProgressBackgroundProps } from '@src/components';
+import type { GlobalSettings } from '@src/models';
+import type { StoreState } from '@src/store';
+
+import { Accordion, AccordionDetails, AccordionSummary, ButtonGroup } from '@mui/material';
+import React, { forwardRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+
+import { ProgressBackground } from '@src/components';
+import { getGlobalTask } from '@src/store/selectors';
+
+export interface ContentItemAccordionProps {
   index: number;
   expanded: number | false;
   setExpanded: Dispatch<SetStateAction<number | false>>;
-};
+}
 
-type ContentItemProps = {
+interface ContentItemProps {
   accordion: ContentItemAccordionProps;
   background?: ProgressBackgroundProps;
   summary: { card: JSX.Element; buttons?: JSX.Element };
@@ -27,7 +25,7 @@ type ContentItemProps = {
   onToggle: (expanded: boolean) => void;
   onHover: (visible: boolean) => void;
   className?: string;
-};
+}
 
 const ContentItemComponent: ForwardRefRenderFunction<HTMLDivElement, ContentItemProps> = (
   { accordion: { index, expanded, setExpanded }, background, summary, details, onToggle, onHover, className },

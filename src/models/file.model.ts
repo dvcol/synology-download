@@ -61,7 +61,8 @@ export enum FileListOption {
 export interface FilePermission {
   /** POSIX file permission, For example, 777 means owner, group or other has all permission; 764 means owner has all permission, group has read/write permission, other has read permission */
   posix: number;
-  /** true : The privilege of the shared folder is set to be ACL-mode. false : The privilege of the shared folder is set to be POSIX-mode.
+  /**
+    true : The privilege of the shared folder is set to be ACL-mode. false : The privilege of the shared folder is set to be POSIX-mode.
    */
   is_acl_mode: boolean;
   acl?: FolderAcl;

@@ -1,22 +1,21 @@
-import { WebComponents } from '../models';
-
-import { patchApi } from './patch-api';
-
 import type { PatchOptions } from '../models';
+
+import { WebComponents } from '../models';
+import { patchApi } from './patch-api';
 
 export type DefineComponentsOptions = PatchOptions & { components?: Partial<Record<WebComponents, string>> };
 
-export const defineComponents = async (options?: DefineComponentsOptions, _global = window) => {
+export async function defineComponents(options?: DefineComponentsOptions, _global = window) {
   await patchApi({ patch: false, ...options });
 
-  /* eslint-disable @typescript-eslint/no-var-requires, global-require -- necessary for mocking global */
   const components: Record<string, CustomElementConstructor> = {
+    // eslint-disable-next-line ts/no-require-imports,ts/no-unsafe-member-access,ts/no-unsafe-assignment
     [WebComponents.StandaloneApp]: require('@src/components/web/standalone-app-wc').StandaloneAppWc,
+    // eslint-disable-next-line ts/no-require-imports,ts/no-unsafe-member-access,ts/no-unsafe-assignment
     [WebComponents.ContentApp]: require('@src/pages/content/components/content-app-wc').ContentAppWc,
   };
-  /* eslint-enable @typescript-eslint/no-var-requires, global-require */
 
-  Object.keys(options?.components ?? components)?.forEach(component => {
+  Object.keys(options?.components ?? components)?.forEach((component) => {
     const _name: string = options?.components?.[component as WebComponents] ?? component;
     if (customElements.get(_name)) {
       console.warn(`Custom element '${_name}' is already defined.`);
@@ -24,4 +23,4 @@ export const defineComponents = async (options?: DefineComponentsOptions, _globa
       customElements.define(_name, components[component]);
     }
   });
-};
+}

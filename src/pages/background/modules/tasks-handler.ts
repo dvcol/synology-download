@@ -1,17 +1,16 @@
+import type { StoreOrProxy, SyncedTaskSlice } from '@src/models';
+
 import { catchError, finalize, map, of } from 'rxjs';
 
-import type { SyncedTaskSlice } from '@src/models';
 import { LoggerService } from '@src/services';
 import { restoreTasks } from '@src/store/actions';
 import { tasksSlice } from '@src/store/slices/tasks.slice';
 import { getManifest, localGet, localSet, parseJSON, versionCheck } from '@src/utils';
 
-import type { Store } from 'redux';
-
 /** Restore extension tasks list */
-export const restoreTaskSlice = (store: Store) =>
-  localGet<SyncedTaskSlice>(tasksSlice.name).pipe(
-    map(async tasks => {
+export function restoreTaskSlice(store: StoreOrProxy) {
+  return localGet<SyncedTaskSlice>(tasksSlice.name).pipe(
+    map(async (tasks) => {
       if (versionCheck(getManifest().version, '2.0.2') < 1) {
         localSet(tasksSlice.name, {}).subscribe();
         return tasks;
@@ -25,8 +24,9 @@ export const restoreTaskSlice = (store: Store) =>
       return tasks;
     }),
     finalize(() => LoggerService.debug('Task slice restored.')),
-    catchError(err => {
+    catchError((err) => {
       LoggerService.error('Tasks slice failed to restore.', err);
       return of(null);
     }),
   );
+}

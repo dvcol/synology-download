@@ -1,17 +1,16 @@
-import { Box, Button, InputAdornment } from '@mui/material';
+import type { TextFieldProps } from '@mui/material';
+import type { FC, PropsWithChildren } from 'react';
 
+import { Box, Button, InputAdornment } from '@mui/material';
 import React from 'react';
 
 import { useI18n } from '@src/utils';
 
-import type { TextFieldProps } from '@mui/material';
-import type { FC, PropsWithChildren } from 'react';
-
-export type FormInputFileProps = {
+export interface FormInputFileProps {
   onChange: TextFieldProps['onChange'];
   split?: boolean;
   accept?: string;
-};
+}
 export const FormInputFile: FC<PropsWithChildren<FormInputFileProps>> = ({ onChange, split, accept }) => {
   const i18n = useI18n('common', 'form', 'input');
   const File = (

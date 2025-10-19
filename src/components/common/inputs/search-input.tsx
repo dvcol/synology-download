@@ -1,19 +1,17 @@
+import type { SelectProps } from '@mui/material';
+import type { ForwardRefRenderFunction, PropsWithChildren } from 'react';
+
 import ClearIcon from '@mui/icons-material/Clear';
-
 import { Button, Stack, TextField, Tooltip } from '@mui/material';
-
-import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 
 import { useI18n } from '@src/utils';
 import { KeyboardKeyCode, KeyboardKeyName } from '@src/utils/keyboard.utils';
 
-import type { SelectProps } from '@mui/material';
-import type { ForwardRefRenderFunction, PropsWithChildren } from 'react';
-
 const ModifierKeyNames = Object.values(KeyboardKeyName).filter(k => k !== KeyboardKeyName.Backspace);
 const ModifierKeyCodes = Object.values(KeyboardKeyCode).filter(k => k !== KeyboardKeyCode.Backspace);
 
-export type SearchInputRef = {
+export interface SearchInputRef {
   visible: boolean;
   focused: boolean;
   focus: () => Promise<void>;
@@ -21,7 +19,7 @@ export type SearchInputRef = {
   clear: () => void;
   setFilter: React.Dispatch<React.SetStateAction<string>>;
   inputRef: React.RefObject<HTMLInputElement>;
-};
+}
 
 type SearchInputProps = PropsWithChildren<{
   containerRef: React.RefObject<HTMLDivElement>;
@@ -40,7 +38,7 @@ type SearchInputProps = PropsWithChildren<{
 
   sx?: React.CSSProperties;
 }>;
-const _SearchInput: ForwardRefRenderFunction<SearchInputRef, SearchInputProps> = (
+const ForwardedSearchInput: ForwardRefRenderFunction<SearchInputRef, SearchInputProps> = (
   {
     focusOnChange,
     containerRef,
@@ -64,10 +62,10 @@ const _SearchInput: ForwardRefRenderFunction<SearchInputRef, SearchInputProps> =
   const [selectOpen, setSelectOpen] = useState(false);
   const [filterFocus, setFilterFocus] = useState<boolean>(false);
 
-  const focusInput = async (input = filterRef.current?.querySelector('input')) => {
+  const focusInput = useCallback(async (input: HTMLInputElement | undefined | null = filterRef.current?.querySelector<HTMLInputElement>('input')) => {
     if (!input) return;
     input.focus();
-  };
+  }, [filterRef]);
 
   const blurInput = async (input = filterRef.current?.querySelector('input')) => {
     if (!input) return;
@@ -79,12 +77,12 @@ const _SearchInput: ForwardRefRenderFunction<SearchInputRef, SearchInputProps> =
     return blurInput();
   };
 
-  const forceFocusVisible = () => {
+  const forceFocusVisible = useCallback(() => {
     setFilterFocus(true);
-    setTimeout(() => focusInput(), 200); // await animation time
-  };
+    setTimeout(async () => focusInput(), 200); // await animation time
+  }, [focusInput]);
 
-  const listener = async (e: KeyboardEvent) => {
+  const listener = useCallback(async (e: KeyboardEvent) => {
     // if an input is focused, do not filter
     if ((e.target as HTMLElement).tagName === 'INPUT') return;
     // if any modifier keys are pressed without any other key, do not filter
@@ -93,16 +91,17 @@ const _SearchInput: ForwardRefRenderFunction<SearchInputRef, SearchInputProps> =
     if ((e.ctrlKey || e.metaKey) && e.key === 'v' && navigator.clipboard) {
       const clip = await navigator.clipboard.readText();
       if (clip) onChangeFilter(_prev => `${_prev}${clip}`);
-    }
-    // if ctrl+f or cmd+f is pressed, focus the filter
-    else if (!filter?.length && (e.ctrlKey || e.metaKey) && e.key === 'f') forceFocusVisible();
-    // if backspace is pressed, remove last character
-    else if (e.key === 'Backspace') onChangeFilter(_prev => _prev.slice(0, -1));
-    else onChangeFilter(_prev => `${_prev}${e.key}`);
+    } else if (!filter?.length && (e.ctrlKey || e.metaKey) && e.key === 'f') {
+      // if ctrl+f or cmd+f is pressed, focus the filter
+      forceFocusVisible();
+    } else if (e.key === 'Backspace') {
+      // if backspace is pressed, remove last character
+      onChangeFilter(_prev => _prev.slice(0, -1));
+    } else onChangeFilter(_prev => `${_prev}${e.key}`);
     if (focusOnChange && !filterFocus) await focusInput();
     e.stopPropagation();
     e.preventDefault();
-  };
+  }, [filter?.length, onChangeFilter, focusOnChange, filterFocus, focusInput, forceFocusVisible]);
 
   useEffect(() => {
     const container = containerGetter ? containerGetter(containerRef) : containerRef.current;
@@ -111,16 +110,19 @@ const _SearchInput: ForwardRefRenderFunction<SearchInputRef, SearchInputProps> =
       onChangeFilter('');
     } else container?.addEventListener('keydown', listener);
     return () => container?.removeEventListener('keydown', listener);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only run on containerRef or disabled change
   }, [containerRef, disabled]);
 
-  const visible = useMemo(() => showFilter || filterFocus || selectOpen || (!disabled && !!filter), [showFilter, filterFocus, disabled, filter]);
+  const visible = useMemo(() => showFilter || filterFocus || selectOpen || (!disabled && !!filter), [showFilter, filterFocus, selectOpen, disabled, filter]);
 
   useEffect(() => {
     if (onChangeVisible) onChangeVisible(visible);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only run on visible change
   }, [visible]);
 
   useEffect(() => {
     onSelectOpen?.(selectOpen);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only run on selectOpen change
   }, [selectOpen]);
 
   useImperativeHandle(ref, () => {
@@ -140,21 +142,21 @@ const _SearchInput: ForwardRefRenderFunction<SearchInputRef, SearchInputProps> =
   });
   return (
     <Stack direction="row" sx={{ display: visible ? 'flex' : 'none', flex: '1 1 auto', alignItems: 'center', p: '0 0 0 0.25em', ...sx }}>
-      {children && (
+      {!!children && (
         <TextField
           select
           variant="standard"
           SelectProps={{
             MenuProps: { PaperProps: { sx: { left: '0 !important' } } },
             ...selectProps,
-            onOpen: event => {
+            onOpen: (event) => {
               setSelectOpen(true);
               selectProps?.onOpen?.(event);
             },
-            onClose: event => {
+            onClose: (event) => {
               setSelectOpen(false);
               selectProps?.onClose?.(event);
-              setTimeout(() => focusInput());
+              setTimeout(async () => focusInput());
             },
           }}
           sx={{ minWidth: 'fit-content', mr: '0.5em' }}
@@ -164,7 +166,7 @@ const _SearchInput: ForwardRefRenderFunction<SearchInputRef, SearchInputProps> =
       )}
       <TextField
         ref={filterRef}
-        placeholder={'Search'}
+        placeholder="Search"
         variant="standard"
         data-visible={visible}
         data-focused={filterFocus}
@@ -192,4 +194,4 @@ const _SearchInput: ForwardRefRenderFunction<SearchInputRef, SearchInputProps> =
   );
 };
 
-export const SearchInput = forwardRef(_SearchInput);
+export const SearchInput = forwardRef(ForwardedSearchInput);

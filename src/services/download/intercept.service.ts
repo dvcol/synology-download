@@ -1,14 +1,15 @@
-import { switchMap, tap } from 'rxjs';
-
-import type { InterceptPayload, InterceptResponse, TaskCreateResponse, TaskForm } from '@src/models';
-import { ChromeMessageType } from '@src/models';
-import { DownloadService, LoggerService, QueryService } from '@src/services';
-import type { DownloadFilenameSuggestion, DownloadItem } from '@src/utils';
-import { sendActiveTabMessage } from '@src/utils';
-
 import type { Observable } from 'rxjs';
 
-type InterceptOptions = { erase?: boolean; resume?: boolean };
+import type { InterceptPayload, InterceptResponse, TaskCreateResponse, TaskForm } from '@src/models';
+import type { DownloadFilenameSuggestion, DownloadItem } from '@src/utils';
+
+import { switchMap, tap } from 'rxjs';
+
+import { ChromeMessageType } from '@src/models';
+import { DownloadService, LoggerService, QueryService } from '@src/services';
+import { sendActiveTabMessage } from '@src/utils';
+
+interface InterceptOptions { erase?: boolean; resume?: boolean }
 export class InterceptService {
   static transfer<T extends DownloadItem>(
     download: T,
@@ -18,7 +19,7 @@ export class InterceptService {
     return DownloadService.pause(download.id).pipe(
       switchMap(() => QueryService.createTask({ url: [download.finalUrl] }, { source: download.referrer })),
       tap({
-        error: err => {
+        error: (err: Error) => {
           callback?.();
           LoggerService.error(`Failed to create task for download '${download.id}'`, { err, download });
           if (resume) {
@@ -63,7 +64,7 @@ export class InterceptService {
             DownloadService.erase({ id: download.id }).subscribe();
           }
         },
-        error: err => {
+        error: (err: Error) => {
           callback?.();
           LoggerService.error(`Failed to send download '${download.id}' to active tab`, { err, download });
           if (resume) {

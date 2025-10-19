@@ -29,27 +29,27 @@ export class BaseLoggerService {
   /* eslint-disable no-console */
   static trace(message?: any, ...params: any[]) {
     if (this.filter(LoggingLevel.trace)) return;
-    return console.trace(...this.timestamp, message, ...params);
+    return console.trace(...this.timestamp, message, ...(params as [any]));
   }
 
   static debug(message?: any, ...params: any[]) {
     if (this.filter(LoggingLevel.debug)) return;
-    return console.debug(...this.timestamp, message, ...params);
+    return console.debug(...this.timestamp, message, ...(params as [any]));
   }
 
   static info(message?: any, ...params: any[]) {
     if (this.filter(LoggingLevel.info)) return;
-    return console.info(...this.timestamp, message, ...params);
+    return console.info(...this.timestamp, message, ...(params as [any]));
   }
 
   static warn(message?: any, ...params: any[]) {
     if (this.filter(LoggingLevel.warn)) return;
-    return console.warn(...this.timestamp, message, ...params);
+    return console.warn(...this.timestamp, message, ...(params as [any]));
   }
 
   static error(message?: any, ...params: any[]) {
     if (this.filter(LoggingLevel.error)) return;
-    return console.error(...this.timestamp, message, ...params);
+    return console.error(...this.timestamp, message, ...(params as [any]));
   }
   /* eslint-enable no-console */
 }

@@ -1,8 +1,8 @@
+import type { StoreState } from '@src/store';
+
 import { createSelector } from '@reduxjs/toolkit';
 
-import type { StoreState } from '../store';
-
-export const getTab = createSelector(
+export const getTab: (state: StoreState) => StoreState['navbar']['tab'] = createSelector(
   (state: StoreState) => state,
   state => state.navbar.tab,
 );

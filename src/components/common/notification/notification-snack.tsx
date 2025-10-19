@@ -1,3 +1,9 @@
+import type { IconButtonProps, SvgIconProps, Theme } from '@mui/material';
+import type { SnackbarKey } from 'notistack';
+import type { ForwardRefRenderFunction } from 'react';
+
+import type { SnackMessage } from '@src/models';
+
 import BugReportOutlinedIcon from '@mui/icons-material/BugReportOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
@@ -5,21 +11,12 @@ import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
-
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, IconButton, styled, Typography } from '@mui/material';
-
 import { useSnackbar } from 'notistack';
-
 import React, { forwardRef, useCallback, useEffect, useState } from 'react';
 
-import type { SnackMessage } from '@src/models';
 import { ColorLevel, ColorLevelMap, NotificationLevel } from '@src/models';
-
 import { createTab } from '@src/utils';
-
-import type { IconButtonProps, SvgIconProps, Theme } from '@mui/material';
-import type { SnackbarKey } from 'notistack';
-import type { ForwardRefRenderFunction } from 'react';
 
 const ExpandMore = styled(({ expand, ...other }: IconButtonProps & { expand: boolean }) => <IconButton {...other} />)<{
   theme?: Theme;
@@ -32,7 +29,7 @@ const ExpandMore = styled(({ expand, ...other }: IconButtonProps & { expand: boo
   }),
 }));
 
-type SnackNotificationCardProps = { id: SnackbarKey; notification: SnackMessage; expanded?: boolean };
+interface SnackNotificationCardProps { id: SnackbarKey; notification: SnackMessage; expanded?: boolean }
 const SnackNotificationCardComponent: ForwardRefRenderFunction<HTMLDivElement, SnackNotificationCardProps> = (
   { id, notification: { title, message, contextMessage, priority, success, buttons }, expanded },
   ref,
@@ -40,6 +37,7 @@ const SnackNotificationCardComponent: ForwardRefRenderFunction<HTMLDivElement, S
   const { closeSnackbar } = useSnackbar();
   const [_expanded, setExpanded] = useState(expanded ?? false);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect,react-hooks-extra/no-direct-set-state-in-use-effect -- TODO investigate if this can be avoided
   useEffect(() => setExpanded(expanded ?? false), [expanded]);
 
   const handleExpandClick = useCallback(() => {
@@ -61,6 +59,7 @@ const SnackNotificationCardComponent: ForwardRefRenderFunction<HTMLDivElement, S
         case NotificationLevel.trace:
           return <BugReportOutlinedIcon {...props} />;
         case NotificationLevel.info:
+        case undefined:
         default:
           return success ? <CheckCircleOutlinedIcon {...props} /> : <InfoOutlinedIcon {...props} />;
       }
@@ -79,6 +78,7 @@ const SnackNotificationCardComponent: ForwardRefRenderFunction<HTMLDivElement, S
       case NotificationLevel.debug:
       case NotificationLevel.trace:
         return ColorLevelMap[ColorLevel.secondary];
+      case undefined:
       default:
     }
   }, [priority, success]);
@@ -87,9 +87,9 @@ const SnackNotificationCardComponent: ForwardRefRenderFunction<HTMLDivElement, S
     <Card id={`${id}`} ref={ref} sx={{ width: '21.5em' }}>
       <CardHeader
         avatar={handleIcon({ sx: { fontSize: '1.125em' } })}
-        action={
+        action={(
           <Box sx={{ marginLeft: 'auto' }}>
-            {(message || contextMessage) && (
+            {!!(message || contextMessage) && (
               <ExpandMore
                 expand={_expanded}
                 onClick={handleExpandClick}
@@ -104,7 +104,7 @@ const SnackNotificationCardComponent: ForwardRefRenderFunction<HTMLDivElement, S
               <CloseIcon sx={{ fontSize: '1em' }} />
             </IconButton>
           </Box>
-        }
+        )}
         title={<Box sx={{ overflowWrap: 'break-word', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</Box>}
         titleTypographyProps={{
           variant: 'subtitle2',
@@ -112,24 +112,24 @@ const SnackNotificationCardComponent: ForwardRefRenderFunction<HTMLDivElement, S
         }}
         sx={{ padding: '0.5em 0.5em 0.5em 1em', bgcolor: handleColor() }}
       />
-      {(message || contextMessage || buttons?.length) && (
+      {!!(message || contextMessage || buttons?.length) && (
         <Collapse in={_expanded} timeout="auto" unmountOnExit>
           <CardContent sx={{ padding: '0.5em 0.5em 0.5em 1em !important', whiteSpace: 'pre-line' }}>
-            {message && (
-              <Typography variant={'body2'} sx={{ fontSize: '0.75em', overflowWrap: 'break-word' }}>
+            {!!message && (
+              <Typography variant="body2" sx={{ fontSize: '0.75em', overflowWrap: 'break-word' }}>
                 {message}
               </Typography>
             )}
-            {contextMessage && (
-              <Typography variant={'caption'} sx={{ fontSize: '0.625em', color: 'darkgrey', overflowWrap: 'break-word' }}>
+            {!!contextMessage && (
+              <Typography variant="caption" sx={{ fontSize: '0.625em', color: 'darkgrey', overflowWrap: 'break-word' }}>
                 {contextMessage}
               </Typography>
             )}
           </CardContent>
-          {buttons?.length && (
+          {!!buttons?.length && (
             <CardActions>
-              {buttons?.map(({ title: _title, url }, index) => (
-                <Button key={index} size="small" onClick={() => createTab({ url })}>
+              {buttons?.map(({ title: _title, url }) => (
+                <Button key={_title + url} size="small" onClick={async () => createTab({ url })}>
                   {_title}
                 </Button>
               ))}

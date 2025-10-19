@@ -9,7 +9,8 @@ export interface DownloadStationConfig {
   emule_max_upload: number;
   /** Max NZB download speed in KB/s (“0” means unlimited) */
   nzb_max_download: number;
-  /** Max HTTP download speed in KB/s (“0” means unlimited).
+  /**
+   * Max HTTP download speed in KB/s (“0” means unlimited).
    *
    * Currently http_max_download and ftp_max_download share the same config value. When
    * both parameters are requested to be set at the same time, the requested ftp_max_download rate
@@ -20,7 +21,8 @@ export interface DownloadStationConfig {
    * is “downloading”. New rates will only be applied to those newly added/resumed HTTP/FTP tasks.
    */
   http_max_download: number;
-  /** Max FTP download speed in KB/s (“0” means unlimited). For more info, please see Limitations.
+  /**
+   * Max FTP download speed in KB/s (“0” means unlimited). For more info, please see Limitations.
    *
    * Currently http_max_download and ftp_max_download share the same config value. When
    * both parameters are requested to be set at the same time, the requested ftp_max_download rate

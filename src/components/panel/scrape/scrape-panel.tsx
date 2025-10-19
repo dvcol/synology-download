@@ -1,31 +1,73 @@
+import type { CardProps } from '@mui/material';
+import type { GridColDef, GridRowsProp } from '@mui/x-data-grid';
+import type { FC } from 'react';
+
+import type { RootSlice, ScrapedContent, ScrapedSlice, TaskForm } from '@src/models';
+
 import AddLinkIcon from '@mui/icons-material/AddLink';
 import DownloadIcon from '@mui/icons-material/Download';
-
 import { Button, ButtonGroup, Card, CardContent, CardHeader } from '@mui/material';
-
 import { DataGrid, GridFooter, GridFooterContainer, useGridApiContext } from '@mui/x-data-grid';
-
-import React, { useContext, useEffect } from 'react';
-
+import React, { useCallback, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { forkJoin } from 'rxjs';
 
 import { TaskDialog } from '@src/components';
-import type { RootSlice, ScrapedContent, ScrapedSlice, TaskForm } from '@src/models';
 import { ChromeMessageType, ColorLevel } from '@src/models';
 import { DownloadService, LoggerService } from '@src/services';
 import { ContainerContext } from '@src/store';
 import { clearScrapedContents } from '@src/store/actions';
 import { getScrapedPage, getScrappedRows } from '@src/store/selectors';
-
 import { sendActiveTabMessage, useI18n } from '@src/utils';
 
-import type { CardProps } from '@mui/material';
-import type { GridColDef, GridRowsProp } from '@mui/x-data-grid';
-import type { FC } from 'react';
+const ScrapeFooter: FC<{
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setForm: React.Dispatch<React.SetStateAction<TaskForm | undefined>>;
+}> = ({
+  setOpen,
+  setForm,
+}) => {
+  const i18n = useI18n('panel', 'scrape');
+  const apiRef = useGridApiContext();
+  const onCreateTask = () => {
+    const _selected = Array.from(apiRef.current.getSelectedRows()?.values());
+    const _form = { uri: _selected?.map((row: { src?: string }) => row?.src).join('\n') };
+    LoggerService.debug('Opening form task of selected rows', _form);
+    setForm(_form);
+    setOpen(true);
+  };
+  const onDownload = () => {
+    const selected = Array.from(apiRef.current.getSelectedRows()?.values());
+    LoggerService.debug('Starting batch download of selected rows', selected);
+    forkJoin(selected?.map((row: { src?: string }) => DownloadService.download({ url: row.src! }))).subscribe({
+      error: (err: Error) => LoggerService.error('Failed to batch download', { err, selected }),
+    });
+  };
+  return (
+    <GridFooterContainer>
+      <ButtonGroup
+        variant="outlined"
+        size="small"
+        aria-label="download button group"
+        sx={{
+          ml: '1.5em',
+          flex: '0 1 auto',
+        }}
+      >
+        <Button color={ColorLevel.primary} startIcon={<AddLinkIcon />} onClick={onCreateTask}>
+          {i18n('create__task')}
+        </Button>
+        <Button color={ColorLevel.secondary} startIcon={<DownloadIcon />} onClick={onDownload}>
+          {i18n('download')}
+        </Button>
+      </ButtonGroup>
 
-type ScrapePanelProps = { cardProps?: CardProps };
+      <GridFooter sx={{ border: 'none', flex: '1 0 auto' }} />
+    </GridFooterContainer>
+  );
+};
+
+interface ScrapePanelProps { cardProps?: CardProps }
 export const ScrapePanel: FC<ScrapePanelProps> = ({ cardProps }) => {
   const i18n = useI18n('panel', 'scrape');
   const dispatch = useDispatch();
@@ -35,15 +77,16 @@ export const ScrapePanel: FC<ScrapePanelProps> = ({ cardProps }) => {
   const page = useSelector<RootSlice, ScrapedSlice['page']>(getScrapedPage);
   const rows = useSelector<RootSlice, GridRowsProp<ScrapedContent>>(getScrappedRows);
 
-  const onScrape = () => {
+  const onScrape = useCallback(() => {
     dispatch(clearScrapedContents());
     sendActiveTabMessage({ type: ChromeMessageType.scrap }).subscribe({
       error: error => LoggerService.error('Failed to send scrap trigger', error),
     });
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     onScrape();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- want to run only once for the lifetime of the component
   }, []);
 
   const columns: GridColDef<ScrapedContent>[] = [
@@ -59,46 +102,6 @@ export const ScrapePanel: FC<ScrapePanelProps> = ({ cardProps }) => {
   const onFormClose = () => {
     setOpen(false);
     setForm(undefined);
-  };
-
-  const ScrapeFooter: FC = () => {
-    const apiRef = useGridApiContext();
-    const onCreateTask = () => {
-      const _selected = Array.from(apiRef.current.getSelectedRows()?.values());
-      const _form = { uri: _selected?.map(row => row?.src).join('\n') };
-      LoggerService.debug('Opening form task of selected rows', _form);
-      setForm(_form);
-      setOpen(true);
-    };
-    const onDownload = () => {
-      const selected = Array.from(apiRef.current.getSelectedRows()?.values());
-      LoggerService.debug('Starting batch download of selected rows', selected);
-      forkJoin(selected?.map(row => DownloadService.download({ url: row.src }))).subscribe({
-        error: err => LoggerService.error('Failed to batch download', { err, selected }),
-      });
-    };
-    return (
-      <GridFooterContainer>
-        <ButtonGroup
-          variant="outlined"
-          size="small"
-          aria-label="download button group"
-          sx={{
-            ml: '1.5em',
-            flex: '0 1 auto',
-          }}
-        >
-          <Button color={ColorLevel.primary} startIcon={<AddLinkIcon />} onClick={onCreateTask}>
-            {i18n('create__task')}
-          </Button>
-          <Button color={ColorLevel.secondary} startIcon={<DownloadIcon />} onClick={onDownload}>
-            {i18n('download')}
-          </Button>
-        </ButtonGroup>
-
-        <GridFooter sx={{ border: 'none', flex: '1 0 auto' }} />
-      </GridFooterContainer>
-    );
   };
 
   return (
@@ -157,7 +160,7 @@ export const ScrapePanel: FC<ScrapePanelProps> = ({ cardProps }) => {
           rows={rows}
           columns={columns}
           density={rows?.length > 10 ? 'compact' : 'standard'}
-          slots={{ footer: ScrapeFooter }}
+          slots={{ footer: () => <ScrapeFooter setOpen={setOpen} setForm={setForm} /> }}
         />
       </CardContent>
       <TaskDialog
@@ -167,7 +170,7 @@ export const ScrapePanel: FC<ScrapePanelProps> = ({ cardProps }) => {
         onClose={onFormClose}
         onCancel={onFormClose}
         onSubmit={onFormClose}
-        container={containerRef?.current}
+        container={() => containerRef?.current ?? null}
       />
     </Card>
   );

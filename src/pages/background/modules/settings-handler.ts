@@ -1,15 +1,14 @@
+import type { SettingsSlice, StoreOrProxy } from '@src/models';
+
 import { catchError, finalize, from, of, switchMap } from 'rxjs';
 
-import type { SettingsSlice } from '@src/models';
 import { defaultSettings, SyncSettingMode } from '@src/models';
 import { LoggerService } from '@src/services';
 import { setNavbar, setSettings } from '@src/store/actions';
 import { settingsSlice } from '@src/store/slices/settings.slice';
 import { buildContextMenu, localGet, setBadgeBackgroundColor, syncGet } from '@src/utils';
 
-import type { Store } from 'redux';
-
-const dispatchRestoreSettings = async (store: Store, settings: SettingsSlice) => {
+async function dispatchRestoreSettings(store: StoreOrProxy, settings: SettingsSlice) {
   LoggerService.debug(`Restoring settings from chrome '${settings?.sync?.mode ?? SyncSettingMode.sync}' storage...`, settings);
   // restore settings
   await store.dispatch(setSettings(settings));
@@ -27,19 +26,20 @@ const dispatchRestoreSettings = async (store: Store, settings: SettingsSlice) =>
   // restore context menu
   await buildContextMenu({ menus: settings?.menus || defaultSettings.menus, scrape: settings?.scrape?.menu });
   return settings;
-};
+}
 
 /** Restore extension settings */
-export const restoreSettings = (store: Store) =>
-  localGet<SettingsSlice>(settingsSlice.name).pipe(
-    switchMap(settings => {
+export function restoreSettings(store: StoreOrProxy) {
+  return localGet<SettingsSlice>(settingsSlice.name).pipe(
+    switchMap((settings) => {
       if (settings?.sync?.mode === SyncSettingMode.local) return of(settings);
       return syncGet<SettingsSlice>(settingsSlice.name);
     }),
     switchMap(settings => from(dispatchRestoreSettings(store, settings))),
     finalize(() => LoggerService.debug('Settings restored.')),
-    catchError(err => {
+    catchError((err) => {
       LoggerService.error('Setting slice failed to restore.', err);
       return of(null);
     }),
   );
+}

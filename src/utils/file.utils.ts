@@ -1,11 +1,11 @@
-export function readJsonFile<T extends Record<string, any>>(file: File): Promise<T> {
+export async function readJsonFile<T extends Record<string, any>>(file: File): Promise<T> {
   const { promise, resolve, reject } = Promise.withResolvers<T>();
 
   const reader = new FileReader();
-  reader.addEventListener('load', e => {
+  reader.addEventListener('load', (e) => {
     try {
       const content = e.target?.result as string;
-      resolve(JSON.parse(content));
+      resolve(JSON.parse(content) as T);
     } catch (error) {
       reject(error);
     }

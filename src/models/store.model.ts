@@ -1,29 +1,15 @@
+import type { AnyAction, Store } from 'redux';
+import type { Store as StoreProxy } from 'webext-redux';
+
 import type { ContentCount } from '@src/models/content.model';
-
 import type { ScrapedContents, ScrapedPage } from '@src/models/scraped-content.model';
-
 import type { InfoResponse } from '@src/models/synology.model';
 
 import type { Download } from './download.model';
-
 import type { ContextMenu, QuickMenu } from './menu.model';
-import type {
-  AdvancedSettings,
-  ConnectionSettings,
-  ContentSettings,
-  DownloadSettings,
-  GlobalSettings,
-  Log,
-  NotificationSettings,
-  PollingSettings,
-  ScrapeSettings,
-  SyncSettings,
-  TaskSettings,
-} from './settings.model';
+import type { AdvancedSettings, ConnectionSettings, ContentSettings, DownloadSettings, GlobalSettings, Log, NotificationSettings, PollingSettings, ScrapeSettings, SyncSettings, TaskSettings } from './settings.model';
 import type { ContentTab } from './tab.model';
 import type { Task, TaskComplete, TaskFile, TaskForm, TaskStatistics } from './task.model';
-import type { Store } from 'redux';
-import type { Store as StoreProxy } from 'webext-redux';
 
 export interface StateSlice {
   logged: boolean;
@@ -104,6 +90,22 @@ export interface RootSlice {
   settings: SettingsSlice;
 }
 
-export type StoreOrProxy = Store | StoreProxy;
+type Dispatch<A extends AnyAction> = (value: A) => void | A | Promise<void | A>;
+
+/**
+ * Base store interface with compatible methods between Redux Store and webext-redux Store
+ */
+export interface BaseStore<Root = RootSlice, Action extends AnyAction = AnyAction> extends Omit<Store<Root, Action>, 'dispatch'>, Omit<StoreProxy<Root, Action>, 'dispatch' | 'replaceState' | 'patchState' | 'ready' | 'replaceReducer'> {
+  dispatch: Dispatch<Action>;
+  ready?: StoreProxy<Root>['ready'];
+  replaceState?: StoreProxy<Root>['replaceState'];
+  patchState?: StoreProxy<Root>['patchState'];
+}
+
+/**
+ * Unified store type that is compatible with both Redux Store and webext-redux Store
+ * This resolves the dispatch signature incompatibility between the two store types
+ */
+export type StoreOrProxy<Root = RootSlice> = BaseStore<Root>;
 
 export const StorePortName = 'synology-download-proxy-store';

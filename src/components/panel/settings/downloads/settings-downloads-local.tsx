@@ -1,21 +1,19 @@
+import type { DownloadSettings } from '@src/models';
+import type { StoreState } from '@src/store';
+
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Button, Card, CardActions, CardContent, CardHeader, Collapse, Stack } from '@mui/material';
-
 import React from 'react';
-
 import { useForm } from 'react-hook-form';
-
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ButtonWithConfirm, FormSwitch } from '@src/components';
-import type { DownloadSettings } from '@src/models';
 import { defaultDownloads, DownloadsHeader } from '@src/models';
-import type { StoreState } from '@src/store';
 import { syncDownloads } from '@src/store/actions';
 import { getSettingsDownloads } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
 
-export const SettingsDownloadsLocal = () => {
+export function SettingsDownloadsLocal() {
   const i18n = useI18n('panel', 'settings', 'downloads');
   const dispatch = useDispatch();
   const state = useSelector<StoreState, DownloadSettings>(getSettingsDownloads);
@@ -77,12 +75,12 @@ export const SettingsDownloadsLocal = () => {
             subheader={i18n('notifications__subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
             subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
-            action={
+            action={(
               <FormSwitch
                 controllerProps={{ name: 'notifications', control }}
                 formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
               />
-            }
+            )}
             sx={{ p: '0.5rem 0' }}
           />
           <CardHeader
@@ -90,12 +88,12 @@ export const SettingsDownloadsLocal = () => {
             subheader={i18n('transfer__erase__subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
             subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
-            action={
+            action={(
               <FormSwitch
                 controllerProps={{ name: 'transfer.erase', control }}
                 formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
               />
-            }
+            )}
             sx={{ p: '0.5rem 0' }}
           />
           <CardHeader
@@ -103,12 +101,12 @@ export const SettingsDownloadsLocal = () => {
             subheader={i18n('transfer__resume__subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
             subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
-            action={
+            action={(
               <FormSwitch
                 controllerProps={{ name: 'transfer.resume', control }}
                 formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
               />
-            }
+            )}
             sx={{ p: '0.5rem 0' }}
           />
           <CardHeader
@@ -116,12 +114,12 @@ export const SettingsDownloadsLocal = () => {
             subheader={i18n('transfer__modal__subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
             subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
-            action={
+            action={(
               <FormSwitch
                 controllerProps={{ name: 'transfer.modal', control }}
                 formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
               />
-            }
+            )}
             sx={{ p: '0.5rem 0' }}
           />
         </Collapse>
@@ -148,4 +146,4 @@ export const SettingsDownloadsLocal = () => {
       </CardActions>
     </Card>
   );
-};
+}

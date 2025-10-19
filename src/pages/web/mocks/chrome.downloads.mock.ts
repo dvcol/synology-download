@@ -1,14 +1,15 @@
+import type { DownloadItem } from '@src/utils';
+
 import { faker } from '@faker-js/faker/locale/en';
 
 import { AbstractMock } from '@src/pages/web/mocks/utils.mock';
 import { BaseLoggerService } from '@src/services';
-import type { DownloadItem } from '@src/utils';
 
-export const generateDownload = (_download: Partial<DownloadItem> = {}): DownloadItem => {
-  const state = faker.helpers.arrayElement([...Array(8).fill('in_progress'), 'interrupted', 'complete']);
+export function generateDownload(_download: Partial<DownloadItem> = {}): DownloadItem {
+  const state = faker.helpers.arrayElement([...Array.from({ length: 8 }).fill('in_progress'), 'interrupted', 'complete']) as DownloadItem['state'];
 
   const totalBytes = _download?.totalBytes ?? faker.datatype.number({ min: 1000, max: 1000000000 });
-  const bytesReceived = _download?.bytesReceived ?? state === 'completed' ? totalBytes : faker.datatype.number({ min: 0, max: totalBytes / 10 });
+  const bytesReceived = _download?.bytesReceived ?? state?.toString() === 'completed' ? totalBytes : faker.datatype.number({ min: 0, max: totalBytes / 10 });
 
   const filename = faker.system.filePath();
   const url = `${faker.internet.url()}/${filename.split('/').pop()}`;
@@ -22,7 +23,7 @@ export const generateDownload = (_download: Partial<DownloadItem> = {}): Downloa
     canResume: state === 'interrupted',
     exists: state === 'complete' ? faker.datatype.boolean() : true,
     danger: faker.helpers.arrayElement(['file', 'url', 'content', 'uncommon', 'host', 'unwanted', 'safe', 'accepted']),
-    id: faker.helpers.unique(faker.datatype.number),
+    id: faker.helpers.unique(faker.datatype.number.bind(faker.datatype)),
     incognito: false,
     mime: faker.system.mimeType(),
     referrer: faker.internet.url(),
@@ -33,13 +34,13 @@ export const generateDownload = (_download: Partial<DownloadItem> = {}): Downloa
     url,
     ..._download,
   };
-};
+}
 
 type DownloadEntities = Record<string, DownloadItem>;
 
-const defaultDownloads: DownloadEntities = Array(5)
+const defaultDownloads: DownloadEntities = Array.from({ length: 5 })
   .fill(undefined)
-  .reduce(acc => {
+  .reduce((acc: DownloadEntities) => {
     const _download = generateDownload();
     acc[_download.id] = _download;
     return acc;
@@ -47,12 +48,12 @@ const defaultDownloads: DownloadEntities = Array(5)
 
 const storageKey = 'synology.mock.download';
 
-const getDownload = (): DownloadEntities => {
+function getDownload(): DownloadEntities {
   const storage = localStorage.getItem(storageKey);
-  if (storage) return JSON.parse(storage);
+  if (storage) return JSON.parse(storage) as DownloadEntities;
   localStorage.setItem(storageKey, JSON.stringify(defaultDownloads));
   return defaultDownloads;
-};
+}
 
 export class DownloadMock extends AbstractMock<DownloadEntities> {
   readonly key = storageKey;
@@ -112,8 +113,8 @@ export class DownloadMock extends AbstractMock<DownloadEntities> {
   }
 }
 
-const generateError = (): DownloadItem['error'] =>
-  faker.helpers.arrayElement([
+function generateError(): DownloadItem['error'] {
+  return faker.helpers.arrayElement([
     'FILE_FAILED',
     'FILE_ACCESS_DENIED',
     'FILE_NO_SPACE',
@@ -144,17 +145,18 @@ const generateError = (): DownloadItem['error'] =>
     'USER_SHUTDOWN',
     'CRASH',
   ]);
+}
 
-const fail = (download: DownloadItem) => {
+function fail(download: DownloadItem) {
   if (faker.datatype.number(100000) < 99999) return download;
   return {
     ...download,
     canResume: faker.datatype.boolean(),
     error: generateError(),
   };
-};
+}
 
-const progress = (download: DownloadItem) => {
+function progress(download: DownloadItem) {
   const total = download.totalBytes ?? download.fileSize;
   const downloaded = download.bytesReceived;
   if (total / downloaded < 1.05) {
@@ -169,19 +171,19 @@ const progress = (download: DownloadItem) => {
     download.bytesReceived = downloaded + faker.datatype.number({ max });
   }
   return download;
-};
+}
 
-const exists = (download: DownloadItem) => {
+function exists(download: DownloadItem) {
   if (faker.datatype.number(100000) < 80000) return download;
   return {
     ...download,
     exists: false,
   };
-};
+}
 
-export const activateDownloadDemo = (download: DownloadMock, interval = 100) => {
+export function activateDownloadDemo(download: DownloadMock, interval = 100) {
   return setInterval(() => {
-    download.downloads.forEach(_download => {
+    download.downloads.forEach((_download) => {
       switch (_download.state) {
         case 'in_progress':
           fail(_download);
@@ -196,47 +198,47 @@ export const activateDownloadDemo = (download: DownloadMock, interval = 100) => 
       }
     });
   }, interval);
-};
+}
 
-export const patchDownloads = (_global = window) => {
+export function patchDownloads(_global = window) {
   if (!_global._synology) _global._synology = {};
   if (!_global._synology.mock) _global._synology.mock = {};
   if (!_global._synology.mock.download) _global._synology.mock.download = new DownloadMock();
   const { download } = _global._synology.mock;
 
-  _global.chrome.downloads.search = query => {
+  _global.chrome.downloads.search = async (query) => {
     BaseLoggerService.debug('chrome.downloads.search', query);
     return Promise.resolve(download?.downloads ?? []);
   };
-  _global.chrome.downloads.erase = query => {
+  _global.chrome.downloads.erase = async (query) => {
     BaseLoggerService.debug('chrome.downloads.erase', query);
     if (query.id) download?.remove(query.id);
     return Promise.resolve([query.id ?? 0]);
   };
-  _global.chrome.downloads.download = query => {
+  _global.chrome.downloads.download = async (query) => {
     BaseLoggerService.debug('chrome.downloads.download', query);
     const { filename, url } = query;
     download?.add(generateDownload({ filename, url }));
     return Promise.resolve(0);
   };
-  _global.chrome.downloads.pause = downloadId => {
+  _global.chrome.downloads.pause = async (downloadId) => {
     BaseLoggerService.debug('chrome.downloads.pause', downloadId);
     download?.pause(downloadId);
     return Promise.resolve();
   };
-  _global.chrome.downloads.resume = downloadId => {
+  _global.chrome.downloads.resume = async (downloadId) => {
     BaseLoggerService.debug('chrome.downloads.resume', downloadId);
     download?.resume(downloadId);
     return Promise.resolve();
   };
-  _global.chrome.downloads.cancel = downloadId => {
+  _global.chrome.downloads.cancel = async (downloadId) => {
     BaseLoggerService.debug('chrome.downloads.cancel', downloadId);
     download?.cancel(downloadId);
     return Promise.resolve();
   };
-  _global.chrome.downloads.open = downloadId => {
+  _global.chrome.downloads.open = async (downloadId) => {
     BaseLoggerService.debug('chrome.downloads.open', downloadId);
     return Promise.resolve();
   };
   return _global.chrome.downloads;
-};
+}

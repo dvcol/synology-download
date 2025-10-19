@@ -1,14 +1,14 @@
-import { Container } from '@mui/material';
+import type { SettingsPanelTab } from '@src/models';
 
+import { Container } from '@mui/material';
 import React from 'react';
 
-import type { SettingsPanelTab } from '@src/models';
 import { AdvancedHeader, ConnectionHeader, DownloadsHeader, InterfaceHeader, NotificationHeader, SettingHeader, TasksHeader } from '@src/models';
 
 import { SettingsNavbar } from './settings-navbar';
 import { SettingsRoutes } from './settings-routes';
 
-export const Settings = () => {
+export function Settings() {
   const tabs: SettingsPanelTab[] = [
     { label: SettingHeader.connection, links: [ConnectionHeader.credential, ConnectionHeader.polling] },
     {
@@ -39,6 +39,6 @@ export const Settings = () => {
       <SettingsRoutes />
     </Container>
   );
-};
+}
 
 export default Settings;

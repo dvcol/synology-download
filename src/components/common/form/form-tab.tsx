@@ -1,27 +1,18 @@
-import { Button, Card, CardHeader, Collapse, Grid, MenuItem } from '@mui/material';
+import type { UseFormReturn } from 'react-hook-form/dist/types/form';
 
+import type { ContentTab, Tab, TabStatus } from '@src/models';
+
+import { Button, Card, CardHeader, Collapse, Grid, MenuItem } from '@mui/material';
 import React from 'react';
 
 import { FormExplorer, FormSwitch } from '@src/components';
-import type { ContentTab, Tab, TabStatus } from '@src/models';
-import {
-  ColorLevel,
-  defaultNotifications,
-  DownloadStatus,
-  getColorFromLevel,
-  getLevelFromColor,
-  TabTemplate,
-  TaskStatus,
-  templateTabs,
-} from '@src/models';
+import { ColorLevel, defaultNotifications, DownloadStatus, getColorFromLevel, getLevelFromColor, TabTemplate, TaskStatus, templateTabs } from '@src/models';
 import { useI18n } from '@src/utils';
 
 import { FormCheckbox } from './form-checkbox';
 import { FormInput } from './form-input';
 
-import type { UseFormReturn } from 'react-hook-form/dist/types/form';
-
-export const FormTab = ({
+export function FormTab({
   useFormProps: { control, getValues, setValue },
   tab: { template, status, color },
   disabled,
@@ -29,12 +20,12 @@ export const FormTab = ({
   useFormProps: Pick<UseFormReturn<Tab>, 'control' | 'getValues' | 'setValue'>;
   tab: Tab;
   disabled?: boolean;
-}>) => {
+}>) {
   const i18n = useI18n('common', 'form', 'tab');
   const getTab = (type?: TabTemplate | string): ContentTab | undefined => templateTabs.find(t => t.name === type);
   const getTemplateStatuses = (tab?: Tab): TabStatus[] => (tab?.status?.length ? tab?.status : status) ?? [];
 
-  const [templateStatuses, setTemplateStatuses] = React.useState<TabStatus[]>(getTemplateStatuses(getTab(template)));
+  const [templateStatuses, setTemplateStatuses] = React.useState<TabStatus[]>(() => getTemplateStatuses(getTab(template)));
   const [badgeColor, setBadgeColor] = React.useState<Tab['color']>(color);
 
   const onTemplateChange = (type: string) => {
@@ -59,7 +50,7 @@ export const FormTab = ({
         subheader={i18n('base_template_subheader')}
         titleTypographyProps={{ variant: 'subtitle2' }}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
-        action={
+        action={(
           <FormInput
             controllerProps={{ name: 'template', control }}
             textFieldProps={{
@@ -76,7 +67,7 @@ export const FormTab = ({
               </MenuItem>
             ))}
           </FormInput>
-        }
+        )}
         sx={{ p: '0.5rem 0' }}
       />
       <CardHeader
@@ -84,7 +75,7 @@ export const FormTab = ({
         subheader={i18n('badge_color_subheader')}
         titleTypographyProps={{ variant: 'subtitle2' }}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
-        action={
+        action={(
           <FormInput
             controllerProps={{ name: 'color', control }}
             textFieldProps={{
@@ -102,11 +93,11 @@ export const FormTab = ({
                 {_color}
               </MenuItem>
             ))}
-            <MenuItem key={'default'} value={defaultNotifications.count.color} sx={{ textTransform: 'capitalize' }}>
+            <MenuItem key="default" value={defaultNotifications.count.color} sx={{ textTransform: 'capitalize' }}>
               {i18n('badge_color_default')}
             </MenuItem>
           </FormInput>
-        }
+        )}
         sx={{ p: '0.5rem 0' }}
       />
       <CardHeader
@@ -136,7 +127,7 @@ export const FormTab = ({
                   }}
                   checkboxProps={{
                     multiple: true,
-                    value: s,
+                    value: s as unknown as boolean,
                     color: getHighlightColor(s),
                     disabled,
                   }}
@@ -164,7 +155,7 @@ export const FormTab = ({
                   }}
                   checkboxProps={{
                     multiple: true,
-                    value: s,
+                    value: s as unknown as boolean,
                     color: getHighlightColor(s),
                     disabled,
                   }}
@@ -192,4 +183,4 @@ export const FormTab = ({
       </Collapse>
     </React.Fragment>
   );
-};
+}

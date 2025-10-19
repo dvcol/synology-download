@@ -260,18 +260,18 @@ export interface TaskEditRequest {
 }
 
 export interface TaskBtEditRequest {
-  task_id: string;
+  'task_id': string;
 
-  destination?: string;
+  'destination'?: string;
 
-  priority?: TaskPriority;
+  'priority'?: TaskPriority;
 
-  max_peers?: number;
-  max_download_rate?: number;
-  max_upload_rate?: number;
+  'max_peers'?: number;
+  'max_download_rate'?: number;
+  'max_upload_rate'?: number;
 
-  seeding_ratio?: number;
-  seeding_interval?: number;
+  'seeding_ratio'?: number;
+  'seeding_interval'?: number;
 
   'ext-comp-1522'?: string;
 }
@@ -422,7 +422,7 @@ export interface TaskListFilesResponse {
   items: TaskFile[];
 }
 
-export type SynologyQueryOptions = {
+export interface SynologyQueryOptions {
   api: Api;
   endpoint: Endpoint;
   method: HttpMethod;
@@ -430,7 +430,7 @@ export type SynologyQueryOptions = {
   params?: HttpParameters;
   body?: HttpBody;
   base?: string;
-};
+}
 
 export type SynologyQueryArgs = [SynologyQueryOptions];
 

@@ -1,6 +1,6 @@
-import React, { Suspense } from 'react';
-
 import type { FC, PropsWithChildren, ReactNode } from 'react';
+
+import React, { Suspense } from 'react';
 
 export const Show: FC<
   PropsWithChildren<{

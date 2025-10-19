@@ -1,15 +1,14 @@
+import type { StoreOrProxy } from '@src/models';
 import type { Task } from '@src/models/task.model';
-
-import type { Store } from 'redux';
 
 export type { AppInstance } from '@src/models/app-instance.model';
 
 export enum WebComponents {
-  StandaloneApp = `wc-synology-download-standalone`,
-  ContentApp = `wc-synology-download-content`,
+  StandaloneApp = 'wc-synology-download-standalone',
+  ContentApp = 'wc-synology-download-content',
 }
 
-export type ContentAppTaskForm = {
+export interface ContentAppTaskForm {
   uri?: string;
   source?: string; // Custom Task
   destination?: { custom?: boolean; path?: string };
@@ -18,9 +17,9 @@ export type ContentAppTaskForm = {
   extract_password?: string; // unzip password
   torrent?: string;
   create_list?: boolean;
-};
-export type ContentAppAnchorPayload = { event?: MouseEvent; anchor?: Element | null; form: ContentAppTaskForm };
-export type ContentAppInterceptResponse = {
+}
+export interface ContentAppAnchorPayload { event?: MouseEvent; anchor?: Element | null; form: ContentAppTaskForm }
+export interface ContentAppInterceptResponse {
   success: boolean;
   payload?: {
     folder?: string;
@@ -29,31 +28,31 @@ export type ContentAppInterceptResponse = {
     message?: string;
   };
   error?: Error;
-};
-export type ContentAppTaskDialogPayload = {
+}
+export interface ContentAppTaskDialogPayload {
   open: boolean;
   form?: ContentAppTaskForm;
   intercept?: { callback: (response?: ContentAppInterceptResponse) => void };
-};
+}
 
 export interface ContentAppHtmlElement extends HTMLElement {
-  render: (root?: Element, store?: Store) => void;
+  render: (root?: Element, store?: StoreOrProxy) => void;
   anchor: (payload: ContentAppAnchorPayload) => void;
   dialog: (payload: ContentAppTaskDialogPayload) => void;
 }
 
-export type StandaloneAppCredentials = {
+export interface StandaloneAppCredentials {
   username?: string;
   password?: string;
   rememberMe?: boolean;
   autoLogin?: boolean;
   path?: string;
   port?: number;
-};
+}
 
 export interface StandaloneAppHtmlElement extends HTMLElement {
   basename?: string;
-  render: (root?: Element, store?: Store) => void;
+  render: (root?: Element, store?: StoreOrProxy) => void;
   add: (tsk: Task) => void;
   poll: () => Promise<any>;
   login: (credentials?: StandaloneAppCredentials) => Promise<any>;

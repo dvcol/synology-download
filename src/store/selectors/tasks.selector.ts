@@ -1,43 +1,43 @@
-import { createSelector } from '@reduxjs/toolkit';
-
-import type { Content, ContentStatusTypeId, Task } from '@src/models';
-import { ContentSource, ContentStatusType, TaskStatus } from '@src/models';
-
-import { LoggerService } from '@src/services';
+import type { Content, ContentStatusTypeId, Task, TaskFile } from '@src/models';
 
 import type { StoreState } from '../store';
 
-export const getTasks = createSelector(
+import { createSelector } from '@reduxjs/toolkit';
+
+import { ContentSource, ContentStatusType, TaskStatus } from '@src/models';
+import { LoggerService } from '@src/services';
+
+export const getTasks: (state: StoreState) => StoreState['tasks']['tasks'] = createSelector(
   (state: StoreState) => state,
   state => state.tasks.tasks,
 );
 
-export const getTaskFiles = createSelector(
+export const getTaskFiles: (state: StoreState) => StoreState['tasks']['files'] = createSelector(
   (state: StoreState) => state,
   state => state.tasks.files,
 );
 
-export const getStats = createSelector(
+export const getStats: (state: StoreState) => StoreState['tasks']['stats'] = createSelector(
   (state: StoreState) => state,
   state => state.tasks.stats,
 );
 
-export const getStopping = createSelector(
+export const getStopping: (state: StoreState) => StoreState['tasks']['stopping'] = createSelector(
   (state: StoreState) => state,
   state => state.tasks.stopping,
 );
 
-export const getTaskForm = createSelector(
+export const getTaskForm: (state: StoreState) => StoreState['tasks']['taskForm'] = createSelector(
   (state: StoreState) => state,
   state => state.tasks.taskForm,
 );
 
-export const getStoppingIds = createSelector(getStopping, tasks => Object.keys(tasks));
+export const getStoppingIds: (state: StoreState) => string[] = createSelector(getStopping, tasks => Object.keys(tasks));
 
-export const getTasksArray = createSelector(getTasks, (tasks: Record<string, Task>) => Object.values(tasks));
+export const getTasksArray: (state: StoreState) => Task[] = createSelector(getTasks, (tasks: Record<string, Task>) => Object.values(tasks));
 
-export const geTasksIdsByStatusTypeReducer = (items: Content[]) =>
-  items
+export function geTasksIdsByStatusTypeReducer(items: Content[]) {
+  return items
     ?.filter(item => item.source === ContentSource.Task)
     ?.map(item => item as Task)
     .reduce(
@@ -66,7 +66,7 @@ export const geTasksIdsByStatusTypeReducer = (items: Content[]) =>
             map[ContentStatusType.error].add(id);
             break;
           default:
-            LoggerService.error(`Status ${status} is not supported`);
+            LoggerService.error(`Status ${status as string} is not supported`);
         }
         map[ContentStatusType.all].add(id);
         return map;
@@ -76,16 +76,17 @@ export const geTasksIdsByStatusTypeReducer = (items: Content[]) =>
         return acc;
       }, {} as ContentStatusTypeId<Task['id']>),
     );
+}
 
-export const getTasksIdsByStatusType = createSelector(getTasksArray, geTasksIdsByStatusTypeReducer);
+export const getTasksIdsByStatusType: (state: StoreState) => ContentStatusTypeId<Task['id']> = createSelector(getTasksArray, geTasksIdsByStatusTypeReducer);
 
-export const getTasksIds = createSelector(getTasksIdsByStatusType, map => map[ContentStatusType.all]);
-export const getErrorTasksIds = createSelector(getTasksIdsByStatusType, map => map[ContentStatusType.error]);
-export const getPausedTasksIds = createSelector(getTasksIdsByStatusType, map => map[ContentStatusType.paused]);
-export const getActiveTasksIds = createSelector(getTasksIdsByStatusType, map => map[ContentStatusType.active]);
-export const getWaitingTasksIds = createSelector(getTasksIdsByStatusType, map => map[ContentStatusType.waiting]);
-export const getFinishedTasksIds = createSelector(getTasksIdsByStatusType, map => map[ContentStatusType.finished]);
+export const getTasksIds: (state: StoreState) => Set<Task['id']> = createSelector(getTasksIdsByStatusType, map => map[ContentStatusType.all]);
+export const getErrorTasksIds: (state: StoreState) => Set<Task['id']> = createSelector(getTasksIdsByStatusType, map => map[ContentStatusType.error]);
+export const getPausedTasksIds: (state: StoreState) => Set<Task['id']> = createSelector(getTasksIdsByStatusType, map => map[ContentStatusType.paused]);
+export const getActiveTasksIds: (state: StoreState) => Set<Task['id']> = createSelector(getTasksIdsByStatusType, map => map[ContentStatusType.active]);
+export const getWaitingTasksIds: (state: StoreState) => Set<Task['id']> = createSelector(getTasksIdsByStatusType, map => map[ContentStatusType.waiting]);
+export const getFinishedTasksIds: (state: StoreState) => Set<Task['id']> = createSelector(getTasksIdsByStatusType, map => map[ContentStatusType.finished]);
 
-export const getTaskById = (id: string) => createSelector(getTasks, tasks => tasks[id]);
+export const getTaskById: (id: string) => (state: StoreState) => Task = (id: string) => createSelector(getTasks, tasks => tasks[id]);
 
-export const getTaskFilesById = (id: string) => createSelector(getTaskFiles, files => files[id]);
+export const getTaskFilesById: (id: string) => (state: StoreState) => TaskFile[] = (id: string) => createSelector(getTaskFiles, files => files[id]);
