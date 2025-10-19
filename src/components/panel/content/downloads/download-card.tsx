@@ -1,29 +1,26 @@
+import type { FC } from 'react';
+
+import type { Download, GlobalSettings } from '@src/models';
+import type { StoreState } from '@src/store';
+
 import DownloadIcon from '@mui/icons-material/Download';
 import DownloadDoneIcon from '@mui/icons-material/DownloadDone';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import FileDownloadOffIcon from '@mui/icons-material/FileDownloadOff';
 import FolderDeleteIcon from '@mui/icons-material/FolderDelete';
 import LoopIcon from '@mui/icons-material/Loop';
-
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import { blue, green, orange, purple, red } from '@mui/material/colors';
-
 import React from 'react';
-
 import { useSelector } from 'react-redux';
 
-import type { Download, GlobalSettings } from '@src/models';
 import { DownloadStatus, downloadStatusToColor } from '@src/models';
-
-import type { StoreState } from '@src/store';
 import { getGlobalDownload } from '@src/store/selectors';
 import { formatBytes, useI18n } from '@src/utils';
 
 import { ContentCard } from '../content-card';
 
-import type { FC } from 'react';
-
-type DownloadCardProps = { download: Download; hideStatus?: boolean; expanded?: boolean; hover?: boolean };
+interface DownloadCardProps { download: Download; hideStatus?: boolean; expanded?: boolean; hover?: boolean }
 export const DownloadCard: FC<DownloadCardProps> = ({ download, hideStatus, expanded, hover }) => {
   const i18n = useI18n('panel', 'content', 'download', 'card');
   const statusIcon = (state: DownloadStatus): JSX.Element => {
@@ -72,8 +69,8 @@ export const DownloadCard: FC<DownloadCardProps> = ({ download, hideStatus, expa
       title={download.title ?? download.filename}
       icon={statusIcon(download.status)}
       iconBackground={avatarBgColor(download.status)}
-      iconVariant={'rounded'}
-      description={
+      iconVariant="rounded"
+      description={(
         <>
           {!hideStatus && (
             <React.Fragment>
@@ -94,11 +91,23 @@ export const DownloadCard: FC<DownloadCardProps> = ({ download, hideStatus, expa
             </React.Fragment>
           )}
           <span>
-            {formatBytes(download.received)} of {formatBytes(download.size)} downloaded
+            {formatBytes(download.received)}
+            {' '}
+            of
+            {formatBytes(download.size)}
+            {' '}
+            downloaded
           </span>
         </>
-      }
-      progress={download.speed ? <span>{formatBytes(download.speed)}/s</span> : undefined}
+      )}
+      progress={download.speed
+        ? (
+            <span>
+              {formatBytes(download.speed)}
+              /s
+            </span>
+          )
+        : undefined}
       progressBar={
         showProgressBar
           ? {

@@ -35,7 +35,7 @@ export enum ContentStatusType {
   error = 'error',
 }
 
-export type ContentTypeId<T = Content['id']> = { source: ContentSource; key: Content['key']; id: T };
+export interface ContentTypeId<T = Content['id']> { source: ContentSource; key: Content['key']; id: T }
 export type ContentStatusTypeId<T = ContentTypeId<Content['id']>> = Record<ContentStatusType, Set<T>>;
 
 export interface ContentCount {

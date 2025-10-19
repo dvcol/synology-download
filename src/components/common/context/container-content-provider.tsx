@@ -1,10 +1,12 @@
-import React from 'react';
-
-import type { ContainerContextInstance } from '@src/models';
-import { ContainerContext } from '@src/store';
-
 import type { FC, PropsWithChildren } from 'react';
 
+import type { ContainerContextInstance } from '@src/models';
+
+import React, { useMemo } from 'react';
+
+import { ContainerContext } from '@src/store';
+
 export const ContainerContextProvider: FC<PropsWithChildren<ContainerContextInstance>> = ({ children, instance, containerRef }) => {
-  return <ContainerContext.Provider value={{ instance, containerRef }}>{children}</ContainerContext.Provider>;
+  const context = useMemo(() => ({ instance, containerRef }), [instance, containerRef]);
+  return <ContainerContext.Provider value={context}>{children}</ContainerContext.Provider>;
 };

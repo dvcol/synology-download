@@ -4,4 +4,4 @@ import { downloadsSlice } from '../slices/downloads.slice';
 const { setDownloads, spliceDownloads, resetDownloads } = downloadsSlice.actions;
 
 // Export as named constants
-export { setDownloads, spliceDownloads, resetDownloads };
+export { resetDownloads, setDownloads, spliceDownloads };

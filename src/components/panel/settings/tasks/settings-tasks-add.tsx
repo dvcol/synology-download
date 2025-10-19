@@ -1,21 +1,19 @@
+import type { TaskSettings } from '@src/models';
+import type { StoreState } from '@src/store';
+
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Button, Card, CardActions, CardContent, CardHeader, Stack } from '@mui/material';
-
 import React from 'react';
-
 import { useForm } from 'react-hook-form';
-
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ButtonWithConfirm, FormSwitch } from '@src/components';
-import type { TaskSettings } from '@src/models';
 import { defaultDownloads, defaultTaskSettings, TasksHeader } from '@src/models';
-import type { StoreState } from '@src/store';
 import { syncDownloads, syncTasksSettings } from '@src/store/actions';
 import { getTaskSettings } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
 
-export const SettingsTasksAdd = () => {
+export function SettingsTasksAdd() {
   const i18n = useI18n('panel', 'settings', 'task_form');
   const dispatch = useDispatch();
   const state = useSelector<StoreState, TaskSettings>(getTaskSettings);
@@ -88,4 +86,4 @@ export const SettingsTasksAdd = () => {
       </CardActions>
     </Card>
   );
-};
+}

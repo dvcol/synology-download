@@ -1,10 +1,11 @@
 import type { ContextMenu, ResetMenuPayload } from '@src/models';
+
 import { ChromeMessageType } from '@src/models';
 import { LoggerService } from '@src/services';
 import { buildContextMenu, onMessage, removeContextMenu, saveContextMenu, toggleScrapeContextMenu } from '@src/utils';
 
 /** Listen to context menu events to create/updates menus */
-export const onContextMenuEvents = () => {
+export function onContextMenuEvents() {
   LoggerService.debug('Subscribing to context menu events.');
 
   // On message from chrome handle payload
@@ -42,9 +43,26 @@ export const onContextMenuEvents = () => {
         case ChromeMessageType.resetMenu:
           await handle(buildContextMenu(payload as ResetMenuPayload));
           break;
+        case ChromeMessageType.openTaskPopup:
+        case ChromeMessageType.openTaskPanel:
+        case ChromeMessageType.routeTaskForm:
+        case ChromeMessageType.routeScrapePage:
+        case ChromeMessageType.clickMenu:
+        case ChromeMessageType.notificationBanner:
+        case ChromeMessageType.notificationSnack:
+        case ChromeMessageType.polling:
+        case ChromeMessageType.query:
+        case ChromeMessageType.download:
+        case ChromeMessageType.intercept:
+        case ChromeMessageType.contentMenuOpen:
+        case ChromeMessageType.contentDialogOpen:
+        case ChromeMessageType.logger:
+        case ChromeMessageType.autoLogin:
+        case ChromeMessageType.scrap:
+        case ChromeMessageType.scraped:
         default:
           LoggerService.error(`Message type '${type}' not supported`);
       }
     }
   });
-};
+}

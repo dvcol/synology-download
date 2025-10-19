@@ -1,10 +1,9 @@
-import { Box } from '@mui/material';
-
-import React from 'react';
-
 import type { FC } from 'react';
 
-export type ProgressBackgroundProps = { primary?: string; secondary?: string; progress?: number };
+import { Box } from '@mui/material';
+import React from 'react';
+
+export interface ProgressBackgroundProps { primary?: string; secondary?: string; progress?: number }
 
 export const ProgressBackground: FC<ProgressBackgroundProps> = ({ primary, secondary, progress }) => (
   <Box sx={{ position: 'absolute', height: '100%', width: '100%', display: 'flex', flexDirection: 'row' }}>
@@ -16,7 +15,7 @@ export const ProgressBackground: FC<ProgressBackgroundProps> = ({ primary, secon
         width: `${progress ?? 100}%`,
       }}
     />
-    {secondary && (
+    {!!secondary && (
       <Box
         sx={{
           background: secondary ?? 'transparent',

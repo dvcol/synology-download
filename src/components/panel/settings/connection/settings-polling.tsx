@@ -1,20 +1,18 @@
+import type { FormRules, PollingSettings } from '@src/models';
+
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, InputAdornment, Stack } from '@mui/material';
-
 import React from 'react';
-
 import { useForm } from 'react-hook-form';
-
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ButtonWithConfirm, FormInput, FormSwitch } from '@src/components';
-import type { FormRules, PollingSettings } from '@src/models';
 import { ConnectionHeader, defaultPolling } from '@src/models';
 import { syncPolling } from '@src/store/actions';
 import { getPolling } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
 
-export const SettingsPolling = () => {
+export function SettingsPolling() {
   const i18n = useI18n('panel', 'settings', 'polling');
   const dispatch = useDispatch();
   const polling: PollingSettings = useSelector(getPolling);
@@ -68,30 +66,30 @@ export const SettingsPolling = () => {
               subheader={i18n('popup_subheader')}
               titleTypographyProps={{ variant: 'subtitle2' }}
               subheaderTypographyProps={{ variant: 'subtitle2' }}
-              action={
+              action={(
                 <FormSwitch
                   controllerProps={{ name: 'popup.enabled', control }}
                   formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
                 />
-              }
+              )}
               sx={{ p: '0.5rem 0' }}
             />
             <CardHeader
               title={i18n('background_title')}
-              subheader={
+              subheader={(
                 <Box>
                   <Box>{i18n('background_subheader_line_1')}</Box>
                   <Box>{i18n('background_subheader_line_2')}</Box>
                 </Box>
-              }
+              )}
               titleTypographyProps={{ variant: 'subtitle2' }}
               subheaderTypographyProps={{ variant: 'subtitle2' }}
-              action={
+              action={(
                 <FormSwitch
                   controllerProps={{ name: 'background.enabled', control }}
                   formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
                 />
-              }
+              )}
               sx={{ p: '0.5rem 0' }}
             />
             <CardHeader
@@ -151,4 +149,4 @@ export const SettingsPolling = () => {
       </CardActions>
     </Card>
   );
-};
+}

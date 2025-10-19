@@ -1,19 +1,11 @@
-import type {
-  FileList,
-  FileListOption,
-  FileSortBy,
-  FolderList,
-  FolderListOption,
-  FolderSortBy,
-  NewFolderList,
-  SynologyFileStationInfo,
-} from '@src/models';
+import type { Observable } from 'rxjs';
+
+import type { FileList, FileListOption, FileSortBy, FolderList, FolderListOption, FolderSortBy, NewFolderList, SynologyFileStationInfo } from '@src/models';
+import type { HttpParameters } from '@src/utils';
+
 import { Endpoint, FileMethod, FileStationAPI } from '@src/models';
 import { SynologyService } from '@src/services/http';
-import type { HttpParameters } from '@src/utils';
 import { HttpMethod } from '@src/utils';
-
-import type { Observable } from 'rxjs';
 
 export class SynologyFileService extends SynologyService {
   constructor(protected isProxy = false, protected name: string = 'SynologyFileService') {
@@ -48,7 +40,7 @@ export class SynologyFileService extends SynologyService {
     if (onlywritable) params.onlywritable = `${onlywritable}`;
     if (sort_by) params.sort_by = `${sort_by}`;
     if (sort_direction) params.sort_direction = `${sort_direction}`;
-    if (additional?.length) params.additional = `${additional}`;
+    if (additional?.length) params.additional = additional?.toString();
     return this._do(HttpMethod.POST, params);
   }
 
@@ -71,7 +63,7 @@ export class SynologyFileService extends SynologyService {
     if (pattern) params.pattern = `${pattern}`;
     if (filetype) params.filetype = `${filetype}`;
     if (goto_path) params.pattern = `${goto_path}`;
-    if (additional?.length) params.additional = `${additional}`;
+    if (additional?.length) params.additional = additional?.toString();
     return this._do(HttpMethod.POST, params);
   }
 
@@ -103,7 +95,7 @@ export class SynologyFileService extends SynologyService {
     }
     if (name) params.name = `["${Array.isArray(name) ? name.join('","') : name}"]`;
     if (force_parent) params.force_parent = `${force_parent}`;
-    if (additional?.length) params.additional = `${additional}`;
+    if (additional?.length) params.additional = additional?.toString();
     return this._do(HttpMethod.POST, params, '2', FileStationAPI.CreateFolder);
   }
 
@@ -115,10 +107,12 @@ export class SynologyFileService extends SynologyService {
    * @param name  One or more new names, separated by commas "," and around brackets.
    *              The number of names must be the same as the number of folder paths in the path parameter.
    *              The first name parameter corresponding to the first path parameter.
+   * @param additional Optional.
+   *                  Additional requested file information separated by a comma "," and around the brackets.
+   *                  When an additional option is requested, responded objects will be provided in the specified additional option.
    * @param search_taskid Optional.
    *                      A unique ID for the search task which is obtained from start method.
    *                      It is used to update the renamed file in the search result.
-   * @param additional
    */
   renameFolder(path: string | string[], name: string | string[], additional?: FileListOption[], search_taskid?: string): Observable<FileList> {
     const params: HttpParameters = { method: FileMethod.rename };
@@ -127,7 +121,7 @@ export class SynologyFileService extends SynologyService {
       params.path = `["${folders?.join('","')}"]`;
     }
     if (name) params.name = `["${Array.isArray(name) ? name.join('","') : name}"]`;
-    if (additional?.length) params.additional = `${additional}`;
+    if (additional?.length) params.additional = additional?.toString();
     if (search_taskid) params.search_taskid = `${search_taskid}`;
     return this._do(HttpMethod.POST, params, '2', FileStationAPI.Rename);
   }

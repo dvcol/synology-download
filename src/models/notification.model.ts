@@ -1,6 +1,6 @@
-import type { NotificationOptions } from '@src/utils';
-
 import type { OptionsObject } from 'notistack';
+
+import type { NotificationOptions } from '@src/utils';
 
 export enum NotificationLevel {
   trace = -2,
@@ -51,6 +51,6 @@ export interface SnackMessage {
   buttons?: SnackButton[];
 }
 
-export type SnackNotification = { message: SnackMessage; options?: OptionsObject };
+export interface SnackNotification { message: SnackMessage; options?: OptionsObject }
 
-export type NotificationServiceOptions = { type?: NotificationType; options?: OptionsObject };
+export interface NotificationServiceOptions { type?: NotificationType; options?: OptionsObject }

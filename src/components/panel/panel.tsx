@@ -1,24 +1,22 @@
-import { Container } from '@mui/material';
+import type { FC } from 'react';
+import type { PathRouteProps } from 'react-router-dom';
 
+import type { TaskForm } from '@src/models';
+
+import { Container } from '@mui/material';
 import React, { lazy, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
 import { ScrapePanel, SuspenseLoader } from '@src/components';
-import type { TaskForm } from '@src/models';
 import { AppRoute } from '@src/models';
-
 import { setNavbar } from '@src/store/actions';
 
-import type { FC } from 'react';
-import type { PathRouteProps } from 'react-router/lib/components';
-
-const ContentPanel = lazy(() => import(/* webpackChunkName: "ContentPanel" */ './content/content-panel'));
-const TaskAdd = lazy(() => import(/* webpackChunkName: "TaskAdd" */ './content/task/task-add'));
-const Config = lazy(() => import(/* webpackChunkName: "Config" */ './config/config'));
-const About = lazy(() => import(/* webpackChunkName: "About" */ './about'));
-const Settings = lazy(() => import(/* webpackChunkName: "Settings" */ './settings/settings'));
+const ContentPanel = lazy(async () => import(/* webpackChunkName: "ContentPanel" */ './content/content-panel'));
+const TaskAdd = lazy(async () => import(/* webpackChunkName: "TaskAdd" */ './content/task/task-add'));
+const Config = lazy(async () => import(/* webpackChunkName: "Config" */ './config/config'));
+const About = lazy(async () => import(/* webpackChunkName: "About" */ './about'));
+const Settings = lazy(async () => import(/* webpackChunkName: "Settings" */ './settings/settings'));
 
 type RouteFragment<T extends Record<string, unknown> = Record<string, unknown>> = PathRouteProps & {
   render?: (props: T) => React.ReactNode;
@@ -45,6 +43,7 @@ export const Panel: FC<{ redirect?: string }> = ({ redirect }) => {
       dispatch(setNavbar());
       navigate(redirect);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only run on redirect change
   }, [redirect]);
 
   return (
@@ -60,8 +59,8 @@ export const Panel: FC<{ redirect?: string }> = ({ redirect }) => {
       }}
     >
       <Routes>
-        {routes?.map(({ path, element, render }, index) => (
-          <Route key={index} path={path} element={<SuspenseLoader element={render?.({ state: location.state }) ?? element} />} />
+        {routes?.map(({ path, element, render }) => (
+          <Route key={path} path={path} element={<SuspenseLoader element={render?.({ state: location.state }) ?? element} />} />
         ))}
       </Routes>
     </Container>

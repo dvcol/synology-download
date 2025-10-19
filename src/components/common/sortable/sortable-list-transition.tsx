@@ -1,20 +1,19 @@
+import type { FC, PropsWithChildren } from 'react';
+import type { TransitionStatus } from 'react-transition-group';
+import type { CSSTransitionProps } from 'react-transition-group/CSSTransition';
+
+import type { SortableItemProps } from './sortable-list-item';
+
 import { styled } from '@mui/material';
-
 import React, { useRef } from 'react';
-
 import { CSSTransition } from 'react-transition-group';
 
 import { slideInAnimation, slideOutAnimation } from '@src/utils';
 
 import { SortableListItem } from './sortable-list-item';
 
-import type { SortableItemProps } from './sortable-list-item';
-import type { FC, PropsWithChildren } from 'react';
-import type { TransitionStatus } from 'react-transition-group';
-import type { CSSTransitionProps } from 'react-transition-group/CSSTransition';
-
 const duration = { enter: 300, exit: 300 };
-type StylingProps = { state: TransitionStatus; index: number };
+interface StylingProps { state: TransitionStatus; index: number }
 const StyledComponent = styled(SortableListItem)<StylingProps>`
   animation-fill-mode: both;
 
@@ -37,7 +36,7 @@ const StyledComponent = styled(SortableListItem)<StylingProps>`
 `;
 
 type TransitionProps = PropsWithChildren<{ item: Omit<SortableItemProps, 'children'> & Pick<StylingProps, 'index'> } & Partial<CSSTransitionProps>>;
-export const SortableListItemTransition: FC<TransitionProps> = props => {
+export const SortableListItemTransition: FC<TransitionProps> = (props) => {
   const ref = useRef<HTMLDivElement>(null);
   const { children, item, ..._props } = props;
   return (

@@ -1,13 +1,13 @@
+import type { File, Folder } from '@src/models';
+
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import { TreeItem } from '@mui/lab';
 import React from 'react';
 
-import type { File, Folder } from '@src/models';
-
 import { ExplorerLeafEdit } from './explorer-leaf-edit';
 import { ExplorerLoading } from './explorer-loading';
 
-export const ExplorerLeaf = ({
+export function ExplorerLeaf({
   nodeId,
   folder,
   tree,
@@ -25,7 +25,7 @@ export const ExplorerLeaf = ({
   disabled?: boolean;
   editable?: boolean;
   spliceTree?: (_nodeId: string, newFolder?: Folder | File, oldFolder?: Partial<Folder | File>) => void;
-}) => {
+}) {
   const isLoading = loading[nodeId];
   const children = tree[nodeId];
   return (
@@ -33,11 +33,13 @@ export const ExplorerLeaf = ({
       nodeId={`${nodeId}`}
       label={
         // only > 2 so that we do not allow renaming of shares
-        editable && folder?.isdir && nodeId.split('-')?.length > 2 ? (
-          <ExplorerLeafEdit folder={folder} disabled={disabled} onChange={(...args) => spliceTree?.(nodeId, ...args)} />
-        ) : (
-          folder.name
-        )
+        editable && folder?.isdir && nodeId.split('-')?.length > 2
+          ? (
+              <ExplorerLeafEdit folder={folder} disabled={disabled} onChange={(...args) => spliceTree?.(nodeId, ...args)} />
+            )
+          : (
+              folder.name
+            )
       }
       disabled={disabled}
       icon={folder?.isdir ? undefined : <InsertDriveFileOutlinedIcon />}
@@ -53,12 +55,12 @@ export const ExplorerLeaf = ({
       ContentProps={{ style: { overflow: 'hidden', marginBottom: 'auto' } }}
     >
       {!flatten && folder?.isdir && <ExplorerLoading loading={isLoading} empty={!children?.length} flatten={flatten} />}
-      {!flatten &&
-        folder?.isdir &&
-        !isLoading &&
-        children?.map((sf, i) => (
+      {!flatten
+        && folder?.isdir
+        && !isLoading
+        && children?.map((sf, i) => (
           <ExplorerLeaf
-            key={`${nodeId}-${i}-${disabled}`}
+            key={`${nodeId}-${sf.name}-${disabled}`}
             nodeId={`${nodeId}-${i}`}
             folder={sf}
             tree={tree}
@@ -69,4 +71,4 @@ export const ExplorerLeaf = ({
         ))}
     </TreeItem>
   );
-};
+}

@@ -1,31 +1,27 @@
-import PowerOffIcon from '@mui/icons-material/PowerOff';
-
-import { ListItemText, Menu, MenuItem } from '@mui/material';
-
-import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-
-import { Subscription, withLatestFrom } from 'rxjs';
-
-import { zIndexMax } from '@dvcol/web-extension-utils';
+import type { PopoverProps, PortalProps } from '@mui/material';
+import type { FC } from 'react';
 
 import type { InterceptPayload, InterceptResponse, OpenPanelPayload, OpenPopupPayload, QuickMenu, TaskForm, ThemeMode } from '@src/models';
-import { ChromeMessageType, ColorLevel, QuickMenuType } from '@src/models';
-
-import { anchor$, lastClick$ } from '@src/pages/content/service/anchor.service';
 import type { TaskDialogIntercept } from '@src/pages/content/service/dialog.service';
+import type { StoreState } from '@src/store';
+import type { ChromeResponse } from '@src/utils';
+
+import { zIndexMax } from '@dvcol/web-extension-utils';
+import PowerOffIcon from '@mui/icons-material/PowerOff';
+import { ListItemText, Menu, MenuItem } from '@mui/material';
+import React, { useCallback, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { Subscription, withLatestFrom } from 'rxjs';
+
+import { ChromeMessageType, ColorLevel, QuickMenuType } from '@src/models';
+import { anchor$, lastClick$ } from '@src/pages/content/service/anchor.service';
 import { taskDialog$ } from '@src/pages/content/service/dialog.service';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
-import type { StoreState } from '@src/store';
 import { getDestinationsHistory, getFolderHistory, getLogged, getQuick, getThemeMode } from '@src/store/selectors';
 import { preferDark } from '@src/themes/media-query';
-import type { ChromeResponse } from '@src/utils';
 import { onMessage, sendMessage, useI18n } from '@src/utils';
 
 import { QuickMenuRecent } from './quick-menu-recent';
-
-import type { PopoverProps, PortalProps } from '@mui/material';
-import type { FC } from 'react';
 
 export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ container }) => {
   const i18n = useI18n('content', 'quick_menu', 'dialog');
@@ -47,19 +43,19 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
 
   const isLogged = useSelector<StoreState, boolean>(getLogged);
 
-  let callback: TaskDialogIntercept['callback']; // fallback for when we respond before react setState
+  const callback = useRef<TaskDialogIntercept['callback']>();
   const [intercept, setIntercept] = React.useState<TaskDialogIntercept>();
   const _menus = menus?.filter(m => !!intercept || ![QuickMenuType.Download, QuickMenuType.RecentDownload].includes(m.type));
 
-  const onIntercept = (response: ChromeResponse<InterceptResponse>) => {
-    const _callback = intercept?.callback ?? callback;
+  const onIntercept = useCallback((response: ChromeResponse<InterceptResponse>) => {
+    const _callback = intercept?.callback ?? callback.current;
     if (_callback) {
       _callback(response);
       setIntercept(undefined);
     }
-  };
+  }, [intercept]);
 
-  const createTask = (form: TaskForm, { modal, popup, panel }: { modal?: boolean; popup?: boolean; panel?: boolean } = {}) => {
+  const createTask = useCallback((form: TaskForm, { modal, popup, panel }: { modal?: boolean; popup?: boolean; panel?: boolean } = {}) => {
     if (form?.uri && QueryService.isLoggedIn) {
       if (panel) {
         sendMessage<OpenPanelPayload>({
@@ -75,7 +71,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
         taskDialog$.next({ open: true, form, intercept });
       } else {
         QueryService.createTask({ url: [form?.uri], destination: form?.destination?.path }, { source: form?.source }).subscribe({
-          error: error => onIntercept({ success: false, error }),
+          error: (error: Error) => onIntercept({ success: false, error }),
           next: () => onIntercept({ success: true, payload: { aborted: false, message: 'Task created successfully' } }),
         });
       }
@@ -89,7 +85,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
       });
       onIntercept({ success: false, error: new Error('Invalid arguments') });
     }
-  };
+  }, [intercept, onIntercept, i18n]);
 
   const handleClose = (response?: InterceptResponse) => {
     setState(null, undefined);
@@ -111,7 +107,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
     createTask({ ..._form, destination: _destination }, { modal, popup, panel });
   };
 
-  const onEvent = (
+  const onEvent = useCallback((
     form: TaskForm,
     anchor?: PopoverProps['anchorEl'],
     position?: PopoverProps['anchorPosition'],
@@ -126,7 +122,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
     } else {
       createTask(form);
     }
-  };
+  }, [_menus, createTask]);
 
   useEffect(() => {
     const subs = new Subscription();
@@ -146,7 +142,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
           const resolvedAnchor = event ? null : anchor ?? null;
 
           if (message?.payload) {
-            callback = sendResponse;
+            callback.current = sendResponse;
             setIntercept({ callback: sendResponse });
             onEvent(message?.payload, resolvedAnchor, resolvedPosition);
           } else {
@@ -156,6 +152,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
     );
 
     return () => subs.unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- want to run only once for the lifetime of the component
   }, []);
 
   const destinations = useSelector<StoreState, string[]>(getDestinationsHistory);
@@ -172,7 +169,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
       anchorReference={_position ? 'anchorPosition' : 'anchorEl'}
       open={open}
       container={container}
-      onClose={() => handleClose({ aborted: true, message: `Quick menu cancelled.` })}
+      onClose={() => handleClose({ aborted: true, message: 'Quick menu cancelled.' })}
       MenuListProps={{
         'aria-labelledby': 'basic-button',
       }}

@@ -1,12 +1,12 @@
-import { ColorLevel } from '@src/models/material-ui.model';
-
 import type { DownloadItem, DownloadQuery } from '@src/utils';
-import { computeProgress, elapsedTime, formatTime } from '@src/utils';
-
-import { ContentSource } from './content.model';
 
 import type { Content } from './content.model';
 import type { TabCount } from './tab.model';
+
+import { ColorLevel } from '@src/models/material-ui.model';
+import { computeProgress, elapsedTime, formatTime } from '@src/utils';
+
+import { ContentSource } from './content.model';
 
 export interface Download extends DownloadItem, Omit<Content, 'id'> {
   status: DownloadStatus;
@@ -55,7 +55,7 @@ export interface DownloadQueryPayload {
  * Mapping function between download state and color level
  * @param state the state of the download to map
  */
-export const downloadStatusToColor = (state: DownloadStatus) => {
+export function downloadStatusToColor(state: DownloadStatus) {
   switch (state) {
     case DownloadStatus.downloading:
       return ColorLevel.info;
@@ -72,25 +72,25 @@ export const downloadStatusToColor = (state: DownloadStatus) => {
     default:
       return ColorLevel.primary;
   }
-};
+}
 
-const getEstimatedSpeed = (download: DownloadItem): number | undefined => {
+function getEstimatedSpeed(download: DownloadItem): number | undefined {
   if (!download.estimatedEndTime) return;
   if (download.bytesReceived > download.fileSize) return;
   const date = new Date(download.estimatedEndTime);
   const seconds = elapsedTime(date);
   const remaining = download.fileSize - download.bytesReceived;
   return remaining / seconds;
-};
+}
 
-const formatEstimatedTime = (download: DownloadItem) => {
+function formatEstimatedTime(download: DownloadItem) {
   if (!download.estimatedEndTime) return;
   const date = new Date(download.estimatedEndTime);
   const seconds = elapsedTime(date);
   return formatTime(seconds);
-};
+}
 
-const mapToDownloadStatus = (download: DownloadItem): DownloadStatus => {
+function mapToDownloadStatus(download: DownloadItem): DownloadStatus {
   switch (download.state) {
     case 'in_progress':
       if (download.paused) return DownloadStatus.paused;
@@ -104,9 +104,9 @@ const mapToDownloadStatus = (download: DownloadItem): DownloadStatus => {
     default:
       return DownloadStatus.error;
   }
-};
+}
 
-export const mapToDownload = (item: DownloadItem): Download => {
+export function mapToDownload(item: DownloadItem): Download {
   const path = item.filename?.split('/');
   return {
     ...item,
@@ -123,4 +123,4 @@ export const mapToDownload = (item: DownloadItem): Download => {
     createdAt: item.startTime ? new Date(item.startTime).getTime() : undefined,
     finishedAt: item.endTime ? new Date(item.endTime).getTime() : undefined,
   };
-};
+}

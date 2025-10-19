@@ -1,10 +1,10 @@
+import type { Task, TaskAdditional, TaskTransfer } from '@src/models';
+
 import { faker } from '@faker-js/faker/locale/en';
 
-import type { Task, TaskAdditional, TaskTransfer } from '@src/models';
 import { TaskPriority, TaskStatus, TaskType } from '@src/models';
 
 import { FetchIntercept } from '../models';
-
 import { AbstractMock, resolveUrl } from './utils.mock';
 
 /**
@@ -18,22 +18,22 @@ export type RecursivePartial<T> = {
  * Generate a Task
  * @todo: move from faker to a three-shakable smaller lib
  */
-export const generateTask = (_task: RecursivePartial<Task> = {}): Task => {
-  const status =
-    _task.status ??
-    faker.helpers.arrayElement([...Object.values(TaskStatus), ...Array(10).fill([TaskStatus.downloading, TaskStatus.waiting]).flat()]);
+export function generateTask(_task: RecursivePartial<Task> = {}): Task {
+  const status
+    = _task.status
+      ?? faker.helpers.arrayElement([...Object.values(TaskStatus), ...Array.from({ length: 10 }).fill([TaskStatus.downloading, TaskStatus.waiting]).flat()]) as TaskStatus;
   const size = _task.size ?? faker.datatype.number({ min: 1000, max: 1000000000 });
 
   const create_time = _task?.additional?.detail?.create_time ?? faker.date.recent().getTime();
   const started_time = _task?.additional?.detail?.started_time ?? faker.date.between(create_time, new Date()).getTime();
   const elapsed = (new Date().getTime() - started_time) / 1000;
 
-  let size_downloaded =
-    _task?.additional?.transfer?.size_downloaded ??
-    faker.datatype.number({
-      min: 0,
-      max: size / 10,
-    });
+  let size_downloaded
+    = _task?.additional?.transfer?.size_downloaded
+      ?? faker.datatype.number({
+        min: 0,
+        max: size / 10,
+      });
   if ([TaskStatus.finished, TaskStatus.seeding, TaskStatus.extracting, TaskStatus.finishing].includes(status)) size_downloaded = size;
   const size_uploaded = _task?.additional?.transfer?.size_uploaded ?? faker.datatype.number({ min: 0, max: size / 10 });
   const speed_download = Math.round(_task?.additional?.transfer?.speed_download ?? Number(size_downloaded) / elapsed);
@@ -74,13 +74,13 @@ export const generateTask = (_task: RecursivePartial<Task> = {}): Task => {
       },
     },
   } as Task;
-};
+}
 
 type TaskEntities = Record<string, Task>;
 
-const defaultTasks: TaskEntities = Array(5)
+const defaultTasks: TaskEntities = Array.from({ length: 5 })
   .fill(undefined)
-  .reduce(acc => {
+  .reduce((acc: TaskEntities) => {
     const _task = generateTask();
     acc[_task.id] = _task;
     return acc;
@@ -88,12 +88,12 @@ const defaultTasks: TaskEntities = Array(5)
 
 const storageKey = 'synology.mock.task';
 
-const getTasks = (): TaskEntities => {
+function getTasks(): TaskEntities {
   const storage = localStorage.getItem(storageKey);
-  if (storage) return JSON.parse(storage);
+  if (storage) return JSON.parse(storage) as TaskEntities;
   localStorage.setItem(storageKey, JSON.stringify(defaultTasks));
   return defaultTasks;
-};
+}
 
 export class TaskMock extends AbstractMock<TaskEntities> {
   readonly key = storageKey;
@@ -140,6 +140,13 @@ export class TaskMock extends AbstractMock<TaskEntities> {
         task.status = TaskStatus.downloading;
         if (task.additional?.transfer) task.additional.transfer.size_downloaded = 0;
         break;
+      case TaskStatus.downloading:
+      case TaskStatus.seeding:
+      case TaskStatus.waiting:
+      case TaskStatus.extracting:
+      case TaskStatus.finishing:
+      case TaskStatus.hash_checking:
+      case TaskStatus.filehosting_waiting:
       default:
         break;
     }
@@ -153,14 +160,14 @@ export class TaskMock extends AbstractMock<TaskEntities> {
   }
 }
 
-const changeStatus = (task: Task, status: TaskStatus, threshold = 50000): Task => {
+function changeStatus(task: Task, status: TaskStatus, threshold = 50000): Task {
   if (faker.datatype.number(100000) > threshold) task.status = status;
   return task;
-};
+}
 
 const failTask = (task: Task) => changeStatus(task, TaskStatus.error, 99999);
 
-const computeSpeed = (task: Task) => {
+function computeSpeed(task: Task) {
   const started_time = task?.additional?.detail?.started_time;
   const size_downloaded = task?.additional?.transfer?.size_downloaded;
   const size_uploaded = task?.additional?.transfer?.size_uploaded;
@@ -176,9 +183,9 @@ const computeSpeed = (task: Task) => {
   const speed_download = Math.round(Number(size_downloaded) / elapsed);
   const speed_upload = Math.round(Number(size_uploaded) / elapsed);
   return { speed_download, speed_upload };
-};
+}
 
-const progress = (task: Task) => {
+function progress(task: Task) {
   if (!task.additional) task.additional = {} as TaskAdditional;
   if (!task.additional.transfer) task.additional.transfer = {} as TaskTransfer;
   if (!task.additional.transfer.size_downloaded) task.additional.transfer.size_downloaded = 0;
@@ -197,20 +204,20 @@ const progress = (task: Task) => {
     task.additional.transfer = { ...task.additional.transfer, size_downloaded, speed_download, speed_upload };
   }
   return task;
-};
+}
 
-const seed = (task: Task) => {
+function seed(task: Task) {
   if (!task.additional?.transfer.size_uploaded) return task;
   if (faker.datatype.number(100) > 20) {
     task.additional.transfer.size_uploaded = faker.datatype.number({ max: task.size / 4 });
     task.additional.transfer.speed_upload = computeSpeed(task).speed_upload;
   }
   return task;
-};
+}
 
-export const activateTaskDemo = (task: TaskMock, interval = 100) => {
+export function activateTaskDemo(task: TaskMock, interval = 100) {
   return setInterval(() => {
-    task.tasks.forEach(_task => {
+    task.tasks.forEach((_task) => {
       switch (_task.status) {
         case TaskStatus.downloading:
           failTask(_task);
@@ -239,9 +246,9 @@ export const activateTaskDemo = (task: TaskMock, interval = 100) => {
       }
     });
   }, interval);
-};
+}
 
-export const patchTasks = (_global = window): TaskMock => {
+export function patchTasks(_global = window): TaskMock {
   if (!_global._synology) _global._synology = {};
   if (!_global._synology.mock) _global._synology.mock = {};
   if (!_global._synology.mock.task) _global._synology.mock.task = new TaskMock();
@@ -324,4 +331,4 @@ export const patchTasks = (_global = window): TaskMock => {
   ]);
 
   return task;
-};
+}

@@ -1,3 +1,9 @@
+import type { Dispatch, FC, SetStateAction } from 'react';
+import type { Observable } from 'rxjs';
+
+import type { ApiInfo, RootSlice, Task, TaskFile } from '@src/models';
+import type { i18n } from '@src/utils';
+
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import PauseIcon from '@mui/icons-material/Pause';
@@ -5,25 +11,17 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReplayIcon from '@mui/icons-material/Replay';
 import StopIcon from '@mui/icons-material/Stop';
 import { Box, Button, Grid, LinearProgress, ListItem, ListItemText, Typography } from '@mui/material';
-
 import React, { useEffect, useState } from 'react';
-
 import { useSelector } from 'react-redux';
-
 import { exhaustMap, finalize, map, timer } from 'rxjs';
 
 import { IconLoader, ProgressBar } from '@src/components';
-import type { ApiInfo, RootSlice, Task, TaskFile } from '@src/models';
 import { ColorLevel, TaskStatus, TaskType } from '@src/models';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
 import { getDownloadStation2APITaskBtFile, getDownloadStation2APITaskComplete, getPollingInterval, getTaskFilesById } from '@src/store/selectors';
-import type { i18n } from '@src/utils';
 import { before, computeProgress, dateToLocalString, formatBytes, useDebounceObservable, useI18n } from '@src/utils';
 
 import ContentDetail from '../content-detail';
-
-import type { Dispatch, FC, SetStateAction } from 'react';
-import type { Observable } from 'rxjs';
 
 const TaskTitle: FC<{ task: Task }> = ({ task }) => {
   const i18n = useI18n('panel', 'content', 'task', 'detail');
@@ -54,19 +52,19 @@ const TaskTitle: FC<{ task: Task }> = ({ task }) => {
   );
 };
 
-export type TaskEditState = { open: boolean; task?: Task };
-export type ConfirmationState = { open: boolean; title?: string; description?: string; callback?: () => void };
+export interface TaskEditState { open: boolean; task?: Task }
+export interface ConfirmationState { open: boolean; title?: string; description?: string; callback?: () => void }
 
-export type TaskDetailProps = {
+export interface TaskDetailProps {
   task: Task;
   isDisabled: boolean;
   loadingIcon: Record<string, boolean>;
   buttonClick: (button: string, request: Observable<any>, $event?: React.MouseEvent, delay?: number) => void;
   setTaskEdit: Dispatch<SetStateAction<TaskEditState>>;
   setConfirmation: Dispatch<SetStateAction<ConfirmationState>>;
-};
+}
 
-type TaskDetailGenericButtonProps = {
+interface TaskDetailGenericButtonProps {
   i18n: typeof i18n;
   isDisabled: boolean;
   loadingIcon: Record<string, boolean>;
@@ -74,7 +72,7 @@ type TaskDetailGenericButtonProps = {
   buttonColor: ColorLevel;
   buttonIcon: JSX.Element;
   buttonClick: () => void;
-};
+}
 const TaskDetailGenericButton: FC<TaskDetailGenericButtonProps> = ({
   isDisabled,
   loadingIcon,
@@ -128,7 +126,7 @@ const PauseButton: FC<TaskDetailButtonProps> = ({ task, isDisabled, loadingIcon,
       i18n={i18n}
       isDisabled={isDisabled}
       loadingIcon={loadingIcon}
-      buttonName={'pause'}
+      buttonName="pause"
       buttonColor={ColorLevel.warning}
       buttonIcon={<PauseIcon />}
       buttonClick={() => buttonClick('pause', QueryService.pauseTask(task.id))}
@@ -144,7 +142,7 @@ const EditButton: FC<TaskDetailButtonProps> = ({ task, isDisabled, loadingIcon, 
       i18n={i18n}
       isDisabled={isDisabled}
       loadingIcon={loadingIcon}
-      buttonName={'edit'}
+      buttonName="edit"
       buttonColor={ColorLevel.secondary}
       buttonIcon={<EditIcon />}
       buttonClick={() => setTaskEdit({ open: true, task })}
@@ -161,7 +159,7 @@ const StopButton: FC<TaskDetailButtonProps> = ({ task, isDisabled, loadingIcon, 
       i18n={i18n}
       isDisabled={isDisabled}
       loadingIcon={loadingIcon}
-      buttonName={'stop'}
+      buttonName="stop"
       buttonColor={ColorLevel.error}
       buttonIcon={<StopIcon />}
       buttonClick={() =>
@@ -170,13 +168,12 @@ const StopButton: FC<TaskDetailButtonProps> = ({ task, isDisabled, loadingIcon, 
           title: i18n('confirmation_title'),
           description: i18n('stop__confirmation_description'),
           callback: () => buttonClick('stop', QueryService.stopTask(task.id)),
-        })
-      }
+        })}
     />
   );
 };
 
-export const TaskDetail: FC<TaskDetailProps> = props => {
+export const TaskDetail: FC<TaskDetailProps> = (props) => {
   const { task, isDisabled, loadingIcon, buttonClick, setConfirmation } = props;
   const i18n = useI18n('panel', 'content', 'task', 'detail');
   const taskFiles = useSelector<RootSlice, TaskFile[]>(getTaskFilesById(task.id));
@@ -217,10 +214,10 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
         }),
       )
       .subscribe({
-        error: error => {
+        error: (error: Error) => {
           LoggerService.error(`Failed to fetch files for task '${task.id}'`, { task, error });
           NotificationService.error({
-            title: i18n(`task_list_files_fail`, 'common', 'error'),
+            title: i18n('task_list_files_fail', 'common', 'error'),
             message: error?.message ?? error?.name ?? '',
           });
         },
@@ -229,6 +226,7 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
     return () => {
       if (!sub?.closed) sub?.unsubscribe();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only run on task status change
   }, [task.status]);
 
   const DeleteButton = (
@@ -244,8 +242,7 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
             title: i18n('confirmation_title'),
             description: i18n('delete__confirmation_description'),
             callback: () => buttonClick('delete', QueryService.deleteTask(task.id), undefined, 0),
-          })
-        }
+          })}
       >
         {i18n('delete', 'common', 'buttons')}
       </Button>
@@ -257,7 +254,7 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
     files = taskFiles.map(f => (
       <ListItem key={`${f.index}-${f.name ?? f.filename}`}>
         <ListItemText
-          primary={
+          primary={(
             <Grid container>
               <Grid item xs={9}>
                 <span>{i18n(f.wanted ? f.priority : 'skip', 'common', 'model', 'task_priority')}</span>
@@ -271,7 +268,7 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
                 })}
               </Grid>
             </Grid>
-          }
+          )}
           primaryTypographyProps={{
             component: 'span',
             variant: 'caption',
@@ -288,7 +285,7 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
   return (
     <ContentDetail
       title={<TaskTitle task={task} />}
-      info={
+      info={(
         <>
           <Typography variant="caption" component="div">
             {`${i18n('type')} :\t${i18n(task.type, 'common', 'model', 'task_type')}`}
@@ -297,8 +294,8 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
             {`${i18n('created')} :\t${dateToLocalString(task.createdAt) ?? ''}${i18n({ key: 'created_by', substitutions: [task.username] })}`}
           </Typography>
         </>
-      }
-      buttons={
+      )}
+      buttons={(
         <>
           {!task.stopping && <PlayOrSeedOrRetry i18n={i18n} {...props} />}
           {!task.stopping && <PauseButton i18n={i18n} {...props} />}
@@ -306,11 +303,11 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
           {!task.stopping && <StopButton i18n={i18n} {...props} />}
           {DeleteButton}
         </>
-      }
-      content={
+      )}
+      content={(
         <>
           <LinearProgress
-            variant={'indeterminate'}
+            variant="indeterminate"
             sx={{
               height: showLoadingBar || taskFiles?.length ? '0.125em' : 0,
               opacity: showLoadingBar ? 1 : 0,
@@ -326,7 +323,7 @@ export const TaskDetail: FC<TaskDetailProps> = props => {
           )}
           {files ? <>{files}</> : undefined}
         </>
-      }
+      )}
     />
   );
 };

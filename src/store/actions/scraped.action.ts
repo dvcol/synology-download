@@ -4,4 +4,4 @@ import { scrapedSlice } from '../slices/scraped.slice';
 const { setScrapedContents, clearScrapedContents, setScrapedPage, clearScrapedPage } = scrapedSlice.actions;
 
 // Export as named constants
-export { setScrapedContents, clearScrapedContents, setScrapedPage, clearScrapedPage };
+export { clearScrapedContents, clearScrapedPage, setScrapedContents, setScrapedPage };

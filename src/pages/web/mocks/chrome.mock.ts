@@ -1,10 +1,10 @@
 import { BaseLoggerService } from '@src/services';
 import { deepMerge } from '@src/utils/object.utils';
 
-const logger =
-  (method: string) =>
-  (...arg: any[]) =>
+function logger(method: string) {
+  return (...arg: any[]) =>
     BaseLoggerService.debug(`chrome override ${method}`, arg);
+}
 
 const chromePatch = {
   loadTimes: logger('chrome.loadTimes'),
@@ -719,8 +719,8 @@ const chromePatch = {
   },
 } as unknown as typeof chrome;
 
-export const patchChrome = (_global = window) => {
+export function patchChrome(_global = window) {
   _global._chrome = _global.chrome;
   _global.chrome = deepMerge(_global._chrome, chromePatch);
   return _global.chrome;
-};
+}

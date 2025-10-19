@@ -1,16 +1,16 @@
-import { createSelector } from '@reduxjs/toolkit';
-
 import type { ScrapedContent, ScrapedContents, ScrapedSlice } from '@src/models';
 
 import type { StoreState } from '../store';
 
-const getScraped = createSelector(
+import { createSelector } from '@reduxjs/toolkit';
+
+const getScraped: (state: StoreState) => StoreState['scraped'] = createSelector(
   (state: StoreState) => state,
   state => state.scraped,
 );
 
-export const getScrapedPage = createSelector(getScraped, (scraped: ScrapedSlice) => scraped.page);
-export const getScrapedContents = createSelector(getScraped, (scraped: ScrapedSlice) => scraped.contents);
+export const getScrapedPage: (state: StoreState) => ScrapedSlice['page'] = createSelector(getScraped, (scraped: ScrapedSlice) => scraped.page);
+export const getScrapedContents: (state: StoreState) => ScrapedContents = createSelector(getScraped, (scraped: ScrapedSlice) => scraped.contents);
 
 const getScrappedContentList = createSelector(getScrapedContents, (contents: ScrapedContents) => [
   ...contents.links.filter(({ type }) => type === 'magnet'),
@@ -20,9 +20,8 @@ const getScrappedContentList = createSelector(getScrapedContents, (contents: Scr
   ...contents.links.filter(({ type }) => type !== 'magnet'),
 ]);
 
-export const getScrappedRows = createSelector(getScrappedContentList, (contents: ScrapedContent[]) =>
+export const getScrappedRows: (state: StoreState) => Array<ScrapedContent & { id: number }> = createSelector(getScrappedContentList, (contents: ScrapedContent[]) =>
   contents?.map((content, index) => ({
     id: index,
     ...content,
-  })),
-);
+  })));

@@ -1,17 +1,16 @@
-import { Avatar, Grid, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
-
-import { blue } from '@mui/material/colors';
-
-import React from 'react';
-
-import type { ProgressBarProps } from '@src/components';
-import { ProgressBar } from '@src/components';
-import { parseMagnetLink } from '@src/utils';
-
 import type { AvatarProps } from '@mui/material';
 import type { FC } from 'react';
 
-type ContentCardProps = {
+import type { ProgressBarProps } from '@src/components';
+
+import { Avatar, Grid, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
+import { blue } from '@mui/material/colors';
+import React from 'react';
+
+import { ProgressBar } from '@src/components';
+import { parseMagnetLink } from '@src/utils';
+
+interface ContentCardProps {
   title: string;
   icon: JSX.Element;
   iconBackground?: string;
@@ -21,7 +20,7 @@ type ContentCardProps = {
   progressBar?: ProgressBarProps;
   expanded?: boolean;
   hover?: boolean;
-};
+}
 export const ContentCard: FC<ContentCardProps> = ({
   title,
   icon,
@@ -54,7 +53,7 @@ export const ContentCard: FC<ContentCardProps> = ({
             wordBreak: 'break-word',
           },
         }}
-        secondary={
+        secondary={(
           <React.Fragment>
             <Grid container>
               <Grid item xs={10}>
@@ -66,7 +65,7 @@ export const ContentCard: FC<ContentCardProps> = ({
             </Grid>
             {!!progressBar && <ProgressBar {...progressBar} />}
           </React.Fragment>
-        }
+        )}
         secondaryTypographyProps={{
           component: 'span',
           variant: 'caption',

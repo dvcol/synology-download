@@ -1,22 +1,20 @@
+import type { ContentTab } from '@src/models';
+import type { StoreState } from '@src/store';
+
 import { Typography } from '@mui/material';
-
 import React, { useState } from 'react';
-
 import { useDispatch, useSelector } from 'react-redux';
 
-import type { ContentTab } from '@src/models';
 import { InterfaceHeader, TaskStatus, templateTabs } from '@src/models';
-import type { StoreState } from '@src/store';
 import { resetContentTabs, saveContentTab, setContentTabs } from '@src/store/actions';
 import { getTabs } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
 
 import { SettingsAccordion } from '../common';
-
 import { SettingsTab } from './settings-tab';
 
 const saskStatuses = Object.values(TaskStatus).map(String);
-export const SettingsTabs = () => {
+export function SettingsTabs() {
   const dispatch = useDispatch();
 
   const tabs = useSelector<StoreState, ContentTab[]>(getTabs);
@@ -60,9 +58,9 @@ export const SettingsTabs = () => {
       detail={t => (
         <SettingsTab
           tab={t}
-          onRemove={() => {
+          onRemove={async () => {
             setExpanded(false);
-            return new Promise(r => {
+            return new Promise((r) => {
               setTimeout(r, 500);
             });
           }}
@@ -73,4 +71,4 @@ export const SettingsTabs = () => {
       onChange={onChange}
     />
   );
-};
+}

@@ -1,34 +1,26 @@
+import type { ScrapedAudio, ScrapedContent, ScrapedContents, ScrapedContentsPayload, ScrapedImages, ScrapedLinks, ScrapedPage, ScrapedVideos } from '@src/models';
+
 import { tap } from 'rxjs';
 
-import type {
-  ScrapedAudio,
-  ScrapedContent,
-  ScrapedContents,
-  ScrapedContentsPayload,
-  ScrapedImages,
-  ScrapedLinks,
-  ScrapedPage,
-  ScrapedVideos,
-} from '@src/models';
 import { ChromeMessageType, emptyContents } from '@src/models';
 import { LoggerService } from '@src/services';
 import { onMessage, parseSrc, sendMessage } from '@src/utils';
 
-const addOrUpdate = <T extends ScrapedContent>(map: Map<string, T>, scrapped: T) => {
+function addOrUpdate<T extends ScrapedContent>(map: Map<string, T>, scrapped: T) {
   const _previous: Partial<T> = map.get(scrapped.src) ?? {};
   map.set(scrapped.src, {
     ..._previous,
     ...scrapped,
     title: scrapped.title?.trim() || _previous.title?.trim(),
   });
-};
+}
 
-const scrapeAudios = (_document?: Document | null, withElements?: boolean): ScrapedAudio[] => {
+function scrapeAudios(_document?: Document | null, withElements?: boolean): ScrapedAudio[] {
   if (!_document) return [];
 
   const links = new Map<string, ScrapedAudio>();
 
-  _document.querySelectorAll<HTMLSourceElement>('audio > source[src]')?.forEach(source => {
+  _document.querySelectorAll<HTMLSourceElement>('audio > source[src]')?.forEach((source) => {
     if (!source.src) return;
     addOrUpdate(links, {
       title: source?.title?.trim(),
@@ -40,14 +32,14 @@ const scrapeAudios = (_document?: Document | null, withElements?: boolean): Scra
   });
 
   return [...links.values()];
-};
+}
 
-const scrapeVideos = (_document?: Document | null, withElements?: boolean): ScrapedVideos[] => {
+function scrapeVideos(_document?: Document | null, withElements?: boolean): ScrapedVideos[] {
   if (!_document) return [];
 
   const links = new Map<string, ScrapedVideos>();
 
-  _document.querySelectorAll<HTMLVideoElement>('video[src]')?.forEach(video => {
+  _document.querySelectorAll<HTMLVideoElement>('video[src]')?.forEach((video) => {
     if (!video.currentSrc) return;
     addOrUpdate(links, {
       title: video?.title?.trim(),
@@ -59,7 +51,7 @@ const scrapeVideos = (_document?: Document | null, withElements?: boolean): Scra
     });
   });
 
-  _document.querySelectorAll<HTMLSourceElement>('video > source[src]')?.forEach(source => {
+  _document.querySelectorAll<HTMLSourceElement>('video > source[src]')?.forEach((source) => {
     if (!source.src) return;
     addOrUpdate(links, {
       title: source?.title?.trim(),
@@ -71,15 +63,15 @@ const scrapeVideos = (_document?: Document | null, withElements?: boolean): Scra
   });
 
   return [...links.values()];
-};
+}
 
 const backgroundImageRegex = /url\("(.*)"/;
-const scrapeImages = (_document?: Document | null, withElements?: boolean): ScrapedImages[] => {
+function scrapeImages(_document?: Document | null, withElements?: boolean): ScrapedImages[] {
   if (!_document) return [];
 
   const links = new Map<string, ScrapedImages>();
 
-  _document.querySelectorAll<HTMLImageElement>('img[src]')?.forEach(image => {
+  _document.querySelectorAll<HTMLImageElement>('img[src]')?.forEach((image) => {
     if (!image.currentSrc) return;
     addOrUpdate(links, {
       title: image?.title?.trim() || image?.alt?.trim(),
@@ -90,7 +82,7 @@ const scrapeImages = (_document?: Document | null, withElements?: boolean): Scra
     });
   });
 
-  _document.querySelectorAll<HTMLSourceElement>('picture > source[srcset]')?.forEach(source => {
+  _document.querySelectorAll<HTMLSourceElement>('picture > source[srcset]')?.forEach((source) => {
     if (!source.srcset) return;
     addOrUpdate(links, {
       title: source?.title?.trim(),
@@ -101,7 +93,7 @@ const scrapeImages = (_document?: Document | null, withElements?: boolean): Scra
     });
   });
 
-  _document.querySelectorAll<HTMLElement>('[style*=background-image]')?.forEach(element => {
+  _document.querySelectorAll<HTMLElement>('[style*=background-image]')?.forEach((element) => {
     const bgImageStyle: string = element?.style?.backgroundImage;
     if (!backgroundImageRegex.test(bgImageStyle)) return;
     const bgImageUrl = bgImageStyle.match(backgroundImageRegex)?.[1];
@@ -117,18 +109,18 @@ const scrapeImages = (_document?: Document | null, withElements?: boolean): Scra
   });
 
   return [...links.values()];
-};
+}
 
-const scrapeLinks = (_document?: Document | null, withElements?: boolean): ScrapedLinks[] => {
+function scrapeLinks(_document?: Document | null, withElements?: boolean): ScrapedLinks[] {
   if (!_document) return [];
 
   const links = new Map<string, ScrapedLinks>();
 
-  _document.querySelectorAll<HTMLElement & { href?: string; src?: string }>(`a[href],link[href],script[src]`)?.forEach(a => {
+  _document.querySelectorAll<HTMLElement & { href?: string; src?: string }>('a[href],link[href],script[src]')?.forEach((a) => {
     const src = a?.href || a?.src;
     if (!src) return;
     addOrUpdate(links, {
-      title: a?.title?.trim() || a?.innerText?.trim(),
+      title: a?.title?.trim() || a?.textContent?.trim() || src,
       name: parseSrc(src),
       src,
       type: src?.startsWith('magnet:') ? 'magnet' : 'link',
@@ -137,9 +129,9 @@ const scrapeLinks = (_document?: Document | null, withElements?: boolean): Scrap
   });
 
   return [...links.values()];
-};
+}
 
-const scrapePage = (_document?: Document | null, withElements = process.env.DEBUG === 'true'): ScrapedContents => {
+function scrapePage(_document?: Document | null, withElements = process.env.DEBUG === 'true'): ScrapedContents {
   if (!_document) return emptyContents;
 
   const images = scrapeImages(_document, withElements);
@@ -147,7 +139,7 @@ const scrapePage = (_document?: Document | null, withElements = process.env.DEBU
   const videos = scrapeVideos(_document, withElements);
   const links = scrapeLinks(_document, withElements);
 
-  _document.querySelectorAll('iframe')?.forEach(iframe => {
+  _document.querySelectorAll('iframe')?.forEach((iframe) => {
     const link = scrapePage(iframe.contentDocument, withElements);
     audios.push(...link.audios);
     videos.push(...link.videos);
@@ -156,9 +148,9 @@ const scrapePage = (_document?: Document | null, withElements = process.env.DEBU
   });
 
   return { images, audios, videos, links };
-};
+}
 
-export const listenToScrapEvents = () => {
+export function listenToScrapEvents() {
   return onMessage([ChromeMessageType.scrap]).pipe(
     tap(() => {
       const page: ScrapedPage = { title: document?.title ?? window.location.origin, origin: window.location.origin, url: window.location.href };
@@ -169,4 +161,4 @@ export const listenToScrapEvents = () => {
       });
     }),
   );
-};
+}

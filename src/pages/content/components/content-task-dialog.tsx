@@ -1,19 +1,19 @@
+import type { PortalProps } from '@mui/base/Portal';
+import type { FC } from 'react';
+
+import type { ContextMenuOnClickPayload, InterceptResponse, OpenPanelPayload, OpenPopupPayload, TaskForm } from '@src/models';
+import type { TaskDialogIntercept } from '@src/pages/content/service/dialog.service';
+import type { ChromeResponse } from '@src/utils';
+
+import { zIndexMax } from '@dvcol/web-extension-utils';
 import React, { useEffect } from 'react';
 import { Subject, takeUntil } from 'rxjs';
 
-import { zIndexMax } from '@dvcol/web-extension-utils';
-
 import { TaskDialog } from '@src/components';
-import type { ContextMenuOnClickPayload, InterceptResponse, OpenPanelPayload, OpenPopupPayload, TaskForm } from '@src/models';
 import { ChromeMessageType } from '@src/models';
-import type { TaskDialogIntercept } from '@src/pages/content/service/dialog.service';
 import { taskDialog$ } from '@src/pages/content/service/dialog.service';
 import { LoggerService, NotificationService, QueryService } from '@src/services';
-import type { ChromeResponse } from '@src/utils';
 import { i18n, onMessage, sendMessage } from '@src/utils';
-
-import type { PortalProps } from '@mui/base/Portal';
-import type { FC } from 'react';
 
 export const ContentTaskDialog: FC<{ container?: PortalProps['container'] }> = ({ container }) => {
   const [form, setForm] = React.useState<TaskForm>();

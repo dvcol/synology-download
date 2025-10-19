@@ -1,18 +1,16 @@
+import type { QuickMenu } from '@src/models';
+
 import { AccordionDetails, Box, Button, Card, CardActions, CardHeader, Collapse, ListItemIcon, ListItemText, MenuItem, Stack } from '@mui/material';
-
 import React from 'react';
-
 import { useForm } from 'react-hook-form';
-
 import { useDispatch } from 'react-redux';
 
 import { FormExplorer, FormInput, FormSwitch, MuiIcon } from '@src/components/common';
-import type { QuickMenu } from '@src/models';
 import { MaterialIcon, MaterialIconMap, QuickMenuType } from '@src/models';
 import { removeQuickMenu, saveQuickMenu } from '@src/store/actions';
 import { openPanel, openPopup, useI18n } from '@src/utils';
 
-export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemove: (id: QuickMenu['id']) => Promise<void> }) => {
+export function SettingsQuickMenu({ menu, onRemove }: { menu: QuickMenu; onRemove: (id: QuickMenu['id']) => Promise<void> }) {
   const i18n = useI18n('panel', 'settings', 'quick_menu');
   const dispatch = useDispatch();
   const {
@@ -61,7 +59,7 @@ export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemov
         subheader={i18n('name_subheader')}
         titleTypographyProps={{ variant: 'subtitle2' }}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
-        action={
+        action={(
           <FormInput
             controllerProps={{ name: 'title', control }}
             textFieldProps={{
@@ -69,7 +67,7 @@ export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemov
               sx: { flex: '0 0 12rem', textTransform: 'capitalize' },
             }}
           />
-        }
+        )}
         sx={{ p: '0.5rem 0' }}
       />
       <CardHeader
@@ -77,7 +75,7 @@ export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemov
         subheader={i18n('icon_subheader')}
         titleTypographyProps={{ variant: 'subtitle2' }}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
-        action={
+        action={(
           <FormInput
             controllerProps={{ name: 'icon', control }}
             textFieldProps={{
@@ -97,7 +95,7 @@ export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemov
               </MenuItem>
             ))}
           </FormInput>
-        }
+        )}
         sx={{ p: '0.5rem 0' }}
       />
       <CardHeader
@@ -105,7 +103,7 @@ export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemov
         subheader={i18n('type_subheader')}
         titleTypographyProps={{ variant: 'subtitle2' }}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
-        action={
+        action={(
           <FormInput
             controllerProps={{ name: 'type', control }}
             textFieldProps={{
@@ -120,7 +118,7 @@ export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemov
               </MenuItem>
             ))}
           </FormInput>
-        }
+        )}
         sx={{ p: '0.5rem 0' }}
       />
 
@@ -130,7 +128,7 @@ export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemov
           subheader={i18n('max_subheader')}
           titleTypographyProps={{ variant: 'subtitle2' }}
           subheaderTypographyProps={{ variant: 'subtitle2' }}
-          action={
+          action={(
             <FormInput
               controllerProps={{
                 name: 'max',
@@ -147,7 +145,7 @@ export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemov
                 sx: { flex: '0 0 12rem', ml: '0.5rem' },
               }}
             />
-          }
+          )}
           sx={{ p: '0.5rem 0', mt: '0.5rem' }}
         />
       </Collapse>
@@ -158,7 +156,7 @@ export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemov
           subheader={i18n('modal_subheader')}
           titleTypographyProps={{ variant: 'subtitle2' }}
           subheaderTypographyProps={{ variant: 'subtitle2' }}
-          action={
+          action={(
             <FormSwitch
               controllerProps={{ name: 'modal', control }}
               formControlLabelProps={{ label: '', disabled: getValues()?.type !== QuickMenuType.Task }}
@@ -169,7 +167,7 @@ export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemov
                 },
               }}
             />
-          }
+          )}
           sx={{ p: '0.5rem 0' }}
         />
         <CardHeader
@@ -177,7 +175,7 @@ export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemov
           subheader={i18n('popup_subheader')}
           titleTypographyProps={{ variant: 'subtitle2' }}
           subheaderTypographyProps={{ variant: 'subtitle2' }}
-          action={
+          action={(
             <FormSwitch
               controllerProps={{ name: 'popup', control }}
               formControlLabelProps={{
@@ -191,7 +189,7 @@ export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemov
                 },
               }}
             />
-          }
+          )}
           sx={{ p: '0.5rem 0' }}
         />
         <CardHeader
@@ -199,7 +197,7 @@ export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemov
           subheader={i18n('panel_subheader')}
           titleTypographyProps={{ variant: 'subtitle2' }}
           subheaderTypographyProps={{ variant: 'subtitle2' }}
-          action={
+          action={(
             <FormSwitch
               controllerProps={{ name: 'panel', control }}
               formControlLabelProps={{
@@ -213,7 +211,7 @@ export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemov
                 },
               }}
             />
-          }
+          )}
           sx={{ p: '0.5rem 0' }}
         />
         <CardHeader
@@ -221,12 +219,12 @@ export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemov
           subheader={i18n('destination_subheader')}
           titleTypographyProps={{ variant: 'subtitle2' }}
           subheaderTypographyProps={{ variant: 'subtitle2' }}
-          action={
+          action={(
             <FormSwitch
               controllerProps={{ name: 'destination.custom', control }}
               formControlLabelProps={{ label: '', disabled: getValues()?.type !== QuickMenuType.Task }}
             />
-          }
+          )}
           sx={{ p: '0.5rem 0' }}
         />
         <Collapse in={getValues()?.destination?.custom} unmountOnExit>
@@ -261,4 +259,4 @@ export const SettingsQuickMenu = ({ menu, onRemove }: { menu: QuickMenu; onRemov
       </CardActions>
     </AccordionDetails>
   );
-};
+}

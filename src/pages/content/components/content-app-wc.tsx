@@ -1,12 +1,12 @@
+import type { StoreOrProxy } from '@src/models';
+import type { AnchorPayload, TaskDialogPayload } from '@src/pages/content/service';
+
 import createCache from '@emotion/cache';
 import React from 'react';
-
 import { render } from 'react-dom';
 
-import type { StoreOrProxy } from '@src/models';
 import { AppInstance, ServiceInstance } from '@src/models';
 import { ContentApp } from '@src/pages/content/components/content-app';
-import type { AnchorPayload, TaskDialogPayload } from '@src/pages/content/service';
 import { anchor$, taskDialog$ } from '@src/pages/content/service';
 import { WcEvents } from '@src/pages/web';
 import { BaseLoggerService, DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
@@ -63,6 +63,7 @@ export class ContentAppWc extends HTMLElement {
     const app = shadowRoot.querySelector(`#${instance}-app`);
     const cache = createCache({ key: `${instance}-cache`, container });
 
+    // eslint-disable-next-line react-dom/no-render-return-value -- to keep consistent with other initApp functions
     return render(<ContentApp storeOrProxy={storeOrProxy} cache={cache} container={container} instance={instance} />, app);
   }
 

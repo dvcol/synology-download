@@ -1,19 +1,18 @@
-import { Box, Tooltip } from '@mui/material';
-
-import React, { useState } from 'react';
-
-import type { ModifiedEvent } from '@src/models';
-
 import type { BoxProps, TooltipProps } from '@mui/material';
 import type { FC } from 'react';
 
-export type TooltipHoverChangeProps = {
+import type { ModifiedEvent } from '@src/models';
+
+import { Box, Tooltip } from '@mui/material';
+import React, { useState } from 'react';
+
+export interface TooltipHoverChangeProps {
   title?: string;
   hoverTooltip?: ($event: ModifiedEvent) => string | undefined;
   props?: Omit<TooltipProps, 'title' | 'children'>;
   boxProps?: BoxProps;
   getContainer?: () => Element | null;
-};
+}
 
 export const TooltipHoverChange: FC<TooltipHoverChangeProps> = ({ title, hoverTooltip, children, props, boxProps, getContainer }) => {
   const [tooltip, setTooltip] = useState<string | undefined>(title);

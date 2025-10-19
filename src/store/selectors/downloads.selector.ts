@@ -1,17 +1,18 @@
-import { createSelector } from '@reduxjs/toolkit';
-
 import type { Content, ContentStatusTypeId, Download } from '@src/models';
-import { ContentSource, ContentStatusType, DownloadStatus } from '@src/models';
 
 import type { StoreState } from '../store';
 
-export const getDownloads = createSelector(
+import { createSelector } from '@reduxjs/toolkit';
+
+import { ContentSource, ContentStatusType, DownloadStatus } from '@src/models';
+
+export const getDownloads: (state: StoreState) => StoreState['downloads']['entities'] = createSelector(
   (state: StoreState) => state,
   state => state.downloads.entities,
 );
 
-export const getDownloadsIdsByStatusTypeReducer = (items: Content[]) =>
-  items
+export function getDownloadsIdsByStatusTypeReducer(items: Content[]) {
+  return items
     ?.filter(item => item.source === ContentSource.Download)
     ?.map(item => item as Download)
     .reduce(
@@ -36,10 +37,11 @@ export const getDownloadsIdsByStatusTypeReducer = (items: Content[]) =>
         return acc;
       }, {} as ContentStatusTypeId<Download['id']>),
     );
+}
 
 const getDownloadsIdsByStatusType = createSelector(getDownloads, getDownloadsIdsByStatusTypeReducer);
 
-export const getActiveDownloadIds = createSelector(getDownloadsIdsByStatusType, map => map[ContentStatusType.active]);
-export const getFinishedDownloadIds = createSelector(getDownloadsIdsByStatusType, map => map[ContentStatusType.finished]);
-export const getDownloadingDownloadIds = createSelector(getDownloadsIdsByStatusType, map => map[ContentStatusType.downloading]);
-export const getPausedDownloadIds = createSelector(getDownloadsIdsByStatusType, map => map[ContentStatusType.paused]);
+export const getActiveDownloadIds: (state: StoreState) => Set<Download['id']> = createSelector(getDownloadsIdsByStatusType, map => map[ContentStatusType.active]);
+export const getFinishedDownloadIds: (state: StoreState) => Set<Download['id']> = createSelector(getDownloadsIdsByStatusType, map => map[ContentStatusType.finished]);
+export const getDownloadingDownloadIds: (state: StoreState) => Set<Download['id']> = createSelector(getDownloadsIdsByStatusType, map => map[ContentStatusType.downloading]);
+export const getPausedDownloadIds: (state: StoreState) => Set<Download['id']> = createSelector(getDownloadsIdsByStatusType, map => map[ContentStatusType.paused]);

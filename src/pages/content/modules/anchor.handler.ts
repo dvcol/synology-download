@@ -43,7 +43,7 @@ function recursivelyFindAnchorAncestor(e: HTMLElement | null, depth = 10): HTMLA
  * Detect if the click event is on a supported downloadable link
  * @param event mouse event
  */
-const listener = async (event: MouseEvent) => {
+async function listener(event: MouseEvent) {
   const anchor = recursivelyFindAnchorAncestor(event.target as HTMLElement);
   lastClick$.next({ event, anchor });
   if (storeProxy.getState()?.settings?.content?.intercept === false) return;
@@ -60,15 +60,15 @@ const listener = async (event: MouseEvent) => {
     },
   });
   event.preventDefault();
-};
+}
 
-const addAnchorClickListener = () => {
+function addAnchorClickListener() {
   document.addEventListener('click', listener);
   document.addEventListener('contextmenu', listener);
-};
-const removeAnchorClickListener = () => {
+}
+function removeAnchorClickListener() {
   document.removeEventListener('click', listener);
   document.addEventListener('contextmenu', listener);
-};
+}
 
 export const clickListener$ = fromEventPattern<MouseEvent>(addAnchorClickListener, removeAnchorClickListener);

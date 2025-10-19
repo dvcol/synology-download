@@ -1,14 +1,15 @@
+import type { SnackNotification, StoreOrProxy } from '@src/models';
+import type { ChromeMessage, Manifest } from '@src/utils';
+
 import { combineLatest, map, of, takeWhile } from 'rxjs';
 
-import type { SnackNotification, StoreOrProxy } from '@src/models';
 import { AppLinks, ChromeMessageType, NotificationLevel } from '@src/models';
 import { LoggerService } from '@src/services';
 import { getPopup } from '@src/store/selectors';
-import type { ChromeMessage, Manifest } from '@src/utils';
 import { getManifest, injectContentScripts, onInstalled$, sendMessage, store$ } from '@src/utils';
 
-type InstalledPayload = { open: boolean; previousVersion?: string; nextVersion: string };
-export const onInstalledEvents = (store: StoreOrProxy) => {
+interface InstalledPayload { open: boolean; previousVersion?: string; nextVersion: string }
+export function onInstalledEvents(store: StoreOrProxy) {
   LoggerService.debug('Subscribing to install events.');
 
   // re-inject content scripts in open tabs
@@ -50,4 +51,4 @@ export const onInstalledEvents = (store: StoreOrProxy) => {
         error: e => LoggerService.warn('Snack notification failed to send.', e),
       }),
     );
-};
+}

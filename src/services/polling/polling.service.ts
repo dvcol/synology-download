@@ -1,6 +1,7 @@
+import type { ChromeNotification, StoreOrProxy } from '@src/models';
+
 import { combineLatest, distinctUntilChanged, Subject, switchMap, takeUntil, timer, withLatestFrom } from 'rxjs';
 
-import type { ChromeNotification, StoreOrProxy } from '@src/models';
 import { ChromeMessageType, defaultPolling } from '@src/models';
 import { DownloadService, LoggerService } from '@src/services';
 import { getLogged, getPollingEnabled, getPollingInterval, getSettingsDownloadsEnabled } from '@src/store/selectors';
@@ -9,7 +10,7 @@ import { onMessage, sendMessage, skipUntilRepeat, store$ } from '@src/utils';
 import { QueryService } from '../query';
 
 export class PollingService {
-  private static store: any | StoreOrProxy;
+  private static store: StoreOrProxy;
 
   private static isProxy: boolean;
 
@@ -56,7 +57,7 @@ export class PollingService {
             QueryService.listTasks()
               .pipe(takeUntil(this._destroy$))
               .subscribe({
-                error: err => {
+                error: (err) => {
                   this.stop();
                   LoggerService.error('Polling service failed to fetch list', err);
                 },
@@ -64,7 +65,7 @@ export class PollingService {
             QueryService.getStatistic()
               .pipe(takeUntil(this._destroy$))
               .subscribe({
-                error: err => {
+                error: (err) => {
                   this.stop();
                   LoggerService.error('Polling service failed to fetch statistics', err);
                 },

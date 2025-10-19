@@ -18,34 +18,34 @@ const destroyedEvent = 'destroyed';
  * Emits 'onDestroy' event on component and await 'destroyed 'callback before resolving
  * @param el the element on which to call 'onDestroy'
  */
-const waitDestroyed = (el: Element): Promise<void> => {
+async function waitDestroyed(el: Element): Promise<void> {
   let resolve: () => void;
-  const promise = new Promise<void>(_resolve => {
+  const promise = new Promise<void>((_resolve) => {
     resolve = () => _resolve();
   });
   el.addEventListener(destroyedEvent, () => resolve());
   el.dispatchEvent(new CustomEvent(onDestroyEvent));
   el.parentElement?.removeChild(el);
   return promise;
-};
+}
 
 /**
  * Remove old instances of the component and trigger destroy lifecycle
  */
-export const removeOldInstances = (): Promise<void | void[]> => {
+export async function removeOldInstances(): Promise<void | void[]> {
   const previous = document.body?.querySelectorAll(`#${rootContainerId}`);
   if (previous?.length) {
     LoggerService.debug(`Found exiting instance of '${rootContainerId}'`, previous);
-    return Promise.all([...previous]?.map(el => waitDestroyed(el)));
+    return Promise.all([...previous]?.map(async el => waitDestroyed(el)));
   }
   return Promise.resolve();
-};
+}
 
 /**
  * Subscribe to magnet link clicks and scrapping events and unsubscribe on destroy
  * @param root the root element to watch for destroy cycle
  */
-const listenUntilDestroy = (root: HTMLElement) => {
+function listenUntilDestroy(root: HTMLElement) {
   // Attach click listener
   const clicks = clickListener$.subscribe();
   const scraps = listenToScrapEvents().subscribe();
@@ -57,7 +57,7 @@ const listenUntilDestroy = (root: HTMLElement) => {
     scraps.unsubscribe();
     root.dispatchEvent(new CustomEvent(destroyedEvent));
   });
-};
+}
 
 /**
  * TODO: Remove if/when persistent MV3 service worker are introduced
@@ -66,15 +66,15 @@ const listenUntilDestroy = (root: HTMLElement) => {
  * @see https://bugs.chromium.org/p/chromium/issues/detail?id=1152255
  * @see https://stackoverflow.com/questions/66618136/persistent-service-worker-in-chrome-extension
  */
-const connect = () => {
+function connect() {
   LoggerService.debug(`connecting ${AppInstance.content}`);
   portConnect({ name: AppInstance.content }).onDisconnect.addListener(connect);
-};
+}
 
 /**
  * Open a modal popup for custom download actions
  */
-export const injectContentApp = async (): Promise<void> => {
+export async function injectContentApp(): Promise<void> {
   // if page is not a valid html document with body, skip injection
   if (!document.body) return;
 
@@ -106,4 +106,4 @@ export const injectContentApp = async (): Promise<void> => {
 
   // render component
   return ContentAppWc.prototype.render(root, storeProxy);
-};
+}

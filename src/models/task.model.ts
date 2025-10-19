@@ -1,4 +1,5 @@
 import type { Content, DownloadStationStatistic, TabCount, TaskPriority } from '@src/models';
+
 import { ColorLevel, ContentSource } from '@src/models';
 import { computeProgress, formatTime } from '@src/utils';
 
@@ -61,7 +62,8 @@ export enum TaskStatus {
  * Status_Extra object which provides extra information about task status.
  */
 export interface TaskStatusExtra {
-  /** for more details
+  /**
+   * for more details
    * see: https://global.download.synology.com/download/Document/Software/DeveloperGuide/Package/DownloadStation/All/enu/Synology_Download_Station_Web_API.pdf
    */
   error_detail: string;
@@ -152,7 +154,7 @@ export interface TaskPeer {
  * Mapping function between task status and color level
  * @param _task the task to map
  */
-export const taskStatusToColor = (_task: Task) => {
+export function taskStatusToColor(_task: Task) {
   if (_task.stopping) return ColorLevel.error;
   switch (_task.status) {
     case TaskStatus.downloading:
@@ -165,12 +167,17 @@ export const taskStatusToColor = (_task: Task) => {
       return ColorLevel.warning;
     case TaskStatus.error:
       return ColorLevel.error;
+    case TaskStatus.waiting:
+    case TaskStatus.extracting:
+    case TaskStatus.finishing:
+    case TaskStatus.hash_checking:
+    case TaskStatus.filehosting_waiting:
     default:
       return ColorLevel.primary;
   }
-};
+}
 
-const computeEta = (task: Task): string | undefined => {
+function computeEta(task: Task): string | undefined {
   const downloaded = Number(task.additional?.transfer?.size_downloaded);
   const speed = Number(task.additional?.transfer?.speed_download);
   if (downloaded && Number.isFinite(downloaded) && speed && Number.isFinite(speed)) {
@@ -178,7 +185,7 @@ const computeEta = (task: Task): string | undefined => {
     return Number.isFinite(secondsRemaining) ? formatTime(secondsRemaining) : undefined;
   }
   return undefined;
-};
+}
 
 export interface TaskForm {
   uri?: string;
@@ -199,7 +206,7 @@ export interface TaskCount {
 
 export type TaskStatistics = DownloadStationStatistic;
 
-export const mapToTask = (task: Task, stoppingIds: TaskComplete['taskId'][] = []): Task => {
+export function mapToTask(task: Task, stoppingIds: TaskComplete['taskId'][] = []): Task {
   const folder = task.additional?.detail?.destination ?? undefined;
   const received = task.additional?.transfer?.size_downloaded ?? 0;
   const speed = task.additional?.transfer?.speed_download ?? undefined;
@@ -218,4 +225,4 @@ export const mapToTask = (task: Task, stoppingIds: TaskComplete['taskId'][] = []
     finishedAt: finished ? new Date(finished * 1000).getTime() : undefined,
     stopping: stoppingIds?.includes(task.id),
   };
-};
+}

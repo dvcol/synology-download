@@ -1,10 +1,11 @@
+import type { FC } from 'react';
+
+import type { StoreState } from '@src/store';
+
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
-import type { StoreState } from '@src/store';
 import { getInterfaceSize } from '@src/store/selectors';
-
-import type { FC } from 'react';
 
 export const SettingsInjector: FC = () => {
   const size = useSelector<StoreState, number>(getInterfaceSize);

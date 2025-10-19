@@ -1,48 +1,22 @@
+import type { VariantType } from 'notistack';
+import type { Observable } from 'rxjs';
+
+import type { ChromeNotification, Download, NotificationServiceOptions, ServiceInstance, SnackMessage, SnackNotification, StateSlice, StoreOrProxy, Task } from '@src/models';
+
 import { filter, map, Subject, takeUntil, tap } from 'rxjs';
 
-import type {
-  ChromeNotification,
-  Download,
-  NotificationServiceOptions,
-  ServiceInstance,
-  SnackMessage,
-  SnackNotification,
-  StateSlice,
-  StoreOrProxy,
-  Task,
-} from '@src/models';
 import { ChromeMessageType, NotificationLevel, NotificationLevelKeys, NotificationType } from '@src/models';
 import { LoggerService } from '@src/services';
 import { setBadge } from '@src/store/actions';
-import {
-  getNotificationsBannerEnabled,
-  getNotificationsBannerLevel,
-  getNotificationsSnack,
-  getNotificationsSnackEnabled,
-  getNotificationsSnackLevel,
-  getStateBadge,
-} from '@src/store/selectors';
-import {
-  bufferDebounceUnless,
-  createNotification,
-  isMacOs,
-  onMessage,
-  parseMagnetLink,
-  sendActiveTabMessage,
-  sendMessage,
-  store$,
-  useI18n,
-} from '@src/utils';
-
-import type { VariantType } from 'notistack';
-import type { Observable } from 'rxjs';
+import { getNotificationsBannerEnabled, getNotificationsBannerLevel, getNotificationsSnack, getNotificationsSnackEnabled, getNotificationsSnackLevel, getStateBadge } from '@src/store/selectors';
+import { bufferDebounceUnless, createNotification, isMacOs, onMessage, parseMagnetLink, sendActiveTabMessage, sendMessage, store$, useI18n } from '@src/utils';
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
 const i18n = useI18n('common', 'notification');
 
 export class NotificationService {
   private static source: ServiceInstance;
-  private static store: any | StoreOrProxy;
+  private static store: StoreOrProxy;
 
   private static isProxy: boolean;
 
@@ -52,19 +26,19 @@ export class NotificationService {
 
   private static readonly snack$ = new Subject<SnackNotification>();
 
-  private static bufferStopStart =
-    (title: string, message?: string) =>
-    (source$: Observable<ChromeNotification>): Observable<ChromeNotification | undefined> =>
-      source$.pipe(
-        filter(({ priority }) => {
-          const enabled = getNotificationsBannerEnabled(this.store.getState());
-          const level = getNotificationsBannerLevel(this.store.getState());
-          return enabled && Number(priority) >= level;
-        }),
-        bufferDebounceUnless(200, 10),
-        map(n => this.handleBannerNotification(n, title, message)),
-        tap(n => n && createNotification(n)),
-      );
+  private static bufferStopStart
+    = (title: string, message?: string) =>
+      (source$: Observable<ChromeNotification>): Observable<ChromeNotification | undefined> =>
+        source$.pipe(
+          filter(({ priority }) => {
+            const enabled = getNotificationsBannerEnabled(this.store.getState());
+            const level = getNotificationsBannerLevel(this.store.getState());
+            return enabled && Number(priority) >= level;
+          }),
+          bufferDebounceUnless(200, 10),
+          map(n => this.handleBannerNotification(n, title, message)),
+          tap(n => n && createNotification(n)),
+        );
 
   private static _destroy$ = new Subject<void>();
 
@@ -81,7 +55,7 @@ export class NotificationService {
 
       store$<StateSlice['badge']>(this.store, getStateBadge)
         .pipe(takeUntil(this._destroy$))
-        .subscribe(count => this.store.dispatch(setBadge(count)));
+        .subscribe(async count => this.store.dispatch(setBadge(count)));
 
       onMessage<ChromeNotification>([ChromeMessageType.notificationBanner])
         .pipe(takeUntil(this._destroy$))
@@ -267,8 +241,8 @@ export class NotificationService {
     this.info({
       title: i18n('task_created'),
       message: [
-        ..._url.map(uri => `${i18n('title')}\xa0${parseMagnetLink(uri)}`),
-        destination ? `${i18n('destination_folder')}\xa0${destination}` : '',
+        ..._url.map(uri => `${i18n('title')}\xA0${parseMagnetLink(uri)}`),
+        destination ? `${i18n('destination_folder')}\xA0${destination}` : '',
       ].join('\n'),
       contextMessage: source,
       success: true,
@@ -279,8 +253,8 @@ export class NotificationService {
     this.info(
       {
         title: i18n('task_finished'),
-        message: `${i18n('title')}\xa0${parseMagnetLink(task?.title) ?? task.id}`,
-        contextMessage: task.additional?.detail.destination ? `${i18n('destination_folder')}\xa0${task.additional.detail.destination}` : undefined,
+        message: `${i18n('title')}\xA0${parseMagnetLink(task?.title) ?? task.id}`,
+        contextMessage: task.additional?.detail.destination ? `${i18n('destination_folder')}\xA0${task.additional.detail.destination}` : undefined,
       },
       { type: NotificationType.banner },
     );
@@ -290,9 +264,9 @@ export class NotificationService {
     this.error(
       {
         title: i18n('task_error'),
-        message: `${i18n('title')}\xa0${parseMagnetLink(task?.title) ?? task.id}`,
+        message: `${i18n('title')}\xA0${parseMagnetLink(task?.title) ?? task.id}`,
         contextMessage: task.status_extra?.error_detail
-          ? `${i18n('error_message')}\xa0${i18n(task.status_extra.error_detail, 'common', 'model', 'task_error')}`
+          ? `${i18n('error_message')}\xA0${i18n(task.status_extra.error_detail, 'common', 'model', 'task_error')}`
           : undefined,
       },
       { type: NotificationType.banner },
@@ -309,7 +283,7 @@ export class NotificationService {
   static downloadCreated(download: Download): void {
     this.info({
       title: i18n('download_created'),
-      message: [`${i18n('title')}\xa0${download.title}`, download?.folder ? `${i18n('destination_folder')}\xa0${download?.folder}` : ''].join('\n'),
+      message: [`${i18n('title')}\xA0${download.title}`, download?.folder ? `${i18n('destination_folder')}\xA0${download?.folder}` : ''].join('\n'),
       contextMessage: download?.referrer,
       success: true,
     });
@@ -319,8 +293,8 @@ export class NotificationService {
     this.error(
       {
         title: i18n('download_error'),
-        message: `${i18n('title')}\xa0${download.title}`,
-        contextMessage: download.error ? `${i18n('error_message')}\xa0${i18n(download.error, 'common', 'model', 'download_error')}` : undefined,
+        message: `${i18n('title')}\xA0${download.title}`,
+        contextMessage: download.error ? `${i18n('error_message')}\xA0${i18n(download.error, 'common', 'model', 'download_error')}` : undefined,
       },
       { type: NotificationType.banner },
     );
@@ -330,8 +304,8 @@ export class NotificationService {
     this.info(
       {
         title: i18n('download_finished'),
-        message: `${i18n('title')}\xa0${download.title}`,
-        contextMessage: download.folder ? `${i18n('destination_folder')}\xa0${download.folder}` : undefined,
+        message: `${i18n('title')}\xA0${download.title}`,
+        contextMessage: download.folder ? `${i18n('destination_folder')}\xA0${download.folder}` : undefined,
       },
       { type: NotificationType.banner },
     );

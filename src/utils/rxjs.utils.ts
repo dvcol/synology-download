@@ -1,9 +1,8 @@
-import { BehaviorSubject, distinctUntilChanged, finalize, map } from 'rxjs';
-
-import { before as _before, bufferDebounceUnless as _bufferDebounceUnless, skipUntilRepeat as _skipUntilRepeat } from '@dvcol/web-extension-utils';
-
 import type { RootSlice, StoreOrProxy } from '@src/models';
 import type { BeforeOperator, BufferDebounceUnless, SkipUntilRepeat } from '@src/utils';
+
+import { before as _before, bufferDebounceUnless as _bufferDebounceUnless, skipUntilRepeat as _skipUntilRepeat } from '@dvcol/web-extension-utils';
+import { BehaviorSubject, distinctUntilChanged, finalize, map } from 'rxjs';
 
 /**
  * Rxjs operator that start emitting when skip condition is falsy, keeps emitting until stop$ emits and restart emitting if start$ emits.
@@ -31,8 +30,8 @@ export const before: BeforeOperator = _before;
  * @param _store a store or proxy tore instance
  * @param getter the getter to extract a slice
  */
-export const store$ = <R, T = RootSlice>(_store: StoreOrProxy, getter: (state: T) => R) => {
+export function store$<R, T = RootSlice>(_store: StoreOrProxy<T>, getter: (state: T) => R) {
   const _store$ = new BehaviorSubject<T>(_store.getState());
   const unsubscribe = _store.subscribe(() => _store$.next(_store.getState()));
   return _store$.pipe(map<T, R>(getter), distinctUntilChanged(), finalize(unsubscribe));
-};
+}

@@ -1,22 +1,19 @@
+import type { SvgIconProps, TextFieldProps } from '@mui/material';
+import type { ControllerProps } from 'react-hook-form';
+import type { FieldPath, FieldValues } from 'react-hook-form/dist/types';
+
+import type { FormInputFileProps } from './form-input-file';
+
 import { Grid, TextField } from '@mui/material';
-
 import React, { useContext, useState } from 'react';
-
 import { Controller } from 'react-hook-form';
 
 import { ContainerContext } from '@src/store';
 
 import { FormInputFile } from './form-input-file';
-
 import { FormInputPassword } from './form-input-password';
 
-import type { FormInputFileProps } from './form-input-file';
-import type { SvgIconProps, TextFieldProps } from '@mui/material';
-import type { ControllerProps } from 'react-hook-form';
-
-import type { FieldPath, FieldValues } from 'react-hook-form/dist/types';
-
-export const FormInput = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({
+export function FormInput<TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({
   controllerProps,
   textFieldProps,
   iconProps,
@@ -27,7 +24,7 @@ export const FormInput = <TFieldValues extends FieldValues = FieldValues, TName 
   textFieldProps?: TextFieldProps;
   iconProps?: SvgIconProps;
   inputFileProps?: Omit<FormInputFileProps, 'onChange'>;
-}>) => {
+}>) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const { containerRef } = useContext(ContainerContext);
 
@@ -39,7 +36,7 @@ export const FormInput = <TFieldValues extends FieldValues = FieldValues, TName 
 
       sx: { flex: '1 1 auto' },
       ...textFieldProps,
-      onChange: e => {
+      onChange: (e) => {
         field.onChange(e);
         if (textFieldProps?.onChange) textFieldProps.onChange(e);
       },
@@ -97,4 +94,4 @@ export const FormInput = <TFieldValues extends FieldValues = FieldValues, TName 
   };
   const _controllerProps = { ...controllerProps, render } as ControllerProps;
   return <Controller {..._controllerProps} />;
-};
+}

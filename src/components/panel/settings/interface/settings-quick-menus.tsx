@@ -1,23 +1,21 @@
+import type { ContentSettings, QuickMenu } from '@src/models';
+import type { StoreState } from '@src/store';
+
 import { CardHeader, Typography } from '@mui/material';
-
 import React, { useState } from 'react';
-
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { FormSwitch } from '@src/components';
-import type { ContentSettings, QuickMenu } from '@src/models';
 import { defaultContentSettings, defaultQuickMenu, InterfaceHeader } from '@src/models';
-import type { StoreState } from '@src/store';
 import { resetQuickMenus, saveQuickMenu, setQuickMenus, syncContentSettings } from '@src/store/actions';
 import { getContentSettings, getQuick } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
 
 import { SettingsAccordion } from '../common';
-
 import { SettingsQuickMenu } from './settings-quick-menu';
 
-export const SettingsQuickMenus = () => {
+export function SettingsQuickMenus() {
   const i18n = useI18n('panel', 'settings', 'quick_menus');
   const dispatch = useDispatch();
   const menus = useSelector<StoreState, QuickMenu[]>(getQuick);
@@ -52,22 +50,22 @@ export const SettingsQuickMenus = () => {
       state={state}
       title={InterfaceHeader.quickMenu}
       list={menus}
-      header={
+      header={(
         <CardHeader
           title={i18n('enabled_title')}
           subheader={i18n('enabled_subheader')}
           titleTypographyProps={{ variant: 'subtitle2' }}
           subheaderTypographyProps={{ variant: 'subtitle2' }}
-          action={
+          action={(
             <FormSwitch
               controllerProps={{ name: 'intercept', control }}
               formControlLabelProps={{ label: '' }}
-              switchProps={{ onChange: (_, checked) => toggleIntercept(checked) }}
+              switchProps={{ onChange: async (_, checked) => toggleIntercept(checked) }}
             />
-          }
+          )}
           sx={{ p: '0.5rem 0' }}
         />
-      }
+      )}
       summary={m => (
         <>
           <Typography sx={{ width: '40%', flexShrink: 0 }}>{m.title}</Typography>
@@ -86,9 +84,9 @@ export const SettingsQuickMenus = () => {
       detail={m => (
         <SettingsQuickMenu
           menu={m}
-          onRemove={() => {
+          onRemove={async () => {
             setExpanded(false);
-            return new Promise(r => {
+            return new Promise((r) => {
               setTimeout(r, 500);
             });
           }}
@@ -99,4 +97,4 @@ export const SettingsQuickMenus = () => {
       onChange={onChange}
     />
   );
-};
+}

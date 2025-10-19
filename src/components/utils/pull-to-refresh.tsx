@@ -1,125 +1,16 @@
-import { Box, CircularProgress, styled } from '@mui/material';
+import type { BoxProps } from '@mui/material';
+import type { FC, ForwardRefRenderFunction } from 'react';
 
-import React, { forwardRef, useRef, useState } from 'react';
+import type { State } from './use-pull-to-refresh';
+
+import { Box, CircularProgress, styled } from '@mui/material';
+import React, { forwardRef } from 'react';
 
 import { pullToRefresh } from '@src/utils';
 
-import type { BoxProps } from '@mui/material';
-import type { FC, ForwardRefRenderFunction, MutableRefObject, TouchEventHandler, WheelEventHandler } from 'react';
+import { animationSpeed } from './use-pull-to-refresh';
 
-const animationSpeed = 300;
-export type State = { start: number; offset: number; progress: number };
-export type OnRefreshCallback = (state: State) => void;
-export type Options = {
-  onRefresh?: OnRefreshCallback;
-  disabled?: MutableRefObject<boolean>;
-  loaderHeight?: number;
-  animationSpeed?: number;
-};
-
-export const usePullToRefresh = (options: Options = {}) => {
-  const { onRefresh, disabled, loaderHeight } = { loaderHeight: 76, ...options };
-  const containerRef = useRef<HTMLDivElement>(null);
-  const loaderRef = useRef<HTMLDivElement>(null);
-
-  const [refreshed, setRefreshed] = useState(false);
-  const [start, setStart] = useState(0);
-  const [offset, setOffset] = useState(0);
-  const progress = offset / loaderHeight;
-
-  const clearOffset = () => {
-    setStart(0);
-    setOffset(0);
-    setRefreshed(false);
-  };
-
-  const timeout = useRef<NodeJS.Timeout>();
-  const resetTimeout = (speed = 100) => {
-    if (timeout.current) clearTimeout(timeout.current);
-    timeout.current = setTimeout(() => {
-      clearOffset();
-    }, speed);
-  };
-
-  const onWheel: WheelEventHandler = e => {
-    // stop propagation to parent containers
-    e.stopPropagation();
-
-    if (disabled?.current) return clearOffset();
-    // if we are not a scroll top, reset timer and set start
-    if (containerRef?.current && containerRef.current.scrollTop !== 0) {
-      setStart(containerRef.current.scrollTop);
-      return resetTimeout();
-    }
-    // If we have start reset timer to prevent inertial scroll
-    if (start) return resetTimeout();
-
-    if (Math.abs(e.deltaX) > 10) return clearOffset(); // side scrolling
-    if (e.deltaY >= 0) return clearOffset(); // scrolling up
-    if (e.ctrlKey) return clearOffset(); // pinch/zoom
-
-    // If progress and not refreshed yet, emit refresh
-    if (progress >= 1 && !refreshed) {
-      onRefresh?.({ start, offset, progress });
-      setRefreshed(true);
-      return resetTimeout(animationSpeed);
-    }
-    // else update the offset
-    if (!refreshed) {
-      setOffset(_offset => _offset + Math.abs(e.deltaY / 3));
-    }
-
-    resetTimeout();
-  };
-
-  const onTouchStart: TouchEventHandler = e => {
-    // stop propagation to parent containers
-    e.stopPropagation();
-
-    if (disabled?.current) return clearOffset();
-    setRefreshed(false);
-    setStart(e.touches[0].screenY);
-  };
-
-  const onTouchMove: TouchEventHandler = e => {
-    // stop propagation to parent containers
-    e.stopPropagation();
-
-    if (disabled?.current) return clearOffset();
-    if (containerRef?.current?.scrollTop !== 0) return; // not container scroll top
-    const current = e.touches[0].screenY;
-    const delta = start - current;
-    if (delta > 0) return; // moving up
-    setOffset(Math.abs(delta));
-  };
-
-  const onTouchEnd: TouchEventHandler = e => {
-    // stop propagation to parent containers
-    e.stopPropagation();
-
-    if (disabled?.current) return clearOffset();
-    if (progress >= 1) {
-      onRefresh?.({ start, offset, progress });
-      setRefreshed(true);
-      return resetTimeout(animationSpeed);
-    }
-
-    clearOffset();
-  };
-
-  return {
-    handlers: { onWheel, onTouchStart, onTouchMove, onTouchEnd },
-    containerRef,
-    loaderRef,
-    loaderHeight,
-    refreshed,
-    progress,
-    offset,
-    start,
-  };
-};
-
-type LoaderProps = { refreshed: boolean; height: number; top?: number } & State & BoxProps;
+type LoaderProps = { refreshed: boolean; height: number; top?: number } & State & Omit<BoxProps, 'height'>;
 type SpinnerProps = Pick<LoaderProps, 'refreshed' | 'offset' | 'progress' | 'top'>;
 const Spinner: FC<SpinnerProps> = ({ offset, progress, top }) => {
   return (
@@ -143,7 +34,7 @@ const Spinner: FC<SpinnerProps> = ({ offset, progress, top }) => {
 };
 
 const Loader: ForwardRefRenderFunction<HTMLDivElement, LoaderProps> = (
-  { refreshed, height, start, offset, className, sx, progress, top, children, ...props },
+  { refreshed, height, start, offset, className, sx, progress, top, children, ...props }: LoaderProps,
   ref,
 ) => {
   const margin = offset - height;

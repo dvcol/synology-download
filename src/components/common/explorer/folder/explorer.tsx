@@ -1,21 +1,20 @@
+import type { FC } from 'react';
+import type { Observable } from 'rxjs';
+
+import type { File, FileList, Folder, RootSlice } from '@src/models';
+
 import FolderIcon from '@mui/icons-material/Folder';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import { TreeView } from '@mui/lab';
 import { Container } from '@mui/material';
-
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-
 import { catchError, finalize, lastValueFrom, map, tap } from 'rxjs';
 
 import { SearchInput } from '@src/components/common/inputs/search-input';
-import type { File, FileList, Folder, RootSlice } from '@src/models';
-
 import { LoggerService, NotificationService, QueryService } from '@src/services';
 import { getDestinationsHistory } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
-
 import { useDebounce } from '@src/utils/debounce.utils';
 
 import { ExplorerBreadCrumbs } from './explorer-breadcrumb';
@@ -24,10 +23,7 @@ import { ExplorerLeafAdd } from './explorer-leaf-add';
 import { ExplorerLoading } from './explorer-loading';
 import { ExplorerRecent } from './explorer-recent';
 
-import type { FC } from 'react';
-import type { Observable } from 'rxjs';
-
-export type ExplorerProps = {
+export interface ExplorerProps {
   collapseOnSelect?: boolean;
   flatten?: boolean;
   disabled?: boolean;
@@ -37,13 +33,13 @@ export type ExplorerProps = {
   onChange?: (event: ExplorerEvent) => void;
   editable?: boolean;
   search?: boolean;
-};
+}
 
-export type ExplorerEvent = {
+export interface ExplorerEvent {
   id?: string;
   path?: string;
   folder?: File | Folder;
-};
+}
 
 type Tree = Record<string, (Folder | File)[]>;
 
@@ -67,7 +63,9 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
 
   const [filterVisible, setFilterVisible] = useState<boolean>(!!search);
 
-  const doFilter = (f: File | Folder) => disabled || !filter || f?.name?.trim()?.toLowerCase()?.includes(filter?.trim()?.toLowerCase());
+  const doFilter = useCallback((f: File | Folder) => {
+    return disabled || !filter || f?.name?.trim()?.toLowerCase()?.includes(filter?.trim()?.toLowerCase());
+  }, [disabled, filter]);
 
   const filteredTree = useMemo(() => {
     if (!filterVisible || !tree) return tree;
@@ -75,13 +73,13 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
       curr[key] = value?.filter(doFilter);
       return curr;
     }, {} as Tree);
-  }, [tree, search, disabled, filter, filterVisible]);
+  }, [tree, filterVisible, doFilter]);
 
   const isLoginCheck = () => {
     if (QueryService.isLoggedIn) return QueryService.isLoggedIn;
 
     const error = new Error('User not logged in.');
-    LoggerService.error(`User not logged in.`, error);
+    LoggerService.error('User not logged in.', error);
     NotificationService.error({
       title: i18n('login_required', 'common', 'error'),
       message: i18n('please_login', 'common', 'error'),
@@ -93,10 +91,10 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
     isLoginCheck();
     return QueryService.listFolders(readonly ?? true).pipe(
       map(list => ({ ..._tree, root: list?.shares ?? [] })),
-      catchError(error => {
-        LoggerService.error(`Failed load folders.`, error);
+      catchError((error: Error) => {
+        LoggerService.error('Failed load folders.', error);
         NotificationService.error({
-          title: i18n(`list_folders_fail`, 'common', 'error'),
+          title: i18n('list_folders_fail', 'common', 'error'),
           message: error?.message ?? error?.name ?? '',
         });
         throw error;
@@ -118,10 +116,10 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
     isLoginCheck();
     return QueryService.listFiles(path, fileType ?? 'dir').pipe(
       map((list: FileList) => ({ ..._tree, [key]: list?.files ?? [] })),
-      catchError(error => {
+      catchError((error: Error) => {
         LoggerService.error(`Failed load files for path '${path}'.`, { path, key, error });
         NotificationService.error({
-          title: i18n(`list_files_fail`, 'common', 'error'),
+          title: i18n('list_files_fail', 'common', 'error'),
           message: error?.message ?? error?.name ?? '',
         });
         throw error;
@@ -172,7 +170,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
     return tree;
   };
 
-  const crumbSelect = (index?: number) => {
+  const crumbSelect = async (index?: number) => {
     if (!index) {
       setFilter('');
       setSelected('root');
@@ -186,13 +184,13 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
     return selectNode(ids.slice(0, index + 1).join('-'));
   };
 
-  const spliceTree = (nodeId: string, newFolder?: Folder | File, oldFolder?: Partial<Folder | File>) => {
-    setTree(old => {
+  const spliceTree = async (nodeId: string, newFolder?: Folder | File, oldFolder?: Partial<Folder | File>) => {
+    setTree((old) => {
       const _new = { ...old };
 
       // if renamed, remove children nodes and splice new folder
       if (oldFolder?.name) {
-        Object.keys(old)?.forEach(key => {
+        Object.keys(old)?.forEach((key) => {
           if (key.startsWith(nodeId)) delete _new[key];
         });
 
@@ -204,9 +202,8 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
             _new[nodePath.join('-')][index] = newFolder;
           }
         }
-      }
-      // else juste add new folder to active node
-      else {
+      } else {
+        // else juste add new folder to active node
         _new[nodeId].push(newFolder as File & Folder);
       }
       return _new;
@@ -217,7 +214,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
     return selectNode(`${nodeId}-${(filteredTree[nodeId]?.length ?? 1) - 1}`);
   };
 
-  const onSelect = ($event: React.SyntheticEvent, nodeId: string) => selectNode(nodeId);
+  const onSelect = async ($event: React.SyntheticEvent, nodeId: string) => selectNode(nodeId);
   const onExpand = ($event: React.SyntheticEvent, nodeIds: string[]) => !flatten && setExpanded(nodeIds);
 
   const loadNestedPath = async (path: string) => {
@@ -241,7 +238,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
 
       _folder = _tree?.[_selected]?.[_leaf];
       _selected = `${_selected}-${_leaf}`;
-      // eslint-disable-next-line no-await-in-loop -- pathing requires sequential loading
+
       _tree = await lastValueFrom(fetchFiles(_folder?.path, _selected, _tree));
     }
 
@@ -258,7 +255,8 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
   }, 500);
 
   useEffect(() => {
-    debounceLoadTree().catch(LoggerService.error);
+    debounceLoadTree().catch((error: Error) => LoggerService.error('Failed to load explorer tree.', error));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only run on startPath change
   }, [startPath]);
 
   return (
@@ -267,76 +265,78 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
         crumbs={crumbs}
         showDestinations={showDestinations}
         hasDestinations={!!recentDestinations?.length}
-        onClick={(_, i) => crumbSelect(i)}
+        onClick={async (_, i) => crumbSelect(i)}
         onRecent={() => setShowDestinations(_show => !_show)}
         disabled={disabled || pathLoading}
       />
-      {showDestinations ? (
-        <ExplorerRecent
-          selected={selectedPath}
-          destinations={recentDestinations}
-          onSelect={_path => {
-            setShowDestinations(_show => !_show);
-            return loadNestedPath(_path);
-          }}
-        />
-      ) : (
-        <TreeView
-          key={`tree-${disabled}`}
-          aria-label="file system navigator"
-          defaultCollapseIcon={<FolderOpenIcon />}
-          defaultExpandIcon={<FolderIcon />}
-          selected={selected}
-          onNodeSelect={onSelect}
-          expanded={expanded}
-          onNodeToggle={onExpand}
-          disableSelection={disabled || pathLoading}
-          sx={{
-            overflow: 'auto',
-            transition: 'height 0.2s ease-in-out',
-            height: `calc(100% - ${filterVisible ? 4.4 : 2.0625}em)`,
-          }}
-        >
-          {
-            // only > 1 so that we do not allow creation of shares
-            flatten && editable && !pathLoading && !loading[selected] && selected?.split('-')?.length > 1 && selectedPath && (
-              <ExplorerLeafAdd nodeId={selected} path={selectedPath} disabled={disabled} spliceTree={spliceTree} />
-            )
-          }
-          {flatten && <ExplorerLoading loading={pathLoading || loading[selected]} empty={!filteredTree[selected]?.length} flatten={flatten} />}
-          {flatten &&
-            !pathLoading &&
-            !loading[selected] &&
-            filteredTree[selected]?.map((f, i) => (
-              <ExplorerLeaf
-                key={`${i}-${disabled}`}
-                nodeId={`${selected}-${i}`}
-                folder={f}
-                tree={filteredTree}
-                loading={loading}
-                disabled={disabled}
-                editable={editable}
-                flatten={flatten}
-                spliceTree={spliceTree}
-              />
-            ))}
-          {!flatten &&
-            !pathLoading &&
-            filteredTree?.root?.map((f, i) => (
-              <ExplorerLeaf
-                key={`${i}-${disabled}`}
-                nodeId={`root-${i}`}
-                folder={f}
-                tree={filteredTree}
-                loading={loading}
-                disabled={disabled}
-                editable={editable}
-                flatten={flatten}
-                spliceTree={spliceTree}
-              />
-            ))}
-        </TreeView>
-      )}
+      {showDestinations
+        ? (
+            <ExplorerRecent
+              selected={selectedPath}
+              destinations={recentDestinations}
+              onSelect={async (_path) => {
+                setShowDestinations(_show => !_show);
+                return loadNestedPath(_path);
+              }}
+            />
+          )
+        : (
+            <TreeView
+              key={`tree-${disabled}`}
+              aria-label="file system navigator"
+              defaultCollapseIcon={<FolderOpenIcon />}
+              defaultExpandIcon={<FolderIcon />}
+              selected={selected}
+              onNodeSelect={onSelect}
+              expanded={expanded}
+              onNodeToggle={onExpand}
+              disableSelection={disabled || pathLoading}
+              sx={{
+                overflow: 'auto',
+                transition: 'height 0.2s ease-in-out',
+                height: `calc(100% - ${filterVisible ? 4.4 : 2.0625}em)`,
+              }}
+            >
+              {
+                // only > 1 so that we do not allow creation of shares
+                flatten && editable && !pathLoading && !loading[selected] && selected?.split('-')?.length > 1 && !!selectedPath && (
+                  <ExplorerLeafAdd nodeId={selected} path={selectedPath} disabled={disabled} spliceTree={spliceTree} />
+                )
+              }
+              {flatten && <ExplorerLoading loading={pathLoading || loading[selected]} empty={!filteredTree[selected]?.length} flatten={flatten} />}
+              {flatten
+                && !pathLoading
+                && !loading[selected]
+                && filteredTree[selected]?.map((f, i) => (
+                  <ExplorerLeaf
+                    key={`${f.name}-${disabled}`}
+                    nodeId={`${selected}-${i}`}
+                    folder={f}
+                    tree={filteredTree}
+                    loading={loading}
+                    disabled={disabled}
+                    editable={editable}
+                    flatten={flatten}
+                    spliceTree={spliceTree}
+                  />
+                ))}
+              {!flatten
+                && !pathLoading
+                && filteredTree?.root?.map((f, i) => (
+                  <ExplorerLeaf
+                    key={`${f.name}-${disabled}`}
+                    nodeId={`root-${i}`}
+                    folder={f}
+                    tree={filteredTree}
+                    loading={loading}
+                    disabled={disabled}
+                    editable={editable}
+                    flatten={flatten}
+                    spliceTree={spliceTree}
+                  />
+                ))}
+            </TreeView>
+          )}
       <SearchInput
         containerRef={containerRef}
         filter={filter}

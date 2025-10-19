@@ -6,31 +6,17 @@ inputs:
     description: 'Build the monorepo'
     required: true
     default: web
-  node_version:
-    description: 'Node version to use'
-    required: true
 
 
 runs:
   using: "composite"
   steps:
-    - name: 🏗️ Setup Node.js ${{ inputs.node_version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ inputs.node_version }}
-        registry-url: 'https://registry.npmjs.org'
-        cache: 'yarn'
-
-    - name: 🏗️ Install dependencies
-      shell: bash
-      run: |
-        # ================= 🏗️ Install dependencies =================
-        
-        yarn install
+    - name: 🧱 Install
+      uses: ./.github/actions/install
 
     - name: 🚧 Build sources
       shell: bash
       run: |
         # =================  🚧 Build  =================
 
-        yarn build:${{ inputs.mode }}
+        pnpm build:${{ inputs.mode }}

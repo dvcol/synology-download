@@ -1,20 +1,18 @@
+import type { NotificationSettings, NotificationsSnack } from '@src/models';
+
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, InputAdornment, MenuItem, Stack } from '@mui/material';
-
 import React from 'react';
-
 import { useForm } from 'react-hook-form';
-
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ButtonWithConfirm, FormInput, FormSwitch } from '@src/components';
-import type { NotificationSettings, NotificationsSnack } from '@src/models';
 import { defaultNotifications, NotificationHeader, NotificationLevel, NotificationLevelKeys } from '@src/models';
 import { syncNotifications } from '@src/store/actions';
 import { getNotifications } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
 
-export const SettingsSnack = () => {
+export function SettingsSnack() {
   const i18n = useI18n('panel', 'settings', 'snack');
   const dispatch = useDispatch();
   const notifications: NotificationSettings = useSelector(getNotifications);
@@ -94,7 +92,7 @@ export const SettingsSnack = () => {
             subheader={i18n('timeout_subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={
+            action={(
               <FormInput
                 controllerProps={{
                   name: 'timeout',
@@ -114,7 +112,7 @@ export const SettingsSnack = () => {
                   sx: { flex: '0 0 14rem', ml: '0.5rem' },
                 }}
               />
-            }
+            )}
             sx={{ p: '0.5rem 0', mt: '0.5rem' }}
           />
           <CardHeader
@@ -122,7 +120,7 @@ export const SettingsSnack = () => {
             subheader={i18n('level_subheader')}
             titleTypographyProps={{ variant: 'subtitle2' }}
             subheaderTypographyProps={{ variant: 'subtitle2' }}
-            action={
+            action={(
               <FormInput
                 controllerProps={{ name: 'level', control }}
                 textFieldProps={{
@@ -138,7 +136,7 @@ export const SettingsSnack = () => {
                   </MenuItem>
                 ))}
               </FormInput>
-            }
+            )}
             sx={{ p: '0.5rem 0' }}
           />
           <Card sx={{ p: '0.5rem 1rem', m: '0.5rem 0' }}>
@@ -147,12 +145,12 @@ export const SettingsSnack = () => {
               subheader={i18n('popup_subheader')}
               titleTypographyProps={{ variant: 'subtitle2' }}
               subheaderTypographyProps={{ variant: 'subtitle2' }}
-              action={
+              action={(
                 <FormSwitch
                   controllerProps={{ name: 'scope.popup', control }}
                   formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
                 />
-              }
+              )}
               sx={{ p: '0.5rem 0' }}
             />
             <CardHeader
@@ -160,12 +158,12 @@ export const SettingsSnack = () => {
               subheader={i18n('tab_subheader')}
               titleTypographyProps={{ variant: 'subtitle2' }}
               subheaderTypographyProps={{ variant: 'subtitle2' }}
-              action={
+              action={(
                 <FormSwitch
                   controllerProps={{ name: 'scope.content', control }}
                   formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }}
                 />
-              }
+              )}
               sx={{ p: '0.5rem 0' }}
             />
           </Card>
@@ -192,4 +190,4 @@ export const SettingsSnack = () => {
       </CardActions>
     </Card>
   );
-};
+}

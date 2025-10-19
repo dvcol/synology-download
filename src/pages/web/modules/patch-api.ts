@@ -1,3 +1,5 @@
+import type { PatchOptions } from '../models';
+
 import { BaseLoggerService } from '@src/services';
 
 import {
@@ -16,9 +18,7 @@ import {
   patchTasks,
 } from '../mocks';
 
-import type { PatchOptions } from '../models';
-
-export const patchApi = async ({ patch, locales }: PatchOptions, _global = window) => {
+export async function patchApi({ patch, locales }: PatchOptions, _global = window) {
   if (!patch) return;
 
   BaseLoggerService.init({ source: 'patch' });
@@ -41,4 +41,4 @@ export const patchApi = async ({ patch, locales }: PatchOptions, _global = windo
 
   patchLocales(locales, _global);
   await patchI18n(_global);
-};
+}

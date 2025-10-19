@@ -1,11 +1,10 @@
 import InfoIcon from '@mui/icons-material/Info';
 import { Box, CircularProgress, Typography } from '@mui/material';
-
 import React from 'react';
 
 import { useI18n } from '@src/utils';
 
-export const ExplorerLoading = ({
+export function ExplorerLoading({
   loading,
   empty,
   text = 'folder',
@@ -15,14 +14,14 @@ export const ExplorerLoading = ({
   empty?: boolean;
   flatten?: boolean;
   text?: string;
-}) => {
+}) {
   const i18n = useI18n('common', 'explorer', 'explorer_loading', text);
   return (
     <React.Fragment>
       {loading && (
         <Typography sx={{ m: '0.25em 0', fontSize: '0.875em', minWidth: flatten ? undefined : 'max-content' }}>
-          <Box component={'span'} sx={{ m: '0 0.75em 0 0.75em' }}>
-            <CircularProgress size={'0.6em'} />
+          <Box component="span" sx={{ m: '0 0.75em 0 0.75em' }}>
+            <CircularProgress size="0.6em" />
           </Box>
           <span>{i18n('content')}</span>
         </Typography>
@@ -44,4 +43,4 @@ export const ExplorerLoading = ({
       )}
     </React.Fragment>
   );
-};
+}

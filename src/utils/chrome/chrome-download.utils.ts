@@ -1,5 +1,3 @@
-import { filter, map, merge, switchMap } from 'rxjs';
-
 import type {
   DownloadFilenameSuggestion as _DownloadFilenameSuggestion,
   DownloadItem as _DownloadItem,
@@ -7,12 +5,14 @@ import type {
   DownloadQuery as _DownloadQuery,
   InstalledDetails as _InstalledDetails,
 } from '@dvcol/web-extension-utils';
-import { onChanged$, onCreated$, onFilename$ as _onFilename$ } from '@dvcol/web-extension-utils';
+import type { Observable } from 'rxjs';
 
 import type { Download, DownloadStatus } from '@src/models';
-import { DownloadService } from '@src/services';
 
-import type { Observable } from 'rxjs';
+import { onFilename$ as _onFilename$, onChanged$, onCreated$ } from '@dvcol/web-extension-utils';
+import { filter, map, merge, switchMap } from 'rxjs';
+
+import { DownloadService } from '@src/services';
 
 export const {
   search,
@@ -40,19 +40,21 @@ export const onFilename$: Observable<[DownloadItem, (suggestion?: DownloadFilena
 
 const onDownloadChange$: Observable<number> = merge(onCreated$.pipe(map(item => item.id)), onChanged$.pipe(map(item => item.id)));
 
-const mapIdToDownload = (source: Observable<number>): Observable<Download> =>
-  source.pipe(
+function mapIdToDownload(source: Observable<number>): Observable<Download> {
+  return source.pipe(
     switchMap(id => DownloadService.search({ id })),
     map(downloads => downloads?.[0]),
   );
+}
 
 export const onDownloadCreated$: Observable<Download> = onCreated$.pipe(
   map(({ id }) => id),
   mapIdToDownload,
 );
 
-export const onStatus$ = (...statuses: DownloadStatus[]): Observable<Download> =>
-  onDownloadChange$.pipe(
+export function onStatus$(...statuses: DownloadStatus[]): Observable<Download> {
+  return onDownloadChange$.pipe(
     mapIdToDownload,
     filter(item => !statuses?.length || statuses?.includes(item?.status)),
   );
+}

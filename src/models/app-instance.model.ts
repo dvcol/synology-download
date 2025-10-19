@@ -6,10 +6,10 @@ export enum AppInstance {
   standalone = 'synology-download-standalone',
 }
 
-export const setInstance = (instance: AppInstance) => {
+export function setInstance(instance: AppInstance) {
   if (!window) return;
   window._instance = instance;
-};
+}
 
 export const getInstance = () => window?._instance;
 export const isInstance = (instance: AppInstance) => getInstance() === instance;

@@ -1,16 +1,17 @@
+import type { CardProps } from '@mui/material';
+import type { ChangeEvent, FC } from 'react';
+import type { SubmitHandler } from 'react-hook-form';
+
+import type { FormRules, TaskCreateRequest, TaskForm, TaskListDownloadRequest } from '@src/models';
+
 import SaveIcon from '@mui/icons-material/Save';
-
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Chip, Grid, Stack, ToggleButton, ToggleButtonGroup, Tooltip } from '@mui/material';
-
 import React, { useEffect, useState } from 'react';
-
 import { useForm, useWatch } from 'react-hook-form';
-
 import { useDispatch, useSelector } from 'react-redux';
 import { finalize, lastValueFrom, tap } from 'rxjs';
 
 import { FormCheckbox, FormExplorer, FormInput, FormSwitch, IconLoader } from '@src/components';
-import type { FormRules, TaskCreateRequest, TaskForm, TaskListDownloadRequest } from '@src/models';
 import { AppInstance, ColorLevel, isInstance, TaskCreateType, torrentExtension } from '@src/models';
 import { LoggerService, QueryService } from '@src/services';
 import { clearTaskForm, setTaskForm } from '@src/store/actions';
@@ -19,16 +20,13 @@ import { before, useI18n } from '@src/utils';
 
 import { TaskAddSelect } from './task-add-select';
 
-import type { CardProps } from '@mui/material';
-import type { ChangeEvent, FC } from 'react';
-import type { SubmitHandler } from 'react-hook-form';
-
 const UrlCounts: FC<{ urls?: string[] }> = ({ urls }) => {
   const i18n = useI18n('panel', 'content', 'task', 'add');
   if (!urls?.length) return null;
 
   const tooltip = urls?.map((_url, i) => (
-    <Box key={i} sx={{ borderTop: i ? '0.03em solid #757575' : 0, p: '0.25em' }}>
+    // eslint-disable-next-line react/no-array-index-key -- url order won't change
+    <Box key={`${_url}-${i}`} sx={{ borderTop: i ? '0.03em solid #757575' : 0, p: '0.25em' }}>
       {_url}
     </Box>
   ));
@@ -36,11 +34,13 @@ const UrlCounts: FC<{ urls?: string[] }> = ({ urls }) => {
   return (
     <Tooltip arrow PopperProps={{ disablePortal: true }} title={<Box sx={{ wordBreak: 'break-all' }}>{tooltip}</Box>} sx={{ ml: '0.5rem' }}>
       <Chip
-        label={
+        label={(
           <Box sx={{ fontSize: '1em' }}>
-            <span>{urls?.length}</span>&nbsp;<span>{i18n('urls')}</span>
+            <span>{urls?.length}</span>
+&nbsp;
+            <span>{i18n('urls')}</span>
           </Box>
-        }
+        )}
         size="small"
         variant="outlined"
         color="primary"
@@ -50,14 +50,14 @@ const UrlCounts: FC<{ urls?: string[] }> = ({ urls }) => {
   );
 };
 
-export type TaskAddProps = {
+export interface TaskAddProps {
   form?: TaskForm;
   withCancel?: boolean;
   onFormCancel?: (form: TaskForm | TaskListDownloadRequest) => void;
   onFormSubmit?: (form: TaskForm | TaskListDownloadRequest) => void;
   cardProps?: CardProps;
   allowFile?: boolean;
-};
+}
 export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFormSubmit, cardProps, allowFile }) => {
   const i18n = useI18n('panel', 'content', 'task', 'add');
   const [path, setPath] = React.useState<string>(form?.destination?.path ?? '');
@@ -110,6 +110,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
   useEffect(() => {
     if (clearOnExist) return;
     dispatch(setTaskForm({ ...getValues(), torrent: undefined }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps  -- only want to trigger on values change
   }, [values]);
 
   const rules: FormRules<TaskForm> = {
@@ -129,6 +130,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
         setPath(_path);
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only run on mount
   }, []);
 
   const onCancel = (discard = true, data: TaskForm = getValues()) => {
@@ -142,7 +144,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
       ?.map(_uri => _uri?.trim())
       .filter(Boolean);
 
-  const [urls, setUrls] = useState<string[] | undefined>(parseUrls(getValues().uri));
+  const [urls, setUrls] = useState<string[] | undefined>(() => parseUrls(getValues().uri));
 
   const createTask = (data: TaskForm) => {
     const { source, destination, username, password, extract_password, create_list } = data;
@@ -169,7 +171,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
       before(() => setLoading(true)),
       finalize(() => setLoading(false)),
       tap({
-        next: response => {
+        next: (response) => {
           const list_id = response?.list_id?.[0];
           reset(data);
           if (list_id) {
@@ -178,12 +180,12 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
             onFormSubmit?.(data);
           }
         },
-        error: error => LoggerService.error('Failed to create task', { data, _request, error }),
+        error: (error: Error) => LoggerService.error('Failed to create task', { data, _request, error }),
       }),
     );
   };
 
-  const onSubmit: SubmitHandler<TaskForm> = data => {
+  const onSubmit: SubmitHandler<TaskForm> = async (data) => {
     if (data?.torrent?.length || urls?.length) return lastValueFrom(createTask(data)).then(() => dispatch(clearTaskForm()));
     return Promise.reject(i18n(`${isFile ? 'file' : 'url'}_required`)).then(() => dispatch(clearTaskForm()));
   };
@@ -208,7 +210,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
               size="small"
               value={type}
               exclusive
-              onChange={(_, _type) => setType(_type)}
+              onChange={(_, _type: TaskCreateType) => setType(_type)}
               aria-label="task-create-type"
               disabled={!_allowFile}
             >
@@ -242,48 +244,50 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
                 fontSize: '0.9em',
               }}
             >
-              {isFile ? (
-                <>
-                  <FormInput
-                    controllerProps={{ name: 'torrent', control, rules: rules.torrent }}
-                    textFieldProps={{
-                      type: 'file',
-                      label: i18n('torrent_file_label'),
-                      placeholder: i18n('torrent_file_placeholder'),
-                      inputProps: { style: { fontSize: '0.875em' } },
-                      disabled: !isFile,
-                      onChange: ($event: ChangeEvent<HTMLInputElement>) => setFile($event.target?.files?.[0]),
-                      sx: { flexGrow: 0 },
-                    }}
-                    inputFileProps={{ split: true, accept: `${torrentExtension.mime},.torrent` }}
-                  >
-                    <FormCheckbox
-                      controllerProps={{ name: 'create_list', control }}
-                      formControlLabelProps={{
-                        label: i18n('create_list_label'),
-                        disabled: !isFile,
+              {isFile
+                ? (
+                    <>
+                      <FormInput
+                        controllerProps={{ name: 'torrent', control, rules: rules.torrent }}
+                        textFieldProps={{
+                          type: 'file',
+                          label: i18n('torrent_file_label'),
+                          placeholder: i18n('torrent_file_placeholder'),
+                          inputProps: { style: { fontSize: '0.875em' } },
+                          disabled: !isFile,
+                          onChange: ($event: ChangeEvent<HTMLInputElement>) => setFile($event.target?.files?.[0]),
+                          sx: { flexGrow: 0 },
+                        }}
+                        inputFileProps={{ split: true, accept: `${torrentExtension.mime},.torrent` }}
+                      >
+                        <FormCheckbox
+                          controllerProps={{ name: 'create_list', control }}
+                          formControlLabelProps={{
+                            label: i18n('create_list_label'),
+                            disabled: !isFile,
+                          }}
+                        />
+                      </FormInput>
+                    </>
+                  )
+                : (
+                    <FormInput
+                      controllerProps={{
+                        name: 'uri',
+                        control,
+                        rules: rules.uri,
+                      }}
+                      textFieldProps={{
+                        label: i18n('url_label'),
+                        multiline: true,
+                        rows: 4,
+                        onChange: e => setUrls(parseUrls(e.target.value)),
+                        inputProps: { style: { fontSize: '0.875em', wordBreak: 'break-all' } },
+                        disabled: isFile,
+                        sx: { flexGrow: 0 },
                       }}
                     />
-                  </FormInput>
-                </>
-              ) : (
-                <FormInput
-                  controllerProps={{
-                    name: 'uri',
-                    control,
-                    rules: rules.uri,
-                  }}
-                  textFieldProps={{
-                    label: i18n('url_label'),
-                    multiline: true,
-                    rows: 4,
-                    onChange: e => setUrls(parseUrls(e.target.value)),
-                    inputProps: { style: { fontSize: '0.875em', wordBreak: 'break-all' } },
-                    disabled: isFile,
-                    sx: { flexGrow: 0 },
-                  }}
-                />
-              )}
+                  )}
               <FormInput
                 controllerProps={{ name: 'username', control }}
                 textFieldProps={{
@@ -367,17 +371,17 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
           </Button>
         </Stack>
       </CardActions>
-      {isFile && openSelect.list_id && (
+      {!!isFile && !!openSelect.list_id && (
         <TaskAddSelect
           open={openSelect.open}
           list_id={openSelect.list_id}
           source={getValues()?.source ?? 'Custom Task'}
           destination={getValues().destination?.path}
-          onFormCancel={data => {
+          onFormCancel={(data) => {
             setOpenSelect(_current => ({ open: false }));
             onFormSubmit?.(data);
           }}
-          onFormSubmit={data => {
+          onFormSubmit={(data) => {
             setOpenSelect(_current => ({ open: false }));
             onFormSubmit?.(data);
           }}

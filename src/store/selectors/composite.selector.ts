@@ -1,73 +1,39 @@
+import type { Content, ContentCount, ContentTab, Download, NotificationsBanner, NotificationsCount, NotificationsSnack, PollingSettings, Tab, TabCount, Task, TaskStatistics } from '@src/models';
+
+import type { StoreState } from '../store';
+
 import { createSelector } from '@reduxjs/toolkit';
 
-import type {
-  Content,
-  ContentCount,
-  ContentTab,
-  Download,
-  NotificationsBanner,
-  NotificationsCount,
-  NotificationsSnack,
-  PollingSettings,
-  Tab,
-  TabCount,
-  Task,
-  TaskStatistics,
-} from '@src/models';
-import { ActionScope, ContentStatusType, ContentTabSort } from '@src/models';
-import {
-  getActionScope,
-  getActiveDownloadIds,
-  getActiveTasksIds,
-  geTasksIdsByStatusTypeReducer,
-  getDownloadingDownloadIds,
-  getDownloads,
-  getDownloadsIdsByStatusTypeReducer,
-  getErrorTasksIds,
-  getFinishedDownloadIds,
-  getFinishedTasksIds,
-  getNotificationsBanner,
-  getNotificationsCount,
-  getNotificationsSnack,
-  getPausedDownloadIds,
-  getPausedTasksIds,
-  getPolling,
-  getSettingsDownloadsEnabled,
-  getStats,
-  getTab,
-  getTabs,
-  getTasksArray,
-  getTasksIds,
-  getWaitingTasksIds,
-  isModalOpen,
-} from '@src/store/selectors';
+import { ActionScope, ContentStatusType, ContentTabSort, defaultPolling } from '@src/models';
+import { getActionScope, getActiveDownloadIds, getActiveTasksIds, geTasksIdsByStatusTypeReducer, getDownloadingDownloadIds, getDownloads, getDownloadsIdsByStatusTypeReducer, getErrorTasksIds, getFinishedDownloadIds, getFinishedTasksIds, getNotificationsBanner, getNotificationsCount, getNotificationsSnack, getPausedDownloadIds, getPausedTasksIds, getPolling, getSettingsDownloadsEnabled, getStats, getTab, getTabs, getTasksArray, getTasksIds, getWaitingTasksIds, isModalOpen } from '@src/store/selectors';
 import { nullSafeCompare, numberCompare, stringCompare } from '@src/utils';
 
-export const getTabOrFirst = createSelector(getTab, getTabs, (tab?: ContentTab, tabs?: ContentTab[]) => tab ?? (tabs?.length ? tabs[0] : tab));
+export const getTabOrFirst: (state: StoreState) => ContentTab | undefined = createSelector(getTab, getTabs, (tab?: ContentTab, tabs?: ContentTab[]) => tab ?? (tabs?.length ? tabs[0] : tab));
 
-export const getPollingInterval = createSelector(isModalOpen, getPolling, (open: boolean, polling: PollingSettings) =>
-  open ? polling?.popup?.interval : polling?.background?.interval,
-);
+export const getPollingInterval: (state: StoreState) => number = createSelector(isModalOpen, getPolling, (open: boolean, polling: PollingSettings) =>
+  open
+    ? (polling?.popup?.interval ?? defaultPolling.popup.interval)
+    : (polling?.background?.interval ?? defaultPolling.background.interval));
 
-export const getPollingEnabled = createSelector(
+export const getPollingEnabled: (state: StoreState) => boolean = createSelector(
   getPolling,
   isModalOpen,
   ({ enabled, popup, background }: PollingSettings, open: boolean) => enabled && (open ? popup?.enabled : background?.enabled),
 );
 
-export const getNotificationsBannerEnabled = createSelector(
+export const getNotificationsBannerEnabled: (state: StoreState) => boolean = createSelector(
   getNotificationsBanner,
   isModalOpen,
   ({ enabled, scope }: NotificationsBanner, open: boolean) => enabled && (open ? scope?.popup : scope?.background),
 );
 
-export const getNotificationsSnackEnabled = createSelector(
+export const getNotificationsSnackEnabled: (state: StoreState) => boolean = createSelector(
   getNotificationsSnack,
   isModalOpen,
   ({ enabled, scope }: NotificationsSnack, open: boolean) => enabled && (open ? scope?.popup : scope?.content),
 );
 
-const doSort = <T extends Content>(items: T[], tab: ContentTab): T[] => {
+function doSort<T extends Content>(items: T[], tab: ContentTab): T[] {
   switch (tab.sort) {
     case ContentTabSort.creation:
       return [...items].sort(nullSafeCompare((a, b) => numberCompare(a.createdAt, b.createdAt), tab.reverse));
@@ -83,14 +49,15 @@ const doSort = <T extends Content>(items: T[], tab: ContentTab): T[] => {
       return [...items].sort(nullSafeCompare((a, b) => stringCompare(a.title, b.title), tab.reverse));
     case ContentTabSort.progress:
       return [...items].sort(nullSafeCompare((a, b) => numberCompare(a.progress, b.progress), tab.reverse));
+    case undefined:
     default:
       return items;
   }
-};
+}
 
-const doFilter = <T extends Content>(items?: T[], tab?: Tab): T[] =>
-  items?.length && (tab?.status?.length || tab?.destination)
-    ? items.filter(item => {
+function doFilter<T extends Content>(items?: T[], tab?: Tab): T[] {
+  return items?.length && (tab?.status?.length || tab?.destination)
+    ? items.filter((item) => {
         let result = true;
         if (tab?.status?.length) {
           result = result && tab?.status?.includes(item.status);
@@ -101,31 +68,28 @@ const doFilter = <T extends Content>(items?: T[], tab?: Tab): T[] =>
         return result;
       })
     : items ?? [];
+}
 
-export const getContents = createSelector(getTasksArray, getDownloads, getSettingsDownloadsEnabled, (tasks, contents, downloadEnabled) =>
-  downloadEnabled ? [...tasks, ...contents] : tasks,
-);
-export const getContentsByTabId = createSelector(getContents, getTabs, (contents: Content[], tabs: ContentTab[]) =>
+export const getContents: (state: StoreState) => Content[] = createSelector(getTasksArray, getDownloads, getSettingsDownloadsEnabled, (tasks, contents, downloadEnabled) =>
+  downloadEnabled ? [...tasks, ...contents] : tasks);
+export const getContentsByTabId: (state: StoreState) => Record<string, Content[]> = createSelector(getContents, getTabs, (contents: Content[], tabs: ContentTab[]) =>
   tabs?.reduce((acc, tab) => {
     acc[tab.id] = doSort(doFilter(contents, tab), tab);
     return acc;
-  }, {} as Record<string, Content[]>),
-);
+  }, {} as Record<string, Content[]>));
 
-export const getContentsCountByTabId = createSelector(getContentsByTabId, getTabs, (contents: Record<string, Content[]>, tabs: ContentTab[]) =>
+export const getContentsCountByTabId: (state: StoreState) => TabCount = createSelector(getContentsByTabId, getTabs, (contents: Record<string, Content[]>, tabs: ContentTab[]) =>
   contents && tabs
     ? tabs?.reduce((acc, tab) => {
         acc[tab.name] = contents[tab.id]?.length ?? 0;
         return acc;
       }, {} as TabCount)
-    : {},
-);
+    : {});
 
-export const getBadgeCount = createSelector(getContents, getNotificationsCount, (contents: Content[], count: NotificationsCount) =>
-  contents?.length ? doFilter(contents, count)?.length ?? 0 : 0,
-);
+export const getBadgeCount: (state: StoreState) => number = createSelector(getContents, getNotificationsCount, (contents: Content[], count: NotificationsCount) =>
+  contents?.length ? doFilter(contents, count)?.length ?? 0 : 0);
 
-export const getCount = createSelector(
+export const getCount: (state: StoreState) => ContentCount | undefined = createSelector(
   getContents,
   getBadgeCount,
   getContentsCountByTabId,
@@ -134,11 +98,10 @@ export const getCount = createSelector(
     enabled ? { badge, total: contents?.length ?? 0, tabs } : undefined,
 );
 
-export const getStateBadge = createSelector(getCount, getStats, (count?: ContentCount, stats?: TaskStatistics) => ({ count, stats }));
+export const getStateBadge: (state: StoreState) => { count?: ContentCount; stats?: TaskStatistics } = createSelector(getCount, getStats, (count?: ContentCount, stats?: TaskStatistics) => ({ count, stats }));
 
-export const getContentsForActiveTab = createSelector(getContentsByTabId, getTab, (contents: Record<string, Content[]>, tab?: ContentTab) =>
-  contents && tab ? contents[tab.id] : [],
-);
+export const getContentsForActiveTab: (state: StoreState) => Content[] = createSelector(getContentsByTabId, getTab, (contents: Record<string, Content[]>, tab?: ContentTab) =>
+  contents && tab ? contents[tab.id] : []);
 
 const geTasksIdsByStatusTypeForActiveTab = createSelector(getContentsForActiveTab, geTasksIdsByStatusTypeReducer);
 
@@ -149,14 +112,15 @@ const getActiveTasksIdsForActiveTab = createSelector(geTasksIdsByStatusTypeForAc
 const getWaitingTasksIdsForActiveTab = createSelector(geTasksIdsByStatusTypeForActiveTab, map => map[ContentStatusType.waiting]);
 const getFinishedTasksIdsForActiveTab = createSelector(geTasksIdsByStatusTypeForActiveTab, map => map[ContentStatusType.finished]);
 
-const taskActionScopeReducer = (tasks: Set<Task['id']>, activeTasks: Set<Task['id']>, scope: ActionScope) =>
-  ActionScope.all === scope ? tasks : activeTasks;
+function taskActionScopeReducer(tasks: Set<Task['id']>, activeTasks: Set<Task['id']>, scope: ActionScope) {
+  return ActionScope.all === scope ? tasks : activeTasks;
+}
 
-export const getTasksIdsByActionScope = createSelector(getTasksIds, getTasksIdsForActiveTab, getActionScope, taskActionScopeReducer);
+export const getTasksIdsByActionScope: (state: StoreState) => Set<Task['id']> = createSelector(getTasksIds, getTasksIdsForActiveTab, getActionScope, taskActionScopeReducer);
 
-export const getErrorTasksIdsByActionScope = createSelector(getErrorTasksIds, getErrorTasksIdsForActiveTab, getActionScope, taskActionScopeReducer);
+export const getErrorTasksIdsByActionScope: (state: StoreState) => Set<Task['id']> = createSelector(getErrorTasksIds, getErrorTasksIdsForActiveTab, getActionScope, taskActionScopeReducer);
 
-export const getPausedTasksIdsByActionScope = createSelector(
+export const getPausedTasksIdsByActionScope: (state: StoreState) => Set<Task['id']> = createSelector(
   getPausedTasksIds,
   getPausedTasksIdsForActiveTab,
   getActionScope,
@@ -165,27 +129,27 @@ export const getPausedTasksIdsByActionScope = createSelector(
 
 const getActiveTasksIdsByActionScope = createSelector(getActiveTasksIds, getActiveTasksIdsForActiveTab, getActionScope, taskActionScopeReducer);
 
-export const getWaitingTasksIdsByActionScope = createSelector(
+export const getWaitingTasksIdsByActionScope: (state: StoreState) => Set<Task['id']> = createSelector(
   getWaitingTasksIds,
   getWaitingTasksIdsForActiveTab,
   getActionScope,
   taskActionScopeReducer,
 );
 
-export const getActiveAndWaitingTasksIdsByActionScope = createSelector(
+export const getActiveAndWaitingTasksIdsByActionScope: (state: StoreState) => Set<Task['id']> = createSelector(
   getWaitingTasksIdsByActionScope,
   getActiveTasksIdsByActionScope,
   (waiting, active) => new Set([...waiting, ...active]),
 );
 
-export const getFinishedTasksIdsByActionScope = createSelector(
+export const getFinishedTasksIdsByActionScope: (state: StoreState) => Set<Task['id']> = createSelector(
   getFinishedTasksIds,
   getFinishedTasksIdsForActiveTab,
   getActionScope,
   taskActionScopeReducer,
 );
 
-export const getFinishedAnErrorTasksIdsByActionScope = createSelector(
+export const getFinishedAnErrorTasksIdsByActionScope: (state: StoreState) => Set<Task['id']> = createSelector(
   getFinishedTasksIdsByActionScope,
   getErrorTasksIdsByActionScope,
   (finished, errors) => new Set([...finished, ...errors]),
@@ -198,28 +162,29 @@ const getFinishedDownloadIdsForActiveTab = createSelector(geDownloadsIdsByStatus
 const getDownloadingDownloadIdsForActiveTab = createSelector(geDownloadsIdsByStatusTypeForActiveTab, map => map[ContentStatusType.downloading]);
 const getPausedDownloadIdsForActiveTab = createSelector(geDownloadsIdsByStatusTypeForActiveTab, map => map[ContentStatusType.paused]);
 
-const downloadActionScopeReducer = (tasks: Set<Download['id']>, activeTasks: Set<Download['id']>, scope: ActionScope) =>
-  Array.from(ActionScope.all === scope ? tasks : activeTasks);
+function downloadActionScopeReducer(tasks: Set<Download['id']>, activeTasks: Set<Download['id']>, scope: ActionScope) {
+  return Array.from(ActionScope.all === scope ? tasks : activeTasks);
+}
 
-export const getActiveDownloadIdsByActionScope = createSelector(
+export const getActiveDownloadIdsByActionScope: (state: StoreState) => Download['id'][] = createSelector(
   getActiveDownloadIds,
   getActiveDownloadIdsForActiveTab,
   getActionScope,
   downloadActionScopeReducer,
 );
-export const getFinishedDownloadIdsByActionScope = createSelector(
+export const getFinishedDownloadIdsByActionScope: (state: StoreState) => Download['id'][] = createSelector(
   getFinishedDownloadIds,
   getFinishedDownloadIdsForActiveTab,
   getActionScope,
   downloadActionScopeReducer,
 );
-export const getDownloadingDownloadIdsByActionScope = createSelector(
+export const getDownloadingDownloadIdsByActionScope: (state: StoreState) => Download['id'][] = createSelector(
   getDownloadingDownloadIds,
   getDownloadingDownloadIdsForActiveTab,
   getActionScope,
   downloadActionScopeReducer,
 );
-export const getPausedDownloadIdsByActionScope = createSelector(
+export const getPausedDownloadIdsByActionScope: (state: StoreState) => Download['id'][] = createSelector(
   getPausedDownloadIds,
   getPausedDownloadIdsForActiveTab,
   getActionScope,

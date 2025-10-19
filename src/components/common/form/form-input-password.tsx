@@ -1,13 +1,11 @@
+import type { SvgIconProps } from '@mui/material';
+import type { FC, PropsWithChildren } from 'react';
+
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-
 import { IconButton, InputAdornment } from '@mui/material';
-
 import React, { useState } from 'react';
 
 import { useI18n } from '@src/utils';
-
-import type { SvgIconProps } from '@mui/material';
-import type { FC, PropsWithChildren } from 'react';
 
 export const FormInputPassword: FC<
   PropsWithChildren<{
@@ -23,11 +21,10 @@ export const FormInputPassword: FC<
       <IconButton
         aria-label={i18n('toggle_password_visibility')}
         onClick={() =>
-          setShowPassword(show => {
+          setShowPassword((show) => {
             onToggle(!show);
             return !show;
-          })
-        }
+          })}
         edge="end"
         sx={{ fontSize: '1.25em' }}
       >

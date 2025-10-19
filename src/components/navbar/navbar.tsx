@@ -1,8 +1,8 @@
+import type { FC } from 'react';
+
 import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, Tabs, Toolbar } from '@mui/material';
-
 import React, { useEffect } from 'react';
-
 import { useDispatch, useSelector } from 'react-redux';
 
 import LoadingBar from '@src/components/navbar/loading-bar';
@@ -13,8 +13,6 @@ import { useI18n } from '@src/utils';
 import NavbarMenu from './navbar-menu';
 import NavbarTab from './navbar-tab';
 
-import type { FC } from 'react';
-
 export const Navbar: FC = () => {
   const i18n = useI18n('navbar');
   const dispatch = useDispatch();
@@ -24,6 +22,7 @@ export const Navbar: FC = () => {
 
   useEffect(() => {
     if (!tab && tabs?.length) dispatch(setNavbar(tabs[0]));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only run on mount
   }, []);
 
   const getValue = (): number => {
@@ -31,6 +30,7 @@ export const Navbar: FC = () => {
     return index && index > -1 ? index : 0;
   };
 
+  // eslint-disable-next-line react/no-array-index-key -- Tabs are static and won't change order
   const tabComponents = tabs?.map((contentTab, index) => <NavbarTab tab={contentTab} value={index} key={`${contentTab.id}-${index}`} />);
   return (
     <AppBar color="inherit" position="sticky" sx={{ mt: '-0.125rem' }}>

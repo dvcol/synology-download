@@ -1,12 +1,11 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic type
 import { useRef } from 'react';
 
 type AnyFunction<T> = (...args: any[]) => Promise<T> | T;
 type Timeout = ReturnType<typeof setTimeout>;
 
-type Ref<T> = {
+interface Ref<T> {
   current: T;
-};
+}
 
 export function debounce<T>(
   func: AnyFunction<T>,
@@ -16,7 +15,7 @@ export function debounce<T>(
   const timeoutId = timout;
 
   return async (...args: Parameters<typeof func>[]): Promise<T> => {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       if (timeoutId?.current) clearTimeout(timeoutId?.current);
 
       timeoutId.current = setTimeout(async () => {
@@ -27,6 +26,7 @@ export function debounce<T>(
   };
 }
 
-export const useDebounce = <T>(func: AnyFunction<T>, delay = 250) => {
+export function useDebounce<T>(func: AnyFunction<T>, delay = 250) {
+  // eslint-disable-next-line react-hooks/refs -- needed for debounce
   return debounce(func, delay, useRef<Timeout>());
-};
+}

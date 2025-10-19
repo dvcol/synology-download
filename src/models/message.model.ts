@@ -39,59 +39,59 @@ export enum ChromeMessageType {
   scraped = 'scraped',
 }
 
-export type ScrapedContentsPayload = {
+export interface ScrapedContentsPayload {
   page: ScrapedPage;
   contents: ScrapedContents;
-};
+}
 
 export type InterceptPayload = TaskForm;
 
-export type InterceptResponse = {
+export interface InterceptResponse {
   folder?: string;
   aborted: boolean;
   resume?: boolean;
   message?: string;
-};
+}
 
-export type ContextMenuOnClickPayload = {
+export interface ContextMenuOnClickPayload {
   info: OnClickData;
   menu: ContextMenu;
-};
+}
 
-export type OpenPopupPayload = {
+export interface OpenPopupPayload {
   form: TaskForm;
   intercept?: TaskDialogIntercept;
-};
+}
 
-export type OpenPanelPayload = {
+export interface OpenPanelPayload {
   options?: OpenOptions;
   form: TaskForm;
   intercept?: TaskDialogIntercept;
-};
+}
 
-export type ResetMenuPayload = {
+export interface ResetMenuPayload {
   menus: ContextMenu[];
   scrape?: boolean;
-};
+}
 
 /**
  * Type union of possible message payloads
  */
-export type ChromeMessagePayload =
-  | boolean
-  | string
-  | ContextMenu
-  | ResetMenuPayload
-  | ChromeNotification
-  | SynologyQueryPayload
-  | DownloadQueryPayload
-  | ContextMenuOnClickPayload
-  | SnackNotification
-  | InterceptPayload
-  | QueryAutoLoginOptions
-  | ScrapedContentsPayload
-  | OpenPopupPayload
-  | OpenPanelPayload;
+export type ChromeMessagePayload
+  = | boolean
+    | string
+    | ContextMenu
+    | ResetMenuPayload
+    | ChromeNotification
+    | SynologyQueryPayload
+    | DownloadQueryPayload
+    | ContextMenuOnClickPayload
+    | SnackNotification
+    | InterceptPayload
+    | QueryAutoLoginOptions
+    | ScrapedContentsPayload
+    | OpenPopupPayload
+    | OpenPanelPayload;
 
 /**
  * Message interface for communication between content & background

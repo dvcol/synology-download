@@ -1,18 +1,17 @@
+import type { RootSlice } from '@src/models';
+
 import DownloadIcon from '@mui/icons-material/Download';
 import { Button, Card, CardActions, CardContent, CardHeader, Stack } from '@mui/material';
-
 import React from 'react';
-
 import { useSelector } from 'react-redux';
 
 import { JsonExplorer } from '@src/components';
-import type { RootSlice } from '@src/models';
 import { AdvancedHeader, ColorLevel } from '@src/models';
 import { getRoot } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
 import { downloadJson } from '@src/utils/downlaod.utils';
 
-export const SettingsRedux = () => {
+export function SettingsRedux() {
   const i18n = useI18n('panel', 'settings', 'advanced', 'redux');
   const store = useSelector<RootSlice, RootSlice>(getRoot);
 
@@ -29,7 +28,7 @@ export const SettingsRedux = () => {
       />
       <CardContent>
         <Card sx={{ p: '0.5rem', m: '0.5rem 0', maxHeight: '30rem', overflow: 'auto' }}>
-          <JsonExplorer data={store} name={'redux-store'} />
+          <JsonExplorer data={store} name="redux-store" />
         </Card>
       </CardContent>
       <CardActions sx={{ justifyContent: 'flex-end', padding: '0 1.5rem 1.5rem' }}>
@@ -41,4 +40,4 @@ export const SettingsRedux = () => {
       </CardActions>
     </Card>
   );
-};
+}

@@ -1,10 +1,9 @@
 import type { File, FileAdditional } from '@src/models';
 
 import { FetchIntercept } from '../models';
-
 import { AbstractMock, resolveUrl } from './utils.mock';
 
-type FileEntities = { shares: Record<string, File>; files: Record<string, File> };
+interface FileEntities { shares: Record<string, File>; files: Record<string, File> }
 
 const additional: FileAdditional = {
   perm: {
@@ -31,12 +30,12 @@ const defaultFiles: FileEntities = {
 
 const storageKey = 'synology.mock.file';
 
-const getFiles = (): FileEntities => {
+function getFiles(): FileEntities {
   const storage = localStorage.getItem(storageKey);
-  if (storage) return JSON.parse(storage);
+  if (storage) return JSON.parse(storage) as FileEntities;
   localStorage.setItem(storageKey, JSON.stringify(defaultFiles));
   return defaultFiles;
-};
+}
 
 export class FileMock extends AbstractMock<FileEntities> {
   readonly key = storageKey;
@@ -71,7 +70,7 @@ export class FileMock extends AbstractMock<FileEntities> {
   add(file: File) {
     this.entities.files[file.path] = { additional, ...file };
     super.publish();
-    return this.files;
+    return this.files.bind(this);
   }
 
   rename(path: string, name: string) {
@@ -82,7 +81,7 @@ export class FileMock extends AbstractMock<FileEntities> {
       this.add(file);
       setTimeout(() => delete this.entities.files[path]);
 
-      Object.keys(this.entities.files).forEach(_path => {
+      Object.keys(this.entities.files).forEach((_path) => {
         if (_path.startsWith(`${path}/`)) {
           this.add({ ...this.entities.files[_path], path: _path.replace(path, file.path) });
           delete this.entities.files[_path];
@@ -94,7 +93,7 @@ export class FileMock extends AbstractMock<FileEntities> {
   }
 }
 
-export const patchFiles = (_global = window): FileMock => {
+export function patchFiles(_global = window): FileMock {
   if (!_global._synology) _global._synology = {};
   if (!_global._synology.mock) _global._synology.mock = {};
   if (!_global._synology.mock.file) _global._synology.mock.file = new FileMock();
@@ -162,4 +161,4 @@ export const patchFiles = (_global = window): FileMock => {
   ]);
 
   return file;
-};
+}

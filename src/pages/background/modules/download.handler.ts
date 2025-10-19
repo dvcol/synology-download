@@ -1,21 +1,16 @@
+import type { Subscription } from 'rxjs';
+
+import type { DownloadsIntercept, StoreOrProxy } from '@src/models';
+
 import { catchError, firstValueFrom, of, withLatestFrom } from 'rxjs';
 
-import type { DownloadsIntercept } from '@src/models';
 import { DownloadStatus } from '@src/models';
 import { InterceptService, LoggerService, NotificationService } from '@src/services';
 import { addFolderHistory } from '@src/store/actions';
-import {
-  getDefaultFolder,
-  getSettingsDownloadsIntercept,
-  getSettingsDownloadsInterceptEnabled,
-  getSettingsDownloadsNotifications,
-} from '@src/store/selectors';
+import { getDefaultFolder, getSettingsDownloadsIntercept, getSettingsDownloadsInterceptEnabled, getSettingsDownloadsNotifications } from '@src/store/selectors';
 import { getActiveTab, onFilename$, onStatus$, store$ } from '@src/utils';
 
-import type { Store } from 'redux';
-import type { Subscription } from 'rxjs';
-
-const onDownloadEventsNotifications = (store: Store) => {
+function onDownloadEventsNotifications(store: StoreOrProxy) {
   LoggerService.debug('Subscribing to download notifications events.');
 
   const notifications$ = store$<boolean>(store, getSettingsDownloadsNotifications);
@@ -31,7 +26,7 @@ const onDownloadEventsNotifications = (store: Store) => {
       if (notification) NotificationService.downloadError(item);
     });
 
-  onStatus$(DownloadStatus.downloading).subscribe(item => {
+  onStatus$(DownloadStatus.downloading).subscribe((item) => {
     // if no folder path
     if (!item?.folder?.length) return;
 
@@ -48,11 +43,11 @@ const onDownloadEventsNotifications = (store: Store) => {
     const relative = item.folder.replace(new RegExp(`^${defaultFolder}`), '');
 
     // add to history
-    if (relative?.length) store.dispatch(addFolderHistory(relative));
+    if (relative?.length) void store.dispatch(addFolderHistory(relative));
   });
-};
+}
 
-const onDownloadEventsIntercept = (store: Store) => {
+function onDownloadEventsIntercept(store: StoreOrProxy) {
   const enabled$ = store$<boolean>(store, getSettingsDownloadsInterceptEnabled);
 
   const subscribe = () =>
@@ -89,7 +84,7 @@ const onDownloadEventsIntercept = (store: Store) => {
       });
 
   let sub: Subscription;
-  enabled$.subscribe(_enabled => {
+  enabled$.subscribe((_enabled) => {
     if (_enabled) {
       LoggerService.debug('Subscribing to download intercepts events.');
       sub = subscribe();
@@ -98,11 +93,11 @@ const onDownloadEventsIntercept = (store: Store) => {
       sub?.unsubscribe();
     }
   });
-};
+}
 
-export const onDownloadEvents = (store: Store) => {
+export function onDownloadEvents(store: StoreOrProxy) {
   LoggerService.debug('Subscribing to download events.');
 
   onDownloadEventsNotifications(store);
   onDownloadEventsIntercept(store);
-};
+}

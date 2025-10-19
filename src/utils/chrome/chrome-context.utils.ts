@@ -1,18 +1,14 @@
-import { firstValueFrom, lastValueFrom, timeout } from 'rxjs';
-
-import {
-  buildContextMenu as _buildContextMenu,
-  removeContextMenu as _removeContextMenu,
-  saveContextMenu as _saveContextMenu,
-} from '@dvcol/web-extension-utils';
+import type { Observable } from 'rxjs';
 
 import type { ContextMenu, ContextMenuOnClickPayload, ResetMenuPayload } from '@src/models';
+import type { Tab } from '@src/utils';
+
+import { buildContextMenu as _buildContextMenu, removeContextMenu as _removeContextMenu, saveContextMenu as _saveContextMenu } from '@dvcol/web-extension-utils';
+import { firstValueFrom, lastValueFrom, timeout } from 'rxjs';
+
 import { AppInstance, ChromeMessageType, scrapeContextMenu } from '@src/models';
 import { LoggerService } from '@src/services';
-import type { Tab } from '@src/utils';
 import { isSidePanelEnabledCb, onConnect, openPanel, openPopup, sendMessage, sendTabMessage } from '@src/utils';
-
-import type { Observable } from 'rxjs';
 
 export type OnClickData = chrome.contextMenus.OnClickData;
 export type TabInfo = chrome.tabs.Tab;
@@ -39,14 +35,14 @@ function createContextMenu(menu: ContextMenu, update?: boolean): Observable<void
 /**
  * Add or update a context menu to chrome with the given options
  */
-export function saveContextMenu(menu: ContextMenu, update?: boolean): Promise<void> {
+export async function saveContextMenu(menu: ContextMenu, update?: boolean): Promise<void> {
   return lastValueFrom(createContextMenu(menu, update));
 }
 
 /**
  * Remove context menu from chrome corresponding to the specified id
  */
-export function removeContextMenu(id: string): Promise<void> {
+export async function removeContextMenu(id: string): Promise<void> {
   return lastValueFrom(_removeContextMenu(id));
 }
 
@@ -54,14 +50,14 @@ export function removeContextMenu(id: string): Promise<void> {
  * Add / Remove the scrape context menu
  * @param show whether to show or hide the scrape context menu
  */
-export function toggleScrapeContextMenu(show = true): Promise<void> {
+export async function toggleScrapeContextMenu(show = true): Promise<void> {
   console.info('Toggling scrape context menu', { show });
   if (!show) return removeContextMenu(scrapeContextMenu.id);
   return lastValueFrom(
     _saveContextMenu({
       ...scrapeContextMenu,
       onclick: async (info: OnClickData, tab: TabInfo) =>
-        isSidePanelEnabledCb(async sidePanel => {
+        isSidePanelEnabledCb(async (sidePanel) => {
           if (info.menuItemId === scrapeContextMenu.id) {
             if (sidePanel && openPanel) {
               await openPanel({ windowId: tab.windowId });
@@ -85,6 +81,8 @@ export function toggleScrapeContextMenu(show = true): Promise<void> {
 /**
  * Build context menu for the menu options given
  * @param options the options
+ * @param options.menus the context menus to build
+ * @param options.scrape whether to add the scrape context menu or not
  */
 export async function buildContextMenu({ menus, scrape = true }: ResetMenuPayload): Promise<void> {
   await lastValueFrom(_buildContextMenu(menus, createContextMenu));

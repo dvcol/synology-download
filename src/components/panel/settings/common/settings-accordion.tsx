@@ -1,18 +1,18 @@
+import type { Dispatch, SetStateAction } from 'react';
+
+import type { InterfaceHeader } from '@src/models';
+
 import AddIcon from '@mui/icons-material/Add';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Accordion, AccordionSummary, Button, Card, CardActions, CardContent, CardHeader, Stack } from '@mui/material';
-
 import React from 'react';
 import { v4 as uuid } from 'uuid';
 
 import { ButtonWithConfirm, SortableList } from '@src/components';
-import type { InterfaceHeader } from '@src/models';
 import { useI18n } from '@src/utils';
 
-import type { Dispatch, SetStateAction } from 'react';
-
-export const SettingsAccordion = <T extends { id: string }>({
+export function SettingsAccordion<T extends { id: string }>({
   title,
   list,
   header,
@@ -32,7 +32,7 @@ export const SettingsAccordion = <T extends { id: string }>({
   reset?: () => void;
   onChange?: (item: T[]) => void;
   state: [string | false, Dispatch<SetStateAction<string | false>>];
-}) => {
+}) {
   const i18n = useI18n('panel', 'settings', 'accordion');
   const [expanded, setExpanded] = state;
 
@@ -93,4 +93,4 @@ export const SettingsAccordion = <T extends { id: string }>({
       </CardActions>
     </Card>
   );
-};
+}

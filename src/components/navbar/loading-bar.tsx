@@ -1,7 +1,7 @@
+import type { LinearProgressProps } from '@mui/material';
+
 import { LinearProgress } from '@mui/material';
-
 import React, { useEffect, useState } from 'react';
-
 import { useSelector } from 'react-redux';
 
 import { defaultGlobal } from '@src/models';
@@ -9,9 +9,7 @@ import { LoggerService } from '@src/services';
 import { getGlobalLoading, getLoading } from '@src/store/selectors';
 import { useDebounceObservable } from '@src/utils';
 
-import type { LinearProgressProps } from '@mui/material';
-
-export const LoadingBar = (props?: LinearProgressProps) => {
+export function LoadingBar(props?: LinearProgressProps) {
   // Loading bar settings
   const { enabled, threshold } = useSelector(getGlobalLoading) ?? defaultGlobal.loading;
 
@@ -26,7 +24,7 @@ export const LoadingBar = (props?: LinearProgressProps) => {
   useEffect(() => {
     next(_loading > 0);
     if (_loading < 0) LoggerService.warn('Loading count negative', { count: _loading });
-  }, [loading$, _loading]);
+  }, [loading$, _loading, next]);
 
   const show = enabled && loading && _loading > 0;
 
@@ -40,6 +38,6 @@ export const LoadingBar = (props?: LinearProgressProps) => {
       }}
     />
   );
-};
+}
 
 export default LoadingBar;

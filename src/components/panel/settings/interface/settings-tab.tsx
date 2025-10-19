@@ -1,21 +1,20 @@
+import type { MenuItemProps } from '@mui/material';
+import type { UseFormGetValues, UseFormSetValue } from 'react-hook-form';
+import type { Control } from 'react-hook-form/dist/types/form';
+
+import type { ContentTab, Tab } from '@src/models';
+
 import { AccordionDetails, Button, CardActions, CardHeader, MenuItem, Stack } from '@mui/material';
-
 import React from 'react';
-
 import { useForm } from 'react-hook-form';
-
 import { useDispatch } from 'react-redux';
 
 import { FormInput, FormTab } from '@src/components';
-import type { ContentTab, Tab } from '@src/models';
 import { ColorLevel, ColorLevelMap, ContentTabSort, getColorFromLevel, getLevelFromColor } from '@src/models';
 import { removeContentTab, saveContentTab } from '@src/store/actions';
 import { useI18n } from '@src/utils';
 
-import type { UseFormGetValues, UseFormSetValue } from 'react-hook-form';
-import type { Control } from 'react-hook-form/dist/types/form';
-
-export const SettingsTab = ({ tab, onRemove }: { tab: ContentTab; onRemove: (id: ContentTab['id']) => Promise<void> }) => {
+export function SettingsTab({ tab, onRemove }: { tab: ContentTab; onRemove: (id: ContentTab['id']) => Promise<void> }) {
   const i18n = useI18n('panel', 'settings', 'tab');
   const formTab = {
     ...tab,
@@ -60,7 +59,7 @@ export const SettingsTab = ({ tab, onRemove }: { tab: ContentTab; onRemove: (id:
         subheader={i18n('name_subheader')}
         titleTypographyProps={{ variant: 'subtitle2' }}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
-        action={
+        action={(
           <FormInput
             controllerProps={{ name: 'name', control }}
             textFieldProps={{
@@ -68,7 +67,7 @@ export const SettingsTab = ({ tab, onRemove }: { tab: ContentTab; onRemove: (id:
               sx: { flex: '0 0 14rem', textTransform: 'capitalize' },
             }}
           />
-        }
+        )}
         sx={{ p: '0.5rem 0' }}
       />
 
@@ -77,7 +76,7 @@ export const SettingsTab = ({ tab, onRemove }: { tab: ContentTab; onRemove: (id:
         subheader={i18n('sort_subheader')}
         titleTypographyProps={{ variant: 'subtitle2' }}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
-        action={
+        action={(
           <FormInput
             controllerProps={{ name: 'sort', control }}
             textFieldProps={{
@@ -92,7 +91,7 @@ export const SettingsTab = ({ tab, onRemove }: { tab: ContentTab; onRemove: (id:
               </MenuItem>
             ))}
           </FormInput>
-        }
+        )}
         sx={{ p: '0.5rem 0' }}
       />
       <CardHeader
@@ -100,7 +99,7 @@ export const SettingsTab = ({ tab, onRemove }: { tab: ContentTab; onRemove: (id:
         subheader={i18n('reverse_subheader')}
         titleTypographyProps={{ variant: 'subtitle2' }}
         subheaderTypographyProps={{ variant: 'subtitle2' }}
-        action={
+        action={(
           <FormInput
             controllerProps={{ name: 'reverse', control }}
             textFieldProps={{
@@ -109,14 +108,14 @@ export const SettingsTab = ({ tab, onRemove }: { tab: ContentTab; onRemove: (id:
               sx: { flex: '0 0 14rem', textTransform: 'capitalize' },
             }}
           >
-            <MenuItem key={'ascendant'} value={false as any} sx={{ textTransform: 'capitalize' }}>
+            <MenuItem key="ascendant" value={false as unknown as MenuItemProps['value']} sx={{ textTransform: 'capitalize' }}>
               {i18n('reverse_ascendant')}
             </MenuItem>
-            <MenuItem key={'descendant'} value={true as any} sx={{ textTransform: 'capitalize' }}>
+            <MenuItem key="descendant" value={true as unknown as MenuItemProps['value']} sx={{ textTransform: 'capitalize' }}>
               {i18n('reverse_descendant')}
             </MenuItem>
           </FormInput>
-        }
+        )}
         sx={{ p: '0.5rem 0' }}
       />
       <FormTab
@@ -146,4 +145,4 @@ export const SettingsTab = ({ tab, onRemove }: { tab: ContentTab; onRemove: (id:
       </CardActions>
     </AccordionDetails>
   );
-};
+}

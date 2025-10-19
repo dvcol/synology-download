@@ -96,7 +96,8 @@ export interface FolderPermission {
   adv_right?: FolderPermissionAdvanced;
   /** If Windows ACL privilege of the shared folder is enabled or not. */
   acl_enabled: boolean;
-  /** true : The privilege of the shared folder is set to be ACL-mode. false : The privilege of the shared folder is set to be POSIX-mode.
+  /**
+    true : The privilege of the shared folder is set to be ACL-mode. false : The privilege of the shared folder is set to be POSIX-mode.
    */
   is_acl_mode: boolean;
   acl?: FolderAcl;
