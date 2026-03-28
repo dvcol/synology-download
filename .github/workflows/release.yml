@@ -109,10 +109,10 @@ jobs:
           
           tag_name=$(git describe --abbrev=0 --match 'v*')
           echo "Tag found: '$tag_name'"
-          echo "::set-output name=TAG_NAME::$tag_name"
+          echo "TAG_NAME=$tag_name" >> "$GITHUB_OUTPUT"
 
       - name: 📦 Push Release to github
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.tagName || needs.release.outputs.tag_name || github.ref}}
           body_path: RELEASE.md
@@ -128,7 +128,7 @@ jobs:
           # =================  Publish to Chrome store  =================
           
           # Uploading zip to web store
-          npx -s chrome-webstore-upload-cli upload --source build/synology-download.zip --extension-id "$CHROME_WEB_STORE_EXTENSION_ID" --client-id "$CHROME_WEB_STORE_CLIENT_ID" --client-secret "$CHROME_WEB_STORE_CLIENT_SECRET" --refresh-token "$CHROME_WEB_STORE_REFRESH_TOKEN"
+          pnpm dlx chrome-webstore-upload-cli upload --source build/synology-download.zip --extension-id "$CHROME_WEB_STORE_EXTENSION_ID" --client-id "$CHROME_WEB_STORE_CLIENT_ID" --client-secret "$CHROME_WEB_STORE_CLIENT_SECRET" --refresh-token "$CHROME_WEB_STORE_REFRESH_TOKEN"
 
 
   publish-npm:
@@ -136,6 +136,8 @@ jobs:
     name: ☁️ Publish npm
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion != 'failure' }}
+    permissions:
+      id-token: write
 
     steps:
       - name: ⛙ Checkout branch ${{ github.ref }}
@@ -147,7 +149,7 @@ jobs:
       - name: 🚧 Build
         uses: ./.github/actions/build
         with:
-          mode: web:ci
+          mode: web
 
       - name: ☁️ Publish to npm
         env:
@@ -155,7 +157,7 @@ jobs:
         run: |
           # =================  ☁️ Publish to npm =================
           
-          npm publish
+          pnpm publish --provenance --no-git-checks
 
       - name: 💾 Caching build artefacts
         uses: actions/cache/save@v4
