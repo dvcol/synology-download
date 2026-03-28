@@ -1,12 +1,10 @@
 import type { ConfigureStoreOptions } from '@reduxjs/toolkit';
-import type { ReducersMapObject, Store } from 'redux';
-
 import type { RootSlice } from '@src/models';
+import type { ReducersMapObject, Store } from 'redux';
 
 import { devToolsEnhancer } from '@redux-devtools/remote';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-
-import { LoggerService } from '@src/services';
+import { LoggerService } from '@src/services/logger/logger.service';
 import { scrapedSlice } from '@src/store/slices/scraped.slice';
 
 import { downloadsSlice } from './slices/downloads.slice';

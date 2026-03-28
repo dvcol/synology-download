@@ -1,9 +1,8 @@
 import type { CaseReducer, PayloadAction } from '@reduxjs/toolkit';
-
 import type { AdvancedLogging, AdvancedSettings, ConnectionSettings, ContentTab, ContextMenu, DownloadSettings, DownloadsIntercept, GlobalSettings, NotificationSettings, QuickMenu, SettingsSlice, SyncSettings } from '@src/models';
 
 import { defaultAdvancedLogging, defaultAdvancedSettings, defaultConnection, defaultDownloads, SettingsSliceName, SyncSettingMode } from '@src/models';
-import { LoggerService } from '@src/services';
+import { LoggerService } from '@src/services/logger/logger.service';
 import { localSet, setBadgeBackgroundColor, syncSet } from '@src/utils';
 
 function localSettings(settings: SettingsSlice): void {
