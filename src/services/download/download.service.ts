@@ -98,14 +98,14 @@ export class DownloadService {
     return from(download(options)).pipe(tap(() => this.searchAll().subscribe()));
   }
 
-  static getFileIcon(id: number): Observable<string> {
-    if (this.isProxy) return this.forward<string>('getFileIcon', id);
+  static getFileIcon(id: number): Observable<string | undefined> {
+    if (this.isProxy) return this.forward<string | undefined>('getFileIcon', id);
     return from(getFileIcon(id));
   }
 
   static open(id: number): Observable<void> {
     if (this.isProxy) return this.forward<void>('open', id);
-    return EMPTY.pipe(tap({ complete: () => open(id) }));
+    return EMPTY.pipe(tap({ complete: async () => open(id) }));
   }
 
   static show(id?: number): Observable<void> {

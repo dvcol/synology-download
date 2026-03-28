@@ -35,7 +35,7 @@ export interface SnackNotificationScope {
   content: boolean;
 }
 
-export type ChromeNotification = NotificationOptions<true>;
+export type ChromeNotification = NotificationOptions;
 
 export interface SnackButton {
   title: string;

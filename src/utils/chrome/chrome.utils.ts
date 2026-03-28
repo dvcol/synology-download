@@ -1,5 +1,5 @@
 /** @see chrome.notifications.NotificationOptions */
-export type NotificationOptions<T extends boolean = false> = chrome.notifications.NotificationOptions<T>;
+export type NotificationOptions = chrome.notifications.NotificationOptions;
 
 /** @see chrome.action.setIcon */
 export const setIcon = chrome?.action?.setIcon;

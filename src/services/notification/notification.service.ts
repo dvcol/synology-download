@@ -47,7 +47,7 @@ export class NotificationService {
           }),
           bufferDebounceUnless(200, 10),
           map(n => this.handleBannerNotification(n, title, message)),
-          tap(n => n && createNotification(n)),
+          tap(async n => n && createNotification(n as chrome.notifications.NotificationCreateOptions)),
         );
 
   private static _destroy$ = new Subject<void>();
@@ -125,7 +125,7 @@ export class NotificationService {
       contextMessage: isMacOs() ? `${array?.length} new notifications` : listContextMessage,
       iconUrl: 'assets/icons/icon-64.png',
       items: array.map(({ message: mMessage, title: mTitle }) => ({
-        title: mTitle,
+        title: mTitle ?? '',
         message: `${mMessage?.slice(0, 30)}...`,
       })),
     };
