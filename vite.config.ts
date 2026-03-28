@@ -33,21 +33,6 @@ const slashRegex = /\\/g;
 const htmlRegex = /"\/assets\//g;
 const preambleScriptRegex = /\s*<!--\s*\[vite:react-refresh-preamble\][\s\S]*?<\/script>/g;
 
-const mainRegex = /pages\/(popup|panel|options)\/index\.ts$/;
-
-/**
- * Preamble code to inject React Refresh runtime in development for extension target.
- * Since Vite's built-in HMR doesn't parse Chrome extension index.html, we need to inject it manually.
- */
-const preambleCode = `
-import RefreshRuntime from '/@react-refresh';
-
-RefreshRuntime.injectIntoGlobalHook(window);
-window.$RefreshReg$ = () => {};
-window.$RefreshSig$ = () => (type) => type;
-window.__vite_plugin_react_preamble_installed__ = true;
-`;
-
 type JsonLocale = Record<string, string>;
 function getPlugins(_isDev: boolean, _isWeb: boolean): PluginOption[] {
   const plugins: PluginOption[] = [
@@ -124,20 +109,6 @@ function getPlugins(_isDev: boolean, _isWeb: boolean): PluginOption[] {
       },
     },
   ];
-
-  if (_isDev && !_isWeb) {
-    plugins.push({
-      name: 'dev-react-refresh-preamble',
-      transform: {
-        filter: {
-          id: mainRegex,
-        },
-        handler: (code) => {
-          return [preambleCode, code].join('\n');
-        },
-      },
-    });
-  }
 
   return plugins;
 }
