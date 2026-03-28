@@ -1,7 +1,11 @@
-import type { Content, DownloadStationStatistic, TabCount, TaskPriority } from '@src/models';
+import type { Content } from './content.model';
+import type { DownloadStationStatistic, TaskPriority } from './synology.model';
+import type { TabCount } from './tab.model';
 
-import { ColorLevel, ContentSource } from '@src/models';
-import { computeProgress, formatTime } from '@src/utils';
+import { computeProgress, formatTime } from '@src/utils/format.utils';
+
+import { ContentSource } from './content.model';
+import { ColorLevel } from './material-ui.model';
 
 export interface TaskList {
   total: number;

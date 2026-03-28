@@ -1,11 +1,11 @@
-import type { Observable } from 'rxjs';
-
 import type { LoginRequest, LoginResponse } from '@src/models';
 import type { HttpParameters } from '@src/utils';
+import type { Observable } from 'rxjs';
 
 import { AuthMethod, CommonAPI, Endpoint, SessionName } from '@src/models';
-import { SynologyService } from '@src/services/http';
 import { HttpMethod } from '@src/utils';
+
+import { SynologyService } from './synology.service';
 
 export class SynologyAuthService extends SynologyService {
   constructor(protected isProxy = false, protected name: string = 'SynologyAuthService') {

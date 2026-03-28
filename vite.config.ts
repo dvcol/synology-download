@@ -1,0 +1,207 @@
+import type { PluginOption } from 'vite';
+
+import { readdir, readFile } from 'node:fs/promises';
+import { dirname, relative } from 'node:path';
+import { fileURLToPath, URL } from 'node:url';
+
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
+import { checker } from 'vite-plugin-checker';
+
+import pkg from './package.json';
+import { isDev, isWeb, outDir, port, resolveParent, sourcemap } from './scripts/utils';
+
+function getInput(hmr: boolean, _isWeb: boolean): Record<string, string> {
+  if (hmr) return { background: resolveParent('src/pages/background/index.ts') };
+
+  if (_isWeb) {
+    return {
+      web: resolveParent('src/pages/web/index.html'),
+      main: resolveParent('src/pages/web/main.ts'),
+      index: resolveParent('src/pages/web/index.ts'),
+    };
+  }
+  return {
+    background: resolveParent('src/pages/background/index.ts'),
+    contentScript: resolveParent('src/pages/content/index.ts'),
+    options: resolveParent('src/pages/options/index.html'),
+    popup: resolveParent('src/pages/popup/index.html'),
+    panel: resolveParent('src/pages/panel/index.html'),
+  };
+}
+
+const i18nRegex = /.*src\/i18n\/([a-zA-Z]+)\/.*\.json/;
+const slashRegex = /\\/g;
+const htmlRegex = /"\/assets\//g;
+const preambleScriptRegex = /\s*<!--\s*\[vite:react-refresh-preamble\][\s\S]*?<\/script>/g;
+
+const mainRegex = /pages\/(popup|panel|options)\/index\.ts$/;
+
+/**
+ * Preamble code to inject React Refresh runtime in development for extension target.
+ * Since Vite's built-in HMR doesn't parse Chrome extension index.html, we need to inject it manually.
+ */
+const preambleCode = `
+import RefreshRuntime from '/@react-refresh';
+
+RefreshRuntime.injectIntoGlobalHook(window);
+window.$RefreshReg$ = () => {};
+window.$RefreshSig$ = () => (type) => type;
+window.__vite_plugin_react_preamble_installed__ = true;
+`;
+
+type JsonLocale = Record<string, string>;
+function getPlugins(_isDev: boolean, _isWeb: boolean): PluginOption[] {
+  const plugins: PluginOption[] = [
+    react({
+      jsxRuntime: 'classic',
+    }),
+    checker({
+      typescript: {
+        tsconfigPath: 'tsconfig.app.json',
+      },
+      enableBuild: false,
+    }),
+    {
+      name: 'i18n-hmr',
+      configureServer: (server) => {
+        console.info('server start');
+        server.ws.on('fetch:i18n', async () => {
+          const dir = await readdir(`${outDir}/_locales`);
+          const locales = dir.map(async _lang =>
+            readFile(`${outDir}/_locales/${_lang}/messages.json`, { encoding: 'utf-8' }).then(locale => ({ lang: _lang, locale: JSON.parse(locale) as JsonLocale })),
+          );
+          server.ws.send({
+            type: 'custom',
+            event: 'update:i18n',
+            data: await Promise.all(locales),
+          });
+        });
+      },
+      handleHotUpdate: async ({ server, file, read, modules }) => {
+        const lang = file.match(i18nRegex)?.[1];
+        if (typeof lang !== 'string') return modules;
+        console.info('Emit new i18n', file);
+        const locale = JSON.parse(await read()) as JsonLocale;
+        server.ws.send({
+          type: 'custom',
+          event: 'update:i18n',
+          data: [{ lang, locale }],
+        });
+        return modules;
+      },
+    },
+    // rewrite assets to use relative path
+    {
+      name: 'assets-rewrite',
+      enforce: 'post',
+      apply: 'build',
+      transformIndexHtml: (html, { path }) =>
+        html
+          .replace(preambleScriptRegex, '')
+          .replace(htmlRegex, `"${relative(dirname(path), '/assets').replace(slashRegex, '/')}/`),
+    },
+    // flatten HTML files from src/pages/*/index.html to build root (popup.html, panel.html, etc.)
+    {
+      name: 'html-flatten',
+      enforce: 'post',
+      apply: 'build',
+      transformIndexHtml: {
+        order: 'post',
+        handler: html => html,
+      },
+      generateBundle(_, bundle) {
+        if (_isWeb) return;
+        for (const [key, chunk] of Object.entries(bundle)) {
+          if (chunk.type === 'asset' && key.startsWith('pages/') && key.endsWith('.html')) {
+            // pages/popup/index.html -> popup.html
+            const pageName = key.split('/')[1];
+            chunk.fileName = `${pageName}.html`;
+          }
+        }
+      },
+    },
+  ];
+
+  if (_isDev && !_isWeb) {
+    plugins.push({
+      name: 'dev-react-refresh-preamble',
+      transform: {
+        filter: {
+          id: mainRegex,
+        },
+        handler: (code) => {
+          return [preambleCode, code].join('\n');
+        },
+      },
+    });
+  }
+
+  return plugins;
+}
+
+export default defineConfig(() => ({
+  root: resolveParent('src'),
+  resolve: {
+    alias: {
+      '@src': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
+  define: {
+    '__DEV__': isDev,
+    'import.meta.env.PKG_VERSION': JSON.stringify(pkg.version),
+    'import.meta.env.PKG_NAME': JSON.stringify(pkg.name),
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
+    'process.env.DEBUG': JSON.stringify(process.env.DEBUG || 'false'),
+    'process.env.DEVTOOL': JSON.stringify(process.env.DEVTOOL || 'false'),
+  },
+  plugins: getPlugins(isDev, isWeb),
+  base: process.env.VITE_BASE || './',
+  server: {
+    port,
+    open: false,
+    host: true,
+    hmr: {
+      host: 'localhost',
+    },
+  },
+  css: {
+    modules: {
+      localsConvention: 'camelCaseOnly',
+    },
+  },
+  build: {
+    outDir: resolveParent(outDir),
+    sourcemap: (isDev || sourcemap) ? 'inline' : false,
+    minify: !isDev,
+    rollupOptions: {
+      input: getInput(isDev, isWeb),
+      output: {
+        minifyInternalExports: false,
+        chunkFileNames: 'chunks/[name]-[hash].chunk.js',
+        entryFileNames: (entry) => {
+          if (entry.name === 'background' || entry.name === 'contentScript') return 'scripts/[name].js';
+          if (entry.name === 'index') return 'entry/index.js';
+          if (entry.name === 'main') return 'entry/main.js';
+          return 'scripts/[name]-[hash].js';
+        },
+        assetFileNames: (asset) => {
+          const format = '[name][extname]';
+          if (asset.names?.[0]?.endsWith('.css')) return `styles/${format}`;
+          return 'assets/[name][extname]';
+        },
+      },
+    },
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    coverage: {
+      reportsDirectory: resolveParent('coverage'),
+    },
+    setupFiles: [resolveParent('vitest.setup.ts')],
+  },
+  optimizeDeps: {
+    exclude: ['path', 'fast-glob'],
+  },
+}));

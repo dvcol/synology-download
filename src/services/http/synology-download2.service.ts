@@ -1,5 +1,3 @@
-import type { Observable } from 'rxjs';
-
 import type {
   CommonResponse,
   SynologyQueryOptions,
@@ -19,12 +17,13 @@ import type {
   TaskListResponse,
 } from '@src/models';
 import type { HttpParameters } from '@src/utils';
-
-import { throwError } from 'rxjs';
+import type { Observable } from 'rxjs';
 
 import { DownloadStation2API, Endpoint, EntryAPI, EntryMethod, Task2Method } from '@src/models';
-import { SynologyService } from '@src/services/http';
 import { buildFormData, HttpMethod, sanitizeUrl, stringifyKeys } from '@src/utils';
+import { throwError } from 'rxjs';
+
+import { SynologyService } from './synology.service';
 
 export class SynologyDownload2Service extends SynologyService {
   /**

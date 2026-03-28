@@ -12,5 +12,3 @@ defineComponents({ patch: true })
     }
   })
   .catch(err => console.error('Web components failed to define.', err));
-
-if (module.hot) module.hot.accept();

@@ -1,13 +1,12 @@
-import type { Observable } from 'rxjs';
-
 import type { CommonResponse, DownloadStationConfig, DownloadStationInfo, DownloadStationStatistic, SynologyFileStationInfo, TaskCreateRequest, TaskList, TaskListOption } from '@src/models';
 import type { HttpParameters } from '@src/utils';
-
-import { throwError } from 'rxjs';
+import type { Observable } from 'rxjs';
 
 import { Controller, DownloadStationAPI, Endpoint, TaskMethod } from '@src/models';
-import { SynologyService } from '@src/services/http';
 import { HttpMethod, sanitizeUrl } from '@src/utils';
+import { throwError } from 'rxjs';
+
+import { SynologyService } from './synology.service';
 
 export class SynologyDownloadService extends SynologyService {
   /**
