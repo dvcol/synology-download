@@ -1,5 +1,6 @@
 import type { Content } from './content.model';
-import type { DownloadStationStatistic, TaskPriority } from './synology.model';
+import type { DownloadStationStatistic } from './download-station.model';
+import type { TaskPriority } from './synology.model';
 import type { TabCount } from './tab.model';
 
 import { computeProgress, formatTime } from '@src/utils/format.utils';

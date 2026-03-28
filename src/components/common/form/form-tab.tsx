@@ -1,13 +1,11 @@
-import type { UseFormReturn } from 'react-hook-form/dist/types/form';
-
 import type { ContentTab, Tab, TabStatus } from '@src/models';
+import type { UseFormReturn } from 'react-hook-form';
 
 import { Button, Card, CardHeader, Collapse, Grid, MenuItem } from '@mui/material';
-import React from 'react';
-
 import { FormExplorer, FormSwitch } from '@src/components';
 import { ColorLevel, defaultNotifications, DownloadStatus, getColorFromLevel, getLevelFromColor, TabTemplate, TaskStatus, templateTabs } from '@src/models';
 import { useI18n } from '@src/utils';
+import React from 'react';
 
 import { FormCheckbox } from './form-checkbox';
 import { FormInput } from './form-input';

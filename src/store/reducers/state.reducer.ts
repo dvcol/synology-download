@@ -1,5 +1,4 @@
 import type { CaseReducer, PayloadAction } from '@reduxjs/toolkit';
-
 import type { ContentCount, Log, StateSlice, TaskStatistics } from '@src/models';
 
 import type { StateReducers } from '../slices/state.slice';
@@ -26,7 +25,7 @@ export async function setCountAndStats(count?: ContentCount, stats?: TaskStatist
   if (stats) {
     if (title) title += '\n';
     (Object.keys(stats) as (keyof TaskStatistics)[])?.forEach((key) => {
-      title += `\n${key?.replaceAll('_', ' ')}: ${formatBytes(stats[key])}/s`;
+      title += `\n${String(key).replaceAll('_', ' ')}: ${formatBytes(stats[key])}/s`;
     });
   }
 

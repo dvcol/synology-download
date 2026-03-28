@@ -1,6 +1,5 @@
 import type { FormControlLabelProps, SwitchProps } from '@mui/material';
-import type { ControllerProps } from 'react-hook-form';
-import type { FieldPath, FieldValues } from 'react-hook-form/dist/types';
+import type { ControllerProps, FieldPath, FieldValues } from 'react-hook-form';
 
 import { FormControl, FormControlLabel, FormHelperText, Switch } from '@mui/material';
 import React from 'react';
