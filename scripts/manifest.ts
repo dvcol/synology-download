@@ -18,6 +18,10 @@ function getHostPermissions(_dev: boolean, _port: number) {
   return permissions;
 }
 
+function getHtmlPath(page: string, _dev: boolean) {
+  return _dev ? `pages/${page}/index.html` : `${page}.html`;
+}
+
 export const manifest = {
   manifest_version: 3,
   name: 'Download Station (client for Synology NAS)',
@@ -31,14 +35,14 @@ export const manifest = {
     128: 'assets/icons/icon-128.png',
     256: 'assets/icons/icon-256.png',
   },
-  options_page: 'options.html',
+  options_page: getHtmlPath('options', isDev),
   background: {
     service_worker: 'scripts/background.js',
     type: 'module' as const,
   },
   action: {
     default_title: 'Synology Download Station',
-    default_popup: 'popup.html',
+    default_popup: getHtmlPath('popup', isDev),
     default_icon: {
       16: 'assets/icons/icon-16.png',
       32: 'assets/icons/icon-32.png',
@@ -48,7 +52,7 @@ export const manifest = {
     },
   },
   side_panel: {
-    default_path: 'panel.html',
+    default_path: getHtmlPath('panel', isDev),
   },
   content_scripts: [
     {
