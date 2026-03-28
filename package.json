@@ -84,9 +84,8 @@
     "@mui/x-data-grid": "^7.29.12",
     "@mui/x-tree-view": "^7.29.10",
     "@reduxjs/toolkit": "^2.11.2",
-    "global": "^4.4.0",
     "notistack": "^3.0.2",
-    "pretty-bytes": "^5.6.0",
+    "pretty-bytes": "^6.1.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-hook-form": "^7.72.0",
@@ -95,8 +94,8 @@
     "react-router-hash-link": "^2.4.3",
     "react-transition-group": "^4.4.5",
     "redux": "^5.0.1",
-    "rxjs": "^7.8.0",
-    "uuid": "^8.3.2",
+    "rxjs": "^7.8.2",
+    "uuid": "^11.1.0",
     "webext-redux": "^2.1.9"
   },
   "devDependencies": {
