@@ -1,13 +1,15 @@
-import type { SyncedTaskSlice } from '../../models/store.model';
-import type { TasksReducers } from '../slices/tasks.slice';
+import type { CaseReducer, PayloadAction } from '@reduxjs/toolkit';
+
+import type { SyncedTaskSlice, TasksSlice } from '../../models/store.model';
+import type { Task, TaskStatistics } from '../../models/task.model';
 
 import { LoggerService } from '../../services/logger/logger.service';
 import { localSet } from '../../utils/webex.utils';
 import { tasksSlice } from '../slices/tasks.slice';
 
-export const setTasksStatsReducer: TasksReducers['setTaskStats'] = (state, { payload: stats }) => ({ ...state, stats });
+export const setTasksStatsReducer: CaseReducer<TasksSlice, PayloadAction<TaskStatistics>> = (state, { payload: stats }) => ({ ...state, stats });
 
-export const syncTaskReducer: TasksReducers['setTasks'] = (state, { payload: entities }) => {
+export const syncTaskReducer: CaseReducer<TasksSlice, PayloadAction<Task[]>> = (state, { payload: entities }) => {
   // TODO : move to thunk ?
 
   const storedState: SyncedTaskSlice = entities?.reduce(

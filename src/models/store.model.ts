@@ -1,5 +1,4 @@
-import type { AnyAction, Store } from 'redux';
-import type { Store as StoreProxy } from 'webext-redux';
+import type { Store, UnknownAction } from 'redux';
 
 import type { ContentCount } from './content.model';
 import type { Download } from './download.model';
@@ -89,22 +88,15 @@ export interface RootSlice {
   settings: SettingsSlice;
 }
 
-type Dispatch<A extends AnyAction> = (value: A) => void | A | Promise<void | A>;
-
 /**
- * Base store interface with compatible methods between Redux Store and webext-redux Store
+ * Unified store type that is compatible with both Redux Store and webext-redux Store.
+ * This resolves the dispatch signature incompatibility between the two store types.
  */
-export interface BaseStore<Root = RootSlice, Action extends AnyAction = AnyAction> extends Omit<Store<Root, Action>, 'dispatch'>, Omit<StoreProxy<Root, Action>, 'dispatch' | 'replaceState' | 'patchState' | 'ready' | 'replaceReducer'> {
-  dispatch: Dispatch<Action>;
-  ready?: StoreProxy<Root>['ready'];
-  replaceState?: StoreProxy<Root>['replaceState'];
-  patchState?: StoreProxy<Root>['patchState'];
+export interface StoreOrProxy<Root = RootSlice> extends Omit<Store<Root>, 'dispatch'> {
+  dispatch: (action: UnknownAction) => unknown;
+  ready?: () => Promise<void>;
+  replaceState?: (state: Root) => void;
+  patchState?: (difference: unknown[]) => void;
 }
-
-/**
- * Unified store type that is compatible with both Redux Store and webext-redux Store
- * This resolves the dispatch signature incompatibility between the two store types
- */
-export type StoreOrProxy<Root = RootSlice> = BaseStore<Root>;
 
 export const StorePortName = 'synology-download-proxy-store';

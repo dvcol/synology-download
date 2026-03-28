@@ -1,4 +1,4 @@
-import type { CaseReducer, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
 import type { Log } from '../../models/settings.model';
 import type { StateSlice } from '../../models/store.model';
@@ -14,28 +14,6 @@ import {
   syncLoggedReducer,
   syncLogHistoryReducer,
 } from '../reducers/state.reducer';
-
-export interface StateReducers<S = StateSlice> extends SliceCaseReducers<S> {
-  restoreState: CaseReducer<S, PayloadAction<Partial<S>>>;
-  setLogged: CaseReducer<S, PayloadAction<boolean>>;
-  setSid: CaseReducer<S, PayloadAction<string | undefined>>;
-  setPopup: CaseReducer<S, PayloadAction<boolean>>;
-  setPanel: CaseReducer<S, PayloadAction<boolean>>;
-  setOption: CaseReducer<S, PayloadAction<boolean>>;
-  setStandalone: CaseReducer<S, PayloadAction<boolean>>;
-  setContentMenu: CaseReducer<S, PayloadAction<boolean>>;
-  setContentDialog: CaseReducer<S, PayloadAction<boolean>>;
-  addLoading: CaseReducer<S, PayloadAction<number | undefined>>;
-  removeLoading: CaseReducer<S, PayloadAction<number | undefined>>;
-  resetLoading: CaseReducer<S>;
-  setBadge: CaseReducer<S, PayloadAction<StateSlice['badge']>>;
-  addDestinationHistory: CaseReducer<S, PayloadAction<string>>;
-  addFolderHistory: CaseReducer<S, PayloadAction<string>>;
-  addLogHistory: CaseReducer<S, PayloadAction<{ log: Log; max: number }>>;
-  resetLogHistory: CaseReducer<S>;
-  syncDownloadState: CaseReducer<S, PayloadAction<StateSlice['download']>>;
-  setApi: CaseReducer<S, PayloadAction<InfoResponse>>;
-}
 
 export const initialState: StateSlice = {
   logged: false,
@@ -64,37 +42,37 @@ export const initialState: StateSlice = {
   api: {},
 };
 
-export const stateSlice = createSlice<StateSlice, StateReducers, 'state'>({
+export const stateSlice = createSlice({
   name: 'state',
   initialState,
   reducers: {
-    restoreState: (state, { payload }) => ({ ...state, ...payload }),
+    restoreState: (state, { payload }: PayloadAction<Partial<StateSlice>>) => ({ ...state, ...payload }),
     setLogged: syncLoggedReducer,
-    setSid: (state, { payload: sid }) => ({ ...state, sid }),
-    setPopup: (state, { payload: popup }) => ({ ...state, modal: { ...state.modal, popup } }),
-    setPanel: (state, { payload: panel }) => ({ ...state, modal: { ...state.modal, panel } }),
-    setOption: (state, { payload: option }) => ({ ...state, modal: { ...state.modal, option } }),
-    setStandalone: (state, { payload: standalone }) => ({ ...state, modal: { ...state.modal, standalone } }),
-    setContentMenu: (state, { payload: menu }) => ({ ...state, content: { ...state.content, menu } }),
-    setContentDialog: (state, { payload: dialog }) => ({ ...state, content: { ...state.content, dialog } }),
-    addLoading: (state, { payload }) => ({ ...state, loading: state.loading + (payload ?? 1) }),
-    removeLoading: (state, { payload }) => ({ ...state, loading: state.loading - (payload ?? 1) }),
+    setSid: (state, { payload: sid }: PayloadAction<string | undefined>) => ({ ...state, sid }),
+    setPopup: (state, { payload: popup }: PayloadAction<boolean>) => ({ ...state, modal: { ...state.modal, popup } }),
+    setPanel: (state, { payload: panel }: PayloadAction<boolean>) => ({ ...state, modal: { ...state.modal, panel } }),
+    setOption: (state, { payload: option }: PayloadAction<boolean>) => ({ ...state, modal: { ...state.modal, option } }),
+    setStandalone: (state, { payload: standalone }: PayloadAction<boolean>) => ({ ...state, modal: { ...state.modal, standalone } }),
+    setContentMenu: (state, { payload: menu }: PayloadAction<boolean>) => ({ ...state, content: { ...state.content, menu } }),
+    setContentDialog: (state, { payload: dialog }: PayloadAction<boolean>) => ({ ...state, content: { ...state.content, dialog } }),
+    addLoading: (state, { payload }: PayloadAction<number | undefined>) => ({ ...state, loading: state.loading + (payload ?? 1) }),
+    removeLoading: (state, { payload }: PayloadAction<number | undefined>) => ({ ...state, loading: state.loading - (payload ?? 1) }),
     resetLoading: state => ({ ...state, loading: 0 }),
     setBadge: setBadgeReducer,
-    addDestinationHistory: (state, action) =>
+    addDestinationHistory: (state, action: PayloadAction<string>) =>
       syncDestinationsHistoryReducer(state, {
         ...action,
         payload: [action.payload, ...(state.history?.destinations ?? initialState.history.destinations)],
       }),
-    addFolderHistory: (state, action) =>
+    addFolderHistory: (state, action: PayloadAction<string>) =>
       syncFoldersHistoryReducer(state, { ...action, payload: [action.payload, ...(state.history?.folders ?? initialState.history.folders)] }),
-    addLogHistory: (state, action) =>
+    addLogHistory: (state, action: PayloadAction<{ log: Log; max: number }>) =>
       syncLogHistoryReducer(state, {
         ...action,
         payload: [...(state.history.logs ?? initialState.history.logs), action.payload.log].slice(0, action.payload.max),
       }),
-    resetLogHistory: (state, action) => syncLogHistoryReducer(state, { ...action, payload: initialState.history.logs }),
+    resetLogHistory: state => syncLogHistoryReducer(state, { type: 'state/resetLogHistory', payload: initialState.history.logs }),
     syncDownloadState: syncDownloadStateReducer,
-    setApi: (state, { payload }) => ({ ...state, api: payload }),
-  } as StateReducers,
+    setApi: (state, { payload }: PayloadAction<InfoResponse>) => ({ ...state, api: payload }),
+  },
 });
