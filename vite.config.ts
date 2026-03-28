@@ -156,7 +156,7 @@ export default defineConfig(() => ({
   base: process.env.VITE_BASE || './',
   server: {
     port,
-    open: false,
+    open: isWeb,
     host: true,
     hmr: {
       host: 'localhost',

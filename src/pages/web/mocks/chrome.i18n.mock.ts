@@ -12,7 +12,7 @@ export async function patchI18n(_global: Window = window, lang = 'en') {
   if (locale) return;
 
   let locale$ = _global._localesFetch?.[lang];
-  if (locale$ !== undefined) {
+  if (locale$ === undefined) {
     locale$ = fetch(`_locales/${lang}/messages.json`)
       .then(async res => res.json() as Promise<Locale>)
       .catch((err: Error) => {
