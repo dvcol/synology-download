@@ -1,7 +1,5 @@
 import type { PatchOptions } from '../models';
 
-import { StandaloneAppWc } from '../../../components/web/standalone-app-wc';
-import { ContentAppWc } from '../../content/components/content-app-wc';
 import { WebComponents } from '../models';
 import { patchApi } from './patch-api';
 
@@ -9,6 +7,11 @@ export type DefineComponentsOptions = PatchOptions & { components?: Partial<Reco
 
 export async function defineComponents(options?: DefineComponentsOptions, _global = window) {
   await patchApi({ patch: false, ...options });
+
+  const [{ StandaloneAppWc }, { ContentAppWc }] = await Promise.all([
+    import('../../../components/web/standalone-app-wc'),
+    import('../../content/components/content-app-wc'),
+  ]);
 
   const components: Record<string, CustomElementConstructor> = {
     [WebComponents.StandaloneApp]: StandaloneAppWc,
