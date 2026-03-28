@@ -173,7 +173,7 @@ export default defineConfig(() => ({
   build: {
     outDir: resolveParent(outDir),
     sourcemap: (isDev || sourcemap) ? 'inline' : false,
-    minify: !isDev,
+    minify: !isDev && isWeb,
     rollupOptions: {
       input: getInput(isDev, isWeb),
       output: {
