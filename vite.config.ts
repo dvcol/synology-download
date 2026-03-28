@@ -132,6 +132,7 @@ export default defineConfig(() => ({
     port,
     open: isWeb ? '/pages/web/index.html' : false,
     host: true,
+    cors: true,
     hmr: {
       host: 'localhost',
     },

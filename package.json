@@ -49,7 +49,7 @@
     "vite:serve": "vite",
     "vite:build": "vite build",
     "vite:build:content": "vite build --config vite.content.config.ts",
-    "vite:serve:content": "vite build --watch --config vite.content.config.ts",
+    "vite:serve:content": "vite --config vite.content.config.ts",
     "dev:extension": "run-s clear && NODE_ENV=development run-p prep vite:serve vite:serve:content",
     "dev:web": "run-s clear && NODE_ENV=development VITE_SOURCEMAP=true VITE_WEB=true run-p prep vite:serve",
     "build:extension": "run-s clear && VITE_TARGET=extension run-p type:check prep vite:build vite:build:content",
