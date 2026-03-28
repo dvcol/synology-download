@@ -3,8 +3,7 @@ import type { RenderResult } from '@testing-library/react';
 import { render } from '@testing-library/react';
 import React from 'react';
 
-import { MaterialIcon } from '@src/models';
-
+import { MaterialIcon } from '../../../models/material-ui.model';
 import { MuiIcon } from './material-icon';
 
 describe('material-icon.tsx component', () => {
