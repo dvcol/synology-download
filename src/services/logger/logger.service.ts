@@ -1,12 +1,12 @@
 import type { Log, ServiceInstance, StoreOrProxy } from '@src/models';
 
-import { Subject, takeUntil } from 'rxjs';
-
 import { ChromeMessageType, defaultLoggingLevels, LoggingLevel, ServiceInstanceColorsMap } from '@src/models';
-import { BaseLoggerService } from '@src/services';
 import { addLogHistory } from '@src/store/actions';
 import { getAdvancedSettingsLogging } from '@src/store/selectors';
 import { onMessage, ProxyLogger, sendMessage, store$ } from '@src/utils';
+import { Subject, takeUntil } from 'rxjs';
+
+import { BaseLoggerService } from './base-logger.service';
 
 export class LoggerService extends BaseLoggerService {
   protected static source: ServiceInstance;

@@ -1,15 +1,14 @@
-import type { Observable } from 'rxjs';
-
 import type { Download, DownloadQueryPayload, StoreOrProxy } from '@src/models';
 import type { DownloadOptions, DownloadQuery } from '@src/utils';
-
-import { catchError, EMPTY, forkJoin, from, map, of, Subject, takeUntil, tap, throwError } from 'rxjs';
+import type { Observable } from 'rxjs';
 
 import { ChromeMessageType, mapToDownload } from '@src/models';
-import { LoggerService } from '@src/services';
 import { setDownloads } from '@src/store/actions';
 import { getActiveDownloadIdsByActionScope, getDownloadingDownloadIdsByActionScope, getFinishedDownloadIdsByActionScope, getPausedDownloadIdsByActionScope } from '@src/store/selectors';
 import { cancel, download, erase, getFileIcon, onMessage, open, pause, resume, search, sendMessage, show, showDefaultFolder } from '@src/utils';
+import { catchError, EMPTY, forkJoin, from, map, of, Subject, takeUntil, tap, throwError } from 'rxjs';
+
+import { LoggerService } from '../logger/logger.service';
 
 export class DownloadService {
   private static key = 'DownloadService';

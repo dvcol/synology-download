@@ -1,15 +1,18 @@
 import type { ContextMenu } from '@src/models/menu.model';
 import type { ContextMenuOnClickPayload, ResetMenuPayload } from '@src/models/message.model';
-import type { Tab } from '@src/utils';
 import type { Observable } from 'rxjs';
+
+import type { Tab } from './chrome.utils';
 
 import { buildContextMenu as _buildContextMenu, removeContextMenu as _removeContextMenu, saveContextMenu as _saveContextMenu } from '@dvcol/web-extension-utils';
 import { AppInstance } from '@src/models/app-instance.model';
 import { scrapeContextMenu } from '@src/models/menu.model';
 import { ChromeMessageType } from '@src/models/message.model';
-import { LoggerService } from '@src/services';
-import { isSidePanelEnabledCb, onConnect, openPanel, openPopup, sendMessage, sendTabMessage } from '@src/utils';
+import { LoggerService } from '@src/services/logger/logger.service';
 import { firstValueFrom, lastValueFrom, timeout } from 'rxjs';
+
+import { onConnect, sendMessage, sendTabMessage } from './chrome-message.utils';
+import { isSidePanelEnabledCb, openPanel, openPopup } from './chrome.utils';
 
 export type OnClickData = chrome.contextMenus.OnClickData;
 export type TabInfo = chrome.tabs.Tab;
