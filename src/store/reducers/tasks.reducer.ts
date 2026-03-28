@@ -2,7 +2,7 @@ import type { SyncedTaskSlice } from '@src/models';
 
 import type { TasksReducers } from '../slices/tasks.slice';
 
-import { LoggerService } from '@src/services';
+import { LoggerService } from '@src/services/logger/logger.service';
 import { localSet } from '@src/utils';
 
 import { tasksSlice } from '../slices/tasks.slice';
