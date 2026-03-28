@@ -25,6 +25,6 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "include": ["./src", "webpack", ".eslintrc.js"],
+  "include": ["./src", "webpack", "test", ".eslintrc.js"],
   "exclude": ["build", "node_modules"]
 }

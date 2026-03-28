@@ -1,27 +1,28 @@
 /** @type {import("ts-jest/dist/types").InitialOptionsTsJest} */
 module.exports = {
-  preset: "ts-jest",
-  testEnvironment: "jsdom",
+  preset: 'ts-jest',
+  testEnvironment: 'jsdom',
 
   // The root of your source code
-  roots: [ "<rootDir>/src" ],
+  roots: ['<rootDir>/src'],
 
   // Target test tsconfig
   globals: {
-    "ts-jest": {
-      tsconfig: "<rootDir>/tsconfig.spec.json",
-      "useESM": true
-    }
+    'ts-jest': {
+      tsconfig: '<rootDir>/tsconfig.spec.json',
+      useESM: true,
+      diagnostics: false,
+    },
   },
 
   // Jest transformations -- this adds support for TypeScript using ts-jest
   transform: {
-    "^.+\\.tsx?$": "ts-jest"
+    '^.+\\.tsx?$': 'ts-jest',
   },
 
   // Test spec file resolution pattern
   // Matches parent folder `__tests__` and filename should contain `test` or `spec`.
-  testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+  testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
 
   // Minimum coverage thresholds
   // TODO : Increase threshold after implementing tests
@@ -30,21 +31,21 @@ module.exports = {
       branches: 0,
       functions: 0,
       lines: 0,
-      statements: 0
-    }
+      statements: 0,
+    },
   },
 
   // Module file extensions for importing
-  moduleFileExtensions: [ "ts", "tsx", "js", "jsx", "json", "node" ],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 
-  extensionsToTreatAsEsm: [ ".ts", ".tsx" ],
+  extensionsToTreatAsEsm: ['.ts', '.tsx'],
   // Webpack alias config=
   moduleNameMapper: {
-    "^@src/(.*)$": "<rootDir>/src/$1"
+    '^@src/(.*)$': '<rootDir>/src/$1',
   },
 
   // Setup scripts before tests
   setupFilesAfterEnv: [
-    "<rootDir>/test/setup.test.ts"
-  ]
+    '<rootDir>/test/setup.test.ts',
+  ],
 };
