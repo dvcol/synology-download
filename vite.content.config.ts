@@ -12,7 +12,6 @@ export default defineConfig(() => ({
     'import.meta.env.PKG_NAME': JSON.stringify(pkg.name),
     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'production'),
     'process.env.DEBUG': JSON.stringify(process.env.DEBUG || 'false'),
-    'process.env.DEVTOOL': JSON.stringify(process.env.DEVTOOL || 'false'),
   },
   plugins: [
     react({ jsxRuntime: 'classic', fastRefresh: false }),
