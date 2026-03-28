@@ -1,18 +1,13 @@
-import type { CaseReducer, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
 import type { ContextMenu, QuickMenu } from '../../models/menu.model';
 import type {
-  AdvancedLogging,
   AdvancedSettings,
-  ConnectionSettings,
   ContentSettings,
   DownloadSettings,
-  DownloadsIntercept,
-  GlobalSettings,
   NotificationSettings,
   PollingSettings,
   ScrapeSettings,
-  SyncSettings,
   TaskSettings,
 } from '../../models/settings.model';
 import type { SettingsSlice } from '../../models/store.model';
@@ -36,37 +31,7 @@ import {
   syncReducer,
 } from '../reducers/settings.reducer';
 
-interface SettingsReducers<S = SettingsSlice> extends SliceCaseReducers<S> {
-  setSettings: CaseReducer<S, PayloadAction<S>>;
-  syncSettings: CaseReducer<S, PayloadAction<Partial<S>>>;
-  resetSettings: CaseReducer<S>;
-  syncConnection: CaseReducer<S, PayloadAction<Partial<ConnectionSettings>>>;
-  syncPolling: CaseReducer<S, PayloadAction<Partial<PollingSettings>>>;
-  syncNotifications: CaseReducer<S, PayloadAction<Partial<NotificationSettings>>>;
-  setContextMenus: CaseReducer<S, PayloadAction<ContextMenu[]>>;
-  saveContextMenu: CaseReducer<S, PayloadAction<ContextMenu>>;
-  removeContextMenu: CaseReducer<S, PayloadAction<string>>;
-  resetContextMenu: CaseReducer<S>;
-  setContentTabs: CaseReducer<S, PayloadAction<ContentTab[]>>;
-  saveContentTab: CaseReducer<S, PayloadAction<ContentTab>>;
-  removeContentTab: CaseReducer<S, PayloadAction<string>>;
-  resetContentTabs: CaseReducer<S>;
-  setQuickMenus: CaseReducer<S, PayloadAction<QuickMenu[]>>;
-  saveQuickMenu: CaseReducer<S, PayloadAction<QuickMenu>>;
-  removeQuickMenu: CaseReducer<S, PayloadAction<string>>;
-  resetQuickMenus: CaseReducer<S>;
-  syncInterface: CaseReducer<S, PayloadAction<Partial<GlobalSettings>>>;
-  syncDownloads: CaseReducer<S, PayloadAction<Partial<DownloadSettings>>>;
-  syncDownloadsIntercept: CaseReducer<S, PayloadAction<DownloadsIntercept>>;
-  syncAdvanced: CaseReducer<S, PayloadAction<AdvancedSettings>>;
-  syncAdvancedLogging: CaseReducer<S, PayloadAction<AdvancedLogging>>;
-  setSyncSettings: CaseReducer<S, PayloadAction<Partial<SyncSettings>>>;
-  syncTasksSettings: CaseReducer<S, PayloadAction<TaskSettings>>;
-  syncScrapeSettings: CaseReducer<S, PayloadAction<Partial<ScrapeSettings>>>;
-  syncContentSettings: CaseReducer<S, PayloadAction<Partial<ContentSettings>>>;
-}
-
-export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'settings'>({
+export const settingsSlice = createSlice({
   name: SettingsSliceName,
   initialState: defaultSettings,
   reducers: {
@@ -74,16 +39,16 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
     syncSettings: syncReducer,
     resetSettings: oldSettings => syncReducer(oldSettings, { type: 'sync', payload: defaultSettings }),
     syncConnection: syncConnectionReducer,
-    syncPolling: (oldSettings, { payload }) => syncNestedReducer<PollingSettings>(oldSettings, payload, 'polling'),
-    syncNotifications: (oldSettings, action) => setBadgeReducer(oldSettings, action),
-    setContextMenus: (oldSettings, { payload: menus }): SettingsSlice =>
+    syncPolling: (oldSettings, { payload }: PayloadAction<Partial<PollingSettings>>) => syncNestedReducer<PollingSettings>(oldSettings, payload, 'polling'),
+    syncNotifications: (oldSettings, action: PayloadAction<Partial<NotificationSettings>>) => setBadgeReducer(oldSettings, action),
+    setContextMenus: (oldSettings, { payload: menus }: PayloadAction<ContextMenu[]>): SettingsSlice =>
       syncReducer(oldSettings, {
         type: 'sync',
         payload: { menus },
       }),
-    saveContextMenu: (oldSettings, { payload }): SettingsSlice =>
+    saveContextMenu: (oldSettings, { payload }: PayloadAction<ContextMenu>): SettingsSlice =>
       addTo<ContextMenu, 'menus'>(oldSettings, payload, 'menus', o => o.id === payload?.id),
-    removeContextMenu: (oldSettings, { payload }): SettingsSlice | void => {
+    removeContextMenu: (oldSettings, { payload }: PayloadAction<string>): SettingsSlice | void => {
       if (oldSettings.menus?.length) {
         return removeFrom<ContextMenu, 'menus'>(oldSettings, 'menus', o => o.id !== payload);
       }
@@ -93,38 +58,38 @@ export const settingsSlice = createSlice<SettingsSlice, SettingsReducers, 'setti
         type: 'sync',
         payload: { menus: defaultSettings.menus },
       }),
-    setContentTabs: (oldSettings, { payload: tabs }): SettingsSlice =>
+    setContentTabs: (oldSettings, { payload: tabs }: PayloadAction<ContentTab[]>): SettingsSlice =>
       syncReducer(oldSettings, {
         type: 'sync',
         payload: { tabs },
       }),
-    saveContentTab: (oldSettings, { payload }): SettingsSlice => addTo<ContentTab, 'tabs'>(oldSettings, payload, 'tabs', o => o.id === payload.id),
-    removeContentTab: (oldSettings, { payload }): SettingsSlice => removeFrom<ContentTab, 'tabs'>(oldSettings, 'tabs', o => o.id !== payload),
+    saveContentTab: (oldSettings, { payload }: PayloadAction<ContentTab>): SettingsSlice => addTo<ContentTab, 'tabs'>(oldSettings, payload, 'tabs', o => o.id === payload.id),
+    removeContentTab: (oldSettings, { payload }: PayloadAction<string>): SettingsSlice => removeFrom<ContentTab, 'tabs'>(oldSettings, 'tabs', o => o.id !== payload),
     resetContentTabs: (oldSettings): SettingsSlice =>
       syncReducer(oldSettings, {
         type: 'sync',
         payload: { tabs: defaultSettings.tabs },
       }),
-    setQuickMenus: (oldSettings, { payload: quick }): SettingsSlice =>
+    setQuickMenus: (oldSettings, { payload: quick }: PayloadAction<QuickMenu[]>): SettingsSlice =>
       syncReducer(oldSettings, {
         type: 'sync',
         payload: { quick },
       }),
-    saveQuickMenu: (oldSettings, { payload }): SettingsSlice => addTo<QuickMenu, 'quick'>(oldSettings, payload, 'quick', o => o.id === payload?.id),
-    removeQuickMenu: (oldSettings, { payload }): SettingsSlice => removeFrom<QuickMenu, 'quick'>(oldSettings, 'quick', o => o.id !== payload),
+    saveQuickMenu: (oldSettings, { payload }: PayloadAction<QuickMenu>): SettingsSlice => addTo<QuickMenu, 'quick'>(oldSettings, payload, 'quick', o => o.id === payload?.id),
+    removeQuickMenu: (oldSettings, { payload }: PayloadAction<string>): SettingsSlice => removeFrom<QuickMenu, 'quick'>(oldSettings, 'quick', o => o.id !== payload),
     resetQuickMenus: (oldSettings): SettingsSlice =>
       syncReducer(oldSettings, {
         type: 'sync',
         payload: { quick: defaultSettings.quick },
       }),
     syncInterface: syncInterfaceReducer,
-    syncDownloads: (oldSettings, { payload }) => syncNestedReducer<DownloadSettings>(oldSettings, payload, 'downloads'),
+    syncDownloads: (oldSettings, { payload }: PayloadAction<Partial<DownloadSettings>>) => syncNestedReducer<DownloadSettings>(oldSettings, payload, 'downloads'),
     syncDownloadsIntercept: syncInterceptReducer,
-    syncAdvanced: (oldSettings, { payload }) => syncNestedReducer<AdvancedSettings>(oldSettings, payload, 'advanced'),
+    syncAdvanced: (oldSettings, { payload }: PayloadAction<AdvancedSettings>) => syncNestedReducer<AdvancedSettings>(oldSettings, payload, 'advanced'),
     syncAdvancedLogging: syncAdvancedLoggingReducer,
     setSyncSettings: setSyncSettingsReducer,
-    syncTasksSettings: (oldSettings, { payload }) => syncNestedReducer<TaskSettings>(oldSettings, payload, 'tasks'),
-    syncScrapeSettings: (oldSettings, { payload }) => syncNestedReducer<ScrapeSettings>(oldSettings, payload, 'scrape'),
-    syncContentSettings: (oldSettings, { payload }) => syncNestedReducer<ContentSettings>(oldSettings, payload, 'content'),
+    syncTasksSettings: (oldSettings, { payload }: PayloadAction<TaskSettings>) => syncNestedReducer<TaskSettings>(oldSettings, payload, 'tasks'),
+    syncScrapeSettings: (oldSettings, { payload }: PayloadAction<Partial<ScrapeSettings>>) => syncNestedReducer<ScrapeSettings>(oldSettings, payload, 'scrape'),
+    syncContentSettings: (oldSettings, { payload }: PayloadAction<Partial<ContentSettings>>) => syncNestedReducer<ContentSettings>(oldSettings, payload, 'content'),
   },
 });

@@ -4,7 +4,6 @@ import type { ContentCount } from '../../models/content.model';
 import type { Log } from '../../models/settings.model';
 import type { StateSlice } from '../../models/store.model';
 import type { TaskStatistics } from '../../models/task.model';
-import type { StateReducers } from '../slices/state.slice';
 
 import { LoggerService } from '../../services/logger/logger.service';
 import { setBadgeText, setIcon, setTitle } from '../../utils/chrome/chrome.utils';
@@ -36,7 +35,7 @@ export async function setCountAndStats(count?: ContentCount, stats?: TaskStatist
   return Promise.all([setBadgeText({ text }).then(), setTitle({ title }).then()]);
 }
 
-export const setBadgeReducer: StateReducers['setBadge'] = (state, { payload: { count, stats } }) => {
+export const setBadgeReducer: CaseReducer<StateSlice, PayloadAction<StateSlice['badge']>> = (state, { payload: { count, stats } }) => {
   void setCountAndStats(count, stats);
   return { ...state, count };
 };
@@ -49,7 +48,7 @@ export function syncStateReducer(state: StateSlice): StateSlice {
   return state;
 }
 
-export const syncLoggedReducer: StateReducers['setLogged'] = (state, { payload: logged }) => {
+export const syncLoggedReducer: CaseReducer<StateSlice, PayloadAction<boolean>> = (state, { payload: logged }) => {
   if (state.logged !== logged) {
     const icon = `icon${logged ? '' : '-disabled'}`;
     void setIcon({
@@ -77,6 +76,6 @@ export const syncLogHistoryReducer: CaseReducer<StateSlice, PayloadAction<Log[]>
   return syncStateReducer({ ...state, history: { ...state.history, logs: logs?.slice(0, 10000) ?? [] } });
 };
 
-export const syncDownloadStateReducer: StateReducers['syncDownloadState'] = (state, { payload: download }) => {
+export const syncDownloadStateReducer: CaseReducer<StateSlice, PayloadAction<StateSlice['download']>> = (state, { payload: download }) => {
   return syncStateReducer({ ...state, download });
 };

@@ -4,7 +4,6 @@ import { settingsSlice } from '../slices/settings.slice';
 const {
   setSettings,
   syncSettings,
-  syncDeviceId,
   syncConnection,
   syncPolling,
   syncNotifications,
@@ -53,7 +52,6 @@ export {
   syncAdvancedLogging,
   syncConnection,
   syncContentSettings,
-  syncDeviceId,
   syncDownloads,
   syncDownloadsIntercept,
   syncInterface,

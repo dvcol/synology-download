@@ -1,4 +1,4 @@
-import type { CaseReducer, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
+import type { ActionCreatorWithoutPayload, PayloadAction, Reducer } from '@reduxjs/toolkit';
 
 import type { ScrapedContents, ScrapedPage } from '../../models/scraped-content.model';
 import type { ScrapedSlice } from '../../models/store.model';
@@ -7,25 +7,31 @@ import { createSlice } from '@reduxjs/toolkit';
 
 import { emptyContents } from '../../models/scraped-content.model';
 
-export interface ScrapedReducers<S = ScrapedSlice> extends SliceCaseReducers<S> {
-  setScrapedPage: CaseReducer<S, PayloadAction<ScrapedPage>>;
-  clearScrapedPage: CaseReducer<S>;
-  setScrapedContents: CaseReducer<S, PayloadAction<ScrapedContents>>;
-  clearScrapedContents: CaseReducer<S>;
-}
-
 const initialState: ScrapedSlice = {
   page: { title: '', origin: '', url: '' },
   contents: emptyContents,
 };
 
-export const scrapedSlice = createSlice<ScrapedSlice, ScrapedReducers, 'scraped'>({
+interface ScrapedSliceType {
+  name: 'scraped';
+  reducer: Reducer<ScrapedSlice>;
+  actions: {
+    setScrapedPage: (payload: ScrapedPage) => PayloadAction<ScrapedPage>;
+    clearScrapedPage: ActionCreatorWithoutPayload<'scraped/clearScrapedPage'>;
+    setScrapedContents: (payload: ScrapedContents) => PayloadAction<ScrapedContents>;
+    clearScrapedContents: ActionCreatorWithoutPayload<'scraped/clearScrapedContents'>;
+  };
+}
+
+// eslint-disable-next-line ts/no-unsafe-assignment -- ScrapedSlice contains DOM types incompatible with immer's WritableNonArrayDraft
+export const scrapedSlice: ScrapedSliceType = createSlice({
   name: 'scraped',
   initialState,
   reducers: {
-    setScrapedPage: (state, { payload }) => ({ ...state, page: payload }),
-    clearScrapedPage: state => ({ ...state, page: initialState.page }),
-    setScrapedContents: (state, { payload }) => ({ ...state, contents: payload }),
-    clearScrapedContents: state => ({ ...state, contents: initialState.contents }),
+    setScrapedPage: (_draft, { payload }: PayloadAction<ScrapedPage>): ScrapedSlice => ({ ...(_draft as ScrapedSlice), page: payload }),
+    clearScrapedPage: (_draft): ScrapedSlice => ({ ...(_draft as ScrapedSlice), page: initialState.page }),
+    setScrapedContents: (_draft, { payload }: PayloadAction<ScrapedContents>): ScrapedSlice => ({ ...(_draft as ScrapedSlice), contents: payload }),
+    clearScrapedContents: (_draft): ScrapedSlice => ({ ...(_draft as ScrapedSlice), contents: initialState.contents }),
   },
-});
+
+}) as any;

@@ -1,29 +1,23 @@
-import type { CaseReducer, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
 import type { Download } from '../../models/download.model';
 import type { DownloadsSlice } from '../../models/store.model';
 
 import { createSlice } from '@reduxjs/toolkit';
 
-export interface DownloadsReducers<S = DownloadsSlice> extends SliceCaseReducers<S> {
-  setDownloads: CaseReducer<S, PayloadAction<Download[]>>;
-  spliceDownloads: CaseReducer<S, PayloadAction<Download['id'] | Download['id'][]>>;
-  resetDownloads: CaseReducer<S>;
-}
-
 const initialState: DownloadsSlice = {
   entities: [],
 };
 
-export const downloadsSlice = createSlice<DownloadsSlice, DownloadsReducers, 'downloads'>({
+export const downloadsSlice = createSlice({
   name: 'downloads',
   initialState,
   reducers: {
-    setDownloads: (state, { payload: entities }) => ({ ...state, entities }),
-    spliceDownloads: (state, { payload: ids }) => ({
+    setDownloads: (state, { payload: entities }: PayloadAction<Download[]>) => ({ ...state, entities }),
+    spliceDownloads: (state, { payload: ids }: PayloadAction<Download['id'] | Download['id'][]>) => ({
       ...state,
       entities: state.entities?.filter(e => (Array.isArray(ids) ? !ids.includes(e.id) : e.id !== ids)),
     }),
     resetDownloads: () => initialState,
-  } as DownloadsReducers,
+  },
 });

@@ -1,27 +1,11 @@
-import type { CaseReducer, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
 import type { TasksSlice } from '../../models/store.model';
-import type { Task, TaskComplete, TaskFile, TaskForm, TaskStatistics } from '../../models/task.model';
+import type { Task, TaskComplete, TaskFile, TaskForm } from '../../models/task.model';
 
 import { createSlice } from '@reduxjs/toolkit';
 
 import { setTasksStatsReducer, syncTaskReducer } from '../reducers/tasks.reducer';
-
-export interface TasksReducers<S = TasksSlice> extends SliceCaseReducers<S> {
-  restoreTasks: CaseReducer<S, PayloadAction<Partial<S>>>;
-  addStopping: CaseReducer<S, PayloadAction<TaskComplete>>;
-  removeStopping: CaseReducer<S, PayloadAction<TaskComplete['taskId'] | TaskComplete['taskId'][]>>;
-  resetStopping: CaseReducer<S>;
-  setTasks: CaseReducer<S, PayloadAction<Task[]>>;
-  addTasks: CaseReducer<S, PayloadAction<Task[]>>;
-  spliceTasks: CaseReducer<S, PayloadAction<Task['id'] | Task['id'][]>>;
-  setTaskStats: CaseReducer<S, PayloadAction<TaskStatistics>>;
-  resetTasks: CaseReducer<S>;
-  resetFiles: CaseReducer<S>;
-  setFiles: CaseReducer<S, PayloadAction<{ taskId: string; files: TaskFile[] }>>;
-  setTaskForm: CaseReducer<S, PayloadAction<TaskForm>>;
-  clearTaskForm: CaseReducer<S>;
-}
 
 const initialState: TasksSlice = {
   taskForm: {},
@@ -33,25 +17,25 @@ const initialState: TasksSlice = {
   stats: undefined,
 };
 
-export const tasksSlice = createSlice<TasksSlice, TasksReducers, 'tasks'>({
+export const tasksSlice = createSlice({
   name: 'tasks',
   initialState,
   reducers: {
-    restoreTasks: (state, { payload }) => ({ ...state, ...payload }),
-    addStopping: (state, { payload: task }) => ({
+    restoreTasks: (state, { payload }: PayloadAction<Partial<TasksSlice>>) => ({ ...state, ...payload }),
+    addStopping: (state, { payload: task }: PayloadAction<TaskComplete>) => ({
       ...state,
       stopping: { ...state.stopping, [task.taskId]: task },
     }),
-    removeStopping: (state, { payload: ids }) => {
+    removeStopping: (state, { payload: ids }: PayloadAction<TaskComplete['taskId'] | TaskComplete['taskId'][]>) => {
       const _state = { ...state, stopping: { ...state.stopping } };
       const _ids = Array.isArray(ids) ? ids : [ids];
       _ids?.forEach(id => delete _state.stopping[id]);
       return _state;
     },
     resetStopping: state => ({ ...state, stopping: initialState.stopping }),
-    addTasks: (state, { payload, type }) => syncTaskReducer(state, { payload: [...Object.values(state.tasks), ...payload], type }),
+    addTasks: (state, { payload, type }: PayloadAction<Task[]>) => syncTaskReducer(state, { payload: [...Object.values(state.tasks), ...payload], type }),
     setTasks: syncTaskReducer,
-    spliceTasks: (state, { payload: ids }) => {
+    spliceTasks: (state, { payload: ids }: PayloadAction<Task['id'] | Task['id'][]>) => {
       const _ids = Array.isArray(ids) ? ids : [ids];
       const _state = { ...state, tasks: { ...state.tasks }, tasksIds: state.tasksIds?.filter(id => !ids.includes(id)) };
       _ids?.forEach(id => delete _state.tasks[id]);
@@ -59,9 +43,9 @@ export const tasksSlice = createSlice<TasksSlice, TasksReducers, 'tasks'>({
     },
     setTaskStats: setTasksStatsReducer,
     resetTasks: () => initialState,
-    setFiles: (state, { payload: { taskId, files } }) => ({ ...state, files: { ...state.files, [taskId]: files } }),
+    setFiles: (state, { payload: { taskId, files } }: PayloadAction<{ taskId: string; files: TaskFile[] }>) => ({ ...state, files: { ...state.files, [taskId]: files } }),
     resetFiles: state => ({ ...state, files: initialState.files, filesIds: initialState.filesIds }),
-    setTaskForm: (state, { payload }) => ({ ...state, taskForm: payload }),
+    setTaskForm: (state, { payload }: PayloadAction<TaskForm>) => ({ ...state, taskForm: payload }),
     clearTaskForm: state => ({ ...state, taskForm: initialState.taskForm }),
   },
 });
