@@ -22,7 +22,6 @@ function getInput(hmr: boolean, _isWeb: boolean): Record<string, string> {
   }
   return {
     background: resolveParent('src/pages/background/index.ts'),
-    contentScript: resolveParent('src/pages/content/index.ts'),
     options: resolveParent('src/pages/options/index.html'),
     popup: resolveParent('src/pages/popup/index.html'),
     panel: resolveParent('src/pages/panel/index.html'),
@@ -110,81 +109,21 @@ function getPlugins(_isDev: boolean, _isWeb: boolean): PluginOption[] {
         handler: html => html,
       },
       generateBundle(_, bundle) {
-        if (_isWeb) return;
         for (const [key, chunk] of Object.entries(bundle)) {
           if (chunk.type === 'asset' && key.startsWith('pages/') && key.endsWith('.html')) {
-            // pages/popup/index.html -> popup.html
-            const pageName = key.split('/')[1];
-            chunk.fileName = `${pageName}.html`;
+            if (_isWeb) {
+              // pages/web/index.html -> index.html
+              chunk.fileName = 'index.html';
+            } else {
+              // pages/popup/index.html -> popup.html
+              const pageName = key.split('/')[1];
+              chunk.fileName = `${pageName}.html`;
+            }
           }
         }
       },
     },
   ];
-
-  if (!_isWeb) {
-    plugins.push({
-      name: 'content-script-iife',
-      enforce: 'post',
-      apply: 'build',
-      generateBundle(_, bundle) {
-        const entry = Object.values(bundle).find(
-          c => c.type === 'chunk' && c.isEntry && c.name === 'contentScript',
-        );
-        if (!entry || entry.type !== 'chunk') return;
-
-        // Collect all chunks this entry imports (recursively, topological order)
-        const visited = new Set<string>();
-        const ordered: string[] = [];
-        const collect = (fileName: string) => {
-          if (visited.has(fileName)) return;
-          visited.add(fileName);
-          const chunk = bundle[fileName];
-          if (!chunk || chunk.type !== 'chunk') return;
-          for (const imp of chunk.imports) collect(imp);
-          ordered.push(fileName);
-        };
-        for (const imp of entry.imports) collect(imp);
-
-        // Find which chunks are also used by other entries (don't delete those)
-        const sharedChunks = new Set<string>();
-        for (const chunk of Object.values(bundle)) {
-          if (chunk.type !== 'chunk') continue;
-          if (chunk.fileName === entry.fileName) continue;
-          for (const imp of chunk.imports) {
-            if (visited.has(imp)) sharedChunks.add(imp);
-          }
-        }
-
-        // Concatenate: chunks first (in dependency order), then entry code (stripped of imports)
-        const parts: string[] = [];
-        for (const fileName of ordered) {
-          const chunk = bundle[fileName];
-          if (!chunk || chunk.type !== 'chunk') continue;
-          // Strip export statements — the entry will access vars directly
-          let code = chunk.code;
-          // Remove export { ... } declarations
-          code = code.replace(/^export\s*\{[^}]*\};\s*$/gm, '');
-          parts.push(`/* chunk: ${fileName} */\n${code}`);
-
-          // Delete chunk if not shared with other entries
-          if (!sharedChunks.has(fileName)) {
-            delete bundle[fileName];
-          }
-        }
-
-        // Strip import declarations from entry code
-        let entryCode = entry.code;
-        entryCode = entryCode.replace(/^import\s.*from\s*["'][^"']+["'];?\s*$/gm, '');
-        entryCode = entryCode.replace(/^import\s*["'][^"']+["'];?\s*$/gm, '');
-        parts.push(`/* entry: contentScript */\n${entryCode}`);
-
-        // Wrap in IIFE
-        entry.code = `(function(){\n${parts.join('\n')}\n})();\n`;
-        entry.imports = [];
-      },
-    });
-  }
 
   if (_isDev && !_isWeb) {
     plugins.push({
@@ -230,6 +169,7 @@ export default defineConfig(() => ({
   },
   build: {
     outDir: resolveParent(outDir),
+    emptyOutDir: false,
     sourcemap: (isDev || sourcemap) ? 'inline' : false,
     minify: !isDev && isWeb,
     rollupOptions: {
@@ -238,7 +178,7 @@ export default defineConfig(() => ({
         minifyInternalExports: false,
         chunkFileNames: 'chunks/[name]-[hash].chunk.js',
         entryFileNames: (entry) => {
-          if (entry.name === 'background' || entry.name === 'contentScript') return 'scripts/[name].js';
+          if (entry.name === 'background') return 'scripts/[name].js';
           if (entry.name === 'index') return 'entry/index.js';
           if (entry.name === 'main') return 'entry/main.js';
           return 'scripts/[name]-[hash].js';

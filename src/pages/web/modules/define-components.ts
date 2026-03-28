@@ -1,5 +1,7 @@
 import type { PatchOptions } from '../models';
 
+import { StandaloneAppWc } from '../../../components/web/standalone-app-wc';
+import { ContentAppWc } from '../../content/components/content-app-wc';
 import { WebComponents } from '../models';
 import { patchApi } from './patch-api';
 
@@ -9,10 +11,8 @@ export async function defineComponents(options?: DefineComponentsOptions, _globa
   await patchApi({ patch: false, ...options });
 
   const components: Record<string, CustomElementConstructor> = {
-    // eslint-disable-next-line ts/no-require-imports,ts/no-unsafe-member-access,ts/no-unsafe-assignment
-    [WebComponents.StandaloneApp]: require('../../../components/web/standalone-app-wc').StandaloneAppWc,
-    // eslint-disable-next-line ts/no-require-imports,ts/no-unsafe-member-access,ts/no-unsafe-assignment
-    [WebComponents.ContentApp]: require('../../content/components/content-app-wc').ContentAppWc,
+    [WebComponents.StandaloneApp]: StandaloneAppWc,
+    [WebComponents.ContentApp]: ContentAppWc,
   };
 
   Object.keys(options?.components ?? components)?.forEach((component) => {
