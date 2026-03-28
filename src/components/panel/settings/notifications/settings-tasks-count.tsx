@@ -1,19 +1,16 @@
-import type { UseFormGetValues, UseFormSetValue } from 'react-hook-form';
-import type { Control } from 'react-hook-form/dist/types/form';
-
 import type { NotificationsCount, NotificationSettings, Tab } from '@src/models';
+import type { Control, UseFormGetValues, UseFormSetValue } from 'react-hook-form';
 
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, Stack } from '@mui/material';
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
-
 import { ButtonWithConfirm, FormSwitch, FormTab } from '@src/components';
 import { defaultNotifications, NotificationHeader } from '@src/models';
 import { syncNotifications } from '@src/store/actions';
 import { getNotifications } from '@src/store/selectors';
 import { useI18n } from '@src/utils';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 
 export function SettingsTasksCount() {
   const i18n = useI18n('panel', 'settings', 'tasks_count');

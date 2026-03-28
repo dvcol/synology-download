@@ -1,18 +1,15 @@
 import type { MenuItemProps } from '@mui/material';
-import type { UseFormGetValues, UseFormSetValue } from 'react-hook-form';
-import type { Control } from 'react-hook-form/dist/types/form';
-
 import type { ContentTab, Tab } from '@src/models';
+import type { Control, UseFormGetValues, UseFormSetValue } from 'react-hook-form';
 
 import { AccordionDetails, Button, CardActions, CardHeader, MenuItem, Stack } from '@mui/material';
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
-
 import { FormInput, FormTab } from '@src/components';
 import { ColorLevel, ColorLevelMap, ContentTabSort, getColorFromLevel, getLevelFromColor } from '@src/models';
 import { removeContentTab, saveContentTab } from '@src/store/actions';
 import { useI18n } from '@src/utils';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 
 export function SettingsTab({ tab, onRemove }: { tab: ContentTab; onRemove: (id: ContentTab['id']) => Promise<void> }) {
   const i18n = useI18n('panel', 'settings', 'tab');

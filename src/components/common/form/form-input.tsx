@@ -1,14 +1,12 @@
 import type { SvgIconProps, TextFieldProps } from '@mui/material';
-import type { ControllerProps } from 'react-hook-form';
-import type { FieldPath, FieldValues } from 'react-hook-form/dist/types';
+import type { ControllerProps, FieldPath, FieldValues } from 'react-hook-form';
 
 import type { FormInputFileProps } from './form-input-file';
 
 import { Grid, TextField } from '@mui/material';
+import { ContainerContext } from '@src/store';
 import React, { useContext, useState } from 'react';
 import { Controller } from 'react-hook-form';
-
-import { ContainerContext } from '@src/store';
 
 import { FormInputFile } from './form-input-file';
 import { FormInputPassword } from './form-input-password';

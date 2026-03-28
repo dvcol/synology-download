@@ -1,12 +1,9 @@
-import type { ControllerProps } from 'react-hook-form';
-import type { FieldPath, FieldValues } from 'react-hook-form/dist/types';
-
 import type { ExplorerEvent, ExplorerProps } from '@src/components';
-
-import React from 'react';
-import { Controller } from 'react-hook-form';
+import type { ControllerProps, FieldPath, FieldValues } from 'react-hook-form';
 
 import { Explorer } from '@src/components';
+import React from 'react';
+import { Controller } from 'react-hook-form';
 
 interface FormExplorerProps<T extends FieldValues, N extends FieldPath<T>> {
   controllerProps: Omit<ControllerProps<T, N>, 'render'>;

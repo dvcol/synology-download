@@ -1,7 +1,6 @@
 import type { CheckboxProps, FormControlLabelProps } from '@mui/material';
 import type { DefaultComponentProps, OverridableTypeMap } from '@mui/material/OverridableComponent';
-import type { ControllerProps } from 'react-hook-form';
-import type { FieldPath, FieldValues } from 'react-hook-form/dist/types';
+import type { ControllerProps, FieldPath, FieldValues } from 'react-hook-form';
 
 import { Checkbox, FormControl, FormControlLabel, FormHelperText } from '@mui/material';
 import React from 'react';

@@ -7,12 +7,12 @@
     "useDefineForClassFields": true,
     "baseUrl": ".",
     "module": "ESNext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "paths": {
       "@src/*": ["./src/*"]
     },
     "resolveJsonModule": true,
-    "types": ["chrome", "@types/chrome"],
+    "types": ["chrome", "@types/chrome", "node"],
     "allowJs": false,
     "strict": true,
     "noFallthroughCasesInSwitch": true,
@@ -27,7 +27,7 @@
     "isolatedModules": true,
     "skipLibCheck": true
   },
-  "include": ["env.d.ts", "src/**/*"],
+  "include": ["env.d.ts", "src/**/*", "src/**/*.json"],
   "exclude": ["**/*.spec.ts", "**/*.spec.tsx", "**/*.test.ts", "**/*.test.tsx", "build", "dist", "node_modules"],
   "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo"
 }
