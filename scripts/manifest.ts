@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 
 import pkg from '../package.json';
-import { getDirName, isDev, outDir, port, resolveParent } from './utils';
+import { contentPort, getDirName, isDev, outDir, port, resolveParent } from './utils';
 
 const Endpoints = {
   Dev: 'http://localhost' as const,
@@ -14,7 +14,7 @@ function getExtensionPages(_dev: boolean, _port: number) {
 
 function getHostPermissions(_dev: boolean, _port: number) {
   const permissions: string[] = ['http://*/*', 'https://*/*'];
-  if (_dev) permissions.push(`${Endpoints.Dev}:${_port}/*`);
+  if (_dev) permissions.push(`${Endpoints.Dev}:${_port}/*`, `${Endpoints.Dev}:${contentPort}/*`);
   return permissions;
 }
 
@@ -64,7 +64,7 @@ export const manifest = {
   host_permissions: getHostPermissions(isDev, port),
   web_accessible_resources: [
     {
-      resources: ['*.html'],
+      resources: isDev ? ['*.html', '*preamble.js'] : ['*.html'],
       matches: ['<all_urls>'],
     },
   ],

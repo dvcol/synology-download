@@ -6,7 +6,7 @@ import fg from 'fast-glob';
 import fs from 'fs-extra';
 
 import { writeManifest } from './manifest';
-import { getDirName, isDev, isWeb, outDir, port, resolveParent } from './utils';
+import { contentPort, getDirName, isDev, isWeb, outDir, port, resolveParent } from './utils';
 
 /**
  * Merge i18n JSON files matching a glob pattern into a single output file.
@@ -71,6 +71,21 @@ function writeBackgroundStub() {
   console.info(`Stubbing background to '${getDirName()}/${outDir}/scripts/background.js'`);
 }
 
+/**
+ * Write a content script stub that lazy-loads from a dedicated vite dev server.
+ */
+function writeContentStub() {
+  const stub = `(async () => {
+  await import('./preamble.js');
+  await import('http://localhost:${contentPort}/@vite/client');
+  await import('http://localhost:${contentPort}/pages/content/index.ts');
+})();
+`;
+  fs.ensureDirSync(resolveParent(`${outDir}/scripts`));
+  fs.writeFileSync(resolveParent(`${outDir}/scripts/contentScript.js`), stub, 'utf-8');
+  console.info(`Stubbing content script to '${getDirName()}/${outDir}/scripts/contentScript.js'`);
+}
+
 async function copyAssets(_isDev: boolean) {
   const assetsSource = resolveParent('src/assets');
   const assetsDest = resolveParent(`${outDir}/assets`);
@@ -107,6 +122,7 @@ async function prepare(hmr = isDev && !isWeb) {
   console.info('Watching changes ...');
 
   writeBackgroundStub();
+  writeContentStub();
   writePreambleStub();
   copyViews().catch(e => console.error('Failed to copy html', e));
   watch(resolveParent('src/pages/*/index.html')).on('change', () => {
