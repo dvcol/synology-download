@@ -169,6 +169,7 @@ export default defineConfig(() => ({
     },
     setupFiles: [resolveParent('vitest.setup.ts')],
   },
+  cacheDir: resolveParent('node_modules/.vite'),
   optimizeDeps: {
     exclude: ['path', 'fast-glob'],
   },
