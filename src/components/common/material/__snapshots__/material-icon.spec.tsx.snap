@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`material-icon.tsx component Renders add icon: add 1`] = `
+exports[`material-icon.tsx component > renders  > add 1`] = `
 <DocumentFragment>
   <svg
     aria-hidden="true"
@@ -16,7 +16,7 @@ exports[`material-icon.tsx component Renders add icon: add 1`] = `
 </DocumentFragment>
 `;
 
-exports[`material-icon.tsx component Renders document icon: document 1`] = `
+exports[`material-icon.tsx component > renders  > document 1`] = `
 <DocumentFragment>
   <svg
     aria-hidden="true"
@@ -32,7 +32,7 @@ exports[`material-icon.tsx component Renders document icon: document 1`] = `
 </DocumentFragment>
 `;
 
-exports[`material-icon.tsx component Renders download icon: download 1`] = `
+exports[`material-icon.tsx component > renders  > download 1`] = `
 <DocumentFragment>
   <svg
     aria-hidden="true"
@@ -48,7 +48,7 @@ exports[`material-icon.tsx component Renders download icon: download 1`] = `
 </DocumentFragment>
 `;
 
-exports[`material-icon.tsx component Renders folder icon: folder 1`] = `
+exports[`material-icon.tsx component > renders  > folder 1`] = `
 <DocumentFragment>
   <svg
     aria-hidden="true"
@@ -64,7 +64,7 @@ exports[`material-icon.tsx component Renders folder icon: folder 1`] = `
 </DocumentFragment>
 `;
 
-exports[`material-icon.tsx component Renders game icon: game 1`] = `
+exports[`material-icon.tsx component > renders  > game 1`] = `
 <DocumentFragment>
   <svg
     aria-hidden="true"
@@ -80,7 +80,42 @@ exports[`material-icon.tsx component Renders game icon: game 1`] = `
 </DocumentFragment>
 `;
 
-exports[`material-icon.tsx component Renders music icon: music 1`] = `
+exports[`material-icon.tsx component > renders  > history 1`] = `
+<DocumentFragment>
+  <svg
+    aria-hidden="true"
+    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+    data-testid="HistoryIcon"
+    focusable="false"
+    viewBox="0 0 24 24"
+  >
+    <path
+      d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"
+    />
+  </svg>
+</DocumentFragment>
+`;
+
+exports[`material-icon.tsx component > renders  > historyAlt 1`] = `
+<DocumentFragment>
+  <svg
+    aria-hidden="true"
+    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+    data-testid="WorkHistoryIcon"
+    focusable="false"
+    viewBox="0 0 24 24"
+  >
+    <path
+      d="M18 11c1.49 0 2.87.47 4 1.26V8c0-1.11-.89-2-2-2h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h7.68c-.43-.91-.68-1.92-.68-3 0-3.87 3.13-7 7-7zm-8-7h4v2h-4V4z"
+    />
+    <path
+      d="M18 13c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm1.65 7.35L17.5 18.2V15h1v2.79l1.85 1.85-.7.71z"
+    />
+  </svg>
+</DocumentFragment>
+`;
+
+exports[`material-icon.tsx component > renders  > music 1`] = `
 <DocumentFragment>
   <svg
     aria-hidden="true"
@@ -96,7 +131,7 @@ exports[`material-icon.tsx component Renders music icon: music 1`] = `
 </DocumentFragment>
 `;
 
-exports[`material-icon.tsx component Renders musicLibrary icon: musicLibrary 1`] = `
+exports[`material-icon.tsx component > renders  > musicLibrary 1`] = `
 <DocumentFragment>
   <svg
     aria-hidden="true"
@@ -112,7 +147,7 @@ exports[`material-icon.tsx component Renders musicLibrary icon: musicLibrary 1`]
 </DocumentFragment>
 `;
 
-exports[`material-icon.tsx component Renders photo icon: photo 1`] = `
+exports[`material-icon.tsx component > renders  > photo 1`] = `
 <DocumentFragment>
   <svg
     aria-hidden="true"
@@ -128,7 +163,7 @@ exports[`material-icon.tsx component Renders photo icon: photo 1`] = `
 </DocumentFragment>
 `;
 
-exports[`material-icon.tsx component Renders photoLibrary icon: photoLibrary 1`] = `
+exports[`material-icon.tsx component > renders  > photoLibrary 1`] = `
 <DocumentFragment>
   <svg
     aria-hidden="true"
@@ -144,7 +179,7 @@ exports[`material-icon.tsx component Renders photoLibrary icon: photoLibrary 1`]
 </DocumentFragment>
 `;
 
-exports[`material-icon.tsx component Renders private icon: private 1`] = `
+exports[`material-icon.tsx component > renders  > private 1`] = `
 <DocumentFragment>
   <svg
     aria-hidden="true"
@@ -160,7 +195,7 @@ exports[`material-icon.tsx component Renders private icon: private 1`] = `
 </DocumentFragment>
 `;
 
-exports[`material-icon.tsx component Renders secure icon: secure 1`] = `
+exports[`material-icon.tsx component > renders  > secure 1`] = `
 <DocumentFragment>
   <svg
     aria-hidden="true"
@@ -176,7 +211,7 @@ exports[`material-icon.tsx component Renders secure icon: secure 1`] = `
 </DocumentFragment>
 `;
 
-exports[`material-icon.tsx component Renders server icon: server 1`] = `
+exports[`material-icon.tsx component > renders  > server 1`] = `
 <DocumentFragment>
   <svg
     aria-hidden="true"
@@ -192,7 +227,7 @@ exports[`material-icon.tsx component Renders server icon: server 1`] = `
 </DocumentFragment>
 `;
 
-exports[`material-icon.tsx component Renders video icon: video 1`] = `
+exports[`material-icon.tsx component > renders  > video 1`] = `
 <DocumentFragment>
   <svg
     aria-hidden="true"
@@ -208,7 +243,7 @@ exports[`material-icon.tsx component Renders video icon: video 1`] = `
 </DocumentFragment>
 `;
 
-exports[`material-icon.tsx component Renders videoLibrary icon: videoLibrary 1`] = `
+exports[`material-icon.tsx component > renders  > videoLibrary 1`] = `
 <DocumentFragment>
   <svg
     aria-hidden="true"
