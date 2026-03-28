@@ -1,4 +1,4 @@
-import type { FC, type SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { FC, SyntheticEvent } from 'react';
 import type { Observable } from 'rxjs';
 
 import type { File, FileList } from '../../../../models/file.model';
@@ -9,6 +9,7 @@ import FolderIcon from '@mui/icons-material/Folder';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import { Container } from '@mui/material';
 import { SimpleTreeView } from '@mui/x-tree-view';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { catchError, finalize, lastValueFrom, map, tap } from 'rxjs';
 
