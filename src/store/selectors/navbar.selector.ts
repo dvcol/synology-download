@@ -1,4 +1,4 @@
-import type { StoreState } from '@src/store';
+import type { StoreState } from '../store';
 
 import { createSelector } from '@reduxjs/toolkit';
 

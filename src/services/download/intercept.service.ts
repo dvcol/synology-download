@@ -1,13 +1,14 @@
-import type { Observable } from 'rxjs';
-
 import type { InterceptPayload, InterceptResponse, TaskCreateResponse, TaskForm } from '@src/models';
 import type { DownloadFilenameSuggestion, DownloadItem } from '@src/utils';
-
-import { switchMap, tap } from 'rxjs';
+import type { Observable } from 'rxjs';
 
 import { ChromeMessageType } from '@src/models';
-import { DownloadService, LoggerService, QueryService } from '@src/services';
 import { sendActiveTabMessage } from '@src/utils';
+import { switchMap, tap } from 'rxjs';
+
+import { LoggerService } from '../logger/logger.service';
+import { QueryService } from '../query/query.service';
+import { DownloadService } from './download.service';
 
 interface InterceptOptions { erase?: boolean; resume?: boolean }
 export class InterceptService {

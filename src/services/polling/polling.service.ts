@@ -1,12 +1,12 @@
 import type { ChromeNotification, StoreOrProxy } from '@src/models';
 
-import { combineLatest, distinctUntilChanged, Subject, switchMap, takeUntil, timer, withLatestFrom } from 'rxjs';
-
 import { ChromeMessageType, defaultPolling } from '@src/models';
-import { DownloadService, LoggerService } from '@src/services';
 import { getLogged, getPollingEnabled, getPollingInterval, getSettingsDownloadsEnabled } from '@src/store/selectors';
 import { onMessage, sendMessage, skipUntilRepeat, store$ } from '@src/utils';
+import { combineLatest, distinctUntilChanged, Subject, switchMap, takeUntil, timer, withLatestFrom } from 'rxjs';
 
+import { DownloadService } from '../download/download.service';
+import { LoggerService } from '../logger/logger.service';
 import { QueryService } from '../query';
 
 export class PollingService {

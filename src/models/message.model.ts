@@ -1,4 +1,3 @@
-import type { ScrapedContents, ScrapedPage } from '@src/models';
 import type { TaskDialogIntercept } from '@src/pages/content/service';
 import type { OnClickData } from '@src/utils';
 
@@ -6,6 +5,7 @@ import type { DownloadQueryPayload } from './download.model';
 import type { ContextMenu } from './menu.model';
 import type { ChromeNotification, SnackNotification } from './notification.model';
 import type { QueryAutoLoginOptions } from './query.model';
+import type { ScrapedContents, ScrapedPage } from './scraped-content.model';
 import type { SynologyQueryPayload } from './synology.model';
 import type { TaskForm } from './task.model';
 

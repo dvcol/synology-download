@@ -1,15 +1,14 @@
+import type { ChromeNotification, Download, NotificationServiceOptions, ServiceInstance, SnackMessage, SnackNotification, StateSlice, StoreOrProxy, Task } from '@src/models';
 import type { VariantType } from 'notistack';
 import type { Observable } from 'rxjs';
 
-import type { ChromeNotification, Download, NotificationServiceOptions, ServiceInstance, SnackMessage, SnackNotification, StateSlice, StoreOrProxy, Task } from '@src/models';
-
-import { filter, map, Subject, takeUntil, tap } from 'rxjs';
-
 import { ChromeMessageType, NotificationLevel, NotificationLevelKeys, NotificationType } from '@src/models';
-import { LoggerService } from '@src/services';
 import { setBadge } from '@src/store/actions';
 import { getNotificationsBannerEnabled, getNotificationsBannerLevel, getNotificationsSnack, getNotificationsSnackEnabled, getNotificationsSnackLevel, getStateBadge } from '@src/store/selectors';
 import { bufferDebounceUnless, createNotification, isMacOs, onMessage, parseMagnetLink, sendActiveTabMessage, sendMessage, store$, useI18n } from '@src/utils';
+import { filter, map, Subject, takeUntil, tap } from 'rxjs';
+
+import { LoggerService } from '../logger/logger.service';
 
 // eslint-disable-next-line react-hooks/rules-of-hooks
 const i18n = useI18n('common', 'notification');

@@ -1,14 +1,12 @@
-import type { Observable } from 'rxjs';
-
 import type { HttpResponse, SynologyQueryArgs, SynologyQueryOptions, SynologyQueryPayload } from '@src/models';
 import type { BaseHttpRequest, HttpHeaders } from '@src/utils';
-
-import { catchError, map, of } from 'rxjs';
+import type { Observable } from 'rxjs';
 
 import { AuthMethod, ChromeMessageType, Controller, CustomHeader, SynologyError } from '@src/models';
-import { LoggerService } from '@src/services';
 import { HttpMethod, onMessage, sendMessage, stringifyParams } from '@src/utils';
+import { catchError, map, of } from 'rxjs';
 
+import { LoggerService } from '../logger/logger.service';
 import { BaseHttpService } from './base-http.service';
 
 export class SynologyService extends BaseHttpService {
