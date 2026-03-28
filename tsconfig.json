@@ -1,30 +1,8 @@
 {
-  "compilerOptions": {
-    "target": "es2021",
-    "jsx": "react",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "experimentalDecorators": true,
-    "baseUrl": "src",
-    "module": "esnext",
-    "moduleResolution": "node",
-    "paths": {
-      "@src/*": ["*"]
-    },
-    "resolveJsonModule": true,
-    "allowJs": false,
-    "strict": true,
-    "noFallthroughCasesInSwitch": true,
-    "declaration": true,
-    "declarationDir": "dist/types",
-    "declarationMap": true,
-    "noEmit": false,
-    "outDir": "dist",
-    "sourceMap": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
-  },
-  "include": ["./src", "webpack", "test", ".eslintrc.js"],
-  "exclude": ["build", "node_modules"]
+  "references": [
+    { "path": "./tsconfig.vite.json" },
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.vitest.json" }
+  ],
+  "files": []
 }

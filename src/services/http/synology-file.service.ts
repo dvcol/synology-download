@@ -1,11 +1,11 @@
-import type { Observable } from 'rxjs';
-
 import type { FileList, FileListOption, FileSortBy, FolderList, FolderListOption, FolderSortBy, NewFolderList, SynologyFileStationInfo } from '@src/models';
 import type { HttpParameters } from '@src/utils';
+import type { Observable } from 'rxjs';
 
 import { Endpoint, FileMethod, FileStationAPI } from '@src/models';
-import { SynologyService } from '@src/services/http';
 import { HttpMethod } from '@src/utils';
+
+import { SynologyService } from './synology.service';
 
 export class SynologyFileService extends SynologyService {
   constructor(protected isProxy = false, protected name: string = 'SynologyFileService') {

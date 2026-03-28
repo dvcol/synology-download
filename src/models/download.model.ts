@@ -1,12 +1,13 @@
-import type { DownloadItem, DownloadQuery } from '@src/utils';
+import type { DownloadItem, DownloadQuery } from '@src/utils/chrome/chrome-download.utils';
 
 import type { Content } from './content.model';
 import type { TabCount } from './tab.model';
 
-import { ColorLevel } from '@src/models/material-ui.model';
-import { computeProgress, elapsedTime, formatTime } from '@src/utils';
+import { computeProgress, formatTime } from '@src/utils/format.utils';
+import { elapsedTime } from '@src/utils/webex.utils';
 
 import { ContentSource } from './content.model';
+import { ColorLevel } from './material-ui.model';
 
 export interface Download extends DownloadItem, Omit<Content, 'id'> {
   status: DownloadStatus;
