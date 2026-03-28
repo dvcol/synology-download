@@ -1,16 +1,21 @@
-import type { NotificationsCount, NotificationSettings, Tab } from '@src/models';
 import type { Control, UseFormGetValues, UseFormSetValue } from 'react-hook-form';
+
+import type { NotificationsCount, NotificationSettings } from '../../../../models/settings.model';
+import type { Tab } from '../../../../models/tab.model';
 
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, Stack } from '@mui/material';
-import { ButtonWithConfirm, FormSwitch, FormTab } from '@src/components';
-import { defaultNotifications, NotificationHeader } from '@src/models';
-import { syncNotifications } from '@src/store/actions';
-import { getNotifications } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { defaultNotifications, NotificationHeader } from '../../../../models/settings.model';
+import { syncNotifications } from '../../../../store/actions/settings.action';
+import { getNotifications } from '../../../../store/selectors/settings.selector';
+import { useI18n } from '../../../../utils/webex.utils';
+import { ButtonWithConfirm } from '../../../common/button/button-with-confirm';
+import { FormSwitch } from '../../../common/form/form-switch';
+import { FormTab } from '../../../common/form/form-tab';
 
 export function SettingsTasksCount() {
   const i18n = useI18n('panel', 'settings', 'tasks_count');

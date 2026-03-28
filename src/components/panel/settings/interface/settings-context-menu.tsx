@@ -1,14 +1,18 @@
-import type { ContextMenu } from '@src/models';
+import type { ContextMenu } from '../../../../models/menu.model';
 
 import { AccordionDetails, Button, Card, CardActions, CardHeader, Collapse, Stack } from '@mui/material';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
-import { FormExplorer, FormInput, FormSwitch } from '@src/components/common';
-import { ChromeMessageType } from '@src/models';
-import { removeContextMenu, saveContextMenu } from '@src/store/actions';
-import { openPanel, openPopup, sendMessage, useI18n } from '@src/utils';
+import { ChromeMessageType } from '../../../../models/message.model';
+import { removeContextMenu, saveContextMenu } from '../../../../store/actions/settings.action';
+import { sendMessage } from '../../../../utils/chrome/chrome-message.utils';
+import { openPanel, openPopup } from '../../../../utils/chrome/chrome.utils';
+import { useI18n } from '../../../../utils/webex.utils';
+import { FormExplorer } from '../../../common/form/form-explorer';
+import { FormInput } from '../../../common/form/form-input';
+import { FormSwitch } from '../../../common/form/form-switch';
 
 export function SettingsContextMenu({ menu, onRemove }: { menu: ContextMenu; onRemove: (id: ContextMenu['id']) => Promise<void> }) {
   const i18n = useI18n('panel', 'settings', 'context_menu');

@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { SettingHeader } from '@src/models';
-
+import { SettingHeader } from '../../../../models/settings.model';
 import { SettingsHeader } from '../settings-header';
 import { SettingsChromeStorage } from './settings-chrome-storage';
 import { SettingsExport } from './settings-export';

@@ -2,13 +2,13 @@ import type { PortalProps } from '@mui/base/Portal';
 import type { DialogProps } from '@mui/material';
 import type { FC } from 'react';
 
-import type { TaskAddProps } from '@src/components';
-import type { TaskForm } from '@src/models';
+import type { TaskForm } from '../../../../models/task.model';
+import type { TaskAddProps } from './task-add';
 
 import { Dialog, DialogContent } from '@mui/material';
 import React, { useEffect } from 'react';
 
-import { TaskAdd } from '@src/components';
+import { TaskAdd } from './task-add';
 
 export const TaskDialog: FC<{
   container?: PortalProps['container'];

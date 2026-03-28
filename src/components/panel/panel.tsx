@@ -1,16 +1,17 @@
 import type { FC } from 'react';
 import type { PathRouteProps } from 'react-router-dom';
 
-import type { TaskForm } from '@src/models';
+import type { TaskForm } from '../../models/task.model';
 
 import { Container } from '@mui/material';
 import React, { lazy, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 
-import { ScrapePanel, SuspenseLoader } from '@src/components';
-import { AppRoute } from '@src/models';
-import { setNavbar } from '@src/store/actions';
+import { AppRoute } from '../../models/routes.model';
+import { setNavbar } from '../../store/actions/navbar.action';
+import { SuspenseLoader } from '../common/loader/suspense-loader';
+import { ScrapePanel } from './scrape/scrape-panel';
 
 const ContentPanel = lazy(async () => import(/* webpackChunkName: "ContentPanel" */ './content/content-panel'));
 const TaskAdd = lazy(async () => import(/* webpackChunkName: "TaskAdd" */ './content/task/task-add'));

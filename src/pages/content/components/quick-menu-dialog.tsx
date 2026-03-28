@@ -1,10 +1,13 @@
 import type { PopoverProps, PortalProps } from '@mui/material';
 import type { FC } from 'react';
 
-import type { InterceptPayload, InterceptResponse, OpenPanelPayload, OpenPopupPayload, QuickMenu, TaskForm, ThemeMode } from '@src/models';
-import type { TaskDialogIntercept } from '@src/pages/content/service/dialog.service';
-import type { StoreState } from '@src/store';
-import type { ChromeResponse } from '@src/utils';
+import type { QuickMenu } from '../../../models/menu.model';
+import type { InterceptPayload, InterceptResponse, OpenPanelPayload, OpenPopupPayload } from '../../../models/message.model';
+import type { ThemeMode } from '../../../models/settings.model';
+import type { TaskForm } from '../../../models/task.model';
+import type { StoreState } from '../../../store/store';
+import type { ChromeResponse } from '../../../utils/webex.utils';
+import type { TaskDialogIntercept } from '../service/dialog.service';
 
 import { zIndexMax } from '@dvcol/web-extension-utils';
 import PowerOffIcon from '@mui/icons-material/PowerOff';
@@ -13,14 +16,19 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { Subscription, withLatestFrom } from 'rxjs';
 
-import { ChromeMessageType, ColorLevel, QuickMenuType } from '@src/models';
-import { anchor$, lastClick$ } from '@src/pages/content/service/anchor.service';
-import { taskDialog$ } from '@src/pages/content/service/dialog.service';
-import { LoggerService, NotificationService, QueryService } from '@src/services';
-import { getDestinationsHistory, getFolderHistory, getLogged, getQuick, getThemeMode } from '@src/store/selectors';
-import { preferDark } from '@src/themes/media-query';
-import { onMessage, sendMessage, useI18n } from '@src/utils';
-
+import { ColorLevel } from '../../../models/material-ui.model';
+import { QuickMenuType } from '../../../models/menu.model';
+import { ChromeMessageType } from '../../../models/message.model';
+import { LoggerService } from '../../../services/logger/logger.service';
+import { NotificationService } from '../../../services/notification/notification.service';
+import { QueryService } from '../../../services/query/query.service';
+import { getQuick, getThemeMode } from '../../../store/selectors/settings.selector';
+import { getDestinationsHistory, getFolderHistory, getLogged } from '../../../store/selectors/state.selector';
+import { preferDark } from '../../../themes/media-query';
+import { onMessage, sendMessage } from '../../../utils/chrome/chrome-message.utils';
+import { useI18n } from '../../../utils/webex.utils';
+import { anchor$, lastClick$ } from '../service/anchor.service';
+import { taskDialog$ } from '../service/dialog.service';
 import { QuickMenuRecent } from './quick-menu-recent';
 
 export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ container }) => {

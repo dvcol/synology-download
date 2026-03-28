@@ -3,8 +3,7 @@ import type { DownloadStationStatistic } from './download-station.model';
 import type { TaskPriority } from './synology.model';
 import type { TabCount } from './tab.model';
 
-import { computeProgress, formatTime } from '@src/utils/format.utils';
-
+import { computeProgress, formatTime } from '../utils/format.utils';
 import { ContentSource } from './content.model';
 import { ColorLevel } from './material-ui.model';
 

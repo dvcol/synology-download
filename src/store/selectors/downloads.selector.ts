@@ -1,10 +1,11 @@
-import type { Content, ContentStatusTypeId, Download } from '@src/models';
-
+import type { Content, ContentStatusTypeId } from '../../models/content.model';
+import type { Download } from '../../models/download.model';
 import type { StoreState } from '../store';
 
 import { createSelector } from '@reduxjs/toolkit';
 
-import { ContentSource, ContentStatusType, DownloadStatus } from '@src/models';
+import { ContentSource, ContentStatusType } from '../../models/content.model';
+import { DownloadStatus } from '../../models/download.model';
 
 export const getDownloads: (state: StoreState) => StoreState['downloads']['entities'] = createSelector(
   (state: StoreState) => state,

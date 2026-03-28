@@ -1,4 +1,4 @@
-import type { File, FileAdditional } from '@src/models';
+import type { File, FileAdditional } from '../../../models/file.model';
 
 import { FetchIntercept } from '../models';
 import { AbstractMock, resolveUrl } from './utils.mock';

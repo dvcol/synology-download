@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-vi.mock('@src/store/store-proxy', () => ({ storeProxy: null }));
+vi.mock('./src/store/store-proxy', () => ({ storeProxy: null }));
 
 // eslint-disable-next-line ts/no-unsafe-assignment -- chrome mock for tests
 globalThis.chrome = {

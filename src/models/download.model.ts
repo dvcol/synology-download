@@ -1,11 +1,9 @@
-import type { DownloadItem, DownloadQuery } from '@src/utils/chrome/chrome-download.utils';
-
+import type { DownloadItem, DownloadQuery } from '../utils/chrome/chrome-download.utils';
 import type { Content } from './content.model';
 import type { TabCount } from './tab.model';
 
-import { computeProgress, formatTime } from '@src/utils/format.utils';
-import { elapsedTime } from '@src/utils/webex.utils';
-
+import { computeProgress, formatTime } from '../utils/format.utils';
+import { elapsedTime } from '../utils/webex.utils';
 import { ContentSource } from './content.model';
 import { ColorLevel } from './material-ui.model';
 

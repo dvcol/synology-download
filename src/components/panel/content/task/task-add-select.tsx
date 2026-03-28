@@ -1,7 +1,8 @@
 import type { FC } from 'react';
 import type { Subscription } from 'rxjs';
 
-import type { FormRules, TaskListDownloadRequest, TaskListResponse } from '@src/models';
+import type { FormRules } from '../../../../models/form.model';
+import type { TaskListDownloadRequest, TaskListResponse } from '../../../../models/synology.model';
 
 import SaveIcon from '@mui/icons-material/Save';
 import { Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, FormHelperText, LinearProgress, List, ListItem, ListItemButton, ListItemText, Stack, Typography } from '@mui/material';
@@ -9,10 +10,14 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { finalize, lastValueFrom } from 'rxjs';
 
-import { FormCheckbox, IconLoader } from '@src/components';
-import { LoggerService, NotificationService, QueryService } from '@src/services';
-import { ContainerContext } from '@src/store';
-import { before, useI18n } from '@src/utils';
+import { LoggerService } from '../../../../services/logger/logger.service';
+import { NotificationService } from '../../../../services/notification/notification.service';
+import { QueryService } from '../../../../services/query/query.service';
+import { ContainerContext } from '../../../../store/context/container.context';
+import { before } from '../../../../utils/rxjs.utils';
+import { useI18n } from '../../../../utils/webex.utils';
+import { FormCheckbox } from '../../../common/form/form-checkbox';
+import { IconLoader } from '../../../common/loader/icon-loader';
 
 interface TaskAddSelectProp {
   open: boolean;

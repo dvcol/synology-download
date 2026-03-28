@@ -1,10 +1,11 @@
 import type { CaseReducer, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
 
-import type { ScrapedContents, ScrapedPage, ScrapedSlice } from '@src/models';
+import type { ScrapedContents, ScrapedPage } from '../../models/scraped-content.model';
+import type { ScrapedSlice } from '../../models/store.model';
 
 import { createSlice } from '@reduxjs/toolkit';
 
-import { emptyContents } from '@src/models';
+import { emptyContents } from '../../models/scraped-content.model';
 
 export interface ScrapedReducers<S = ScrapedSlice> extends SliceCaseReducers<S> {
   setScrapedPage: CaseReducer<S, PayloadAction<ScrapedPage>>;

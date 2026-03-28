@@ -2,17 +2,20 @@ import type { FC, ForwardRefRenderFunction } from 'react';
 import type { TransitionStatus } from 'react-transition-group';
 import type { CSSTransitionProps } from 'react-transition-group/CSSTransition';
 
-import type { TaskItemProps } from '@src/components';
-import type { ContentItemAccordionProps } from '@src/components/panel/content/content-item';
-import type { Content, Download, Task } from '@src/models';
+import type { Content } from '../../../models/content.model';
+import type { Download } from '../../../models/download.model';
+import type { Task } from '../../../models/task.model';
+import type { ContentItemAccordionProps } from './content-item';
+import type { TaskItemProps } from './task/task-item';
 
 import { styled } from '@mui/material';
 import React, { forwardRef, useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
-import { DownloadItem, TaskItem } from '@src/components';
-import { ContentSource } from '@src/models';
-import { slideDownAnimation, slideOutAnimation } from '@src/utils';
+import { ContentSource } from '../../../models/content.model';
+import { slideDownAnimation, slideOutAnimation } from '../../../utils/animations.utils';
+import { DownloadItem } from './downloads/download-item';
+import { TaskItem } from './task/task-item';
 
 interface ItemComponentProps {
   item: Content;

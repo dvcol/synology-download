@@ -1,4 +1,4 @@
-import { BaseLoggerService } from '@src/services';
+import { BaseLoggerService } from '../../../services/logger/base-logger.service';
 
 export function patchNotifications(_global = window) {
   _global.chrome.notifications.create = async (notificationId, options) => {

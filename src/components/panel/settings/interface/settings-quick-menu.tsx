@@ -1,14 +1,19 @@
-import type { QuickMenu } from '@src/models';
+import type { QuickMenu } from '../../../../models/menu.model';
 
 import { AccordionDetails, Box, Button, Card, CardActions, CardHeader, Collapse, ListItemIcon, ListItemText, MenuItem, Stack } from '@mui/material';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
-import { FormExplorer, FormInput, FormSwitch, MuiIcon } from '@src/components/common';
-import { MaterialIcon, MaterialIconMap, QuickMenuType } from '@src/models';
-import { removeQuickMenu, saveQuickMenu } from '@src/store/actions';
-import { openPanel, openPopup, useI18n } from '@src/utils';
+import { MaterialIcon, MaterialIconMap } from '../../../../models/material-ui.model';
+import { QuickMenuType } from '../../../../models/menu.model';
+import { removeQuickMenu, saveQuickMenu } from '../../../../store/actions/settings.action';
+import { openPanel, openPopup } from '../../../../utils/chrome/chrome.utils';
+import { useI18n } from '../../../../utils/webex.utils';
+import { FormExplorer } from '../../../common/form/form-explorer';
+import { FormInput } from '../../../common/form/form-input';
+import { FormSwitch } from '../../../common/form/form-switch';
+import { MuiIcon } from '../../../common/material/material-icon';
 
 export function SettingsQuickMenu({ menu, onRemove }: { menu: QuickMenu; onRemove: (id: QuickMenu['id']) => Promise<void> }) {
   const i18n = useI18n('panel', 'settings', 'quick_menu');

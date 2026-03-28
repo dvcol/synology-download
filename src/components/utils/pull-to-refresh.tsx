@@ -6,8 +6,7 @@ import type { State } from './use-pull-to-refresh';
 import { Box, CircularProgress, styled } from '@mui/material';
 import React, { forwardRef } from 'react';
 
-import { pullToRefresh } from '@src/utils';
-
+import { pullToRefresh } from '../../utils/animations.utils';
 import { animationSpeed } from './use-pull-to-refresh';
 
 type LoaderProps = { refreshed: boolean; height: number; top?: number } & State & Omit<BoxProps, 'height'>;

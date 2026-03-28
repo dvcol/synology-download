@@ -1,4 +1,4 @@
-import { BaseLoggerService } from '@src/services';
+import { BaseLoggerService } from '../../../services/logger/base-logger.service';
 
 export interface BadgeMock {
   text?: string;

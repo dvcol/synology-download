@@ -1,9 +1,15 @@
 import type { CaseReducer, PayloadAction } from '@reduxjs/toolkit';
-import type { AdvancedLogging, AdvancedSettings, ConnectionSettings, ContentTab, ContextMenu, DownloadSettings, DownloadsIntercept, GlobalSettings, NotificationSettings, QuickMenu, SettingsSlice, SyncSettings } from '@src/models';
 
-import { defaultAdvancedLogging, defaultAdvancedSettings, defaultConnection, defaultDownloads, SettingsSliceName, SyncSettingMode } from '@src/models';
-import { LoggerService } from '@src/services/logger/logger.service';
-import { localSet, setBadgeBackgroundColor, syncSet } from '@src/utils';
+import type { ContextMenu, QuickMenu } from '../../models/menu.model';
+import type { AdvancedLogging, AdvancedSettings, ConnectionSettings, DownloadSettings, DownloadsIntercept, GlobalSettings, NotificationSettings, SyncSettings } from '../../models/settings.model';
+import type { SettingsSlice } from '../../models/store.model';
+import type { ContentTab } from '../../models/tab.model';
+
+import { defaultAdvancedLogging, defaultAdvancedSettings, defaultConnection, defaultDownloads, SyncSettingMode } from '../../models/settings.model';
+import { SettingsSliceName } from '../../models/store.model';
+import { LoggerService } from '../../services/logger/logger.service';
+import { setBadgeBackgroundColor } from '../../utils/chrome/chrome.utils';
+import { localSet, syncSet } from '../../utils/webex.utils';
 
 function localSettings(settings: SettingsSlice): void {
   // TODO : move to thunk ?

@@ -1,10 +1,8 @@
-import type { SyncedTaskSlice } from '@src/models';
-
+import type { SyncedTaskSlice } from '../../models/store.model';
 import type { TasksReducers } from '../slices/tasks.slice';
 
-import { LoggerService } from '@src/services/logger/logger.service';
-import { localSet } from '@src/utils';
-
+import { LoggerService } from '../../services/logger/logger.service';
+import { localSet } from '../../utils/webex.utils';
 import { tasksSlice } from '../slices/tasks.slice';
 
 export const setTasksStatsReducer: TasksReducers['setTaskStats'] = (state, { payload: stats }) => ({ ...state, stats });

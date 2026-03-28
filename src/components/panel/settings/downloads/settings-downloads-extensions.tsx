@@ -1,14 +1,14 @@
 import type { FC } from 'react';
 
-import type { DownloadExtension } from '@src/models';
+import type { DownloadExtension } from '../../../../models/settings.model';
 
 import AddIcon from '@mui/icons-material/Add';
 import { Button, Grid } from '@mui/material';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-import { FormInput } from '@src/components';
-import { useI18n } from '@src/utils';
+import { useI18n } from '../../../../utils/webex.utils';
+import { FormInput } from '../../../common/form/form-input';
 
 const empty: DownloadExtension = { ext: '', mime: '' };
 

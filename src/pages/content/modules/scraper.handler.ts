@@ -1,10 +1,13 @@
-import type { ScrapedAudio, ScrapedContent, ScrapedContents, ScrapedContentsPayload, ScrapedImages, ScrapedLinks, ScrapedPage, ScrapedVideos } from '@src/models';
+import type { ScrapedContentsPayload } from '../../../models/message.model';
+import type { ScrapedAudio, ScrapedContent, ScrapedContents, ScrapedImages, ScrapedLinks, ScrapedPage, ScrapedVideos } from '../../../models/scraped-content.model';
 
 import { tap } from 'rxjs';
 
-import { ChromeMessageType, emptyContents } from '@src/models';
-import { LoggerService } from '@src/services';
-import { onMessage, parseSrc, sendMessage } from '@src/utils';
+import { ChromeMessageType } from '../../../models/message.model';
+import { emptyContents } from '../../../models/scraped-content.model';
+import { LoggerService } from '../../../services/logger/logger.service';
+import { onMessage, sendMessage } from '../../../utils/chrome/chrome-message.utils';
+import { parseSrc } from '../../../utils/string.utils';
 
 function addOrUpdate<T extends ScrapedContent>(map: Map<string, T>, scrapped: T) {
   const _previous: Partial<T> = map.get(scrapped.src) ?? {};

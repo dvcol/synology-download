@@ -1,5 +1,4 @@
-import { BaseLoggerService } from '@src/services';
-
+import { BaseLoggerService } from '../../../services/logger/base-logger.service';
 import { FetchIntercept } from '../models';
 
 export function patchFetch(_global = window) {

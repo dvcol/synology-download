@@ -1,13 +1,37 @@
-import type { CommonResponse, ContentStatusTypeId, Credentials, DownloadStationConfig, DownloadStationInfo, DownloadStationStatistic, FileList, FolderList, InfoResponse, LoginRequest, LoginResponse, NewFolderList, QueryAutoLoginOptions, StoreOrProxy, SynologyFileStationInfo, Task, TaskBtEditRequest, TaskComplete, TaskCompleteResponse, TaskCreateRequest, TaskCreateResponse, TaskEditResponse, TaskFileEditRequest, TaskList, TaskListDeleteResponse, TaskListDownloadRequest, TaskListDownloadResponse, TaskListFilesRequest, TaskListFilesResponse, TaskListResponse } from '@src/models';
 import type { Observable } from 'rxjs';
 
-import { ChromeMessageType, ConnectionType, FetchError, FileListOption, LoginError, mapToTask, NotReadyError, Order, ServiceInstance, TaskCreateType, TaskListFilesOrderBy, TaskListOption, TaskStatus, TaskType } from '@src/models';
-import { SynologyAuthService, SynologyDownload2Service, SynologyDownloadService, SynologyFileService, SynologyInfoService } from '@src/services/http';
-import { addDestinationHistory, addLoading, addStopping, removeLoading, removeStopping, resetStopping, setApi, setFiles, setLogged, setSid, setTasks, setTaskStats, spliceTasks } from '@src/store/actions';
-import { getActiveAndWaitingTasksIdsByActionScope, getApi, getCredentials, getDownloadStation2APITask, getFinishedAnErrorTasksIdsByActionScope, getFinishedTasksIdsByActionScope, getLogged, getNotificationsBannerFailedEnabled, getNotificationsBannerFinishedEnabled, getOption, getPausedTasksIdsByActionScope, getPopup, getShouldAutoLogin, getSid, getStoppingIds, getTasksIdsByActionScope, getTasksIdsByStatusType, getUrl } from '@src/store/selectors';
-import { before, sendMessage, store$, useI18n } from '@src/utils';
+import type { ContentStatusTypeId } from '../../models/content.model';
+import type { DownloadStationConfig, DownloadStationInfo, DownloadStationStatistic } from '../../models/download-station.model';
+import type { FileList } from '../../models/file.model';
+import type { FolderList, NewFolderList } from '../../models/folder.model';
+import type { QueryAutoLoginOptions } from '../../models/query.model';
+import type { Credentials } from '../../models/settings.model';
+import type { StoreOrProxy } from '../../models/store.model';
+import type { CommonResponse, InfoResponse, LoginRequest, LoginResponse, SynologyFileStationInfo, TaskBtEditRequest, TaskCompleteResponse, TaskCreateRequest, TaskCreateResponse, TaskEditResponse, TaskFileEditRequest, TaskListDeleteResponse, TaskListDownloadRequest, TaskListDownloadResponse, TaskListFilesRequest, TaskListFilesResponse, TaskListResponse } from '../../models/synology.model';
+import type { Task, TaskComplete, TaskList } from '../../models/task.model';
+
 import { catchError, EMPTY, exhaustMap, finalize, forkJoin, map, of, retry, Subject, switchMap, take, takeUntil, tap, throttleTime, throwError } from 'rxjs';
 
+import { FetchError, LoginError, NotReadyError } from '../../models/error.model';
+import { FileListOption } from '../../models/file.model';
+import { ChromeMessageType } from '../../models/message.model';
+import { ConnectionType, ServiceInstance } from '../../models/settings.model';
+import { Order, TaskCreateType, TaskListFilesOrderBy } from '../../models/synology.model';
+import { mapToTask, TaskListOption, TaskStatus, TaskType } from '../../models/task.model';
+import { addDestinationHistory, addLoading, removeLoading, setApi, setLogged, setSid } from '../../store/actions/state.action';
+import { addStopping, removeStopping, resetStopping, setFiles, setTasks, setTaskStats, spliceTasks } from '../../store/actions/tasks.action';
+import { getActiveAndWaitingTasksIdsByActionScope, getFinishedAnErrorTasksIdsByActionScope, getFinishedTasksIdsByActionScope, getPausedTasksIdsByActionScope, getTasksIdsByActionScope } from '../../store/selectors/composite.selector';
+import { getCredentials, getNotificationsBannerFailedEnabled, getNotificationsBannerFinishedEnabled, getShouldAutoLogin, getUrl } from '../../store/selectors/settings.selector';
+import { getApi, getDownloadStation2APITask, getLogged, getOption, getPopup, getSid } from '../../store/selectors/state.selector';
+import { getStoppingIds, getTasksIdsByStatusType } from '../../store/selectors/tasks.selector';
+import { sendMessage } from '../../utils/chrome/chrome-message.utils';
+import { before, store$ } from '../../utils/rxjs.utils';
+import { useI18n } from '../../utils/webex.utils';
+import { SynologyAuthService } from '../http/synology-auth.service';
+import { SynologyDownload2Service } from '../http/synology-download2.service';
+import { SynologyDownloadService } from '../http/synology-download.service';
+import { SynologyFileService } from '../http/synology-file.service';
+import { SynologyInfoService } from '../http/synology-info.service';
 import { LoggerService } from '../logger/logger.service';
 import { NotificationService } from '../notification/notification.service';
 

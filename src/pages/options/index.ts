@@ -1,7 +1,9 @@
-import { AppInstance, AppRoute, ServiceInstance } from '@src/models';
-import { initApp } from '@src/pages/common';
-import { LoggerService } from '@src/services';
-import { getOption } from '@src/store/selectors';
+import { AppInstance } from '../../models/app-instance.model';
+import { AppRoute } from '../../models/routes.model';
+import { ServiceInstance } from '../../models/settings.model';
+import { LoggerService } from '../../services/logger/logger.service';
+import { getOption } from '../../store/selectors/state.selector';
+import { initApp } from '../common/init-app';
 
 initApp(ServiceInstance.Option, AppInstance.option, getOption, AppRoute.Settings)
   .then(() => LoggerService.debug('Options app initialised.'))

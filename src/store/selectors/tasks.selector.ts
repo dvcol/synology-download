@@ -1,10 +1,12 @@
-import type { Content, ContentStatusTypeId, Task, TaskFile } from '@src/models';
-
+import type { Content, ContentStatusTypeId } from '../../models/content.model';
+import type { Task, TaskFile } from '../../models/task.model';
 import type { StoreState } from '../store';
 
 import { createSelector } from '@reduxjs/toolkit';
-import { ContentSource, ContentStatusType, TaskStatus } from '@src/models';
-import { LoggerService } from '@src/services/logger/logger.service';
+
+import { ContentSource, ContentStatusType } from '../../models/content.model';
+import { TaskStatus } from '../../models/task.model';
+import { LoggerService } from '../../services/logger/logger.service';
 
 export const getTasks: (state: StoreState) => StoreState['tasks']['tasks'] = createSelector(
   (state: StoreState) => state,

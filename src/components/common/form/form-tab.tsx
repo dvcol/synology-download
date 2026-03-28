@@ -1,14 +1,20 @@
-import type { ContentTab, Tab, TabStatus } from '@src/models';
 import type { UseFormReturn } from 'react-hook-form';
 
+import type { ContentTab, Tab, TabStatus } from '../../../models/tab.model';
+
 import { Button, Card, CardHeader, Collapse, Grid, MenuItem } from '@mui/material';
-import { FormExplorer, FormSwitch } from '@src/components';
-import { ColorLevel, defaultNotifications, DownloadStatus, getColorFromLevel, getLevelFromColor, TabTemplate, TaskStatus, templateTabs } from '@src/models';
-import { useI18n } from '@src/utils';
 import React from 'react';
 
+import { DownloadStatus } from '../../../models/download.model';
+import { ColorLevel, getColorFromLevel, getLevelFromColor } from '../../../models/material-ui.model';
+import { defaultNotifications } from '../../../models/settings.model';
+import { TabTemplate, templateTabs } from '../../../models/tab.model';
+import { TaskStatus } from '../../../models/task.model';
+import { useI18n } from '../../../utils/webex.utils';
 import { FormCheckbox } from './form-checkbox';
+import { FormExplorer } from './form-explorer';
 import { FormInput } from './form-input';
+import { FormSwitch } from './form-switch';
 
 export function FormTab({
   useFormProps: { control, getValues, setValue },

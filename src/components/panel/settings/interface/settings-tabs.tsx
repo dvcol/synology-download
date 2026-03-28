@@ -1,16 +1,17 @@
-import type { ContentTab } from '@src/models';
-import type { StoreState } from '@src/store';
+import type { ContentTab } from '../../../../models/tab.model';
+import type { StoreState } from '../../../../store/store';
 
 import { Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { InterfaceHeader, TaskStatus, templateTabs } from '@src/models';
-import { resetContentTabs, saveContentTab, setContentTabs } from '@src/store/actions';
-import { getTabs } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
-
-import { SettingsAccordion } from '../common';
+import { InterfaceHeader } from '../../../../models/settings.model';
+import { templateTabs } from '../../../../models/tab.model';
+import { TaskStatus } from '../../../../models/task.model';
+import { resetContentTabs, saveContentTab, setContentTabs } from '../../../../store/actions/settings.action';
+import { getTabs } from '../../../../store/selectors/settings.selector';
+import { useI18n } from '../../../../utils/webex.utils';
+import { SettingsAccordion } from '../common/settings-accordion';
 import { SettingsTab } from './settings-tab';
 
 const saskStatuses = Object.values(TaskStatus).map(String);

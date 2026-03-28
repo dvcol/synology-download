@@ -2,7 +2,8 @@ import type { ButtonProps } from '@mui/material';
 import type { InputProps as StandardInputProps } from '@mui/material/Input/Input';
 import type { FC, KeyboardEventHandler, ReactEventHandler } from 'react';
 
-import type { File, Folder } from '@src/models';
+import type { File } from '../../../../models/file.model';
+import type { Folder } from '../../../../models/folder.model';
 
 import ClearIcon from '@mui/icons-material/Clear';
 import EditIcon from '@mui/icons-material/Edit';
@@ -10,8 +11,8 @@ import SaveIcon from '@mui/icons-material/Save';
 import { Button, Stack, TextField, Tooltip, Typography } from '@mui/material';
 import React, { useState } from 'react';
 
-import { QueryService } from '@src/services';
-import { i18n } from '@src/utils';
+import { QueryService } from '../../../../services/query/query.service';
+import { i18n } from '../../../../utils/webex.utils';
 
 export interface ExplorerLeafEditProps {
   folder: Partial<Folder | File>;

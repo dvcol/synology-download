@@ -1,4 +1,5 @@
-import type { File, Folder } from '@src/models';
+import type { File } from '../../../../models/file.model';
+import type { Folder } from '../../../../models/folder.model';
 
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import { TreeItem } from '@mui/lab';

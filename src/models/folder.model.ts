@@ -1,4 +1,4 @@
-import type { File } from '@src/models/file.model';
+import type { File } from './file.model';
 
 export interface FolderList {
   total: number;

@@ -1,28 +1,27 @@
 import type { CaseReducer, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
 
+import type { ContextMenu, QuickMenu } from '../../models/menu.model';
 import type {
   AdvancedLogging,
   AdvancedSettings,
   ConnectionSettings,
   ContentSettings,
-  ContentTab,
-  ContextMenu,
   DownloadSettings,
   DownloadsIntercept,
   GlobalSettings,
   NotificationSettings,
   PollingSettings,
-  QuickMenu,
   ScrapeSettings,
-  SettingsSlice,
   SyncSettings,
   TaskSettings,
-} from '@src/models';
+} from '../../models/settings.model';
+import type { SettingsSlice } from '../../models/store.model';
+import type { ContentTab } from '../../models/tab.model';
 
 import { createSlice } from '@reduxjs/toolkit';
 
-import { defaultSettings, SettingsSliceName } from '@src/models';
-
+import { defaultSettings } from '../../models/settings.model';
+import { SettingsSliceName } from '../../models/store.model';
 import {
   addTo,
   removeFrom,

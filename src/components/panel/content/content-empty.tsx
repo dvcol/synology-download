@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 
-import type { StoreState } from '@src/store';
+import type { StoreState } from '../../../store/store';
 
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import PowerOffIcon from '@mui/icons-material/PowerOff';
@@ -9,11 +9,12 @@ import React, { Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { AppRoute } from '@src/models';
-import { QueryService } from '@src/services';
-import { setNavbar } from '@src/store/actions';
-import { getLoading, getLogged, getShouldAutoLogin } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
+import { AppRoute } from '../../../models/routes.model';
+import { QueryService } from '../../../services/query/query.service';
+import { setNavbar } from '../../../store/actions/navbar.action';
+import { getShouldAutoLogin } from '../../../store/selectors/settings.selector';
+import { getLoading, getLogged } from '../../../store/selectors/state.selector';
+import { useI18n } from '../../../utils/webex.utils';
 
 export const ContentEmpty: FC = () => {
   const i18n = useI18n('panel', 'content', 'empty');

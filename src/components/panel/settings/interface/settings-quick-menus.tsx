@@ -1,18 +1,19 @@
-import type { ContentSettings, QuickMenu } from '@src/models';
-import type { StoreState } from '@src/store';
+import type { QuickMenu } from '../../../../models/menu.model';
+import type { ContentSettings } from '../../../../models/settings.model';
+import type { StoreState } from '../../../../store/store';
 
 import { CardHeader, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { FormSwitch } from '@src/components';
-import { defaultContentSettings, defaultQuickMenu, InterfaceHeader } from '@src/models';
-import { resetQuickMenus, saveQuickMenu, setQuickMenus, syncContentSettings } from '@src/store/actions';
-import { getContentSettings, getQuick } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
-
-import { SettingsAccordion } from '../common';
+import { defaultQuickMenu } from '../../../../models/menu.model';
+import { defaultContentSettings, InterfaceHeader } from '../../../../models/settings.model';
+import { resetQuickMenus, saveQuickMenu, setQuickMenus, syncContentSettings } from '../../../../store/actions/settings.action';
+import { getContentSettings, getQuick } from '../../../../store/selectors/settings.selector';
+import { useI18n } from '../../../../utils/webex.utils';
+import { FormSwitch } from '../../../common/form/form-switch';
+import { SettingsAccordion } from '../common/settings-accordion';
 import { SettingsQuickMenu } from './settings-quick-menu';
 
 export function SettingsQuickMenus() {

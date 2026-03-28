@@ -1,11 +1,18 @@
-import type { HttpResponse, SynologyQueryArgs, SynologyQueryOptions, SynologyQueryPayload } from '@src/models';
-import type { BaseHttpRequest, HttpHeaders } from '@src/utils';
 import type { Observable } from 'rxjs';
 
-import { AuthMethod, ChromeMessageType, Controller, CustomHeader, SynologyError } from '@src/models';
-import { HttpMethod, onMessage, sendMessage, stringifyParams } from '@src/utils';
+import type { HttpResponse } from '../../models/http.model';
+import type { SynologyQueryArgs, SynologyQueryOptions, SynologyQueryPayload } from '../../models/synology.model';
+import type { BaseHttpRequest, HttpHeaders } from '../../utils/webex.utils';
+
 import { catchError, map, of } from 'rxjs';
 
+import { SynologyError } from '../../models/error.model';
+import { CustomHeader } from '../../models/http.model';
+import { ChromeMessageType } from '../../models/message.model';
+import { AuthMethod, Controller } from '../../models/synology.model';
+import { onMessage, sendMessage } from '../../utils/chrome/chrome-message.utils';
+import { stringifyParams } from '../../utils/string.utils';
+import { HttpMethod } from '../../utils/webex.utils';
 import { LoggerService } from '../logger/logger.service';
 import { BaseHttpService } from './base-http.service';
 

@@ -1,19 +1,31 @@
-import type { StoreOrProxy, Task } from '@src/models';
-import type { StandaloneAppCredentials } from '@src/pages/web';
+import type { StoreOrProxy } from '../../models/store.model';
+import type { Task } from '../../models/task.model';
+import type { StandaloneAppCredentials } from '../../pages/web/models/components.model';
 
 import createCache from '@emotion/cache';
 import React from 'react';
 import { render } from 'react-dom';
 import { forkJoin, lastValueFrom } from 'rxjs';
 
-import { StandaloneApp } from '@src/components';
-import { AppInstance, mapToTask, ServiceInstance } from '@src/models';
-import { restoreLocalSate, restoreSettings, restoreTaskSlice } from '@src/pages/background/modules';
-import { WcEvents } from '@src/pages/web';
-import { BaseLoggerService, DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
-import { store } from '@src/store';
-import { addTasks, setStandalone, syncConnection } from '@src/store/actions';
-import { getConnection } from '@src/store/selectors';
+import { AppInstance } from '../../models/app-instance.model';
+import { ServiceInstance } from '../../models/settings.model';
+import { mapToTask } from '../../models/task.model';
+import { restoreSettings } from '../../pages/background/modules/settings-handler';
+import { restoreLocalSate } from '../../pages/background/modules/state-handler';
+import { restoreTaskSlice } from '../../pages/background/modules/tasks-handler';
+import { WcEvents } from '../../pages/web/models/components.model';
+import { DownloadService } from '../../services/download/download.service';
+import { BaseLoggerService } from '../../services/logger/base-logger.service';
+import { LoggerService } from '../../services/logger/logger.service';
+import { NotificationService } from '../../services/notification/notification.service';
+import { PollingService } from '../../services/polling/polling.service';
+import { QueryService } from '../../services/query/query.service';
+import { syncConnection } from '../../store/actions/settings.action';
+import { setStandalone } from '../../store/actions/state.action';
+import { addTasks } from '../../store/actions/tasks.action';
+import { getConnection } from '../../store/selectors/settings.selector';
+import { store } from '../../store/store';
+import { StandaloneApp } from './standalone-app';
 
 export class StandaloneAppWc extends HTMLElement {
   get store() {

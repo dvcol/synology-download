@@ -1,4 +1,4 @@
-import { CustomHeader } from '@src/models';
+import { CustomHeader } from '../../../models/http.model';
 
 export type FetchInputs = Parameters<typeof fetch>;
 export type FetchInterceptFilter = (...params: FetchInputs) => boolean;

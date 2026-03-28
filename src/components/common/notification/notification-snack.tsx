@@ -2,7 +2,7 @@ import type { IconButtonProps, SvgIconProps, Theme } from '@mui/material';
 import type { SnackbarKey } from 'notistack';
 import type { ForwardRefRenderFunction } from 'react';
 
-import type { SnackMessage } from '@src/models';
+import type { SnackMessage } from '../../../models/notification.model';
 
 import BugReportOutlinedIcon from '@mui/icons-material/BugReportOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
@@ -15,8 +15,9 @@ import { Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, Icon
 import { useSnackbar } from 'notistack';
 import React, { forwardRef, useCallback, useEffect, useState } from 'react';
 
-import { ColorLevel, ColorLevelMap, NotificationLevel } from '@src/models';
-import { createTab } from '@src/utils';
+import { ColorLevel, ColorLevelMap } from '../../../models/material-ui.model';
+import { NotificationLevel } from '../../../models/notification.model';
+import { createTab } from '../../../utils/chrome/chrome.utils';
 
 const ExpandMore = styled(({ expand, ...other }: IconButtonProps & { expand: boolean }) => <IconButton {...other} />)<{
   theme?: Theme;

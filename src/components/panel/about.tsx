@@ -9,8 +9,9 @@ import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import { Button, Card, CardActions, CardContent, CardHeader, Chip, Stack, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
-import { AppLinks } from '@src/models';
-import { createTab, getAcceptLanguages, getManifest, useI18n } from '@src/utils';
+import { AppLinks } from '../../models/links.model';
+import { createTab } from '../../utils/chrome/chrome.utils';
+import { getAcceptLanguages, getManifest, useI18n } from '../../utils/webex.utils';
 
 export const About: FC<{
   cardProps?: CardProps;

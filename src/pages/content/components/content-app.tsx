@@ -2,18 +2,20 @@ import type { EmotionCache } from '@emotion/utils';
 import type { Theme } from '@mui/material';
 import type { Store } from 'redux';
 
-import type { AppInstance } from '@src/models';
-import type { StoreOrProxy } from '@src/models/store.model';
+import type { AppInstance } from '../../../models/app-instance.model';
+import type { StoreOrProxy } from '../../../models/store.model';
 
 import { CacheProvider } from '@emotion/react';
 import { ThemeProvider } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react';
 import { Provider } from 'react-redux';
 
-import { ContainerContextProvider, NotificationStack } from '@src/components';
-import { ContentTaskDialog, QuickMenuDialog } from '@src/pages/content/components';
-import { store } from '@src/store';
-import { getThemeFromStore, subscribeToTheme } from '@src/themes';
+import { ContainerContextProvider } from '../../../components/common/context/container-content-provider';
+import { NotificationStack } from '../../../components/common/notification/notification-stack';
+import { store } from '../../../store/store';
+import { getThemeFromStore, subscribeToTheme } from '../../../themes/media-query';
+import { ContentTaskDialog } from './content-task-dialog';
+import { QuickMenuDialog } from './quick-menu-dialog';
 
 export function ContentApp({
   storeOrProxy,

@@ -1,9 +1,9 @@
-import type { DownloadItem } from '@src/utils';
+import type { DownloadItem } from '../../../utils/chrome/chrome-download.utils';
 
 import { faker } from '@faker-js/faker/locale/en';
 
-import { AbstractMock } from '@src/pages/web/mocks/utils.mock';
-import { BaseLoggerService } from '@src/services';
+import { BaseLoggerService } from '../../../services/logger/base-logger.service';
+import { AbstractMock } from './utils.mock';
 
 export function generateDownload(_download: Partial<DownloadItem> = {}): DownloadItem {
   const state = faker.helpers.arrayElement([...Array.from({ length: 8 }).fill('in_progress'), 'interrupted', 'complete']) as DownloadItem['state'];

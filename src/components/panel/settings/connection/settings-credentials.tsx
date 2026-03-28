@@ -1,7 +1,9 @@
 import type { FC } from 'react';
 import type { Observable } from 'rxjs';
 
-import type { ConnectionSettings, Credentials, FormRules, InfoResponse, LoginResponse } from '@src/models';
+import type { FormRules } from '../../../../models/form.model';
+import type { ConnectionSettings, Credentials } from '../../../../models/settings.model';
+import type { InfoResponse, LoginResponse } from '../../../../models/synology.model';
 
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Button, Card, CardActions, CardContent, CardHeader, Collapse, Grid, LinearProgress, MenuItem, Stack, Typography } from '@mui/material';
@@ -10,13 +12,26 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { finalize, lastValueFrom } from 'rxjs';
 
-import { ButtonWithConfirm, FormCheckbox, FormInput, FormSwitch } from '@src/components';
-import Show from '@src/components/common/utils/show';
-import { AppLinks, ColorLevel, ColorLevelMap, CommonAPI, ConnectionFormat, ConnectionHeader, ConnectionType, defaultConnection, Protocol } from '@src/models';
-import { LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
-import { syncConnection } from '@src/store/actions';
-import { getConnection, getLogged, urlReducer } from '@src/store/selectors';
-import { before, createTab, useDebounceObservable, useI18n } from '@src/utils';
+import { AppLinks } from '../../../../models/links.model';
+import { ColorLevel, ColorLevelMap } from '../../../../models/material-ui.model';
+import { ConnectionFormat, ConnectionHeader, ConnectionType, defaultConnection, Protocol } from '../../../../models/settings.model';
+import { CommonAPI } from '../../../../models/synology.model';
+import { LoggerService } from '../../../../services/logger/logger.service';
+import { NotificationService } from '../../../../services/notification/notification.service';
+import { PollingService } from '../../../../services/polling/polling.service';
+import { QueryService } from '../../../../services/query/query.service';
+import { syncConnection } from '../../../../store/actions/settings.action';
+import { getConnection, urlReducer } from '../../../../store/selectors/settings.selector';
+import { getLogged } from '../../../../store/selectors/state.selector';
+import { createTab } from '../../../../utils/chrome/chrome.utils';
+import { useDebounceObservable } from '../../../../utils/hooks.utils';
+import { before } from '../../../../utils/rxjs.utils';
+import { useI18n } from '../../../../utils/webex.utils';
+import { ButtonWithConfirm } from '../../../common/button/button-with-confirm';
+import { FormCheckbox } from '../../../common/form/form-checkbox';
+import { FormInput } from '../../../common/form/form-input';
+import { FormSwitch } from '../../../common/form/form-switch';
+import Show from '../../../common/utils/show';
 
 export const SettingsCredentials: FC = () => {
   const i18n = useI18n('panel', 'settings', 'credentials');

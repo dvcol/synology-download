@@ -1,5 +1,5 @@
-import type { DownloadSettings } from '@src/models';
-import type { StoreState } from '@src/store';
+import type { DownloadSettings } from '../../../../models/settings.model';
+import type { StoreState } from '../../../../store/store';
 
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Button, Card, CardActions, CardContent, CardHeader, Collapse, Stack } from '@mui/material';
@@ -7,11 +7,12 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ButtonWithConfirm, FormSwitch } from '@src/components';
-import { defaultDownloads, DownloadsHeader } from '@src/models';
-import { syncDownloads } from '@src/store/actions';
-import { getSettingsDownloads } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
+import { defaultDownloads, DownloadsHeader } from '../../../../models/settings.model';
+import { syncDownloads } from '../../../../store/actions/settings.action';
+import { getSettingsDownloads } from '../../../../store/selectors/settings.selector';
+import { useI18n } from '../../../../utils/webex.utils';
+import { ButtonWithConfirm } from '../../../common/button/button-with-confirm';
+import { FormSwitch } from '../../../common/form/form-switch';
 
 export function SettingsDownloadsLocal() {
   const i18n = useI18n('panel', 'settings', 'downloads');

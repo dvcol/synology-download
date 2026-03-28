@@ -1,10 +1,11 @@
-import { defaultGlobal } from '@src/models/settings.model';
-import { ContainerContext } from '@src/store';
-import { getGlobalLoading } from '@src/store/selectors';
 import { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { debounce, Subject, timer } from 'rxjs';
+
+import { defaultGlobal } from '../models/settings.model';
+import { ContainerContext } from '../store/context/container.context';
+import { getGlobalLoading } from '../store/selectors/settings.selector';
 
 /**
  * React hook which call observer on subject inside react effect

@@ -1,5 +1,7 @@
-import type { ContextMenu, ResetMenuPayload, ScrapeSettings } from '@src/models';
-import type { StoreState } from '@src/store';
+import type { ContextMenu } from '../../../../models/menu.model';
+import type { ResetMenuPayload } from '../../../../models/message.model';
+import type { ScrapeSettings } from '../../../../models/settings.model';
+import type { StoreState } from '../../../../store/store';
 
 import { CardHeader, Typography } from '@mui/material';
 import React, { useState } from 'react';
@@ -7,13 +9,15 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { firstValueFrom } from 'rxjs';
 
-import { FormSwitch } from '@src/components';
-import { ChromeMessageType, defaultContextMenu, defaultScrapeSettings, InterfaceHeader } from '@src/models';
-import { resetContextMenu, saveContextMenu, setContextMenus, syncScrapeSettings } from '@src/store/actions';
-import { getMenus, getScrapeSettings } from '@src/store/selectors';
-import { sendMessage, useI18n } from '@src/utils';
-
-import { SettingsAccordion } from '../common';
+import { defaultContextMenu } from '../../../../models/menu.model';
+import { ChromeMessageType } from '../../../../models/message.model';
+import { defaultScrapeSettings, InterfaceHeader } from '../../../../models/settings.model';
+import { resetContextMenu, saveContextMenu, setContextMenus, syncScrapeSettings } from '../../../../store/actions/settings.action';
+import { getMenus, getScrapeSettings } from '../../../../store/selectors/settings.selector';
+import { sendMessage } from '../../../../utils/chrome/chrome-message.utils';
+import { useI18n } from '../../../../utils/webex.utils';
+import { FormSwitch } from '../../../common/form/form-switch';
+import { SettingsAccordion } from '../common/settings-accordion';
 import { SettingsContextMenu } from './settings-context-menu';
 
 export function SettingsContextMenus() {

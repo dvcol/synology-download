@@ -1,4 +1,4 @@
-import { BaseLoggerService } from '@src/services';
+import { BaseLoggerService } from '../../../services/logger/base-logger.service';
 
 export function patchContextMenus(_global = window) {
   _global.chrome.contextMenus.create = (createProperties, cb) => {

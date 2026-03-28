@@ -1,14 +1,14 @@
 import type { AvatarProps } from '@mui/material';
 import type { FC } from 'react';
 
-import type { ProgressBarProps } from '@src/components';
+import type { ProgressBarProps } from '../../common/loader/progress-bar';
 
 import { Avatar, Grid, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import React from 'react';
 
-import { ProgressBar } from '@src/components';
-import { parseMagnetLink } from '@src/utils';
+import { parseMagnetLink } from '../../../utils/string.utils';
+import { ProgressBar } from '../../common/loader/progress-bar';
 
 interface ContentCardProps {
   title: string;

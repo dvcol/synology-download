@@ -4,10 +4,11 @@ import { LinearProgress } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { defaultGlobal } from '@src/models';
-import { LoggerService } from '@src/services';
-import { getGlobalLoading, getLoading } from '@src/store/selectors';
-import { useDebounceObservable } from '@src/utils';
+import { defaultGlobal } from '../../models/settings.model';
+import { LoggerService } from '../../services/logger/logger.service';
+import { getGlobalLoading } from '../../store/selectors/settings.selector';
+import { getLoading } from '../../store/selectors/state.selector';
+import { useDebounceObservable } from '../../utils/hooks.utils';
 
 export function LoadingBar(props?: LinearProgressProps) {
   // Loading bar settings

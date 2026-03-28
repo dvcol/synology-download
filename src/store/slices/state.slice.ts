@@ -1,6 +1,8 @@
 import type { CaseReducer, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
 
-import type { InfoResponse, Log, StateSlice } from '@src/models';
+import type { Log } from '../../models/settings.model';
+import type { StateSlice } from '../../models/store.model';
+import type { InfoResponse } from '../../models/synology.model';
 
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -11,7 +13,7 @@ import {
   syncFoldersHistoryReducer,
   syncLoggedReducer,
   syncLogHistoryReducer,
-} from '@src/store/reducers/state.reducer';
+} from '../reducers/state.reducer';
 
 export interface StateReducers<S = StateSlice> extends SliceCaseReducers<S> {
   restoreState: CaseReducer<S, PayloadAction<Partial<S>>>;

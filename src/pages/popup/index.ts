@@ -1,8 +1,9 @@
-import { AppInstance, ServiceInstance } from '@src/models';
-import { initApp } from '@src/pages/common';
-import { LoggerService } from '@src/services';
-import { getPopup } from '@src/store/selectors';
-import { isMacOs } from '@src/utils';
+import { AppInstance } from '../../models/app-instance.model';
+import { ServiceInstance } from '../../models/settings.model';
+import { LoggerService } from '../../services/logger/logger.service';
+import { getPopup } from '../../store/selectors/state.selector';
+import { isMacOs } from '../../utils/webex.utils';
+import { initApp } from '../common/init-app';
 
 function resizeContainer() {
   const root = document?.getElementById('synology-download-popup-app-container');

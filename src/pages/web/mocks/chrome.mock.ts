@@ -1,5 +1,5 @@
-import { BaseLoggerService } from '@src/services';
-import { deepMerge } from '@src/utils/object.utils';
+import { BaseLoggerService } from '../../../services/logger/base-logger.service';
+import { deepMerge } from '../../../utils/object.utils';
 
 function logger(method: string) {
   return (...arg: any[]) =>

@@ -1,5 +1,6 @@
 import { buildFormData as _buildFormData, stringifyKeys as _stringifyKeys, stringifyParams as _stringifyParams } from '@dvcol/web-extension-utils';
-import { LoggerService } from '@src/services/logger/logger.service';
+
+import { LoggerService } from '../services/logger/logger.service';
 
 export const buildFormData = _buildFormData;
 

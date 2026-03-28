@@ -1,4 +1,4 @@
-import { LoggingLevel } from '@src/models';
+import { LoggingLevel } from '../../models/logger.model';
 
 export class BaseLoggerService {
   protected static source: string;

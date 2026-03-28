@@ -1,4 +1,4 @@
-import { BaseLoggerService } from '@src/services';
+import { BaseLoggerService } from '../../../services/logger/base-logger.service';
 
 export function patchTabs(_global = window) {
   _global.chrome.tabs.create = async (createProperties) => {

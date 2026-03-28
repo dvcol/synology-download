@@ -1,7 +1,7 @@
 import type { SvgIconProps } from '@mui/material';
 import type { FC, MouseEvent } from 'react';
 
-import type { QuickMenu } from '@src/models';
+import type { QuickMenu } from '../../../models/menu.model';
 
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
@@ -9,8 +9,9 @@ import FolderIcon from '@mui/icons-material/Folder';
 import { Collapse, ListItemText, MenuItem } from '@mui/material';
 import React from 'react';
 
-import { MuiIcon } from '@src/components';
-import { MaterialIcon, QuickMenuType } from '@src/models';
+import { MuiIcon } from '../../../components/common/material/material-icon';
+import { MaterialIcon } from '../../../models/material-ui.model';
+import { QuickMenuType } from '../../../models/menu.model';
 
 function isDisabled(type: QuickMenuType, logged: boolean, folders: boolean, destinations: boolean): boolean {
   switch (type) {

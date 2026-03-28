@@ -1,8 +1,11 @@
 import type { CaseReducer, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
-import type { ContentTab, NavbarSlice } from '@src/models';
+
+import type { NavbarSlice } from '../../models/store.model';
+import type { ContentTab } from '../../models/tab.model';
 
 import { createSlice } from '@reduxjs/toolkit';
-import { defaultTabs } from '@src/models/tab.model';
+
+import { defaultTabs } from '../../models/tab.model';
 
 interface NavbarReducers<S = NavbarSlice> extends SliceCaseReducers<S> {
   setNavbar: CaseReducer<S, PayloadAction<ContentTab | undefined>>;

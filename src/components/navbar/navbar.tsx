@@ -5,11 +5,11 @@ import { AppBar, Tabs, Toolbar } from '@mui/material';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import LoadingBar from '@src/components/navbar/loading-bar';
-import { setNavbar } from '@src/store/actions';
-import { getActiveTabs, getTab } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
-
+import { setNavbar } from '../../store/actions/navbar.action';
+import { getTab } from '../../store/selectors/navbar.selector';
+import { getActiveTabs } from '../../store/selectors/settings.selector';
+import { useI18n } from '../../utils/webex.utils';
+import LoadingBar from './loading-bar';
 import NavbarMenu from './navbar-menu';
 import NavbarTab from './navbar-tab';
 

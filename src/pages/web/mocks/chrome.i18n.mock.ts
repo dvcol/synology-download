@@ -1,6 +1,6 @@
-import type { Locale, Locales } from '@src/pages/web/models';
+import type { Locale, Locales } from '../models/locales.model';
 
-import { deepMerge } from '@src/utils/object.utils';
+import { deepMerge } from '../../../utils/object.utils';
 
 export async function patchI18n(_global: Window = window, lang = 'en') {
   _global.chrome.i18n.getMessage = (key: string) => _global._locales?.[lang]?.[key]?.message ?? key;

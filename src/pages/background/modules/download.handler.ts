@@ -1,14 +1,20 @@
 import type { Subscription } from 'rxjs';
 
-import type { DownloadsIntercept, StoreOrProxy } from '@src/models';
+import type { DownloadsIntercept } from '../../../models/settings.model';
+import type { StoreOrProxy } from '../../../models/store.model';
 
 import { catchError, firstValueFrom, of, withLatestFrom } from 'rxjs';
 
-import { DownloadStatus } from '@src/models';
-import { InterceptService, LoggerService, NotificationService } from '@src/services';
-import { addFolderHistory } from '@src/store/actions';
-import { getDefaultFolder, getSettingsDownloadsIntercept, getSettingsDownloadsInterceptEnabled, getSettingsDownloadsNotifications } from '@src/store/selectors';
-import { getActiveTab, onFilename$, onStatus$, store$ } from '@src/utils';
+import { DownloadStatus } from '../../../models/download.model';
+import { InterceptService } from '../../../services/download/intercept.service';
+import { LoggerService } from '../../../services/logger/logger.service';
+import { NotificationService } from '../../../services/notification/notification.service';
+import { addFolderHistory } from '../../../store/actions/state.action';
+import { getSettingsDownloadsIntercept, getSettingsDownloadsInterceptEnabled, getSettingsDownloadsNotifications } from '../../../store/selectors/settings.selector';
+import { getDefaultFolder } from '../../../store/selectors/state.selector';
+import { onFilename$, onStatus$ } from '../../../utils/chrome/chrome-download.utils';
+import { store$ } from '../../../utils/rxjs.utils';
+import { getActiveTab } from '../../../utils/webex.utils';
 
 function onDownloadEventsNotifications(store: StoreOrProxy) {
   LoggerService.debug('Subscribing to download notifications events.');

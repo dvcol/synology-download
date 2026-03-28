@@ -1,6 +1,5 @@
-import type { TaskDialogIntercept } from '@src/pages/content/service';
-import type { OnClickData } from '@src/utils';
-
+import type { TaskDialogIntercept } from '../pages/content/service/dialog.service';
+import type { OnClickData } from '../utils/chrome/chrome-context.utils';
 import type { DownloadQueryPayload } from './download.model';
 import type { ContextMenu } from './menu.model';
 import type { ChromeNotification, SnackNotification } from './notification.model';

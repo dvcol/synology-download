@@ -1,11 +1,15 @@
-import type { CommonResponse, DownloadStationConfig, DownloadStationInfo, DownloadStationStatistic, SynologyFileStationInfo, TaskCreateRequest, TaskList, TaskListOption } from '@src/models';
-import type { HttpParameters } from '@src/utils';
 import type { Observable } from 'rxjs';
 
-import { Controller, DownloadStationAPI, Endpoint, TaskMethod } from '@src/models';
-import { HttpMethod, sanitizeUrl } from '@src/utils';
+import type { DownloadStationConfig, DownloadStationInfo, DownloadStationStatistic } from '../../models/download-station.model';
+import type { CommonResponse, SynologyFileStationInfo, TaskCreateRequest } from '../../models/synology.model';
+import type { TaskList, TaskListOption } from '../../models/task.model';
+import type { HttpParameters } from '../../utils/webex.utils';
+
 import { throwError } from 'rxjs';
 
+import { Controller, DownloadStationAPI, Endpoint, TaskMethod } from '../../models/synology.model';
+import { sanitizeUrl } from '../../utils/string.utils';
+import { HttpMethod } from '../../utils/webex.utils';
 import { SynologyService } from './synology.service';
 
 export class SynologyDownloadService extends SynologyService {

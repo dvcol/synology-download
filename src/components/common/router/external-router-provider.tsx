@@ -1,13 +1,14 @@
 import type { FC } from 'react';
 
-import type { OpenPopupPayload } from '@src/models';
+import type { OpenPopupPayload } from '../../../models/message.model';
 
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { AppRoute, ChromeMessageType } from '@src/models';
-import { LoggerService } from '@src/services';
-import { onMessage } from '@src/utils';
+import { ChromeMessageType } from '../../../models/message.model';
+import { AppRoute } from '../../../models/routes.model';
+import { LoggerService } from '../../../services/logger/logger.service';
+import { onMessage } from '../../../utils/chrome/chrome-message.utils';
 
 export const ExternalRouterProvider: FC = () => {
   const navigate = useNavigate();

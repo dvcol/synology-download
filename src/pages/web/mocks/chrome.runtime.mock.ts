@@ -1,5 +1,5 @@
-import manifest from '@src/manifest.json';
-import { BaseLoggerService } from '@src/services';
+import manifest from '../../../manifest.json';
+import { BaseLoggerService } from '../../../services/logger/base-logger.service';
 
 export function patchRuntime(_global = window) {
   _global.chrome.runtime.getManifest = () => {

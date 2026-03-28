@@ -1,10 +1,10 @@
-import type { InfoResponse } from '@src/models';
-import type { HttpParameters } from '@src/utils';
 import type { Observable } from 'rxjs';
 
-import { CommonAPI, Endpoint, InfoMethod } from '@src/models';
-import { HttpMethod } from '@src/utils';
+import type { InfoResponse } from '../../models/synology.model';
+import type { HttpParameters } from '../../utils/webex.utils';
 
+import { CommonAPI, Endpoint, InfoMethod } from '../../models/synology.model';
+import { HttpMethod } from '../../utils/webex.utils';
 import { SynologyService } from './synology.service';
 
 export class SynologyInfoService extends SynologyService {

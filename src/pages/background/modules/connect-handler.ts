@@ -2,10 +2,11 @@ import type { Store } from 'redux';
 
 import { tap } from 'rxjs';
 
-import { AppInstance, ChromeMessageType } from '@src/models';
-import { LoggerService } from '@src/services';
-import { resetLoading, setContentDialog, setContentMenu, setOption, setPanel, setPopup } from '@src/store/actions';
-import { onConnect, onMessage } from '@src/utils';
+import { AppInstance } from '../../../models/app-instance.model';
+import { ChromeMessageType } from '../../../models/message.model';
+import { LoggerService } from '../../../services/logger/logger.service';
+import { resetLoading, setContentDialog, setContentMenu, setOption, setPanel, setPopup } from '../../../store/actions/state.action';
+import { onConnect, onMessage } from '../../../utils/chrome/chrome-message.utils';
 
 function onAppConnect(store: Store, instance: AppInstance, dispatch: typeof setOption | typeof setPopup | typeof setPanel) {
   return onConnect([instance]).pipe(

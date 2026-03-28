@@ -2,7 +2,9 @@ import type { CardProps } from '@mui/material';
 import type { ChangeEvent, FC } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 
-import type { FormRules, TaskCreateRequest, TaskForm, TaskListDownloadRequest } from '@src/models';
+import type { FormRules } from '../../../../models/form.model';
+import type { TaskCreateRequest, TaskListDownloadRequest } from '../../../../models/synology.model';
+import type { TaskForm } from '../../../../models/task.model';
 
 import SaveIcon from '@mui/icons-material/Save';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Chip, Grid, Stack, ToggleButton, ToggleButtonGroup, Tooltip } from '@mui/material';
@@ -11,13 +13,23 @@ import { useForm, useWatch } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { finalize, lastValueFrom, tap } from 'rxjs';
 
-import { FormCheckbox, FormExplorer, FormInput, FormSwitch, IconLoader } from '@src/components';
-import { AppInstance, ColorLevel, isInstance, TaskCreateType, torrentExtension } from '@src/models';
-import { LoggerService, QueryService } from '@src/services';
-import { clearTaskForm, setTaskForm } from '@src/store/actions';
-import { getClearOnExitTaskSettings, getDownloadStation2APITask, getTaskForm } from '@src/store/selectors';
-import { before, useI18n } from '@src/utils';
-
+import { AppInstance, isInstance } from '../../../../models/app-instance.model';
+import { ColorLevel } from '../../../../models/material-ui.model';
+import { torrentExtension } from '../../../../models/settings.model';
+import { TaskCreateType } from '../../../../models/synology.model';
+import { LoggerService } from '../../../../services/logger/logger.service';
+import { QueryService } from '../../../../services/query/query.service';
+import { clearTaskForm, setTaskForm } from '../../../../store/actions/tasks.action';
+import { getClearOnExitTaskSettings } from '../../../../store/selectors/settings.selector';
+import { getDownloadStation2APITask } from '../../../../store/selectors/state.selector';
+import { getTaskForm } from '../../../../store/selectors/tasks.selector';
+import { before } from '../../../../utils/rxjs.utils';
+import { useI18n } from '../../../../utils/webex.utils';
+import { FormCheckbox } from '../../../common/form/form-checkbox';
+import { FormExplorer } from '../../../common/form/form-explorer';
+import { FormInput } from '../../../common/form/form-input';
+import { FormSwitch } from '../../../common/form/form-switch';
+import { IconLoader } from '../../../common/loader/icon-loader';
 import { TaskAddSelect } from './task-add-select';
 
 const UrlCounts: FC<{ urls?: string[] }> = ({ urls }) => {

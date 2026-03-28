@@ -1,5 +1,5 @@
-import type { DownloadExtension, DownloadsIntercept } from '@src/models';
-import type { StoreState } from '@src/store';
+import type { DownloadExtension, DownloadsIntercept } from '../../../../models/settings.model';
+import type { StoreState } from '../../../../store/store';
 
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Button, Card, CardActions, CardContent, CardHeader, Collapse, Grid, Stack, Tooltip, Typography } from '@mui/material';
@@ -7,12 +7,14 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ButtonWithConfirm, FormCheckbox, FormSwitch } from '@src/components';
-import { ColorLevel, ColorLevelMap, defaultDownloads, DownloadsHeader } from '@src/models';
-import { syncDownloadsIntercept } from '@src/store/actions';
-import { getSettingsDownloadsEnabled, getSettingsDownloadsIntercept } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
-
+import { ColorLevel, ColorLevelMap } from '../../../../models/material-ui.model';
+import { defaultDownloads, DownloadsHeader } from '../../../../models/settings.model';
+import { syncDownloadsIntercept } from '../../../../store/actions/settings.action';
+import { getSettingsDownloadsEnabled, getSettingsDownloadsIntercept } from '../../../../store/selectors/settings.selector';
+import { useI18n } from '../../../../utils/webex.utils';
+import { ButtonWithConfirm } from '../../../common/button/button-with-confirm';
+import { FormCheckbox } from '../../../common/form/form-checkbox';
+import { FormSwitch } from '../../../common/form/form-switch';
 import { SettingsDownloadsExtensions } from './settings-downloads-extensions';
 
 export function SettingsDownloadsIntercept() {

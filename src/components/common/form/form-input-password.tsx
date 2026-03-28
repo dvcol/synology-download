@@ -5,7 +5,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { IconButton, InputAdornment } from '@mui/material';
 import React, { useState } from 'react';
 
-import { useI18n } from '@src/utils';
+import { useI18n } from '../../../utils/webex.utils';
 
 export const FormInputPassword: FC<
   PropsWithChildren<{

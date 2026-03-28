@@ -1,14 +1,15 @@
 import type { ConfigureStoreOptions } from '@reduxjs/toolkit';
-import type { RootSlice } from '@src/models';
 import type { ReducersMapObject, Store } from 'redux';
+
+import type { RootSlice } from '../models/store.model';
 
 import { devToolsEnhancer } from '@redux-devtools/remote';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { LoggerService } from '@src/services/logger/logger.service';
-import { scrapedSlice } from '@src/store/slices/scraped.slice';
 
+import { LoggerService } from '../services/logger/logger.service';
 import { downloadsSlice } from './slices/downloads.slice';
 import { navbarSlice } from './slices/navbar.slice';
+import { scrapedSlice } from './slices/scraped.slice';
 import { settingsSlice } from './slices/settings.slice';
 import { stateSlice } from './slices/state.slice';
 import { tasksSlice } from './slices/tasks.slice';

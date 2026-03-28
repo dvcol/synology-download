@@ -1,12 +1,21 @@
-import type { Content, ContentCount, ContentTab, Download, NotificationsBanner, NotificationsCount, NotificationsSnack, PollingSettings, Tab, TabCount, Task, TaskStatistics } from '@src/models';
-
+import type { Content, ContentCount } from '../../models/content.model';
+import type { Download } from '../../models/download.model';
+import type { NotificationsBanner, NotificationsCount, NotificationsSnack, PollingSettings } from '../../models/settings.model';
+import type { ContentTab, Tab, TabCount } from '../../models/tab.model';
+import type { Task, TaskStatistics } from '../../models/task.model';
 import type { StoreState } from '../store';
 
 import { createSelector } from '@reduxjs/toolkit';
 
-import { ActionScope, ContentStatusType, ContentTabSort, defaultPolling } from '@src/models';
-import { getActionScope, getActiveDownloadIds, getActiveTasksIds, geTasksIdsByStatusTypeReducer, getDownloadingDownloadIds, getDownloads, getDownloadsIdsByStatusTypeReducer, getErrorTasksIds, getFinishedDownloadIds, getFinishedTasksIds, getNotificationsBanner, getNotificationsCount, getNotificationsSnack, getPausedDownloadIds, getPausedTasksIds, getPolling, getSettingsDownloadsEnabled, getStats, getTab, getTabs, getTasksArray, getTasksIds, getWaitingTasksIds, isModalOpen } from '@src/store/selectors';
-import { nullSafeCompare, numberCompare, stringCompare } from '@src/utils';
+import { ContentStatusType } from '../../models/content.model';
+import { ActionScope, defaultPolling } from '../../models/settings.model';
+import { ContentTabSort } from '../../models/tab.model';
+import { nullSafeCompare, numberCompare, stringCompare } from '../../utils/webex.utils';
+import { getActiveDownloadIds, getDownloadingDownloadIds, getDownloads, getDownloadsIdsByStatusTypeReducer, getFinishedDownloadIds, getPausedDownloadIds } from './downloads.selector';
+import { getTab } from './navbar.selector';
+import { getActionScope, getNotificationsBanner, getNotificationsCount, getNotificationsSnack, getPolling, getSettingsDownloadsEnabled, getTabs } from './settings.selector';
+import { isModalOpen } from './state.selector';
+import { getActiveTasksIds, geTasksIdsByStatusTypeReducer, getErrorTasksIds, getFinishedTasksIds, getPausedTasksIds, getStats, getTasksArray, getTasksIds, getWaitingTasksIds } from './tasks.selector';
 
 export const getTabOrFirst: (state: StoreState) => ContentTab | undefined = createSelector(getTab, getTabs, (tab?: ContentTab, tabs?: ContentTab[]) => tab ?? (tabs?.length ? tabs[0] : tab));
 
