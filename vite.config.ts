@@ -11,8 +11,11 @@ import pkg from './package.json';
 import { isDev, isWeb, outDir, port, resolveParent, sourcemap } from './scripts/utils';
 
 function getInput(hmr: boolean, _isWeb: boolean): Record<string, string> {
-  if (hmr) return { background: resolveParent('src/pages/background/index.ts') };
-
+  if (hmr) {
+    // Web dev server needs no explicit input — it serves index.html directly
+    if (_isWeb) return {};
+    return { background: resolveParent('src/pages/background/index.ts') };
+  }
   if (_isWeb) {
     return {
       web: resolveParent('src/pages/web/index.html'),
@@ -123,10 +126,11 @@ export default defineConfig(() => ({
     'process.env.DEBUG': JSON.stringify(process.env.DEBUG || 'false'),
   },
   plugins: getPlugins(isDev, isWeb),
+  publicDir: isWeb && isDev ? resolveParent('dist') : false,
   base: process.env.VITE_BASE || './',
   server: {
     port,
-    open: isWeb,
+    open: isWeb ? '/pages/web/index.html' : false,
     host: true,
     hmr: {
       host: 'localhost',

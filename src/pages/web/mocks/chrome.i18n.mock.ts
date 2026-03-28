@@ -13,7 +13,8 @@ export async function patchI18n(_global: Window = window, lang = 'en') {
 
   let locale$ = _global._localesFetch?.[lang];
   if (locale$ === undefined) {
-    locale$ = fetch(`_locales/${lang}/messages.json`)
+    const base = import.meta.env.BASE_URL?.replace(/\.\/?$/, '/') ?? '/';
+    locale$ = fetch(`${base}_locales/${lang}/messages.json`)
       .then(async res => res.json() as Promise<Locale>)
       .catch((err: Error) => {
         console.error('failed to load locales', { lang, err });

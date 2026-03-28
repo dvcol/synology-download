@@ -6,7 +6,7 @@ import fg from 'fast-glob';
 import fs from 'fs-extra';
 
 import { writeManifest } from './manifest';
-import { getDirName, isDev, outDir, port, resolveParent } from './utils';
+import { getDirName, isDev, isWeb, outDir, port, resolveParent } from './utils';
 
 /**
  * Merge i18n JSON files matching a glob pattern into a single output file.
@@ -95,12 +95,13 @@ async function mergeI18n() {
   );
 }
 
-async function prepare(hmr = isDev) {
-  writeManifest().catch(e => console.error('Failed to write manifest.json', e));
-
-  copyAssets(isDev).catch(e => console.error('Failed to copy assets', e));
-
+async function prepare(hmr = isDev && !isWeb) {
   mergeI18n().catch(e => console.error('Failed to merge i18n', e));
+
+  if (isWeb) return;
+
+  writeManifest().catch(e => console.error('Failed to write manifest.json', e));
+  copyAssets(isDev).catch(e => console.error('Failed to copy assets', e));
 
   if (!hmr) return;
   console.info('Watching changes ...');
