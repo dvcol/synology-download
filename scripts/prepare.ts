@@ -32,8 +32,7 @@ async function mergeJson({ pattern, output }: { pattern: string; output: string 
  * Extension CSP blocks inline scripts, so it must be a separate file.
  */
 function writePreambleStub() {
-  const preamble = `if (typeof globalThis !== 'undefined' && typeof global === 'undefined') { globalThis.global = globalThis; }
-import RefreshRuntime from 'http://localhost:${port}/@react-refresh';
+  const preamble = `import RefreshRuntime from 'http://localhost:${port}/@react-refresh';
 RefreshRuntime.injectIntoGlobalHook(window);
 window.$RefreshReg$ = () => {};
 window.$RefreshSig$ = () => (type) => type;

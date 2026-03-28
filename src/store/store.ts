@@ -1,12 +1,9 @@
-import type { ConfigureStoreOptions } from '@reduxjs/toolkit';
 import type { ReducersMapObject, Store } from 'redux';
 
 import type { RootSlice } from '../models/store.model';
 
-import { devToolsEnhancer } from '@redux-devtools/remote';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-import { LoggerService } from '../services/logger/logger.service';
 import { downloadsSlice } from './slices/downloads.slice';
 import { navbarSlice } from './slices/navbar.slice';
 import { scrapedSlice } from './slices/scraped.slice';
@@ -27,15 +24,4 @@ export const rootReducer = combineReducers<RootSlice>(reducers);
 
 export type StoreState = ReturnType<typeof rootReducer>;
 
-const options: ConfigureStoreOptions<RootSlice> = { reducer: reducers, devTools: { name: 'synology-download' } };
-
-if (process.env.NODE_ENV === 'development' || process.env.DEVTOOL === 'true') {
-  const context = globalThis?.document?.querySelector<HTMLDivElement>("[id^='synology-download-']")?.dataset?.context;
-  if (!globalThis?.document || context === 'popup') {
-    const name = `synology-download-remote-${context ?? 'background'}`;
-    const devtools = { realtime: true, hostname: 'localhost', port: 8000, name };
-    options.enhancers = [devToolsEnhancer(devtools)];
-    LoggerService.debug('Redux devtool exposed on', `http://${devtools.hostname}:${devtools.port}`, name);
-  }
-}
-export const store: Store<RootSlice> = configureStore(options);
+export const store: Store<RootSlice> = configureStore({ reducer: reducers, devTools: false });

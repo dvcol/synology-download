@@ -8,7 +8,6 @@ declare global {
       PORT?: string;
       NODE_ENV?: 'development' | 'production';
       DEBUG?: string;
-      DEVTOOL?: string;
     }
   }
 }
