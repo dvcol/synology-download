@@ -22,42 +22,42 @@ export function generateTask(_task: RecursivePartial<Task> = {}): Task {
   const status
     = _task.status
       ?? faker.helpers.arrayElement([...Object.values(TaskStatus), ...Array.from({ length: 10 }).fill([TaskStatus.downloading, TaskStatus.waiting]).flat()]) as TaskStatus;
-  const size = _task.size ?? faker.datatype.number({ min: 1000, max: 1000000000 });
+  const size = _task.size ?? faker.number.int({ min: 1000, max: 1000000000 });
 
   const create_time = _task?.additional?.detail?.create_time ?? faker.date.recent().getTime();
-  const started_time = _task?.additional?.detail?.started_time ?? faker.date.between(create_time, new Date()).getTime();
+  const started_time = _task?.additional?.detail?.started_time ?? faker.date.between({ from: create_time, to: new Date() }).getTime();
   const elapsed = (new Date().getTime() - started_time) / 1000;
 
   let size_downloaded
     = _task?.additional?.transfer?.size_downloaded
-      ?? faker.datatype.number({
+      ?? faker.number.int({
         min: 0,
         max: size / 10,
       });
   if ([TaskStatus.finished, TaskStatus.seeding, TaskStatus.extracting, TaskStatus.finishing].includes(status)) size_downloaded = size;
-  const size_uploaded = _task?.additional?.transfer?.size_uploaded ?? faker.datatype.number({ min: 0, max: size / 10 });
+  const size_uploaded = _task?.additional?.transfer?.size_uploaded ?? faker.number.int({ min: 0, max: size / 10 });
   const speed_download = Math.round(_task?.additional?.transfer?.speed_download ?? Number(size_downloaded) / elapsed);
   const speed_upload = Math.round(_task?.additional?.transfer?.speed_upload ?? Number(size_uploaded) / elapsed);
   return {
-    id: `dbid_${faker.datatype.uuid()}`,
+    id: `dbid_${faker.string.uuid()}`,
     size,
     status,
     title: faker.system.commonFileName(),
     type: faker.helpers.arrayElement(Object.values(TaskType)),
-    username: faker.internet.userName(),
+    username: faker.internet.username(),
     ..._task,
     additional: {
       detail: {
         completed_time: [TaskStatus.finished, TaskStatus.seeding].includes(status) ? faker.date.past().getTime() : 0,
-        connected_leechers: faker.datatype.number(1000),
-        connected_peers: faker.datatype.number(1000),
-        connected_seeders: faker.datatype.number(1000),
+        connected_leechers: faker.number.int(1000),
+        connected_peers: faker.number.int(1000),
+        connected_seeders: faker.number.int(1000),
         create_time,
         started_time,
         destination: faker.system.directoryPath(),
         seedelapsed: 0,
-        total_peers: faker.datatype.number(1000),
-        total_pieces: faker.datatype.number(1000),
+        total_peers: faker.number.int(1000),
+        total_pieces: faker.number.int(1000),
         unzip_password: '',
         uri: faker.internet.url(),
         waiting_seconds: 0,
@@ -161,7 +161,7 @@ export class TaskMock extends AbstractMock<TaskEntities> {
 }
 
 function changeStatus(task: Task, status: TaskStatus, threshold = 50000): Task {
-  if (faker.datatype.number(100000) > threshold) task.status = status;
+  if (faker.number.int(100000) > threshold) task.status = status;
   return task;
 }
 
@@ -197,9 +197,9 @@ function progress(task: Task) {
     task.additional.transfer.speed_download = 0;
     return task;
   }
-  if (faker.datatype.number(100) > 20) {
-    const max = (total - downloaded) / faker.datatype.number({ min: 5, max: 500 });
-    const size_downloaded = downloaded + faker.datatype.number({ max });
+  if (faker.number.int(100) > 20) {
+    const max = (total - downloaded) / faker.number.int({ min: 5, max: 500 });
+    const size_downloaded = downloaded + faker.number.int({ max });
     const { speed_upload, speed_download } = computeSpeed(task);
     task.additional.transfer = { ...task.additional.transfer, size_downloaded, speed_download, speed_upload };
   }
@@ -208,8 +208,8 @@ function progress(task: Task) {
 
 function seed(task: Task) {
   if (!task.additional?.transfer.size_uploaded) return task;
-  if (faker.datatype.number(100) > 20) {
-    task.additional.transfer.size_uploaded = faker.datatype.number({ max: task.size / 4 });
+  if (faker.number.int(100) > 20) {
+    task.additional.transfer.size_uploaded = faker.number.int({ max: task.size / 4 });
     task.additional.transfer.speed_upload = computeSpeed(task).speed_upload;
   }
   return task;

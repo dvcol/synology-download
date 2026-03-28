@@ -2,7 +2,7 @@ import type { File } from '../../../../models/file.model';
 import type { Folder } from '../../../../models/folder.model';
 
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
-import { TreeItem } from '@mui/lab';
+import { TreeItem } from '@mui/x-tree-view';
 
 import { ExplorerLeafEdit } from './explorer-leaf-edit';
 import { ExplorerLoading } from './explorer-loading';
@@ -30,7 +30,7 @@ export function ExplorerLeaf({
   const children = tree[nodeId];
   return (
     <TreeItem
-      nodeId={`${nodeId}`}
+      itemId={`${nodeId}`}
       label={
         // only > 2 so that we do not allow renaming of shares
         editable && folder?.isdir && nodeId.split('-')?.length > 2
@@ -42,7 +42,7 @@ export function ExplorerLeaf({
             )
       }
       disabled={disabled}
-      icon={folder?.isdir ? undefined : <InsertDriveFileOutlinedIcon />}
+      slots={folder?.isdir ? undefined : { icon: InsertDriveFileOutlinedIcon }}
       sx={{
         display: 'flex',
         overflow: 'hidden',

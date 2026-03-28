@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type { FC, type SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Observable } from 'rxjs';
 
 import type { File, FileList } from '../../../../models/file.model';
@@ -7,9 +7,8 @@ import type { RootSlice } from '../../../../models/store.model';
 
 import FolderIcon from '@mui/icons-material/Folder';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
-import { TreeView } from '@mui/lab';
 import { Container } from '@mui/material';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { SimpleTreeView } from '@mui/x-tree-view';
 import { useSelector } from 'react-redux';
 import { catchError, finalize, lastValueFrom, map, tap } from 'rxjs';
 
@@ -217,8 +216,8 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
     return selectNode(`${nodeId}-${(filteredTree[nodeId]?.length ?? 1) - 1}`);
   };
 
-  const onSelect = async ($event: React.SyntheticEvent, nodeId: string) => selectNode(nodeId);
-  const onExpand = ($event: React.SyntheticEvent, nodeIds: string[]) => !flatten && setExpanded(nodeIds);
+  const onSelect = async ($event: SyntheticEvent, itemId: string | null) => itemId && selectNode(itemId);
+  const onExpand = ($event: SyntheticEvent, itemIds: string[]) => !flatten && setExpanded(itemIds);
 
   const loadNestedPath = async (path: string) => {
     const _crumbs = path?.includes('/') ? path?.split('/') : [path];
@@ -284,15 +283,14 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
             />
           )
         : (
-            <TreeView
+            <SimpleTreeView
               key={`tree-${disabled}`}
               aria-label="file system navigator"
-              defaultCollapseIcon={<FolderOpenIcon />}
-              defaultExpandIcon={<FolderIcon />}
-              selected={selected}
-              onNodeSelect={onSelect}
-              expanded={expanded}
-              onNodeToggle={onExpand}
+              slots={{ collapseIcon: FolderOpenIcon, expandIcon: FolderIcon }}
+              selectedItems={selected}
+              onSelectedItemsChange={onSelect}
+              expandedItems={expanded}
+              onExpandedItemsChange={onExpand}
               disableSelection={disabled || pathLoading}
               sx={{
                 overflow: 'auto',
@@ -338,7 +336,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
                     spliceTree={spliceTree}
                   />
                 ))}
-            </TreeView>
+            </SimpleTreeView>
           )}
       <SearchInput
         containerRef={containerRef}

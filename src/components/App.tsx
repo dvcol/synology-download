@@ -1,4 +1,4 @@
-import type { EmotionCache } from '@emotion/utils';
+import type { EmotionCache } from '@emotion/cache';
 import type { Theme } from '@mui/material';
 import type { FC } from 'react';
 import type { HashRouterProps } from 'react-router-dom';

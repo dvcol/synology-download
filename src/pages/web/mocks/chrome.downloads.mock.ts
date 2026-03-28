@@ -8,8 +8,8 @@ import { AbstractMock } from './utils.mock';
 export function generateDownload(_download: Partial<DownloadItem> = {}): DownloadItem {
   const state = faker.helpers.arrayElement([...Array.from({ length: 8 }).fill('in_progress'), 'interrupted', 'complete']) as DownloadItem['state'];
 
-  const totalBytes = _download?.totalBytes ?? faker.datatype.number({ min: 1000, max: 1000000000 });
-  const bytesReceived = _download?.bytesReceived ?? state?.toString() === 'completed' ? totalBytes : faker.datatype.number({ min: 0, max: totalBytes / 10 });
+  const totalBytes = _download?.totalBytes ?? faker.number.int({ min: 1000, max: 1000000000 });
+  const bytesReceived = _download?.bytesReceived ?? state?.toString() === 'completed' ? totalBytes : faker.number.int({ min: 0, max: totalBytes / 10 });
 
   const filename = faker.system.filePath();
   const url = `${faker.internet.url()}/${filename.split('/').pop()}`;
@@ -23,12 +23,12 @@ export function generateDownload(_download: Partial<DownloadItem> = {}): Downloa
     canResume: state === 'interrupted',
     exists: state === 'complete' ? faker.datatype.boolean() : true,
     danger: faker.helpers.arrayElement(['file', 'url', 'content', 'uncommon', 'host', 'unwanted', 'safe', 'accepted']),
-    id: faker.helpers.unique(faker.datatype.number.bind(faker.datatype)),
+    id: faker.number.int(),
     incognito: false,
     mime: faker.system.mimeType(),
     referrer: faker.internet.url(),
     startTime: new Date().toISOString(),
-    estimatedEndTime: faker.date.soon(0).toISOString(),
+    estimatedEndTime: faker.date.soon({ days: 0 }).toISOString(),
     filename: faker.system.filePath(),
     finalUrl: url,
     url,
@@ -148,7 +148,7 @@ function generateError(): DownloadItem['error'] {
 }
 
 function fail(download: DownloadItem) {
-  if (faker.datatype.number(100000) < 99999) return download;
+  if (faker.number.int(100000) < 99999) return download;
   return {
     ...download,
     canResume: faker.datatype.boolean(),
@@ -163,18 +163,18 @@ function progress(download: DownloadItem) {
     download.state = 'complete';
     download.bytesReceived = total;
     download.endTime = new Date().toISOString();
-    download.estimatedEndTime = faker.date.soon(0, download.estimatedEndTime).toISOString();
+    download.estimatedEndTime = faker.date.soon({ days: 0, refDate: download.estimatedEndTime }).toISOString();
     return download;
   }
-  if (faker.datatype.number(100) > 20) {
-    const max = (total - downloaded) / faker.datatype.number({ min: 5, max: 500 });
-    download.bytesReceived = downloaded + faker.datatype.number({ max });
+  if (faker.number.int(100) > 20) {
+    const max = (total - downloaded) / faker.number.int({ min: 5, max: 500 });
+    download.bytesReceived = downloaded + faker.number.int({ max });
   }
   return download;
 }
 
 function exists(download: DownloadItem) {
-  if (faker.datatype.number(100000) < 80000) return download;
+  if (faker.number.int(100000) < 80000) return download;
   return {
     ...download,
     exists: false,
