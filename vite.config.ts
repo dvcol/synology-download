@@ -52,29 +52,28 @@ function getPlugins(_isDev: boolean, _isWeb: boolean): PluginOption[] {
       name: 'i18n-hmr',
       configureServer: (server) => {
         console.info('server start');
-        server.ws.on('fetch:i18n', async () => {
+        server.hot.on('fetch:i18n', async () => {
           const dir = await readdir(`${outDir}/_locales`);
           const locales = dir.map(async _lang =>
             readFile(`${outDir}/_locales/${_lang}/messages.json`, { encoding: 'utf-8' }).then(locale => ({ lang: _lang, locale: JSON.parse(locale) as JsonLocale })),
           );
-          server.ws.send({
+          server.hot.send({
             type: 'custom',
             event: 'update:i18n',
             data: await Promise.all(locales),
           });
         });
       },
-      handleHotUpdate: async ({ server, file, read, modules }) => {
+      hotUpdate: async ({ server, file, read }) => {
         const lang = file.match(i18nRegex)?.[1];
-        if (typeof lang !== 'string') return modules;
+        if (typeof lang !== 'string') return;
         console.info('Emit new i18n', file);
         const locale = JSON.parse(await read()) as JsonLocale;
-        server.ws.send({
+        server.hot.send({
           type: 'custom',
           event: 'update:i18n',
           data: [{ lang, locale }],
         });
-        return modules;
       },
     },
     // rewrite assets to use relative path
