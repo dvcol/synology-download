@@ -1,9 +1,14 @@
-import { AppInstance, ServiceInstance } from '@src/models';
-import { ContentAppWc } from '@src/pages/content/components/content-app-wc';
-import { clickListener$, listenToScrapEvents } from '@src/pages/content/modules';
-import { LoggerService, NotificationService, QueryService } from '@src/services';
-import { storeProxy } from '@src/store';
-import { getManifest, portConnect } from '@src/utils';
+import { AppInstance } from '../../../models/app-instance.model';
+import { ServiceInstance } from '../../../models/settings.model';
+import { LoggerService } from '../../../services/logger/logger.service';
+import { NotificationService } from '../../../services/notification/notification.service';
+import { QueryService } from '../../../services/query/query.service';
+import { storeProxy } from '../../../store/store-proxy';
+import { portConnect } from '../../../utils/chrome/chrome-message.utils';
+import { getManifest } from '../../../utils/webex.utils';
+import { ContentAppWc } from '../components/content-app-wc';
+import { clickListener$ } from './anchor.handler';
+import { listenToScrapEvents } from './scraper.handler';
 
 const { name, version } = getManifest();
 const injection = new Date().toISOString();

@@ -1,11 +1,14 @@
-import type { InterceptPayload, InterceptResponse, TaskCreateResponse, TaskForm } from '@src/models';
-import type { DownloadFilenameSuggestion, DownloadItem } from '@src/utils';
 import type { Observable } from 'rxjs';
 
-import { ChromeMessageType } from '@src/models';
-import { sendActiveTabMessage } from '@src/utils';
+import type { InterceptPayload, InterceptResponse } from '../../models/message.model';
+import type { TaskCreateResponse } from '../../models/synology.model';
+import type { TaskForm } from '../../models/task.model';
+import type { DownloadFilenameSuggestion, DownloadItem } from '../../utils/chrome/chrome-download.utils';
+
 import { switchMap, tap } from 'rxjs';
 
+import { ChromeMessageType } from '../../models/message.model';
+import { sendActiveTabMessage } from '../../utils/chrome/chrome-message.utils';
 import { LoggerService } from '../logger/logger.service';
 import { QueryService } from '../query/query.service';
 import { DownloadService } from './download.service';

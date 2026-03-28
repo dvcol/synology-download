@@ -1,4 +1,4 @@
-import { BaseLoggerService } from '@src/services';
+import { BaseLoggerService } from '../../../services/logger/base-logger.service';
 
 export function patchStorage(_global = window) {
   _global.chrome.storage.local.set = async (items) => {

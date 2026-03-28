@@ -4,8 +4,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import { Breadcrumbs, Button, Tooltip, Typography } from '@mui/material';
 import React from 'react';
 
-import { ExplorerLoading } from '@src/components/common/explorer/folder/explorer-loading';
-import { useI18n } from '@src/utils';
+import { useI18n } from '../../../../utils/webex.utils';
+import { ExplorerLoading } from './explorer-loading';
 
 export function ExplorerBreadCrumbs({
   crumbs,

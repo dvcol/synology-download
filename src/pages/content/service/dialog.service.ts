@@ -1,5 +1,6 @@
-import type { InterceptResponse, TaskForm } from '@src/models';
-import type { ChromeResponse } from '@src/utils';
+import type { InterceptResponse } from '../../../models/message.model';
+import type { TaskForm } from '../../../models/task.model';
+import type { ChromeResponse } from '../../../utils/webex.utils';
 
 import { Subject } from 'rxjs';
 

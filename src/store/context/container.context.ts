@@ -1,4 +1,4 @@
-import type { ContainerContextInstance } from '@src/models';
+import type { ContainerContextInstance } from '../../models/context.model';
 
 import { createContext } from 'react';
 

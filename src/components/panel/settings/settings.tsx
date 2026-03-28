@@ -1,10 +1,9 @@
-import type { SettingsPanelTab } from '@src/models';
+import type { SettingsPanelTab } from '../../../models/settings.model';
 
 import { Container } from '@mui/material';
 import React from 'react';
 
-import { AdvancedHeader, ConnectionHeader, DownloadsHeader, InterfaceHeader, NotificationHeader, SettingHeader, TasksHeader } from '@src/models';
-
+import { AdvancedHeader, ConnectionHeader, DownloadsHeader, InterfaceHeader, NotificationHeader, SettingHeader, TasksHeader } from '../../../models/settings.model';
 import { SettingsNavbar } from './settings-navbar';
 import { SettingsRoutes } from './settings-routes';
 

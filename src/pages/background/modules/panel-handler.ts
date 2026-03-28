@@ -1,11 +1,14 @@
-import type { OpenPanelPayload, OpenPopupPayload, StoreOrProxy } from '@src/models';
+import type { OpenPanelPayload, OpenPopupPayload } from '../../../models/message.model';
+import type { StoreOrProxy } from '../../../models/store.model';
 
 import { firstValueFrom, timeout } from 'rxjs';
 
-import { AppInstance, ChromeMessageType } from '@src/models';
-import { LoggerService } from '@src/services';
-import { getPanel } from '@src/store/selectors';
-import { getCurrentWindow, onConnect, onMessage, openPanel, sendMessage } from '@src/utils';
+import { AppInstance } from '../../../models/app-instance.model';
+import { ChromeMessageType } from '../../../models/message.model';
+import { LoggerService } from '../../../services/logger/logger.service';
+import { getPanel } from '../../../store/selectors/state.selector';
+import { onConnect, onMessage, sendMessage } from '../../../utils/chrome/chrome-message.utils';
+import { getCurrentWindow, openPanel } from '../../../utils/chrome/chrome.utils';
 
 export function onOpenPanelEvent(store: StoreOrProxy) {
   LoggerService.debug('Subscribing to open popup events.');

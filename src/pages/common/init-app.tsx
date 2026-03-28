@@ -1,13 +1,23 @@
-import type { AppInstance, AppRoutes, QueryAutoLoginOptions, RootSlice, ServiceInstance } from '@src/models';
+import type { AppInstance } from '../../models/app-instance.model';
+import type { QueryAutoLoginOptions } from '../../models/query.model';
+import type { AppRoutes } from '../../models/routes.model';
+import type { ServiceInstance } from '../../models/settings.model';
+import type { RootSlice } from '../../models/store.model';
 
 import React from 'react';
 import { render } from 'react-dom';
 
-import { App } from '@src/components';
-import { ChromeMessageType, setInstance } from '@src/models';
-import { DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
-import { storeProxy } from '@src/store';
-import { onMessage, portConnect, store$ } from '@src/utils';
+import { App } from '../../components/App';
+import { setInstance } from '../../models/app-instance.model';
+import { ChromeMessageType } from '../../models/message.model';
+import { DownloadService } from '../../services/download/download.service';
+import { LoggerService } from '../../services/logger/logger.service';
+import { NotificationService } from '../../services/notification/notification.service';
+import { PollingService } from '../../services/polling/polling.service';
+import { QueryService } from '../../services/query/query.service';
+import { storeProxy } from '../../store/store-proxy';
+import { onMessage, portConnect } from '../../utils/chrome/chrome-message.utils';
+import { store$ } from '../../utils/rxjs.utils';
 
 export async function initApp(logInstance: ServiceInstance, appInstance: AppInstance, getter: (state: RootSlice) => boolean, redirect?: AppRoutes): Promise<void> {
   // Set global instance

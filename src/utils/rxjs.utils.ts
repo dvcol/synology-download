@@ -1,5 +1,4 @@
-import type { RootSlice, StoreOrProxy } from '@src/models';
-
+import type { RootSlice, StoreOrProxy } from '../models/store.model';
 import type { BeforeOperator, BufferDebounceUnless, SkipUntilRepeat } from './webex.utils';
 
 import { before as _before, bufferDebounceUnless as _bufferDebounceUnless, skipUntilRepeat as _skipUntilRepeat } from '@dvcol/web-extension-utils';

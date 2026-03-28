@@ -1,15 +1,15 @@
 import type { Dispatch, ForwardRefRenderFunction, SetStateAction } from 'react';
 
-import type { ProgressBackgroundProps } from '@src/components';
-import type { GlobalSettings } from '@src/models';
-import type { StoreState } from '@src/store';
+import type { GlobalSettings } from '../../../models/settings.model';
+import type { StoreState } from '../../../store/store';
+import type { ProgressBackgroundProps } from '../../common/loader/progress-background';
 
 import { Accordion, AccordionDetails, AccordionSummary, ButtonGroup } from '@mui/material';
 import React, { forwardRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { ProgressBackground } from '@src/components';
-import { getGlobalTask } from '@src/store/selectors';
+import { getGlobalTask } from '../../../store/selectors/settings.selector';
+import { ProgressBackground } from '../../common/loader/progress-background';
 
 export interface ContentItemAccordionProps {
   index: number;

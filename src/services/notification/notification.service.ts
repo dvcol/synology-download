@@ -1,13 +1,24 @@
-import type { ChromeNotification, Download, NotificationServiceOptions, ServiceInstance, SnackMessage, SnackNotification, StateSlice, StoreOrProxy, Task } from '@src/models';
 import type { VariantType } from 'notistack';
 import type { Observable } from 'rxjs';
 
-import { ChromeMessageType, NotificationLevel, NotificationLevelKeys, NotificationType } from '@src/models';
-import { setBadge } from '@src/store/actions';
-import { getNotificationsBannerEnabled, getNotificationsBannerLevel, getNotificationsSnack, getNotificationsSnackEnabled, getNotificationsSnackLevel, getStateBadge } from '@src/store/selectors';
-import { bufferDebounceUnless, createNotification, isMacOs, onMessage, parseMagnetLink, sendActiveTabMessage, sendMessage, store$, useI18n } from '@src/utils';
+import type { Download } from '../../models/download.model';
+import type { ChromeNotification, NotificationServiceOptions, SnackMessage, SnackNotification } from '../../models/notification.model';
+import type { ServiceInstance } from '../../models/settings.model';
+import type { StateSlice, StoreOrProxy } from '../../models/store.model';
+import type { Task } from '../../models/task.model';
+
 import { filter, map, Subject, takeUntil, tap } from 'rxjs';
 
+import { ChromeMessageType } from '../../models/message.model';
+import { NotificationLevel, NotificationLevelKeys, NotificationType } from '../../models/notification.model';
+import { setBadge } from '../../store/actions/state.action';
+import { getNotificationsBannerEnabled, getNotificationsSnackEnabled, getStateBadge } from '../../store/selectors/composite.selector';
+import { getNotificationsBannerLevel, getNotificationsSnack, getNotificationsSnackLevel } from '../../store/selectors/settings.selector';
+import { onMessage, sendActiveTabMessage, sendMessage } from '../../utils/chrome/chrome-message.utils';
+import { createNotification } from '../../utils/chrome/chrome.utils';
+import { bufferDebounceUnless, store$ } from '../../utils/rxjs.utils';
+import { parseMagnetLink } from '../../utils/string.utils';
+import { isMacOs, useI18n } from '../../utils/webex.utils';
 import { LoggerService } from '../logger/logger.service';
 
 // eslint-disable-next-line react-hooks/rules-of-hooks

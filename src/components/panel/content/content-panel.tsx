@@ -1,24 +1,30 @@
-import type { ConfirmationState, TaskEditState } from '@src/components';
-import type { SearchInputRef } from '@src/components/common/inputs/search-input';
-import type { OnRefreshCallback } from '@src/components/utils/use-pull-to-refresh';
-import type { Content } from '@src/models';
-import type { StoreState } from '@src/store';
+import type { Content } from '../../../models/content.model';
+import type { StoreState } from '../../../store/store';
+import type { SearchInputRef } from '../../common/inputs/search-input';
+import type { OnRefreshCallback } from '../../utils/use-pull-to-refresh';
+import type { ConfirmationState, TaskEditState } from './task/task-detail';
 
 import { Container, MenuItem } from '@mui/material';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { TransitionGroup } from 'react-transition-group';
 
-import { ConfirmationDialog, RefreshLoader, TaskEdit, usePullToRefresh } from '@src/components';
-import { SearchInput } from '@src/components/common/inputs/search-input';
-import { ContentItemInstance } from '@src/components/panel/content/content-item-instance';
-import { ErrorType, LoginError } from '@src/models';
-import { DownloadService, NotificationService, QueryService } from '@src/services';
-import { PanelService } from '@src/services/panel/panel.service';
-import { getContentsForActiveTab, getInterfacePullToRefresh, getLogged, getSettingsDownloadsEnabled, getTabOrFirst } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
-
+import { ErrorType, LoginError } from '../../../models/error.model';
+import { DownloadService } from '../../../services/download/download.service';
+import { NotificationService } from '../../../services/notification/notification.service';
+import { PanelService } from '../../../services/panel/panel.service';
+import { QueryService } from '../../../services/query/query.service';
+import { getContentsForActiveTab, getTabOrFirst } from '../../../store/selectors/composite.selector';
+import { getInterfacePullToRefresh, getSettingsDownloadsEnabled } from '../../../store/selectors/settings.selector';
+import { getLogged } from '../../../store/selectors/state.selector';
+import { useI18n } from '../../../utils/webex.utils';
+import { ConfirmationDialog } from '../../common/dialog/confirmation-dialog';
+import { SearchInput } from '../../common/inputs/search-input';
+import { RefreshLoader } from '../../utils/pull-to-refresh';
+import { usePullToRefresh } from '../../utils/use-pull-to-refresh';
 import { ContentEmpty } from './content-empty';
+import { ContentItemInstance } from './content-item-instance';
+import { TaskEdit } from './task/task-edit';
 
 const FilterMode: Record<string, keyof Content | 'all'> = {
   title: 'title',

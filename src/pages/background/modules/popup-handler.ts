@@ -1,8 +1,9 @@
-import type { OpenPopupPayload } from '@src/models';
+import type { OpenPopupPayload } from '../../../models/message.model';
 
-import { ChromeMessageType } from '@src/models';
-import { LoggerService } from '@src/services';
-import { onMessage, openPopup, sendMessage } from '@src/utils';
+import { ChromeMessageType } from '../../../models/message.model';
+import { LoggerService } from '../../../services/logger/logger.service';
+import { onMessage, sendMessage } from '../../../utils/chrome/chrome-message.utils';
+import { openPopup } from '../../../utils/chrome/chrome.utils';
 
 export function onOpenPopupEvent() {
   LoggerService.debug('Subscribing to open popup events.');

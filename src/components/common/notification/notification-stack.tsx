@@ -1,14 +1,15 @@
 import type { SnackbarKey, SnackbarProviderProps } from 'notistack';
 import type { FC } from 'react';
 
-import type { SnackMessage } from '@src/models';
+import type { SnackMessage } from '../../../models/notification.model';
 
 import { zIndexMax } from '@dvcol/web-extension-utils';
 import { Slide } from '@mui/material';
 import { SnackbarProvider } from 'notistack';
 import React, { useState } from 'react';
 
-import { Notifier, SnackNotificationCard } from '@src/components';
+import { Notifier } from './notification-notifier';
+import { SnackNotificationCard } from './notification-snack';
 
 // TODO move to custom snack for next notistack version, see https://github.com/iamhosseindhv/notistack/issues/242
 export const NotificationStack: FC<Pick<SnackbarProviderProps, 'maxSnack'>> = ({ maxSnack }) => {

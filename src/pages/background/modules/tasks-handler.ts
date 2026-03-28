@@ -1,11 +1,11 @@
-import type { StoreOrProxy, SyncedTaskSlice } from '@src/models';
+import type { StoreOrProxy, SyncedTaskSlice } from '../../../models/store.model';
 
 import { catchError, finalize, map, of } from 'rxjs';
 
-import { LoggerService } from '@src/services';
-import { restoreTasks } from '@src/store/actions';
-import { tasksSlice } from '@src/store/slices/tasks.slice';
-import { getManifest, localGet, localSet, parseJSON, versionCheck } from '@src/utils';
+import { LoggerService } from '../../../services/logger/logger.service';
+import { restoreTasks } from '../../../store/actions/tasks.action';
+import { tasksSlice } from '../../../store/slices/tasks.slice';
+import { getManifest, localGet, localSet, parseJSON, versionCheck } from '../../../utils/webex.utils';
 
 /** Restore extension tasks list */
 export function restoreTaskSlice(store: StoreOrProxy) {

@@ -1,7 +1,8 @@
-import { AppInstance, ServiceInstance } from '@src/models';
-import { initApp } from '@src/pages/common';
-import { LoggerService } from '@src/services';
-import { getPanel } from '@src/store/selectors';
+import { AppInstance } from '../../models/app-instance.model';
+import { ServiceInstance } from '../../models/settings.model';
+import { LoggerService } from '../../services/logger/logger.service';
+import { getPanel } from '../../store/selectors/state.selector';
+import { initApp } from '../common/init-app';
 
 initApp(ServiceInstance.Panel, AppInstance.panel, getPanel)
   .then(() => LoggerService.debug('Panel app initialised.'))

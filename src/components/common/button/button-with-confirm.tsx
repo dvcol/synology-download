@@ -1,14 +1,13 @@
 import type { ButtonProps } from '@mui/material';
 import type { FC } from 'react';
 
-import type { ConfirmationDialogProps } from '../dialog';
+import type { ConfirmationDialogProps } from '../dialog/confirmation-dialog';
 
 import { Button } from '@mui/material';
 import React, { useState } from 'react';
 
-import { useI18n } from '@src/utils';
-
-import { ConfirmationDialog } from '../dialog';
+import { useI18n } from '../../../utils/webex.utils';
+import { ConfirmationDialog } from '../dialog/confirmation-dialog';
 
 interface ButtonWithConfirmProps {
   buttonLabel?: JSX.Element | string;

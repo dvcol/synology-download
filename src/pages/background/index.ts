@@ -1,5 +1,4 @@
-import { LoggerService } from '@src/services';
-
+import { LoggerService } from '../../services/logger/logger.service';
 import { initServiceWorker } from './init-service-worker';
 
 LoggerService.debug('Background service worker injected.');

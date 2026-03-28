@@ -1,7 +1,6 @@
-import type { TaskFile, TaskType } from '@src/models/task.model';
-import type { HttpBody, HttpMethod, HttpParameters } from '@src/utils';
-
+import type { HttpBody, HttpMethod, HttpParameters } from '../utils/webex.utils';
 import type { ApiInfo } from './api-info.model';
+import type { TaskFile, TaskType } from './task.model';
 
 export enum SessionName {
   DownloadStation = 'DownloadStation',

@@ -1,12 +1,13 @@
 import type { FC, ForwardRefRenderFunction } from 'react';
 import type { Observable } from 'rxjs';
 
-import type { ProgressBackgroundProps, TaskDetailProps } from '@src/components';
-import type { GlobalSettings, Task } from '@src/models';
-import type { StoreState } from '@src/store';
-import type { i18n } from '@src/utils';
-
+import type { GlobalSettings } from '../../../../models/settings.model';
+import type { Task } from '../../../../models/task.model';
+import type { StoreState } from '../../../../store/store';
+import type { i18n } from '../../../../utils/webex.utils';
+import type { ProgressBackgroundProps } from '../../../common/loader/progress-background';
 import type { ContentItemAccordionProps } from '../content-item';
+import type { TaskDetailProps } from './task-detail';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import PauseIcon from '@mui/icons-material/Pause';
@@ -16,13 +17,18 @@ import React, { forwardRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { finalize } from 'rxjs';
 
-import { IconLoader } from '@src/components';
-import { ContentButton } from '@src/components/panel/content/content-button';
-import { ColorLevel, ColorLevelMap, ErrorType, LoginError, TaskStatus, taskStatusToColor } from '@src/models';
-import { LoggerService, NotificationService, QueryService } from '@src/services';
-import { getGlobalTask } from '@src/store/selectors';
-import { before, useDebounceObservable, useI18n } from '@src/utils';
-
+import { ErrorType, LoginError } from '../../../../models/error.model';
+import { ColorLevel, ColorLevelMap } from '../../../../models/material-ui.model';
+import { TaskStatus, taskStatusToColor } from '../../../../models/task.model';
+import { LoggerService } from '../../../../services/logger/logger.service';
+import { NotificationService } from '../../../../services/notification/notification.service';
+import { QueryService } from '../../../../services/query/query.service';
+import { getGlobalTask } from '../../../../store/selectors/settings.selector';
+import { useDebounceObservable } from '../../../../utils/hooks.utils';
+import { before } from '../../../../utils/rxjs.utils';
+import { useI18n } from '../../../../utils/webex.utils';
+import { IconLoader } from '../../../common/loader/icon-loader';
+import { ContentButton } from '../content-button';
 import { ContentItem } from '../content-item';
 import TaskCard from './task-card';
 import TaskDetail from './task-detail';

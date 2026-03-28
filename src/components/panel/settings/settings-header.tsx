@@ -1,9 +1,9 @@
-import type { SettingHeader } from '@src/models';
+import type { SettingHeader } from '../../../models/settings.model';
 
 import { Typography } from '@mui/material';
 import React from 'react';
 
-import { useI18n } from '@src/utils';
+import { useI18n } from '../../../utils/webex.utils';
 
 export function SettingsHeader({ label }: { label: SettingHeader }) {
   const i18n = useI18n('panel', 'settings');

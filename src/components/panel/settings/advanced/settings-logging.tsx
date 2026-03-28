@@ -1,4 +1,5 @@
-import type { AdvancedLogging, RootSlice } from '@src/models';
+import type { AdvancedLogging } from '../../../../models/settings.model';
+import type { RootSlice } from '../../../../models/store.model';
 
 import DownloadIcon from '@mui/icons-material/Download';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
@@ -7,12 +8,19 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ButtonWithConfirm, FormInput, FormSwitch, JsonExplorer } from '@src/components';
-import { AdvancedHeader, ColorLevel, defaultAdvancedLogging, LoggingLevel, LoggingLevelLevelKeys, ServiceInstance } from '@src/models';
-import { resetLogHistory, syncAdvancedLogging } from '@src/store/actions';
-import { getAdvancedSettingsLogging, getLogHistory } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
-import { downloadJson } from '@src/utils/downlaod.utils';
+import { LoggingLevel, LoggingLevelLevelKeys } from '../../../../models/logger.model';
+import { ColorLevel } from '../../../../models/material-ui.model';
+import { AdvancedHeader, defaultAdvancedLogging, ServiceInstance } from '../../../../models/settings.model';
+import { syncAdvancedLogging } from '../../../../store/actions/settings.action';
+import { resetLogHistory } from '../../../../store/actions/state.action';
+import { getAdvancedSettingsLogging } from '../../../../store/selectors/settings.selector';
+import { getLogHistory } from '../../../../store/selectors/state.selector';
+import { downloadJson } from '../../../../utils/downlaod.utils';
+import { useI18n } from '../../../../utils/webex.utils';
+import { ButtonWithConfirm } from '../../../common/button/button-with-confirm';
+import { JsonExplorer } from '../../../common/explorer/json/json-explorer';
+import { FormInput } from '../../../common/form/form-input';
+import { FormSwitch } from '../../../common/form/form-switch';
 
 export function SettingsLogging() {
   const i18n = useI18n('panel', 'settings', 'advanced', 'logging');

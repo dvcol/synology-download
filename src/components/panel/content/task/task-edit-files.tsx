@@ -1,17 +1,23 @@
 import type { FC } from 'react';
 
-import type { RootSlice, TaskFile } from '@src/models';
+import type { RootSlice } from '../../../../models/store.model';
+import type { TaskFile } from '../../../../models/task.model';
 
 import { Grid, List, ListItem, ListItemText, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { finalize, tap } from 'rxjs';
 
-import { ProgressBar } from '@src/components';
-import { TaskPriority } from '@src/models';
-import { LoggerService, NotificationService, QueryService } from '@src/services';
-import { getTaskFilesById } from '@src/store/selectors';
-import { before, computeProgress, useDebounceObservable, useI18n } from '@src/utils';
+import { TaskPriority } from '../../../../models/synology.model';
+import { LoggerService } from '../../../../services/logger/logger.service';
+import { NotificationService } from '../../../../services/notification/notification.service';
+import { QueryService } from '../../../../services/query/query.service';
+import { getTaskFilesById } from '../../../../store/selectors/tasks.selector';
+import { computeProgress } from '../../../../utils/format.utils';
+import { useDebounceObservable } from '../../../../utils/hooks.utils';
+import { before } from '../../../../utils/rxjs.utils';
+import { useI18n } from '../../../../utils/webex.utils';
+import { ProgressBar } from '../../../common/loader/progress-bar';
 
 interface TaskEditFilesProps { taskId: string }
 export const TaskEditFiles: FC<TaskEditFilesProps> = ({ taskId }) => {

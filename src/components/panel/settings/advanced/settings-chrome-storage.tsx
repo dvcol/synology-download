@@ -1,4 +1,5 @@
-import type { RootSlice, SettingsSlice, SyncSettings } from '@src/models';
+import type { SyncSettings } from '../../../../models/settings.model';
+import type { RootSlice, SettingsSlice } from '../../../../models/store.model';
 
 import DownloadIcon from '@mui/icons-material/Download';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
@@ -9,14 +10,18 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { firstValueFrom, Subscription } from 'rxjs';
 
-import { ButtonWithConfirm, FormInput, JsonExplorer } from '@src/components';
-import { AdvancedHeader, ColorLevel, ColorLevelCss, defaultSettings, defaultSyncSettings, SyncSettingMode } from '@src/models';
-import { ContainerContext } from '@src/store';
-import { setSyncSettings, syncSettings } from '@src/store/actions';
-import { getRoot, getSyncSettings } from '@src/store/selectors';
-import { settingsSlice } from '@src/store/slices/settings.slice';
-import { localClear, localGet, syncClear, syncGet, useI18n } from '@src/utils';
-import { downloadJson } from '@src/utils/downlaod.utils';
+import { ColorLevel, ColorLevelCss } from '../../../../models/material-ui.model';
+import { AdvancedHeader, defaultSettings, defaultSyncSettings, SyncSettingMode } from '../../../../models/settings.model';
+import { setSyncSettings, syncSettings } from '../../../../store/actions/settings.action';
+import { ContainerContext } from '../../../../store/context/container.context';
+import { getRoot } from '../../../../store/selectors/root.selector';
+import { getSyncSettings } from '../../../../store/selectors/settings.selector';
+import { settingsSlice } from '../../../../store/slices/settings.slice';
+import { downloadJson } from '../../../../utils/downlaod.utils';
+import { localClear, localGet, syncClear, syncGet, useI18n } from '../../../../utils/webex.utils';
+import { ButtonWithConfirm } from '../../../common/button/button-with-confirm';
+import { JsonExplorer } from '../../../common/explorer/json/json-explorer';
+import { FormInput } from '../../../common/form/form-input';
 
 export function SettingsChromeStorage() {
   const i18n = useI18n('panel', 'settings', 'advanced', 'storage');

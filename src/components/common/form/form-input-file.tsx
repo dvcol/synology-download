@@ -4,7 +4,7 @@ import type { FC, PropsWithChildren } from 'react';
 import { Box, Button, InputAdornment } from '@mui/material';
 import React from 'react';
 
-import { useI18n } from '@src/utils';
+import { useI18n } from '../../../utils/webex.utils';
 
 export interface FormInputFileProps {
   onChange: TextFieldProps['onChange'];

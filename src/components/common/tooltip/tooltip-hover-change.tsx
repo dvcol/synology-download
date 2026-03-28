@@ -1,7 +1,7 @@
 import type { BoxProps, TooltipProps } from '@mui/material';
 import type { FC } from 'react';
 
-import type { ModifiedEvent } from '@src/models';
+import type { ModifiedEvent } from '../../../models/navbar.model';
 
 import { Box, Tooltip } from '@mui/material';
 import React, { useState } from 'react';

@@ -10,9 +10,9 @@ export async function defineComponents(options?: DefineComponentsOptions, _globa
 
   const components: Record<string, CustomElementConstructor> = {
     // eslint-disable-next-line ts/no-require-imports,ts/no-unsafe-member-access,ts/no-unsafe-assignment
-    [WebComponents.StandaloneApp]: require('@src/components/web/standalone-app-wc').StandaloneAppWc,
+    [WebComponents.StandaloneApp]: require('../../../components/web/standalone-app-wc').StandaloneAppWc,
     // eslint-disable-next-line ts/no-require-imports,ts/no-unsafe-member-access,ts/no-unsafe-assignment
-    [WebComponents.ContentApp]: require('@src/pages/content/components/content-app-wc').ContentAppWc,
+    [WebComponents.ContentApp]: require('../../content/components/content-app-wc').ContentAppWc,
   };
 
   Object.keys(options?.components ?? components)?.forEach((component) => {

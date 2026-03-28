@@ -1,13 +1,12 @@
 import type { AnyAction, Store } from 'redux';
 import type { Store as StoreProxy } from 'webext-redux';
 
-import type { ContentCount } from '@src/models/content.model';
-import type { ScrapedContents, ScrapedPage } from '@src/models/scraped-content.model';
-import type { InfoResponse } from '@src/models/synology.model';
-
+import type { ContentCount } from './content.model';
 import type { Download } from './download.model';
 import type { ContextMenu, QuickMenu } from './menu.model';
+import type { ScrapedContents, ScrapedPage } from './scraped-content.model';
 import type { AdvancedSettings, ConnectionSettings, ContentSettings, DownloadSettings, GlobalSettings, Log, NotificationSettings, PollingSettings, ScrapeSettings, SyncSettings, TaskSettings } from './settings.model';
+import type { InfoResponse } from './synology.model';
 import type { ContentTab } from './tab.model';
 import type { Task, TaskComplete, TaskFile, TaskForm, TaskStatistics } from './task.model';
 

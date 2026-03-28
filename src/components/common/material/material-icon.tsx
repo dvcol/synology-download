@@ -18,7 +18,7 @@ import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
 import React from 'react';
 
-import { MaterialIcon } from '@src/models';
+import { MaterialIcon } from '../../../models/material-ui.model';
 
 import JSX = jsx.JSX;
 

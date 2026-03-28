@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
 
-import type { InterfaceHeader } from '@src/models';
+import type { InterfaceHeader } from '../../../../models/settings.model';
 
 import AddIcon from '@mui/icons-material/Add';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -9,8 +9,9 @@ import { Accordion, AccordionSummary, Button, Card, CardActions, CardContent, Ca
 import React from 'react';
 import { v4 as uuid } from 'uuid';
 
-import { ButtonWithConfirm, SortableList } from '@src/components';
-import { useI18n } from '@src/utils';
+import { useI18n } from '../../../../utils/webex.utils';
+import { ButtonWithConfirm } from '../../../common/button/button-with-confirm';
+import { SortableList } from '../../../common/sortable/sortable-list';
 
 export function SettingsAccordion<T extends { id: string }>({
   title,

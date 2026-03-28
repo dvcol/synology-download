@@ -8,8 +8,7 @@ import { styled } from '@mui/material';
 import React, { useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
-import { slideInAnimation, slideOutAnimation } from '@src/utils';
-
+import { slideInAnimation, slideOutAnimation } from '../../../utils/animations.utils';
 import { SortableListItem } from './sortable-list-item';
 
 const duration = { enter: 300, exit: 300 };

@@ -1,12 +1,12 @@
 import type { FC } from 'react';
 
-import type { NavbarButton } from '@src/models';
+import type { NavbarButton } from '../../models/navbar.model';
 
 import { ListItemIcon, MenuItem } from '@mui/material';
 import React, { useContext } from 'react';
 
-import { TooltipHoverChange } from '@src/components';
-import { ContainerContext } from '@src/store';
+import { ContainerContext } from '../../store/context/container.context';
+import { TooltipHoverChange } from '../common/tooltip/tooltip-hover-change';
 
 type MenuItemIconProps = {
   label: string;

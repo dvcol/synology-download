@@ -1,11 +1,11 @@
 import type { Store } from 'redux';
 
-import type { ScrapedContentsPayload } from '@src/models';
+import type { ScrapedContentsPayload } from '../../../models/message.model';
 
-import { ChromeMessageType } from '@src/models';
-import { LoggerService } from '@src/services';
-import { setScrapedContents, setScrapedPage } from '@src/store/actions';
-import { onMessage } from '@src/utils';
+import { ChromeMessageType } from '../../../models/message.model';
+import { LoggerService } from '../../../services/logger/logger.service';
+import { setScrapedContents, setScrapedPage } from '../../../store/actions/scraped.action';
+import { onMessage } from '../../../utils/chrome/chrome-message.utils';
 
 export function onScrapedContentEvent(store: Store) {
   LoggerService.debug('Subscribing to scraped contents events.');

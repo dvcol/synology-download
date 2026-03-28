@@ -5,12 +5,8 @@
     "jsx": "react",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "useDefineForClassFields": true,
-    "baseUrl": ".",
     "module": "ESNext",
     "moduleResolution": "node",
-    "paths": {
-      "@src/*": ["./src/*"]
-    },
     "resolveJsonModule": true,
     "types": ["chrome", "@types/chrome", "node"],
     "allowJs": false,

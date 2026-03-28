@@ -1,8 +1,10 @@
 import type { Dispatch, FC, SetStateAction } from 'react';
 import type { Observable } from 'rxjs';
 
-import type { ApiInfo, RootSlice, Task, TaskFile } from '@src/models';
-import type { i18n } from '@src/utils';
+import type { ApiInfo } from '../../../../models/api-info.model';
+import type { RootSlice } from '../../../../models/store.model';
+import type { Task, TaskFile } from '../../../../models/task.model';
+import type { i18n } from '../../../../utils/webex.utils';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -15,12 +17,20 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { exhaustMap, finalize, map, timer } from 'rxjs';
 
-import { IconLoader, ProgressBar } from '@src/components';
-import { ColorLevel, TaskStatus, TaskType } from '@src/models';
-import { LoggerService, NotificationService, QueryService } from '@src/services';
-import { getDownloadStation2APITaskBtFile, getDownloadStation2APITaskComplete, getPollingInterval, getTaskFilesById } from '@src/store/selectors';
-import { before, computeProgress, dateToLocalString, formatBytes, useDebounceObservable, useI18n } from '@src/utils';
-
+import { ColorLevel } from '../../../../models/material-ui.model';
+import { TaskStatus, TaskType } from '../../../../models/task.model';
+import { LoggerService } from '../../../../services/logger/logger.service';
+import { NotificationService } from '../../../../services/notification/notification.service';
+import { QueryService } from '../../../../services/query/query.service';
+import { getPollingInterval } from '../../../../store/selectors/composite.selector';
+import { getDownloadStation2APITaskBtFile, getDownloadStation2APITaskComplete } from '../../../../store/selectors/state.selector';
+import { getTaskFilesById } from '../../../../store/selectors/tasks.selector';
+import { computeProgress, dateToLocalString, formatBytes } from '../../../../utils/format.utils';
+import { useDebounceObservable } from '../../../../utils/hooks.utils';
+import { before } from '../../../../utils/rxjs.utils';
+import { useI18n } from '../../../../utils/webex.utils';
+import { IconLoader } from '../../../common/loader/icon-loader';
+import { ProgressBar } from '../../../common/loader/progress-bar';
 import ContentDetail from '../content-detail';
 
 const TaskTitle: FC<{ task: Task }> = ({ task }) => {

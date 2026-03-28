@@ -1,9 +1,9 @@
-import type { Task, TaskAdditional, TaskTransfer } from '@src/models';
+import type { Task, TaskAdditional, TaskTransfer } from '../../../models/task.model';
 
 import { faker } from '@faker-js/faker/locale/en';
 
-import { TaskPriority, TaskStatus, TaskType } from '@src/models';
-
+import { TaskPriority } from '../../../models/synology.model';
+import { TaskStatus, TaskType } from '../../../models/task.model';
 import { FetchIntercept } from '../models';
 import { AbstractMock, resolveUrl } from './utils.mock';
 

@@ -1,10 +1,12 @@
-import type { FileList, FileListOption, FileSortBy, FolderList, FolderListOption, FolderSortBy, NewFolderList, SynologyFileStationInfo } from '@src/models';
-import type { HttpParameters } from '@src/utils';
 import type { Observable } from 'rxjs';
 
-import { Endpoint, FileMethod, FileStationAPI } from '@src/models';
-import { HttpMethod } from '@src/utils';
+import type { FileList, FileListOption, FileSortBy } from '../../models/file.model';
+import type { FolderList, FolderListOption, FolderSortBy, NewFolderList } from '../../models/folder.model';
+import type { SynologyFileStationInfo } from '../../models/synology.model';
+import type { HttpParameters } from '../../utils/webex.utils';
 
+import { Endpoint, FileMethod, FileStationAPI } from '../../models/synology.model';
+import { HttpMethod } from '../../utils/webex.utils';
 import { SynologyService } from './synology.service';
 
 export class SynologyFileService extends SynologyService {

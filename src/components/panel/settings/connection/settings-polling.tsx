@@ -1,4 +1,5 @@
-import type { FormRules, PollingSettings } from '@src/models';
+import type { FormRules } from '../../../../models/form.model';
+import type { PollingSettings } from '../../../../models/settings.model';
 
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, InputAdornment, Stack } from '@mui/material';
@@ -6,11 +7,13 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ButtonWithConfirm, FormInput, FormSwitch } from '@src/components';
-import { ConnectionHeader, defaultPolling } from '@src/models';
-import { syncPolling } from '@src/store/actions';
-import { getPolling } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
+import { ConnectionHeader, defaultPolling } from '../../../../models/settings.model';
+import { syncPolling } from '../../../../store/actions/settings.action';
+import { getPolling } from '../../../../store/selectors/settings.selector';
+import { useI18n } from '../../../../utils/webex.utils';
+import { ButtonWithConfirm } from '../../../common/button/button-with-confirm';
+import { FormInput } from '../../../common/form/form-input';
+import { FormSwitch } from '../../../common/form/form-switch';
 
 export function SettingsPolling() {
   const i18n = useI18n('panel', 'settings', 'polling');

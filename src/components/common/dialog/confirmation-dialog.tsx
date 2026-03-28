@@ -1,13 +1,13 @@
 import type { ButtonProps } from '@mui/material';
 
-import type { TooltipHoverChangeProps } from '@src/components/common/tooltip/tooltip-hover-change';
+import type { TooltipHoverChangeProps } from '../tooltip/tooltip-hover-change';
 
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import React, { useContext } from 'react';
 
-import TooltipHoverChange from '@src/components/common/tooltip/tooltip-hover-change';
-import { ContainerContext } from '@src/store';
-import { useI18n } from '@src/utils';
+import { ContainerContext } from '../../../store/context/container.context';
+import { useI18n } from '../../../utils/webex.utils';
+import TooltipHoverChange from '../tooltip/tooltip-hover-change';
 
 export interface ConfirmationDialogProps {
   open: boolean;

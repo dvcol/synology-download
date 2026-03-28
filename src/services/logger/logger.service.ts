@@ -1,11 +1,16 @@
-import type { Log, ServiceInstance, StoreOrProxy } from '@src/models';
+import type { Log, ServiceInstance } from '../../models/settings.model';
+import type { StoreOrProxy } from '../../models/store.model';
 
-import { ChromeMessageType, defaultLoggingLevels, LoggingLevel, ServiceInstanceColorsMap } from '@src/models';
-import { addLogHistory } from '@src/store/actions';
-import { getAdvancedSettingsLogging } from '@src/store/selectors';
-import { onMessage, ProxyLogger, sendMessage, store$ } from '@src/utils';
 import { Subject, takeUntil } from 'rxjs';
 
+import { LoggingLevel } from '../../models/logger.model';
+import { ChromeMessageType } from '../../models/message.model';
+import { defaultLoggingLevels, ServiceInstanceColorsMap } from '../../models/settings.model';
+import { addLogHistory } from '../../store/actions/state.action';
+import { getAdvancedSettingsLogging } from '../../store/selectors/settings.selector';
+import { onMessage, sendMessage } from '../../utils/chrome/chrome-message.utils';
+import { store$ } from '../../utils/rxjs.utils';
+import { ProxyLogger } from '../../utils/webex.utils';
 import { BaseLoggerService } from './base-logger.service';
 
 export class LoggerService extends BaseLoggerService {

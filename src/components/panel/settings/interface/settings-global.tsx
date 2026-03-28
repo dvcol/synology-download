@@ -1,5 +1,5 @@
-import type { GlobalSettings } from '@src/models';
-import type { StoreState } from '@src/store';
+import type { GlobalSettings } from '../../../../models/settings.model';
+import type { StoreState } from '../../../../store/store';
 
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Button, Card, CardActions, CardContent, CardHeader, Collapse, Grid, InputAdornment, MenuItem, Stack } from '@mui/material';
@@ -7,11 +7,15 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ButtonWithConfirm, FormCheckbox, FormInput, FormSwitch } from '@src/components';
-import { ActionScope, defaultGlobal, InterfaceHeader, InterfaceSize, NavbarButtonType, ThemeMode } from '@src/models';
-import { syncInterface } from '@src/store/actions';
-import { getGlobal } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
+import { NavbarButtonType } from '../../../../models/navbar.model';
+import { ActionScope, defaultGlobal, InterfaceHeader, InterfaceSize, ThemeMode } from '../../../../models/settings.model';
+import { syncInterface } from '../../../../store/actions/settings.action';
+import { getGlobal } from '../../../../store/selectors/settings.selector';
+import { useI18n } from '../../../../utils/webex.utils';
+import { ButtonWithConfirm } from '../../../common/button/button-with-confirm';
+import { FormCheckbox } from '../../../common/form/form-checkbox';
+import { FormInput } from '../../../common/form/form-input';
+import { FormSwitch } from '../../../common/form/form-switch';
 
 export function SettingsGlobal() {
   const i18n = useI18n('panel', 'settings', 'global');

@@ -1,15 +1,16 @@
-import type { RootSlice } from '@src/models';
+import type { RootSlice } from '../../../../models/store.model';
 
 import DownloadIcon from '@mui/icons-material/Download';
 import { Button, Card, CardActions, CardContent, CardHeader, Stack } from '@mui/material';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { JsonExplorer } from '@src/components';
-import { AdvancedHeader, ColorLevel } from '@src/models';
-import { getRoot } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
-import { downloadJson } from '@src/utils/downlaod.utils';
+import { ColorLevel } from '../../../../models/material-ui.model';
+import { AdvancedHeader } from '../../../../models/settings.model';
+import { getRoot } from '../../../../store/selectors/root.selector';
+import { downloadJson } from '../../../../utils/downlaod.utils';
+import { useI18n } from '../../../../utils/webex.utils';
+import { JsonExplorer } from '../../../common/explorer/json/json-explorer';
 
 export function SettingsRedux() {
   const i18n = useI18n('panel', 'settings', 'advanced', 'redux');

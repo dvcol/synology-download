@@ -1,4 +1,4 @@
-import type { NavbarButton } from '@src/models';
+import type { NavbarButton } from '../../models/navbar.model';
 
 import AddLinkIcon from '@mui/icons-material/AddLink';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
@@ -19,15 +19,24 @@ import React, { useContext, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 
-import { ConfirmationDialog, TooltipHoverChange } from '@src/components';
-import { AppLinks, AppRoute, ErrorType, LoginError, NavbarButtonType } from '@src/models';
-import { DownloadService, NotificationService, QueryService } from '@src/services';
-import { PanelService } from '@src/services/panel/panel.service';
-import { ContainerContext } from '@src/store';
-import { resetDownloads, resetTasks, setNavbar } from '@src/store/actions';
-import { getGlobalNavbarButton, getLogged, getSettingsDownloadsButtons, getSettingsDownloadsEnabled, getUrl } from '@src/store/selectors';
-import { createTab, useI18n } from '@src/utils';
-
+import { ErrorType, LoginError } from '../../models/error.model';
+import { AppLinks } from '../../models/links.model';
+import { NavbarButtonType } from '../../models/navbar.model';
+import { AppRoute } from '../../models/routes.model';
+import { DownloadService } from '../../services/download/download.service';
+import { NotificationService } from '../../services/notification/notification.service';
+import { PanelService } from '../../services/panel/panel.service';
+import { QueryService } from '../../services/query/query.service';
+import { resetDownloads } from '../../store/actions/downloads.action';
+import { setNavbar } from '../../store/actions/navbar.action';
+import { resetTasks } from '../../store/actions/tasks.action';
+import { ContainerContext } from '../../store/context/container.context';
+import { getGlobalNavbarButton, getSettingsDownloadsButtons, getSettingsDownloadsEnabled, getUrl } from '../../store/selectors/settings.selector';
+import { getLogged } from '../../store/selectors/state.selector';
+import { createTab } from '../../utils/chrome/chrome.utils';
+import { useI18n } from '../../utils/webex.utils';
+import { ConfirmationDialog } from '../common/dialog/confirmation-dialog';
+import { TooltipHoverChange } from '../common/tooltip/tooltip-hover-change';
 import NavbarMenuIcon from './navbar-menu-icon';
 
 interface NavbarMenuProps { menuIcon: React.ReactNode }

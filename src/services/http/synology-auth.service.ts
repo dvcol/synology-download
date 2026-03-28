@@ -1,10 +1,10 @@
-import type { LoginRequest, LoginResponse } from '@src/models';
-import type { HttpParameters } from '@src/utils';
 import type { Observable } from 'rxjs';
 
-import { AuthMethod, CommonAPI, Endpoint, SessionName } from '@src/models';
-import { HttpMethod } from '@src/utils';
+import type { LoginRequest, LoginResponse } from '../../models/synology.model';
+import type { HttpParameters } from '../../utils/webex.utils';
 
+import { AuthMethod, CommonAPI, Endpoint, SessionName } from '../../models/synology.model';
+import { HttpMethod } from '../../utils/webex.utils';
 import { SynologyService } from './synology.service';
 
 export class SynologyAuthService extends SynologyService {

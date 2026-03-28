@@ -1,9 +1,10 @@
 import type { ForwardRefRenderFunction } from 'react';
 
-import type { ProgressBackgroundProps } from '@src/components';
-import type { Download, GlobalSettings, TaskForm } from '@src/models';
-import type { StoreState } from '@src/store';
-
+import type { Download } from '../../../../models/download.model';
+import type { GlobalSettings } from '../../../../models/settings.model';
+import type { TaskForm } from '../../../../models/task.model';
+import type { StoreState } from '../../../../store/store';
+import type { ProgressBackgroundProps } from '../../../common/loader/progress-background';
 import type { ContentItemAccordionProps } from '../content-item';
 
 import CloudSyncIcon from '@mui/icons-material/CloudSync';
@@ -18,15 +19,18 @@ import React, { forwardRef, useContext, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { forkJoin } from 'rxjs';
 
-import { TaskAdd } from '@src/components';
-import { ContentButton } from '@src/components/panel/content/content-button';
-import { ColorLevel, ColorLevelMap, DownloadStatus, downloadStatusToColor } from '@src/models';
-import { DownloadService, InterceptService, LoggerService, NotificationService } from '@src/services';
-import { ContainerContext } from '@src/store';
-import { getGlobalDownload, getSettingsDownloadsTransfer } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
-
+import { DownloadStatus, downloadStatusToColor } from '../../../../models/download.model';
+import { ColorLevel, ColorLevelMap } from '../../../../models/material-ui.model';
+import { DownloadService } from '../../../../services/download/download.service';
+import { InterceptService } from '../../../../services/download/intercept.service';
+import { LoggerService } from '../../../../services/logger/logger.service';
+import { NotificationService } from '../../../../services/notification/notification.service';
+import { ContainerContext } from '../../../../store/context/container.context';
+import { getGlobalDownload, getSettingsDownloadsTransfer } from '../../../../store/selectors/settings.selector';
+import { useI18n } from '../../../../utils/webex.utils';
+import { ContentButton } from '../content-button';
 import { ContentItem } from '../content-item';
+import { TaskAdd } from '../task/task-add';
 import { DownloadCard } from './download-card';
 import { DownloadDetail } from './download-detail';
 

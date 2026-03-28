@@ -4,10 +4,10 @@ import type { ControllerProps, FieldPath, FieldValues } from 'react-hook-form';
 import type { FormInputFileProps } from './form-input-file';
 
 import { Grid, TextField } from '@mui/material';
-import { ContainerContext } from '@src/store';
 import React, { useContext, useState } from 'react';
 import { Controller } from 'react-hook-form';
 
+import { ContainerContext } from '../../../store/context/container.context';
 import { FormInputFile } from './form-input-file';
 import { FormInputPassword } from './form-input-password';
 

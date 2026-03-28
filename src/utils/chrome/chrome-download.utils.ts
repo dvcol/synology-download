@@ -5,12 +5,14 @@ import type {
   DownloadQuery as _DownloadQuery,
   InstalledDetails as _InstalledDetails,
 } from '@dvcol/web-extension-utils';
-import type { Download, DownloadStatus } from '@src/models';
 import type { Observable } from 'rxjs';
 
+import type { Download, DownloadStatus } from '../../models/download.model';
+
 import { onFilename$ as _onFilename$, onChanged$, onCreated$ } from '@dvcol/web-extension-utils';
-import { DownloadService } from '@src/services/download/download.service';
 import { filter, map, merge, switchMap } from 'rxjs';
+
+import { DownloadService } from '../../services/download/download.service';
 
 export const {
   search,

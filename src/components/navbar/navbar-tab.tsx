@@ -1,16 +1,16 @@
 import type { BadgeProps, LinkProps, TabProps } from '@mui/material';
 import type { FC } from 'react';
 
-import type { ContentTab, TabTemplate } from '@src/models';
+import type { ContentTab, TabTemplate } from '../../models/tab.model';
 
 import { Badge, styled, Tab } from '@mui/material';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { ColorLevel } from '@src/models';
-import { setNavbar } from '@src/store/actions';
-import { getContentsCountByTabId } from '@src/store/selectors';
+import { ColorLevel } from '../../models/material-ui.model';
+import { setNavbar } from '../../store/actions/navbar.action';
+import { getContentsCountByTabId } from '../../store/selectors/composite.selector';
 
 type NavbarTabProps = TabProps & LinkProps & { tab: ContentTab };
 

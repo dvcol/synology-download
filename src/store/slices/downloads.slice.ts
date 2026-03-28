@@ -1,6 +1,7 @@
 import type { CaseReducer, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
 
-import type { Download, DownloadsSlice } from '@src/models';
+import type { Download } from '../../models/download.model';
+import type { DownloadsSlice } from '../../models/store.model';
 
 import { createSlice } from '@reduxjs/toolkit';
 

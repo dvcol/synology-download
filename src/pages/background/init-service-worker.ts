@@ -1,23 +1,24 @@
 import { lastValueFrom } from 'rxjs';
 import { wrapStore } from 'webext-redux';
 
-import { ServiceInstance, StorePortName } from '@src/models';
-import { onOpenPanelEvent } from '@src/pages/background/modules/panel-handler';
-import { onOpenPopupEvent } from '@src/pages/background/modules/popup-handler';
-import { DownloadService, LoggerService, NotificationService, PollingService, QueryService } from '@src/services';
-import { store } from '@src/store';
-
-import {
-  onContentEvents,
-  onContextMenuEvents,
-  onDownloadEvents,
-  onInstalledEvents,
-  onPortEvents,
-  onScrapedContentEvent,
-  restoreLocalSate,
-  restoreSettings,
-  restoreTaskSlice,
-} from './modules';
+import { ServiceInstance } from '../../models/settings.model';
+import { StorePortName } from '../../models/store.model';
+import { DownloadService } from '../../services/download/download.service';
+import { LoggerService } from '../../services/logger/logger.service';
+import { NotificationService } from '../../services/notification/notification.service';
+import { PollingService } from '../../services/polling/polling.service';
+import { QueryService } from '../../services/query/query.service';
+import { store } from '../../store/store';
+import { onContentEvents, onPortEvents } from './modules/connect-handler';
+import { onContextMenuEvents } from './modules/context-menu.handler';
+import { onDownloadEvents } from './modules/download.handler';
+import { onOpenPanelEvent } from './modules/panel-handler';
+import { onOpenPopupEvent } from './modules/popup-handler';
+import { onScrapedContentEvent } from './modules/scraped.handler';
+import { restoreSettings } from './modules/settings-handler';
+import { restoreLocalSate } from './modules/state-handler';
+import { restoreTaskSlice } from './modules/tasks-handler';
+import { onInstalledEvents } from './modules/update-handler';
 
 export async function initServiceWorker() {
   // Wrap proxy store see https://github.com/tshaddix/webext-redux

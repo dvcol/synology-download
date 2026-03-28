@@ -1,10 +1,11 @@
 import type { CaseReducer, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
 
-import type { Task, TaskComplete, TaskFile, TaskForm, TasksSlice, TaskStatistics } from '@src/models';
+import type { TasksSlice } from '../../models/store.model';
+import type { Task, TaskComplete, TaskFile, TaskForm, TaskStatistics } from '../../models/task.model';
 
 import { createSlice } from '@reduxjs/toolkit';
 
-import { setTasksStatsReducer, syncTaskReducer } from '@src/store/reducers/tasks.reducer';
+import { setTasksStatsReducer, syncTaskReducer } from '../reducers/tasks.reducer';
 
 export interface TasksReducers<S = TasksSlice> extends SliceCaseReducers<S> {
   restoreTasks: CaseReducer<S, PayloadAction<Partial<S>>>;

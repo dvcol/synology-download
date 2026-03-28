@@ -1,19 +1,23 @@
 import type { PortalProps } from '@mui/base/Portal';
 import type { FC } from 'react';
 
-import type { ContextMenuOnClickPayload, InterceptResponse, OpenPanelPayload, OpenPopupPayload, TaskForm } from '@src/models';
-import type { TaskDialogIntercept } from '@src/pages/content/service/dialog.service';
-import type { ChromeResponse } from '@src/utils';
+import type { ContextMenuOnClickPayload, InterceptResponse, OpenPanelPayload, OpenPopupPayload } from '../../../models/message.model';
+import type { TaskForm } from '../../../models/task.model';
+import type { ChromeResponse } from '../../../utils/webex.utils';
+import type { TaskDialogIntercept } from '../service/dialog.service';
 
 import { zIndexMax } from '@dvcol/web-extension-utils';
 import React, { useEffect } from 'react';
 import { Subject, takeUntil } from 'rxjs';
 
-import { TaskDialog } from '@src/components';
-import { ChromeMessageType } from '@src/models';
-import { taskDialog$ } from '@src/pages/content/service/dialog.service';
-import { LoggerService, NotificationService, QueryService } from '@src/services';
-import { i18n, onMessage, sendMessage } from '@src/utils';
+import { TaskDialog } from '../../../components/panel/content/task/task-dialog';
+import { ChromeMessageType } from '../../../models/message.model';
+import { LoggerService } from '../../../services/logger/logger.service';
+import { NotificationService } from '../../../services/notification/notification.service';
+import { QueryService } from '../../../services/query/query.service';
+import { onMessage, sendMessage } from '../../../utils/chrome/chrome-message.utils';
+import { i18n } from '../../../utils/webex.utils';
+import { taskDialog$ } from '../service/dialog.service';
 
 export const ContentTaskDialog: FC<{ container?: PortalProps['container'] }> = ({ container }) => {
   const [form, setForm] = React.useState<TaskForm>();

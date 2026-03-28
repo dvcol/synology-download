@@ -1,13 +1,18 @@
-import type { ChromeNotification, StoreOrProxy } from '@src/models';
+import type { ChromeNotification } from '../../models/notification.model';
+import type { StoreOrProxy } from '../../models/store.model';
 
-import { ChromeMessageType, defaultPolling } from '@src/models';
-import { getLogged, getPollingEnabled, getPollingInterval, getSettingsDownloadsEnabled } from '@src/store/selectors';
-import { onMessage, sendMessage, skipUntilRepeat, store$ } from '@src/utils';
 import { combineLatest, distinctUntilChanged, Subject, switchMap, takeUntil, timer, withLatestFrom } from 'rxjs';
 
+import { ChromeMessageType } from '../../models/message.model';
+import { defaultPolling } from '../../models/settings.model';
+import { getPollingEnabled, getPollingInterval } from '../../store/selectors/composite.selector';
+import { getSettingsDownloadsEnabled } from '../../store/selectors/settings.selector';
+import { getLogged } from '../../store/selectors/state.selector';
+import { onMessage, sendMessage } from '../../utils/chrome/chrome-message.utils';
+import { skipUntilRepeat, store$ } from '../../utils/rxjs.utils';
 import { DownloadService } from '../download/download.service';
 import { LoggerService } from '../logger/logger.service';
-import { QueryService } from '../query';
+import { QueryService } from '../query/query.service';
 
 export class PollingService {
   private static store: StoreOrProxy;

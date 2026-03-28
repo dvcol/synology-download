@@ -1,11 +1,11 @@
-import type { Api, InfoResponse, StateSlice } from '@src/models';
-
+import type { StateSlice } from '../../models/store.model';
+import type { Api, InfoResponse } from '../../models/synology.model';
 import type { StoreState } from '../store';
 
 import { createSelector } from '@reduxjs/toolkit';
 
-import { DownloadStation2API } from '@src/models';
-import { initialState } from '@src/store/slices/state.slice';
+import { DownloadStation2API } from '../../models/synology.model';
+import { initialState } from '../slices/state.slice';
 
 export const getState: (state: StoreState) => StateSlice = createSelector(
   (store: StoreState) => store,

@@ -1,4 +1,4 @@
-import type { RootSlice, SettingsSlice } from '@src/models';
+import type { RootSlice, SettingsSlice } from '../../../../models/store.model';
 
 import DownloadIcon from '@mui/icons-material/Download';
 import PublishIcon from '@mui/icons-material/Publish';
@@ -6,14 +6,16 @@ import { Box, Button, Card, CardActions, CardContent, CardHeader, InputAdornment
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { JsonExplorer } from '@src/components';
-import { AdvancedHeader, ColorLevel, ColorLevelMap } from '@src/models';
-import { LoggerService, NotificationService } from '@src/services';
-import { syncSettings } from '@src/store/actions';
-import { getSettings } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
-import { downloadJson } from '@src/utils/downlaod.utils';
-import { readJsonFile } from '@src/utils/file.utils';
+import { ColorLevel, ColorLevelMap } from '../../../../models/material-ui.model';
+import { AdvancedHeader } from '../../../../models/settings.model';
+import { LoggerService } from '../../../../services/logger/logger.service';
+import { NotificationService } from '../../../../services/notification/notification.service';
+import { syncSettings } from '../../../../store/actions/settings.action';
+import { getSettings } from '../../../../store/selectors/settings.selector';
+import { downloadJson } from '../../../../utils/downlaod.utils';
+import { readJsonFile } from '../../../../utils/file.utils';
+import { useI18n } from '../../../../utils/webex.utils';
+import { JsonExplorer } from '../../../common/explorer/json/json-explorer';
 
 export function SettingsExport() {
   const i18n = useI18n('panel', 'settings', 'advanced', 'export');

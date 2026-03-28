@@ -1,5 +1,5 @@
-import type { TaskSettings } from '@src/models';
-import type { StoreState } from '@src/store';
+import type { TaskSettings } from '../../../../models/settings.model';
+import type { StoreState } from '../../../../store/store';
 
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Button, Card, CardActions, CardContent, CardHeader, Stack } from '@mui/material';
@@ -7,11 +7,12 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ButtonWithConfirm, FormSwitch } from '@src/components';
-import { defaultDownloads, defaultTaskSettings, TasksHeader } from '@src/models';
-import { syncDownloads, syncTasksSettings } from '@src/store/actions';
-import { getTaskSettings } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
+import { defaultDownloads, defaultTaskSettings, TasksHeader } from '../../../../models/settings.model';
+import { syncDownloads, syncTasksSettings } from '../../../../store/actions/settings.action';
+import { getTaskSettings } from '../../../../store/selectors/settings.selector';
+import { useI18n } from '../../../../utils/webex.utils';
+import { ButtonWithConfirm } from '../../../common/button/button-with-confirm';
+import { FormSwitch } from '../../../common/form/form-switch';
 
 export function SettingsTasksAdd() {
   const i18n = useI18n('panel', 'settings', 'task_form');

@@ -1,12 +1,15 @@
-import type { SettingsSlice, StoreOrProxy } from '@src/models';
+import type { SettingsSlice, StoreOrProxy } from '../../../models/store.model';
 
 import { catchError, finalize, from, of, switchMap } from 'rxjs';
 
-import { defaultSettings, SyncSettingMode } from '@src/models';
-import { LoggerService } from '@src/services';
-import { setNavbar, setSettings } from '@src/store/actions';
-import { settingsSlice } from '@src/store/slices/settings.slice';
-import { buildContextMenu, localGet, setBadgeBackgroundColor, syncGet } from '@src/utils';
+import { defaultSettings, SyncSettingMode } from '../../../models/settings.model';
+import { LoggerService } from '../../../services/logger/logger.service';
+import { setNavbar } from '../../../store/actions/navbar.action';
+import { setSettings } from '../../../store/actions/settings.action';
+import { settingsSlice } from '../../../store/slices/settings.slice';
+import { buildContextMenu } from '../../../utils/chrome/chrome-context.utils';
+import { setBadgeBackgroundColor } from '../../../utils/chrome/chrome.utils';
+import { localGet, syncGet } from '../../../utils/webex.utils';
 
 async function dispatchRestoreSettings(store: StoreOrProxy, settings: SettingsSlice) {
   LoggerService.debug(`Restoring settings from chrome '${settings?.sync?.mode ?? SyncSettingMode.sync}' storage...`, settings);

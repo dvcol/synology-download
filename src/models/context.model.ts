@@ -1,6 +1,6 @@
 import type { MutableRefObject } from 'react';
 
-import type { AppInstance } from '@src/models/app-instance.model';
+import type { AppInstance } from './app-instance.model';
 
 export interface ContainerContextInstance {
   instance?: AppInstance;

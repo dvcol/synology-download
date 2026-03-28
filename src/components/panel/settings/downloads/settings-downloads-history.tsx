@@ -1,5 +1,5 @@
-import type { StateSlice } from '@src/models';
-import type { StoreState } from '@src/store';
+import type { StateSlice } from '../../../../models/store.model';
+import type { StoreState } from '../../../../store/store';
 
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Button, Card, CardActions, CardContent, CardHeader, Collapse, Stack, Typography } from '@mui/material';
@@ -7,12 +7,15 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ButtonWithConfirm, FormInput, FormSwitch } from '@src/components';
-import { ColorLevel, ColorLevelMap, DownloadsHeader } from '@src/models';
-import { syncDownloadState } from '@src/store/actions';
-import { getDownloadState } from '@src/store/selectors';
-import { initialState } from '@src/store/slices/state.slice';
-import { useI18n } from '@src/utils';
+import { ColorLevel, ColorLevelMap } from '../../../../models/material-ui.model';
+import { DownloadsHeader } from '../../../../models/settings.model';
+import { syncDownloadState } from '../../../../store/actions/state.action';
+import { getDownloadState } from '../../../../store/selectors/state.selector';
+import { initialState } from '../../../../store/slices/state.slice';
+import { useI18n } from '../../../../utils/webex.utils';
+import { ButtonWithConfirm } from '../../../common/button/button-with-confirm';
+import { FormInput } from '../../../common/form/form-input';
+import { FormSwitch } from '../../../common/form/form-switch';
 
 type StateDownload = StateSlice['download'];
 

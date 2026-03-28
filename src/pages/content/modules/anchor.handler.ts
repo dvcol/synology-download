@@ -1,7 +1,7 @@
 import { fromEventPattern } from 'rxjs';
 
-import { anchor$, lastClick$ } from '@src/pages/content/service/anchor.service';
-import { storeProxy } from '@src/store';
+import { storeProxy } from '../../../store/store-proxy';
+import { anchor$, lastClick$ } from '../service/anchor.service';
 
 /**
  * List of supported protocols

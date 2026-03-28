@@ -1,7 +1,8 @@
 import type { FC } from 'react';
 
-import type { Download, GlobalSettings } from '@src/models';
-import type { StoreState } from '@src/store';
+import type { Download } from '../../../../models/download.model';
+import type { GlobalSettings } from '../../../../models/settings.model';
+import type { StoreState } from '../../../../store/store';
 
 import DownloadIcon from '@mui/icons-material/Download';
 import DownloadDoneIcon from '@mui/icons-material/DownloadDone';
@@ -14,10 +15,10 @@ import { blue, green, orange, purple, red } from '@mui/material/colors';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { DownloadStatus, downloadStatusToColor } from '@src/models';
-import { getGlobalDownload } from '@src/store/selectors';
-import { formatBytes, useI18n } from '@src/utils';
-
+import { DownloadStatus, downloadStatusToColor } from '../../../../models/download.model';
+import { getGlobalDownload } from '../../../../store/selectors/settings.selector';
+import { formatBytes } from '../../../../utils/format.utils';
+import { useI18n } from '../../../../utils/webex.utils';
 import { ContentCard } from '../content-card';
 
 interface DownloadCardProps { download: Download; hideStatus?: boolean; expanded?: boolean; hover?: boolean }

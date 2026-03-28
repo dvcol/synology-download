@@ -5,10 +5,11 @@ import { Container } from '@mui/material';
 import React, { lazy, useContext } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
-import { SuspenseLoader } from '@src/components';
-import { AppInstance, SettingHeader } from '@src/models';
-import { ContainerContext } from '@src/store';
-import { useAnchor } from '@src/utils';
+import { AppInstance } from '../../../models/app-instance.model';
+import { SettingHeader } from '../../../models/settings.model';
+import { ContainerContext } from '../../../store/context/container.context';
+import { useAnchor } from '../../../utils/hooks.utils';
+import { SuspenseLoader } from '../../common/loader/suspense-loader';
 
 const SettingsAdvanced = lazy(async () => import(/* webpackChunkName: "SettingsAdvanced" */ './advanced/settings-advanced'));
 const SettingsConnection = lazy(async () => import(/* webpackChunkName: "SettingsConnection" */ './connection/settings-connection'));

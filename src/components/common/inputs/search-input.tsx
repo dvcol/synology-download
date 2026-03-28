@@ -5,8 +5,8 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { Button, Stack, TextField, Tooltip } from '@mui/material';
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 
-import { useI18n } from '@src/utils';
-import { KeyboardKeyCode, KeyboardKeyName } from '@src/utils/keyboard.utils';
+import { KeyboardKeyCode, KeyboardKeyName } from '../../../utils/keyboard.utils';
+import { useI18n } from '../../../utils/webex.utils';
 
 const ModifierKeyNames = Object.values(KeyboardKeyName).filter(k => k !== KeyboardKeyName.Backspace);
 const ModifierKeyCodes = Object.values(KeyboardKeyCode).filter(k => k !== KeyboardKeyCode.Backspace);

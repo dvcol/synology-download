@@ -3,17 +3,23 @@ import type { FC } from 'react';
 import type { SubmitHandler } from 'react-hook-form';
 import type { Observable } from 'rxjs';
 
-import type { DownloadStationConfig, DownloadStationInfo } from '@src/models';
+import type { DownloadStationConfig, DownloadStationInfo } from '../../../models/download-station.model';
 
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, Container, InputAdornment, LinearProgress, Stack, Typography } from '@mui/material';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { finalize, forkJoin } from 'rxjs';
 
-import { FormExplorer, FormInput, FormSwitch } from '@src/components';
-import { ColorLevel, ColorLevelMap, defaultConfig } from '@src/models';
-import { NotificationService, QueryService } from '@src/services';
-import { before, useDebounceObservable, useI18n } from '@src/utils';
+import { defaultConfig } from '../../../models/download-station.model';
+import { ColorLevel, ColorLevelMap } from '../../../models/material-ui.model';
+import { NotificationService } from '../../../services/notification/notification.service';
+import { QueryService } from '../../../services/query/query.service';
+import { useDebounceObservable } from '../../../utils/hooks.utils';
+import { before } from '../../../utils/rxjs.utils';
+import { useI18n } from '../../../utils/webex.utils';
+import { FormExplorer } from '../../common/form/form-explorer';
+import { FormInput } from '../../common/form/form-input';
+import { FormSwitch } from '../../common/form/form-switch';
 
 export const Config: FC<{
   cardProps?: CardProps;

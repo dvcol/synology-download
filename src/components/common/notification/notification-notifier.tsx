@@ -1,7 +1,7 @@
 import { useSnackbar } from 'notistack';
 import { useEffect } from 'react';
 
-import { NotificationService } from '@src/services';
+import { NotificationService } from '../../../services/notification/notification.service';
 
 const NotifierId = 'synology-download-notification-stack';
 

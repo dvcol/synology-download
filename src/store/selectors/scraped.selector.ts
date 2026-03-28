@@ -1,5 +1,5 @@
-import type { ScrapedContent, ScrapedContents, ScrapedSlice } from '@src/models';
-
+import type { ScrapedContent, ScrapedContents } from '../../models/scraped-content.model';
+import type { ScrapedSlice } from '../../models/store.model';
 import type { StoreState } from '../store';
 
 import { createSelector } from '@reduxjs/toolkit';

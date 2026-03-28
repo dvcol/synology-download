@@ -1,7 +1,7 @@
-import type { StoreOrProxy } from '@src/models';
-import type { Task } from '@src/models/task.model';
+import type { StoreOrProxy } from '../../../models/store.model';
+import type { Task } from '../../../models/task.model';
 
-export type { AppInstance } from '@src/models/app-instance.model';
+export type { AppInstance } from '../../../models/app-instance.model';
 
 export enum WebComponents {
   StandaloneApp = 'wc-synology-download-standalone',

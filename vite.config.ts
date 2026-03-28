@@ -2,7 +2,6 @@ import type { PluginOption } from 'vite';
 
 import { readdir, readFile } from 'node:fs/promises';
 import { dirname, relative } from 'node:path';
-import { fileURLToPath, URL } from 'node:url';
 
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
@@ -142,11 +141,6 @@ function getPlugins(_isDev: boolean, _isWeb: boolean): PluginOption[] {
 
 export default defineConfig(() => ({
   root: resolveParent('src'),
-  resolve: {
-    alias: {
-      '@src': fileURLToPath(new URL('./src', import.meta.url)),
-    },
-  },
   define: {
     '__DEV__': isDev,
     'import.meta.env.PKG_VERSION': JSON.stringify(pkg.version),

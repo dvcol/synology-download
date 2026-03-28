@@ -1,6 +1,6 @@
 import type { OptionsObject } from 'notistack';
 
-import type { NotificationOptions } from '@src/utils';
+import type { NotificationOptions } from '../utils/chrome/chrome.utils';
 
 export enum NotificationLevel {
   trace = -2,

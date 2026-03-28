@@ -1,7 +1,10 @@
 import type { SyntheticEvent } from 'react';
 import type { Subscription } from 'rxjs';
 
-import type { FormRules, RootSlice, Task, TaskBtEditRequest, TaskFile } from '@src/models';
+import type { FormRules } from '../../../../models/form.model';
+import type { RootSlice } from '../../../../models/store.model';
+import type { TaskBtEditRequest } from '../../../../models/synology.model';
+import type { Task, TaskFile } from '../../../../models/task.model';
 
 import SaveIcon from '@mui/icons-material/Save';
 import { AppBar, Box, Button, Card, CardHeader, Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment, LinearProgress, MenuItem, Stack, Tab, Tabs } from '@mui/material';
@@ -10,13 +13,20 @@ import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { finalize, lastValueFrom } from 'rxjs';
 
-import { FormExplorer, FormInput, IconLoader } from '@src/components';
-import { TaskPriority, TaskStatus, TaskType } from '@src/models';
-import { LoggerService, NotificationService, QueryService } from '@src/services';
-import { ContainerContext } from '@src/store';
-import { getDownloadStation2APITaskBt, getTaskFilesById } from '@src/store/selectors';
-import { before, useDebounceObservable, useI18n } from '@src/utils';
-
+import { TaskPriority } from '../../../../models/synology.model';
+import { TaskStatus, TaskType } from '../../../../models/task.model';
+import { LoggerService } from '../../../../services/logger/logger.service';
+import { NotificationService } from '../../../../services/notification/notification.service';
+import { QueryService } from '../../../../services/query/query.service';
+import { ContainerContext } from '../../../../store/context/container.context';
+import { getDownloadStation2APITaskBt } from '../../../../store/selectors/state.selector';
+import { getTaskFilesById } from '../../../../store/selectors/tasks.selector';
+import { useDebounceObservable } from '../../../../utils/hooks.utils';
+import { before } from '../../../../utils/rxjs.utils';
+import { useI18n } from '../../../../utils/webex.utils';
+import { FormExplorer } from '../../../common/form/form-explorer';
+import { FormInput } from '../../../common/form/form-input';
+import { IconLoader } from '../../../common/loader/icon-loader';
 import { TaskEditFiles } from './task-edit-files';
 
 type TaskEditForm = TaskBtEditRequest;

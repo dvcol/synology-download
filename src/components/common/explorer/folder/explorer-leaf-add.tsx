@@ -1,14 +1,14 @@
 import type { ButtonProps } from '@mui/material';
 import type { FC } from 'react';
 
-import type { File, Folder } from '@src/models';
+import type { File } from '../../../../models/file.model';
+import type { Folder } from '../../../../models/folder.model';
 
 import CreateNewFolderOutlinedIcon from '@mui/icons-material/CreateNewFolderOutlined';
 import { Button, Stack, Typography } from '@mui/material';
 import React, { useState } from 'react';
 
-import { useI18n } from '@src/utils';
-
+import { useI18n } from '../../../../utils/webex.utils';
 import { ExplorerLeafEdit } from './explorer-leaf-edit';
 
 export interface ExplorerLeafAddProps {

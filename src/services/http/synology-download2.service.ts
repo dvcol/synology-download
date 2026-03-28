@@ -1,3 +1,5 @@
+import type { Observable } from 'rxjs';
+
 import type {
   CommonResponse,
   SynologyQueryOptions,
@@ -15,14 +17,14 @@ import type {
   TaskListFilesRequest,
   TaskListFilesResponse,
   TaskListResponse,
-} from '@src/models';
-import type { HttpParameters } from '@src/utils';
-import type { Observable } from 'rxjs';
+} from '../../models/synology.model';
+import type { HttpParameters } from '../../utils/webex.utils';
 
-import { DownloadStation2API, Endpoint, EntryAPI, EntryMethod, Task2Method } from '@src/models';
-import { buildFormData, HttpMethod, sanitizeUrl, stringifyKeys } from '@src/utils';
 import { throwError } from 'rxjs';
 
+import { DownloadStation2API, Endpoint, EntryAPI, EntryMethod, Task2Method } from '../../models/synology.model';
+import { buildFormData, sanitizeUrl, stringifyKeys } from '../../utils/string.utils';
+import { HttpMethod } from '../../utils/webex.utils';
 import { SynologyService } from './synology.service';
 
 export class SynologyDownload2Service extends SynologyService {

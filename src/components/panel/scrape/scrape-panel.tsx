@@ -2,7 +2,9 @@ import type { CardProps } from '@mui/material';
 import type { GridColDef, GridRowsProp } from '@mui/x-data-grid';
 import type { FC } from 'react';
 
-import type { RootSlice, ScrapedContent, ScrapedSlice, TaskForm } from '@src/models';
+import type { ScrapedContent } from '../../../models/scraped-content.model';
+import type { RootSlice, ScrapedSlice } from '../../../models/store.model';
+import type { TaskForm } from '../../../models/task.model';
 
 import AddLinkIcon from '@mui/icons-material/AddLink';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -12,13 +14,16 @@ import React, { useCallback, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { forkJoin } from 'rxjs';
 
-import { TaskDialog } from '@src/components';
-import { ChromeMessageType, ColorLevel } from '@src/models';
-import { DownloadService, LoggerService } from '@src/services';
-import { ContainerContext } from '@src/store';
-import { clearScrapedContents } from '@src/store/actions';
-import { getScrapedPage, getScrappedRows } from '@src/store/selectors';
-import { sendActiveTabMessage, useI18n } from '@src/utils';
+import { ColorLevel } from '../../../models/material-ui.model';
+import { ChromeMessageType } from '../../../models/message.model';
+import { DownloadService } from '../../../services/download/download.service';
+import { LoggerService } from '../../../services/logger/logger.service';
+import { clearScrapedContents } from '../../../store/actions/scraped.action';
+import { ContainerContext } from '../../../store/context/container.context';
+import { getScrapedPage, getScrappedRows } from '../../../store/selectors/scraped.selector';
+import { sendActiveTabMessage } from '../../../utils/chrome/chrome-message.utils';
+import { useI18n } from '../../../utils/webex.utils';
+import { TaskDialog } from '../content/task/task-dialog';
 
 const ScrapeFooter: FC<{
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;

@@ -1,7 +1,9 @@
 import type { FC } from 'react';
 import type { Observable } from 'rxjs';
 
-import type { File, FileList, Folder, RootSlice } from '@src/models';
+import type { File, FileList } from '../../../../models/file.model';
+import type { Folder } from '../../../../models/folder.model';
+import type { RootSlice } from '../../../../models/store.model';
 
 import FolderIcon from '@mui/icons-material/Folder';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
@@ -11,12 +13,13 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { catchError, finalize, lastValueFrom, map, tap } from 'rxjs';
 
-import { SearchInput } from '@src/components/common/inputs/search-input';
-import { LoggerService, NotificationService, QueryService } from '@src/services';
-import { getDestinationsHistory } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
-import { useDebounce } from '@src/utils/debounce.utils';
-
+import { LoggerService } from '../../../../services/logger/logger.service';
+import { NotificationService } from '../../../../services/notification/notification.service';
+import { QueryService } from '../../../../services/query/query.service';
+import { getDestinationsHistory } from '../../../../store/selectors/state.selector';
+import { useDebounce } from '../../../../utils/debounce.utils';
+import { useI18n } from '../../../../utils/webex.utils';
+import { SearchInput } from '../../inputs/search-input';
 import { ExplorerBreadCrumbs } from './explorer-breadcrumb';
 import { ExplorerLeaf } from './explorer-leaf';
 import { ExplorerLeafAdd } from './explorer-leaf-add';

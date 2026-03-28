@@ -1,11 +1,15 @@
 import type { CaseReducer, PayloadAction } from '@reduxjs/toolkit';
-import type { ContentCount, Log, StateSlice, TaskStatistics } from '@src/models';
 
+import type { ContentCount } from '../../models/content.model';
+import type { Log } from '../../models/settings.model';
+import type { StateSlice } from '../../models/store.model';
+import type { TaskStatistics } from '../../models/task.model';
 import type { StateReducers } from '../slices/state.slice';
 
-import { LoggerService } from '@src/services/logger/logger.service';
-import { formatBytes, localSet, setBadgeText, setIcon, setTitle } from '@src/utils';
-
+import { LoggerService } from '../../services/logger/logger.service';
+import { setBadgeText, setIcon, setTitle } from '../../utils/chrome/chrome.utils';
+import { formatBytes } from '../../utils/format.utils';
+import { localSet } from '../../utils/webex.utils';
 import { stateSlice } from '../slices/state.slice';
 
 export async function setCountAndStats(count?: ContentCount, stats?: TaskStatistics) {

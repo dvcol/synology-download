@@ -1,5 +1,6 @@
-import { activateDemo } from '@src/pages/web/index';
-import { defineComponents } from '@src/pages/web/modules';
+import { defineComponents } from './modules/define-components';
+
+import { activateDemo } from './index';
 
 defineComponents({ patch: true })
   .then(() => {

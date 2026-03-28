@@ -1,7 +1,8 @@
 import type { FC } from 'react';
 
-import type { GlobalSettings, Task } from '@src/models';
-import type { StoreState } from '@src/store';
+import type { GlobalSettings } from '../../../../models/settings.model';
+import type { Task } from '../../../../models/task.model';
+import type { StoreState } from '../../../../store/store';
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -15,10 +16,10 @@ import { blue, green, orange, purple, red } from '@mui/material/colors';
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { TaskStatus, taskStatusToColor } from '@src/models';
-import { getGlobalTask } from '@src/store/selectors';
-import { formatBytes, useI18n } from '@src/utils';
-
+import { TaskStatus, taskStatusToColor } from '../../../../models/task.model';
+import { getGlobalTask } from '../../../../store/selectors/settings.selector';
+import { formatBytes } from '../../../../utils/format.utils';
+import { useI18n } from '../../../../utils/webex.utils';
 import { ContentCard } from '../content-card';
 
 interface TaskCardProps { task: Task; hideStatus?: boolean; expanded?: boolean; hover?: boolean }

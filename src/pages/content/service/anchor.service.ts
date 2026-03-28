@@ -1,4 +1,4 @@
-import type { TaskForm } from '@src/models';
+import type { TaskForm } from '../../../models/task.model';
 
 import { Subject } from 'rxjs';
 

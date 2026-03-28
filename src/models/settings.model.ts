@@ -1,15 +1,12 @@
 import type { OptionsObject } from 'notistack';
 
-import type { LoginRequest } from '@src/models/synology.model';
-
 import type { BannerNotificationScope, SnackNotificationScope } from './notification.model';
 import type { SettingsSlice } from './store.model';
+import type { LoginRequest } from './synology.model';
 import type { Tab } from './tab.model';
 
-import { DownloadStatus } from '@src/models/download.model';
-import { LoggingLevel } from '@src/models/logger.model';
-import { NavbarButtonType } from '@src/models/navbar.model';
-
+import { DownloadStatus } from './download.model';
+import { LoggingLevel } from './logger.model';
 import {
   defaultContextMenu,
   defaultDownloadQuickMenu,
@@ -18,6 +15,7 @@ import {
   defaultRecentDownloadQuickMenu,
   defaultRecentQuickMenu,
 } from './menu.model';
+import { NavbarButtonType } from './navbar.model';
 import { NotificationLevel } from './notification.model';
 import { defaultTabs, TabTemplate } from './tab.model';
 import { TaskStatus } from './task.model';

@@ -1,4 +1,4 @@
-import type { NotificationsBanner, NotificationSettings } from '@src/models';
+import type { NotificationsBanner, NotificationSettings } from '../../../../models/settings.model';
 
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Button, Card, CardActions, CardContent, CardHeader, Collapse, MenuItem, Stack } from '@mui/material';
@@ -6,11 +6,14 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ButtonWithConfirm, FormInput, FormSwitch } from '@src/components';
-import { defaultNotifications, NotificationHeader, NotificationLevel, NotificationLevelKeys } from '@src/models';
-import { syncNotifications } from '@src/store/actions';
-import { getNotifications } from '@src/store/selectors';
-import { useI18n } from '@src/utils';
+import { NotificationLevel, NotificationLevelKeys } from '../../../../models/notification.model';
+import { defaultNotifications, NotificationHeader } from '../../../../models/settings.model';
+import { syncNotifications } from '../../../../store/actions/settings.action';
+import { getNotifications } from '../../../../store/selectors/settings.selector';
+import { useI18n } from '../../../../utils/webex.utils';
+import { ButtonWithConfirm } from '../../../common/button/button-with-confirm';
+import { FormInput } from '../../../common/form/form-input';
+import { FormSwitch } from '../../../common/form/form-switch';
 
 export function SettingsBanner() {
   const i18n = useI18n('panel', 'settings', 'banner');

@@ -1,8 +1,10 @@
-import type { ContextMenu, ResetMenuPayload } from '@src/models';
+import type { ContextMenu } from '../../../models/menu.model';
+import type { ResetMenuPayload } from '../../../models/message.model';
 
-import { ChromeMessageType } from '@src/models';
-import { LoggerService } from '@src/services';
-import { buildContextMenu, onMessage, removeContextMenu, saveContextMenu, toggleScrapeContextMenu } from '@src/utils';
+import { ChromeMessageType } from '../../../models/message.model';
+import { LoggerService } from '../../../services/logger/logger.service';
+import { buildContextMenu, removeContextMenu, saveContextMenu, toggleScrapeContextMenu } from '../../../utils/chrome/chrome-context.utils';
+import { onMessage } from '../../../utils/chrome/chrome-message.utils';
 
 /** Listen to context menu events to create/updates menus */
 export function onContextMenuEvents() {

@@ -4,7 +4,8 @@ import type { FC } from 'react';
 import type { HashRouterProps } from 'react-router-dom';
 import type { Store } from 'redux';
 
-import type { AppInstance, StoreOrProxy } from '@src/models';
+import type { AppInstance } from '../models/app-instance.model';
+import type { StoreOrProxy } from '../models/store.model';
 
 import { CacheProvider } from '@emotion/react';
 import { Box, CssBaseline, ThemeProvider } from '@mui/material';
@@ -12,12 +13,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Provider } from 'react-redux';
 import { HashRouter as Router } from 'react-router-dom';
 
-import { ContainerContextProvider, ExternalRouterProvider, SettingsInjector } from '@src/components';
-import { darkTheme, getThemeFromStore, subscribeToTheme } from '@src/themes';
-
-import { NotificationStack } from './common';
+import { getThemeFromStore, subscribeToTheme } from '../themes/media-query';
+import { darkTheme } from '../themes/themes';
+import { ContainerContextProvider } from './common/context/container-content-provider';
+import { NotificationStack } from './common/notification/notification-stack';
+import { ExternalRouterProvider } from './common/router/external-router-provider';
 import { Navbar } from './navbar/navbar';
 import { Panel } from './panel/panel';
+import { SettingsInjector } from './panel/settings/settings-injector';
 
 export interface AppProps { store: StoreOrProxy; cache?: EmotionCache; redirect?: string; routerProps?: HashRouterProps; instance: AppInstance }
 export const App: FC<AppProps> = ({ store, redirect, cache, routerProps, instance }) => {

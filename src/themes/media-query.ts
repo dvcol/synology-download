@@ -2,14 +2,14 @@ import type { Theme } from '@mui/material';
 import type { Dispatch, SetStateAction } from 'react';
 import type { Subscription } from 'rxjs';
 
-import type { StoreOrProxy } from '@src/models';
+import type { StoreOrProxy } from '../models/store.model';
 
 import { fromEventPattern } from 'rxjs';
 
-import { ThemeMode } from '@src/models';
-import { getTheme } from '@src/store/selectors';
-import { darkTheme, lightTheme } from '@src/themes/themes';
-import { store$ } from '@src/utils';
+import { ThemeMode } from '../models/settings.model';
+import { getTheme } from '../store/selectors/settings.selector';
+import { store$ } from '../utils/rxjs.utils';
+import { darkTheme, lightTheme } from './themes';
 
 export const isDarkTheme = (): boolean => window.matchMedia('(prefers-color-scheme: dark)').matches;
 

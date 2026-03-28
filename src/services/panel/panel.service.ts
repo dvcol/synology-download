@@ -1,4 +1,4 @@
-import type { SearchInputRef } from '@src/components/common/inputs/search-input';
+import type { SearchInputRef } from '../../components/common/inputs/search-input';
 
 export class PanelService {
   private static _searchInputRef?: SearchInputRef;
