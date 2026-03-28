@@ -1,4 +1,4 @@
-import type { EmotionCache } from '@emotion/utils';
+import type { EmotionCache } from '@emotion/cache';
 import type { Theme } from '@mui/material';
 import type { Store } from 'redux';
 

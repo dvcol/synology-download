@@ -1,5 +1,5 @@
-import type { PortalProps } from '@mui/base/Portal';
 import type { DialogProps } from '@mui/material';
+import type { PortalProps } from '@mui/material/Portal';
 import type { FC } from 'react';
 
 import type { TaskForm } from '../../../../models/task.model';

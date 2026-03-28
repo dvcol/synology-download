@@ -1,4 +1,4 @@
-import type { PortalProps } from '@mui/base/Portal';
+import type { PortalProps } from '@mui/material/Portal';
 import type { FC } from 'react';
 
 import type { ContextMenuOnClickPayload, InterceptResponse, OpenPanelPayload, OpenPopupPayload } from '../../../models/message.model';
