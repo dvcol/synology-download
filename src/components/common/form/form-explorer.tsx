@@ -2,13 +2,12 @@ import type { ControllerProps, FieldPath, FieldValues } from 'react-hook-form';
 
 import type { ExplorerEvent, ExplorerProps } from '../explorer/folder/explorer';
 
-import React from 'react';
 import { Controller } from 'react-hook-form';
 
 import { Explorer } from '../explorer/folder/explorer';
 
 interface FormExplorerProps<T extends FieldValues, N extends FieldPath<T>> {
-  controllerProps: Omit<ControllerProps<T, N>, 'render'>;
+  controllerProps: Omit<ControllerProps<T, N>, 'render' | 'control'> & { control?: unknown };
   explorerProps?: Omit<ExplorerProps, 'onChange'>;
   onChange?: (event: ExplorerEvent) => void;
 }

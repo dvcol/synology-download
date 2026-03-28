@@ -1,4 +1,4 @@
-import type { Dispatch, SetStateAction } from 'react';
+import type { Dispatch, JSX, SetStateAction } from 'react';
 
 import type { InterfaceHeader } from '../../../../models/settings.model';
 

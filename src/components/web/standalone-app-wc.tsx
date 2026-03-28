@@ -1,10 +1,11 @@
+import type { Root } from 'react-dom/client';
+
 import type { StoreOrProxy } from '../../models/store.model';
 import type { Task } from '../../models/task.model';
 import type { StandaloneAppCredentials } from '../../pages/web/models/components.model';
 
 import createCache from '@emotion/cache';
-import React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { forkJoin, lastValueFrom } from 'rxjs';
 
 import { AppInstance } from '../../models/app-instance.model';
@@ -28,6 +29,8 @@ import { store } from '../../store/store';
 import { StandaloneApp } from './standalone-app';
 
 export class StandaloneAppWc extends HTMLElement {
+  private _root: Root | undefined;
+
   get store() {
     return store;
   }
@@ -53,6 +56,7 @@ export class StandaloneAppWc extends HTMLElement {
   }
 
   private destroy() {
+    this._root?.unmount();
     PollingService.destroy();
     DownloadService.destroy();
     QueryService.destroy();
@@ -104,10 +108,9 @@ export class StandaloneAppWc extends HTMLElement {
     const app = shadowRoot.querySelector(`#${AppInstance.standalone}-app`);
     const cache = createCache({ key: `${AppInstance.standalone}-cache`, container });
 
-    // eslint-disable-next-line react-dom/no-render-return-value -- we need to return the rendered instance for web component usage
-    return render(
+    this._root = createRoot(app!);
+    this._root.render(
       <StandaloneApp store={storeOrProxy} cache={cache} routerProps={{ basename: this.basename }} instance={AppInstance.standalone} />,
-      app,
     );
   }
 

@@ -4,7 +4,6 @@ import type { DownloadExtension } from '../../../../models/settings.model';
 
 import AddIcon from '@mui/icons-material/Add';
 import { Button, Grid } from '@mui/material';
-import React from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useI18n } from '../../../../utils/webex.utils';

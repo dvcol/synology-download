@@ -1,4 +1,4 @@
-import type { Dispatch, ForwardRefRenderFunction, SetStateAction } from 'react';
+import type { Dispatch, ForwardRefRenderFunction, JSX, SetStateAction } from 'react';
 
 import type { GlobalSettings } from '../../../models/settings.model';
 import type { StoreState } from '../../../store/store';

@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type { FC, JSX } from 'react';
 
 import type { Download } from '../../../../models/download.model';
 import type { GlobalSettings } from '../../../../models/settings.model';

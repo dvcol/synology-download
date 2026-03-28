@@ -51,7 +51,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
 
   const isLogged = useSelector<StoreState, boolean>(getLogged);
 
-  const callback = useRef<TaskDialogIntercept['callback']>();
+  const callback = useRef<TaskDialogIntercept['callback']>(undefined);
   const [intercept, setIntercept] = React.useState<TaskDialogIntercept>();
   const _menus = menus?.filter(m => !!intercept || ![QuickMenuType.Download, QuickMenuType.RecentDownload].includes(m.type));
 

@@ -10,5 +10,5 @@
     "esModuleInterop": true,
     "skipLibCheck": true
   },
-  "include": ["vite.config.*", "scripts/**/*", "package.json"]
+  "include": ["vite.config.*", "vite.content.config.*", "scripts/**/*", "package.json"]
 }

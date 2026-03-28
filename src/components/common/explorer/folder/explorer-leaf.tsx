@@ -3,7 +3,6 @@ import type { Folder } from '../../../../models/folder.model';
 
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import { TreeItem } from '@mui/lab';
-import React from 'react';
 
 import { ExplorerLeafEdit } from './explorer-leaf-edit';
 import { ExplorerLoading } from './explorer-loading';

@@ -1,3 +1,5 @@
+import type { SnackbarMessage } from 'notistack';
+
 import { useSnackbar } from 'notistack';
 import { useEffect } from 'react';
 
@@ -23,7 +25,7 @@ export function Notifier() {
     // else create identifier
     createIdentifier();
     // and subscribe
-    const sub = NotificationService.snackNotifications$.subscribe(({ message, options }) => enqueueSnackbar(message, options));
+    const sub = NotificationService.snackNotifications$.subscribe(({ message, options }) => enqueueSnackbar(message as unknown as SnackbarMessage, options));
     return () => sub.unsubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps -- want to run only once for the lifetime of the app
   }, []);

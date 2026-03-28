@@ -39,9 +39,7 @@ const preambleScriptRegex = /\s*<!--\s*\[vite:react-refresh-preamble\][\s\S]*?<\
 type JsonLocale = Record<string, string>;
 function getPlugins(_isDev: boolean, _isWeb: boolean): PluginOption[] {
   const plugins: PluginOption[] = [
-    react({
-      jsxRuntime: 'classic',
-    }),
+    react(),
     checker({
       typescript: {
         tsconfigPath: 'tsconfig.app.json',

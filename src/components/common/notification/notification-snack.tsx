@@ -1,6 +1,6 @@
 import type { IconButtonProps, SvgIconProps, Theme } from '@mui/material';
 import type { SnackbarKey } from 'notistack';
-import type { ForwardRefRenderFunction } from 'react';
+import type { ForwardRefRenderFunction, JSX } from 'react';
 
 import type { SnackMessage } from '../../../models/notification.model';
 
@@ -25,8 +25,8 @@ const ExpandMore = styled(({ expand, ...other }: IconButtonProps & { expand: boo
 }>(({ theme, expand }) => ({
   transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
   marginLeft: 'auto',
-  transition: theme.transitions.create('transform', {
-    duration: theme.transitions.duration.shortest,
+  transition: (theme as Theme).transitions.create('transform', {
+    duration: (theme as Theme).transitions.duration.shortest,
   }),
 }));
 

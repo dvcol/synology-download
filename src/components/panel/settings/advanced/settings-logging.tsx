@@ -4,7 +4,6 @@ import type { RootSlice } from '../../../../models/store.model';
 import DownloadIcon from '@mui/icons-material/Download';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Button, Card, CardActions, CardContent, CardHeader, Collapse, InputAdornment, MenuItem, Stack } from '@mui/material';
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 

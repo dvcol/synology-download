@@ -3,7 +3,6 @@ import type { DefaultComponentProps, OverridableTypeMap } from '@mui/material/Ov
 import type { ControllerProps, FieldPath, FieldValues } from 'react-hook-form';
 
 import { Checkbox, FormControl, FormControlLabel, FormHelperText } from '@mui/material';
-import React from 'react';
 import { Controller } from 'react-hook-form';
 
 function stringifyIncludes(array?: (boolean | string)[], value?: boolean | string): boolean {
@@ -16,19 +15,19 @@ export function FormCheckbox<TFieldValues extends FieldValues = FieldValues, TNa
   formControlProps,
   formControlLabelProps,
 }: {
-  controllerProps: Omit<ControllerProps<TFieldValues, TName>, 'render'>;
+  controllerProps: Omit<ControllerProps<TFieldValues, TName>, 'render' | 'control'> & { control?: unknown };
   checkboxProps?: CheckboxProps & { multiple?: boolean; value?: CheckboxProps['checked'] };
   formControlProps?: DefaultComponentProps<OverridableTypeMap>;
   formControlLabelProps?: Omit<FormControlLabelProps, 'control'>;
 }) {
-  const render: ControllerProps<TFieldValues, TName>['render'] = ({ field, fieldState: { invalid, error } }) => {
+  const render: ControllerProps['render'] = ({ field, fieldState: { invalid, error } }) => {
     const checked: CheckboxProps['checked'] = checkboxProps?.multiple
-      ? stringifyIncludes(field.value, checkboxProps?.value)
-      : field.value;
+      ? stringifyIncludes(field.value as (boolean | string)[], checkboxProps?.value)
+      : (field.value as boolean);
     const onChange: CheckboxProps['onChange'] = checkboxProps?.multiple
       ? (event, _checked) => {
           if (_checked) {
-            field.onChange([...field.value, JSON.parse(event.target.value)]);
+            field.onChange([...(field.value as unknown[]), JSON.parse(event.target.value)]);
           } else {
             field.onChange((field.value as string[]).filter((_value: string) => JSON.stringify(_value) !== event.target.value));
           }
@@ -66,6 +65,6 @@ export function FormCheckbox<TFieldValues extends FieldValues = FieldValues, TNa
     );
   };
 
-  const _controllerProps = { ...controllerProps, render };
+  const _controllerProps = { ...controllerProps, render } as ControllerProps;
   return <Controller {..._controllerProps} />;
 }

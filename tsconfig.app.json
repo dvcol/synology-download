@@ -2,7 +2,7 @@
   "compilerOptions": {
     "composite": true,
     "target": "ESNext",
-    "jsx": "react",
+    "jsx": "react-jsx",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "useDefineForClassFields": true,
     "module": "ESNext",

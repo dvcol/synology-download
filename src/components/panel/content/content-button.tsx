@@ -1,10 +1,9 @@
 import type { BoxProps, ButtonProps, TooltipProps } from '@mui/material';
-import type { FC } from 'react';
+import type { FC, PropsWithChildren } from 'react';
 
 import { Box, Button, Tooltip } from '@mui/material';
-import React from 'react';
 
-export interface ContentButtonProps {
+export interface ContentButtonProps extends PropsWithChildren {
   TooltipProps: Omit<TooltipProps, 'children'>;
   ButtonProps: ButtonProps;
   BoxProps?: Partial<BoxProps>;

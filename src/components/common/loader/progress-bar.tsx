@@ -2,7 +2,6 @@ import type { LinearProgressProps } from '@mui/material';
 import type { FC } from 'react';
 
 import { Box, LinearProgress, Typography } from '@mui/material';
-import React from 'react';
 
 export interface ProgressBarProps { props: LinearProgressProps; value: number; percentage?: boolean }
 export const ProgressBar: FC<ProgressBarProps> = ({ props, value, percentage }) => (

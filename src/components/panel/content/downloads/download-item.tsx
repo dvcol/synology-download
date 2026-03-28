@@ -1,4 +1,4 @@
-import type { ForwardRefRenderFunction } from 'react';
+import type { ForwardRefRenderFunction, JSX } from 'react';
 
 import type { Download } from '../../../../models/download.model';
 import type { GlobalSettings } from '../../../../models/settings.model';
@@ -15,7 +15,7 @@ import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReplayIcon from '@mui/icons-material/Replay';
 import { Dialog, DialogContent } from '@mui/material';
-import React, { forwardRef, useContext, useState } from 'react';
+import React, { forwardRef, use, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { forkJoin } from 'rxjs';
 
@@ -51,7 +51,7 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
   const [dialog, toggleDialog] = React.useState(false);
   const [form] = React.useState<TaskForm>({ uri: download.finalUrl, source: download.referrer });
   const { erase, resume, modal } = useSelector(getSettingsDownloadsTransfer);
-  const { containerRef } = useContext(ContainerContext);
+  const { containerRef } = use(ContainerContext);
 
   const close = (_erase = false) => {
     toggleDialog(false);

@@ -1,5 +1,5 @@
 import type { BoxProps } from '@mui/material';
-import type { FC, ForwardRefRenderFunction } from 'react';
+import type { FC, ForwardRefRenderFunction, JSX } from 'react';
 
 import type { State } from './use-pull-to-refresh';
 
@@ -72,7 +72,7 @@ const StyledLoader = styled(forwardRef(Loader))`
 `;
 
 export type RefreshLoaderProps = {
-  loaderRef: React.RefObject<HTMLDivElement>;
+  loaderRef: React.RefObject<HTMLDivElement | null>;
   loaderHeight: number;
   loaderContent?: JSX.Element;
   loaderTop?: number;

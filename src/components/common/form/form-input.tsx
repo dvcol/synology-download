@@ -4,7 +4,7 @@ import type { ControllerProps, FieldPath, FieldValues } from 'react-hook-form';
 import type { FormInputFileProps } from './form-input-file';
 
 import { Grid, TextField } from '@mui/material';
-import React, { useContext, useState } from 'react';
+import React, { use, useState } from 'react';
 import { Controller } from 'react-hook-form';
 
 import { ContainerContext } from '../../../store/context/container.context';
@@ -18,13 +18,13 @@ export function FormInput<TFieldValues extends FieldValues = FieldValues, TName 
   children,
   inputFileProps,
 }: React.PropsWithChildren<{
-  controllerProps: Omit<ControllerProps<TFieldValues, TName>, 'render'>;
+  controllerProps: Omit<ControllerProps<TFieldValues, TName>, 'render' | 'control'> & { control?: unknown };
   textFieldProps?: TextFieldProps;
   iconProps?: SvgIconProps;
   inputFileProps?: Omit<FormInputFileProps, 'onChange'>;
 }>) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const { containerRef } = useContext(ContainerContext);
+  const { containerRef } = use(ContainerContext);
 
   const render: ControllerProps['render'] = ({ field, fieldState: { invalid, error } }) => {
     const _textFieldProps: TextFieldProps = {

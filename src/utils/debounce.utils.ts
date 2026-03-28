@@ -28,5 +28,5 @@ export function debounce<T>(
 
 export function useDebounce<T>(func: AnyFunction<T>, delay = 250) {
   // eslint-disable-next-line react-hooks/refs -- needed for debounce
-  return debounce(func, delay, useRef<Timeout>());
+  return debounce(func, delay, useRef<Timeout>(undefined));
 }

@@ -4,7 +4,6 @@ import type { Control, UseFormGetValues, UseFormSetValue } from 'react-hook-form
 import type { ContentTab, Tab } from '../../../../models/tab.model';
 
 import { AccordionDetails, Button, CardActions, CardHeader, MenuItem, Stack } from '@mui/material';
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 

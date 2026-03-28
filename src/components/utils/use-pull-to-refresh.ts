@@ -28,7 +28,7 @@ export function usePullToRefresh(options: Options = {}) {
     setRefreshed(false);
   };
 
-  const timeout = useRef<NodeJS.Timeout>();
+  const timeout = useRef<NodeJS.Timeout>(undefined);
   const resetTimeout = (speed = 100) => {
     if (timeout.current) clearTimeout(timeout.current);
     timeout.current = setTimeout(() => {
