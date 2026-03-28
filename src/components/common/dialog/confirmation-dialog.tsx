@@ -1,9 +1,10 @@
 import type { ButtonProps } from '@mui/material';
+import type { JSX } from 'react';
 
 import type { TooltipHoverChangeProps } from '../tooltip/tooltip-hover-change';
 
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
-import React, { useContext } from 'react';
+import React, { use } from 'react';
 
 import { ContainerContext } from '../../../store/context/container.context';
 import { useI18n } from '../../../utils/webex.utils';
@@ -19,7 +20,7 @@ export interface ConfirmationDialogProps {
 }
 export function ConfirmationDialog({ open, title, description, tooltip, onCancel, onConfirm }: ConfirmationDialogProps) {
   const i18n = useI18n('common', 'buttons');
-  const { containerRef } = useContext(ContainerContext);
+  const { containerRef } = use(ContainerContext);
 
   function getContainerRef() {
     return containerRef?.current ?? null;

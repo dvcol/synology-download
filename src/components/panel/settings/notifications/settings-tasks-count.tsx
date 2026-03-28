@@ -5,7 +5,6 @@ import type { Tab } from '../../../../models/tab.model';
 
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, Stack } from '@mui/material';
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 

@@ -2,7 +2,6 @@ import type { FC } from 'react';
 
 import FolderIcon from '@mui/icons-material/Folder';
 import { Container, List, ListItemButton, ListItemText, Tooltip } from '@mui/material';
-import React from 'react';
 
 export interface ExplorerRecentProps {
   selected?: string;

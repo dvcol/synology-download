@@ -1,7 +1,6 @@
-import type { FC } from 'react';
+import type { FC, JSX } from 'react';
 
 import { Card, Grid, Stack, Typography } from '@mui/material';
-import React from 'react';
 
 interface ContentDetailProps {
   title?: JSX.Element;

@@ -4,7 +4,6 @@ import type { FC } from 'react';
 import type { ContentTab, TabTemplate } from '../../models/tab.model';
 
 import { Badge, styled, Tab } from '@mui/material';
-import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 

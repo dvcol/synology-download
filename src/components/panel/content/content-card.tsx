@@ -1,5 +1,5 @@
 import type { AvatarProps } from '@mui/material';
-import type { FC } from 'react';
+import type { FC, JSX } from 'react';
 
 import type { ProgressBarProps } from '../../common/loader/progress-bar';
 

@@ -2,7 +2,6 @@ import type { FormControlLabelProps, SwitchProps } from '@mui/material';
 import type { ControllerProps, FieldPath, FieldValues } from 'react-hook-form';
 
 import { FormControl, FormControlLabel, FormHelperText, Switch } from '@mui/material';
-import React from 'react';
 import { Controller } from 'react-hook-form';
 
 export function FormSwitch<TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({
@@ -10,7 +9,7 @@ export function FormSwitch<TFieldValues extends FieldValues = FieldValues, TName
   switchProps,
   formControlLabelProps,
 }: {
-  controllerProps: Omit<ControllerProps<TFieldValues, TName>, 'render'>;
+  controllerProps: Omit<ControllerProps<TFieldValues, TName>, 'render' | 'control'> & { control?: unknown };
   switchProps?: SwitchProps;
   formControlLabelProps?: Omit<FormControlLabelProps, 'control'>;
 }) {

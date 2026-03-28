@@ -33,7 +33,7 @@ export const NotificationStack: FC<Pick<SnackbarProviderProps, 'maxSnack'>> = ({
       <style>{`.SnackbarContainer-root {z-index: ${zIndexMax} !important;}`}</style>
       <SnackbarProvider
         maxSnack={maxSnack}
-        content={(key, message) => <SnackNotificationCard id={key} notification={message as SnackMessage} expanded={stack[key]} />}
+        content={(key, message) => <SnackNotificationCard id={key} notification={message as unknown as SnackMessage} expanded={stack[key]} />}
         onExited={handleExited}
         onEntered={handleEntered}
         TransitionComponent={Slide as React.ComponentType}

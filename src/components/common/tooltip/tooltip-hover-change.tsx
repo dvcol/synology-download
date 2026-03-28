@@ -1,12 +1,12 @@
 import type { BoxProps, TooltipProps } from '@mui/material';
-import type { FC } from 'react';
+import type { FC, PropsWithChildren } from 'react';
 
 import type { ModifiedEvent } from '../../../models/navbar.model';
 
 import { Box, Tooltip } from '@mui/material';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-export interface TooltipHoverChangeProps {
+export interface TooltipHoverChangeProps extends PropsWithChildren {
   title?: string;
   hoverTooltip?: ($event: ModifiedEvent) => string | undefined;
   props?: Omit<TooltipProps, 'title' | 'children'>;

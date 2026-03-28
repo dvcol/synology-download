@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type { FC, JSX } from 'react';
 
 import type { GlobalSettings } from '../../../../models/settings.model';
 import type { Task } from '../../../../models/task.model';

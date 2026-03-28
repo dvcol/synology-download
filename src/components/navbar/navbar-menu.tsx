@@ -1,3 +1,5 @@
+import type { JSX } from 'react';
+
 import type { NavbarButton } from '../../models/navbar.model';
 
 import AddLinkIcon from '@mui/icons-material/AddLink';
@@ -15,7 +17,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import SettingsIcon from '@mui/icons-material/Settings';
 import TuneIcon from '@mui/icons-material/Tune';
 import { DialogContentText, Divider, IconButton, Menu, Tooltip } from '@mui/material';
-import React, { useContext, useMemo } from 'react';
+import React, { use, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -49,7 +51,7 @@ export function NavbarMenu({ menuIcon }: NavbarMenuProps) {
   const logged = useSelector(getLogged);
   const downloadEnabled = useSelector(getSettingsDownloadsEnabled);
   const downloadButtons = useSelector(getSettingsDownloadsButtons);
-  const { containerRef } = useContext(ContainerContext);
+  const { containerRef } = use(ContainerContext);
   const location = useLocation();
 
   const [anchorEl, setAnchorEl] = React.useState<undefined | null | Element>(null);

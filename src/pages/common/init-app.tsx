@@ -4,8 +4,7 @@ import type { AppRoutes } from '../../models/routes.model';
 import type { ServiceInstance } from '../../models/settings.model';
 import type { RootSlice } from '../../models/store.model';
 
-import React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import { App } from '../../components/App';
 import { setInstance } from '../../models/app-instance.model';
@@ -47,5 +46,5 @@ export async function initApp(logInstance: ServiceInstance, appInstance: AppInst
   );
 
   // Render the app
-  render(<App store={storeProxy} redirect={redirect} instance={appInstance} />, window.document.querySelector(`#${appInstance}-app-container`));
+  createRoot(window.document.querySelector(`#${appInstance}-app-container`)!).render(<App store={storeProxy} redirect={redirect} instance={appInstance} />);
 }

@@ -1,4 +1,4 @@
-import type { Theme } from '@mui/material';
+import type { Theme, ThemeOptions } from '@mui/material';
 import type { CSSProperties } from 'react';
 
 import { createTheme } from '@mui/material';
@@ -169,7 +169,7 @@ const common = {
 };
 
 export const lightTheme: Theme = createTheme({
-  ...common,
+  ...(common as ThemeOptions),
   palette: {
     mode: 'light',
     background: {
@@ -179,7 +179,7 @@ export const lightTheme: Theme = createTheme({
 });
 
 export const darkTheme: Theme = createTheme({
-  ...common,
+  ...(common as ThemeOptions),
   palette: {
     mode: 'dark',
     background: {

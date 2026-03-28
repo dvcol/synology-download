@@ -1,4 +1,4 @@
-import type { Dispatch, FC, SetStateAction } from 'react';
+import type { Dispatch, FC, JSX, SetStateAction } from 'react';
 import type { Observable } from 'rxjs';
 
 import type { ApiInfo } from '../../../../models/api-info.model';

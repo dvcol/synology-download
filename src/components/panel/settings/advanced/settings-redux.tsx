@@ -2,7 +2,6 @@ import type { RootSlice } from '../../../../models/store.model';
 
 import DownloadIcon from '@mui/icons-material/Download';
 import { Button, Card, CardActions, CardContent, CardHeader, Stack } from '@mui/material';
-import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { ColorLevel } from '../../../../models/material-ui.model';

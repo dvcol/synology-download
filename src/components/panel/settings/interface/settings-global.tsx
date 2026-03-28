@@ -3,7 +3,6 @@ import type { StoreState } from '../../../../store/store';
 
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Button, Card, CardActions, CardContent, CardHeader, Collapse, Grid, InputAdornment, MenuItem, Stack } from '@mui/material';
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 

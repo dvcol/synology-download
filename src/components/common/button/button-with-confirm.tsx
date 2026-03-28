@@ -1,5 +1,5 @@
 import type { ButtonProps } from '@mui/material';
-import type { FC } from 'react';
+import type { FC, JSX } from 'react';
 
 import type { ConfirmationDialogProps } from '../dialog/confirmation-dialog';
 

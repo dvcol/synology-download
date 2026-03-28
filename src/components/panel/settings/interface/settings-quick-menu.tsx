@@ -1,7 +1,6 @@
 import type { QuickMenu } from '../../../../models/menu.model';
 
 import { AccordionDetails, Box, Button, Card, CardActions, CardHeader, Collapse, ListItemIcon, ListItemText, MenuItem, Stack } from '@mui/material';
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 

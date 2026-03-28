@@ -1,10 +1,11 @@
+import type { Root } from 'react-dom/client';
+
 import type { StoreOrProxy } from '../../../models/store.model';
 import type { AnchorPayload } from '../service/anchor.service';
 import type { TaskDialogPayload } from '../service/dialog.service';
 
 import createCache from '@emotion/cache';
-import React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import { AppInstance } from '../../../models/app-instance.model';
 import { ServiceInstance } from '../../../models/settings.model';
@@ -21,6 +22,8 @@ import { taskDialog$ } from '../service/dialog.service';
 import { ContentApp } from './content-app';
 
 export class ContentAppWc extends HTMLElement {
+  private _root: Root | undefined;
+
   get store() {
     return store;
   }
@@ -37,6 +40,7 @@ export class ContentAppWc extends HTMLElement {
   }
 
   private disconnectedCallback() {
+    this._root?.unmount();
     this.dispatchEvent(new CustomEvent(WcEvents.disconnected, { detail: this }));
   }
 
@@ -71,8 +75,8 @@ export class ContentAppWc extends HTMLElement {
     const app = shadowRoot.querySelector(`#${instance}-app`);
     const cache = createCache({ key: `${instance}-cache`, container });
 
-    // eslint-disable-next-line react-dom/no-render-return-value -- to keep consistent with other initApp functions
-    return render(<ContentApp storeOrProxy={storeOrProxy} cache={cache} container={container} instance={instance} />, app);
+    this._root = createRoot(app!);
+    this._root.render(<ContentApp storeOrProxy={storeOrProxy} cache={cache} container={container} instance={instance} />);
   }
 
   /**

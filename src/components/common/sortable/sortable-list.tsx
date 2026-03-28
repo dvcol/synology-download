@@ -1,6 +1,6 @@
 import type { DndContextProps, UniqueIdentifier } from '@dnd-kit/core';
 import type { BoxProps } from '@mui/material';
-import type { MouseEvent } from 'react';
+import type { JSX, MouseEvent } from 'react';
 
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { restrictToParentElement, restrictToVerticalAxis } from '@dnd-kit/modifiers';

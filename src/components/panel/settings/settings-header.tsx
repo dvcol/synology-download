@@ -1,7 +1,6 @@
 import type { SettingHeader } from '../../../models/settings.model';
 
 import { Typography } from '@mui/material';
-import React from 'react';
 
 import { useI18n } from '../../../utils/webex.utils';
 

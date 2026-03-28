@@ -1,7 +1,6 @@
 import type { ContextMenu } from '../../../../models/menu.model';
 
 import { AccordionDetails, Button, Card, CardActions, CardHeader, Collapse, Stack } from '@mui/material';
-import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 

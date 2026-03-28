@@ -1,6 +1,6 @@
 import type { SvgIconProps } from '@mui/material';
+import type { JSX } from 'react';
 
-import { jsx } from '@emotion/react';
 import AddIcon from '@mui/icons-material/Add';
 import DownloadIcon from '@mui/icons-material/Download';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
@@ -16,11 +16,8 @@ import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
-import React from 'react';
 
 import { MaterialIcon } from '../../../models/material-ui.model';
-
-import JSX = jsx.JSX;
 
 export function MuiIcon({ icon, props }: { icon: MaterialIcon; props?: SvgIconProps }): JSX.Element {
   switch (icon) {

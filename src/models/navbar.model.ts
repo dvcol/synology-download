@@ -1,5 +1,5 @@
 import type { IconButtonProps } from '@mui/material';
-import type { ForwardRefExoticComponent, MouseEventHandler } from 'react';
+import type { ForwardRefExoticComponent, JSX, MouseEventHandler } from 'react';
 
 export enum NavbarButtonType {
   Add = 'add',

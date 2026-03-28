@@ -18,12 +18,12 @@ export interface SearchInputRef {
   blur: () => Promise<void>;
   clear: () => void;
   setFilter: React.Dispatch<React.SetStateAction<string>>;
-  inputRef: React.RefObject<HTMLInputElement>;
+  inputRef: React.RefObject<HTMLInputElement | null>;
 }
 
 type SearchInputProps = PropsWithChildren<{
-  containerRef: React.RefObject<HTMLDivElement>;
-  containerGetter?: (ref: React.RefObject<HTMLDivElement>) => HTMLElement | null | undefined;
+  containerRef: React.RefObject<HTMLDivElement | null>;
+  containerGetter?: (ref: React.RefObject<HTMLDivElement | null>) => HTMLElement | null | undefined;
 
   filter: string;
   showFilter?: boolean;

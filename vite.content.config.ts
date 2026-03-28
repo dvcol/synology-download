@@ -14,7 +14,7 @@ export default defineConfig(() => ({
     'process.env.DEBUG': JSON.stringify(process.env.DEBUG || 'false'),
   },
   plugins: [
-    react({ jsxRuntime: 'classic' }),
+    react(),
   ],
   base: './',
   css: {
