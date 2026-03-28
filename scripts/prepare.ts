@@ -27,6 +27,23 @@ async function mergeJson({ pattern, output }: { pattern: string; output: string 
 /**
  * Replace index.html with link to vite localhost for hot reload
  */
+/**
+ * Write a React Refresh preamble script for the vite dev server to serve.
+ * Extension CSP blocks inline scripts, so it must be a separate file.
+ */
+function writePreambleStub() {
+  const preamble = `if (typeof globalThis !== 'undefined' && typeof global === 'undefined') { globalThis.global = globalThis; }
+import RefreshRuntime from 'http://localhost:${port}/@react-refresh';
+RefreshRuntime.injectIntoGlobalHook(window);
+window.$RefreshReg$ = () => {};
+window.$RefreshSig$ = () => (type) => type;
+window.__vite_plugin_react_preamble_installed__ = true;
+`;
+  fs.ensureDirSync(resolveParent(`${outDir}/scripts`));
+  fs.writeFileSync(resolveParent(`${outDir}/scripts/preamble.js`), preamble, 'utf-8');
+  console.info(`Stubbing preamble to '${getDirName()}/${outDir}/scripts/preamble.js'`);
+}
+
 async function copyIndexHtml(page: string) {
   fs.ensureDirSync(resolveParent(`${outDir}/pages/${page}`));
   const devServer = `http://localhost:${port}`;
@@ -35,13 +52,7 @@ async function copyIndexHtml(page: string) {
     .replace(
       /<\/body>/,
       `<script type="module" src="${devServer}/@vite/client"></script>
-    <script type="module">
-      import RefreshRuntime from '${devServer}/@react-refresh';
-      RefreshRuntime.injectIntoGlobalHook(window);
-      window.$RefreshReg$ = () => {};
-      window.$RefreshSig$ = () => (type) => type;
-      window.__vite_plugin_react_preamble_installed__ = true;
-    </script>
+    <script type="module" src="../../scripts/preamble.js"></script>
     <script type="module" src="${devServer}/pages/${page}/index.ts"></script>
     </body>`,
     );
@@ -96,6 +107,7 @@ async function prepare(hmr = isDev) {
   console.info('Watching changes ...');
 
   writeBackgroundStub();
+  writePreambleStub();
   copyViews().catch(e => console.error('Failed to copy html', e));
   watch(resolveParent('src/pages/*/index.html')).on('change', () => {
     copyViews().catch(e => console.error('Failed to copy html', e));
