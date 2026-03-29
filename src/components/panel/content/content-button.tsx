@@ -10,6 +10,7 @@ export interface ContentButtonProps extends PropsWithChildren {
 }
 
 export const ContentButton: FC<ContentButtonProps> = ({ TooltipProps, BoxProps, ButtonProps, children }) => {
+  const { key, ...buttonProps } = ButtonProps as ButtonProps & { key?: string };
   return (
     <Tooltip arrow placement="left" {...TooltipProps} PopperProps={{ disablePortal: true, ...TooltipProps?.PopperProps }}>
       <Box
@@ -21,11 +22,12 @@ export const ContentButton: FC<ContentButtonProps> = ({ TooltipProps, BoxProps, 
         }}
       >
         <Button
+          key={key}
           component="span"
-          {...ButtonProps}
+          {...buttonProps}
           sx={{
             p: '0 1rem',
-            ...ButtonProps?.sx,
+            ...buttonProps?.sx,
           }}
         >
           {children}
