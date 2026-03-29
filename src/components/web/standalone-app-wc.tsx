@@ -26,6 +26,7 @@ import { setStandalone } from '../../store/actions/state.action';
 import { addTasks } from '../../store/actions/tasks.action';
 import { getConnection } from '../../store/selectors/settings.selector';
 import { store } from '../../store/store';
+import { fixNestedAmpersand } from '../../utils/emotion.utils';
 import { StandaloneApp } from './standalone-app';
 
 export class StandaloneAppWc extends HTMLElement {
@@ -106,7 +107,7 @@ export class StandaloneAppWc extends HTMLElement {
 
     const container = shadowRoot.querySelector(`#${AppInstance.standalone}-container`) as HTMLElement;
     const app = shadowRoot.querySelector(`#${AppInstance.standalone}-app`);
-    const cache = createCache({ key: `${AppInstance.standalone}-cache`, container });
+    const cache = createCache({ key: `${AppInstance.standalone}-cache`, container, stylisPlugins: [fixNestedAmpersand] });
 
     this._root = createRoot(app!);
     this._root.render(
