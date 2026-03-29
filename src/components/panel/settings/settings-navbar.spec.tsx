@@ -29,13 +29,13 @@ describe('settings-navbar', () => {
   it('renders tabs as links with hash fragments', () => {
     renderWithProviders(<SettingsNavbar tabs={tabs} />);
     const renderedTabs = screen.getAllByRole('tab');
-    // main tab links to "label#label"
-    expect(renderedTabs[0].getAttribute('href')).toBe('/connection#connection');
-    // sub-link links to "label#link"
-    expect(renderedTabs[1].getAttribute('href')).toBe('/connection#credentials');
-    expect(renderedTabs[2].getAttribute('href')).toBe('/connection#polling');
+    // main tab links to absolute "/settings/label#label"
+    expect(renderedTabs[0].getAttribute('href')).toBe('/settings/connection#connection');
+    // sub-link links to "/settings/label#link"
+    expect(renderedTabs[1].getAttribute('href')).toBe('/settings/connection#credentials');
+    expect(renderedTabs[2].getAttribute('href')).toBe('/settings/connection#polling');
     // second main tab
-    expect(renderedTabs[3].getAttribute('href')).toBe('/downloads#downloads');
+    expect(renderedTabs[3].getAttribute('href')).toBe('/settings/downloads#downloads');
   });
 
   it('uses a custom anchor when provided', () => {
@@ -44,6 +44,6 @@ describe('settings-navbar', () => {
     ];
     renderWithProviders(<SettingsNavbar tabs={tabsWithAnchor} />);
     const tab = screen.getByRole('tab');
-    expect(tab.getAttribute('href')).toBe('/interface#custom-anchor');
+    expect(tab.getAttribute('href')).toBe('/settings/interface#custom-anchor');
   });
 });
