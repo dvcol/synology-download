@@ -47,7 +47,7 @@ const common = {
         root: scrollbar,
       },
     },
-    MuiTreeView: {
+    MuiSimpleTreeView: {
       styleOverrides: {
         root: scrollbar,
       },
