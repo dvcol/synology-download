@@ -305,7 +305,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
                   <ExplorerLeafAdd nodeId={selected} path={selectedPath} disabled={disabled} spliceTree={spliceTree} />
                 )
               }
-              {flatten && <ExplorerLoading loading={pathLoading || loading[selected]} empty={!filteredTree[selected]?.length} flatten={flatten} />}
+              {flatten && <ExplorerLoading loading={pathLoading || loading[selected]} empty={!filteredTree[selected]?.length} disabled={disabled} flatten={flatten} />}
               {flatten
                 && !pathLoading
                 && !loading[selected]

@@ -1,6 +1,7 @@
 import type { File } from '../../../../models/file.model';
 import type { Folder } from '../../../../models/folder.model';
 
+import FolderIcon from '@mui/icons-material/Folder';
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import { TreeItem } from '@mui/x-tree-view';
 
@@ -42,7 +43,7 @@ export function ExplorerLeaf({
             )
       }
       disabled={disabled}
-      slots={folder?.isdir ? undefined : { icon: InsertDriveFileOutlinedIcon }}
+      slots={folder?.isdir ? (flatten ? { icon: FolderIcon } : undefined) : { icon: InsertDriveFileOutlinedIcon }}
       sx={{
         display: 'flex',
         overflow: 'hidden',
@@ -54,13 +55,13 @@ export function ExplorerLeaf({
       }}
       slotProps={{ content: { style: { overflow: 'hidden', marginBottom: 'auto' } } }}
     >
-      {!flatten && folder?.isdir && <ExplorerLoading loading={isLoading} empty={!children?.length} flatten={flatten} />}
+      {!flatten && folder?.isdir && <ExplorerLoading loading={isLoading} disabled={disabled} empty={!children?.length} flatten={flatten} />}
       {!flatten
         && folder?.isdir
         && !isLoading
         && children?.map((sf, i) => (
           <ExplorerLeaf
-            key={`${nodeId}-${sf.name}-${disabled}`}
+            key={`${nodeId}-${i}-${disabled}`} // eslint-disable-line react/no-array-index-key -- cannot ensure name unicity
             nodeId={`${nodeId}-${i}`}
             folder={sf}
             tree={tree}

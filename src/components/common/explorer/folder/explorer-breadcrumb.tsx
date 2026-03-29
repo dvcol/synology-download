@@ -28,7 +28,7 @@ export function ExplorerBreadCrumbs({
   const i18n = useI18n('common', 'explorer', 'breadcrumb');
   return (
     <Breadcrumbs aria-label="breadcrumb" maxItems={3} sx={{ mb: '0.125em', overflow: 'auto', fontSize: '0.875em', minHeight: '2em' }}>
-      {loading && <ExplorerLoading loading={loading} text="path" />}
+      {loading && <ExplorerLoading loading={loading} disabled={disabled} text="path" />}
       {!loading && !crumbs?.length && hasDestinations && (
         <Button
           key={`recent-${disabled}`}

@@ -5,11 +5,13 @@ import React from 'react';
 import { useI18n } from '../../../../utils/webex.utils';
 
 export function ExplorerLoading({
+  disabled,
   loading,
   empty,
   text = 'folder',
   flatten,
 }: {
+  disabled?: boolean;
   loading?: boolean;
   empty?: boolean;
   flatten?: boolean;
@@ -32,12 +34,12 @@ export function ExplorerLoading({
             display: 'flex',
             alignItems: 'center',
             pl: '0.5em',
-            m: '0.5em 0',
-            fontSize: '0.75em',
+            m: `${flatten ? '0.5em' : '0.2em'} 0`,
             minWidth: flatten ? undefined : 'max-content',
+            opacity: disabled ? '0.38' : undefined,
           }}
         >
-          <InfoIcon sx={{ width: '1em', height: '1em', m: '0 0.25rem 0.1rem 0', fontSize: '1.125em' }} />
+          <InfoIcon sx={{ width: '1em', height: '1em', m: `0 0.25em ${flatten ? '0.025em' : '0'} 0`, fontSize: flatten ? '1.125em' : '1em' }} />
           <span>{i18n('empty')}</span>
         </Typography>
       )}
