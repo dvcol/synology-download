@@ -90,8 +90,8 @@ importers:
         specifier: ^11.1.0
         version: 11.1.0
       webext-redux:
-        specifier: ^2.1.9
-        version: 2.1.9(redux@5.0.1)
+        specifier: ^4.0.0
+        version: 4.0.0(redux@5.0.1)
     devDependencies:
       '@commitlint/cli':
         specifier: ^20.5.0
@@ -5961,10 +5961,10 @@ packages:
   wcwidth@1.0.1:
     resolution: {integrity: sha512-XHPEwS0q6TaxcvG85+8EYkbiCux2XtWG2mkc47Ng2A77BQu9+DqIOJldST4HgPkuea7dvKSj5VgX3P1d4rW8Tg==}
 
-  webext-redux@2.1.9:
-    resolution: {integrity: sha512-z7frkQ/avFgnMxUH6Q955hU8SDsHT9Zlq9az3OpY891RXw9nKODOTnUhNo9ZAlDFUPHhX2A+z6j74BCaYwEsfQ==}
+  webext-redux@4.0.0:
+    resolution: {integrity: sha512-pMyU0mWRz5umC5ISGG4H7src+bwgJUw3lYEtPm5gvJZILC2/ZrEE5mtqi3caSifet684kMtPse0uVyK/9bZMuA==}
     peerDependencies:
-      redux: '>= 3 <= 4'
+      redux: '>= 3 <= 5'
 
   webidl-conversions@8.0.1:
     resolution: {integrity: sha512-BMhLD/Sw+GbJC21C/UgyaZX41nPt8bUTg+jWyDeg7e7YN4xOM05YPSIXceACnXVtqyEw/LMClUQMtMZ+PGGpqQ==}
@@ -12579,7 +12579,7 @@ snapshots:
     dependencies:
       defaults: 1.0.3
 
-  webext-redux@2.1.9(redux@5.0.1):
+  webext-redux@4.0.0(redux@5.0.1):
     dependencies:
       lodash.assignin: 4.2.0
       lodash.clonedeep: 4.5.0
