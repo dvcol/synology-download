@@ -43,8 +43,7 @@ export function SettingsSnack() {
         id={NotificationHeader.snack}
         title={i18n('title')}
         subheader={i18n('subheader')}
-        titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
-        subheaderTypographyProps={{ variant: 'subtitle2' }}
+        slotProps={{ title: { variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }, subheader: { variant: 'subtitle2' } }}
         action={<FormSwitch controllerProps={{ name: 'enabled', control }} formControlLabelProps={{ label: '' }} />}
         sx={{ p: '1rem 1rem 0' }}
       />
@@ -53,8 +52,7 @@ export function SettingsSnack() {
           <CardHeader
             title={i18n('position_title')}
             subheader={i18n('position_subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
             sx={{ p: '0rem 0rem 1rem' }}
           />
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -92,8 +90,7 @@ export function SettingsSnack() {
           <CardHeader
             title={i18n('timeout_title')}
             subheader={i18n('timeout_subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
             action={(
               <FormInput
                 controllerProps={{
@@ -107,8 +104,8 @@ export function SettingsSnack() {
                 textFieldProps={{
                   type: 'number',
                   label: i18n('timeout_label'),
-                  InputProps: {
-                    endAdornment: <InputAdornment position="end">ms</InputAdornment>,
+                  slotProps: {
+                    input: { endAdornment: <InputAdornment position="end">ms</InputAdornment> },
                   },
                   disabled: !getValues()?.enabled,
                   sx: { flex: '0 0 14rem', ml: '0.5rem' },
@@ -120,8 +117,7 @@ export function SettingsSnack() {
           <CardHeader
             title={i18n('level_title')}
             subheader={i18n('level_subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
             action={(
               <FormInput
                 controllerProps={{ name: 'level', control }}
@@ -145,8 +141,7 @@ export function SettingsSnack() {
             <CardHeader
               title={i18n('popup_title')}
               subheader={i18n('popup_subheader')}
-              titleTypographyProps={{ variant: 'subtitle2' }}
-              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
               action={(
                 <FormSwitch
                   controllerProps={{ name: 'scope.popup', control }}
@@ -158,8 +153,7 @@ export function SettingsSnack() {
             <CardHeader
               title={i18n('tab_title')}
               subheader={i18n('tab_subheader')}
-              titleTypographyProps={{ variant: 'subtitle2' }}
-              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
               action={(
                 <FormSwitch
                   controllerProps={{ name: 'scope.content', control }}

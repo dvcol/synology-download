@@ -51,15 +51,14 @@ export function SettingsTasksAdd() {
         id={TasksHeader.form}
         title={i18n('title')}
         subheader={i18n('subheader')}
-        titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
+        slotProps={{ title: { variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } } }}
         sx={{ p: '1rem 1rem 0' }}
       />
       <CardContent>
         <CardHeader
           title={i18n('clear_on_exist__title')}
           subheader={i18n('clear_on_exist__subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2', sx: { maxWidth: '95%' } } }}
           action={<FormSwitch controllerProps={{ name: 'clearOnExist', control }} formControlLabelProps={{ label: '' }} />}
           sx={{ p: '0.5rem 0' }}
         />

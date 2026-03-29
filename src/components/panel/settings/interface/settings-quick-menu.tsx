@@ -61,8 +61,7 @@ export function SettingsQuickMenu({ menu, onRemove }: { menu: QuickMenu; onRemov
       <CardHeader
         title={i18n('name_title')}
         subheader={i18n('name_subheader')}
-        titleTypographyProps={{ variant: 'subtitle2' }}
-        subheaderTypographyProps={{ variant: 'subtitle2' }}
+        slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
         action={(
           <FormInput
             controllerProps={{ name: 'title', control }}
@@ -77,8 +76,7 @@ export function SettingsQuickMenu({ menu, onRemove }: { menu: QuickMenu; onRemov
       <CardHeader
         title={i18n('icon_title')}
         subheader={i18n('icon_subheader')}
-        titleTypographyProps={{ variant: 'subtitle2' }}
-        subheaderTypographyProps={{ variant: 'subtitle2' }}
+        slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
         action={(
           <FormInput
             controllerProps={{ name: 'icon', control }}
@@ -105,8 +103,7 @@ export function SettingsQuickMenu({ menu, onRemove }: { menu: QuickMenu; onRemov
       <CardHeader
         title={i18n('type_title')}
         subheader={i18n('type_subheader')}
-        titleTypographyProps={{ variant: 'subtitle2' }}
-        subheaderTypographyProps={{ variant: 'subtitle2' }}
+        slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
         action={(
           <FormInput
             controllerProps={{ name: 'type', control }}
@@ -130,8 +127,7 @@ export function SettingsQuickMenu({ menu, onRemove }: { menu: QuickMenu; onRemov
         <CardHeader
           title={i18n('max_title')}
           subheader={i18n('max_subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           action={(
             <FormInput
               controllerProps={{
@@ -158,8 +154,7 @@ export function SettingsQuickMenu({ menu, onRemove }: { menu: QuickMenu; onRemov
         <CardHeader
           title={i18n('modal_title')}
           subheader={i18n('modal_subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           action={(
             <FormSwitch
               controllerProps={{ name: 'modal', control }}
@@ -177,8 +172,7 @@ export function SettingsQuickMenu({ menu, onRemove }: { menu: QuickMenu; onRemov
         <CardHeader
           title={i18n('popup_title')}
           subheader={i18n('popup_subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           action={(
             <FormSwitch
               controllerProps={{ name: 'popup', control }}
@@ -199,8 +193,7 @@ export function SettingsQuickMenu({ menu, onRemove }: { menu: QuickMenu; onRemov
         <CardHeader
           title={i18n('panel_title')}
           subheader={i18n('panel_subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           action={(
             <FormSwitch
               controllerProps={{ name: 'panel', control }}
@@ -221,8 +214,7 @@ export function SettingsQuickMenu({ menu, onRemove }: { menu: QuickMenu; onRemov
         <CardHeader
           title={i18n('destination_title')}
           subheader={i18n('destination_subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           action={(
             <FormSwitch
               controllerProps={{ name: 'destination.custom', control }}

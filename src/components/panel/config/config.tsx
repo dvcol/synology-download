@@ -118,24 +118,22 @@ export const Config: FC<{
               <Typography sx={{ mb: '0.5rem' }}>{i18n('subheader_line_2')}</Typography>
             </Box>
           )}
-          titleTypographyProps={{ variant: 'h6', color: 'text.primary', fontSize: '1rem' }}
-          subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '0.875rem' }}
+          slotProps={{ title: { variant: 'h6', color: 'text.primary', fontSize: '1rem' }, subheader: { variant: 'subtitle2', fontSize: '0.875rem' } }}
           sx={{ p: '1rem 1rem 0' }}
         />
         <CardContent sx={{ display: 'flex', flexDirection: 'column', p: '0.5rem 1rem 1rem' }}>
           <CardHeader
             title={i18n('bt_max_download__title')}
             subheader={i18n('bt_max_download__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
             action={(
               <FormInput
                 controllerProps={{ name: 'bt_max_download', control, rules }}
                 textFieldProps={{
                   type: 'number',
                   label: i18n('bt_max_download__label'),
-                  InputProps: {
-                    endAdornment: <InputAdornment position="end">KB/s</InputAdornment>,
+                  slotProps: {
+                    input: { endAdornment: <InputAdornment position="end">KB/s</InputAdornment> },
                   },
                   disabled: !isAdmin,
                   sx: { flex: '0 0 14rem' },
@@ -147,16 +145,15 @@ export const Config: FC<{
           <CardHeader
             title={i18n('bt_max_upload__title')}
             subheader={i18n('bt_max_upload__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
             action={(
               <FormInput
                 controllerProps={{ name: 'bt_max_upload', control, rules }}
                 textFieldProps={{
                   type: 'number',
                   label: i18n('bt_max_upload__label'),
-                  InputProps: {
-                    endAdornment: <InputAdornment position="end">KB/s</InputAdornment>,
+                  slotProps: {
+                    input: { endAdornment: <InputAdornment position="end">KB/s</InputAdornment> },
                   },
                   disabled: !isAdmin,
                   sx: { flex: '0 0 14rem' },
@@ -168,16 +165,15 @@ export const Config: FC<{
           <CardHeader
             title={i18n('nzb_max_download__title')}
             subheader={i18n('nzb_max_download__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
             action={(
               <FormInput
                 controllerProps={{ name: 'nzb_max_download', control, rules }}
                 textFieldProps={{
                   type: 'number',
                   label: i18n('nzb_max_download__label'),
-                  InputProps: {
-                    endAdornment: <InputAdornment position="end">KB/s</InputAdornment>,
+                  slotProps: {
+                    input: { endAdornment: <InputAdornment position="end">KB/s</InputAdornment> },
                   },
                   disabled: !isAdmin,
                   sx: { flex: '0 0 14rem' },
@@ -189,16 +185,15 @@ export const Config: FC<{
           <CardHeader
             title={i18n('http_max_download__title')}
             subheader={i18n('http_max_download__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
             action={(
               <FormInput
                 controllerProps={{ name: 'http_max_download', control, rules }}
                 textFieldProps={{
                   type: 'number',
                   label: i18n('http_max_download__label'),
-                  InputProps: {
-                    endAdornment: <InputAdornment position="end">KB/s</InputAdornment>,
+                  slotProps: {
+                    input: { endAdornment: <InputAdornment position="end">KB/s</InputAdornment> },
                   },
                   disabled: !isAdmin,
                   sx: { flex: '0 0 14rem' },
@@ -210,16 +205,15 @@ export const Config: FC<{
           <CardHeader
             title={i18n('ftp_max_download__title')}
             subheader={i18n('ftp_max_download__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
             action={(
               <FormInput
                 controllerProps={{ name: 'ftp_max_download', control, rules }}
                 textFieldProps={{
                   type: 'number',
                   label: i18n('ftp_max_download__label'),
-                  InputProps: {
-                    endAdornment: <InputAdornment position="end">KB/s</InputAdornment>,
+                  slotProps: {
+                    input: { endAdornment: <InputAdornment position="end">KB/s</InputAdornment> },
                   },
                   disabled: !isAdmin,
                   sx: { flex: '0 0 14rem' },
@@ -231,16 +225,14 @@ export const Config: FC<{
           <CardHeader
             title={i18n('unzip_service_enabled__title')}
             subheader={i18n('unzip_service_enabled__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
             action={<FormSwitch controllerProps={{ name: 'unzip_service_enabled', control }} formControlLabelProps={{ label: '' }} />}
             sx={{ p: '0.5rem 0' }}
           />
           <CardHeader
             title={i18n('default_destination__title')}
             subheader={i18n('default_destination__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
             sx={{ p: '0.5rem 0' }}
           />
           <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: 'clamp(12rem, 20vh, 20vh)' }}>
@@ -252,8 +244,7 @@ export const Config: FC<{
           <CardHeader
             title={i18n('emule_enabled__title')}
             subheader={i18n('emule_enabled__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
             action={<FormSwitch controllerProps={{ name: 'emule_enabled', control }} formControlLabelProps={{ label: '' }} />}
             sx={{ p: '0.5rem 0' }}
           />
@@ -261,16 +252,15 @@ export const Config: FC<{
             <CardHeader
               title={i18n('emule_max_download__title')}
               subheader={i18n('emule_max_download__subheader')}
-              titleTypographyProps={{ variant: 'subtitle2' }}
-              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
               action={(
                 <FormInput
                   controllerProps={{ name: 'emule_max_download', control, rules }}
                   textFieldProps={{
                     type: 'number',
                     label: i18n('emule_max_download__label'),
-                    InputProps: {
-                      endAdornment: <InputAdornment position="end">KB/s</InputAdornment>,
+                    slotProps: {
+                      input: { endAdornment: <InputAdornment position="end">KB/s</InputAdornment> },
                     },
                     disabled: !isAdmin || !getValues().emule_enabled,
                     sx: { flex: '0 0 14rem' },
@@ -282,16 +272,15 @@ export const Config: FC<{
             <CardHeader
               title={i18n('emule_max_upload__title')}
               subheader={i18n('emule_max_upload__subheader')}
-              titleTypographyProps={{ variant: 'subtitle2' }}
-              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
               action={(
                 <FormInput
                   controllerProps={{ name: 'emule_max_upload', control, rules }}
                   textFieldProps={{
                     type: 'number',
                     label: i18n('emule_max_upload__label'),
-                    InputProps: {
-                      endAdornment: <InputAdornment position="end">KB/s</InputAdornment>,
+                    slotProps: {
+                      input: { endAdornment: <InputAdornment position="end">KB/s</InputAdornment> },
                     },
                     disabled: !isAdmin || !getValues().emule_enabled,
                     sx: { flex: '0 0 14rem' },
@@ -303,8 +292,7 @@ export const Config: FC<{
             <CardHeader
               title={i18n('emule_default_destination__title')}
               subheader={i18n('emule_default_destination__subheader')}
-              titleTypographyProps={{ variant: 'subtitle2' }}
-              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
               sx={{ p: '0.5rem 0' }}
             />
             <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: 'clamp(12rem, 20vh, 20vh)' }}>

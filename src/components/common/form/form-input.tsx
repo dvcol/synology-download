@@ -42,17 +42,17 @@ export function FormInput<TFieldValues extends FieldValues = FieldValues, TName 
 
     if (textFieldProps?.type === 'password') {
       _textFieldProps.type = showPassword ? 'text' : 'password';
-      _textFieldProps.InputProps = {
-        endAdornment: <FormInputPassword iconProps={iconProps} onToggle={show => setShowPassword(show)} />,
-        ...(_textFieldProps.InputProps ?? {}),
+      _textFieldProps.slotProps = {
+        ...(_textFieldProps.slotProps ?? {}),
+        input: { endAdornment: <FormInputPassword iconProps={iconProps} onToggle={show => setShowPassword(show)} />, ...(_textFieldProps.slotProps?.input ?? {}) },
       };
     } else if (textFieldProps?.type === 'file') {
       _textFieldProps.type = 'text';
       const UploadButton = <FormInputFile split={inputFileProps?.split} accept={inputFileProps?.accept} onChange={_textFieldProps.onChange} />;
       if (inputFileProps?.split) {
-        _textFieldProps.InputProps = {
-          readOnly: true,
-          ...(_textFieldProps.InputProps ?? {}),
+        _textFieldProps.slotProps = {
+          ...(_textFieldProps.slotProps ?? {}),
+          input: { readOnly: true, ...(_textFieldProps.slotProps?.input ?? {}) },
         };
         return (
           <Grid container direction="column">
@@ -71,17 +71,15 @@ export function FormInput<TFieldValues extends FieldValues = FieldValues, TName 
         );
       }
 
-      _textFieldProps.InputProps = {
-        startAdornment: UploadButton,
-        readOnly: true,
-        ...(_textFieldProps.InputProps ?? {}),
+      _textFieldProps.slotProps = {
+        ...(_textFieldProps.slotProps ?? {}),
+        input: { startAdornment: UploadButton, readOnly: true, ...(_textFieldProps.slotProps?.input ?? {}) },
       };
     }
 
-    _textFieldProps.SelectProps = {
-      MenuProps: {
-        container: containerRef?.current,
-      },
+    _textFieldProps.slotProps = {
+      ...(_textFieldProps.slotProps ?? {}),
+      select: { MenuProps: { container: containerRef?.current } },
     };
 
     return (

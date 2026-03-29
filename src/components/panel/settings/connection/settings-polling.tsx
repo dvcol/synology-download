@@ -56,7 +56,7 @@ export function SettingsPolling() {
         id={ConnectionHeader.polling}
         title={i18n('title')}
         subheader={i18n('subheader')}
-        titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
+        slotProps={{ title: { variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } } }}
         action={<FormSwitch controllerProps={{ name: 'enabled', control }} formControlLabelProps={{ label: '' }} />}
         sx={{ p: '1rem 1rem 0' }}
       />
@@ -66,8 +66,7 @@ export function SettingsPolling() {
             <CardHeader
               title={i18n('popup_title')}
               subheader={i18n('popup_subheader')}
-              titleTypographyProps={{ variant: 'subtitle2' }}
-              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
               action={(
                 <FormSwitch
                   controllerProps={{ name: 'popup.enabled', control }}
@@ -84,8 +83,7 @@ export function SettingsPolling() {
                   <Box>{i18n('background_subheader_line_2')}</Box>
                 </Box>
               )}
-              titleTypographyProps={{ variant: 'subtitle2' }}
-              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
               action={(
                 <FormSwitch
                   controllerProps={{ name: 'background.enabled', control }}
@@ -97,8 +95,7 @@ export function SettingsPolling() {
             <CardHeader
               title={i18n('interval_title')}
               subheader={i18n('interval_subheader')}
-              titleTypographyProps={{ variant: 'subtitle2' }}
-              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
               sx={{ p: '1rem 0' }}
             />
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -107,8 +104,8 @@ export function SettingsPolling() {
                 textFieldProps={{
                   type: 'number',
                   label: i18n('interval_popup_label'),
-                  InputProps: {
-                    endAdornment: <InputAdornment position="end">ms</InputAdornment>,
+                  slotProps: {
+                    input: { endAdornment: <InputAdornment position="end">ms</InputAdornment> },
                   },
                   disabled: !getValues()?.enabled || !getValues()?.popup?.enabled,
                   sx: { flex: '1 1 30ch' },
@@ -119,8 +116,8 @@ export function SettingsPolling() {
                 textFieldProps={{
                   type: 'number',
                   label: i18n('interval_background_label'),
-                  InputProps: {
-                    endAdornment: <InputAdornment position="end">ms</InputAdornment>,
+                  slotProps: {
+                    input: { endAdornment: <InputAdornment position="end">ms</InputAdornment> },
                   },
                   disabled: !getValues()?.enabled || !getValues()?.background?.enabled,
                   sx: { flex: '1 1 30ch' },

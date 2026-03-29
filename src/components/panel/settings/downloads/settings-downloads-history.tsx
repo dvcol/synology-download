@@ -69,7 +69,7 @@ export function SettingsDownloadsHistory() {
         id={DownloadsHeader.history}
         title={i18n('title')}
         subheader={i18n('subheader')}
-        titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
+        slotProps={{ title: { variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } } }}
         action={<FormSwitch controllerProps={{ name: 'enabled', control }} formControlLabelProps={{ label: '' }} />}
         sx={{ p: '1rem 1rem 0' }}
       />
@@ -81,8 +81,7 @@ export function SettingsDownloadsHistory() {
           <CardHeader
             title={i18n('default_folder__title')}
             subheader={i18n('default_folder__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2', sx: { maxWidth: '95%' } } }}
             sx={{ p: '0.5rem 0' }}
           />
           <FormInput

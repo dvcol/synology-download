@@ -54,7 +54,7 @@ export function SettingsDownloadsLocal() {
         id={DownloadsHeader.general}
         title={i18n('title')}
         subheader={i18n('subheader')}
-        titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
+        slotProps={{ title: { variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } } }}
         action={<FormSwitch controllerProps={{ name: 'enabled', control }} formControlLabelProps={{ label: '' }} />}
         sx={{ p: '1rem 1rem 0' }}
       />
@@ -63,8 +63,7 @@ export function SettingsDownloadsLocal() {
           <CardHeader
             title={i18n('buttons__title')}
             subheader={i18n('buttons__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2', sx: { maxWidth: '95%' } } }}
             action={
               <FormSwitch controllerProps={{ name: 'buttons', control }} formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }} />
             }
@@ -73,8 +72,7 @@ export function SettingsDownloadsLocal() {
           <CardHeader
             title={i18n('notifications__title')}
             subheader={i18n('notifications__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2', sx: { maxWidth: '95%' } } }}
             action={(
               <FormSwitch
                 controllerProps={{ name: 'notifications', control }}
@@ -86,8 +84,7 @@ export function SettingsDownloadsLocal() {
           <CardHeader
             title={i18n('transfer__erase__title')}
             subheader={i18n('transfer__erase__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2', sx: { maxWidth: '95%' } } }}
             action={(
               <FormSwitch
                 controllerProps={{ name: 'transfer.erase', control }}
@@ -99,8 +96,7 @@ export function SettingsDownloadsLocal() {
           <CardHeader
             title={i18n('transfer__resume__title')}
             subheader={i18n('transfer__resume__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2', sx: { maxWidth: '95%' } } }}
             action={(
               <FormSwitch
                 controllerProps={{ name: 'transfer.resume', control }}
@@ -112,8 +108,7 @@ export function SettingsDownloadsLocal() {
           <CardHeader
             title={i18n('transfer__modal__title')}
             subheader={i18n('transfer__modal__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2', sx: { maxWidth: '95%' } } }}
             action={(
               <FormSwitch
                 controllerProps={{ name: 'transfer.modal', control }}

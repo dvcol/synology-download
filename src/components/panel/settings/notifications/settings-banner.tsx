@@ -42,8 +42,7 @@ export function SettingsBanner() {
         id={NotificationHeader.banner}
         title={i18n('toggle_title')}
         subheader={i18n('toggle_subheader')}
-        titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
-        subheaderTypographyProps={{ variant: 'subtitle2' }}
+        slotProps={{ title: { variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }, subheader: { variant: 'subtitle2' } }}
         action={<FormSwitch controllerProps={{ name: 'enabled', control }} formControlLabelProps={{ label: '' }} />}
         sx={{ p: '1rem 1rem 0' }}
       />
@@ -52,8 +51,7 @@ export function SettingsBanner() {
           <CardHeader
             title={i18n('level_title')}
             subheader={i18n('level_subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
             action={(
               <FormInput
                 controllerProps={{ name: 'level', control }}
@@ -78,8 +76,7 @@ export function SettingsBanner() {
             <CardHeader
               title={i18n('background_title')}
               subheader={i18n('background_subheader')}
-              titleTypographyProps={{ variant: 'subtitle2' }}
-              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
               action={(
                 <FormSwitch
                   controllerProps={{ name: 'scope.background', control }}
@@ -91,8 +88,7 @@ export function SettingsBanner() {
             <CardHeader
               title={i18n('popup_title')}
               subheader={i18n('popup_subheader')}
-              titleTypographyProps={{ variant: 'subtitle2' }}
-              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
               action={(
                 <FormSwitch
                   controllerProps={{ name: 'scope.popup', control }}
@@ -104,8 +100,7 @@ export function SettingsBanner() {
             <CardHeader
               title={i18n('completed_title')}
               subheader={i18n('completed_subheader')}
-              titleTypographyProps={{ variant: 'subtitle2' }}
-              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
               action={(
                 <FormSwitch
                   controllerProps={{ name: 'scope.finished', control }}
@@ -117,8 +112,7 @@ export function SettingsBanner() {
             <CardHeader
               title={i18n('failed_title')}
               subheader={i18n('failed_subheader')}
-              titleTypographyProps={{ variant: 'subtitle2' }}
-              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
               action={(
                 <FormSwitch
                   controllerProps={{ name: 'scope.failed', control }}

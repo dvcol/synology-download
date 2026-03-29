@@ -49,8 +49,7 @@ export const About: FC<{
             )}
           </Stack>
         )}
-        titleTypographyProps={{ variant: 'h5', color: 'text.primary' }}
-        subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '0.875rem' }}
+        slotProps={{ title: { variant: 'h5', color: 'text.primary' }, subheader: { variant: 'subtitle2', fontSize: '0.875rem' } }}
         sx={{ p: '1rem 1rem 0', textTransform: 'capitalize' }}
       />
       <CardContent sx={{ display: 'flex', flexDirection: 'column', p: '0.5rem 1rem 1rem' }}>

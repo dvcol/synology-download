@@ -57,8 +57,7 @@ export function SettingsTab({ tab, onRemove }: { tab: ContentTab; onRemove: (id:
       <CardHeader
         title={i18n('name_title')}
         subheader={i18n('name_subheader')}
-        titleTypographyProps={{ variant: 'subtitle2' }}
-        subheaderTypographyProps={{ variant: 'subtitle2' }}
+        slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
         action={(
           <FormInput
             controllerProps={{ name: 'name', control }}
@@ -74,8 +73,7 @@ export function SettingsTab({ tab, onRemove }: { tab: ContentTab; onRemove: (id:
       <CardHeader
         title={i18n('sort_title')}
         subheader={i18n('sort_subheader')}
-        titleTypographyProps={{ variant: 'subtitle2' }}
-        subheaderTypographyProps={{ variant: 'subtitle2' }}
+        slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
         action={(
           <FormInput
             controllerProps={{ name: 'sort', control }}
@@ -97,8 +95,7 @@ export function SettingsTab({ tab, onRemove }: { tab: ContentTab; onRemove: (id:
       <CardHeader
         title={i18n('reverse_title')}
         subheader={i18n('reverse_subheader')}
-        titleTypographyProps={{ variant: 'subtitle2' }}
-        subheaderTypographyProps={{ variant: 'subtitle2' }}
+        slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
         action={(
           <FormInput
             controllerProps={{ name: 'reverse', control }}

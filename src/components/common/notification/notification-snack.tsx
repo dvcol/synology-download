@@ -25,8 +25,8 @@ const ExpandMore = styled(({ expand, ...other }: IconButtonProps & { expand: boo
 }>(({ theme, expand }) => ({
   transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
   marginLeft: 'auto',
-  transition: (theme as Theme).transitions.create('transform', {
-    duration: (theme as Theme).transitions.duration.shortest,
+  transition: (theme).transitions.create('transform', {
+    duration: (theme).transitions.duration.shortest,
   }),
 }));
 
@@ -107,10 +107,7 @@ const SnackNotificationCardComponent: ForwardRefRenderFunction<HTMLDivElement, S
           </Box>
         )}
         title={<Box sx={{ overflowWrap: 'break-word', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</Box>}
-        titleTypographyProps={{
-          variant: 'subtitle2',
-          sx: { fontSize: '0.875em', overflow: 'hidden', width: '13.625em' },
-        }}
+        slotProps={{ title: { variant: 'subtitle2', sx: { fontSize: '0.875em', overflow: 'hidden', width: '13.625em' } } }}
         sx={{ padding: '0.5em 0.5em 0.5em 1em', bgcolor: handleColor() }}
       />
       {!!(message || contextMessage || buttons?.length) && (

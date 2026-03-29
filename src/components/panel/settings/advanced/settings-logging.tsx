@@ -68,7 +68,7 @@ export function SettingsLogging() {
         id={AdvancedHeader.logging}
         title={i18n('title')}
         subheader={i18n('subheader')}
-        titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
+        slotProps={{ title: { variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } } }}
         action={<FormSwitch controllerProps={{ name: 'enabled', control }} formControlLabelProps={{ label: '' }} />}
         sx={{ p: '1rem 1rem 0' }}
       />
@@ -79,8 +79,7 @@ export function SettingsLogging() {
               key={instance}
               title={i18n(`levels__${instance}__title`)}
               subheader={i18n(`levels__${instance}__subheader`)}
-              titleTypographyProps={{ variant: 'subtitle2' }}
-              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
               action={(
                 <FormInput
                   controllerProps={{ name: `levels.${instance}`, control }}
@@ -104,8 +103,7 @@ export function SettingsLogging() {
           <CardHeader
             title={i18n('history__title')}
             subheader={i18n('history__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2', sx: { maxWidth: '95%' } } }}
             action={
               <FormSwitch controllerProps={{ name: 'history', control }} formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }} />
             }
@@ -114,16 +112,15 @@ export function SettingsLogging() {
           <CardHeader
             title={i18n('history_max__title')}
             subheader={i18n('history_max__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
             action={(
               <FormInput
                 controllerProps={{ name: 'historyMax', control, rules }}
                 textFieldProps={{
                   type: 'number',
                   label: i18n('history_max__label'),
-                  InputProps: {
-                    endAdornment: <InputAdornment position="end">{i18n('history_max__unit')}</InputAdornment>,
+                  slotProps: {
+                    input: { endAdornment: <InputAdornment position="end">{i18n('history_max__unit')}</InputAdornment> },
                   },
                   disabled: !getValues()?.enabled || !getValues()?.history,
                   sx: { flex: '0 0 10rem' },
