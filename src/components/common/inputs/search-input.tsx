@@ -1,9 +1,9 @@
 import type { SelectProps } from '@mui/material';
-import type { ForwardRefRenderFunction, PropsWithChildren } from 'react';
+import type { PropsWithChildren, Ref } from 'react';
 
 import ClearIcon from '@mui/icons-material/Clear';
 import { Button, Stack, TextField, Tooltip } from '@mui/material';
-import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 
 import { KeyboardKeyCode, KeyboardKeyName } from '../../../utils/keyboard.utils';
 import { useI18n } from '../../../utils/webex.utils';
@@ -38,23 +38,21 @@ type SearchInputProps = PropsWithChildren<{
 
   sx?: React.CSSProperties;
 }>;
-const ForwardedSearchInput: ForwardRefRenderFunction<SearchInputRef, SearchInputProps> = (
-  {
-    focusOnChange,
-    containerRef,
-    containerGetter,
-    filter,
-    showFilter,
-    disabled,
-    selectProps,
-    onChangeFilter,
-    onChangeVisible,
-    onSelectOpen,
-    sx,
-    children,
-  },
+export function SearchInput({
   ref,
-) => {
+  focusOnChange,
+  containerRef,
+  containerGetter,
+  filter,
+  showFilter,
+  disabled,
+  selectProps,
+  onChangeFilter,
+  onChangeVisible,
+  onSelectOpen,
+  sx,
+  children,
+}: SearchInputProps & { ref?: Ref<SearchInputRef> }) {
   const i18n = useI18n('common', 'search-input');
 
   const filterRef = useRef<HTMLInputElement>(null);
@@ -194,6 +192,4 @@ const ForwardedSearchInput: ForwardRefRenderFunction<SearchInputRef, SearchInput
       </Tooltip>
     </Stack>
   );
-};
-
-export const SearchInput = forwardRef(ForwardedSearchInput);
+}

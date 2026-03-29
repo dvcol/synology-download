@@ -1,6 +1,6 @@
 import type { IconButtonProps, SvgIconProps, Theme } from '@mui/material';
 import type { SnackbarKey } from 'notistack';
-import type { ForwardRefRenderFunction, JSX } from 'react';
+import type { JSX, Ref } from 'react';
 
 import type { SnackMessage } from '../../../models/notification.model';
 
@@ -13,7 +13,7 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, IconButton, styled, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import React, { forwardRef, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { ColorLevel, ColorLevelMap } from '../../../models/material-ui.model';
 import { NotificationLevel } from '../../../models/notification.model';
@@ -30,11 +30,13 @@ const ExpandMore = styled(({ expand, ...other }: IconButtonProps & { expand: boo
   }),
 }));
 
-interface SnackNotificationCardProps { id: SnackbarKey; notification: SnackMessage; expanded?: boolean }
-const SnackNotificationCardComponent: ForwardRefRenderFunction<HTMLDivElement, SnackNotificationCardProps> = (
-  { id, notification: { title, message, contextMessage, priority, success, buttons }, expanded },
+interface SnackNotificationCardProps { id: SnackbarKey; notification: SnackMessage; expanded?: boolean; ref?: Ref<HTMLDivElement> }
+export function SnackNotificationCard({
   ref,
-) => {
+  id,
+  notification: { title, message, contextMessage, priority, success, buttons },
+  expanded,
+}: SnackNotificationCardProps) {
   const { closeSnackbar } = useSnackbar();
   const [_expanded, setExpanded] = useState(expanded ?? false);
 
@@ -137,6 +139,4 @@ const SnackNotificationCardComponent: ForwardRefRenderFunction<HTMLDivElement, S
       )}
     </Card>
   );
-};
-
-export const SnackNotificationCard = forwardRef(SnackNotificationCardComponent);
+}

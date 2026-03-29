@@ -9,6 +9,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { store } from '../store/store';
 import { lightTheme } from '../themes/themes';
 
+// eslint-disable-next-line react-refresh/only-export-components -- test helper, not a component file
 function TestProviders({ children }: PropsWithChildren) {
   return (
     <Provider store={store}>

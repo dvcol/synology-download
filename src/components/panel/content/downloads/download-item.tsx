@@ -1,4 +1,4 @@
-import type { ForwardRefRenderFunction, JSX } from 'react';
+import type { JSX, Ref } from 'react';
 
 import type { Download } from '../../../../models/download.model';
 import type { GlobalSettings } from '../../../../models/settings.model';
@@ -15,7 +15,7 @@ import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReplayIcon from '@mui/icons-material/Replay';
 import { Dialog, DialogContent } from '@mui/material';
-import React, { forwardRef, use, useState } from 'react';
+import React, { use, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { forkJoin } from 'rxjs';
 
@@ -34,7 +34,7 @@ import { TaskAdd } from '../task/task-add';
 import { DownloadCard } from './download-card';
 import { DownloadDetail } from './download-detail';
 
-interface DownloadItemProps { download: Download; hideStatus?: boolean; accordion: ContentItemAccordionProps; className?: string }
+interface DownloadItemProps { download: Download; hideStatus?: boolean; accordion: ContentItemAccordionProps; className?: string; ref?: Ref<HTMLDivElement> }
 export interface DownloadItemButton {
   key: 'erase' | 'cancel' | 'retry' | 'pause' | 'resume' | 'open' | 'transfer';
   icon: JSX.Element;
@@ -42,7 +42,7 @@ export interface DownloadItemButton {
 }
 
 const ButtonStyle = { display: 'flex', flex: '1 1 auto', minHeight: '2.5rem' };
-const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadItemProps> = ({ download, hideStatus, accordion, className }, ref) => {
+export function DownloadItem({ download, hideStatus, accordion, className, ref }: DownloadItemProps) {
   const i18n = useI18n('panel', 'content', 'download', 'item');
   const [expanded, setExpanded] = useState(false);
   const [hover, setHover] = useState(false);
@@ -173,6 +173,4 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
       </Dialog>
     </>
   );
-};
-
-export const DownloadItem = forwardRef(DownloadItemComponent);
+}

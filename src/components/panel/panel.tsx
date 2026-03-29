@@ -42,7 +42,7 @@ export const Panel: FC<{ redirect?: string }> = ({ redirect }) => {
   useEffect(() => {
     if (redirect) {
       dispatch(setNavbar());
-      navigate(redirect);
+      void navigate(redirect);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- only run on redirect change
   }, [redirect]);

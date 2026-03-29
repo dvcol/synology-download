@@ -1,17 +1,21 @@
 import type { UniqueIdentifier } from '@dnd-kit/core';
 import type { BoxProps } from '@mui/material';
-import type { ForwardRefRenderFunction, MouseEventHandler, PropsWithChildren, RefCallback } from 'react';
+import type { MouseEventHandler, PropsWithChildren, Ref, RefCallback } from 'react';
 
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Box } from '@mui/material';
-import React, { forwardRef } from 'react';
+import React from 'react';
 
-export type SortableItemProps = PropsWithChildren<{ id: UniqueIdentifier; box?: BoxProps; onClick?: MouseEventHandler; className?: string }>;
-const SortableListItemComponent: ForwardRefRenderFunction<HTMLDivElement, SortableItemProps> = (
-  { id, box, children, onClick, className },
-  forward,
-) => {
+export type SortableItemProps = PropsWithChildren<{ id: UniqueIdentifier; box?: BoxProps; onClick?: MouseEventHandler; className?: string; ref?: Ref<HTMLDivElement> }>;
+export function SortableListItem({
+  id,
+  box,
+  children,
+  onClick,
+  className,
+  ref: forward,
+}: SortableItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition, active, over } = useSortable({ id });
 
   const style = {
@@ -41,6 +45,4 @@ const SortableListItemComponent: ForwardRefRenderFunction<HTMLDivElement, Sortab
       {children}
     </Box>
   );
-};
-
-export const SortableListItem = forwardRef(SortableListItemComponent);
+}

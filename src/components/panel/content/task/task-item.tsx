@@ -1,4 +1,4 @@
-import type { FC, ForwardRefRenderFunction } from 'react';
+import type { FC, Ref } from 'react';
 import type { Observable } from 'rxjs';
 
 import type { GlobalSettings } from '../../../../models/settings.model';
@@ -13,7 +13,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReplayIcon from '@mui/icons-material/Replay';
-import React, { forwardRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { finalize } from 'rxjs';
 
@@ -98,11 +98,17 @@ export interface TaskItemProps {
   hideStatus?: boolean;
   accordion: ContentItemAccordionProps;
   className?: string;
+  ref?: Ref<HTMLDivElement>;
 }
-const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps> = (
-  { task, hideStatus, setTaskEdit, setConfirmation, accordion, className },
+export function TaskItem({
+  task,
+  hideStatus,
+  setTaskEdit,
+  setConfirmation,
+  accordion,
+  className,
   ref,
-) => {
+}: TaskItemProps) {
   const i18n = useI18n('panel', 'content', 'task', 'item');
   const [expanded, setExpanded] = useState(false);
   const [hover, setHover] = useState(false);
@@ -212,6 +218,4 @@ const TaskItemComponent: ForwardRefRenderFunction<HTMLDivElement, TaskItemProps>
       )}
     />
   );
-};
-
-export const TaskItem = forwardRef(TaskItemComponent);
+}

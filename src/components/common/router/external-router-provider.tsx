@@ -15,8 +15,14 @@ export const ExternalRouterProvider: FC = () => {
 
   useEffect(() => {
     const sub = onMessage<OpenPopupPayload>([ChromeMessageType.routeScrapePage, ChromeMessageType.routeTaskForm]).subscribe(({ message }) => {
-      if (message?.type === ChromeMessageType.routeScrapePage) return navigate(AppRoute.Scrape);
-      if (message?.type === ChromeMessageType.routeTaskForm) return navigate(AppRoute.Add, { state: message.payload?.form });
+      if (message?.type === ChromeMessageType.routeScrapePage) {
+        void navigate(AppRoute.Scrape);
+        return;
+      }
+      if (message?.type === ChromeMessageType.routeTaskForm) {
+        void navigate(AppRoute.Add, { state: message.payload?.form });
+        return;
+      }
       LoggerService.error('Unknown message type', message);
     });
 

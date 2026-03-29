@@ -1,10 +1,10 @@
 import type { BoxProps } from '@mui/material';
-import type { FC, ForwardRefRenderFunction, JSX } from 'react';
+import type { FC, JSX, Ref } from 'react';
 
 import type { State } from './use-pull-to-refresh';
 
 import { Box, CircularProgress, styled } from '@mui/material';
-import React, { forwardRef } from 'react';
+import React from 'react';
 
 import { pullToRefresh } from '../../utils/animations.utils';
 import { animationSpeed } from './use-pull-to-refresh';
@@ -32,10 +32,19 @@ const Spinner: FC<SpinnerProps> = ({ offset, progress, top }) => {
   );
 };
 
-const Loader: ForwardRefRenderFunction<HTMLDivElement, LoaderProps> = (
-  { refreshed, height, start, offset, className, sx, progress, top, children, ...props }: LoaderProps,
+function Loader({
   ref,
-) => {
+  refreshed,
+  height,
+  start,
+  offset,
+  className,
+  sx,
+  progress,
+  top,
+  children,
+  ...props
+}: LoaderProps & { ref?: Ref<HTMLDivElement> }) {
   const margin = offset - height;
   const classNames = [className];
 
@@ -58,9 +67,9 @@ const Loader: ForwardRefRenderFunction<HTMLDivElement, LoaderProps> = (
       {children || <Spinner offset={offset} refreshed={refreshed} progress={progress} top={top} />}
     </Box>
   );
-};
+}
 
-const StyledLoader = styled(forwardRef(Loader))`
+const StyledLoader = styled(Loader)`
   &.closing {
     transition: margin-top ${animationSpeed}ms ease;
   }

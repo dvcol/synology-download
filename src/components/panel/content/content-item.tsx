@@ -1,11 +1,11 @@
-import type { Dispatch, ForwardRefRenderFunction, JSX, SetStateAction } from 'react';
+import type { Dispatch, JSX, Ref, SetStateAction } from 'react';
 
 import type { GlobalSettings } from '../../../models/settings.model';
 import type { StoreState } from '../../../store/store';
 import type { ProgressBackgroundProps } from '../../common/loader/progress-background';
 
 import { Accordion, AccordionDetails, AccordionSummary, ButtonGroup } from '@mui/material';
-import React, { forwardRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { getGlobalTask } from '../../../store/selectors/settings.selector';
@@ -25,12 +25,19 @@ interface ContentItemProps {
   onToggle: (expanded: boolean) => void;
   onHover: (visible: boolean) => void;
   className?: string;
+  ref?: Ref<HTMLDivElement>;
 }
 
-const ContentItemComponent: ForwardRefRenderFunction<HTMLDivElement, ContentItemProps> = (
-  { accordion: { index, expanded, setExpanded }, background, summary, details, onToggle, onHover, className },
+export function ContentItem({
+  accordion: { index, expanded, setExpanded },
+  background,
+  summary,
+  details,
+  onToggle,
+  onHover,
+  className,
   ref,
-) => {
+}: ContentItemProps) {
   const [hover, setHover] = useState(false);
 
   const onChange = (_: React.SyntheticEvent, _expanded: boolean) => {
@@ -71,6 +78,4 @@ const ContentItemComponent: ForwardRefRenderFunction<HTMLDivElement, ContentItem
       <AccordionDetails sx={{ padding: '1rem' }}>{details}</AccordionDetails>
     </Accordion>
   );
-};
-
-export const ContentItem = forwardRef(ContentItemComponent);
+}
