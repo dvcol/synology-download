@@ -4,7 +4,7 @@ import type { FC, SyntheticEvent } from 'react';
 import type { SettingsPanelTab } from '../../../models/settings.model';
 
 import { Paper, Tab, Tabs } from '@mui/material';
-import React from 'react';
+import * as React from 'react';
 
 import { AppRoute } from '../../../models/routes.model';
 import { SettingHeader } from '../../../models/settings.model';

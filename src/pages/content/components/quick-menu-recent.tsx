@@ -7,7 +7,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import FolderIcon from '@mui/icons-material/Folder';
 import { Collapse, ListItemText, MenuItem } from '@mui/material';
-import React from 'react';
+import * as React from 'react';
 
 import { MuiIcon } from '../../../components/common/material/material-icon';
 import { MaterialIcon } from '../../../models/material-ui.model';

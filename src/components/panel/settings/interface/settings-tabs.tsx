@@ -2,7 +2,8 @@ import type { ContentTab } from '../../../../models/tab.model';
 import type { StoreState } from '../../../../store/store';
 
 import { Typography } from '@mui/material';
-import React, { useState } from 'react';
+import * as React from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { InterfaceHeader } from '../../../../models/settings.model';

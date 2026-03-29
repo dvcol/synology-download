@@ -10,7 +10,8 @@ import AddLinkIcon from '@mui/icons-material/AddLink';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Button, ButtonGroup, Card, CardContent, CardHeader } from '@mui/material';
 import { DataGrid, GridFooter, GridFooterContainer, useGridApiContext } from '@mui/x-data-grid';
-import React, { use, useCallback, useEffect } from 'react';
+import * as React from 'react';
+import { use, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { forkJoin } from 'rxjs';
 

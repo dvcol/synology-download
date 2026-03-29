@@ -2,7 +2,8 @@ import type { FC } from 'react';
 import type { PathRouteProps } from 'react-router-dom';
 
 import { Container } from '@mui/material';
-import React, { lazy, use } from 'react';
+import * as React from 'react';
+import { lazy, use } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { AppInstance } from '../../../models/app-instance.model';

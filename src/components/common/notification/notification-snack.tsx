@@ -13,7 +13,8 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, IconButton, styled, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import React, { useCallback, useEffect, useState } from 'react';
+import * as React from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { ColorLevel, ColorLevelMap } from '../../../models/material-ui.model';
 import { NotificationLevel } from '../../../models/notification.model';
@@ -40,7 +41,7 @@ export function SnackNotificationCard({
   const { closeSnackbar } = useSnackbar();
   const [_expanded, setExpanded] = useState(expanded ?? false);
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect,react-hooks-extra/no-direct-set-state-in-use-effect -- TODO investigate if this can be avoided
+  // eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect -- TODO investigate if this can be avoided
   useEffect(() => setExpanded(expanded ?? false), [expanded]);
 
   const handleExpandClick = useCallback(() => {

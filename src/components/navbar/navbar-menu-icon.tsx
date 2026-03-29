@@ -3,7 +3,8 @@ import type { FC } from 'react';
 import type { NavbarButton } from '../../models/navbar.model';
 
 import { ListItemIcon, MenuItem } from '@mui/material';
-import React, { use } from 'react';
+import * as React from 'react';
+import { use } from 'react';
 
 import { ContainerContext } from '../../store/context/container.context';
 import { TooltipHoverChange } from '../common/tooltip/tooltip-hover-change';

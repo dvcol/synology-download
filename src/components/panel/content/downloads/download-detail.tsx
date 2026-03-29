@@ -4,7 +4,7 @@ import type { Download } from '../../../../models/download.model';
 import type { DownloadItemButton } from './download-item';
 
 import { Button, Typography } from '@mui/material';
-import React from 'react';
+import * as React from 'react';
 
 import { dateToLocalString } from '../../../../utils/format.utils';
 import { useI18n } from '../../../../utils/webex.utils';

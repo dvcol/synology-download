@@ -8,7 +8,8 @@ import type { TaskForm } from '../../../../models/task.model';
 
 import SaveIcon from '@mui/icons-material/Save';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Chip, Grid, Stack, ToggleButton, ToggleButtonGroup, Tooltip } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { finalize, lastValueFrom, tap } from 'rxjs';
@@ -31,6 +32,8 @@ import { FormInput } from '../../../common/form/form-input';
 import { FormSwitch } from '../../../common/form/form-switch';
 import { IconLoader } from '../../../common/loader/icon-loader';
 import { TaskAddSelect } from './task-add-select';
+
+const newlineRegex = /\r?\n/;
 
 const UrlCounts: FC<{ urls?: string[] }> = ({ urls }) => {
   const i18n = useI18n('panel', 'content', 'task', 'add');
@@ -101,7 +104,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
     defaultValues: {
       ...taskForm,
       ...form,
-      uri: [...new Set([taskForm?.uri, form?.uri]?.filter(Boolean).flatMap(uri => uri!.split(/\r?\n/)))].join('\n'),
+      uri: [...new Set([taskForm?.uri, form?.uri]?.filter(Boolean).flatMap(uri => uri!.split(newlineRegex)))].join('\n'),
       source: taskForm?.source ?? form?.source ?? 'Custom Task',
       destination: {
         ...taskForm,
@@ -152,7 +155,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
 
   const parseUrls = (uri?: string) =>
     uri
-      ?.split(/\r?\n/)
+      ?.split(newlineRegex)
       ?.map(_uri => _uri?.trim())
       .filter(Boolean);
 

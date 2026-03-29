@@ -5,7 +5,8 @@ import type { StoreState } from '../../../store/store';
 import type { ProgressBackgroundProps } from '../../common/loader/progress-background';
 
 import { Accordion, AccordionDetails, AccordionSummary, ButtonGroup } from '@mui/material';
-import React, { useState } from 'react';
+import * as React from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { getGlobalTask } from '../../../store/selectors/settings.selector';

@@ -1,7 +1,7 @@
 import type { SettingsPanelTab } from '../../../models/settings.model';
 
 import { screen } from '@testing-library/react';
-import React from 'react';
+import * as React from 'react';
 import { describe, expect, it } from 'vitest';
 
 import { SettingHeader } from '../../../models/settings.model';

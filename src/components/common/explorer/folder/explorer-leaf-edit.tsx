@@ -1,5 +1,4 @@
 import type { ButtonProps } from '@mui/material';
-import type { InputProps as StandardInputProps } from '@mui/material/Input/Input';
 import type { FC, KeyboardEventHandler, ReactEventHandler } from 'react';
 
 import type { File } from '../../../../models/file.model';
@@ -9,7 +8,8 @@ import ClearIcon from '@mui/icons-material/Clear';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import { Button, Stack, TextField, Tooltip, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import * as React from 'react';
+import { useState } from 'react';
 
 import { QueryService } from '../../../../services/query/query.service';
 import { i18n } from '../../../../utils/webex.utils';
@@ -29,11 +29,11 @@ export const ExplorerLeafEdit: FC<ExplorerLeafEditProps> = ({ folder, isEditing,
   const [hover, setHover] = useState(false);
   const [name, setName] = useState(folder?.name);
 
-  const onInputChange: StandardInputProps['onChange'] = (event) => {
+  const onInputChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setName(event.target.value);
   };
 
-  const onClick: StandardInputProps['onClick'] = (event) => {
+  const onClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
     event.stopPropagation();
   };
 

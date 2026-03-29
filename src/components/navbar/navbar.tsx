@@ -2,7 +2,8 @@ import type { FC } from 'react';
 
 import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, Tabs, Toolbar } from '@mui/material';
-import React, { useEffect } from 'react';
+import * as React from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { setNavbar } from '../../store/actions/navbar.action';

@@ -4,7 +4,8 @@ import type { FC, JSX } from 'react';
 import type { ConfirmationDialogProps } from '../dialog/confirmation-dialog';
 
 import { Button } from '@mui/material';
-import React, { useState } from 'react';
+import * as React from 'react';
+import { useState } from 'react';
 
 import { useI18n } from '../../../utils/webex.utils';
 import { ConfirmationDialog } from '../dialog/confirmation-dialog';

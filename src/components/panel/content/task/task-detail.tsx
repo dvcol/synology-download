@@ -13,7 +13,8 @@ import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReplayIcon from '@mui/icons-material/Replay';
 import StopIcon from '@mui/icons-material/Stop';
 import { Box, Button, Grid, LinearProgress, ListItem, ListItemText, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { exhaustMap, finalize, map, timer } from 'rxjs';
 

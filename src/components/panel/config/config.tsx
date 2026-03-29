@@ -6,7 +6,8 @@ import type { Observable } from 'rxjs';
 import type { DownloadStationConfig, DownloadStationInfo } from '../../../models/download-station.model';
 
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, Container, InputAdornment, LinearProgress, Stack, Typography } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import * as React from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { finalize, forkJoin } from 'rxjs';
 

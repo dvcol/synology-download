@@ -2,7 +2,7 @@ import FolderIcon from '@mui/icons-material/Folder';
 import HistoryIcon from '@mui/icons-material/History';
 import HomeIcon from '@mui/icons-material/Home';
 import { Breadcrumbs, Button, Tooltip, Typography } from '@mui/material';
-import React from 'react';
+import * as React from 'react';
 
 import { useI18n } from '../../../../utils/webex.utils';
 import { ExplorerLoading } from './explorer-loading';

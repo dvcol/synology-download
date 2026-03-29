@@ -12,7 +12,7 @@ import FolderDeleteIcon from '@mui/icons-material/FolderDelete';
 import LoopIcon from '@mui/icons-material/Loop';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import { blue, green, orange, purple, red } from '@mui/material/colors';
-import React from 'react';
+import * as React from 'react';
 import { useSelector } from 'react-redux';
 
 import { DownloadStatus, downloadStatusToColor } from '../../../../models/download.model';

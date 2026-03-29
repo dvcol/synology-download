@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { describe, expect, it } from 'vitest';
 
 import { renderWithProviders } from '../../test/render-helper';

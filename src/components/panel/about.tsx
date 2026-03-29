@@ -7,7 +7,8 @@ import LocalGroceryStoreIcon from '@mui/icons-material/LocalGroceryStore';
 import SecurityIcon from '@mui/icons-material/Security';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import { Button, Card, CardActions, CardContent, CardHeader, Chip, Stack, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
 
 import { AppLinks } from '../../models/links.model';
 import { createTab } from '../../utils/chrome/chrome.utils';

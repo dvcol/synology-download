@@ -6,7 +6,8 @@ import type { Folder } from '../../../../models/folder.model';
 
 import CreateNewFolderOutlinedIcon from '@mui/icons-material/CreateNewFolderOutlined';
 import { Button, Stack, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import * as React from 'react';
+import { useState } from 'react';
 
 import { useI18n } from '../../../../utils/webex.utils';
 import { ExplorerLeafEdit } from './explorer-leaf-edit';

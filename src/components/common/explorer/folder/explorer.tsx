@@ -135,7 +135,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
     return fetchFiles(path, key).pipe(
       tap(_tree => setTree(old => ({ ...old, ..._tree }))),
       finalize(() => {
-        setTimeout(() => setLoading({ ...loading, [key]: false }), 200);
+        setTimeout(setLoading, 200, { ...loading, [key]: false });
       }),
     );
   };

@@ -127,7 +127,7 @@ describe('settings.reducer', () => {
 
       const result = addTo<ContextMenu, 'menus'>(baseState, newMenu, 'menus', m => m.id === newMenu.id);
       expect(result.menus).toHaveLength(baseState.menus.length + 1);
-      expect(result.menus[result.menus.length - 1]).toEqual(newMenu);
+      expect(result.menus.at(-1)).toEqual(newMenu);
     });
 
     it('should replace an existing item when filter matches by id', () => {

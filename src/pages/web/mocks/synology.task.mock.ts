@@ -7,6 +7,10 @@ import { TaskStatus, TaskType } from '../../../models/task.model';
 import { FetchIntercept } from '../models';
 import { AbstractMock, resolveUrl } from './utils.mock';
 
+const idParamRegex = /id=(.*?(?=&|$))/;
+const uriParamRegex = /uri=(.*?(?=&|$))/;
+const destinationParamRegex = /destination=(.*?(?=&|$))/;
+
 /**
  * Extends Partial to make all own properties also Partial
  */
@@ -26,7 +30,7 @@ export function generateTask(_task: RecursivePartial<Task> = {}): Task {
 
   const create_time = _task?.additional?.detail?.create_time ?? faker.date.recent().getTime();
   const started_time = _task?.additional?.detail?.started_time ?? faker.date.between({ from: create_time, to: new Date() }).getTime();
-  const elapsed = (new Date().getTime() - started_time) / 1000;
+  const elapsed = (Date.now() - started_time) / 1000;
 
   let size_downloaded
     = _task?.additional?.transfer?.size_downloaded
@@ -178,7 +182,7 @@ function computeSpeed(task: Task) {
       speed_upload: 0,
     };
 
-  const elapsed = (new Date().getTime() - started_time) / 1000;
+  const elapsed = (Date.now() - started_time) / 1000;
 
   const speed_download = Math.round(Number(size_downloaded) / elapsed);
   const speed_upload = Math.round(Number(size_uploaded) / elapsed);
@@ -272,7 +276,7 @@ export function patchTasks(_global = window): TaskMock {
       return !!init?.body?.toString()?.includes('api=SYNO.DownloadStation.Task&method=delete');
     },
     (_, init) => {
-      const id = init?.body?.toString()?.match(/id=(.*?(?=&|$))/)?.[1];
+      const id = init?.body?.toString()?.match(idParamRegex)?.[1];
       if (id) id.split('%2C')?.forEach(_id => task?.remove(_id));
       return { error: 0, id };
     },
@@ -285,7 +289,7 @@ export function patchTasks(_global = window): TaskMock {
       return !!init?.body?.toString()?.includes('api=SYNO.DownloadStation.Task&method=resume');
     },
     (_, init) => {
-      const id = init?.body?.toString()?.match(/id=(.*?(?=&|$))/)?.[1];
+      const id = init?.body?.toString()?.match(idParamRegex)?.[1];
       if (id) id.split('%2C')?.forEach(_id => task.resume(_id));
       return { error: 0, id };
     },
@@ -298,7 +302,7 @@ export function patchTasks(_global = window): TaskMock {
       return !!init?.body?.toString()?.includes('api=SYNO.DownloadStation.Task&method=pause');
     },
     (_, init) => {
-      const id = init?.body?.toString()?.match(/id=(.*?(?=&|$))/)?.[1];
+      const id = init?.body?.toString()?.match(idParamRegex)?.[1];
       if (id) id.split('%2C')?.forEach(_id => task?.pause(_id));
       return { error: 0, id };
     },
@@ -311,8 +315,8 @@ export function patchTasks(_global = window): TaskMock {
       return !!init?.body?.toString()?.includes('api=SYNO.DownloadStation.Task&method=create');
     },
     (_, init) => {
-      const uri = init?.body?.toString()?.match(/uri=(.*?(?=&|$))/)?.[1];
-      const destination = init?.body?.toString()?.match(/destination=(.*?(?=&|$))/)?.[1];
+      const uri = init?.body?.toString()?.match(uriParamRegex)?.[1];
+      const destination = init?.body?.toString()?.match(destinationParamRegex)?.[1];
       if (uri)
         uri.split('%2C')?.forEach(_uri =>
           task?.add(

@@ -5,7 +5,8 @@ import type { JSX, MouseEvent } from 'react';
 import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { restrictToParentElement, restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { TransitionGroup } from 'react-transition-group';
 
 import { SortableListItemTransition } from './sortable-list-transition';
@@ -25,7 +26,7 @@ interface SortableListProps<T extends SortableValue> {
 export function SortableList<T extends SortableValue>({ values, render, context, box, onClick, onChange, disabled }: SortableListProps<T>) {
   const [_values, _setValues] = useState(values);
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect,react-hooks-extra/no-direct-set-state-in-use-effect -- TODO investigate if this can be avoided
+  // eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect -- TODO investigate if this can be avoided
   useEffect(() => _setValues(values), [values]);
 
   const sensors = useSensors(

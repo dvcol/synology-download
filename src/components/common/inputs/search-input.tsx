@@ -3,7 +3,8 @@ import type { PropsWithChildren, Ref } from 'react';
 
 import ClearIcon from '@mui/icons-material/Clear';
 import { Button, Stack, TextField, Tooltip } from '@mui/material';
-import React, { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import * as React from 'react';
+import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 
 import { KeyboardKeyCode, KeyboardKeyName } from '../../../utils/keyboard.utils';
 import { useI18n } from '../../../utils/webex.utils';
@@ -77,7 +78,7 @@ export function SearchInput({
 
   const forceFocusVisible = useCallback(() => {
     setFilterFocus(true);
-    setTimeout(async () => focusInput(), 200); // await animation time
+    setTimeout(focusInput, 200); // await animation time
   }, [focusInput]);
 
   const listener = useCallback(async (e: KeyboardEvent) => {

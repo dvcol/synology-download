@@ -4,7 +4,8 @@ import type { PathRouteProps } from 'react-router-dom';
 import type { TaskForm } from '../../models/task.model';
 
 import { Container } from '@mui/material';
-import React, { lazy, useEffect } from 'react';
+import * as React from 'react';
+import { lazy, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 

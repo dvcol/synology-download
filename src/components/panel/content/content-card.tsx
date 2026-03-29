@@ -5,7 +5,7 @@ import type { ProgressBarProps } from '../../common/loader/progress-bar';
 
 import { Avatar, Grid, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 import { blue } from '@mui/material/colors';
-import React from 'react';
+import * as React from 'react';
 
 import { parseMagnetLink } from '../../../utils/string.utils';
 import { ProgressBar } from '../../common/loader/progress-bar';

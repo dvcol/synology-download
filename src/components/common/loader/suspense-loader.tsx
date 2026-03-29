@@ -1,7 +1,7 @@
 import type { FC, ReactNode } from 'react';
 
 import { CircularProgress } from '@mui/material';
-import React from 'react';
+import * as React from 'react';
 
 export interface SuspenseLoaderProps { element: ReactNode; fallback?: ReactNode }
 export const SuspenseLoader: FC<SuspenseLoaderProps> = ({ element, fallback }) => (

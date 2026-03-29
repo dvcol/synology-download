@@ -4,7 +4,8 @@ import type { RootSlice } from '../../../../models/store.model';
 import type { TaskFile } from '../../../../models/task.model';
 
 import { Grid, List, ListItem, ListItemText, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { finalize, tap } from 'rxjs';
 

@@ -12,7 +12,8 @@ import type { TaskDialogIntercept } from '../service/dialog.service';
 import { zIndexMax } from '@dvcol/web-extension-utils';
 import PowerOffIcon from '@mui/icons-material/PowerOff';
 import { ListItemText, Menu, MenuItem } from '@mui/material';
-import React, { useCallback, useEffect, useRef } from 'react';
+import * as React from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { Subscription, withLatestFrom } from 'rxjs';
 

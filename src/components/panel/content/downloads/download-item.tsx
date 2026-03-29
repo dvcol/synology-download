@@ -15,7 +15,8 @@ import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReplayIcon from '@mui/icons-material/Replay';
 import { Dialog, DialogContent } from '@mui/material';
-import React, { use, useState } from 'react';
+import * as React from 'react';
+import { use, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { forkJoin } from 'rxjs';
 

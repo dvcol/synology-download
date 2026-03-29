@@ -3,7 +3,7 @@ import type { UseFormReturn } from 'react-hook-form';
 import type { ContentTab, Tab, TabStatus } from '../../../models/tab.model';
 
 import { Button, Card, CardHeader, Collapse, Grid, MenuItem } from '@mui/material';
-import React from 'react';
+import * as React from 'react';
 
 import { DownloadStatus } from '../../../models/download.model';
 import { ColorLevel, getColorFromLevel, getLevelFromColor } from '../../../models/material-ui.model';
