@@ -7,7 +7,8 @@ import type { ChromeResponse } from '../../../utils/webex.utils';
 import type { TaskDialogIntercept } from '../service/dialog.service';
 
 import { zIndexMax } from '@dvcol/web-extension-utils';
-import React, { useEffect } from 'react';
+import * as React from 'react';
+import { useEffect } from 'react';
 import { Subject, takeUntil } from 'rxjs';
 
 import { TaskDialog } from '../../../components/panel/content/task/task-dialog';

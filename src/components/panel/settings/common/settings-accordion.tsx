@@ -6,7 +6,7 @@ import AddIcon from '@mui/icons-material/Add';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Accordion, AccordionSummary, Button, Card, CardActions, CardContent, CardHeader, Stack } from '@mui/material';
-import React from 'react';
+import * as React from 'react';
 import { v4 as uuid } from 'uuid';
 
 import { useI18n } from '../../../../utils/webex.utils';
@@ -44,7 +44,7 @@ export function SettingsAccordion<T extends { id: string }>({
   const _addNew = () => {
     const id = uuid();
     addNew?.(id);
-    setTimeout(() => setExpanded(id), 330);
+    setTimeout(setExpanded, 330, id);
   };
 
   const _reset = () => reset && reset();

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import { renderWithProviders } from '../../../test/render-helper';
 import { ContentCard } from './content-card';

@@ -5,7 +5,8 @@ import type { OnRefreshCallback } from '../../utils/use-pull-to-refresh';
 import type { ConfirmationState, TaskEditState } from './task/task-detail';
 
 import { Container, MenuItem } from '@mui/material';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import * as React from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { TransitionGroup } from 'react-transition-group';
 
@@ -52,7 +53,7 @@ export function ContentPanel() {
 
   useEffect(() => {
     if (firstMount) firstMount = false;
-    // eslint-disable-next-line react-hooks/set-state-in-effect,react-hooks-extra/no-direct-set-state-in-use-effect -- TODO investigate if this can be avoided
+    // eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect -- TODO investigate if this can be avoided
     setExpanded(false);
   }, [tab]);
 

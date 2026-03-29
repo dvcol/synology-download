@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 
 import { SettingHeader } from '../../../../models/settings.model';
 import { SettingsHeader } from '../settings-header';

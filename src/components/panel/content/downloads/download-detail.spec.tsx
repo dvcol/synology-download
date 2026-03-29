@@ -1,5 +1,5 @@
 /* eslint-disable ts/no-unsafe-assignment */
-import React from 'react';
+import * as React from 'react';
 
 import { renderWithProviders } from '../../../../test/render-helper';
 import { DownloadDetail } from './download-detail';

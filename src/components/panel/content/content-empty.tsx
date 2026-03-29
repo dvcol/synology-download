@@ -5,7 +5,8 @@ import type { StoreState } from '../../../store/store';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import PowerOffIcon from '@mui/icons-material/PowerOff';
 import { Box, Button, CircularProgress, Stack } from '@mui/material';
-import React, { Fragment } from 'react';
+import * as React from 'react';
+import { Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 

@@ -9,6 +9,7 @@ export const stringifyKeys = _stringifyKeys;
 export const stringifyParams = _stringifyParams;
 
 export const eMuleRegex = /^ed2k:\/\/\|file\|[^|]+\|\d+\|[a-fA-F0-9]{32}\|(h=[a-zA-Z0-9]{32}\|)?\/$/;
+const fileExtensionRegex = /\.\w+$/;
 
 const commaRegex = /,/g;
 const commaReplacement = '%2C';
@@ -47,7 +48,7 @@ export function parseSrc(src: string, fallback?: string): string | undefined {
   if (src.includes('dn=')) return parseMagnetLink(src, fallback);
   try {
     const pathname = new URL(src).pathname?.split('/').pop()?.trim();
-    if (pathname && /\.\w+$/.test(pathname)) return decodeURIComponent(pathname) ?? fallback;
+    if (pathname && fileExtensionRegex.test(pathname)) return decodeURIComponent(pathname) ?? fallback;
     if (pathname) return pathname;
   } catch (error: unknown) {
     LoggerService.warn('Failed to parse', { src, error });

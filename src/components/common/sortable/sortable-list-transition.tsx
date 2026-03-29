@@ -5,7 +5,8 @@ import type { CSSTransitionProps } from 'react-transition-group/CSSTransition';
 import type { SortableItemProps } from './sortable-list-item';
 
 import { styled } from '@mui/material';
-import React, { useRef } from 'react';
+import * as React from 'react';
+import { useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
 import { slideInAnimation, slideOutAnimation } from '../../../utils/animations.utils';

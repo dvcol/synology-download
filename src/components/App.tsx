@@ -9,7 +9,8 @@ import type { StoreOrProxy } from '../models/store.model';
 
 import { CacheProvider } from '@emotion/react';
 import { Box, CssBaseline, ThemeProvider } from '@mui/material';
-import React, { useEffect, useRef, useState } from 'react';
+import * as React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Provider } from 'react-redux';
 import { HashRouter as Router } from 'react-router-dom';
 

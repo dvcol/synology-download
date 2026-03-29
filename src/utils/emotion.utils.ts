@@ -9,6 +9,8 @@ import type { StylisPlugin } from '@emotion/cache';
  *
  * @see https://github.com/emotion-js/emotion/issues/3366
  */
+const ampersandMarkerRegex = /&\f/g;
+
 export const fixNestedAmpersand: StylisPlugin = (element) => {
   if (element.type !== 'rule' || !Array.isArray(element.props)) return;
 
@@ -22,7 +24,7 @@ export const fixNestedAmpersand: StylisPlugin = (element) => {
     const prop = element.props[i];
     if (prop.includes('&\f')) {
       const parentProp = parentProps[i % parentProps.length];
-      element.props[i] = prop.replace(/&\f/g, parentProp);
+      element.props[i] = prop.replace(ampersandMarkerRegex, parentProp);
     }
   }
 };

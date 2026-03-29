@@ -41,7 +41,7 @@ export async function removeOldInstances(): Promise<void | void[]> {
   const previous = document.body?.querySelectorAll(`#${rootContainerId}`);
   if (previous?.length) {
     LoggerService.debug(`Found exiting instance of '${rootContainerId}'`, previous);
-    return Promise.all([...previous]?.map(async el => waitDestroyed(el)));
+    return Promise.all(Array.from(previous, async el => waitDestroyed(el)));
   }
   return Promise.resolve();
 }

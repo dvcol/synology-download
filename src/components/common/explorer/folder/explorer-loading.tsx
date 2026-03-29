@@ -1,6 +1,6 @@
 import InfoIcon from '@mui/icons-material/Info';
 import { Box, CircularProgress, Typography } from '@mui/material';
-import React from 'react';
+import * as React from 'react';
 
 import { useI18n } from '../../../../utils/webex.utils';
 

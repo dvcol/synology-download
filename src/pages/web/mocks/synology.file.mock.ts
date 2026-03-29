@@ -3,6 +3,11 @@ import type { File, FileAdditional } from '../../../models/file.model';
 import { FetchIntercept } from '../models';
 import { AbstractMock, resolveUrl } from './utils.mock';
 
+const folderPathRegex = /folder_path=(.*?(?=&|$))/;
+const encodedFolderPathRegex = /folder_path=%5B%22(.*?(?=&|$|%22%5D))%22%5D/;
+const encodedNameRegex = /name=%5B%22(.*?(?=&|$|%22%5D))%22%5D/;
+const encodedPathRegex = /path=%5B%22(.*?(?=&|$|%22%5D))%22%5D/;
+
 interface FileEntities { shares: Record<string, File>; files: Record<string, File> }
 
 const additional: FileAdditional = {
@@ -117,7 +122,7 @@ export function patchFiles(_global = window): FileMock {
       return !!init?.body?.toString()?.includes('api=SYNO.FileStation.List&method=list');
     },
     (_, init) => {
-      let path = init?.body?.toString()?.match(/folder_path=(.*?(?=&|$))/)?.[1];
+      let path = init?.body?.toString()?.match(folderPathRegex)?.[1];
       if (path) path = decodeURIComponent(path);
       return { offset: 0, files: file.files(path), total: 1 };
     },
@@ -130,8 +135,8 @@ export function patchFiles(_global = window): FileMock {
       return !!init?.body?.toString()?.includes('api=SYNO.FileStation.CreateFolder&method=create');
     },
     (_, init) => {
-      let path = init?.body?.toString()?.match(/folder_path=%5B%22(.*?(?=&|$|%22%5D))%22%5D/)?.[1];
-      let name = init?.body?.toString()?.match(/name=%5B%22(.*?(?=&|$|%22%5D))%22%5D/)?.[1];
+      let path = init?.body?.toString()?.match(encodedFolderPathRegex)?.[1];
+      let name = init?.body?.toString()?.match(encodedNameRegex)?.[1];
       if (path && name) {
         path = decodeURIComponent(path);
         name = decodeURIComponent(name);
@@ -150,8 +155,8 @@ export function patchFiles(_global = window): FileMock {
       return !!init?.body?.toString()?.includes('api=SYNO.FileStation.Rename&method=rename');
     },
     (_, init) => {
-      const path = init?.body?.toString()?.match(/path=%5B%22(.*?(?=&|$|%22%5D))%22%5D/)?.[1];
-      const name = init?.body?.toString()?.match(/name=%5B%22(.*?(?=&|$|%22%5D))%22%5D/)?.[1];
+      const path = init?.body?.toString()?.match(encodedPathRegex)?.[1];
+      const name = init?.body?.toString()?.match(encodedNameRegex)?.[1];
       if (path && name) {
         const _file = file.rename(decodeURIComponent(path), decodeURIComponent(name));
         return { offset: 0, files: [_file], total: 1 };

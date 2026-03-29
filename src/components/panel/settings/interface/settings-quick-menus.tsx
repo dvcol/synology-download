@@ -3,7 +3,8 @@ import type { ContentSettings } from '../../../../models/settings.model';
 import type { StoreState } from '../../../../store/store';
 
 import { CardHeader, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import * as React from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 

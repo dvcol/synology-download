@@ -4,11 +4,11 @@ import type { ChromeMessagePayload, ChromeMessageType } from '../../models/messa
 import type { ChromeMessage, ChromeMessageHandler } from '../webex.utils';
 import type { InstalledDetails } from './chrome-download.utils';
 
+import Port = chrome.runtime.Port;
+
 import { onConnect as _onConnect, onInstalled$ as _onInstalled$, onMessage as _onMessage, portConnect as _portConnect, sendActiveTabMessage as _sendActiveTabMessage, sendMessage as _sendMessage, sendTabMessage as _sendTabMessage } from '@dvcol/web-extension-utils';
 
 import { LoggerService } from '../../services/logger/logger.service';
-
-import Port = chrome.runtime.Port;
 
 /**
  * Rxjs wrapper for chrome.runtime.onMessage event listener

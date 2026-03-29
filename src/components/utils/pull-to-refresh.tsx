@@ -4,7 +4,7 @@ import type { FC, JSX, Ref } from 'react';
 import type { State } from './use-pull-to-refresh';
 
 import { Box, CircularProgress, styled } from '@mui/material';
-import React from 'react';
+import * as React from 'react';
 
 import { pullToRefresh } from '../../utils/animations.utils';
 import { animationSpeed } from './use-pull-to-refresh';

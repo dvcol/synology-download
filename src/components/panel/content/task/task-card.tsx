@@ -13,7 +13,7 @@ import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
 import UploadIcon from '@mui/icons-material/Upload';
 import { blue, green, orange, purple, red } from '@mui/material/colors';
-import React from 'react';
+import * as React from 'react';
 import { useSelector } from 'react-redux';
 
 import { TaskStatus, taskStatusToColor } from '../../../../models/task.model';

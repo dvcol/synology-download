@@ -17,7 +17,8 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import SettingsIcon from '@mui/icons-material/Settings';
 import TuneIcon from '@mui/icons-material/Tune';
 import { DialogContentText, Divider, IconButton, Menu, Tooltip } from '@mui/material';
-import React, { use, useMemo } from 'react';
+import * as React from 'react';
+import { use, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 

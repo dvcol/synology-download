@@ -2,6 +2,8 @@ import type { Locale, Locales } from '../models/locales.model';
 
 import { deepMerge } from '../../../utils/object.utils';
 
+const trailingDotSlashRegex = /\.\/?$/;
+
 export async function patchI18n(_global: Window = window, lang = 'en') {
   _global.chrome.i18n.getMessage = (key: string) => _global._locales?.[lang]?.[key]?.message ?? key;
 
@@ -13,7 +15,7 @@ export async function patchI18n(_global: Window = window, lang = 'en') {
 
   let locale$ = _global._localesFetch?.[lang];
   if (locale$ === undefined) {
-    const base = import.meta.env.BASE_URL?.replace(/\.\/?$/, '/') ?? '/';
+    const base = import.meta.env.BASE_URL?.replace(trailingDotSlashRegex, '/') ?? '/';
     locale$ = fetch(`${base}_locales/${lang}/messages.json`)
       .then(async res => res.json() as Promise<Locale>)
       .catch((err: Error) => {

@@ -4,7 +4,8 @@ import type { ControllerProps, FieldPath, FieldValues } from 'react-hook-form';
 import type { FormInputFileProps } from './form-input-file';
 
 import { Grid, TextField } from '@mui/material';
-import React, { use, useState } from 'react';
+import * as React from 'react';
+import { use, useState } from 'react';
 import { Controller } from 'react-hook-form';
 
 import { ContainerContext } from '../../../store/context/container.context';

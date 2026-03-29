@@ -6,7 +6,8 @@ import type { SnackMessage } from '../../../models/notification.model';
 import { zIndexMax } from '@dvcol/web-extension-utils';
 import { Slide } from '@mui/material';
 import { SnackbarProvider } from 'notistack';
-import React, { useState } from 'react';
+import * as React from 'react';
+import { useState } from 'react';
 
 import { Notifier } from './notification-notifier';
 import { SnackNotificationCard } from './notification-snack';

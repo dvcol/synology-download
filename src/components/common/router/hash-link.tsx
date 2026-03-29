@@ -1,6 +1,7 @@
 import type { ComponentProps } from 'react';
 
-import React, { useCallback } from 'react';
+import * as React from 'react';
+import { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 
 export type HashLinkProps = ComponentProps<typeof Link>;

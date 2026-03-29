@@ -1,7 +1,8 @@
 import type { LinearProgressProps } from '@mui/material';
 
 import { LinearProgress } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { defaultGlobal } from '../../models/settings.model';

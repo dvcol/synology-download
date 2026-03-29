@@ -6,7 +6,8 @@ import type { TaskForm } from '../../../../models/task.model';
 import type { TaskAddProps } from './task-add';
 
 import { Dialog, DialogContent } from '@mui/material';
-import React, { useEffect } from 'react';
+import * as React from 'react';
+import { useEffect } from 'react';
 
 import { TaskAdd } from './task-add';
 
@@ -23,7 +24,7 @@ export const TaskDialog: FC<{
   const [form, setForm] = React.useState<TaskForm>(taskForm ?? {});
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect,react-hooks-extra/no-direct-set-state-in-use-effect -- TODO investigate if this can be avoided
+    // eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect -- TODO investigate if this can be avoided
     setForm(taskForm ?? {});
   }, [taskForm]);
 

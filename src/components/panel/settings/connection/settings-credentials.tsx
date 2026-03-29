@@ -7,7 +7,8 @@ import type { InfoResponse, LoginResponse } from '../../../../models/synology.mo
 
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Button, Card, CardActions, CardContent, CardHeader, Collapse, Grid, LinearProgress, MenuItem, Stack, Typography } from '@mui/material';
-import React, { useCallback, useEffect, useState } from 'react';
+import * as React from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { finalize, lastValueFrom } from 'rxjs';

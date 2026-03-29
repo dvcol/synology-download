@@ -5,7 +5,7 @@ import type { MouseEventHandler, PropsWithChildren, Ref, RefCallback } from 'rea
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Box } from '@mui/material';
-import React from 'react';
+import * as React from 'react';
 
 export type SortableItemProps = PropsWithChildren<{ id: UniqueIdentifier; box?: BoxProps; onClick?: MouseEventHandler; className?: string; ref?: Ref<HTMLDivElement> }>;
 export function SortableListItem({
