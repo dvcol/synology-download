@@ -42,15 +42,23 @@ export const ContentCard: FC<ContentCardProps> = ({
       <ListItemText
         sx={{ maxWidth: '100%', whiteSpace: 'nowrap' }}
         primary={parseMagnetLink(title)}
-        primaryTypographyProps={{
-          component: 'span',
-          sx: {
-            maxWidth: !expanded && !hover ? 'calc(100% - 2.5rem)' : '100%',
-            WebkitLineClamp: expanded ? undefined : '2',
-            paddingRight: expanded ? '2rem' : undefined,
-            display: '-webkit-box',
-            WebkitBoxOrient: 'vertical',
-            wordBreak: 'break-word',
+        slotProps={{
+          primary: {
+            component: 'span',
+            sx: {
+              maxWidth: !expanded && !hover ? 'calc(100% - 2.5rem)' : '100%',
+              WebkitLineClamp: expanded ? undefined : '2',
+              paddingRight: expanded ? '2rem' : undefined,
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              wordBreak: 'break-word',
+            },
+          },
+          secondary: {
+            component: 'span',
+            variant: 'caption',
+            color: 'text.secondary',
+            sx: { display: 'inline' },
           },
         }}
         secondary={(
@@ -66,12 +74,6 @@ export const ContentCard: FC<ContentCardProps> = ({
             {!!progressBar && <ProgressBar {...progressBar} />}
           </React.Fragment>
         )}
-        secondaryTypographyProps={{
-          component: 'span',
-          variant: 'caption',
-          color: 'text.secondary',
-          sx: { display: 'inline' },
-        }}
       />
     </ListItem>
   );

@@ -319,7 +319,7 @@ export function NavbarMenu({ menuIcon }: NavbarMenuProps) {
         container={() => containerRef?.current ?? null}
         onClose={handleClose}
         onClick={handleClose}
-        MenuListProps={{ 'aria-labelledby': 'dropdown-menu' }}
+        slotProps={{ list: { 'aria-labelledby': 'dropdown-menu' } }}
         disableScrollLock
       >
         {buttons

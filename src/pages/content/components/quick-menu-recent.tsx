@@ -59,7 +59,7 @@ export const QuickMenuRecent: FC<QuickMenuRecentProps> = ({ isDark, menu, logged
     <>
       <MenuItem onClick={_onClick} disabled={disabled} sx={{ fontSize: '1em' }}>
         <MuiIcon icon={menu.icon ?? MaterialIcon.download} props={{ sx: { fontSize: '0.875em', width: '1.25em', height: '1.25em' } }} />
-        <ListItemText primary={menu.title} primaryTypographyProps={{ sx: { fontSize: '0.75em', ml: '0.75em' } }} />
+        <ListItemText primary={menu.title} slotProps={{ primary: { sx: { fontSize: '0.75em', ml: '0.75em' } } }} />
         {isRecent && <ExpandIcon expand={expand} sx={{ ml: '0.5em', fontSize: '1em', width: '1em', height: '1em' }} />}
       </MenuItem>
       <Collapse
@@ -74,7 +74,7 @@ export const QuickMenuRecent: FC<QuickMenuRecentProps> = ({ isDark, menu, logged
           // eslint-disable-next-line react/no-array-index-key -- history is an ordered list that can contain duplicates
           <MenuItem key={i} sx={{ pl: '1.5em', fontSize: '1em' }} onClick={$event => onClick($event, { menu, destination })}>
             <FolderIcon sx={{ fontSize: '0.875em', width: '1.25em', height: '1.25em' }} />
-            <ListItemText primary={destination} primaryTypographyProps={{ sx: { fontSize: '0.75em', ml: '1em' } }} />
+            <ListItemText primary={destination} slotProps={{ primary: { sx: { fontSize: '0.75em', ml: '1em' } } }} />
           </MenuItem>
         ))}
       </Collapse>

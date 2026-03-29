@@ -122,11 +122,14 @@ export const TaskEditFiles: FC<TaskEditFilesProps> = ({ taskId }) => {
             </Grid>
           </Grid>
         )}
-        primaryTypographyProps={{
-          component: 'span',
-          variant: 'caption',
-          color: 'text.secondary',
-          sx: { display: 'inline' },
+        slotProps={{
+          primary: {
+            component: 'span',
+            variant: 'caption',
+            color: 'text.secondary',
+            sx: { display: 'inline' },
+          },
+          secondary: { component: 'span' },
         }}
         secondary={(
           <ProgressBar
@@ -134,7 +137,6 @@ export const TaskEditFiles: FC<TaskEditFilesProps> = ({ taskId }) => {
             value={computeProgress(f.size_downloaded, f.size)}
           />
         )}
-        secondaryTypographyProps={{ component: 'span' }}
       />
     </ListItem>
   ));

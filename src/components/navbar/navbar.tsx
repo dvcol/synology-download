@@ -43,7 +43,7 @@ export const Navbar: FC = () => {
           variant="scrollable"
           value={getValue()}
           sx={{ height: '100%', minHeight: '3rem', flex: '1 1 auto' }}
-          TabIndicatorProps={{ style: tab ? undefined : { display: 'none' } }}
+          slotProps={{ indicator: { style: tab ? undefined : { display: 'none' } } }}
         >
           {tabComponents}
         </Tabs>

@@ -92,7 +92,7 @@ export function SettingsQuickMenu({ menu, onRemove }: { menu: QuickMenu; onRemov
                   <ListItemIcon sx={{ alignItems: 'center', minWidth: '2.25rem', pl: '0.5rem' }}>
                     <MuiIcon icon={icon} props={{ sx: { fontSize: '1.125rem' } }} />
                   </ListItemIcon>
-                  <ListItemText primary={MaterialIconMap[icon]} primaryTypographyProps={{ sx: { fontSize: '0.75rem' } }} />
+                  <ListItemText primary={MaterialIconMap[icon]} slotProps={{ primary: { sx: { fontSize: '0.75rem' } } }} />
                 </Box>
               </MenuItem>
             ))}
