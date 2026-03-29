@@ -6,6 +6,7 @@ import type { SettingsPanelTab } from '../../../models/settings.model';
 import { Paper, Tab, Tabs } from '@mui/material';
 import React from 'react';
 
+import { AppRoute } from '../../../models/routes.model';
 import { SettingHeader } from '../../../models/settings.model';
 import { useI18n } from '../../../utils/webex.utils';
 import { HashLink as Link } from '../../common/router/hash-link';
@@ -40,7 +41,7 @@ export const SettingsNavbar: FC<SettingsNavbarProps> = ({ tabs }) => {
             value={label}
             disableFocusRipple={true}
             component={Link}
-            to={`${label}#${anchor ?? label}`}
+            to={`${AppRoute.Settings}/${label}#${anchor ?? label}`}
             sx={{
               fontWeight: '700',
               fontSize: '0.75rem',
@@ -56,7 +57,7 @@ export const SettingsNavbar: FC<SettingsNavbarProps> = ({ tabs }) => {
               value={l}
               disableFocusRipple={true}
               component={Link}
-              to={`${label}#${l}`}
+              to={`${AppRoute.Settings}/${label}#${l}`}
               sx={{ backdropFilter: 'contrast(0.9)', whiteSpace: 'nowrap', minHeight: '2.78rem' }}
             />
           )) ?? []),
