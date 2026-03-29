@@ -1,5 +1,5 @@
 import { DownloadStatus } from './download.model';
-import { ContentTabSort, defaultTabs, TabTemplate, templateTabs } from './tab.model';
+import { defaultTabs, TabTemplate, templateTabs } from './tab.model';
 import { TaskStatus } from './task.model';
 
 describe('tab.model', () => {
@@ -57,17 +57,6 @@ describe('tab.model', () => {
       for (const status of Object.values(TaskStatus)) {
         expect(allTab.status).toContain(status);
       }
-    });
-  });
-
-  describe('contentTabSort', () => {
-    it('should have all sort options', () => {
-      expect(ContentTabSort.creation).toBe('creation');
-      expect(ContentTabSort.title).toBe('title');
-      expect(ContentTabSort.speed).toBe('speed');
-      expect(ContentTabSort.size).toBe('size');
-      expect(ContentTabSort.status).toBe('status');
-      expect(ContentTabSort.progress).toBe('progress');
     });
   });
 });

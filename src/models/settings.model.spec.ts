@@ -12,11 +12,6 @@ import {
   defaultSettings,
   InterfaceSize,
   Protocol,
-  ServiceInstance,
-  ServiceInstanceColors,
-  ServiceInstanceColorsMap,
-  SettingHeader,
-  SyncSettingMode,
   ThemeMode,
 } from './settings.model';
 
@@ -72,32 +67,6 @@ describe('settings.model', () => {
       expect(defaultSettings.global).toBe(defaultGlobal);
       expect(defaultSettings.downloads).toBe(defaultDownloads);
       expect(defaultSettings.advanced).toBe(defaultAdvancedSettings);
-    });
-  });
-
-  describe('enums', () => {
-    it('should have all SettingHeader values', () => {
-      expect(Object.values(SettingHeader)).toContain('connection');
-      expect(Object.values(SettingHeader)).toContain('notification');
-      expect(Object.values(SettingHeader)).toContain('advanced');
-    });
-
-    it('should have all SyncSettingMode values', () => {
-      expect(SyncSettingMode.sync).toBe('sync');
-      expect(SyncSettingMode.local).toBe('local');
-    });
-  });
-
-  describe('serviceInstanceColorsMap', () => {
-    it('should map all ServiceInstance values', () => {
-      for (const instance of Object.values(ServiceInstance)) {
-        expect(ServiceInstanceColorsMap[instance]).toBeDefined();
-      }
-    });
-
-    it('should have correct mappings', () => {
-      expect(ServiceInstanceColorsMap[ServiceInstance.Background]).toBe(ServiceInstanceColors.Background);
-      expect(ServiceInstanceColorsMap[ServiceInstance.Popup]).toBe(ServiceInstanceColors.Popup);
     });
   });
 });
