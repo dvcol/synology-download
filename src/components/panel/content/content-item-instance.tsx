@@ -1,4 +1,4 @@
-import type { FC, ForwardRefRenderFunction } from 'react';
+import type { FC, Ref } from 'react';
 import type { TransitionStatus } from 'react-transition-group';
 import type { CSSTransitionProps } from 'react-transition-group/CSSTransition';
 
@@ -9,7 +9,7 @@ import type { ContentItemAccordionProps } from './content-item';
 import type { TaskItemProps } from './task/task-item';
 
 import { styled } from '@mui/material';
-import React, { forwardRef, useRef } from 'react';
+import React, { useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
 import { ContentSource } from '../../../models/content.model';
@@ -24,11 +24,17 @@ interface ItemComponentProps {
   setTaskEdit: TaskItemProps['setTaskEdit'];
   setConfirmation: TaskItemProps['setConfirmation'];
   className?: string;
+  ref?: Ref<HTMLDivElement>;
 }
-const ItemComponent: ForwardRefRenderFunction<HTMLDivElement, ItemComponentProps> = (
-  { item, accordion, hideStatus, setTaskEdit, setConfirmation, className },
+function ItemComponent({
+  item,
+  accordion,
+  hideStatus,
+  setTaskEdit,
+  setConfirmation,
+  className,
   ref,
-) => {
+}: ItemComponentProps) {
   if (item.source === ContentSource.Download) {
     return <DownloadItem ref={ref} className={className} accordion={accordion} download={item as Download} hideStatus={hideStatus} />;
   }
@@ -46,12 +52,12 @@ const ItemComponent: ForwardRefRenderFunction<HTMLDivElement, ItemComponentProps
     );
   }
   return null;
-};
+}
 
 const duration = { enter: 300, exit: 300 };
 const STAGGER = 50;
 interface StylingProps { state: TransitionStatus; index: number }
-const StyledItemComponent = styled(forwardRef(ItemComponent))<StylingProps>`
+const StyledItemComponent = styled(ItemComponent)<StylingProps>`
   z-index: 0;
   animation-fill-mode: both;
 

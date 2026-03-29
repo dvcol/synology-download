@@ -18,7 +18,7 @@ export const FormInputPassword: FC<
 
   useEffect(() => {
     onToggle(showPassword);
-  }, [showPassword]);
+  }, [showPassword, onToggle]);
 
   return (
     <InputAdornment position="end">

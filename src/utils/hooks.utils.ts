@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { debounce, Subject, timer } from 'rxjs';
@@ -28,7 +28,7 @@ export function useDebounceObservable<T>(observer: (value: T) => void, threshold
 }
 
 export function useAnchor(scrollContainerId: string, offset = 0) {
-  const { containerRef } = useContext(ContainerContext);
+  const { containerRef } = use(ContainerContext);
   const location = useLocation();
   useEffect(() => {
     let scroll: number | undefined;

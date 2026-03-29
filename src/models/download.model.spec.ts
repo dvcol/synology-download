@@ -32,6 +32,7 @@ describe('download.model', () => {
   });
 
   describe('mapToDownload', () => {
+    // eslint-disable-next-line ts/no-unsafe-assignment -- intentional test fixture with partial cast
     const baseItem: DownloadItem = {
       id: 1,
       url: 'http://example.com/file.zip',
@@ -54,6 +55,7 @@ describe('download.model', () => {
 
     it('should set key with source prefix', () => {
       const result = mapToDownload(baseItem);
+      // eslint-disable-next-line ts/no-unsafe-member-access -- intentional test fixture with partial cast
       expect(result.key).toBe(`${ContentSource.Download}-${baseItem.id}`);
     });
 

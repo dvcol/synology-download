@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import type { PathRouteProps } from 'react-router-dom';
 
 import { Container } from '@mui/material';
-import React, { lazy, useContext } from 'react';
+import React, { lazy, use } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { AppInstance } from '../../../models/app-instance.model';
@@ -19,7 +19,7 @@ const SettingsNotifications = lazy(async () => import(/* webpackChunkName: "Sett
 const SettingsTasks = lazy(async () => import(/* webpackChunkName: "SettingsTasks" */ './tasks/settings-tasks'));
 
 export const SettingsRoutes: FC = () => {
-  const context = useContext(ContainerContext);
+  const context = use(ContainerContext);
   // added to support shadow dom anchor routing, offset is for navbar
   if (context.instance === AppInstance.standalone) {
     // eslint-disable-next-line react-hooks/rules-of-hooks -- only inject hooks if in WC (render are consistent)
