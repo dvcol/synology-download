@@ -279,14 +279,16 @@ export const TaskDetail: FC<TaskDetailProps> = (props) => {
               </Grid>
             </Grid>
           )}
-          primaryTypographyProps={{
-            component: 'span',
-            variant: 'caption',
-            color: 'text.secondary',
-            sx: { display: 'inline' },
+          slotProps={{
+            primary: {
+              component: 'span',
+              variant: 'caption',
+              color: 'text.secondary',
+              sx: { display: 'inline' },
+            },
+            secondary: { component: 'span' },
           }}
           secondary={<ProgressBar props={{ variant: 'determinate' }} value={computeProgress(f.size_downloaded, f.size)} />}
-          secondaryTypographyProps={{ component: 'span' }}
         />
       </ListItem>
     ));

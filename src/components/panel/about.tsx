@@ -57,26 +57,26 @@ export const About: FC<{
           {i18n('description_title')}
         </Typography>
 
-        <Typography variant="body2" color="text.secondary" paragraph>
+        <Typography variant="body2" color="text.secondary" component="p" sx={{ mb: 2 }}>
           {i18n('description_body_p1')}
         </Typography>
-        <Typography variant="body2" color="text.secondary" paragraph>
+        <Typography variant="body2" color="text.secondary" component="p" sx={{ mb: 2 }}>
           {i18n('description_body_p2')}
         </Typography>
 
         <Typography gutterBottom variant="h5" component="div">
           {i18n('limitations_title')}
         </Typography>
-        <Typography variant="body2" color="text.secondary" paragraph>
+        <Typography variant="body2" color="text.secondary" component="p" sx={{ mb: 2 }}>
           {i18n('limitations_body_p1')}
         </Typography>
-        <Typography variant="body2" color="text.secondary" paragraph>
+        <Typography variant="body2" color="text.secondary" component="p" sx={{ mb: 2 }}>
           {i18n('limitations_body_p2')}
         </Typography>
-        <Typography variant="body2" color="text.secondary" paragraph>
+        <Typography variant="body2" color="text.secondary" component="p" sx={{ mb: 2 }}>
           {i18n('limitations_body_p3')}
         </Typography>
-        <Typography variant="body2" color="text.secondary" paragraph>
+        <Typography variant="body2" color="text.secondary" component="p" sx={{ mb: 2 }}>
           {i18n('limitations_body_p4')}
         </Typography>
 

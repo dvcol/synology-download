@@ -19,12 +19,14 @@ export const ExplorerRecent: FC<ExplorerRecentProps> = ({ selected, destinations
             <Tooltip arrow title={destination} slotProps={{ popper: { disablePortal: true, sx: { wordBreak: 'break-all' } } }} enterDelay={1000}>
               <ListItemText
                 primary={destination}
-                primaryTypographyProps={{
-                  sx: {
-                    overflow: 'hidden',
-                    whiteSpace: 'nowrap',
-                    textOverflow: 'ellipsis',
-                    fontSize: '0.875em',
+                slotProps={{
+                  primary: {
+                    sx: {
+                      overflow: 'hidden',
+                      whiteSpace: 'nowrap',
+                      textOverflow: 'ellipsis',
+                      fontSize: '0.875em',
+                    },
                   },
                 }}
                 sx={{ mb: 0, mt: 0 }}

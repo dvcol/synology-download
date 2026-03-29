@@ -178,10 +178,10 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
       open={open}
       container={container}
       onClose={() => handleClose({ aborted: true, message: 'Quick menu cancelled.' })}
-      MenuListProps={{
-        'aria-labelledby': 'basic-button',
-      }}
       slotProps={{
+        list: {
+          'aria-labelledby': 'basic-button',
+        },
         paper: {
           sx: {
             borderRadius: '1em',
@@ -196,7 +196,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
       {!isLogged && (
         <MenuItem sx={{ fontSize: '1em' }} disableRipple disableTouchRipple>
           <PowerOffIcon color={ColorLevel.error} sx={{ fontSize: '0.875em', width: '1.25em', height: '1.25em' }} />
-          <ListItemText primary={i18n('disconnected')} primaryTypographyProps={{ sx: { fontSize: '0.75em', ml: '0.75em' } }} />
+          <ListItemText primary={i18n('disconnected')} slotProps={{ primary: { sx: { fontSize: '0.75em', ml: '0.75em' } } }} />
         </MenuItem>
       )}
       {_menus?.map(m => (
