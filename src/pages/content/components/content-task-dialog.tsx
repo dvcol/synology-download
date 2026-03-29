@@ -105,9 +105,11 @@ export const ContentTaskDialog: FC<{ container?: PortalProps['container'] }> = (
       container={container}
       dialogProps={{
         sx: { zIndex: `${zIndexMax} !important`, fontSize: '16px' },
-        PaperProps: {
-          sx: {
-            borderRadius: '1em',
+        slotProps: {
+          paper: {
+            sx: {
+              borderRadius: '1em',
+            },
           },
         },
       }}

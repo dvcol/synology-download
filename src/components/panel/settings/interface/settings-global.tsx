@@ -242,7 +242,7 @@ export function SettingsGlobal() {
         <Card sx={{ p: '0.5rem 1rem', m: '0.5rem 0' }}>
           <Grid container spacing={1} columnSpacing={1}>
             {Object.values(NavbarButtonType).map(t => (
-              <Grid item xs={4} lg={2} key={t}>
+              <Grid size={{ xs: 4, lg: 2 }} key={t}>
                 <Button disableTouchRipple={true} sx={{ p: '0 0 0 0.5rem' }}>
                   <FormCheckbox
                     controllerProps={{ name: 'navbar.buttons', control }}

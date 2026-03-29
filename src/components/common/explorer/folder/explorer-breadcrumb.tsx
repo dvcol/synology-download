@@ -50,7 +50,7 @@ export function ExplorerBreadCrumbs({
         </Button>
       )}
       {!loading && (!!crumbs?.length || !hasDestinations) && (
-        <Tooltip arrow title={i18n('home')} PopperProps={{ disablePortal: true }}>
+        <Tooltip arrow title={i18n('home')} slotProps={{ popper: { disablePortal: true } }}>
           <span>
             <Button
               key={`home-${disabled}`}
@@ -65,7 +65,7 @@ export function ExplorerBreadCrumbs({
       )}
       {!loading
         && crumbs?.map((folder, i) => (
-          <Tooltip key={`${folder}-${disabled}`} title={folder} PopperProps={{ disablePortal: true, sx: { wordBreak: 'break-all' } }} enterDelay={500}>
+          <Tooltip key={`${folder}-${disabled}`} title={folder} slotProps={{ popper: { disablePortal: true, sx: { wordBreak: 'break-all' } } }} enterDelay={500}>
             <span>
               <Button
                 variant="text"

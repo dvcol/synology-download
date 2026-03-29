@@ -121,7 +121,7 @@ export function FormTab({
         </Grid>
         <Grid container spacing={1} columnSpacing={1}>
           {Object.values(TaskStatus).map(s => (
-            <Grid item xs={4} lg={2} key={s}>
+            <Grid size={{ xs: 4, lg: 2 }} key={s}>
               <Button disableTouchRipple={true} sx={{ p: '0.25rem 0 0.25rem 0.5rem' }} color={getHighlightColor(s)} disabled={disabled}>
                 <FormCheckbox
                   controllerProps={{ name: 'status', control }}
@@ -149,7 +149,7 @@ export function FormTab({
         </Grid>
         <Grid container spacing={1} columnSpacing={1}>
           {Object.values(DownloadStatus).map(s => (
-            <Grid item xs={4} lg={2} key={s}>
+            <Grid size={{ xs: 4, lg: 2 }} key={s}>
               <Button disableTouchRipple={true} sx={{ p: '0.25rem 0 0.25rem 0.5rem' }} color={getHighlightColor(s)} disabled={disabled}>
                 <FormCheckbox
                   controllerProps={{ name: 'status', control }}

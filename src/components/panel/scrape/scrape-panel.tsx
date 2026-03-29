@@ -10,7 +10,7 @@ import AddLinkIcon from '@mui/icons-material/AddLink';
 import DownloadIcon from '@mui/icons-material/Download';
 import { Button, ButtonGroup, Card, CardContent, CardHeader } from '@mui/material';
 import { DataGrid, GridFooter, GridFooterContainer, useGridApiContext } from '@mui/x-data-grid';
-import React, { useCallback, useContext, useEffect } from 'react';
+import React, { use, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { forkJoin } from 'rxjs';
 
@@ -77,7 +77,7 @@ export const ScrapePanel: FC<ScrapePanelProps> = ({ cardProps }) => {
   const i18n = useI18n('panel', 'scrape');
   const dispatch = useDispatch();
 
-  const { containerRef } = useContext(ContainerContext);
+  const { containerRef } = use(ContainerContext);
 
   const page = useSelector<RootSlice, ScrapedSlice['page']>(getScrapedPage);
   const rows = useSelector<RootSlice, GridRowsProp<ScrapedContent>>(getScrappedRows);
@@ -171,7 +171,7 @@ export const ScrapePanel: FC<ScrapePanelProps> = ({ cardProps }) => {
       <TaskDialog
         open={open}
         taskForm={form}
-        dialogProps={{ PaperProps: { sx: { maxHeight: 'calc(100% - 1em)' } } }}
+        dialogProps={{ slotProps: { paper: { sx: { maxHeight: 'calc(100% - 1em)' } } } }}
         onClose={onFormClose}
         onCancel={onFormClose}
         onSubmit={onFormClose}
