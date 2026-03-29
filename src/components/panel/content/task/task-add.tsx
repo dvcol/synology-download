@@ -212,8 +212,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
       <CardHeader
         title={i18n('title')}
         subheader={i18n('subheader')}
-        titleTypographyProps={{ variant: 'h6', color: 'text.primary', fontSize: '1em' }}
-        subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '0.875em' }}
+        slotProps={{ title: { variant: 'h6', color: 'text.primary', fontSize: '1em' }, subheader: { variant: 'subtitle2', fontSize: '0.875em' } }}
         sx={{ p: '1em 1em 0', textTransform: 'capitalize' }}
         action={
           _allowFile && (
@@ -241,8 +240,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
             <CardHeader
               title={i18n('source_title')}
               subheader={i18n('source_subheader')}
-              titleTypographyProps={{ variant: 'subtitle2', fontSize: '0.875em' }}
-              subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '0.75em' }}
+              slotProps={{ title: { variant: 'subtitle2', fontSize: '0.875em' }, subheader: { variant: 'subtitle2', fontSize: '0.75em' } }}
               action={<UrlCounts urls={urls} />}
               sx={{ p: '0.5em 0' }}
             />
@@ -265,7 +263,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
                           type: 'file',
                           label: i18n('torrent_file_label'),
                           placeholder: i18n('torrent_file_placeholder'),
-                          inputProps: { style: { fontSize: '0.875em' } },
+                          slotProps: { htmlInput: { style: { fontSize: '0.875em' } } },
                           disabled: !isFile,
                           onChange: ($event: ChangeEvent<HTMLInputElement>) => setFile($event.target?.files?.[0]),
                           sx: { flexGrow: 0 },
@@ -294,7 +292,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
                         multiline: true,
                         rows: 4,
                         onChange: e => setUrls(parseUrls(e.target.value)),
-                        inputProps: { style: { fontSize: '0.875em', wordBreak: 'break-all' } },
+                        slotProps: { htmlInput: { style: { fontSize: '0.875em', wordBreak: 'break-all' } } },
                         disabled: isFile,
                         sx: { flexGrow: 0 },
                       }}
@@ -304,7 +302,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
                 controllerProps={{ name: 'username', control }}
                 textFieldProps={{
                   label: i18n('username_label'),
-                  inputProps: { style: { fontSize: '0.875em' } },
+                  slotProps: { htmlInput: { style: { fontSize: '0.875em' } } },
                   sx: { flexGrow: 0 },
                 }}
               />
@@ -313,7 +311,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
                 textFieldProps={{
                   type: 'password',
                   label: i18n('ftp_password_label'),
-                  inputProps: { style: { fontSize: '0.875em' } },
+                  slotProps: { htmlInput: { style: { fontSize: '0.875em' } } },
                   sx: { flexGrow: 0 },
                 }}
                 iconProps={{ sx: { fontSize: '1em' } }}
@@ -323,7 +321,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
                 textFieldProps={{
                   type: 'password',
                   label: i18n('zip_password_label'),
-                  inputProps: { style: { fontSize: '0.875em' } },
+                  slotProps: { htmlInput: { style: { fontSize: '0.875em' } } },
                   sx: { flexGrow: 0 },
                 }}
                 iconProps={{ sx: { fontSize: '1em' } }}
@@ -334,8 +332,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
             <CardHeader
               title={i18n('destination_title')}
               subheader={i18n('destination_subheader')}
-              titleTypographyProps={{ variant: 'subtitle2', fontSize: '0.875em' }}
-              subheaderTypographyProps={{ variant: 'subtitle2', fontSize: '0.75em' }}
+              slotProps={{ title: { variant: 'subtitle2', fontSize: '0.875em' }, subheader: { variant: 'subtitle2', fontSize: '0.75em' } }}
               action={<FormSwitch controllerProps={{ name: 'destination.custom', control }} formControlLabelProps={{ label: '' }} />}
               sx={{ p: '0.5em 0' }}
             />

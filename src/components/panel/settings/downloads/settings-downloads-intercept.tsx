@@ -74,7 +74,7 @@ export function SettingsDownloadsIntercept() {
         id={DownloadsHeader.intercept}
         title={i18n('enabled__title')}
         subheader={i18n('enabled__subheader')}
-        titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
+        slotProps={{ title: { variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } } }}
         action={<FormSwitch controllerProps={{ name: 'enabled', control }} formControlLabelProps={{ label: '', disabled: !downloadEnabled }} />}
         sx={{ p: '1rem 1rem 0' }}
       />
@@ -89,8 +89,7 @@ export function SettingsDownloadsIntercept() {
           <CardHeader
             title={i18n('erase__title')}
             subheader={i18n('erase__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2', sx: { maxWidth: '95%' } } }}
             action={(
               <FormSwitch
                 controllerProps={{ name: 'erase', control }}
@@ -102,8 +101,7 @@ export function SettingsDownloadsIntercept() {
           <CardHeader
             title={i18n('resume__title')}
             subheader={i18n('resume__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2', sx: { maxWidth: '95%' } } }}
             action={
               <FormSwitch controllerProps={{ name: 'resume', control }} formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }} />
             }
@@ -112,8 +110,7 @@ export function SettingsDownloadsIntercept() {
           <CardHeader
             title={i18n('modal__title')}
             subheader={i18n('modal__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2', sx: { maxWidth: '95%' } } }}
             action={
               <FormSwitch controllerProps={{ name: 'modal', control }} formControlLabelProps={{ label: '', disabled: !getValues()?.enabled }} />
             }
@@ -127,8 +124,7 @@ export function SettingsDownloadsIntercept() {
           <CardHeader
             title={i18n('all__title')}
             subheader={i18n('all__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2', sx: { maxWidth: '95%' } } }}
             action={(
               <FormSwitch
                 controllerProps={{ name: 'all', control }}
@@ -141,9 +137,8 @@ export function SettingsDownloadsIntercept() {
           <Collapse in={!getValues()?.all} unmountOnExit>
             <CardHeader
               title={i18n('extensions__title')}
-              titleTypographyProps={{ variant: 'subtitle2' }}
               subheader={i18n('extensions__subheader')}
-              subheaderTypographyProps={{ variant: 'subtitle2', sx: { maxWidth: '95%' } }}
+              slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2', sx: { maxWidth: '95%' } } }}
               sx={{ p: '0.5rem 0' }}
             />
             <Card sx={{ p: '1.5rem 1rem 1rem', m: '0.5rem 0' }}>

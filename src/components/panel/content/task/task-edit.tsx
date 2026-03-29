@@ -225,8 +225,7 @@ export function TaskEdit({
             <CardHeader
               title={i18n('priority__title')}
               subheader={i18n('priority__subheader')}
-              titleTypographyProps={{ variant: 'subtitle2' }}
-              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
               action={(
                 <FormInput
                   controllerProps={{ name: 'priority', control }}
@@ -249,8 +248,7 @@ export function TaskEdit({
             <CardHeader
               title={i18n('max_peers__title')}
               subheader={i18n('max_peers__subheader')}
-              titleTypographyProps={{ variant: 'subtitle2' }}
-              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
               action={(
                 <FormInput
                   controllerProps={{
@@ -261,8 +259,8 @@ export function TaskEdit({
                   textFieldProps={{
                     type: 'number',
                     label: i18n('max_peers__label'),
-                    InputProps: {
-                      endAdornment: <InputAdornment position="end">peers</InputAdornment>,
+                    slotProps: {
+                      input: { endAdornment: <InputAdornment position="end">peers</InputAdornment> },
                     },
                     disabled: loading,
                     sx: { flex: '0 0 14rem', ml: '0.5rem' },
@@ -274,8 +272,7 @@ export function TaskEdit({
             <CardHeader
               title={i18n('max_download_rate__title')}
               subheader={i18n('max_download_rate__subheader')}
-              titleTypographyProps={{ variant: 'subtitle2' }}
-              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
               action={(
                 <FormInput
                   controllerProps={{
@@ -286,8 +283,8 @@ export function TaskEdit({
                   textFieldProps={{
                     type: 'number',
                     label: i18n('max_download_rate__label'),
-                    InputProps: {
-                      endAdornment: <InputAdornment position="end">KB/s</InputAdornment>,
+                    slotProps: {
+                      input: { endAdornment: <InputAdornment position="end">KB/s</InputAdornment> },
                     },
                     disabled: loading,
                     sx: { flex: '0 0 14rem', ml: '0.5rem' },
@@ -299,8 +296,7 @@ export function TaskEdit({
             <CardHeader
               title={i18n('max_upload_rate__title')}
               subheader={i18n('max_upload_rate__subheader')}
-              titleTypographyProps={{ variant: 'subtitle2' }}
-              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
               action={(
                 <FormInput
                   controllerProps={{
@@ -311,8 +307,8 @@ export function TaskEdit({
                   textFieldProps={{
                     type: 'number',
                     label: i18n('max_upload_rate__label'),
-                    InputProps: {
-                      endAdornment: <InputAdornment position="end">KB/s</InputAdornment>,
+                    slotProps: {
+                      input: { endAdornment: <InputAdornment position="end">KB/s</InputAdornment> },
                     },
                     disabled: loading,
                     sx: { flex: '0 0 14rem', ml: '0.5rem' },
@@ -321,12 +317,11 @@ export function TaskEdit({
               )}
               sx={{ p: '0.5rem 0', mt: '0.5rem' }}
             />
-            <CardHeader subheader={i18n('seeding_info')} subheaderTypographyProps={{ variant: 'subtitle2' }} sx={{ p: '0.5rem 0', mt: '0.5rem' }} />
+            <CardHeader subheader={i18n('seeding_info')} slotProps={{ subheader: { variant: 'subtitle2' } }} sx={{ p: '0.5rem 0', mt: '0.5rem' }} />
             <CardHeader
               title={i18n('seeding_interval__title')}
               subheader={i18n('seeding_interval__subheader')}
-              titleTypographyProps={{ variant: 'subtitle2' }}
-              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
               action={(
                 <FormInput
                   controllerProps={{
@@ -337,8 +332,8 @@ export function TaskEdit({
                   textFieldProps={{
                     type: 'number',
                     label: i18n('seeding_interval__label'),
-                    InputProps: {
-                      endAdornment: <InputAdornment position="end">minutes</InputAdornment>,
+                    slotProps: {
+                      input: { endAdornment: <InputAdornment position="end">minutes</InputAdornment> },
                     },
                     disabled: loading,
                     sx: { flex: '0 0 14rem', ml: '0.5rem' },
@@ -350,8 +345,7 @@ export function TaskEdit({
             <CardHeader
               title={i18n('seeding_ratio__title')}
               subheader={i18n('seeding_ratio__subheader')}
-              titleTypographyProps={{ variant: 'subtitle2' }}
-              subheaderTypographyProps={{ variant: 'subtitle2' }}
+              slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
               action={(
                 <FormInput
                   controllerProps={{
@@ -362,8 +356,8 @@ export function TaskEdit({
                   textFieldProps={{
                     type: 'number',
                     label: i18n('seeding_ratio__label'),
-                    InputProps: {
-                      endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                    slotProps: {
+                      input: { endAdornment: <InputAdornment position="end">%</InputAdornment> },
                     },
                     disabled: loading,
                     sx: { flex: '0 0 14rem', ml: '0.5rem' },

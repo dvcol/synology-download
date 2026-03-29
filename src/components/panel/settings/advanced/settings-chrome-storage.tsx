@@ -5,7 +5,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import { Button, Card, CardActions, CardContent, CardHeader, Dialog, DialogActions, DialogContent, DialogTitle, MenuItem, Stack, Typography } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { firstValueFrom, Subscription } from 'rxjs';
@@ -29,7 +29,7 @@ export function SettingsChromeStorage() {
   const store = useSelector<RootSlice, RootSlice>(getRoot);
   const syncSettingsState = useSelector<RootSlice, SyncSettings>(getSyncSettings);
 
-  const { containerRef } = useContext(ContainerContext);
+  const { containerRef } = use(ContainerContext);
 
   const [sync, setSync] = useState({});
   const [local, setLocal] = useState({});
@@ -80,15 +80,14 @@ export function SettingsChromeStorage() {
         id={AdvancedHeader.storage}
         title={i18n('title')}
         subheader={i18n('subheader')}
-        titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
+        slotProps={{ title: { variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } } }}
         sx={{ p: '1rem 1rem 0' }}
       />
       <CardContent>
         <CardHeader
           title={i18n('sync_mode_title')}
           subheader={i18n('sync_mode_subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           action={(
             <FormInput
               controllerProps={{ name: 'mode', control }}

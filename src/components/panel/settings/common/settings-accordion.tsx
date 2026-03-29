@@ -54,7 +54,7 @@ export function SettingsAccordion<T extends { id: string }>({
       <CardHeader
         id={title}
         title={i18n(`title__${title}`)}
-        titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
+        slotProps={{ title: { variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } } }}
         sx={{ p: '1rem 1rem 0' }}
         subheader={header}
       />

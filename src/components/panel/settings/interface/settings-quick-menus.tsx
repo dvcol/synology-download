@@ -55,8 +55,7 @@ export function SettingsQuickMenus() {
         <CardHeader
           title={i18n('enabled_title')}
           subheader={i18n('enabled_subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           action={(
             <FormSwitch
               controllerProps={{ name: 'intercept', control }}

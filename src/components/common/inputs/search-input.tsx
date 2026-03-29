@@ -146,17 +146,19 @@ const ForwardedSearchInput: ForwardRefRenderFunction<SearchInputRef, SearchInput
         <TextField
           select
           variant="standard"
-          SelectProps={{
-            MenuProps: { slotProps: { paper: { sx: { left: '0 !important' } } } },
-            ...selectProps,
-            onOpen: (event) => {
-              setSelectOpen(true);
-              selectProps?.onOpen?.(event);
-            },
-            onClose: (event) => {
-              setSelectOpen(false);
-              selectProps?.onClose?.(event);
-              setTimeout(async () => focusInput());
+          slotProps={{
+            select: {
+              MenuProps: { slotProps: { paper: { sx: { left: '0 !important' } } } },
+              ...selectProps,
+              onOpen: (event) => {
+                setSelectOpen(true);
+                selectProps?.onOpen?.(event);
+              },
+              onClose: (event) => {
+                setSelectOpen(false);
+                selectProps?.onClose?.(event);
+                setTimeout(async () => focusInput());
+              },
             },
           }}
           sx={{ minWidth: 'fit-content', mr: '0.5em' }}

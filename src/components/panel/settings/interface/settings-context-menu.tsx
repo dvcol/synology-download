@@ -61,8 +61,7 @@ export function SettingsContextMenu({ menu, onRemove }: { menu: ContextMenu; onR
       <CardHeader
         title={i18n('name_title')}
         subheader={i18n('name_subheader')}
-        titleTypographyProps={{ variant: 'subtitle2' }}
-        subheaderTypographyProps={{ variant: 'subtitle2' }}
+        slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
         action={(
           <FormInput
             controllerProps={{ name: 'title', control }}
@@ -77,8 +76,7 @@ export function SettingsContextMenu({ menu, onRemove }: { menu: ContextMenu; onR
       <CardHeader
         title={i18n('modal_title')}
         subheader={i18n('modal_subheader')}
-        titleTypographyProps={{ variant: 'subtitle2' }}
-        subheaderTypographyProps={{ variant: 'subtitle2' }}
+        slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
         action={(
           <FormSwitch
             controllerProps={{ name: 'modal', control }}
@@ -96,8 +94,7 @@ export function SettingsContextMenu({ menu, onRemove }: { menu: ContextMenu; onR
       <CardHeader
         title={i18n('popup_title')}
         subheader={i18n('popup_subheader')}
-        titleTypographyProps={{ variant: 'subtitle2' }}
-        subheaderTypographyProps={{ variant: 'subtitle2' }}
+        slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
         action={(
           <FormSwitch
             controllerProps={{ name: 'popup', control }}
@@ -115,8 +112,7 @@ export function SettingsContextMenu({ menu, onRemove }: { menu: ContextMenu; onR
       <CardHeader
         title={i18n('panel_title')}
         subheader={i18n('panel_subheader')}
-        titleTypographyProps={{ variant: 'subtitle2' }}
-        subheaderTypographyProps={{ variant: 'subtitle2' }}
+        slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
         action={(
           <FormSwitch
             controllerProps={{ name: 'panel', control }}
@@ -134,8 +130,7 @@ export function SettingsContextMenu({ menu, onRemove }: { menu: ContextMenu; onR
       <CardHeader
         title={i18n('destination_title')}
         subheader={i18n('destination_subheader')}
-        titleTypographyProps={{ variant: 'subtitle2' }}
-        subheaderTypographyProps={{ variant: 'subtitle2' }}
+        slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
         action={<FormSwitch controllerProps={{ name: 'destination.custom', control }} formControlLabelProps={{ label: '' }} />}
         sx={{ p: '0.5rem 0' }}
       />

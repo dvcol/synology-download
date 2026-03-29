@@ -69,8 +69,7 @@ export function SettingsContextMenus() {
         <CardHeader
           title={i18n('scrape_menu_title')}
           subheader={i18n('scrape_menu_subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           action={(
             <FormSwitch
               controllerProps={{ name: 'menu', control }}

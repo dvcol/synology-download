@@ -124,28 +124,30 @@ export const ScrapePanel: FC<ScrapePanelProps> = ({ cardProps }) => {
       <CardHeader
         title={page?.title}
         subheader={page?.url}
-        titleTypographyProps={{
-          variant: 'h6',
-          color: 'text.primary',
-          fontSize: '1em',
-          sx: {
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
-            display: '-webkit-box',
-            WebkitLineClamp: '1',
-            WebkitBoxOrient: 'vertical',
+        slotProps={{
+          title: {
+            variant: 'h6',
+            color: 'text.primary',
+            fontSize: '1em',
+            sx: {
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+              display: '-webkit-box',
+              WebkitLineClamp: '1',
+              WebkitBoxOrient: 'vertical',
+            },
           },
-        }}
-        subheaderTypographyProps={{
-          variant: 'caption',
-          fontSize: '0.875em',
-          sx: {
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
-            display: '-webkit-box',
-            wordBreak: 'break-all',
-            WebkitLineClamp: '2',
-            WebkitBoxOrient: 'vertical',
+          subheader: {
+            variant: 'caption',
+            fontSize: '0.875em',
+            sx: {
+              textOverflow: 'ellipsis',
+              overflow: 'hidden',
+              display: '-webkit-box',
+              wordBreak: 'break-all',
+              WebkitLineClamp: '2',
+              WebkitBoxOrient: 'vertical',
+            },
           },
         }}
         sx={{ p: '1em 1em 0', textTransform: 'capitalize' }}

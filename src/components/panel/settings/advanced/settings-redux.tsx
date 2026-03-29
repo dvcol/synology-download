@@ -23,7 +23,7 @@ export function SettingsRedux() {
         id={AdvancedHeader.redux}
         title={i18n('title')}
         subheader={i18n('subheader')}
-        titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
+        slotProps={{ title: { variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } } }}
         sx={{ p: '1rem 1rem 0' }}
       />
       <CardContent>

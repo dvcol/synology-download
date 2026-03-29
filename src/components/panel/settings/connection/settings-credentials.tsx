@@ -223,17 +223,15 @@ export const SettingsCredentials: FC = () => {
       <CardHeader
         id={ConnectionHeader.credential}
         title={i18n('title')}
-        titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
         subheader={i18n('subheader')}
-        subheaderTypographyProps={{ color: 'text.secondary', gutterBottom: true }}
+        slotProps={{ title: { variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }, subheader: { color: 'text.secondary', gutterBottom: true } }}
         sx={{ p: '1rem 1rem 0' }}
       />
       <CardContent sx={{ p: '0 1rem' }}>
         <CardHeader
           title={i18n('type__title')}
           subheader={i18n('type__subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           action={(
             <FormInput
               controllerProps={{ name: 'type', control, rules: rules.type }}
@@ -259,8 +257,7 @@ export const SettingsCredentials: FC = () => {
         <CardHeader
           title={i18n('format__title')}
           subheader={i18n('format__subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           action={(
             <FormInput
               controllerProps={{ name: 'format', control, rules: rules.format }}
@@ -283,8 +280,7 @@ export const SettingsCredentials: FC = () => {
         <CardHeader
           title={i18n('general__title')}
           subheader={i18n('general__subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           sx={{ p: '0.5rem 0' }}
         />
         <Collapse in={isQC} unmountOnExit={true}>
@@ -424,8 +420,7 @@ export const SettingsCredentials: FC = () => {
           <CardHeader
             title={i18n('2fa__title')}
             subheader={i18n('2fa__subheader')}
-            titleTypographyProps={{ variant: 'subtitle2', mb: '0.75rem' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
+            slotProps={{ title: { variant: 'subtitle2', mb: '0.75rem' }, subheader: { variant: 'subtitle2' } }}
             action={(
               <FormCheckbox
                 controllerProps={{ name: 'enable_device_token', control, rules: rules.enable_device_token }}
@@ -483,16 +478,14 @@ export const SettingsCredentials: FC = () => {
         <CardHeader
           title={i18n('remember_me__title')}
           subheader={i18n('remember_me__subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           action={<FormSwitch controllerProps={{ name: 'rememberMe', control }} formControlLabelProps={{ label: '' }} />}
           sx={{ p: '0.5rem 0' }}
         />
         <CardHeader
           title={i18n('auto_login__title')}
           subheader={i18n('auto_login__subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           action={
             <FormSwitch controllerProps={{ name: 'autoLogin', control }} formControlLabelProps={{ label: '', disabled: !getValues().rememberMe }} />
           }

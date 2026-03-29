@@ -69,25 +69,22 @@ export function SettingsGlobal() {
       <CardHeader
         id={InterfaceHeader.global}
         title={i18n('title')}
-        titleTypographyProps={{ variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }}
         subheader={i18n('subheader')}
-        subheaderTypographyProps={{ color: 'text.secondary', gutterBottom: true }}
+        slotProps={{ title: { variant: 'h6', color: 'text.primary', sx: { textTransform: 'capitalize' } }, subheader: { color: 'text.secondary', gutterBottom: true } }}
         sx={{ p: '1rem 1rem 0' }}
       />
       <CardContent>
         <CardHeader
           title={i18n('panel_enabled_title')}
           subheader={i18n('panel_enabled_subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           action={<FormSwitch controllerProps={{ name: 'panel.enabled', control }} formControlLabelProps={{ label: '' }} />}
           sx={{ p: '0.5rem 0' }}
         />
         <CardHeader
           title={i18n('theme_title')}
           subheader={i18n('theme_subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           action={(
             <FormInput
               controllerProps={{ name: 'theme', control }}
@@ -109,8 +106,7 @@ export function SettingsGlobal() {
         <CardHeader
           title={i18n('interface_size_title')}
           subheader={i18n('interface_size_subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           action={(
             <FormInput
               controllerProps={{ name: 'interface.size', control }}
@@ -134,8 +130,7 @@ export function SettingsGlobal() {
         <CardHeader
           title={i18n('actions_title')}
           subheader={i18n('actions_subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           action={(
             <FormInput
               controllerProps={{ name: 'actions', control }}
@@ -157,16 +152,14 @@ export function SettingsGlobal() {
         <CardHeader
           title={i18n('interface_pull_title')}
           subheader={i18n('interface_pull_subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           action={<FormSwitch controllerProps={{ name: 'interface.pullToRefresh', control }} formControlLabelProps={{ label: '' }} />}
           sx={{ p: '0.5rem 0' }}
         />
         <CardHeader
           title={i18n('loading_title')}
           subheader={i18n('loading_subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           action={<FormSwitch controllerProps={{ name: 'loading.enabled', control }} formControlLabelProps={{ label: '' }} />}
           sx={{ p: '0.5rem 0' }}
         />
@@ -174,8 +167,7 @@ export function SettingsGlobal() {
           <CardHeader
             title={i18n('loading_threshold_title')}
             subheader={i18n('loading_threshold_subheader')}
-            titleTypographyProps={{ variant: 'subtitle2' }}
-            subheaderTypographyProps={{ variant: 'subtitle2' }}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
             action={(
               <FormInput
                 controllerProps={{
@@ -189,8 +181,8 @@ export function SettingsGlobal() {
                 textFieldProps={{
                   type: 'number',
                   label: i18n('loading_threshold_label'),
-                  InputProps: {
-                    endAdornment: <InputAdornment position="end">ms</InputAdornment>,
+                  slotProps: {
+                    input: { endAdornment: <InputAdornment position="end">ms</InputAdornment> },
                   },
                   disabled: !getValues()?.loading?.enabled,
                   sx: { flex: '0 0 10rem', ml: '0.5rem' },
@@ -203,40 +195,35 @@ export function SettingsGlobal() {
         <CardHeader
           title={i18n('task__progress_bar_title')}
           subheader={i18n('task__progress_bar_subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           action={<FormSwitch controllerProps={{ name: 'task.progressBar', control }} formControlLabelProps={{ label: '' }} />}
           sx={{ p: '0.5rem 0' }}
         />
         <CardHeader
           title={i18n('task__background_title')}
           subheader={i18n('task__background_subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           action={<FormSwitch controllerProps={{ name: 'task.background', control }} formControlLabelProps={{ label: '' }} />}
           sx={{ p: '0.5rem 0' }}
         />
         <CardHeader
           title={i18n('download__progress_bar_title')}
           subheader={i18n('download__progress_bar_subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           action={<FormSwitch controllerProps={{ name: 'download.progressBar', control }} formControlLabelProps={{ label: '' }} />}
           sx={{ p: '0.5rem 0' }}
         />
         <CardHeader
           title={i18n('download__background_title')}
           subheader={i18n('download__background_subheader')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           action={<FormSwitch controllerProps={{ name: 'download.background', control }} formControlLabelProps={{ label: '' }} />}
           sx={{ p: '0.5rem 0' }}
         />
         <CardHeader
           title={i18n('navbar__buttons_title')}
-          titleTypographyProps={{ variant: 'subtitle2' }}
           subheader={i18n('navbar__buttons_subheader')}
-          subheaderTypographyProps={{ variant: 'subtitle2' }}
+          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
           sx={{ p: '0.5rem 0' }}
         />
         <Card sx={{ p: '0.5rem 1rem', m: '0.5rem 0' }}>
