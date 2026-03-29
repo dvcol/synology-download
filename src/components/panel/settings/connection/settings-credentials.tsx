@@ -376,6 +376,7 @@ export const SettingsCredentials: FC = () => {
               textFieldProps={{
                 type: 'text',
                 label: i18n('username'),
+                autoComplete: 'username',
               }}
             />
 
@@ -384,6 +385,7 @@ export const SettingsCredentials: FC = () => {
               textFieldProps={{
                 type: 'password',
                 label: i18n('password'),
+                autoComplete: 'current-password',
               }}
             />
           </Grid>

@@ -146,7 +146,6 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
                     title: i18n(button.key, 'common', 'buttons'),
                   }}
                   ButtonProps={{
-                    key: button.key,
                     sx: ButtonStyle,
                     onClick: $event => handleClick($event, button.key),
                     color: button.color,

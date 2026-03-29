@@ -21,6 +21,7 @@ export const ContentButton: FC<ContentButtonProps> = ({ TooltipProps, BoxProps, 
         }}
       >
         <Button
+          component="span"
           {...ButtonProps}
           sx={{
             p: '0 1rem',
