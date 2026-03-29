@@ -217,8 +217,8 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
     return selectNode(`${nodeId}-${(filteredTree[nodeId]?.length ?? 1) - 1}`);
   };
 
-  const onSelect = async ($event: SyntheticEvent, itemId: string | null) => itemId && selectNode(itemId);
-  const onExpand = ($event: SyntheticEvent, itemIds: string[]) => !flatten && setExpanded(itemIds);
+  const onSelect = async ($event: SyntheticEvent | null, itemId: string | null) => itemId && selectNode(itemId);
+  const onExpand = ($event: SyntheticEvent | null, itemIds: string[]) => !flatten && setExpanded(itemIds);
 
   const loadNestedPath = async (path: string) => {
     const _crumbs = path?.includes('/') ? path?.split('/') : [path];
