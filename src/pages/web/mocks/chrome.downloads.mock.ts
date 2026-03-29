@@ -28,7 +28,7 @@ export function generateDownload(_download: Partial<DownloadItem> = {}): Downloa
     mime: faker.system.mimeType(),
     referrer: faker.internet.url(),
     startTime: new Date().toISOString(),
-    estimatedEndTime: faker.date.soon({ days: 0 }).toISOString(),
+    estimatedEndTime: faker.date.soon({ days: 1 }).toISOString(),
     filename: faker.system.filePath(),
     finalUrl: url,
     url,
@@ -163,7 +163,7 @@ function progress(download: DownloadItem) {
     download.state = 'complete';
     download.bytesReceived = total;
     download.endTime = new Date().toISOString();
-    download.estimatedEndTime = faker.date.soon({ days: 0, refDate: download.estimatedEndTime }).toISOString();
+    download.estimatedEndTime = faker.date.soon({ days: 1, refDate: download.estimatedEndTime }).toISOString();
     return download;
   }
   if (faker.number.int(100) > 20) {
