@@ -16,6 +16,7 @@ import { NotificationService } from '../../../services/notification/notification
 import { PollingService } from '../../../services/polling/polling.service';
 import { QueryService } from '../../../services/query/query.service';
 import { store } from '../../../store/store';
+import { fixNestedAmpersand } from '../../../utils/emotion.utils';
 import { WcEvents } from '../../web/models/components.model';
 import { anchor$ } from '../service/anchor.service';
 import { taskDialog$ } from '../service/dialog.service';
@@ -73,7 +74,7 @@ export class ContentAppWc extends HTMLElement {
 
     const container = shadowRoot.querySelector(`#${instance}-container`) as HTMLElement;
     const app = shadowRoot.querySelector(`#${instance}-app`);
-    const cache = createCache({ key: `${instance}-cache`, container });
+    const cache = createCache({ key: `${instance}-cache`, container, stylisPlugins: [fixNestedAmpersand] });
 
     this._root = createRoot(app!);
     this._root.render(<ContentApp storeOrProxy={storeOrProxy} cache={cache} container={container} instance={instance} />);
