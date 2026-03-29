@@ -5,10 +5,10 @@ import type { SettingsPanelTab } from '../../../models/settings.model';
 
 import { Paper, Tab, Tabs } from '@mui/material';
 import React from 'react';
-import { HashLink as Link } from 'react-router-hash-link';
 
 import { SettingHeader } from '../../../models/settings.model';
 import { useI18n } from '../../../utils/webex.utils';
+import { HashLink as Link } from '../../common/router/hash-link';
 
 interface SettingsNavbarProps { tabs: SettingsPanelTab[] }
 export const SettingsNavbar: FC<SettingsNavbarProps> = ({ tabs }) => {
