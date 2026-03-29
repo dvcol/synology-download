@@ -3,7 +3,7 @@ import type { FC, PropsWithChildren } from 'react';
 
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { IconButton, InputAdornment } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useI18n } from '../../../utils/webex.utils';
 
@@ -16,15 +16,15 @@ export const FormInputPassword: FC<
   const i18n = useI18n('common', 'form', 'input');
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
+  useEffect(() => {
+    onToggle(showPassword);
+  }, [showPassword]);
+
   return (
     <InputAdornment position="end">
       <IconButton
         aria-label={i18n('toggle_password_visibility')}
-        onClick={() =>
-          setShowPassword((show) => {
-            onToggle(!show);
-            return !show;
-          })}
+        onClick={() => setShowPassword(show => !show)}
         edge="end"
         sx={{ fontSize: '1.25em' }}
       >
