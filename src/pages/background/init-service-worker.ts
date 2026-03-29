@@ -1,5 +1,5 @@
 import { lastValueFrom } from 'rxjs';
-import { wrapStore } from 'webext-redux';
+import { createWrapStore } from 'webext-redux';
 
 import { ServiceInstance } from '../../models/settings.model';
 import { StorePortName } from '../../models/store.model';
@@ -22,9 +22,8 @@ import { onInstalledEvents } from './modules/update-handler';
 
 export async function initServiceWorker() {
   // Wrap proxy store see https://github.com/tshaddix/webext-redux
-  wrapStore(store, {
-    portName: StorePortName,
-  });
+  const wrapStore = createWrapStore({ channelName: StorePortName });
+  wrapStore(store);
 
   // initialize logger
   LoggerService.init({ store, source: ServiceInstance.Background });
