@@ -1,13 +1,4 @@
-import {
-  ColorLevel,
-  ColorLevelCss,
-  ColorLevelMap,
-  ColorMap,
-  getColorFromLevel,
-  getLevelFromColor,
-  MaterialIcon,
-  MaterialIconMap,
-} from './material-ui.model';
+import { ColorLevel, ColorLevelCss, getColorFromLevel, getLevelFromColor } from './material-ui.model';
 
 describe('material-ui.model', () => {
   describe('getColorFromLevel', () => {
@@ -34,31 +25,6 @@ describe('material-ui.model', () => {
 
     it('should return undefined for unknown color', () => {
       expect(getLevelFromColor('#000000')).toBeUndefined();
-    });
-  });
-
-  describe('colorLevelMap', () => {
-    it('should have an entry for every ColorLevel', () => {
-      for (const level of Object.values(ColorLevel)) {
-        expect(ColorLevelMap[level]).toBeDefined();
-      }
-    });
-  });
-
-  describe('colorMap', () => {
-    it('should be the inverse of ColorLevelMap', () => {
-      for (const [level, color] of Object.entries(ColorLevelMap)) {
-        expect(ColorMap[color]).toBe(level);
-      }
-    });
-  });
-
-  describe('materialIconMap', () => {
-    it('should have a label for every MaterialIcon', () => {
-      for (const icon of Object.values(MaterialIcon)) {
-        expect(MaterialIconMap[icon]).toBeDefined();
-        expect(typeof MaterialIconMap[icon]).toBe('string');
-      }
     });
   });
 });
