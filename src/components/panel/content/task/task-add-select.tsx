@@ -6,7 +6,7 @@ import type { TaskListDownloadRequest, TaskListResponse } from '../../../../mode
 
 import SaveIcon from '@mui/icons-material/Save';
 import { Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, FormHelperText, LinearProgress, List, ListItem, ListItemButton, ListItemText, Stack, Typography } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { finalize, lastValueFrom } from 'rxjs';
 
@@ -33,7 +33,7 @@ export const TaskAddSelect: FC<TaskAddSelectProp> = ({ open, list_id, source, de
 
   const [response, setResponse] = useState<TaskListResponse>();
 
-  const { containerRef } = useContext(ContainerContext);
+  const { containerRef } = use(ContainerContext);
 
   const {
     handleSubmit,
@@ -129,7 +129,7 @@ export const TaskAddSelect: FC<TaskAddSelectProp> = ({ open, list_id, source, de
       onClose={() => handleSubmit(onCancel)}
       aria-labelledby="confirm-delete-dialog"
       maxWidth="md"
-      PaperProps={{ sx: { maxHeight: 'calc(100% - 1em)' } }}
+      slotProps={{ paper: { sx: { maxHeight: 'calc(100% - 1em)' } } }}
       container={() => containerRef?.current ?? null}
     >
       <DialogTitle>

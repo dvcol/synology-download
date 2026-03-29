@@ -149,7 +149,7 @@ export function SettingsDownloadsIntercept() {
             <Card sx={{ p: '1.5rem 1rem 1rem', m: '0.5rem 0' }}>
               <Grid container spacing={1} columnSpacing={1}>
                 {getValues().extensions.map(extension => (
-                  <Grid item xs={3} lg={2} key={`${extension.ext}-${extension.mime}`}>
+                  <Grid size={{ xs: 3, lg: 2 }} key={`${extension.ext}-${extension.mime}`}>
                     <Button
                       disableTouchRipple={true}
                       sx={{ p: '0 0 0 0.5rem' }}
@@ -160,7 +160,7 @@ export function SettingsDownloadsIntercept() {
                         controllerProps={{ name: 'active', control }}
                         formControlLabelProps={{
                           label: (
-                            <Tooltip arrow title={extension.mime ?? '⚠ no mime type specified'} PopperProps={{ disablePortal: true }}>
+                            <Tooltip arrow title={extension.mime ?? '⚠ no mime type specified'} slotProps={{ popper: { disablePortal: true } }}>
                               <Typography
                                 variant="body2"
                                 color="text.secondary"

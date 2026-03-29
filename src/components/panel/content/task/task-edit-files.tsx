@@ -96,10 +96,10 @@ export const TaskEditFiles: FC<TaskEditFilesProps> = ({ taskId }) => {
       <ListItemText
         primary={(
           <Grid container>
-            <Grid item xs={8} sx={{ alignSelf: 'center' }}>
+            <Grid size={8} sx={{ alignSelf: 'center' }}>
               <span>{f.name ?? f.filename}</span>
             </Grid>
-            <Grid item xs={4} sx={{ textAlign: 'end' }}>
+            <Grid size={4} sx={{ textAlign: 'end' }}>
               <ToggleButtonGroup
                 color="primary"
                 size="small"

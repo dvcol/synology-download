@@ -16,7 +16,7 @@ export const ExplorerRecent: FC<ExplorerRecentProps> = ({ selected, destinations
         {destinations?.map(destination => (
           <ListItemButton key={destination} selected={selected === destination} onClick={() => onSelect(destination)} sx={{ p: '0 0.5em', mb: '0.1em' }}>
             <FolderIcon sx={{ mr: '0.25em', width: '1em', fontSize: '1.125em' }} />
-            <Tooltip arrow title={destination} PopperProps={{ disablePortal: true, sx: { wordBreak: 'break-all' } }} enterDelay={1000}>
+            <Tooltip arrow title={destination} slotProps={{ popper: { disablePortal: true, sx: { wordBreak: 'break-all' } } }} enterDelay={1000}>
               <ListItemText
                 primary={destination}
                 primaryTypographyProps={{

@@ -266,12 +266,12 @@ export const TaskDetail: FC<TaskDetailProps> = (props) => {
         <ListItemText
           primary={(
             <Grid container>
-              <Grid item xs={9}>
+              <Grid size={9}>
                 <span>{i18n(f.wanted ? f.priority : 'skip', 'common', 'model', 'task_priority')}</span>
                 <span> – </span>
                 <span>{f.name ?? f.filename}</span>
               </Grid>
-              <Grid item xs={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Grid size={3} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                 {i18n({
                   key: 'downloaded',
                   substitutions: [formatBytes(f.size_downloaded), formatBytes(f.size)],

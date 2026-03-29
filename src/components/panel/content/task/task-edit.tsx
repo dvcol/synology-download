@@ -8,7 +8,7 @@ import type { Task, TaskFile } from '../../../../models/task.model';
 
 import SaveIcon from '@mui/icons-material/Save';
 import { AppBar, Box, Button, Card, CardHeader, Dialog, DialogActions, DialogContent, DialogTitle, InputAdornment, LinearProgress, MenuItem, Stack, Tab, Tabs } from '@mui/material';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { finalize, lastValueFrom } from 'rxjs';
@@ -44,7 +44,7 @@ export function TaskEdit({
 }) {
   const i18n = useI18n('panel', 'content', 'task', 'edit');
 
-  const { containerRef } = useContext(ContainerContext);
+  const { containerRef } = use(ContainerContext);
 
   const taskFiles = useSelector<RootSlice, TaskFile[]>(getTaskFilesById(task.id));
 
@@ -194,7 +194,7 @@ export function TaskEdit({
       onClose={() => handleSubmit(onCancel)}
       aria-labelledby="confirm-delete-dialog"
       maxWidth="md"
-      PaperProps={{ sx: { maxHeight: 'calc(100% - 1em)' } }}
+      slotProps={{ paper: { sx: { maxHeight: 'calc(100% - 1em)' } } }}
       container={() => containerRef?.current ?? null}
     >
       <DialogTitle>{i18n('destination_folder')}</DialogTitle>

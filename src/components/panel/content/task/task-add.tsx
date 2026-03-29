@@ -44,7 +44,7 @@ const UrlCounts: FC<{ urls?: string[] }> = ({ urls }) => {
   ));
 
   return (
-    <Tooltip arrow PopperProps={{ disablePortal: true }} title={<Box sx={{ wordBreak: 'break-all' }}>{tooltip}</Box>} sx={{ ml: '0.5rem' }}>
+    <Tooltip arrow slotProps={{ popper: { disablePortal: true } }} title={<Box sx={{ wordBreak: 'break-all' }}>{tooltip}</Box>} sx={{ ml: '0.5rem' }}>
       <Chip
         label={(
           <Box sx={{ fontSize: '1em' }}>
@@ -237,7 +237,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
       />
       <CardContent sx={{ display: 'flex', flexDirection: 'row', p: '0.5em 1em 0.75em', fontSize: '1em' }}>
         <Grid container spacing={2}>
-          <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Grid size={6} sx={{ display: 'flex', flexDirection: 'column' }}>
             <CardHeader
               title={i18n('source_title')}
               subheader={i18n('source_subheader')}
@@ -330,7 +330,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
               />
             </Box>
           </Grid>
-          <Grid item xs={6} sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Grid size={6} sx={{ display: 'flex', flexDirection: 'column' }}>
             <CardHeader
               title={i18n('destination_title')}
               subheader={i18n('destination_subheader')}

@@ -44,7 +44,7 @@ const ContentItemComponent: ForwardRefRenderFunction<HTMLDivElement, ContentItem
 
   const showBackground = useSelector<StoreState, GlobalSettings['task']>(getGlobalTask)?.background;
   return (
-    <Accordion ref={ref} className={className} expanded={expanded === index} onChange={onChange} TransitionProps={{ unmountOnExit: true }}>
+    <Accordion ref={ref} className={className} expanded={expanded === index} onChange={onChange} slotProps={{ transition: { unmountOnExit: true } }}>
       <AccordionSummary
         aria-controls="task-content"
         id="task-header"

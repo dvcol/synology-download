@@ -67,7 +67,7 @@ export function SettingsAccordion<T extends { id: string }>({
               expanded={expanded === i.id}
               onChange={handleExpand(i.id)}
               sx={{ borderRadius: '0' }}
-              TransitionProps={{ unmountOnExit: true }}
+              slotProps={{ transition: { unmountOnExit: true } }}
             >
               <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ overflow: 'hidden' }}>
                 {summary(i)}

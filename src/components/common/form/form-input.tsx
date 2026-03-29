@@ -57,10 +57,10 @@ export function FormInput<TFieldValues extends FieldValues = FieldValues, TName 
         return (
           <Grid container direction="column">
             <Grid container direction="row" wrap="nowrap" sx={{ mb: '0.75em', alignItems: 'center' }}>
-              <Grid item xs={4}>
+              <Grid size={4}>
                 {UploadButton}
               </Grid>
-              <Grid item xs={8}>
+              <Grid size={8}>
                 {children}
               </Grid>
             </Grid>

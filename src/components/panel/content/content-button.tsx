@@ -12,7 +12,7 @@ export interface ContentButtonProps extends PropsWithChildren {
 export const ContentButton: FC<ContentButtonProps> = ({ TooltipProps, BoxProps, ButtonProps, children }) => {
   const { key, ...buttonProps } = ButtonProps as ButtonProps & { key?: string };
   return (
-    <Tooltip arrow placement="left" {...TooltipProps} PopperProps={{ disablePortal: true, ...TooltipProps?.PopperProps }}>
+    <Tooltip arrow placement="left" {...TooltipProps} slotProps={{ popper: { disablePortal: true, ...TooltipProps?.slotProps?.popper } }}>
       <Box
         {...BoxProps}
         sx={{

@@ -56,10 +56,10 @@ export const ContentCard: FC<ContentCardProps> = ({
         secondary={(
           <React.Fragment>
             <Grid container>
-              <Grid item xs={10}>
+              <Grid size={10}>
                 {description}
               </Grid>
-              <Grid item xs={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Grid size={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                 {progress ?? ''}
               </Grid>
             </Grid>

@@ -282,7 +282,7 @@ export function NavbarMenu({ menuIcon }: NavbarMenuProps) {
           ))}
 
       {!logged && (
-        <Tooltip arrow title={i18n('menu_login')} key="login" PopperProps={{ disablePortal: true }}>
+        <Tooltip arrow title={i18n('menu_login')} key="login" slotProps={{ popper: { disablePortal: true } }}>
           <span>
             <IconButton
               id="login-pinned"
@@ -298,7 +298,7 @@ export function NavbarMenu({ menuIcon }: NavbarMenuProps) {
         </Tooltip>
       )}
 
-      <Tooltip arrow title={i18n('menu_drawer')} PopperProps={{ disablePortal: true }}>
+      <Tooltip arrow title={i18n('menu_drawer')} slotProps={{ popper: { disablePortal: true } }}>
         <span>
           <IconButton
             sx={{ m: '0 0.25rem' }}

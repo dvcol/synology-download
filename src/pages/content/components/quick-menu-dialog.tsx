@@ -181,11 +181,13 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
       MenuListProps={{
         'aria-labelledby': 'basic-button',
       }}
-      PaperProps={{
-        sx: {
-          borderRadius: '1em',
-          backgroundColor: isDark ? 'rgb(5 5 10 / 0.8)' : 'rgba(234 238 242 / 0.8)',
-          backdropFilter: 'blur(2px)',
+      slotProps={{
+        paper: {
+          sx: {
+            borderRadius: '1em',
+            backgroundColor: isDark ? 'rgb(5 5 10 / 0.8)' : 'rgba(234 238 242 / 0.8)',
+            backdropFilter: 'blur(2px)',
+          },
         },
       }}
       sx={{ zIndex: `${zIndexMax} !important` }}

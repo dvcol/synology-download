@@ -164,7 +164,7 @@ const DownloadItemComponent: ForwardRefRenderFunction<HTMLDivElement, DownloadIt
         fullWidth={true}
         onClose={() => close()}
         maxWidth="md"
-        PaperProps={{ sx: { maxHeight: 'calc(100% - 1em)' } }}
+        slotProps={{ paper: { sx: { maxHeight: 'calc(100% - 1em)' } } }}
         container={() => containerRef?.current ?? null}
       >
         <DialogContent sx={{ p: '0', fontSize: '1rem' }}>

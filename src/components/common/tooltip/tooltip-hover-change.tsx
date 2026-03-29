@@ -22,7 +22,7 @@ export const TooltipHoverChange: FC<TooltipHoverChangeProps> = ({ title, hoverTo
   };
 
   return (
-    <Tooltip arrow title={tooltip ?? ''} PopperProps={{ disablePortal: !getContainer, container: getContainer }} {...props}>
+    <Tooltip arrow title={tooltip ?? ''} slotProps={{ popper: { disablePortal: !getContainer, container: getContainer } }} {...props}>
       <Box {...boxProps} onMouseOver={onEvent} onKeyUp={onEvent} onKeyDown={onEvent}>
         {children}
       </Box>

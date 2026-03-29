@@ -147,7 +147,7 @@ const ForwardedSearchInput: ForwardRefRenderFunction<SearchInputRef, SearchInput
           select
           variant="standard"
           SelectProps={{
-            MenuProps: { PaperProps: { sx: { left: '0 !important' } } },
+            MenuProps: { slotProps: { paper: { sx: { left: '0 !important' } } } },
             ...selectProps,
             onOpen: (event) => {
               setSelectOpen(true);
@@ -177,7 +177,7 @@ const ForwardedSearchInput: ForwardRefRenderFunction<SearchInputRef, SearchInput
         onFocus={() => setFilterFocus(true)}
         onBlur={() => setFilterFocus(false)}
       />
-      <Tooltip arrow title={i18n('cancel', 'common', 'buttons')} PopperProps={{ disablePortal: true }}>
+      <Tooltip arrow title={i18n('cancel', 'common', 'buttons')} slotProps={{ popper: { disablePortal: true } }}>
         <span>
           <Button
             key="cancel"

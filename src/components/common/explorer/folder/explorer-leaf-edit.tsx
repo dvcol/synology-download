@@ -102,7 +102,7 @@ export const ExplorerLeafEdit: FC<ExplorerLeafEditProps> = ({ folder, isEditing,
             />
           )
         : (
-            <Tooltip arrow title={folder?.name ?? ''} PopperProps={{ disablePortal: true, sx: { wordBreak: 'break-all' } }} enterDelay={1000}>
+            <Tooltip arrow title={folder?.name ?? ''} slotProps={{ popper: { disablePortal: true, sx: { wordBreak: 'break-all' } } }} enterDelay={1000}>
               <Typography
                 sx={{
                   flex: '1 1 auto',
@@ -119,7 +119,7 @@ export const ExplorerLeafEdit: FC<ExplorerLeafEditProps> = ({ folder, isEditing,
           )}
       <Stack direction="row" sx={{ mt: editing ? '0.25em' : 0 }}>
         {!editing && !disabled && hover && (
-          <Tooltip arrow title={i18n('edit', 'common', 'buttons')} PopperProps={{ disablePortal: true }}>
+          <Tooltip arrow title={i18n('edit', 'common', 'buttons')} slotProps={{ popper: { disablePortal: true } }}>
             <span>
               <Button
                 key="edit"
@@ -133,7 +133,7 @@ export const ExplorerLeafEdit: FC<ExplorerLeafEditProps> = ({ folder, isEditing,
           </Tooltip>
         )}
         {editing && !disabled && isDirty && (
-          <Tooltip arrow title={i18n('save', 'common', 'buttons')} PopperProps={{ disablePortal: true }}>
+          <Tooltip arrow title={i18n('save', 'common', 'buttons')} slotProps={{ popper: { disablePortal: true } }}>
             <span>
               <Button
                 key="save"
@@ -147,7 +147,7 @@ export const ExplorerLeafEdit: FC<ExplorerLeafEditProps> = ({ folder, isEditing,
           </Tooltip>
         )}
         {editing && !disabled && (
-          <Tooltip arrow title={i18n('cancel', 'common', 'buttons')} PopperProps={{ disablePortal: true }}>
+          <Tooltip arrow title={i18n('cancel', 'common', 'buttons')} slotProps={{ popper: { disablePortal: true } }}>
             <span>
               <Button
                 key="cancel"
