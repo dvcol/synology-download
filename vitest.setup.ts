@@ -67,6 +67,8 @@ globalThis.chrome = {
   action: {
     setBadgeText: vi.fn(),
     setBadgeBackgroundColor: vi.fn(),
+    setTitle: vi.fn(),
+    setIcon: vi.fn(),
   },
   scripting: {
     executeScript: vi.fn(),
@@ -75,6 +77,7 @@ globalThis.chrome = {
   sidePanel: {
     open: vi.fn(),
     setOptions: vi.fn(),
+    setPanelBehavior: vi.fn(async () => Promise.resolve()),
   },
   i18n: {
     getMessage: vi.fn((key: string) => key),
