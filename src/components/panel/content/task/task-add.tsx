@@ -236,7 +236,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
         }
       />
       <CardContent sx={{ display: 'flex', flexDirection: 'row', p: '0.5em 1em 0.75em', fontSize: '1em' }}>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} size="grow">
           <Grid size={6} sx={{ display: 'flex', flexDirection: 'column' }}>
             <CardHeader
               title={i18n('source_title')}
