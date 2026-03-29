@@ -3,7 +3,7 @@ import type { Log } from '../../models/settings.model';
 import type { StateSlice } from '../../models/store.model';
 
 import { of } from 'rxjs';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../../utils/webex.utils', () => ({
   localSet: vi.fn(() => of(undefined)),
@@ -53,6 +53,10 @@ const initialState: StateSlice = {
 } as StateSlice;
 
 describe('state.reducer', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe('setCountAndStats', () => {
     it('should set default text and title when no count is provided', async () => {
       await setCountAndStats();
