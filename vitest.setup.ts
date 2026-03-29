@@ -2,6 +2,21 @@ import { vi } from 'vitest';
 
 vi.mock('./src/store/store-proxy', () => ({ storeProxy: null }));
 
+// matchMedia mock for jsdom (used by MUI theme detection)
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: vi.fn().mockImplementation((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  })),
+});
+
 // eslint-disable-next-line ts/no-unsafe-assignment -- chrome mock for tests
 globalThis.chrome = {
   runtime: {
@@ -13,15 +28,15 @@ globalThis.chrome = {
     getURL: vi.fn((path: string) => `chrome-extension://test-extension-id/${path}`),
   },
   storage: {
-    local: { get: vi.fn(), set: vi.fn(), clear: vi.fn() },
-    sync: { get: vi.fn(), set: vi.fn(), clear: vi.fn() },
+    local: { get: vi.fn(async () => Promise.resolve({})), set: vi.fn(async () => Promise.resolve()), clear: vi.fn(async () => Promise.resolve()) },
+    sync: { get: vi.fn(async () => Promise.resolve({})), set: vi.fn(async () => Promise.resolve()), clear: vi.fn(async () => Promise.resolve()) },
     onChanged: { addListener: vi.fn(), removeListener: vi.fn() },
   },
   tabs: {
-    query: vi.fn(),
-    sendMessage: vi.fn(),
-    create: vi.fn(),
-    executeScript: vi.fn(),
+    query: vi.fn(async () => Promise.resolve([])),
+    sendMessage: vi.fn(async () => Promise.resolve()),
+    create: vi.fn(async () => Promise.resolve({})),
+    executeScript: vi.fn(async () => Promise.resolve([])),
   },
   notifications: {
     create: vi.fn(),
@@ -63,9 +78,17 @@ globalThis.chrome = {
   },
   i18n: {
     getMessage: vi.fn((key: string) => key),
-    getAcceptLanguages: vi.fn(async (cb?: (langs: string[]) => void) => {
+    getAcceptLanguages: vi.fn((cb?: (langs: string[]) => void) => {
       if (cb) cb(['en']);
-      return Promise.resolve(['en']);
     }),
   },
 } as unknown as typeof chrome;
+
+// Initialize QueryService with the test store so components using it don't crash
+// Uses dynamic import to avoid hoisting above the chrome mock
+beforeAll(async () => {
+  const { ServiceInstance } = await import('./src/models/settings.model');
+  const { QueryService } = await import('./src/services/query/query.service');
+  const { store } = await import('./src/store/store');
+  QueryService.init(store, ServiceInstance.Popup);
+});
