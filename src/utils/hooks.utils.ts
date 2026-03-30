@@ -1,3 +1,5 @@
+import type { Dispatch, SetStateAction } from 'react';
+
 import { use, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
@@ -35,4 +37,22 @@ export function useAnchor(scrollContainerId: string, offset = 0) {
     if (location.hash) scroll = containerRef?.current?.querySelector<HTMLDivElement>(location.hash)?.offsetTop;
     if (scroll !== undefined) containerRef?.current?.querySelector(`#${scrollContainerId}`)?.scrollTo({ top: scroll + offset });
   }, [containerRef, location, offset, scrollContainerId]);
+}
+
+/**
+ * React hook which sync an internal state with an external value, using a custom equality function to determine when to update the internal state.
+ */
+export function useSyncedState<T>(
+  externalValue: T,
+  isEqual: (a: T, b: T) => boolean = Object.is,
+): [T, Dispatch<SetStateAction<T>>] {
+  const [value, setValue] = useState(externalValue);
+  const [prev, setPrev] = useState(externalValue);
+
+  if (!isEqual(externalValue, prev)) {
+    setPrev(externalValue);
+    setValue(externalValue);
+  }
+
+  return [value, setValue];
 }

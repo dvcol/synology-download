@@ -28,10 +28,10 @@ export function usePullToRefresh(options: Options = {}) {
     setRefreshed(false);
   };
 
-  const timeout = useRef<NodeJS.Timeout>(undefined);
+  const timeoutRef = useRef<NodeJS.Timeout>(undefined);
   const resetTimeout = (speed = 100) => {
-    if (timeout.current) clearTimeout(timeout.current);
-    timeout.current = setTimeout(() => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
       clearOffset();
     }, speed);
   };

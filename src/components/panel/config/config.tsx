@@ -41,7 +41,7 @@ export const Config: FC<{
     },
   };
 
-  const [isAdmin, setAdmin] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
 
   const [error, setError] = useState<boolean | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
@@ -69,7 +69,7 @@ export const Config: FC<{
         .pipe<[DownloadStationConfig, DownloadStationInfo]>(loadingOperator)
         .subscribe(([_config, _info]) => {
           reset(_config);
-          setAdmin(!!_info?.is_manager);
+          setIsAdmin(!!_info?.is_manager);
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- only run on mount

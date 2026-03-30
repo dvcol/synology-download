@@ -51,12 +51,12 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
 
   const isLogged = useSelector<StoreState, boolean>(getLogged);
 
-  const callback = useRef<TaskDialogIntercept['callback']>(undefined);
+  const callbackRef = useRef<TaskDialogIntercept['callback']>(undefined);
   const [intercept, setIntercept] = useState<TaskDialogIntercept>();
   const _menus = menus?.filter(m => !!intercept || ![QuickMenuType.Download, QuickMenuType.RecentDownload].includes(m.type));
 
   const onIntercept = useCallback((response: ChromeResponse<InterceptResponse>) => {
-    const _callback = intercept?.callback ?? callback.current;
+    const _callback = intercept?.callback ?? callbackRef.current;
     if (_callback) {
       _callback(response);
       setIntercept(undefined);
@@ -150,7 +150,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
           const resolvedAnchor = event ? null : anchor ?? null;
 
           if (message?.payload) {
-            callback.current = sendResponse;
+            callbackRef.current = sendResponse;
             setIntercept({ callback: sendResponse });
             onEvent(message?.payload, resolvedAnchor, resolvedPosition);
           } else {

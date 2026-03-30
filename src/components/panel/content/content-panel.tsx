@@ -72,7 +72,7 @@ export function ContentPanel() {
   const logged = useSelector(getLogged);
   const downloadEnabled = useSelector(getSettingsDownloadsEnabled);
   const pullToRefreshEnabled = useSelector(getInterfacePullToRefresh);
-  const disabled = useRef<boolean>(!pullToRefreshEnabled || (!logged && !downloadEnabled));
+  const disabledRef = useRef<boolean>(!pullToRefreshEnabled || (!logged && !downloadEnabled));
 
   const onRefresh: OnRefreshCallback = () => {
     if (downloadEnabled) DownloadService.searchAll().subscribe(handleError('download', 'refresh'));
@@ -97,7 +97,7 @@ export function ContentPanel() {
     return contents.filter(content => content.status?.trim()?.toLowerCase()?.includes(filter?.trim()?.toLowerCase()));
   }, [contents, visible, filter, filterMode]);
 
-  const { containerRef, handlers, ...loaderProps } = usePullToRefresh({ onRefresh, disabled });
+  const { containerRef, handlers, ...loaderProps } = usePullToRefresh({ onRefresh, disabled: disabledRef });
   const searchInputRef = useRef<SearchInputRef>(null);
 
   useEffect(() => {
