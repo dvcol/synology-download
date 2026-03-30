@@ -8,7 +8,7 @@ import { portConnect } from '../../../utils/chrome/chrome-message.utils';
 import { getManifest } from '../../../utils/webex.utils';
 import { ContentAppWc } from '../components/content-app-wc';
 import { clickListener$ } from './anchor.handler';
-import { listenToScrapEvents } from './scraper.handler';
+import { listenToScrapeDownloadEvents, listenToScrapEvents } from './scraper.handler';
 
 const { name, version } = getManifest();
 const injection = new Date().toISOString();
@@ -54,12 +54,14 @@ function listenUntilDestroy(root: HTMLElement) {
   // Attach click listener
   const clicks = clickListener$.subscribe();
   const scraps = listenToScrapEvents().subscribe();
+  const scrapeDownloads = listenToScrapeDownloadEvents().subscribe();
 
   // remove it when destroying
   root.addEventListener(onDestroyEvent, () => {
     LoggerService.debug(`Unsubscribing to events from '${rootContainerId}'.`, { version, injection });
     clicks.unsubscribe();
     scraps.unsubscribe();
+    scrapeDownloads.unsubscribe();
     root.dispatchEvent(new CustomEvent(destroyedEvent));
   });
 }
