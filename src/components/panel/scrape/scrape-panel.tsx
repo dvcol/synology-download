@@ -2,6 +2,7 @@ import type { CardProps } from '@mui/material';
 import type { GridColDef, GridRowsProp } from '@mui/x-data-grid';
 import type { FC } from 'react';
 
+import type { ScrapeDownloadPayload, ScrapeDownloadResponse } from '../../../models/message.model';
 import type { ScrapedContent } from '../../../models/scraped-content.model';
 import type { RootSlice, ScrapedSlice } from '../../../models/store.model';
 import type { TaskForm } from '../../../models/task.model';
@@ -17,7 +18,6 @@ import { forkJoin } from 'rxjs';
 
 import { ColorLevel } from '../../../models/material-ui.model';
 import { ChromeMessageType } from '../../../models/message.model';
-import { DownloadService } from '../../../services/download/download.service';
 import { LoggerService } from '../../../services/logger/logger.service';
 import { clearScrapedContents } from '../../../store/actions/scraped.action';
 import { ContainerContext } from '../../../store/context/container.context';
@@ -45,7 +45,17 @@ const ScrapeFooter: FC<{
   const onDownload = () => {
     const selected = Array.from(apiRef.current.getSelectedRows()?.values());
     LoggerService.debug('Starting batch download of selected rows', selected);
-    forkJoin(selected?.map((row: { src?: string }) => DownloadService.download({ url: row.src! }))).subscribe({
+    forkJoin(selected?.map((row: { src?: string; name?: string }) =>
+      sendActiveTabMessage<ScrapeDownloadPayload, ScrapeDownloadResponse>({
+        type: ChromeMessageType.scrapeDownload,
+        payload: { url: row.src!, filename: row.name },
+      }),
+    )).subscribe({
+      next: (responses) => {
+        responses?.forEach((res) => {
+          if (!res?.success) LoggerService.error('Scrape download failed', res);
+        });
+      },
       error: (err: Error) => LoggerService.error('Failed to batch download', { err, selected }),
     });
   };
@@ -119,7 +129,8 @@ export const ScrapePanel: FC<ScrapePanelProps> = ({ cardProps }) => {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        minHeight: 'calc(100% - 1em)',
+        height: 'calc(100% - 1em)', // ← fixed height instead of minHeight
+        overflow: 'hidden', // ← prevent content from expanding the Card
       }}
     >
       <CardHeader
@@ -158,6 +169,8 @@ export const ScrapePanel: FC<ScrapePanelProps> = ({ cardProps }) => {
           display: 'flex',
           flexDirection: 'column',
           flex: '1 1 auto',
+          minHeight: 0, // ← allow flex child to shrink
+          overflow: 'hidden', // ← contain the DataGrid
           p: '0.75em !important',
           pb: '0.75em',
           fontSize: '1em',
@@ -169,6 +182,7 @@ export const ScrapePanel: FC<ScrapePanelProps> = ({ cardProps }) => {
           columns={columns}
           density={rows?.length > 10 ? 'compact' : 'standard'}
           slots={{ footer: () => <ScrapeFooter setOpen={setOpen} setForm={setForm} /> }}
+          sx={{ flex: '1 1 auto', minHeight: 0 }}
         />
       </CardContent>
       <TaskDialog

@@ -36,6 +36,18 @@ export enum ChromeMessageType {
   autoLogin = 'autoLogin',
   scrap = 'scrap',
   scraped = 'scraped',
+  scrapeDownload = 'scrapeDownload',
+}
+
+export interface ScrapeDownloadPayload {
+  url: string;
+  filename?: string;
+}
+
+export interface ScrapeDownloadResponse {
+  success: boolean;
+  url: string;
+  error?: string;
 }
 
 export interface ScrapedContentsPayload {
@@ -90,7 +102,8 @@ export type ChromeMessagePayload
     | QueryAutoLoginOptions
     | ScrapedContentsPayload
     | OpenPopupPayload
-    | OpenPanelPayload;
+    | OpenPanelPayload
+    | ScrapeDownloadPayload;
 
 /**
  * Message interface for communication between content & background
