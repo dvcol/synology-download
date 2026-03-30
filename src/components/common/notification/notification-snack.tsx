@@ -3,6 +3,8 @@ import type { CustomContentProps, SnackbarKey } from 'notistack';
 import type { JSX, Ref } from 'react';
 
 import type { SnackMessage } from '../../../models/notification.model';
+import type { ThemeMode } from '../../../models/settings.model';
+import type { StoreState } from '../../../store/store';
 
 import BugReportOutlinedIcon from '@mui/icons-material/BugReportOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
@@ -15,9 +17,12 @@ import { Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, Icon
 import { useSnackbar } from 'notistack';
 import * as React from 'react';
 import { use, useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import { ColorLevel, ColorLevelMap } from '../../../models/material-ui.model';
 import { NotificationLevel } from '../../../models/notification.model';
+import { getThemeMode } from '../../../store/selectors/settings.selector';
+import { preferDark } from '../../../themes/media-query';
 import { createTab } from '../../../utils/chrome/chrome.utils';
 import { ExpandedContext } from './expanded-context';
 
@@ -88,8 +93,21 @@ export function SnackNotificationCard({
     }
   }, [priority, success]);
 
+  const theme = useSelector<StoreState, ThemeMode>(getThemeMode);
+  const isDark = preferDark(theme);
+
   return (
-    <Card id={`${id}`} ref={ref} sx={{ width: '21.5em' }}>
+    <Card
+      id={`${id}`}
+      ref={ref}
+      sx={{
+        width: '21.5em',
+        borderRadius: '1em',
+        backgroundColor: isDark ? 'rgb(5 5 10 / 0.75)' : 'rgba(234 238 242 / 0.75)',
+        backdropFilter: 'blur(3px)',
+        boxShadow: 'rgba(0, 0, 0, 0.3) 2px 3px 4px 0px',
+      }}
+    >
       <CardHeader
         avatar={handleIcon({ sx: { fontSize: '1.125em' } })}
         action={(

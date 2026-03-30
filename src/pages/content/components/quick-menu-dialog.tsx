@@ -186,8 +186,9 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
         paper: {
           sx: {
             borderRadius: '1em',
-            backgroundColor: isDark ? 'rgb(5 5 10 / 0.8)' : 'rgba(234 238 242 / 0.8)',
-            backdropFilter: 'blur(2px)',
+            backgroundColor: isDark ? 'rgb(5 5 10 / 0.75)' : 'rgba(234 238 242 / 0.75)',
+            backdropFilter: 'blur(3px)',
+            boxShadow: 'rgba(0, 0, 0, 0.3) 2px 3px 4px 0px',
           },
         },
       }}
