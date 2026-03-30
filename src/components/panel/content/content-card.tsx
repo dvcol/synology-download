@@ -5,7 +5,6 @@ import type { ProgressBarProps } from '../../common/loader/progress-bar';
 
 import { Avatar, Grid, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 import { blue } from '@mui/material/colors';
-import * as React from 'react';
 
 import { parseMagnetLink } from '../../../utils/string.utils';
 import { ProgressBar } from '../../common/loader/progress-bar';
@@ -62,7 +61,7 @@ export const ContentCard: FC<ContentCardProps> = ({
           },
         }}
         secondary={(
-          <React.Fragment>
+          <>
             <Grid container>
               <Grid size={10}>
                 {description}
@@ -72,7 +71,7 @@ export const ContentCard: FC<ContentCardProps> = ({
               </Grid>
             </Grid>
             {!!progressBar && <ProgressBar {...progressBar} />}
-          </React.Fragment>
+          </>
         )}
       />
     </ListItem>

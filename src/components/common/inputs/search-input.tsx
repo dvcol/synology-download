@@ -1,9 +1,8 @@
 import type { SelectProps } from '@mui/material';
-import type { PropsWithChildren, Ref } from 'react';
+import type { CSSProperties, Dispatch, PropsWithChildren, Ref, RefObject, SetStateAction } from 'react';
 
 import ClearIcon from '@mui/icons-material/Clear';
 import { Button, Stack, TextField, Tooltip } from '@mui/material';
-import * as React from 'react';
 import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 
 import { KeyboardKeyCode, KeyboardKeyName } from '../../../utils/keyboard.utils';
@@ -18,13 +17,13 @@ export interface SearchInputRef {
   focus: () => Promise<void>;
   blur: () => Promise<void>;
   clear: () => void;
-  setFilter: React.Dispatch<React.SetStateAction<string>>;
-  inputRef: React.RefObject<HTMLInputElement | null>;
+  setFilter: Dispatch<SetStateAction<string>>;
+  inputRef: RefObject<HTMLInputElement | null>;
 }
 
 type SearchInputProps = PropsWithChildren<{
-  containerRef: React.RefObject<HTMLDivElement | null>;
-  containerGetter?: (ref: React.RefObject<HTMLDivElement | null>) => HTMLElement | null | undefined;
+  containerRef: RefObject<HTMLDivElement | null>;
+  containerGetter?: (ref: RefObject<HTMLDivElement | null>) => HTMLElement | null | undefined;
 
   filter: string;
   showFilter?: boolean;
@@ -33,11 +32,11 @@ type SearchInputProps = PropsWithChildren<{
 
   selectProps?: SelectProps;
 
-  onChangeFilter: React.Dispatch<React.SetStateAction<string>>;
-  onChangeVisible?: React.Dispatch<React.SetStateAction<boolean>>;
-  onSelectOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+  onChangeFilter: Dispatch<SetStateAction<string>>;
+  onChangeVisible?: Dispatch<SetStateAction<boolean>>;
+  onSelectOpen?: Dispatch<SetStateAction<boolean>>;
 
-  sx?: React.CSSProperties;
+  sx?: CSSProperties;
 }>;
 export function SearchInput({
   ref,

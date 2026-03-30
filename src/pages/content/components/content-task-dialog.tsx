@@ -7,8 +7,7 @@ import type { ChromeResponse } from '../../../utils/webex.utils';
 import type { TaskDialogIntercept } from '../service/dialog.service';
 
 import { zIndexMax } from '@dvcol/web-extension-utils';
-import * as React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Subject, takeUntil } from 'rxjs';
 
 import { TaskDialog } from '../../../components/panel/content/task/task-dialog';
@@ -21,10 +20,10 @@ import { i18n } from '../../../utils/webex.utils';
 import { taskDialog$ } from '../service/dialog.service';
 
 export const ContentTaskDialog: FC<{ container?: PortalProps['container'] }> = ({ container }) => {
-  const [form, setForm] = React.useState<TaskForm>();
-  const [open, setOpen] = React.useState<boolean>(false);
+  const [form, setForm] = useState<TaskForm>();
+  const [open, setOpen] = useState<boolean>(false);
 
-  const [intercept, setIntercept] = React.useState<TaskDialogIntercept>();
+  const [intercept, setIntercept] = useState<TaskDialogIntercept>();
   const onIntercept = (response: ChromeResponse<InterceptResponse>) => {
     if (intercept?.callback) {
       intercept.callback(response);

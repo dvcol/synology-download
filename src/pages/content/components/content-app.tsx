@@ -7,8 +7,7 @@ import type { StoreOrProxy } from '../../../models/store.model';
 
 import { CacheProvider } from '@emotion/react';
 import { ThemeProvider } from '@mui/material';
-import * as React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { StrictMode, useEffect, useRef, useState } from 'react';
 import { Provider } from 'react-redux';
 
 import { ContainerContextProvider } from '../../../components/common/context/container-content-provider';
@@ -42,7 +41,7 @@ export function ContentApp({
   const containerRef = useRef(container);
 
   return (
-    <React.StrictMode>
+    <StrictMode>
       <Provider store={_store as Store}>
         <ContainerContextProvider instance={instance} containerRef={containerRef}>
           <CacheProvider value={cache}>
@@ -54,6 +53,6 @@ export function ContentApp({
           </CacheProvider>
         </ContainerContextProvider>
       </Provider>
-    </React.StrictMode>
+    </StrictMode>
   );
 }

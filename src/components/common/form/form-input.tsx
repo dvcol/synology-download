@@ -1,10 +1,10 @@
 import type { SvgIconProps, TextFieldProps } from '@mui/material';
+import type { PropsWithChildren } from 'react';
 import type { ControllerProps, FieldPath, FieldValues } from 'react-hook-form';
 
 import type { FormInputFileProps } from './form-input-file';
 
 import { Grid, TextField } from '@mui/material';
-import * as React from 'react';
 import { use, useState } from 'react';
 import { Controller } from 'react-hook-form';
 
@@ -18,7 +18,7 @@ export function FormInput<TFieldValues extends FieldValues = FieldValues, TName 
   iconProps,
   children,
   inputFileProps,
-}: React.PropsWithChildren<{
+}: PropsWithChildren<{
   controllerProps: Omit<ControllerProps<TFieldValues, TName>, 'render' | 'control'> & { control?: unknown };
   textFieldProps?: TextFieldProps;
   iconProps?: SvgIconProps;

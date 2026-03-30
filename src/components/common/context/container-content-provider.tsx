@@ -2,7 +2,6 @@ import type { FC, PropsWithChildren } from 'react';
 
 import type { ContainerContextInstance } from '../../../models/context.model';
 
-import * as React from 'react';
 import { useMemo } from 'react';
 
 import { ContainerContext } from '../../../store/context/container.context';

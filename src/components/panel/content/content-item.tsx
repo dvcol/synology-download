@@ -1,11 +1,10 @@
-import type { Dispatch, JSX, Ref, SetStateAction } from 'react';
+import type { Dispatch, JSX, Ref, SetStateAction, SyntheticEvent } from 'react';
 
 import type { GlobalSettings } from '../../../models/settings.model';
 import type { StoreState } from '../../../store/store';
 import type { ProgressBackgroundProps } from '../../common/loader/progress-background';
 
 import { Accordion, AccordionDetails, AccordionSummary, ButtonGroup } from '@mui/material';
-import * as React from 'react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -41,7 +40,7 @@ export function ContentItem({
 }: ContentItemProps) {
   const [hover, setHover] = useState(false);
 
-  const onChange = (_: React.SyntheticEvent, _expanded: boolean) => {
+  const onChange = (_: SyntheticEvent, _expanded: boolean) => {
     setExpanded(_expanded ? index : false);
     onToggle(_expanded);
   };

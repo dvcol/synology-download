@@ -1,4 +1,4 @@
-import type { FC, Ref } from 'react';
+import type { FC, MouseEvent, Ref } from 'react';
 import type { Observable } from 'rxjs';
 
 import type { GlobalSettings } from '../../../../models/settings.model';
@@ -13,7 +13,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReplayIcon from '@mui/icons-material/Replay';
-import * as React from 'react';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { finalize } from 'rxjs';
@@ -36,7 +35,7 @@ import TaskDetail from './task-detail';
 
 const ButtonStyle = { display: 'flex', flex: '1 1 auto', minHeight: '2.5rem' };
 
-type TaskItemsOnClick = <T>(button: string, request: Observable<T>, $event?: React.MouseEvent) => void;
+type TaskItemsOnClick = <T>(button: string, request: Observable<T>, $event?: MouseEvent) => void;
 
 interface TaskItemsButtonProp { task: Task; isDisabled: boolean; loadingIcon: Record<string, boolean>; onClick: TaskItemsOnClick; i18n: typeof i18n }
 
@@ -121,7 +120,7 @@ export function TaskItem({
   // Loading observable for debounce
   const [, next] = useDebounceObservable<Record<string, boolean>>(setLoadingIcon);
 
-  const onClick = <T,>(button: string, request: Observable<T>, $event?: React.MouseEvent): void => {
+  const onClick = <T,>(button: string, request: Observable<T>, $event?: MouseEvent): void => {
     request
       .pipe(
         before(() => {

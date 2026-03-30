@@ -9,8 +9,7 @@ import type { StoreOrProxy } from '../models/store.model';
 
 import { CacheProvider } from '@emotion/react';
 import { Box, CssBaseline, ThemeProvider } from '@mui/material';
-import * as React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { StrictMode, useEffect, useRef, useState } from 'react';
 import { Provider } from 'react-redux';
 import { HashRouter as Router } from 'react-router-dom';
 
@@ -63,8 +62,8 @@ export const App: FC<AppProps> = ({ store, redirect, cache, routerProps, instanc
   if (cache) Main = <CacheProvider value={cache}>{Main}</CacheProvider>;
 
   return (
-    <React.StrictMode>
+    <StrictMode>
       <Provider store={store as Store}>{Main}</Provider>
-    </React.StrictMode>
+    </StrictMode>
   );
 };

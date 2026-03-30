@@ -1,6 +1,5 @@
 import InfoIcon from '@mui/icons-material/Info';
 import { Box, CircularProgress, Typography } from '@mui/material';
-import * as React from 'react';
 
 import { useI18n } from '../../../../utils/webex.utils';
 
@@ -19,7 +18,7 @@ export function ExplorerLoading({
 }) {
   const i18n = useI18n('common', 'explorer', 'explorer_loading', text);
   return (
-    <React.Fragment>
+    <>
       {loading && (
         <Typography sx={{ m: '0.25em 0', fontSize: '0.875em', minWidth: flatten ? undefined : 'max-content' }}>
           <Box component="span" sx={{ m: '0 0.75em 0 0.75em' }}>
@@ -43,6 +42,6 @@ export function ExplorerLoading({
           <span>{i18n('empty')}</span>
         </Typography>
       )}
-    </React.Fragment>
+    </>
   );
 }

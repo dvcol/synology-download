@@ -9,7 +9,6 @@ import type { ContentItemAccordionProps } from './content-item';
 import type { TaskItemProps } from './task/task-item';
 
 import { styled } from '@mui/material';
-import * as React from 'react';
 import { useRef } from 'react';
 import { CSSTransition } from 'react-transition-group';
 

@@ -1,9 +1,10 @@
+import type { ChangeEvent } from 'react';
+
 import type { RootSlice, SettingsSlice } from '../../../../models/store.model';
 
 import DownloadIcon from '@mui/icons-material/Download';
 import PublishIcon from '@mui/icons-material/Publish';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, InputAdornment, Stack, Typography } from '@mui/material';
-import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ColorLevel, ColorLevelMap } from '../../../../models/material-ui.model';
@@ -24,7 +25,7 @@ export function SettingsExport() {
 
   const exportSnapshot = () => downloadJson(store, `synology_download_settings_snapshot_${new Date().toISOString()}.json`);
 
-  const onChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 

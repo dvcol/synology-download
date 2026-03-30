@@ -4,7 +4,6 @@ import type { FC } from 'react';
 import { zIndexMax } from '@dvcol/web-extension-utils';
 import { Slide } from '@mui/material';
 import { SnackbarProvider } from 'notistack';
-import * as React from 'react';
 import { useMemo, useState } from 'react';
 
 import { ExpandedContext } from './expanded-context';

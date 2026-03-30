@@ -7,7 +7,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import FolderIcon from '@mui/icons-material/Folder';
 import { Collapse, ListItemText, MenuItem } from '@mui/material';
-import * as React from 'react';
+import { useState } from 'react';
 
 import { MuiIcon } from '../../../components/common/material/material-icon';
 import { MaterialIcon } from '../../../models/material-ui.model';
@@ -39,7 +39,7 @@ interface QuickMenuRecentProps {
   onToggle?: ($event: MouseEvent, open: boolean) => void;
 }
 export const QuickMenuRecent: FC<QuickMenuRecentProps> = ({ isDark, menu, logged, folders, destinations, onClick, onToggle }) => {
-  const [expand, setExpand] = React.useState(false);
+  const [expand, setExpand] = useState(false);
 
   const disabled = isDisabled(menu.type, logged, !folders?.length, !destinations?.length);
 
