@@ -47,7 +47,7 @@ export function ContentApp({
         <ContainerContextProvider instance={instance} containerRef={containerRef}>
           <CacheProvider value={cache}>
             <ThemeProvider theme={theme}>
-              <NotificationStack maxSnack={5} />
+              <NotificationStack maxSnack={5} container={container} />
               <QuickMenuDialog container={container} />
               <ContentTaskDialog container={container} />
             </ThemeProvider>

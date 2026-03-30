@@ -1,19 +1,17 @@
 import type { SnackbarKey, SnackbarProviderProps } from 'notistack';
 import type { FC } from 'react';
 
-import type { SnackMessage } from '../../../models/notification.model';
-
 import { zIndexMax } from '@dvcol/web-extension-utils';
 import { Slide } from '@mui/material';
 import { SnackbarProvider } from 'notistack';
 import * as React from 'react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
+import { ExpandedContext } from './expanded-context';
 import { Notifier } from './notification-notifier';
-import { SnackNotificationCard } from './notification-snack';
+import { SnackNotificationContent } from './notification-snack';
 
-// TODO move to custom snack for next notistack version, see https://github.com/iamhosseindhv/notistack/issues/242
-export const NotificationStack: FC<Pick<SnackbarProviderProps, 'maxSnack'>> = ({ maxSnack }) => {
+export const NotificationStack: FC<Pick<SnackbarProviderProps, 'maxSnack'> & { container?: HTMLElement }> = ({ maxSnack, container = document.body }) => {
   const [stack, setStack] = useState<Record<SnackbarKey, boolean>>({});
 
   const handleEntered = (_node: HTMLElement, _isAppearing: boolean, key: SnackbarKey) =>
@@ -29,18 +27,29 @@ export const NotificationStack: FC<Pick<SnackbarProviderProps, 'maxSnack'>> = ({
       return rest;
     });
 
+  const components = useMemo(() => ({
+    default: SnackNotificationContent,
+    info: SnackNotificationContent,
+    success: SnackNotificationContent,
+    warning: SnackNotificationContent,
+    error: SnackNotificationContent,
+  }), []);
+
   return (
-    <>
-      <style>{`.SnackbarContainer-root {z-index: ${zIndexMax} !important;}`}</style>
+    <ExpandedContext value={stack}>
+      <style>
+        {`.notistack-SnackbarContainer { z-index: ${zIndexMax} !important; }`}
+      </style>
       <SnackbarProvider
+        domRoot={container}
         maxSnack={maxSnack}
-        content={(key, message) => <SnackNotificationCard id={key} notification={message as unknown as SnackMessage} expanded={stack[key]} />}
+        Components={components}
         onExited={handleExited}
         onEntered={handleEntered}
-        TransitionComponent={Slide as React.ComponentType}
+        TransitionComponent={Slide}
       >
-        <Notifier />
+        <Notifier container={container} />
       </SnackbarProvider>
-    </>
+    </ExpandedContext>
   );
 };

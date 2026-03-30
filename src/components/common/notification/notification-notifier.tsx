@@ -6,26 +6,34 @@ import { useEffect } from 'react';
 import { NotificationService } from '../../../services/notification/notification.service';
 
 const NotifierId = 'synology-download-notification-stack';
+const NotifierStyles = '_goober';
 
-const hasNotifierIdInstance = (id = NotifierId) => document.querySelector(`#${id}`);
-function createIdentifier(id = NotifierId) {
+function hasNotifierIdInstance(root: ParentNode, id = NotifierId) {
+  return root.querySelector(`#${id}`);
+};
+function createIdentifier(root: ParentNode, id = NotifierId) {
+  const styles = document.querySelector(`#${NotifierStyles}`);
+  if (styles)root.appendChild(styles);
+  else console.warn('Notifier styles not found, notifications may not be styled correctly');
   const notifierDivId = document.createElement('div');
   notifierDivId.id = id;
   notifierDivId.hidden = true;
   notifierDivId.ariaHidden = 'true';
-  document.body.appendChild(notifierDivId);
+  root.appendChild(notifierDivId);
   return notifierDivId;
 }
 
-export function Notifier() {
+export function Notifier({ container = document.body }: { container?: HTMLElement }) {
   const { enqueueSnackbar } = useSnackbar();
   useEffect(() => {
     // disable notification stack if already injected in the page
-    if (hasNotifierIdInstance()) return;
+    if (hasNotifierIdInstance(container)) return;
     // else create identifier
-    createIdentifier();
+    createIdentifier(container);
     // and subscribe
-    const sub = NotificationService.snackNotifications$.subscribe(({ message, options }) => enqueueSnackbar(message as unknown as SnackbarMessage, options));
+    const sub = NotificationService.snackNotifications$.subscribe(
+      ({ message, options }) => enqueueSnackbar({ ...options, message: message as unknown as SnackbarMessage }),
+    );
     return () => sub.unsubscribe();
     // eslint-disable-next-line react-hooks/exhaustive-deps -- want to run only once for the lifetime of the app
   }, []);
