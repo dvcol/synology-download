@@ -12,8 +12,7 @@ import type { TaskDialogIntercept } from '../service/dialog.service';
 import { zIndexMax } from '@dvcol/web-extension-utils';
 import PowerOffIcon from '@mui/icons-material/PowerOff';
 import { ListItemText, Menu, MenuItem } from '@mui/material';
-import * as React from 'react';
-import { useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Subscription, withLatestFrom } from 'rxjs';
 
@@ -34,8 +33,8 @@ import { QuickMenuRecent } from './quick-menu-recent';
 
 export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ container }) => {
   const i18n = useI18n('content', 'quick_menu', 'dialog');
-  const [_anchor, setAnchor] = React.useState<PopoverProps['anchorEl']>();
-  const [_position, setPosition] = React.useState<PopoverProps['anchorPosition'] | undefined>();
+  const [_anchor, setAnchor] = useState<PopoverProps['anchorEl']>();
+  const [_position, setPosition] = useState<PopoverProps['anchorPosition'] | undefined>();
 
   const open = Boolean(_position || _anchor);
 
@@ -47,13 +46,13 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
     });
   };
 
-  const [_form, setForm] = React.useState<TaskForm>();
+  const [_form, setForm] = useState<TaskForm>();
   const menus = useSelector<StoreState, QuickMenu[]>(getQuick);
 
   const isLogged = useSelector<StoreState, boolean>(getLogged);
 
   const callback = useRef<TaskDialogIntercept['callback']>(undefined);
-  const [intercept, setIntercept] = React.useState<TaskDialogIntercept>();
+  const [intercept, setIntercept] = useState<TaskDialogIntercept>();
   const _menus = menus?.filter(m => !!intercept || ![QuickMenuType.Download, QuickMenuType.RecentDownload].includes(m.type));
 
   const onIntercept = useCallback((response: ChromeResponse<InterceptResponse>) => {

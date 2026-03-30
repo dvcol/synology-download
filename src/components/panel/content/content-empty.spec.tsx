@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { renderWithProviders } from '../../../test/render-helper';
 import { ContentEmpty } from './content-empty';
 

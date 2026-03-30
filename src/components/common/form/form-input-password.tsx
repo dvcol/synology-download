@@ -3,7 +3,6 @@ import type { FC, PropsWithChildren } from 'react';
 
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { IconButton, InputAdornment } from '@mui/material';
-import * as React from 'react';
 import { useEffect, useState } from 'react';
 
 import { useI18n } from '../../../utils/webex.utils';

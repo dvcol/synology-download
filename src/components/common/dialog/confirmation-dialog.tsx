@@ -4,7 +4,6 @@ import type { JSX } from 'react';
 import type { TooltipHoverChangeProps } from '../tooltip/tooltip-hover-change';
 
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
-import * as React from 'react';
 import { use } from 'react';
 
 import { ContainerContext } from '../../../store/context/container.context';

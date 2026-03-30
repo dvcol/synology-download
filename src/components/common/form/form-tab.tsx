@@ -1,9 +1,10 @@
+import type { PropsWithChildren } from 'react';
 import type { UseFormReturn } from 'react-hook-form';
 
 import type { ContentTab, Tab, TabStatus } from '../../../models/tab.model';
 
 import { Button, Card, CardHeader, Collapse, Grid, MenuItem } from '@mui/material';
-import * as React from 'react';
+import { useState } from 'react';
 
 import { DownloadStatus } from '../../../models/download.model';
 import { ColorLevel, getColorFromLevel, getLevelFromColor } from '../../../models/material-ui.model';
@@ -20,7 +21,7 @@ export function FormTab({
   useFormProps: { control, getValues, setValue },
   tab: { template, status, color },
   disabled,
-}: React.PropsWithChildren<{
+}: PropsWithChildren<{
   useFormProps: Pick<UseFormReturn<Tab>, 'control' | 'getValues' | 'setValue'>;
   tab: Tab;
   disabled?: boolean;
@@ -29,8 +30,8 @@ export function FormTab({
   const getTab = (type?: TabTemplate | string): ContentTab | undefined => templateTabs.find(t => t.name === type);
   const getTemplateStatuses = (tab?: Tab): TabStatus[] => (tab?.status?.length ? tab?.status : status) ?? [];
 
-  const [templateStatuses, setTemplateStatuses] = React.useState<TabStatus[]>(() => getTemplateStatuses(getTab(template)));
-  const [badgeColor, setBadgeColor] = React.useState<Tab['color']>(color);
+  const [templateStatuses, setTemplateStatuses] = useState<TabStatus[]>(() => getTemplateStatuses(getTab(template)));
+  const [badgeColor, setBadgeColor] = useState<Tab['color']>(color);
 
   const onTemplateChange = (type: string) => {
     const tab = getTab(type);
@@ -48,7 +49,7 @@ export function FormTab({
   };
 
   return (
-    <React.Fragment>
+    <>
       <CardHeader
         title={i18n('base_template_title')}
         subheader={i18n('base_template_subheader')}
@@ -181,6 +182,6 @@ export function FormTab({
           />
         </Card>
       </Collapse>
-    </React.Fragment>
+    </>
   );
 }

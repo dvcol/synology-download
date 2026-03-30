@@ -15,7 +15,6 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, IconButton, styled, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import * as React from 'react';
 import { use, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -161,7 +160,7 @@ export function SnackNotificationCard({
   );
 }
 
-export function SnackNotificationContent(props: CustomContentProps & { ref?: React.Ref<HTMLDivElement> }) {
+export function SnackNotificationContent(props: CustomContentProps & { ref?: Ref<HTMLDivElement> }) {
   const stack = use(ExpandedContext);
   return (
     <SnackNotificationCard

@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "composite": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.vite.tsbuildinfo",
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "bundler",

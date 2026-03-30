@@ -4,7 +4,7 @@ import type { FC, SyntheticEvent } from 'react';
 import type { SettingsPanelTab } from '../../../models/settings.model';
 
 import { Paper, Tab, Tabs } from '@mui/material';
-import * as React from 'react';
+import { useState } from 'react';
 
 import { AppRoute } from '../../../models/routes.model';
 import { SettingHeader } from '../../../models/settings.model';
@@ -15,7 +15,7 @@ interface SettingsNavbarProps { tabs: SettingsPanelTab[] }
 export const SettingsNavbar: FC<SettingsNavbarProps> = ({ tabs }) => {
   const i18n = useI18n('panel', 'settings');
 
-  const [tab, setTab] = React.useState<string>(SettingHeader.connection);
+  const [tab, setTab] = useState<string>(SettingHeader.connection);
   const handleChange = (event: SyntheticEvent, newValue: SettingHeader) => setTab(newValue);
 
   return (

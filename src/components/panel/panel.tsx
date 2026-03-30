@@ -1,10 +1,9 @@
-import type { FC } from 'react';
+import type { FC, ReactNode } from 'react';
 import type { PathRouteProps } from 'react-router-dom';
 
 import type { TaskForm } from '../../models/task.model';
 
 import { Container } from '@mui/material';
-import * as React from 'react';
 import { lazy, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
@@ -21,7 +20,7 @@ const About = lazy(async () => import(/* webpackChunkName: "About" */ './about')
 const Settings = lazy(async () => import(/* webpackChunkName: "Settings" */ './settings/settings'));
 
 type RouteFragment<T extends Record<string, unknown> = Record<string, unknown>> = PathRouteProps & {
-  render?: (props: T) => React.ReactNode;
+  render?: (props: T) => ReactNode;
 };
 const routes: RouteFragment[] = [
   { path: `${AppRoute.All}`, element: <ContentPanel /> },

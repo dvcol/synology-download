@@ -1,5 +1,4 @@
 /* eslint-disable ts/no-unsafe-assignment */
-import * as React from 'react';
 
 import { renderWithProviders } from '../../../test/render-helper';
 import { ContentItemInstance } from './content-item-instance';

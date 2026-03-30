@@ -5,7 +5,6 @@ import type { OnRefreshCallback } from '../../utils/use-pull-to-refresh';
 import type { ConfirmationState, TaskEditState } from './task/task-detail';
 
 import { Container, MenuItem } from '@mui/material';
-import * as React from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { TransitionGroup } from 'react-transition-group';

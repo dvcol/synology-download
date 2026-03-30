@@ -6,8 +6,7 @@ import type { TaskForm } from '../../../../models/task.model';
 import type { TaskAddProps } from './task-add';
 
 import { Dialog, DialogContent } from '@mui/material';
-import * as React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { TaskAdd } from './task-add';
 
@@ -21,7 +20,7 @@ export const TaskDialog: FC<{
   onCancel?: (form?: TaskForm) => void;
   onSubmit?: (form?: TaskForm) => void;
 }> = ({ container, dialogProps, taskAddProps, taskForm, open, onClose, onCancel, onSubmit }) => {
-  const [form, setForm] = React.useState<TaskForm>(taskForm ?? {});
+  const [form, setForm] = useState<TaskForm>(taskForm ?? {});
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect -- TODO investigate if this can be avoided

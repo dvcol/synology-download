@@ -1,4 +1,4 @@
-import type { JSX, Ref } from 'react';
+import type { JSX, MouseEvent, Ref } from 'react';
 
 import type { Download } from '../../../../models/download.model';
 import type { GlobalSettings } from '../../../../models/settings.model';
@@ -15,7 +15,6 @@ import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import ReplayIcon from '@mui/icons-material/Replay';
 import { Dialog, DialogContent } from '@mui/material';
-import * as React from 'react';
 import { use, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { forkJoin } from 'rxjs';
@@ -49,8 +48,8 @@ export function DownloadItem({ download, hideStatus, accordion, className, ref }
   const [hover, setHover] = useState(false);
 
   // Dialog
-  const [dialog, toggleDialog] = React.useState(false);
-  const [form] = React.useState<TaskForm>({ uri: download.finalUrl, source: download.referrer });
+  const [dialog, toggleDialog] = useState(false);
+  const [form] = useState<TaskForm>({ uri: download.finalUrl, source: download.referrer });
   const { erase, resume, modal } = useSelector(getSettingsDownloadsTransfer);
   const { containerRef } = use(ContainerContext);
 
@@ -94,7 +93,7 @@ export function DownloadItem({ download, hideStatus, accordion, className, ref }
     },
   });
 
-  const handleClick = ($event: React.MouseEvent, key: DownloadItemButton['key'] | string) => {
+  const handleClick = ($event: MouseEvent, key: DownloadItemButton['key'] | string) => {
     $event.stopPropagation();
     switch (key) {
       case 'erase':
