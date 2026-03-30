@@ -108,11 +108,11 @@ export const SettingsCredentials: FC = () => {
       }),
     ), [next]);
 
-  const [hasInfo, setInfo] = useState<InfoResponse>();
+  const [hasInfo, setHasInfo] = useState<InfoResponse>();
   const queryInfo = useCallback(async (baseUrl?: string) =>
     lastValueFrom(QueryService.info(baseUrl, true).pipe(loadingOperator))
       .then((res: InfoResponse) => {
-        setInfo(res);
+        setHasInfo(res);
         const _version = res[CommonAPI.Auth]?.maxVersion ?? defaultConnection.authVersion;
         setValue('authVersion', _version);
         if (_version < 6) setValue('enable_device_token', false);

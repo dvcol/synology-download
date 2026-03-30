@@ -58,7 +58,7 @@
     "test:unit": "vitest run --coverage --mode testing",
     "test:watch": "vitest --mode testing",
     "lint:quiet": "eslint src --quiet",
-    "lint": "eslint src",
+    "lint": "eslint src --max-warnings 0",
     "lint:fix": "eslint src --fix",
     "lint:type": "tsc --build tsconfig.app.json",
     "style": "stylelint 'src/**/*.{css,scss,less,html}'",

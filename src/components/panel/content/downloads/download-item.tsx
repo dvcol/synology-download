@@ -48,13 +48,13 @@ export function DownloadItem({ download, hideStatus, accordion, className, ref }
   const [hover, setHover] = useState(false);
 
   // Dialog
-  const [dialog, toggleDialog] = useState(false);
+  const [dialog, setDialog] = useState(false);
   const [form] = useState<TaskForm>({ uri: download.finalUrl, source: download.referrer });
   const { erase, resume, modal } = useSelector(getSettingsDownloadsTransfer);
   const { containerRef } = use(ContainerContext);
 
   const close = (_erase = false) => {
-    toggleDialog(false);
+    setDialog(false);
     if (_erase) DownloadService.erase({ id: download.id }).subscribe();
   };
 
@@ -118,7 +118,7 @@ export function DownloadItem({ download, hideStatus, accordion, className, ref }
         return DownloadService.show(download.id).subscribe(errorHandler(key));
       case 'transfer':
         if ($event.shiftKey || !modal) return InterceptService.transfer(download, { erase, resume }).subscribe(errorHandler(key));
-        return toggleDialog(true);
+        return setDialog(true);
       default:
         LoggerService.warn(`Key '${key}' is unknown`);
     }

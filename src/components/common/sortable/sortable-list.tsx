@@ -6,9 +6,9 @@ import { closestCenter, DndContext, PointerSensor, useSensor, useSensors } from 
 import { restrictToParentElement, restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import * as React from 'react';
-import { useEffect, useState } from 'react';
 import { TransitionGroup } from 'react-transition-group';
 
+import { useSyncedState } from '../../../utils/hooks.utils';
 import { SortableListItemTransition } from './sortable-list-transition';
 
 interface SortableValue { id: UniqueIdentifier; [key: string]: any }
@@ -24,10 +24,7 @@ interface SortableListProps<T extends SortableValue> {
 }
 
 export function SortableList<T extends SortableValue>({ values, render, context, box, onClick, onChange, disabled }: SortableListProps<T>) {
-  const [_values, _setValues] = useState(values);
-
-  // eslint-disable-next-line react-hooks-extra/no-direct-set-state-in-use-effect -- TODO investigate if this can be avoided
-  useEffect(() => _setValues(values), [values]);
+  const [innerValues, setInnerValues] = useSyncedState(values);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -37,7 +34,7 @@ export function SortableList<T extends SortableValue>({ values, render, context,
 
   const handleDragEnd: DndContextProps['onDragEnd'] = ({ active, over }) => {
     if (over && active.id !== over.id) {
-      _setValues((items) => {
+      setInnerValues((items) => {
         const oldIndex = items.findIndex(_item => _item.id === active.id);
         const newIndex = items.findIndex(_item => _item.id === over.id);
 
@@ -56,9 +53,9 @@ export function SortableList<T extends SortableValue>({ values, render, context,
       modifiers={[restrictToVerticalAxis, restrictToParentElement]}
       {...context}
     >
-      <SortableContext items={_values} strategy={verticalListSortingStrategy} disabled={disabled}>
+      <SortableContext items={innerValues} strategy={verticalListSortingStrategy} disabled={disabled}>
         <TransitionGroup component={null} enter exit>
-          {_values.map((value, index) => (
+          {innerValues.map((value, index) => (
             <SortableListItemTransition
               key={value.id}
               item={{

@@ -326,7 +326,7 @@ export function NavbarMenu({ menuIcon }: NavbarMenuProps) {
         {buttons
           ?.map(({ divider, hide, ..._button }) => {
             const elements: JSX.Element[] = [];
-            if (!hide) elements.push(<NavbarMenuIcon {..._button} key={`${_button.type}-icon`} />);
+            if (!hide) elements.push(<NavbarMenuIcon key={`${_button.type}-icon`} {..._button} />);
             if (divider) elements.push(<Divider key={`${_button.type}-divider`} />);
             return elements;
           })
