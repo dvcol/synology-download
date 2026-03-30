@@ -1,5 +1,5 @@
 import type { IconButtonProps, SvgIconProps, Theme } from '@mui/material';
-import type { SnackbarKey } from 'notistack';
+import type { CustomContentProps, SnackbarKey } from 'notistack';
 import type { JSX, Ref } from 'react';
 
 import type { SnackMessage } from '../../../models/notification.model';
@@ -14,11 +14,12 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import { Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, IconButton, styled, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import * as React from 'react';
-import { useCallback, useEffect, useState } from 'react';
+import { use, useCallback, useEffect, useState } from 'react';
 
 import { ColorLevel, ColorLevelMap } from '../../../models/material-ui.model';
 import { NotificationLevel } from '../../../models/notification.model';
 import { createTab } from '../../../utils/chrome/chrome.utils';
+import { ExpandedContext } from './expanded-context';
 
 const ExpandMore = styled(({ expand, ...other }: IconButtonProps & { expand: boolean }) => <IconButton {...other} />)<{
   theme?: Theme;
@@ -139,5 +140,17 @@ export function SnackNotificationCard({
         </Collapse>
       )}
     </Card>
+  );
+}
+
+export function SnackNotificationContent(props: CustomContentProps & { ref?: React.Ref<HTMLDivElement> }) {
+  const stack = use(ExpandedContext);
+  return (
+    <SnackNotificationCard
+      ref={props.ref}
+      id={props.id}
+      notification={props.message as unknown as SnackMessage}
+      expanded={stack[props.id]}
+    />
   );
 }
