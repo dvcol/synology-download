@@ -1,0 +1,131 @@
+name: ☁️ Publish - npm Publish and Github Release
+
+on:
+  workflow_call:
+    inputs:
+      commit-hash:
+        description: Commit to checkout
+        required: false
+        type: string
+      tag-name:
+        description: Tag name
+        required: false
+        type: string
+      skip-npm:
+        description: Skip npm publish
+        required: false
+        type: boolean
+
+# Permission to generate an OIDC token for npm trusted publishing
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish-npm:
+    name: ☁️ Publish npm
+    runs-on: ubuntu-latest
+    environment:
+      name: npm
+      url: https://www.npmjs.com/package/@dvcol/synology-extension
+
+    steps:
+      - name: ⛙ Checkout branch ${{ github.ref }}
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.commit-hash || 'main' }}
+          fetch-depth: 0
+
+      - name: 🚧 Build
+        uses: ./.github/actions/build
+        with:
+          mode: web
+
+      - name: ☁️ Publish to npm
+        if: ${{ inputs.skip-npm != true }}
+        run: |
+          # =================  ☁️ Publish =================
+          # Check status
+          git status
+          git diff --color -U0 | cat
+
+          # Ensure npm 11.5.1 or later for trusted publishing
+          npm install -g npm@latest
+
+          # Publish
+          pnpm publish --provenance --no-git-checks
+
+      - name: 💾 Caching build artefacts
+        uses: actions/cache/save@v5
+        with:
+          path: dist
+          key: ${{ github.ref }}-${{ github.run_id }}-build
+
+  publish-store:
+    name: 🚀 Publish extension
+    runs-on: ubuntu-latest
+    environment:
+      name: chrome
+      url: https://chrome.google.com/webstore/devconsole/
+    if: ${{ github.event.workflow_run.conclusion != 'failure' }}
+
+    steps:
+      - name: ⛙ Checkout branch ${{ github.ref }}
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.commit-hash || 'main' }}
+          fetch-depth: 0
+
+      - name: 🚧 Build
+        uses: ./.github/actions/build
+        with:
+          mode: extension
+
+      - name: 🗃️ Zip build folder
+        run: |
+          # =================  🗃️ Zipping build folder  =================
+
+          # Zipping build folder for artifact upload
+          cd build
+          zip -r synology-download.zip *
+
+          # Check zip created
+          echo "Zip created in 'build/'"
+          ls -l synology-download.zip
+          cd ..
+
+      - name: 📝 Generate Release changelog
+        run: |
+          # =================  📝 Generate Release changelog  =================
+
+          pnpm run release:changelog
+
+      - name: 🏷️ Fetch latest tag
+        if: ${{ inputs.tag-name == '' }}
+        id: latest-tag
+        run: |
+          # =================  🏷️ Fetch tags  =================
+
+          tag_name=$(git describe --abbrev=0 --match 'v*')
+          echo "Tag found: '$tag_name'"
+          echo "TAG_NAME=$tag_name" >> "$GITHUB_OUTPUT"
+
+      - name: 📦 Push Release to github
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.tag-name || steps.latest-tag.outputs.TAG_NAME }}
+          body_path: RELEASE.md
+          files: build/synology-download.zip
+
+      - name: 🚀 Publish to Chrome webstore
+        env:
+          CHROME_WEB_STORE_EXTENSION_ID: ebbdkledlkjpgbbmmopgbnnjmklnkcef
+          CHROME_WEB_STORE_CLIENT_ID: ${{ secrets.CHROME_WEB_STORE_CLIENT_ID }}
+          CHROME_WEB_STORE_CLIENT_SECRET: ${{ secrets.CHROME_WEB_STORE_CLIENT_SECRET }}
+          CHROME_WEB_STORE_REFRESH_TOKEN: ${{ secrets.CHROME_WEB_STORE_REFRESH_TOKEN }}
+        run: |
+          # =================  🚀 Publish to Chrome store  =================
+
+          # Uploading zip to web store
+          npx -s chrome-webstore-upload-cli upload --source build/synology-download.zip --extension-id "$CHROME_WEB_STORE_EXTENSION_ID" --client-id "$CHROME_WEB_STORE_CLIENT_ID" --client-secret "$CHROME_WEB_STORE_CLIENT_SECRET" --refresh-token "$CHROME_WEB_STORE_REFRESH_TOKEN"
+

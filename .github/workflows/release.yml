@@ -1,7 +1,5 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
-name: 📦 Release - Tag, release and publish package
+name: 📦 Release - Tag, Release, Publish and Deploy
+run-name: 📦 Release - ${{ inputs.tag-name || github.sha || github.ref }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -10,37 +8,49 @@ concurrency:
 on:
   workflow_dispatch:
     inputs:
-      tagName:
-        description: 'Tag name'
+      tag-name:
+        description: Tag name
         required: false
+        type: string
+      skip-npm:
+        description: Skip npm publish
+        required: false
+        type: boolean
+
+permissions:
+  contents: write
+  id-token: write
 
 jobs:
   release:
-    name: 📦 Release
+    name: 📦 Tag and release commit
     runs-on: ubuntu-latest
+
     outputs:
-      tag_name: ${{ steps.push-tag.outputs.tag_name }}
-      commit_hash: ${{ steps.push-tag.outputs.commit_hash }}
+      tag-name: ${{ steps.push-tag.outputs.tag_name }}
+      commit-hash: ${{ steps.push-tag.outputs.commit_hash }}
 
     steps:
       - name: ⛙ Checkout branch ${{ github.ref }}
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
+          ref: main
           fetch-depth: 0
+          token: ${{ secrets.CI_TOKEN != '' && secrets.CI_TOKEN || github.token }}
 
       - name: 🧱 Install
         uses: ./.github/actions/install
 
-      - name: 🏷️ Tag and bump Release
+      - name: 🏷️ Release
         run: |
-          # =================  🏷️ Tab and bump  =================
+          # =================  🏷️ Release =================
           
-          # setup git creds
+          # setup git credentials
           git config user.name "GitHub Release Bot"
           git config user.email "<>"
           
           # generate release
-          pnpm release
+          pnpm run release
 
       - name: ⛙ Push to remote
         id: push-tag
@@ -61,113 +71,22 @@ jobs:
           echo "Pushing tag: ${tag_name}"
           echo "Pushing commit: ${commit_hash}"
           
-          # Save tag name and commit hash to output
+          # Save tag name and commit hash to outputs
           echo "tag_name=${tag_name}" >> "$GITHUB_OUTPUT"
           echo "commit_hash=${commit_hash}" >> "$GITHUB_OUTPUT"
 
-  publish-store:
+  publish:
+    name: ☁️ Publish
     needs: release
-    name: 🔌 Publish extension
-    runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion != 'failure' }}
-
-    steps:
-      - name: ⛙ Checkout branch ${{ github.ref }}
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ needs.release.outputs.commit_hash || 'main' }}
-
-      - name: 🚧 Build
-        uses: ./.github/actions/build
-        with:
-          mode: extension
-
-      - name: 🗃️ Zip build folder
-        run: |
-          # =================  🗃️ Zipping build folder  =================
-          
-          # Zipping build folder for artifact upload
-          cd build;
-          zip -r synology-download.zip *
-
-          # Check zip created
-          echo "Zip created in 'build/'"
-          ls -l  synology-download.zip
-          cd ..
-
-      - name: 📝 Generate Release changelog
-        run: |
-          # =================  📝 Generate Release changelog  =================
-          pnpm release:changelog
-
-      - name: 🏷️ Fetch latest tag
-        if: ${{ github.event.inputs.tagName == '' || needs.release.outputs.tag_name == '' }}
-        id: latest-tag
-        run: |
-          # =================  🏷️ Fetch tags  =================
-          
-          tag_name=$(git describe --abbrev=0 --match 'v*')
-          echo "Tag found: '$tag_name'"
-          echo "TAG_NAME=$tag_name" >> "$GITHUB_OUTPUT"
-
-      - name: 📦 Push Release to github
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ github.event.inputs.tagName || needs.release.outputs.tag_name || github.ref}}
-          body_path: RELEASE.md
-          files: build/synology-download.zip
-
-      - name: 🔌 Publish to Chrome webstore
-        env:
-          CHROME_WEB_STORE_EXTENSION_ID: ebbdkledlkjpgbbmmopgbnnjmklnkcef
-          CHROME_WEB_STORE_CLIENT_ID: ${{ secrets.CHROME_WEB_STORE_CLIENT_ID }}
-          CHROME_WEB_STORE_CLIENT_SECRET: ${{ secrets.CHROME_WEB_STORE_CLIENT_SECRET }}
-          CHROME_WEB_STORE_REFRESH_TOKEN: ${{ secrets.CHROME_WEB_STORE_REFRESH_TOKEN }}
-        run: |
-          # =================  Publish to Chrome store  =================
-          
-          # Uploading zip to web store
-          pnpm dlx chrome-webstore-upload-cli upload --source build/synology-download.zip --extension-id "$CHROME_WEB_STORE_EXTENSION_ID" --client-id "$CHROME_WEB_STORE_CLIENT_ID" --client-secret "$CHROME_WEB_STORE_CLIENT_SECRET" --refresh-token "$CHROME_WEB_STORE_REFRESH_TOKEN"
-
-
-  publish-npm:
-    needs: release
-    name: ☁️ Publish npm
-    runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion != 'failure' }}
-    permissions:
-      id-token: write
-
-    steps:
-      - name: ⛙ Checkout branch ${{ github.ref }}
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ needs.release.outputs.commit_hash || 'main' }}
-
-      - name: 🚧 Build
-        uses: ./.github/actions/build
-        with:
-          mode: web
-
-      - name: ☁️ Publish to npm
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          # =================  ☁️ Publish to npm =================
-          
-          pnpm publish --provenance --no-git-checks
-
-      - name: 💾 Caching build artefacts
-        uses: actions/cache/save@v4
-        id: cache
-        with:
-          path: dist
-          key: ${{ github.ref }}-${{ github.run_id }}-build
+    uses: ./.github/workflows/publish.yml
+    secrets: inherit
+    with:
+      commit-hash: ${{ needs.release.outputs.commit-hash }}
+      tag-name: ${{ inputs.tag-name || needs.release.outputs.tag-name }}
+      skip-npm: ${{ inputs.skip-npm }}
 
   deploy:
     name: 🚀 Deploy
-    needs: publish-npm
+    needs: publish
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
