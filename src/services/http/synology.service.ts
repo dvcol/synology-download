@@ -57,11 +57,7 @@ export class SynologyService extends BaseHttpService {
     if (this.sid && params?.method !== AuthMethod.login) _params._sid = this.sid;
 
     const _body = httpBody ?? stringifyParams({ api, method, version, ..._params });
-    // BodyInit | string | Blob | ArrayBufferView | ArrayBuffer | FormData | URLSearchParams | ReadableStream<Uint8Array> | null | undefined;
-    if (this.sid && params?.method !== AuthMethod.login && httpBody) {
-      if (httpBody instanceof FormData || httpBody instanceof URLSearchParams) httpBody.set('_sid', this.sid);
-      else if (typeof httpBody === 'object' && !Array.isArray(httpBody)) Object.assign(httpBody, { _sid: this.sid });
-    }
+    const _body_params = this.sid ? { _sid: this.sid } : undefined;
 
     const headers: HttpHeaders = { 'Access-Control-Allow-Origin': '*', [CustomHeader.SynologyDownloadApp]: this.name };
     if (this.sid) headers.Credentials = 'omit';
@@ -70,10 +66,10 @@ export class SynologyService extends BaseHttpService {
     switch (httpMethod) {
       case HttpMethod.POST:
       case HttpMethod.post:
-        return this.post<HttpResponse<T>>(url, _body, undefined, headers);
+        return this.post<HttpResponse<T>>(url, _body, _body_params, headers);
       case HttpMethod.PUT:
       case HttpMethod.put:
-        return this.put<HttpResponse<T>>(url, _body, undefined, headers);
+        return this.put<HttpResponse<T>>(url, _body, _body_params, headers);
       case HttpMethod.DELETE:
       case HttpMethod.delete:
         return this.delete<HttpResponse<T>>(url, { api, method, version, ..._params }, headers);
