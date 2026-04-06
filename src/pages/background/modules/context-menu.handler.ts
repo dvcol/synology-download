@@ -62,6 +62,7 @@ export function onContextMenuEvents() {
         case ChromeMessageType.autoLogin:
         case ChromeMessageType.scrap:
         case ChromeMessageType.scraped:
+        case ChromeMessageType.scrapeDownload:
         default:
           LoggerService.error(`Message type '${type}' not supported`);
       }
