@@ -53,7 +53,7 @@ export function ExplorerLeaf({
         minWidth: 'fit-content',
         width: flatten ? '100%' : 'max-content',
       }}
-      slotProps={{ content: { style: { overflow: 'hidden', marginBottom: 'auto' } } }}
+      slotProps={{ content: { style: { overflow: 'hidden', marginBottom: 'auto', paddingBlock: '0.125rem' } } }}
     >
       {!flatten && folder?.isdir && <ExplorerLoading loading={isLoading} disabled={disabled} empty={!children?.length} flatten={flatten} />}
       {!flatten

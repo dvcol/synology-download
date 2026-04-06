@@ -54,5 +54,18 @@ describe('debounce.utils', () => {
       vi.advanceTimersByTime(1);
       expect(fn).toHaveBeenCalledTimes(1);
     });
+
+    it('should reject when the function throws', async () => {
+      const fn = vi.fn(() => {
+        throw new Error('boom');
+      });
+      const debounced = debounce(fn, 50);
+
+      const promise = debounced();
+      vi.advanceTimersByTime(50);
+
+      await expect(promise).rejects.toThrow('boom');
+      expect(fn).toHaveBeenCalledTimes(1);
+    });
   });
 });
