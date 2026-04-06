@@ -2,6 +2,49 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/dvcol/synology-download/compare/v3.22.1...v4.0.0) (2026-04-06)
+
+
+### ⚠ BREAKING CHANGES
+
+* **deps:** upgrade MUI Material v7 and migrate deprecated props
+* **deps:** upgrade to React 19, TypeScript 5.9, and related packages
+
+### Features
+
+* **deps:** upgrade MUI Material v7 and migrate deprecated props ([ba2ed3b](https://github.com/dvcol/synology-download/commit/ba2ed3b4aba85343fb5651f6126cadc1bf22e309))
+* **deps:** upgrade to React 19, TypeScript 5.9, and related packages ([75ffea0](https://github.com/dvcol/synology-download/commit/75ffea01989b4445a77f354a79c766d659a3838a))
+* **scrape:** scrape form page to avoid csp ([40631c0](https://github.com/dvcol/synology-download/commit/40631c0a726577fc3afa1d771dc89c0a3ffe150c))
+
+
+### Bug Fixes
+
+* **build:** bundle content script as single IIFE for MV3 compatibility ([bce3185](https://github.com/dvcol/synology-download/commit/bce3185654c280e22cede3da3112f632eb892b4e))
+* **build:** resolve type errors blocking production build ([b960123](https://github.com/dvcol/synology-download/commit/b960123103499321492c209b2421d77b12a43632))
+* **build:** separate content script build as IIFE for MV3 compatibility ([21af7ce](https://github.com/dvcol/synology-download/commit/21af7ce8b97155b014078baf11cd01c0e5fcac65))
+* **button:** assign key directly ([d95ac18](https://github.com/dvcol/synology-download/commit/d95ac181ba93b69e3b5de6412f7b81a14ba358a6))
+* **ci:** permissions ([793f39f](https://github.com/dvcol/synology-download/commit/793f39fdd5e190cd3d3595dd0ba163b2b5313e0c))
+* **ci:** remove rc handling ([0bc5afc](https://github.com/dvcol/synology-download/commit/0bc5afc019f82e7d15ec99d83f5d75abeb64f0a5))
+* **content:** adds HMR to content script ([449003c](https://github.com/dvcol/synology-download/commit/449003cd5e26ab9c05466cc4afc3c34dd662e45f))
+* **esm:** break circular dependency chains in services, utils, and models ([f767cb8](https://github.com/dvcol/synology-download/commit/f767cb83e567a6a0e1448fbf26caf2bf092c3b60))
+* **esm:** break cross-module circular deps between store/utils and services ([b7b75c3](https://github.com/dvcol/synology-download/commit/b7b75c3c253e4a6f1558c934a3ca6532ba33ff46))
+* **explorer:** padding & error handling ([5a7f490](https://github.com/dvcol/synology-download/commit/5a7f490fc89770a5ad874b218240fb0a83679c47))
+* **extension:** fix preamble ([1eef078](https://github.com/dvcol/synology-download/commit/1eef0784e9c18156abc63cc543f35a710b8000c7))
+* **extension:** remove devtool ([6f06ad8](https://github.com/dvcol/synology-download/commit/6f06ad832c659e958ec977ddd6bc68912c957137))
+* **input:** fix toggle ([19b8cbb](https://github.com/dvcol/synology-download/commit/19b8cbb625fbd3c982566c22dc2761229ad464dc))
+* **leaf:** restore icons ([28e1282](https://github.com/dvcol/synology-download/commit/28e1282dedef3410277437f09f5fca80f75d19dc))
+* **mocks:** fix faker v9 date.soon requiring days > 0 ([b907b84](https://github.com/dvcol/synology-download/commit/b907b84a0bebe145a6a311d06bb19b9a09fd0967))
+* **mui:** migrate deprecated props to slotProps API ([bef47a4](https://github.com/dvcol/synology-download/commit/bef47a43573b1ae6e3b91330c98f58f727066c88))
+* **notification:** fix notifier ([8aef010](https://github.com/dvcol/synology-download/commit/8aef0108d4931e2d198ddaf340762ac9b8c15ec2))
+* **router:** replace react-router-hash-link with custom HashLink ([ab8c7e0](https://github.com/dvcol/synology-download/commit/ab8c7e0d9b25f4d72681955b5f4853bb86029203))
+* **router:** use absolute paths in settings navbar links ([8639bb8](https://github.com/dvcol/synology-download/commit/8639bb805e53c5ba8ce2829a7bbc852b7f18d3af))
+* **scripts:** separate clear by targets ([31c631b](https://github.com/dvcol/synology-download/commit/31c631b23e0a5ce40e4628cf548d2bc68f6c4f59))
+* **task:** move sid to parms always ([637b718](https://github.com/dvcol/synology-download/commit/637b718275f8f01faec953ed808ce62a99398687))
+* **tree:** adds container grow ([8e37647](https://github.com/dvcol/synology-download/commit/8e37647d1c7f1cf7553b1530f9ec9743225147b9))
+* **web:** fix emotion cache ([e178503](https://github.com/dvcol/synology-download/commit/e1785032009a8f8294ce2790c9b0e2faf1755f3c))
+* **web:** fix i18n ([1b993c0](https://github.com/dvcol/synology-download/commit/1b993c0172bb27128f50ab6408ecc6f1adfcad37))
+* **web:** fix i18n relative path in dev ([1b46124](https://github.com/dvcol/synology-download/commit/1b461244bb24c0999af0f5002b812c5a4e7cf1b2))
+
 ### [3.22.1](https://github.com/dvcol/synology-download/compare/v3.22.0...v3.22.1) (2025-07-28)
 
 
