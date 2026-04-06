@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [4.0.1](https://github.com/dvcol/synology-download/compare/v4.0.0...v4.0.1) (2026-04-06)
+
+
+### Bug Fixes
+
+* **ci:** fix publish workflow ([2473cd2](https://github.com/dvcol/synology-download/commit/2473cd2db23185ede24ecb239e58a37f90328a7f))
+
 ## [4.0.0](https://github.com/dvcol/synology-download/compare/v3.22.1...v4.0.0) (2026-04-06)
 
 
