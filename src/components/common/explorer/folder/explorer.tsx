@@ -11,7 +11,7 @@ import { Container } from '@mui/material';
 import { SimpleTreeView } from '@mui/x-tree-view';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { catchError, finalize, lastValueFrom, map, tap } from 'rxjs';
+import { catchError, finalize, lastValueFrom, map, of, tap } from 'rxjs';
 
 import { LoggerService } from '../../../../services/logger/logger.service';
 import { NotificationService } from '../../../../services/notification/notification.service';
@@ -65,7 +65,6 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [filterVisible, setFilterVisible] = useState<boolean>(!!search);
-
   const doFilter = useCallback((f: File | Folder) => {
     return disabled || !filter || f?.name?.trim()?.toLowerCase()?.includes(filter?.trim()?.toLowerCase());
   }, [disabled, filter]);
@@ -79,7 +78,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
   }, [tree, filterVisible, doFilter]);
 
   const isLoginCheck = () => {
-    if (QueryService.isLoggedIn) return QueryService.isLoggedIn;
+    if (QueryService.isLoggedIn) return true;
 
     const error = new Error('User not logged in.');
     LoggerService.error('User not logged in.', error);
@@ -87,11 +86,13 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
       title: i18n('login_required', 'common', 'error'),
       message: i18n('please_login', 'common', 'error'),
     });
-    throw error;
+
+    return false;
   };
 
   const fetchFolders = (_tree = tree): Observable<Tree> => {
-    isLoginCheck();
+    if (!isLoginCheck()) return of({ ..._tree, root: [] });
+
     return QueryService.listFolders(readonly ?? true).pipe(
       map(list => ({ ..._tree, root: list?.shares ?? [] })),
       catchError((error: Error) => {
@@ -100,7 +101,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
           title: i18n('list_folders_fail', 'common', 'error'),
           message: error?.message ?? error?.name ?? '',
         });
-        throw error;
+        return of({ ..._tree, root: [] });
       }),
     );
   };
@@ -116,7 +117,8 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
   };
 
   const fetchFiles = (path: string, key: string, _tree = tree): Observable<Tree> => {
-    isLoginCheck();
+    if (!isLoginCheck()) return of({ ..._tree, [key]: [] });
+
     return QueryService.listFiles(path, fileType ?? 'dir').pipe(
       map((list: FileList) => ({ ..._tree, [key]: list?.files ?? [] })),
       catchError((error: Error) => {
@@ -125,7 +127,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
           title: i18n('list_files_fail', 'common', 'error'),
           message: error?.message ?? error?.name ?? '',
         });
-        throw error;
+        return of({ ..._tree, [key]: [] });
       }),
     );
   };
@@ -232,24 +234,29 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
 
     setPathLoading(true);
 
-    let _selected = selected;
-    let _folder = tree?.[selected]?.find(_f => _f?.name === _crumbs[0]);
-    for (let i = 0; i < _crumbs.length; i += 1) {
-      const _leaf = _tree?.[_selected]?.findIndex(_f => _f?.name === _crumbs[i]);
+    try {
+      let _selected = selected;
+      let _folder = tree?.[selected]?.find(_f => _f?.name === _crumbs[0]);
+      for (let i = 0; i < _crumbs.length; i += 1) {
+        const currentLeaves = _tree?.[_selected];
+        if (!currentLeaves?.length) break;
 
-      if (_leaf < 0) break;
+        const _leaf = currentLeaves.findIndex(_f => _f?.name === _crumbs[i]);
+        if (_leaf < 0) break;
 
-      _folder = _tree?.[_selected]?.[_leaf];
-      _selected = `${_selected}-${_leaf}`;
+        _folder = currentLeaves[_leaf];
+        _selected = `${_selected}-${_leaf}`;
 
-      _tree = await lastValueFrom(fetchFiles(_folder?.path, _selected, _tree));
+        _tree = await lastValueFrom(fetchFiles(_folder?.path, _selected, _tree));
+      }
+
+      setTree(old => ({ ...old, ..._tree }));
+      onSelectChange(_selected, _crumbs, _folder);
+
+      setLoading(_loading => ({ ..._loading, root: false }));
+    } finally {
+      setPathLoading(false);
     }
-
-    setTree(old => ({ ...old, ..._tree }));
-    onSelectChange(_selected, _crumbs, _folder);
-
-    setLoading(_loading => ({ ...loading, root: false }));
-    setPathLoading(false);
   };
 
   const debounceLoadTree = useDebounce(async () => {
