@@ -9,7 +9,7 @@
   "homepage": "https://github.com/dvcol/synology-download",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dvcol/synology-download.git"
+    "url": "git+https://github.com/dvcol/synology-download.git"
   },
   "bugs": "https://github.com/dvcol/synology-download/issues",
   "keywords": [

@@ -16,9 +16,9 @@ on:
         required: false
         type: boolean
 
-# Permission to generate an OIDC token for npm trusted publishing
+# Permissions for npm trusted publishing and GitHub release creation
 permissions:
-  contents: read
+  contents: write
   id-token: write
 
 jobs:
