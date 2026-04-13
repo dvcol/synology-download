@@ -4,6 +4,7 @@ import type { Observable } from 'rxjs';
 import type { File, FileList } from '../../../../models/file.model';
 import type { Folder } from '../../../../models/folder.model';
 import type { RootSlice } from '../../../../models/store.model';
+import type { Tree } from './explorer.utils';
 
 import FolderIcon from '@mui/icons-material/Folder';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
@@ -25,6 +26,7 @@ import { ExplorerLeaf } from './explorer-leaf';
 import { ExplorerLeafAdd } from './explorer-leaf-add';
 import { ExplorerLoading } from './explorer-loading';
 import { ExplorerRecent } from './explorer-recent';
+import { buildVisibleTree } from './explorer.utils';
 
 export interface ExplorerProps {
   collapseOnSelect?: boolean;
@@ -43,8 +45,6 @@ export interface ExplorerEvent {
   path?: string;
   folder?: File | Folder;
 }
-
-type Tree = Record<string, (Folder | File)[]>;
 
 // TODO implement virtual scroll
 export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disabled, readonly, fileType, startPath, onChange, editable, search }) => {
@@ -69,13 +69,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
     return disabled || !filter || f?.name?.trim()?.toLowerCase()?.includes(filter?.trim()?.toLowerCase());
   }, [disabled, filter]);
 
-  const filteredTree = useMemo(() => {
-    if (!filterVisible || !tree) return tree;
-    return Object.entries(tree).reduce((curr, [key, value]) => {
-      curr[key] = value?.filter(doFilter);
-      return curr;
-    }, {} as Tree);
-  }, [tree, filterVisible, doFilter]);
+  const visibleTree = useMemo(() => buildVisibleTree(tree, filterVisible, doFilter), [tree, filterVisible, doFilter]);
 
   const isLoginCheck = () => {
     if (QueryService.isLoggedIn) return true;
@@ -155,18 +149,19 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
 
     const ids = nodeId.split('-');
     const index = Number(ids.pop());
-    const folder = filteredTree[ids?.join('-')][index];
+    const folder = tree[ids?.join('-')]?.[index];
+    if (!folder) return tree;
     const path = folder.path.split('/')?.slice(1);
 
     if (!flatten && collapseOnSelect) {
       setExpanded([...expanded.filter(id => nodeId.startsWith(id)), nodeId]);
     }
 
-    if (!filteredTree[nodeId] && flatten) {
+    if (!tree[nodeId] && flatten) {
       onSelectChange(nodeId, path);
       return lastValueFrom(loadFilesIntoTree(folder.path, nodeId));
     }
-    if (!filteredTree[nodeId]) {
+    if (!tree[nodeId]) {
       const _tree = await lastValueFrom(loadFilesIntoTree(folder.path, nodeId));
       onSelectChange(nodeId, path, folder);
       return _tree;
@@ -203,7 +198,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
           const nodePath = nodeId.split('-');
           const index = Number(nodePath?.pop());
 
-          if (index && Number.isInteger(index)) {
+          if (Number.isInteger(index) && index >= 0) {
             _new[nodePath.join('-')][index] = newFolder;
           }
         }
@@ -216,7 +211,7 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
     // if old folder exit
     if (oldFolder?.name) return;
     // else select new folder
-    return selectNode(`${nodeId}-${(filteredTree[nodeId]?.length ?? 1) - 1}`);
+    return selectNode(`${nodeId}-${(tree[nodeId]?.length ?? 1) - 1}`);
   };
 
   const onSelect = async ($event: SyntheticEvent | null, itemId: string | null) => itemId && selectNode(itemId);
@@ -312,16 +307,17 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
                   <ExplorerLeafAdd nodeId={selected} path={selectedPath} disabled={disabled} spliceTree={spliceTree} />
                 )
               }
-              {flatten && <ExplorerLoading loading={pathLoading || loading[selected]} empty={!filteredTree[selected]?.length} disabled={disabled} flatten={flatten} />}
+              {flatten && <ExplorerLoading loading={pathLoading || loading[selected]} empty={!visibleTree[selected]?.length} disabled={disabled} flatten={flatten} />}
               {flatten
                 && !pathLoading
                 && !loading[selected]
-                && filteredTree[selected]?.map((f, i) => (
+                && visibleTree[selected]?.map(({ item, sourceIndex }) => (
                   <ExplorerLeaf
-                    key={`${f.name}-${disabled}`}
-                    nodeId={`${selected}-${i}`}
-                    folder={f}
-                    tree={filteredTree}
+                    key={`${selected}-${sourceIndex}-${disabled}`}
+                    nodeId={`${selected}-${sourceIndex}`}
+                    folder={item}
+                    tree={tree}
+                    visibleTree={visibleTree}
                     loading={loading}
                     disabled={disabled}
                     editable={editable}
@@ -331,12 +327,13 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
                 ))}
               {!flatten
                 && !pathLoading
-                && filteredTree?.root?.map((f, i) => (
+                && visibleTree?.root?.map(({ item, sourceIndex }) => (
                   <ExplorerLeaf
-                    key={`${f.name}-${disabled}`}
-                    nodeId={`root-${i}`}
-                    folder={f}
-                    tree={filteredTree}
+                    key={`root-${sourceIndex}-${disabled}`}
+                    nodeId={`root-${sourceIndex}`}
+                    folder={item}
+                    tree={tree}
+                    visibleTree={visibleTree}
                     loading={loading}
                     disabled={disabled}
                     editable={editable}
