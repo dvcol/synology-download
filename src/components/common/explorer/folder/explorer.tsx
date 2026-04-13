@@ -20,6 +20,7 @@ import { QueryService } from '../../../../services/query/query.service';
 import { getDestinationsHistory } from '../../../../store/selectors/state.selector';
 import { useDebounce } from '../../../../utils/debounce.utils';
 import { useI18n } from '../../../../utils/webex.utils';
+import { ErrorBoundary } from '../../errors/error-boundary';
 import { SearchInput } from '../../inputs/search-input';
 import { ExplorerBreadCrumbs } from './explorer-breadcrumb';
 import { ExplorerLeaf } from './explorer-leaf';
@@ -265,96 +266,98 @@ export const Explorer: FC<ExplorerProps> = ({ collapseOnSelect, flatten, disable
   }, [startPath]);
 
   return (
-    <Container ref={containerRef} disableGutters maxWidth={false} sx={{ height: '100%', outline: 'none' }} tabIndex={0}>
-      <ExplorerBreadCrumbs
-        crumbs={crumbs}
-        showDestinations={showDestinations}
-        hasDestinations={!!recentDestinations?.length}
-        onClick={async (_, i) => crumbSelect(i)}
-        onRecent={() => setShowDestinations(_show => !_show)}
-        disabled={disabled || pathLoading}
-      />
-      {showDestinations
-        ? (
-            <ExplorerRecent
-              selected={selectedPath}
-              destinations={recentDestinations}
-              onSelect={async (_path) => {
-                setShowDestinations(_show => !_show);
-                return loadNestedPath(_path);
-              }}
-            />
-          )
-        : (
-            <SimpleTreeView
-              key={`tree-${disabled}`}
-              aria-label="file system navigator"
-              slots={{ collapseIcon: FolderOpenIcon, expandIcon: FolderIcon }}
-              selectedItems={selected}
-              onSelectedItemsChange={onSelect}
-              expandedItems={expanded}
-              onExpandedItemsChange={onExpand}
-              disableSelection={disabled || pathLoading}
-              sx={{
-                overflow: 'auto',
-                transition: 'height 0.2s ease-in-out',
-                height: `calc(100% - ${filterVisible ? 4.4 : 2.0625}em)`,
-              }}
-            >
-              {
-                // only > 1 so that we do not allow creation of shares
-                flatten && editable && !pathLoading && !loading[selected] && selected?.split('-')?.length > 1 && !!selectedPath && (
-                  <ExplorerLeafAdd nodeId={selected} path={selectedPath} disabled={disabled} spliceTree={spliceTree} />
-                )
-              }
-              {flatten && <ExplorerLoading loading={pathLoading || loading[selected]} empty={!visibleTree[selected]?.length} disabled={disabled} flatten={flatten} />}
-              {flatten
-                && !pathLoading
-                && !loading[selected]
-                && visibleTree[selected]?.map(({ item, sourceIndex }) => (
-                  <ExplorerLeaf
-                    key={`${selected}-${sourceIndex}-${disabled}`}
-                    nodeId={`${selected}-${sourceIndex}`}
-                    folder={item}
-                    tree={tree}
-                    visibleTree={visibleTree}
-                    loading={loading}
-                    disabled={disabled}
-                    editable={editable}
-                    flatten={flatten}
-                    spliceTree={spliceTree}
-                  />
-                ))}
-              {!flatten
-                && !pathLoading
-                && visibleTree?.root?.map(({ item, sourceIndex }) => (
-                  <ExplorerLeaf
-                    key={`root-${sourceIndex}-${disabled}`}
-                    nodeId={`root-${sourceIndex}`}
-                    folder={item}
-                    tree={tree}
-                    visibleTree={visibleTree}
-                    loading={loading}
-                    disabled={disabled}
-                    editable={editable}
-                    flatten={flatten}
-                    spliceTree={spliceTree}
-                  />
-                ))}
-            </SimpleTreeView>
-          )}
-      <SearchInput
-        containerRef={containerRef}
-        filter={filter}
-        showFilter={search}
-        disabled={disabled}
-        onChangeFilter={setFilter}
-        onChangeVisible={setFilterVisible}
-        sx={{
-          transition: 'max-height 0.2s ease-in-out',
-          maxHeight: filterVisible ? '5rem' : 0,
-        }}
-      />
-    </Container>
+    <ErrorBoundary>
+      <Container ref={containerRef} disableGutters maxWidth={false} sx={{ height: '100%', outline: 'none' }} tabIndex={0}>
+        <ExplorerBreadCrumbs
+          crumbs={crumbs}
+          showDestinations={showDestinations}
+          hasDestinations={!!recentDestinations?.length}
+          onClick={async (_, i) => crumbSelect(i)}
+          onRecent={() => setShowDestinations(_show => !_show)}
+          disabled={disabled || pathLoading}
+        />
+        {showDestinations
+          ? (
+              <ExplorerRecent
+                selected={selectedPath}
+                destinations={recentDestinations}
+                onSelect={async (_path) => {
+                  setShowDestinations(_show => !_show);
+                  return loadNestedPath(_path);
+                }}
+              />
+            )
+          : (
+              <SimpleTreeView
+                key={`tree-${disabled}`}
+                aria-label="file system navigator"
+                slots={{ collapseIcon: FolderOpenIcon, expandIcon: FolderIcon }}
+                selectedItems={selected}
+                onSelectedItemsChange={onSelect}
+                expandedItems={expanded}
+                onExpandedItemsChange={onExpand}
+                disableSelection={disabled || pathLoading}
+                sx={{
+                  overflow: 'auto',
+                  transition: 'height 0.2s ease-in-out',
+                  height: `calc(100% - ${filterVisible ? 4.4 : 2.0625}em)`,
+                }}
+              >
+                {
+                  // only > 1 so that we do not allow creation of shares
+                  flatten && editable && !pathLoading && !loading[selected] && selected?.split('-')?.length > 1 && !!selectedPath && (
+                    <ExplorerLeafAdd nodeId={selected} path={selectedPath} disabled={disabled} spliceTree={spliceTree} />
+                  )
+                }
+                {flatten && <ExplorerLoading loading={pathLoading || loading[selected]} empty={!visibleTree[selected]?.length} disabled={disabled} flatten={flatten} />}
+                {flatten
+                  && !pathLoading
+                  && !loading[selected]
+                  && visibleTree[selected]?.map(({ item, sourceIndex }) => (
+                    <ExplorerLeaf
+                      key={`${selected}-${sourceIndex}-${disabled}`}
+                      nodeId={`${selected}-${sourceIndex}`}
+                      folder={item}
+                      tree={tree}
+                      visibleTree={visibleTree}
+                      loading={loading}
+                      disabled={disabled}
+                      editable={editable}
+                      flatten={flatten}
+                      spliceTree={spliceTree}
+                    />
+                  ))}
+                {!flatten
+                  && !pathLoading
+                  && visibleTree?.root?.map(({ item, sourceIndex }) => (
+                    <ExplorerLeaf
+                      key={`root-${sourceIndex}-${disabled}`}
+                      nodeId={`root-${sourceIndex}`}
+                      folder={item}
+                      tree={tree}
+                      visibleTree={visibleTree}
+                      loading={loading}
+                      disabled={disabled}
+                      editable={editable}
+                      flatten={flatten}
+                      spliceTree={spliceTree}
+                    />
+                  ))}
+              </SimpleTreeView>
+            )}
+        <SearchInput
+          containerRef={containerRef}
+          filter={filter}
+          showFilter={search}
+          disabled={disabled}
+          onChangeFilter={setFilter}
+          onChangeVisible={setFilterVisible}
+          sx={{
+            transition: 'max-height 0.2s ease-in-out',
+            maxHeight: filterVisible ? '5rem' : 0,
+          }}
+        />
+      </Container>
+    </ErrorBoundary>
   );
 };
