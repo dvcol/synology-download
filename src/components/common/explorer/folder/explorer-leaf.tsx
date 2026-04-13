@@ -1,5 +1,6 @@
 import type { File } from '../../../../models/file.model';
 import type { Folder } from '../../../../models/folder.model';
+import type { Tree, VisibleTree } from './explorer.utils';
 
 import FolderIcon from '@mui/icons-material/Folder';
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
@@ -12,6 +13,7 @@ export function ExplorerLeaf({
   nodeId,
   folder,
   tree,
+  visibleTree,
   loading,
   flatten,
   disabled,
@@ -20,7 +22,8 @@ export function ExplorerLeaf({
 }: {
   nodeId: string;
   folder: Folder | File;
-  tree: Record<string, Folder[] | File[]>;
+  tree: Tree;
+  visibleTree?: VisibleTree;
   loading: Record<string, boolean>;
   flatten?: boolean;
   disabled?: boolean;
@@ -29,6 +32,7 @@ export function ExplorerLeaf({
 }) {
   const isLoading = loading[nodeId];
   const children = tree[nodeId];
+  const visibleChildren = visibleTree?.[nodeId] ?? children?.map((item, sourceIndex) => ({ item, sourceIndex }));
   return (
     <TreeItem
       itemId={`${nodeId}`}
@@ -59,12 +63,13 @@ export function ExplorerLeaf({
       {!flatten
         && folder?.isdir
         && !isLoading
-        && children?.map((sf, i) => (
+        && visibleChildren?.map(({ item: sf, sourceIndex }) => (
           <ExplorerLeaf
-            key={`${nodeId}-${i}-${disabled}`} // eslint-disable-line react/no-array-index-key -- cannot ensure name unicity
-            nodeId={`${nodeId}-${i}`}
+            key={`${nodeId}-${sourceIndex}-${disabled}`}
+            nodeId={`${nodeId}-${sourceIndex}`}
             folder={sf}
             tree={tree}
+            visibleTree={visibleTree}
             loading={loading}
             disabled={disabled}
             flatten={flatten}
