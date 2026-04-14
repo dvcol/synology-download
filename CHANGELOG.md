@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.1.0](https://github.com/dvcol/synology-download/compare/v4.0.1...v4.1.0) (2026-04-14)
+
+
+### Features
+
+* **errors:** adds error boundary ([45cb881](https://github.com/dvcol/synology-download/commit/45cb881a1f14930d9fe8b4b9c207dc2faa8ffb55))
+
+
+### Bug Fixes
+
+* **explorer:** fix filter crash ([1664038](https://github.com/dvcol/synology-download/commit/16640388110f07d528e74bbf2252db73b5c12db8))
+
 ### [4.0.1](https://github.com/dvcol/synology-download/compare/v4.0.0...v4.0.1) (2026-04-06)
 
 
