@@ -8,6 +8,7 @@ import { emptyContents } from '../../../models/scraped-content.model';
 import { LoggerService } from '../../../services/logger/logger.service';
 import { onMessage, sendMessage } from '../../../utils/chrome/chrome-message.utils';
 import { parseSrc } from '../../../utils/string.utils';
+import { ContentDownloadService } from '../service/download.service';
 
 function addOrUpdate<T extends ScrapedContent>(map: Map<string, T>, scrapped: T) {
   const _previous: Partial<T> = map.get(scrapped.src) ?? {};
@@ -166,51 +167,12 @@ export function listenToScrapEvents() {
   );
 }
 
-const utf8FilenameRegex = /filename\*=UTF-8''([^;\s]+)/i;
-const filenameRegex = /filename="?([^";\s]+)"?/i;
-
-function filenameFromContentDisposition(headers: Headers): string | undefined {
-  const disposition = headers.get('Content-Disposition');
-  if (!disposition) return undefined;
-
-  // Try filename*=UTF-8''encoded first (RFC 5987)
-  const utf8Match = disposition.match(utf8FilenameRegex);
-  if (utf8Match) return decodeURIComponent(utf8Match[1]);
-
-  // Fall back to filename="value" or filename=value
-  const match = disposition.match(filenameRegex);
-  return match ? match[1] : undefined;
-}
-
-async function fetchAndTriggerDownload(url: string, hint?: string): Promise<void> {
-  const response = await fetch(url, { credentials: 'include' });
-  if (!response.ok) throw new Error(`Fetch failed: ${response.status} ${response.statusText}`);
-
-  const blob = await response.blob();
-  const objectUrl = URL.createObjectURL(blob);
-
-  const filename = filenameFromContentDisposition(response.headers)
-    ?? hint
-    ?? parseSrc(url)
-    ?? 'download';
-
-  const a = document.createElement('a');
-  a.href = objectUrl;
-  a.download = filename;
-  a.style.display = 'none';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-
-  setTimeout(() => URL.revokeObjectURL(objectUrl), 60_000);
-}
-
 export function listenToScrapeDownloadEvents() {
   return onMessage<ScrapeDownloadPayload, ScrapeDownloadResponse>([ChromeMessageType.scrapeDownload]).pipe(
     tap(({ message, sendResponse }) => {
       const { url, filename } = message.payload ?? {} as ScrapeDownloadPayload;
       LoggerService.debug('Scrape download request', { url, filename });
-      fetchAndTriggerDownload(url, filename)
+      ContentDownloadService.download(url, filename)
         .then(() => sendResponse({ success: true, payload: { success: true, url } }))
         .catch((err: Error) => {
           LoggerService.error('Scrape download failed', { url, err });
