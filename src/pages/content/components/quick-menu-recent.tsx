@@ -1,4 +1,4 @@
-import type { SvgIconProps } from '@mui/material';
+import type { CollapseProps, SvgIconProps } from '@mui/material';
 import type { FC, MouseEvent } from 'react';
 
 import type { QuickMenu } from '../../../models/menu.model';
@@ -37,8 +37,9 @@ interface QuickMenuRecentProps {
   destinations?: string[];
   onClick: ($event: MouseEvent, payload: { menu: QuickMenu; destination?: string }) => void;
   onToggle?: ($event: MouseEvent, open: boolean) => void;
+  collapseProps?: Omit<Partial<CollapseProps>, 'in'>;
 }
-export const QuickMenuRecent: FC<QuickMenuRecentProps> = ({ isDark, menu, logged, folders, destinations, onClick, onToggle }) => {
+export const QuickMenuRecent: FC<QuickMenuRecentProps> = ({ isDark, menu, logged, folders, destinations, onClick, onToggle, collapseProps }) => {
   const [expand, setExpand] = useState(false);
 
   const disabled = isDisabled(menu.type, logged, !folders?.length, !destinations?.length);
@@ -63,16 +64,21 @@ export const QuickMenuRecent: FC<QuickMenuRecentProps> = ({ isDark, menu, logged
         {isRecent && <ExpandIcon expand={expand} sx={{ ml: '0.5em', fontSize: '1em', width: '1em', height: '1em' }} />}
       </MenuItem>
       <Collapse
-        in={expand}
         timeout="auto"
         unmountOnExit
+        {...collapseProps}
         sx={{
           backgroundColor: `rgba(5, 5, 10, ${isDark ? 0.4 : 0.075})`,
+          ...collapseProps?.sx,
         }}
+        in={expand}
       >
         {history?.slice(0, menu?.max ?? 5)?.map((destination, i) => (
-          // eslint-disable-next-line react/no-array-index-key -- history is an ordered list that can contain duplicates
-          <MenuItem key={i} sx={{ pl: '1.5em', fontSize: '1em' }} onClick={$event => onClick($event, { menu, destination })}>
+          <MenuItem
+            key={i} // eslint-disable-line react/no-array-index-key -- history is an ordered list that can contain duplicates
+            sx={{ pl: '1.5em', fontSize: '1em' }}
+            onClick={$event => onClick($event, { menu, destination })}
+          >
             <FolderIcon sx={{ fontSize: '0.875em', width: '1.25em', height: '1.25em' }} />
             <ListItemText primary={destination} slotProps={{ primary: { sx: { fontSize: '0.75em', ml: '1em' } } }} />
           </MenuItem>

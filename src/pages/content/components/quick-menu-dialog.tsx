@@ -1,4 +1,5 @@
 import type { PopoverProps, PortalProps } from '@mui/material';
+import type { PopoverActions } from '@mui/material/Popover';
 import type { FC } from 'react';
 
 import type { QuickMenu } from '../../../models/menu.model';
@@ -29,18 +30,26 @@ import { onMessage, sendMessage } from '../../../utils/chrome/chrome-message.uti
 import { useI18n } from '../../../utils/webex.utils';
 import { anchor$, lastClick$ } from '../service/anchor.service';
 import { taskDialog$ } from '../service/dialog.service';
+import { cursorAnchorToPosition, elementToCursorAnchor, eventToCursorAnchor } from './quick-menu-position.utils';
 import { QuickMenuRecent } from './quick-menu-recent';
 
 export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ container }) => {
   const i18n = useI18n('content', 'quick_menu', 'dialog');
   const [_anchor, setAnchor] = useState<PopoverProps['anchorEl']>();
   const [_position, setPosition] = useState<PopoverProps['anchorPosition'] | undefined>();
+  const menuActionRef = useRef<PopoverActions>(null);
+  const cursorAnchorRef = useRef<ReturnType<typeof eventToCursorAnchor> | undefined>(undefined);
 
   const open = Boolean(_position || _anchor);
 
-  const setState = (anchor?: PopoverProps['anchorEl'], position?: PopoverProps['anchorPosition']) => {
+  const setState = (
+    anchor?: PopoverProps['anchorEl'],
+    position?: PopoverProps['anchorPosition'],
+    cursorAnchor?: ReturnType<typeof eventToCursorAnchor>,
+  ) => {
     setAnchor(anchor ?? null);
     setPosition(position);
+    cursorAnchorRef.current = cursorAnchor;
     sendMessage<boolean>({ type: ChromeMessageType.contentMenuOpen, payload: Boolean(position || anchor) }).subscribe({
       error: e => LoggerService.warn('Intercept menu open failed to send.', e),
     });
@@ -115,15 +124,12 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
     createTask({ ..._form, destination: _destination }, { modal, popup, panel });
   };
 
-  const onEvent = useCallback((
-    form: TaskForm,
-    anchor?: PopoverProps['anchorEl'],
-    position?: PopoverProps['anchorPosition'],
-    quickMenus: QuickMenu[] = _menus,
-  ) => {
+  const onEvent = useCallback((form: TaskForm, event?: MouseEvent, anchor?: Element | null, quickMenus: QuickMenu[] = _menus) => {
     if (quickMenus?.length > 1) {
+      const cursorAnchor = event ? eventToCursorAnchor(event) : elementToCursorAnchor(anchor);
+      const position = cursorAnchor ? cursorAnchorToPosition(cursorAnchor) : undefined;
       setForm(form);
-      setState(anchor ?? null, position);
+      setState(cursorAnchor ? null : anchor ?? null, position, cursorAnchor);
     } else if (quickMenus?.length === 1) {
       const { modal, popup, panel, destination } = quickMenus[0];
       createTask({ ...form, destination }, { modal, popup, panel });
@@ -136,9 +142,7 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
     const subs = new Subscription();
     subs.add(
       anchor$.subscribe(({ event, anchor, form }) => {
-        const resolvedPosition = event ? { top: event.clientY, left: event.clientX } : undefined;
-        const resolvedAnchor = event ? null : anchor ?? null;
-        onEvent(form, resolvedAnchor, resolvedPosition);
+        onEvent(form, event, anchor ?? null);
       }),
     );
 
@@ -146,13 +150,10 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
       onMessage<InterceptPayload>([ChromeMessageType.intercept])
         .pipe(withLatestFrom(lastClick$))
         .subscribe(([{ message, sendResponse }, { event, anchor }]) => {
-          const resolvedPosition = event ? { top: event.clientY, left: event.clientX } : undefined;
-          const resolvedAnchor = event ? null : anchor ?? null;
-
           if (message?.payload) {
             callbackRef.current = sendResponse;
             setIntercept({ callback: sendResponse });
-            onEvent(message?.payload, resolvedAnchor, resolvedPosition);
+            onEvent(message?.payload, event, anchor ?? null);
           } else {
             sendResponse({ success: false, error: new Error('Missing task form payload.') });
           }
@@ -163,6 +164,45 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
     // eslint-disable-next-line react-hooks/exhaustive-deps -- want to run only once for the lifetime of the component
   }, []);
 
+  useEffect(() => {
+    if (!open || !cursorAnchorRef.current) return;
+
+    let frame = 0;
+    let settleFrame = 0;
+    const updatePosition = () => {
+      frame = 0;
+      if (!cursorAnchorRef.current) return;
+      const nextPosition = cursorAnchorToPosition(cursorAnchorRef.current);
+      setPosition((previous) => {
+        if (previous?.left === nextPosition.left && previous?.top === nextPosition.top) return previous;
+        return nextPosition;
+      });
+      menuActionRef.current?.updatePosition();
+    };
+
+    const scheduleUpdate = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(updatePosition);
+    };
+
+    if (window.visualViewport?.scale === 1) {
+      window.addEventListener('resize', scheduleUpdate);
+      window.addEventListener('scroll', scheduleUpdate, true);
+    }
+    scheduleUpdate();
+    settleFrame = window.requestAnimationFrame(() => {
+      scheduleUpdate();
+      menuActionRef.current?.updatePosition();
+    });
+
+    return () => {
+      window.removeEventListener('resize', scheduleUpdate);
+      window.removeEventListener('scroll', scheduleUpdate, true);
+      if (frame) window.cancelAnimationFrame(frame);
+      if (settleFrame) window.cancelAnimationFrame(settleFrame);
+    };
+  }, [open]);
+
   const destinations = useSelector<StoreState, string[]>(getDestinationsHistory);
   const folders = useSelector<StoreState, string[]>(getFolderHistory);
   const logged = useSelector<StoreState, boolean>(getLogged);
@@ -172,15 +212,22 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
   return (
     <Menu
       id="basic-menu"
+      action={menuActionRef}
       anchorEl={_anchor}
       anchorPosition={_position}
       anchorReference={_position ? 'anchorPosition' : 'anchorEl'}
+      anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+      transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+      marginThreshold={8}
       open={open}
       container={container}
       onClose={() => handleClose({ aborted: true, message: 'Quick menu cancelled.' })}
       slotProps={{
         list: {
           'aria-labelledby': 'basic-button',
+        },
+        transition: {
+          onEntered: () => menuActionRef.current?.updatePosition(),
         },
         paper: {
           sx: {
@@ -210,9 +257,11 @@ export const QuickMenuDialog: FC<{ container?: PortalProps['container'] }> = ({ 
           destinations={destinations}
           onClick={(_, { menu, destination }) => handleClick(menu, destination)}
           onToggle={(_, _open) => {
-            if (!_open) return;
-            // If the menu is opened, we need to trigger a resize event to ensure the menu is positioned correctly
-            window.dispatchEvent(new CustomEvent('resize'));
+            menuActionRef.current?.updatePosition();
+          }}
+          collapseProps={{
+            onEntered: () => menuActionRef.current?.updatePosition(),
+            onExited: () => menuActionRef.current?.updatePosition(),
           }}
         />
       ))}
