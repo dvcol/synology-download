@@ -1,6 +1,8 @@
 import type { JSX } from 'react';
 
 import type { NavbarButton } from '../../models/navbar.model';
+import type { ThemeMode } from '../../models/settings.model';
+import type { StoreState } from '../../store/store';
 
 import AddLinkIcon from '@mui/icons-material/AddLink';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
@@ -34,17 +36,18 @@ import { resetDownloads } from '../../store/actions/downloads.action';
 import { setNavbar } from '../../store/actions/navbar.action';
 import { resetTasks } from '../../store/actions/tasks.action';
 import { ContainerContext } from '../../store/context/container.context';
-import { getGlobalNavbarButton, getSettingsDownloadsButtons, getSettingsDownloadsEnabled, getUrl } from '../../store/selectors/settings.selector';
+import { getGlobalNavbarButton, getSettingsDownloadsButtons, getSettingsDownloadsEnabled, getThemeMode, getUrl } from '../../store/selectors/settings.selector';
 import { getLogged } from '../../store/selectors/state.selector';
+import { preferDark } from '../../themes/media-query';
 import { createTab } from '../../utils/chrome/chrome.utils';
 import { useI18n } from '../../utils/webex.utils';
 import { ConfirmationDialog } from '../common/dialog/confirmation-dialog';
 import { TooltipHoverChange } from '../common/tooltip/tooltip-hover-change';
 import NavbarMenuIcon from './navbar-menu-icon';
 
-interface NavbarMenuProps { menuIcon: React.ReactNode }
+interface NavbarMenuProps { menuIcon: React.ReactNode; navbarRef?: React.RefObject<HTMLElement | null> }
 
-export function NavbarMenu({ menuIcon }: NavbarMenuProps) {
+export function NavbarMenu({ menuIcon, navbarRef }: NavbarMenuProps) {
   const i18n = useI18n('navbar', 'menu');
   const dispatch = useDispatch();
   const url = useSelector(getUrl) + AppLinks.DownloadStation;
@@ -55,11 +58,16 @@ export function NavbarMenu({ menuIcon }: NavbarMenuProps) {
   const { containerRef } = use(ContainerContext);
   const location = useLocation();
 
-  const [anchorEl, setAnchorEl] = React.useState<undefined | null | Element>(null);
-  const open = Boolean(anchorEl);
+  const theme = useSelector<StoreState, ThemeMode>(getThemeMode);
+  const isDark = preferDark(theme);
 
-  const handleClick = <T extends Element>(event: React.MouseEvent<T>) => setAnchorEl(event.currentTarget);
-  const handleClose = () => setAnchorEl(null);
+  const [open, setOpen] = React.useState<boolean>(false);
+
+  const handleClick = () => {
+    if (!navbarRef?.current) return console.warn('NavbarMenu: navbarRef is not attached');
+    setOpen(true);
+  };
+  const handleClose = () => setOpen(false);
   const handleClearTab = () => dispatch(setNavbar());
   const handleUrl = async () => createTab({ url });
   const handleError = (button: string, type: 'task' | 'download' = 'task') => ({
@@ -315,12 +323,30 @@ export function NavbarMenu({ menuIcon }: NavbarMenuProps) {
       </Tooltip>
       <Menu
         id="dropdown-menu"
-        anchorEl={anchorEl}
+        anchorEl={navbarRef?.current}
         open={open}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
         container={() => containerRef?.current ?? null}
         onClose={handleClose}
         onClick={handleClose}
-        slotProps={{ list: { 'aria-labelledby': 'dropdown-menu' } }}
+        slotProps={{
+          list: { 'aria-labelledby': 'dropdown-menu' },
+          paper: {
+            sx: {
+              backgroundColor: isDark ? 'rgb(0,0,0,0.6)' : 'transparent',
+              backdropFilter: 'blur(10px)',
+              mt: '0.1em',
+              right: 0,
+            },
+          },
+        }}
         disableScrollLock
       >
         {buttons

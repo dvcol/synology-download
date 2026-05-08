@@ -2,8 +2,8 @@ import type { FC } from 'react';
 
 import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, Tabs, Toolbar } from '@mui/material';
+import { useEffect, useRef } from 'react';
 import * as React from 'react';
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { setNavbar } from '../../store/actions/navbar.action';
@@ -21,6 +21,8 @@ export const Navbar: FC = () => {
   const tabs = useSelector(getActiveTabs);
   const tab = useSelector(getTab);
 
+  const navbarRef = useRef<HTMLElement>(null);
+
   useEffect(() => {
     if (!tab && tabs?.length) dispatch(setNavbar(tabs[0]));
     // eslint-disable-next-line react-hooks/exhaustive-deps -- only run on mount
@@ -34,7 +36,7 @@ export const Navbar: FC = () => {
   // eslint-disable-next-line react/no-array-index-key -- Tabs are static and won't change order
   const tabComponents = tabs?.map((contentTab, index) => <NavbarTab tab={contentTab} value={index} key={`${contentTab.id}-${index}`} />);
   return (
-    <AppBar color="inherit" position="sticky" sx={{ mt: '-0.125rem' }}>
+    <AppBar color="inherit" position="sticky" sx={{ mt: '-0.125rem' }} ref={navbarRef}>
       <LoadingBar />
       <Toolbar disableGutters={true} sx={{ minHeight: '3rem', justifyContent: 'space-between' }}>
         <Tabs
@@ -48,7 +50,7 @@ export const Navbar: FC = () => {
         >
           {tabComponents}
         </Tabs>
-        <NavbarMenu menuIcon={<MenuIcon />} />
+        <NavbarMenu menuIcon={<MenuIcon />} navbarRef={navbarRef} />
       </Toolbar>
     </AppBar>
   );
