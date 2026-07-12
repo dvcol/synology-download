@@ -129,7 +129,7 @@
     "prettier": "^3.8.1",
     "rimraf": "^6.1.3",
     "sass": "^1.98.0",
-    "standard-version": "^9.5.0",
+    "commit-and-tag-version": "^9.5.0",
     "stylelint": "^17.6.0",
     "typescript": "^6.0.2",
     "vite": "^8.0.3",
