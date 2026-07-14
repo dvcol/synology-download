@@ -31,10 +31,10 @@ jobs:
 
     steps:
       - name: ⛙ Checkout branch ${{ github.ref }}
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: 💾 Restore build artefacts
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         id: cache
         with:
           path: dist
