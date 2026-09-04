@@ -9,6 +9,26 @@ import { anchor$, lastClick$ } from '../service/anchor.service';
 const DOWNLOAD_ONLY_PROTOCOLS = ['magnet', 'thunder', 'flashget', 'qqdl', 'ed2k'];
 
 /**
+ * List of supported file extensions for http(s) links
+ */
+const DOWNLOAD_ONLY_EXTENSIONS = ['.torrent', '.nzb'];
+
+/**
+ * Check if the url is a http(s) link to a supported file extension
+ * @param url the url to test
+ */
+export function isDownloadOnlyFile(url: string): boolean {
+  try {
+    const { protocol, pathname } = new URL(url);
+    if (protocol !== 'http:' && protocol !== 'https:') return false;
+    const path = pathname.toLowerCase();
+    return DOWNLOAD_ONLY_EXTENSIONS.some(ext => path.endsWith(ext));
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Check if the url starts with the given protocol(s)
  * @param url the url to test
  * @param protocols the protocol(s)
@@ -50,7 +70,7 @@ async function listener(event: MouseEvent) {
   // Left clicks only
   if (event.button !== 0) return;
   if (!anchor?.href) return;
-  if (!startsWithAnyProtocol(anchor.href, DOWNLOAD_ONLY_PROTOCOLS)) return;
+  if (!startsWithAnyProtocol(anchor.href, DOWNLOAD_ONLY_PROTOCOLS) && !isDownloadOnlyFile(anchor.href)) return;
   anchor$.next({
     event,
     anchor,
@@ -68,7 +88,7 @@ function addAnchorClickListener() {
 }
 function removeAnchorClickListener() {
   document.removeEventListener('click', listener);
-  document.addEventListener('contextmenu', listener);
+  document.removeEventListener('contextmenu', listener);
 }
 
 export const clickListener$ = fromEventPattern<MouseEvent>(addAnchorClickListener, removeAnchorClickListener);
