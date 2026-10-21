@@ -49,7 +49,7 @@
 >
 > Note that translation on previous version of Chrome (100 and below) might have only partial support in banner notifications.
 >
-> Due to MV3 current limitation, the service-worker is maintained awake through periodic messaging on active tab, if no tab is active in the past 5 minutes, service worker and associated functionalities might suspend until wake events.
+> Manifest V3 can suspend the service worker. A one-minute recovery alarm wakes it while global and background polling are enabled, restoring saved settings and attempting configured automatic login. Chrome may delay alarms, so polling and completion notifications are not guaranteed at exact intervals or while the device sleeps.
 
 ## Prerequisites
 

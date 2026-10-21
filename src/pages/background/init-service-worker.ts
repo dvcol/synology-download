@@ -14,6 +14,7 @@ import { watchContextMenuVisibility } from './modules/context-menu-visibility';
 import { onContextMenuEvents } from './modules/context-menu.handler';
 import { onDownloadEvents } from './modules/download.handler';
 import { onOpenPanelEvent } from './modules/panel-handler';
+import { watchPollingAlarm } from './modules/polling-alarm';
 import { onOpenPopupEvent } from './modules/popup-handler';
 import { onScrapedContentEvent } from './modules/scraped.handler';
 import { restoreSettings } from './modules/settings-handler';
@@ -40,6 +41,8 @@ export async function initServiceWorker() {
 
   // Restore settings & polling
   await lastValueFrom(restoreSettings(store));
+
+  watchPollingAlarm(store);
 
   // Init notifications
   NotificationService.init(store, ServiceInstance.Background);
