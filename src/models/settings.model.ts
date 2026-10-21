@@ -421,10 +421,12 @@ export const defaultScrapeSettings: ScrapeSettings = {
 
 export interface ContentSettings {
   intercept: boolean;
+  interceptFiles?: boolean;
 }
 
 export const defaultContentSettings: ContentSettings = {
   intercept: true,
+  interceptFiles: false,
 };
 
 export interface TaskSettings {

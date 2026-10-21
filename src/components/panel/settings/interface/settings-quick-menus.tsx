@@ -40,6 +40,7 @@ export function SettingsQuickMenus() {
     defaultValues: {
       ...contentSettings,
       intercept: contentSettings.intercept ?? defaultContentSettings.intercept,
+      interceptFiles: contentSettings.interceptFiles ?? false,
     },
   });
 
@@ -53,19 +54,37 @@ export function SettingsQuickMenus() {
       title={InterfaceHeader.quickMenu}
       list={menus}
       header={(
-        <CardHeader
-          title={i18n('enabled_title')}
-          subheader={i18n('enabled_subheader')}
-          slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
-          action={(
-            <FormSwitch
-              controllerProps={{ name: 'intercept', control }}
-              formControlLabelProps={{ label: '' }}
-              switchProps={{ onChange: async (_, checked) => toggleIntercept(checked) }}
-            />
-          )}
-          sx={{ p: '0.5rem 0' }}
-        />
+        <>
+          <CardHeader
+            title={i18n('enabled_title')}
+            subheader={i18n('enabled_subheader')}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
+            action={(
+              <FormSwitch
+                controllerProps={{ name: 'intercept', control }}
+                formControlLabelProps={{ label: '' }}
+                switchProps={{ onChange: async (_, checked) => toggleIntercept(checked) }}
+              />
+            )}
+            sx={{ p: '0.5rem 0' }}
+          />
+          <CardHeader
+            title={i18n('files_title')}
+            subheader={i18n('files_subheader')}
+            slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
+            action={(
+              <FormSwitch
+                controllerProps={{ name: 'interceptFiles', control }}
+                formControlLabelProps={{ label: '' }}
+                switchProps={{
+                  slotProps: { input: { 'aria-label': i18n('files_title') } },
+                  onChange: (_, checked) => dispatch(syncContentSettings({ interceptFiles: checked })),
+                }}
+              />
+            )}
+            sx={{ p: '0.5rem 0' }}
+          />
+        </>
       )}
       summary={m => (
         <>

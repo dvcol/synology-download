@@ -7,6 +7,17 @@ import { anchor$, lastClick$ } from '../service/anchor.service';
  * List of supported protocols
  */
 const DOWNLOAD_ONLY_PROTOCOLS = ['magnet', 'thunder', 'flashget', 'qqdl', 'ed2k'];
+const DOWNLOAD_FILE_EXTENSION = /\.(?:torrent|nzb)$/i;
+
+/** Match file extensions in HTTP(S) paths without inspecting query parameters. */
+function isDownloadFileLink(url: string): boolean {
+  try {
+    const { protocol, pathname } = new URL(url);
+    return (protocol === 'http:' || protocol === 'https:') && DOWNLOAD_FILE_EXTENSION.test(pathname);
+  } catch {
+    return false;
+  }
+}
 
 /**
  * Check if the url starts with the given protocol(s)
@@ -46,11 +57,16 @@ function recursivelyFindAnchorAncestor(e: HTMLElement | null, depth = 10): HTMLA
 async function listener(event: MouseEvent) {
   const anchor = recursivelyFindAnchorAncestor(event.target as HTMLElement);
   lastClick$.next({ event, anchor });
-  if (storeProxy.getState()?.settings?.content?.intercept === false) return;
+  const settings = storeProxy.getState()?.settings?.content;
+  if (settings?.intercept === false) return;
   // Left clicks only
   if (event.button !== 0) return;
   if (!anchor?.href) return;
-  if (!startsWithAnyProtocol(anchor.href, DOWNLOAD_ONLY_PROTOCOLS)) return;
+  if (!startsWithAnyProtocol(anchor.href, DOWNLOAD_ONLY_PROTOCOLS)) {
+    if (settings?.interceptFiles !== true) return;
+    if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    if (!isDownloadFileLink(anchor.href)) return;
+  }
   anchor$.next({
     event,
     anchor,
@@ -68,7 +84,7 @@ function addAnchorClickListener() {
 }
 function removeAnchorClickListener() {
   document.removeEventListener('click', listener);
-  document.addEventListener('contextmenu', listener);
+  document.removeEventListener('contextmenu', listener);
 }
 
 export const clickListener$ = fromEventPattern<MouseEvent>(addAnchorClickListener, removeAnchorClickListener);

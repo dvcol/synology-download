@@ -7,5 +7,11 @@
   },
   "panel__settings__quick_menus__enabled_subheader": {
     "message": "Enable/disable the quick menu interception feature."
+  },
+  "panel__settings__quick_menus__files_title": {
+    "message": "Torrent and NZB link interception"
+  },
+  "panel__settings__quick_menus__files_subheader": {
+    "message": "Opt in to the quick menu for HTTP(S) links ending in .torrent or .nzb. Requires quick menu interception; modified clicks keep their normal behavior."
   }
 }
