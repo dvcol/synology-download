@@ -15,6 +15,8 @@ import { ChromeMessageType } from '../../../models/message.model';
 import { LoggerService } from '../../../services/logger/logger.service';
 import { NotificationService } from '../../../services/notification/notification.service';
 import { QueryService } from '../../../services/query/query.service';
+import { getDestinationsHistory } from '../../../store/selectors/state.selector';
+import { storeProxy } from '../../../store/store-proxy';
 import { onMessage, sendMessage } from '../../../utils/chrome/chrome-message.utils';
 import { i18n } from '../../../utils/webex.utils';
 import { taskDialog$ } from '../service/dialog.service';
@@ -52,10 +54,15 @@ export const ContentTaskDialog: FC<{ container?: PortalProps['container'] }> = (
         if (message?.payload) {
           const {
             info: { linkUrl, pageUrl: source, selectionText },
-            menu: { modal, popup, panel, destination },
+            menu: { modal, popup, panel, destination: configuredDestination },
           } = message.payload;
 
           const uri = linkUrl ?? selectionText;
+          let destination = configuredDestination;
+          if (configuredDestination?.lastUsed) {
+            const path = getDestinationsHistory(storeProxy.getState())[0];
+            destination = { custom: !!path, path };
+          }
 
           if (uri && QueryService.isLoggedIn) {
             if (panel) {

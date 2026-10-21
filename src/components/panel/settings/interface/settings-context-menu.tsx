@@ -1,7 +1,7 @@
 import type { ContextMenu } from '../../../../models/menu.model';
 
-import { AccordionDetails, Button, Card, CardActions, CardHeader, Collapse, Stack } from '@mui/material';
-import { useForm } from 'react-hook-form';
+import { AccordionDetails, Button, Card, CardActions, CardHeader, Collapse, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { useForm, useWatch } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { ChromeMessageType } from '../../../../models/message.model';
@@ -30,9 +30,23 @@ export function SettingsContextMenu({ menu, onRemove }: { menu: ContextMenu; onR
       modal: menu.modal ?? false,
       popup: (menu.popup ?? false) && !!openPopup && !menu.modal && !menu.panel,
       panel: (menu.panel ?? false) && !!openPanel && !menu.modal && !menu.popup,
-      destination: { custom: menu.destination?.custom ?? false, path: menu.destination?.path ?? '' },
+      destination: { custom: menu.destination?.custom ?? false, path: menu.destination?.path ?? '', lastUsed: menu.destination?.lastUsed ?? false },
     },
   });
+
+  const destination = useWatch({ control, name: 'destination' });
+  let destinationMode = 'default';
+  if (destination?.custom) destinationMode = 'custom';
+  if (destination?.lastUsed) destinationMode = 'last_used';
+
+  const onDestinationModeChange = (_event: React.MouseEvent<HTMLElement>, mode: string | null) => {
+    if (!mode) return;
+    setValue('destination', {
+      custom: mode === 'custom',
+      lastUsed: mode === 'last_used',
+      path: mode === 'custom' ? getValues('destination.path') : '',
+    }, { shouldDirty: true });
+  };
 
   const onDelete = async () => {
     await onRemove(menu.id);
@@ -131,10 +145,16 @@ export function SettingsContextMenu({ menu, onRemove }: { menu: ContextMenu; onR
         title={i18n('destination_title')}
         subheader={i18n('destination_subheader')}
         slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
-        action={<FormSwitch controllerProps={{ name: 'destination.custom', control }} formControlLabelProps={{ label: '' }} />}
+        action={(
+          <ToggleButtonGroup value={destinationMode} exclusive size="small" onChange={onDestinationModeChange} aria-label={i18n('destination_title')}>
+            <ToggleButton value="default">{i18n('destination_default')}</ToggleButton>
+            <ToggleButton value="custom">{i18n('destination_custom')}</ToggleButton>
+            <ToggleButton value="last_used">{i18n('destination_last_used')}</ToggleButton>
+          </ToggleButtonGroup>
+        )}
         sx={{ p: '0.5rem 0' }}
       />
-      <Collapse in={getValues()?.destination?.custom} unmountOnExit>
+      <Collapse in={destinationMode === 'custom'} unmountOnExit>
         <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: 'clamp(12rem, 20vh, 20vh)' }}>
           <FormExplorer
             controllerProps={{ name: 'destination.path', control }}

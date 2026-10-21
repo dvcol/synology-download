@@ -10,6 +10,7 @@ import { PollingService } from '../../services/polling/polling.service';
 import { QueryService } from '../../services/query/query.service';
 import { store } from '../../store/store';
 import { onContentEvents, onPortEvents } from './modules/connect-handler';
+import { watchContextMenuVisibility } from './modules/context-menu-visibility';
 import { onContextMenuEvents } from './modules/context-menu.handler';
 import { onDownloadEvents } from './modules/download.handler';
 import { onOpenPanelEvent } from './modules/panel-handler';
@@ -51,6 +52,8 @@ export async function initServiceWorker() {
 
   // Restore State
   await lastValueFrom(restoreLocalSate(store));
+
+  watchContextMenuVisibility(store);
 
   // Restore Tasks
   await lastValueFrom(restoreTaskSlice(store));
