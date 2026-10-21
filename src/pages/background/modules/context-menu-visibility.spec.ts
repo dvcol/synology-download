@@ -43,7 +43,7 @@ describe('last-used native menu visibility', () => {
     setHistory(destinations);
     subscription = watchContextMenuVisibility(store);
     expect(chrome.contextMenus.update).toHaveBeenCalledWith('recent', { visible }, expect.any(Function));
-    expect(vi.mocked(chrome.contextMenus.update).mock.calls.some(([id]) => id === ordinaryMenu.id)).toBe(false);
+    expect(vi.mocked(chrome.contextMenus.update).mock.calls.filter(([id]) => id === ordinaryMenu.id).map(([, properties]) => properties.visible)).toEqual(menus.includes(ordinaryMenu) ? [true] : []);
   });
 
   it('ignores Scrape Page when deciding the sole-action fallback', () => {
@@ -60,7 +60,7 @@ describe('last-used native menu visibility', () => {
     setHistory(['downloads/restored']);
     setHistory(['downloads/newest', 'downloads/restored']);
     setHistory([]);
-    expect(vi.mocked(chrome.contextMenus.update).mock.calls.map(([, properties]) => properties.visible)).toEqual([false, true, false]);
+    expect(vi.mocked(chrome.contextMenus.update).mock.calls.filter(([id]) => id === recentMenu.id).map(([, properties]) => properties.visible)).toEqual([false, true, false]);
     expect(store.getState().settings.menus).toEqual([recentMenu, ordinaryMenu]);
   });
 
@@ -70,14 +70,27 @@ describe('last-used native menu visibility', () => {
     subscription = watchContextMenuVisibility(store);
     setMenus([recentMenu, ordinaryMenu]);
     setMenus([recentMenu]);
-    expect(vi.mocked(chrome.contextMenus.update).mock.calls.map(([, properties]) => properties.visible)).toEqual([true, false, true]);
+    expect(vi.mocked(chrome.contextMenus.update).mock.calls.filter(([id]) => id === recentMenu.id).map(([, properties]) => properties.visible)).toEqual([true, false, true]);
   });
 
-  it('does nothing for ordinary menus', () => {
+  it.each([
+    { custom: false },
+    { custom: true, path: 'downloads/custom' },
+  ])('restores a hidden menu when changing to an ordinary destination: $custom', (destination) => {
+    expect.assertions(2);
+    setMenus([recentMenu, ordinaryMenu]);
+    subscription = watchContextMenuVisibility(store);
+    expect(chrome.contextMenus.update).toHaveBeenCalledWith('recent', { visible: false }, expect.any(Function));
+    vi.mocked(chrome.contextMenus.update).mockClear();
+    setMenus([{ ...recentMenu, destination }, ordinaryMenu]);
+    expect(chrome.contextMenus.update).toHaveBeenCalledWith('recent', { visible: true }, expect.any(Function));
+  });
+
+  it('keeps ordinary menus visible', () => {
     expect.assertions(1);
     setMenus([ordinaryMenu]);
     subscription = watchContextMenuVisibility(store);
-    expect(chrome.contextMenus.update).not.toHaveBeenCalled();
+    expect(chrome.contextMenus.update).toHaveBeenCalledExactlyOnceWith('ordinary', { visible: true }, expect.any(Function));
   });
 
   it('replaces the previous watcher and stops after unsubscribe', () => {
@@ -87,9 +100,9 @@ describe('last-used native menu visibility', () => {
     subscription = watchContextMenuVisibility(store);
     vi.mocked(chrome.contextMenus.update).mockClear();
     setHistory(['downloads/newest']);
-    expect(chrome.contextMenus.update).toHaveBeenCalledOnce();
+    expect(chrome.contextMenus.update).toHaveBeenCalledTimes(2);
     subscription.unsubscribe();
     setHistory([]);
-    expect(chrome.contextMenus.update).toHaveBeenCalledOnce();
+    expect(chrome.contextMenus.update).toHaveBeenCalledTimes(2);
   });
 });

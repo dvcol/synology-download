@@ -21,7 +21,7 @@ export function watchContextMenuVisibility(store: StoreOrProxy): Subscription {
   ]).pipe(
     concatMap(([menus, hasHistory]) => {
       const visible = hasHistory || !menus.some(menu => !menu.destination?.lastUsed);
-      return forkJoin(menus.filter(menu => menu.destination?.lastUsed).map(menu => saveContextMenu({ id: menu.id, visible }, true))).pipe(
+      return forkJoin(menus.map(menu => saveContextMenu({ id: menu.id, visible: !menu.destination?.lastUsed || visible }, true))).pipe(
         catchError((error: unknown) => {
           LoggerService.error('Failed to update last-used destination menu visibility.', error);
           return EMPTY;
