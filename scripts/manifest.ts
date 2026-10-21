@@ -60,7 +60,7 @@ export const manifest = {
       js: ['scripts/contentScript.js'],
     },
   ],
-  permissions: ['scripting', 'contextMenus', 'notifications', 'storage', 'tabs', 'downloads', 'downloads.open', 'clipboardRead', 'sidePanel'],
+  permissions: ['scripting', 'contextMenus', 'notifications', 'storage', 'tabs', 'downloads', 'downloads.open', 'clipboardRead', 'sidePanel', 'alarms'],
   host_permissions: getHostPermissions(isDev, port),
   web_accessible_resources: [
     {
