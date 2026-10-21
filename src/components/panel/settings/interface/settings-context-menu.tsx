@@ -1,6 +1,6 @@
 import type { ContextMenu } from '../../../../models/menu.model';
 
-import { AccordionDetails, Button, Card, CardActions, CardHeader, Collapse, Stack, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { AccordionDetails, Button, Card, CardActions, CardHeader, Collapse, Stack } from '@mui/material';
 import { useForm, useWatch } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
@@ -30,23 +30,11 @@ export function SettingsContextMenu({ menu, onRemove }: { menu: ContextMenu; onR
       modal: menu.modal ?? false,
       popup: (menu.popup ?? false) && !!openPopup && !menu.modal && !menu.panel,
       panel: (menu.panel ?? false) && !!openPanel && !menu.modal && !menu.popup,
-      destination: { custom: menu.destination?.custom ?? false, path: menu.destination?.path ?? '', lastUsed: menu.destination?.lastUsed ?? false },
+      destination: { custom: !!menu.destination?.custom && !menu.destination?.lastUsed, path: menu.destination?.path ?? '', lastUsed: menu.destination?.lastUsed ?? false },
     },
   });
 
-  const destination = useWatch({ control, name: 'destination' });
-  let destinationMode = 'default';
-  if (destination?.custom) destinationMode = 'custom';
-  if (destination?.lastUsed) destinationMode = 'last_used';
-
-  const onDestinationModeChange = (_event: React.MouseEvent<HTMLElement>, mode: string | null) => {
-    if (!mode) return;
-    setValue('destination', {
-      custom: mode === 'custom',
-      lastUsed: mode === 'last_used',
-      path: mode === 'custom' ? getValues('destination.path') : '',
-    }, { shouldDirty: true });
-  };
+  const customDestination = useWatch({ control, name: 'destination.custom' });
 
   const onDelete = async () => {
     await onRemove(menu.id);
@@ -146,15 +134,20 @@ export function SettingsContextMenu({ menu, onRemove }: { menu: ContextMenu; onR
         subheader={i18n('destination_subheader')}
         slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
         action={(
-          <ToggleButtonGroup value={destinationMode} exclusive size="small" onChange={onDestinationModeChange} aria-label={i18n('destination_title')}>
-            <ToggleButton value="default">{i18n('destination_default')}</ToggleButton>
-            <ToggleButton value="custom">{i18n('destination_custom')}</ToggleButton>
-            <ToggleButton value="last_used">{i18n('destination_last_used')}</ToggleButton>
-          </ToggleButtonGroup>
+          <FormSwitch
+            controllerProps={{ name: 'destination.custom', control }}
+            formControlLabelProps={{ label: '' }}
+            switchProps={{
+              slotProps: { input: { 'role': 'switch', 'aria-label': i18n('destination_title') } },
+              onChange: (_, checked) => {
+                if (checked && getValues()?.destination?.lastUsed) setValue('destination.lastUsed', false);
+              },
+            }}
+          />
         )}
         sx={{ p: '0.5rem 0' }}
       />
-      <Collapse in={destinationMode === 'custom'} unmountOnExit>
+      <Collapse in={customDestination} unmountOnExit>
         <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: 'clamp(12rem, 20vh, 20vh)' }}>
           <FormExplorer
             controllerProps={{ name: 'destination.path', control }}
@@ -166,6 +159,24 @@ export function SettingsContextMenu({ menu, onRemove }: { menu: ContextMenu; onR
           />
         </Card>
       </Collapse>
+      <CardHeader
+        title={i18n('last_used_title')}
+        subheader={i18n('last_used_subheader')}
+        slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
+        action={(
+          <FormSwitch
+            controllerProps={{ name: 'destination.lastUsed', control }}
+            formControlLabelProps={{ label: '' }}
+            switchProps={{
+              slotProps: { input: { 'role': 'switch', 'aria-label': i18n('last_used_title') } },
+              onChange: (_, checked) => {
+                if (checked && getValues()?.destination?.custom) setValue('destination.custom', false);
+              },
+            }}
+          />
+        )}
+        sx={{ p: '0.5rem 0' }}
+      />
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Stack direction="row" spacing={2}>
           <Button variant="outlined" color="error" sx={{ width: '5rem' }} type="submit" onClick={onDelete}>

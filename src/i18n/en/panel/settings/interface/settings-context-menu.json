@@ -27,18 +27,15 @@
     "message": "Toggle to open in panel instead of shortcut."
   },
   "panel__settings__context_menu__destination_title": {
-    "message": "Destination folder"
-  },
-  "panel__settings__context_menu__destination_subheader": {
-    "message": "Use the NAS default, a custom folder, or the most recently used destination. Without history, Last used is hidden when another download action exists; otherwise it uses the NAS default."
-  },
-  "panel__settings__context_menu__destination_default": {
-    "message": "Default folder"
-  },
-  "panel__settings__context_menu__destination_custom": {
     "message": "Custom folder"
   },
-  "panel__settings__context_menu__destination_last_used": {
-    "message": "Last used destination"
+  "panel__settings__context_menu__destination_subheader": {
+    "message": "Choose a fixed destination. Leave both folder switches off to use the NAS default."
+  },
+  "panel__settings__context_menu__last_used_title": {
+    "message": "Last used folder"
+  },
+  "panel__settings__context_menu__last_used_subheader": {
+    "message": "Reuse the destination folder from the most recent successful task."
   }
 }

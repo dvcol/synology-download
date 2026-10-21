@@ -63,7 +63,8 @@ export function SettingsContextMenus() {
 
   function getDestinationLabel(menu: ContextMenu) {
     if (menu.destination?.lastUsed) return i18n('last_used_folder');
-    return menu.destination?.path?.replaceAll('/', ' / ') ?? i18n('default_folder');
+    if (menu.destination?.custom && menu.destination.path) return menu.destination.path.replaceAll('/', ' / ');
+    return i18n('default_folder');
   }
 
   return (

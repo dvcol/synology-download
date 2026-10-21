@@ -79,7 +79,7 @@ export const ContentTaskDialog: FC<{ container?: PortalProps['container'] }> = (
               setForm({ uri, source, destination });
               _setOpen(true);
             } else {
-              QueryService.createTask({ url: [uri], destination: destination?.path }, { source }).subscribe();
+              QueryService.createTask({ url: [uri], destination: destination?.custom ? destination.path : undefined }, { source }).subscribe();
             }
           } else if (uri) {
             NotificationService.loginRequired();

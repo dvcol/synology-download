@@ -53,6 +53,7 @@ afterEach(() => {
 describe('context-menu destinations', () => {
   it.each([
     { destination: { custom: false }, expected: undefined },
+    { destination: { custom: false, lastUsed: false, path: 'downloads/fixed' }, expected: undefined },
     { destination: { custom: true, path: 'downloads/fixed' }, expected: 'downloads/fixed' },
     { destination: { custom: false, lastUsed: true }, expected: 'downloads/newest' },
   ])('routes a direct HTTP task to $expected', ({ destination, expected }) => {
