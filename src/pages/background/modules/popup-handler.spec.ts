@@ -1,4 +1,4 @@
-/* eslint-disable ts/no-unsafe-member-access, ts/no-unsafe-assignment */
+/* eslint-disable ts/no-unsafe-member-access */
 import type { OpenPopupPayload } from '../../../models/message.model';
 
 import { Subject } from 'rxjs';

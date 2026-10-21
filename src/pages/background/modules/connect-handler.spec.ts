@@ -1,4 +1,4 @@
-/* eslint-disable ts/no-unsafe-member-access, ts/no-unsafe-assignment, ts/no-unsafe-call */
+/* eslint-disable ts/no-unsafe-assignment */
 import type { Store } from 'redux';
 
 import { Subject } from 'rxjs';

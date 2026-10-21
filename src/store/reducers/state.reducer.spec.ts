@@ -1,4 +1,4 @@
-/* eslint-disable ts/no-unsafe-member-access, ts/no-unsafe-assignment, ts/no-unsafe-call, import/first */
+/* eslint-disable ts/no-unsafe-member-access, import/first */
 import type { Log } from '../../models/settings.model';
 import type { StateSlice } from '../../models/store.model';
 
