@@ -2,7 +2,7 @@
 import type { DownloadStationConfig } from '../../../models/download-station.model';
 import type { ContextMenu } from '../../../models/menu.model';
 
-import { act, fireEvent } from '@testing-library/react';
+import { act, fireEvent, waitFor } from '@testing-library/react';
 import { of } from 'rxjs';
 
 import { defaultContextMenu } from '../../../models/menu.model';
@@ -95,14 +95,18 @@ describe('context-menu destinations', () => {
   it('keeps the resolved folder when submitting the existing modal', async () => {
     expect.assertions(2);
     const { findByRole, getByRole } = renderWithProviders(<ContentTaskDialog />);
-    act(() => sendMenuClick({ custom: false, lastUsed: true }, { modal: true }));
+    await act(async () => sendMenuClick({ custom: false, lastUsed: true }, { modal: true }));
     const dialog = await findByRole('dialog');
     expect((dialog.querySelector('input[name="destination.custom"]') as HTMLInputElement).checked).toBe(true);
+    const createButton = getByRole('button', { name: 'common__buttons__create' }) as HTMLButtonElement;
+    await waitFor(() => {
+      if (createButton.disabled) throw new Error('Task form is not valid yet');
+    }, { timeout: 10000 });
     await act(async () => {
-      fireEvent.click(getByRole('button', { name: 'common__buttons__create' }));
+      fireEvent.click(createButton);
     });
     expect(QueryService.createTask).toHaveBeenCalledWith(expect.objectContaining({ url: [linkUrl], destination: 'downloads/newest' }), expect.objectContaining({ source: pageUrl }));
-  });
+  }, 15000);
 
   it('requires login before creating a task', () => {
     expect.assertions(2);

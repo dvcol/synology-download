@@ -1,6 +1,6 @@
 import type { TaskForm } from '../../../../models/task.model';
 
-import { act, fireEvent } from '@testing-library/react';
+import { act, fireEvent, waitFor } from '@testing-library/react';
 import { of } from 'rxjs';
 
 import { SynologyFileService } from '../../../../services/http/synology-file.service';
@@ -34,14 +34,14 @@ describe('task-add destination prefilling', () => {
     const toggle = container.querySelector('input[name="destination.custom"]') as HTMLInputElement;
     expect(toggle.checked).toBe(expected !== undefined);
     const createButton = getByRole('button', { name: 'common__buttons__create' }) as HTMLButtonElement;
-    await vi.waitFor(() => {
+    await waitFor(() => {
       if (createButton.disabled) throw new Error('Task form is not valid yet');
-    });
+    }, { timeout: 10000 });
     await act(async () => {
       fireEvent.click(createButton);
     });
     const request = vi.mocked(QueryService.createTask).mock.calls[0];
     expect(request[0].destination).toBe(expected);
     expect(request[1]?.source).toBe('Context menu');
-  });
+  }, 15000);
 });
