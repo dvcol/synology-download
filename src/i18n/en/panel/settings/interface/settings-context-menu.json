@@ -8,7 +8,6 @@
   "panel__settings__context_menu__name_label": {
     "message": "Menu name"
   },
-
   "panel__settings__context_menu__modal_title": {
     "message": "Open full modal"
   },
@@ -27,11 +26,16 @@
   "panel__settings__context_menu__panel_subheader": {
     "message": "Toggle to open in panel instead of shortcut."
   },
-
   "panel__settings__context_menu__destination_title": {
-    "message": "Destination folder"
+    "message": "Custom folder"
   },
   "panel__settings__context_menu__destination_subheader": {
-    "message": "Change default destination folder."
+    "message": "Choose a fixed destination. Leave both folder switches off to use the NAS default."
+  },
+  "panel__settings__context_menu__last_used_title": {
+    "message": "Last used folder"
+  },
+  "panel__settings__context_menu__last_used_subheader": {
+    "message": "Reuse the destination folder from the most recent successful task."
   }
 }

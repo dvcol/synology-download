@@ -1,0 +1,129 @@
+/// <reference types="chrome" />
+import type { Subscription } from 'rxjs';
+
+import type { ContextMenu } from '../../../models/menu.model';
+
+import { defaultContextMenu } from '../../../models/menu.model';
+import { defaultSettings } from '../../../models/settings.model';
+import { LoggerService } from '../../../services/logger/logger.service';
+import { setSettings } from '../../../store/actions/settings.action';
+import { restoreState } from '../../../store/actions/state.action';
+import { store } from '../../../store/store';
+import { watchContextMenuVisibility } from './context-menu-visibility';
+
+const recentMenu: ContextMenu = { ...defaultContextMenu, id: 'recent', destination: { custom: false, lastUsed: true } };
+const ordinaryMenu: ContextMenu = { ...defaultContextMenu, id: 'ordinary' };
+let subscription: Subscription | undefined;
+
+function setMenus(menus: ContextMenu[], scrape = true) {
+  store.dispatch(setSettings({ ...defaultSettings, menus, scrape: { menu: scrape } }));
+}
+function setHistory(destinations: string[]) {
+  store.dispatch(restoreState({ history: { destinations, folders: [], logs: [] } }));
+}
+
+beforeEach(() => {
+  vi.mocked(chrome.contextMenus.update).mockReset();
+  vi.mocked(chrome.contextMenus.update).mockImplementation(async (_id, _properties, callback) => {
+    callback?.();
+    return Promise.resolve();
+  });
+  setHistory([]);
+});
+afterEach(() => {
+  subscription?.unsubscribe();
+  vi.restoreAllMocks();
+});
+
+describe('last-used native menu visibility', () => {
+  it.each([
+    { menus: [recentMenu, ordinaryMenu], destinations: [], visible: false },
+    { menus: [recentMenu, ordinaryMenu], destinations: ['downloads/recent'], visible: true },
+    { menus: [recentMenu], destinations: [], visible: true },
+    { menus: [recentMenu, { ...recentMenu, id: 'second-recent' }], destinations: [], visible: true },
+  ])('uses history and remaining download actions: $visible', ({ menus, destinations, visible }) => {
+    expect.assertions(2);
+    setMenus(menus);
+    setHistory(destinations);
+    subscription = watchContextMenuVisibility(store);
+    expect(chrome.contextMenus.update).toHaveBeenCalledWith('recent', { visible }, expect.any(Function));
+    expect(vi.mocked(chrome.contextMenus.update).mock.calls.filter(([id]) => id === ordinaryMenu.id).map(([, properties]) => properties.visible)).toEqual(menus.includes(ordinaryMenu) ? [true] : []);
+  });
+
+  it('ignores Scrape Page when deciding the sole-action fallback', () => {
+    expect.assertions(1);
+    setMenus([recentMenu], true);
+    subscription = watchContextMenuVisibility(store);
+    expect(chrome.contextMenus.update).toHaveBeenCalledExactlyOnceWith('recent', { visible: true }, expect.any(Function));
+  });
+
+  it('reacts to restored, added and cleared history', () => {
+    expect.assertions(2);
+    setMenus([recentMenu, ordinaryMenu]);
+    subscription = watchContextMenuVisibility(store);
+    setHistory(['downloads/restored']);
+    setHistory(['downloads/newest', 'downloads/restored']);
+    setHistory([]);
+    expect(vi.mocked(chrome.contextMenus.update).mock.calls.filter(([id]) => id === recentMenu.id).map(([, properties]) => properties.visible)).toEqual([false, true, false]);
+    expect(store.getState().settings.menus).toEqual([recentMenu, ordinaryMenu]);
+  });
+
+  it('refreshes visibility after menu configuration changes', () => {
+    expect.assertions(1);
+    setMenus([recentMenu]);
+    subscription = watchContextMenuVisibility(store);
+    setMenus([recentMenu, ordinaryMenu]);
+    setMenus([recentMenu]);
+    expect(vi.mocked(chrome.contextMenus.update).mock.calls.filter(([id]) => id === recentMenu.id).map(([, properties]) => properties.visible)).toEqual([true, false, true]);
+  });
+
+  it.each([
+    { custom: false },
+    { custom: true, path: 'downloads/custom' },
+  ])('restores a hidden menu when changing to an ordinary destination: $custom', (destination) => {
+    expect.assertions(2);
+    setMenus([recentMenu, ordinaryMenu]);
+    subscription = watchContextMenuVisibility(store);
+    expect(chrome.contextMenus.update).toHaveBeenCalledWith('recent', { visible: false }, expect.any(Function));
+    vi.mocked(chrome.contextMenus.update).mockClear();
+    setMenus([{ ...recentMenu, destination }, ordinaryMenu]);
+    expect(chrome.contextMenus.update).toHaveBeenCalledWith('recent', { visible: true }, expect.any(Function));
+  });
+
+  it('keeps ordinary menus visible', () => {
+    expect.assertions(1);
+    setMenus([ordinaryMenu]);
+    subscription = watchContextMenuVisibility(store);
+    expect(chrome.contextMenus.update).toHaveBeenCalledExactlyOnceWith('ordinary', { visible: true }, expect.any(Function));
+  });
+
+  it('reports a native update failure and processes subsequent visibility changes', () => {
+    expect.assertions(4);
+    const error = new Error('Context menu API unavailable');
+    const logError = vi.spyOn(LoggerService, 'error').mockImplementation(() => {});
+    vi.mocked(chrome.contextMenus.update).mockImplementationOnce(() => {
+      throw error;
+    });
+    setMenus([recentMenu, ordinaryMenu]);
+    subscription = watchContextMenuVisibility(store);
+    expect(chrome.contextMenus.update).toHaveBeenCalledWith('recent', { visible: false }, expect.any(Function));
+    expect(logError).toHaveBeenCalledExactlyOnceWith('Failed to update last-used destination menu visibility.', error);
+    vi.mocked(chrome.contextMenus.update).mockClear();
+    setHistory(['downloads/recovered']);
+    expect(chrome.contextMenus.update).toHaveBeenCalledWith('recent', { visible: true }, expect.any(Function));
+    expect(logError).toHaveBeenCalledOnce();
+  });
+
+  it('replaces the previous watcher and stops after unsubscribe', () => {
+    expect.assertions(2);
+    setMenus([recentMenu, ordinaryMenu]);
+    subscription = watchContextMenuVisibility(store);
+    subscription = watchContextMenuVisibility(store);
+    vi.mocked(chrome.contextMenus.update).mockClear();
+    setHistory(['downloads/newest']);
+    expect(chrome.contextMenus.update).toHaveBeenCalledTimes(2);
+    subscription.unsubscribe();
+    setHistory([]);
+    expect(chrome.contextMenus.update).toHaveBeenCalledTimes(2);
+  });
+});

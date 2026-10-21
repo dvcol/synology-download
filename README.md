@@ -32,6 +32,7 @@
 > * One click download on magnet links, with optional HTTP(S) torrent and NZB link interception
 > * Quick menu dropdown if more than one exist
 > * Rich task creation modal on quick action or context menu
+> * Configurable context-menu destinations: NAS default, custom folder, or last successfully used destination. Without history, last-used entries hide when another download action remains; a sole action uses the NAS default.
 > * In-page notification for task creation
 
 > The service worker supports the following functionalities:

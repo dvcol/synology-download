@@ -1,7 +1,7 @@
 import type { ContextMenu } from '../../../../models/menu.model';
 
 import { AccordionDetails, Button, Card, CardActions, CardHeader, Collapse, Stack } from '@mui/material';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 
 import { ChromeMessageType } from '../../../../models/message.model';
@@ -30,9 +30,11 @@ export function SettingsContextMenu({ menu, onRemove }: { menu: ContextMenu; onR
       modal: menu.modal ?? false,
       popup: (menu.popup ?? false) && !!openPopup && !menu.modal && !menu.panel,
       panel: (menu.panel ?? false) && !!openPanel && !menu.modal && !menu.popup,
-      destination: { custom: menu.destination?.custom ?? false, path: menu.destination?.path ?? '' },
+      destination: { custom: !!menu.destination?.custom && !menu.destination?.lastUsed, path: menu.destination?.path ?? '', lastUsed: menu.destination?.lastUsed ?? false },
     },
   });
+
+  const customDestination = useWatch({ control, name: 'destination.custom' });
 
   const onDelete = async () => {
     await onRemove(menu.id);
@@ -131,10 +133,21 @@ export function SettingsContextMenu({ menu, onRemove }: { menu: ContextMenu; onR
         title={i18n('destination_title')}
         subheader={i18n('destination_subheader')}
         slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
-        action={<FormSwitch controllerProps={{ name: 'destination.custom', control }} formControlLabelProps={{ label: '' }} />}
+        action={(
+          <FormSwitch
+            controllerProps={{ name: 'destination.custom', control }}
+            formControlLabelProps={{ label: '' }}
+            switchProps={{
+              slotProps: { input: { 'role': 'switch', 'aria-label': i18n('destination_title') } },
+              onChange: (_, checked) => {
+                if (checked && getValues()?.destination?.lastUsed) setValue('destination.lastUsed', false);
+              },
+            }}
+          />
+        )}
         sx={{ p: '0.5rem 0' }}
       />
-      <Collapse in={getValues()?.destination?.custom} unmountOnExit>
+      <Collapse in={customDestination} unmountOnExit>
         <Card sx={{ p: '0.5rem', m: '0.5rem 0', height: 'clamp(12rem, 20vh, 20vh)' }}>
           <FormExplorer
             controllerProps={{ name: 'destination.path', control }}
@@ -146,6 +159,24 @@ export function SettingsContextMenu({ menu, onRemove }: { menu: ContextMenu; onR
           />
         </Card>
       </Collapse>
+      <CardHeader
+        title={i18n('last_used_title')}
+        subheader={i18n('last_used_subheader')}
+        slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
+        action={(
+          <FormSwitch
+            controllerProps={{ name: 'destination.lastUsed', control }}
+            formControlLabelProps={{ label: '' }}
+            switchProps={{
+              slotProps: { input: { 'role': 'switch', 'aria-label': i18n('last_used_title') } },
+              onChange: (_, checked) => {
+                if (checked && getValues()?.destination?.custom) setValue('destination.custom', false);
+              },
+            }}
+          />
+        )}
+        sx={{ p: '0.5rem 0' }}
+      />
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Stack direction="row" spacing={2}>
           <Button variant="outlined" color="error" sx={{ width: '5rem' }} type="submit" onClick={onDelete}>

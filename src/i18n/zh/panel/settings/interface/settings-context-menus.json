@@ -7,5 +7,8 @@
   },
   "panel__settings__context_menus__scrape_menu_subheader": {
     "message": "启用/禁用抓取上下文菜单。"
+  },
+  "panel__settings__context_menus__last_used_folder": {
+    "message": "上次使用的目标文件夹"
   }
 }

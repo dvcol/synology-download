@@ -7,5 +7,8 @@
   },
   "panel__settings__context_menus__scrape_menu_subheader": {
     "message": "Enable/disable the scrape context menu."
+  },
+  "panel__settings__context_menus__last_used_folder": {
+    "message": "Last used destination"
   }
 }

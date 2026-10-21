@@ -27,9 +27,15 @@
     "message": "切换为在面板而不是快捷方式中打开。"
   },
   "panel__settings__context_menu__destination_title": {
-    "message": "目标文件夹"
+    "message": "自定义文件夹"
   },
   "panel__settings__context_menu__destination_subheader": {
-    "message": "更改默认的目标文件夹。"
+    "message": "选择固定的目标文件夹。两个文件夹开关均关闭时，使用 NAS 的默认文件夹。"
+  },
+  "panel__settings__context_menu__last_used_title": {
+    "message": "上次使用的文件夹"
+  },
+  "panel__settings__context_menu__last_used_subheader": {
+    "message": "使用最近一次成功创建任务时的目标文件夹。"
   }
 }

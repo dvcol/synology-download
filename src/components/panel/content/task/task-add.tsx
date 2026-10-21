@@ -75,7 +75,6 @@ export interface TaskAddProps {
 }
 export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFormSubmit, cardProps, allowFile }) => {
   const i18n = useI18n('panel', 'content', 'task', 'add');
-  const [path, setPath] = React.useState<string>(form?.destination?.path ?? '');
   const [type, setType] = useState(TaskCreateType.url);
   const [file, setFile] = useState<File>();
   const [openSelect, setOpenSelect] = useState<{ open: boolean; list_id?: string }>({ open: false });
@@ -84,6 +83,7 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
 
   const clearOnExist = useSelector(getClearOnExitTaskSettings);
   const taskForm = useSelector(getTaskForm);
+  const [path, setPath] = React.useState<string>(form?.destination?.path ?? taskForm?.destination?.path ?? '');
   const dispatch = useDispatch();
 
   const height = isInstance(AppInstance.panel) ? 'calc(100vh - 270px)' : '21em';
@@ -107,10 +107,10 @@ export const TaskAdd: FC<TaskAddProps> = ({ form, withCancel, onFormCancel, onFo
       uri: [...new Set([taskForm?.uri, form?.uri]?.filter(Boolean).flatMap(uri => uri!.split(newlineRegex)))].join('\n'),
       source: taskForm?.source ?? form?.source ?? 'Custom Task',
       destination: {
-        ...taskForm,
-        ...form,
-        custom: taskForm?.destination?.custom ?? taskForm?.destination?.custom ?? false,
-        path: taskForm?.destination?.path ?? taskForm?.destination?.path ?? path ?? '',
+        ...taskForm?.destination,
+        ...form?.destination,
+        custom: form?.destination?.custom ?? taskForm?.destination?.custom ?? false,
+        path: form?.destination?.path ?? taskForm?.destination?.path ?? path ?? '',
       },
       username: taskForm?.username ?? form?.username ?? '',
       password: taskForm?.password ?? form?.password ?? '',

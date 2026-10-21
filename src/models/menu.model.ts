@@ -107,6 +107,7 @@ export enum ContextType {
  */
 export interface ContextMenu extends Menu {
   contexts: ContextType[];
+  destination: Menu['destination'] & { lastUsed?: boolean };
 }
 
 export const defaultContextMenu: ContextMenu = {

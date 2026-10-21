@@ -61,6 +61,12 @@ export function SettingsContextMenus() {
     dispatch(syncScrapeSettings({ menu: show }));
   }
 
+  function getDestinationLabel(menu: ContextMenu) {
+    if (menu.destination?.lastUsed) return i18n('last_used_folder');
+    if (menu.destination?.custom && menu.destination.path) return menu.destination.path.replaceAll('/', ' / ');
+    return i18n('default_folder');
+  }
+
   return (
     <SettingsAccordion
       state={state}
@@ -92,7 +98,7 @@ export function SettingsContextMenus() {
               overflow: 'hidden',
             }}
           >
-            {c.destination?.path?.replaceAll('/', ' / ') ?? i18n('default_folder')}
+            {getDestinationLabel(c)}
           </Typography>
         </>
       )}
