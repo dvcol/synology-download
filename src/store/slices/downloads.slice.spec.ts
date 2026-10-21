@@ -1,4 +1,3 @@
-/* eslint-disable ts/no-unsafe-assignment, ts/no-unsafe-argument, ts/no-unsafe-call */
 import type { Download } from '../../models/download.model';
 
 import { describe, expect, it, vi } from 'vitest';

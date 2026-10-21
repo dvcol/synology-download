@@ -1,4 +1,3 @@
-/* eslint-disable ts/no-unsafe-member-access, ts/no-unsafe-assignment */
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 import type { ContextMenu } from '../../models/menu.model';

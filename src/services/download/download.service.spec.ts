@@ -1,4 +1,4 @@
-/* eslint-disable ts/no-unsafe-return, ts/no-unsafe-member-access, ts/no-unsafe-assignment, ts/no-unsafe-call, ts/no-unsafe-argument */
+/* eslint-disable ts/no-unsafe-return, ts/no-unsafe-member-access, ts/no-unsafe-assignment, ts/no-unsafe-argument */
 import { firstValueFrom, of } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 

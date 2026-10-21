@@ -29,7 +29,7 @@
 
 > The content script supports the following functionalities:
 >
-> * One click download on magnet links
+> * One click download on magnet links, with optional HTTP(S) torrent and NZB link interception
 > * Quick menu dropdown if more than one exist
 > * Rich task creation modal on quick action or context menu
 > * In-page notification for task creation
@@ -44,7 +44,7 @@
 
 > Quick-connect login is not currently supported due to the lack of official API documentation.
 >
-> Currently, only magnet urls are supported for the quick action menu.
+> The quick action menu lets you choose supported link types individually. Magnet, thunder, flashget, qqdl and ed2k protocols are enabled by default; HTTP(S) links ending in `.torrent` or `.nzb` are independently opt-in under quick menu settings. The main quick menu interception switch must also be enabled. Redirect-only URLs without a supported extension are not detected.
 >
 > Note that translation on previous version of Chrome (100 and below) might have only partial support in banner notifications.
 >

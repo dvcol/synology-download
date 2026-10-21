@@ -1,12 +1,12 @@
 import type { Theme } from '@mui/material';
 
-import type { AdvancedLogging, AdvancedSettings, ConnectionSettings, ContentSettings, Credentials, DownloadSettings, DownloadsIntercept, GlobalSettings, NotificationsBanner, NotificationSettings, NotificationsSnack, PollingSettings, ScrapeSettings, SyncSettings, TaskSettings } from '../../models/settings.model';
+import type { AdvancedLogging, AdvancedSettings, ConnectionSettings, ContentInterceptions, ContentSettings, Credentials, DownloadSettings, DownloadsIntercept, GlobalSettings, NotificationsBanner, NotificationSettings, NotificationsSnack, PollingSettings, ScrapeSettings, SyncSettings, TaskSettings } from '../../models/settings.model';
 import type { SettingsSlice } from '../../models/store.model';
 import type { StoreState } from '../store';
 
 import { createSelector } from '@reduxjs/toolkit';
 
-import { ConnectionType, defaultAdvancedSettings, defaultConnection, defaultContentSettings, defaultDownloads, defaultGlobal, defaultLoggingLevels, defaultNotifications, defaultPolling, defaultScrapeSettings, defaultSyncSettings, defaultTaskSettings, ThemeMode } from '../../models/settings.model';
+import { ConnectionType, defaultAdvancedSettings, defaultConnection, defaultContentInterceptions, defaultContentSettings, defaultDownloads, defaultGlobal, defaultLoggingLevels, defaultNotifications, defaultPolling, defaultScrapeSettings, defaultSyncSettings, defaultTaskSettings, ThemeMode } from '../../models/settings.model';
 import { TaskStatus } from '../../models/task.model';
 import { LoggerService } from '../../services/logger/logger.service';
 import { darkTheme, lightTheme } from '../../themes/themes';
@@ -92,6 +92,11 @@ export const getNotificationsBannerFinishedEnabled: (state: StoreState) => boole
 export const getScrapeSettings: (state: StoreState) => ScrapeSettings = createSelector(getSettings, (setting: SettingsSlice) => setting?.scrape ?? defaultScrapeSettings);
 
 export const getContentSettings: (state: StoreState) => ContentSettings = createSelector(getSettings, (setting: SettingsSlice) => setting?.content ?? defaultContentSettings);
+
+export const getContentInterceptions: (state: StoreState) => ContentInterceptions = createSelector(
+  getContentSettings,
+  content => ({ ...defaultContentInterceptions, ...content.interceptions }),
+);
 
 export const getGlobal: (state: StoreState) => GlobalSettings = createSelector(getSettings, (setting: SettingsSlice) => setting?.global ?? defaultGlobal);
 

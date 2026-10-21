@@ -7,5 +7,11 @@
   },
   "panel__settings__quick_menus__enabled_subheader": {
     "message": "Enable/disable the quick menu interception feature."
+  },
+  "panel__settings__quick_menus__interceptions_title": {
+    "message": "Supported link types"
+  },
+  "panel__settings__quick_menus__interceptions_subheader": {
+    "message": "Choose the protocol links and HTTP(S) file extensions to intercept. Torrent and NZB files are opt-in; modified file clicks keep their normal behavior."
   }
 }
