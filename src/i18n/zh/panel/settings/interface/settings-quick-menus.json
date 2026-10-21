@@ -3,9 +3,15 @@
     "message": "默认文件夹"
   },
   "panel__settings__quick_menus__enabled_title": {
-    "message": "Quick menu interception"
+    "message": "快捷菜单拦截"
   },
   "panel__settings__quick_menus__enabled_subheader": {
-    "message": "Enable/disable the quick menu interception feature."
+    "message": "启用或禁用快捷菜单拦截功能。"
+  },
+  "panel__settings__quick_menus__interceptions_title": {
+    "message": "支持的链接类型"
+  },
+  "panel__settings__quick_menus__interceptions_subheader": {
+    "message": "选择要拦截的协议链接和 HTTP(S) 文件扩展名。Torrent 和 NZB 文件默认不拦截，需手动启用；按住修饰键点击文件链接时保留浏览器的默认行为。"
   }
 }
