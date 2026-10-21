@@ -5,6 +5,7 @@ import type { ContextMenu } from '../../../models/menu.model';
 
 import { defaultContextMenu } from '../../../models/menu.model';
 import { defaultSettings } from '../../../models/settings.model';
+import { LoggerService } from '../../../services/logger/logger.service';
 import { setSettings } from '../../../store/actions/settings.action';
 import { restoreState } from '../../../store/actions/state.action';
 import { store } from '../../../store/store';
@@ -29,7 +30,10 @@ beforeEach(() => {
   });
   setHistory([]);
 });
-afterEach(() => subscription?.unsubscribe());
+afterEach(() => {
+  subscription?.unsubscribe();
+  vi.restoreAllMocks();
+});
 
 describe('last-used native menu visibility', () => {
   it.each([
@@ -91,6 +95,23 @@ describe('last-used native menu visibility', () => {
     setMenus([ordinaryMenu]);
     subscription = watchContextMenuVisibility(store);
     expect(chrome.contextMenus.update).toHaveBeenCalledExactlyOnceWith('ordinary', { visible: true }, expect.any(Function));
+  });
+
+  it('reports a native update failure and processes subsequent visibility changes', () => {
+    expect.assertions(4);
+    const error = new Error('Context menu API unavailable');
+    const logError = vi.spyOn(LoggerService, 'error').mockImplementation(() => {});
+    vi.mocked(chrome.contextMenus.update).mockImplementationOnce(() => {
+      throw error;
+    });
+    setMenus([recentMenu, ordinaryMenu]);
+    subscription = watchContextMenuVisibility(store);
+    expect(chrome.contextMenus.update).toHaveBeenCalledWith('recent', { visible: false }, expect.any(Function));
+    expect(logError).toHaveBeenCalledExactlyOnceWith('Failed to update last-used destination menu visibility.', error);
+    vi.mocked(chrome.contextMenus.update).mockClear();
+    setHistory(['downloads/recovered']);
+    expect(chrome.contextMenus.update).toHaveBeenCalledWith('recent', { visible: true }, expect.any(Function));
+    expect(logError).toHaveBeenCalledOnce();
   });
 
   it('replaces the previous watcher and stops after unsubscribe', () => {
