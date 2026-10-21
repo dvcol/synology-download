@@ -94,7 +94,7 @@ export const DownloadCard: FC<DownloadCardProps> = ({ download, hideStatus, expa
           <span>
             {formatBytes(download.received)}
             {' '}
-            of
+            {'of '}
             {formatBytes(download.size)}
             {' '}
             downloaded

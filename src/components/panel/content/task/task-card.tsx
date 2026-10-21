@@ -116,7 +116,7 @@ export const TaskCard: FC<TaskCardProps> = ({ task, hideStatus, expanded, hover 
           <span>
             {formatBytes(task.received)}
             {' '}
-            of
+            {'of '}
             {formatBytes(task.size)}
             {' '}
             downloaded
