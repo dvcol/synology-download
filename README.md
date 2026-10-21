@@ -44,7 +44,7 @@
 
 > Quick-connect login is not currently supported due to the lack of official API documentation.
 >
-> The quick action menu supports magnet, thunder, flashget, qqdl and ed2k links. HTTP(S) links ending in `.torrent` or `.nzb` require the separate opt-in under quick menu settings. Redirect-only URLs without a supported extension are not detected.
+> The quick action menu lets you choose supported link types individually. Magnet, thunder, flashget, qqdl and ed2k protocols are enabled by default; HTTP(S) links ending in `.torrent` or `.nzb` are independently opt-in under quick menu settings. The main quick menu interception switch must also be enabled. Redirect-only URLs without a supported extension are not detected.
 >
 > Note that translation on previous version of Chrome (100 and below) might have only partial support in banner notifications.
 >

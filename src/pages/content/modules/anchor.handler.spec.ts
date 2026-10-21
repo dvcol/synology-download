@@ -1,5 +1,6 @@
 import type { Subscription } from 'rxjs';
 
+import type { ContentInterceptions } from '../../../models/settings.model';
 import type { AnchorPayload, ClickPayload } from '../service/anchor.service';
 
 import { defaultSettings } from '../../../models/settings.model';
@@ -17,8 +18,8 @@ let subscriptions: Subscription[];
 let receivedAnchor: ReturnType<typeof vi.fn<(payload: AnchorPayload) => void>>;
 let receivedClick: ReturnType<typeof vi.fn<(payload: ClickPayload) => void>>;
 
-function setInterception(intercept: boolean, interceptFiles?: boolean) {
-  store.dispatch(setSettings({ ...defaultSettings, content: { intercept, interceptFiles } }));
+function setInterception(intercept: boolean, interceptions?: Partial<ContentInterceptions>) {
+  store.dispatch(setSettings({ ...defaultSettings, content: { intercept, interceptions } }));
 }
 
 /** Dispatch at the document boundary without executing jsdom's native navigation. */
@@ -36,7 +37,7 @@ function clickLink(href: string, options: MouseEventInit = {}, cancelled = false
 beforeEach(() => {
   receivedAnchor = vi.fn();
   receivedClick = vi.fn();
-  setInterception(true, true);
+  setInterception(true, { torrent: true, nzb: true });
   subscriptions = [anchor$.subscribe(receivedAnchor), lastClick$.subscribe(receivedClick), clickListener$.subscribe()];
 });
 
@@ -78,13 +79,13 @@ describe('anchor interception', () => {
   });
 
   it.each([
-    { intercept: true, interceptFiles: undefined },
-    { intercept: true, interceptFiles: false },
-    { intercept: false, interceptFiles: true },
-    { intercept: false, interceptFiles: false },
-  ])('respects settings and legacy opt-out: $intercept/$interceptFiles', ({ intercept, interceptFiles }) => {
+    { intercept: true, interceptions: undefined },
+    { intercept: true, interceptions: { torrent: false } },
+    { intercept: false, interceptions: { torrent: true } },
+    { intercept: false, interceptions: { torrent: false } },
+  ])('respects the master switch and legacy file opt-out: $intercept/$interceptions', ({ intercept, interceptions }) => {
     expect.assertions(2);
-    setInterception(intercept, interceptFiles);
+    setInterception(intercept, interceptions);
     const { event } = clickLink('https://example.com/file.torrent');
     expect(event.defaultPrevented).toBe(false);
     expect(receivedAnchor).not.toHaveBeenCalled();
@@ -119,9 +120,50 @@ describe('anchor interception', () => {
     expect(receivedAnchor).toHaveBeenCalledOnce();
   });
 
+  it('preserves custom ed2k syntax that an HTTP-style URL parser rejects', () => {
+    expect.assertions(2);
+    setInterception(true);
+    const { event, anchor } = clickLink('ed2k://|file|example.iso|1000|0123456789abcdef0123456789abcdef|/');
+    expect(event.defaultPrevented).toBe(true);
+    expect(receivedAnchor).toHaveBeenCalledExactlyOnceWith({ event, anchor, form: { uri: anchor.href, source: document.URL } });
+  });
+
+  it.each(['magnet', 'thunder', 'flashget', 'qqdl', 'ed2k'] as const)('opts out of %s independently', (protocol) => {
+    expect.assertions(3);
+    setInterception(true, { [protocol]: false, torrent: true });
+    const { event } = clickLink(`${protocol}:download`);
+    expect(event.defaultPrevented).toBe(false);
+    expect(receivedAnchor).not.toHaveBeenCalled();
+    clickLink('https://example.com/file.torrent');
+    expect(receivedAnchor).toHaveBeenCalledOnce();
+  });
+
+  it.each([
+    { interceptions: { torrent: true, nzb: false }, extension: 'torrent', intercepted: true },
+    { interceptions: { torrent: true, nzb: false }, extension: 'nzb', intercepted: false },
+    { interceptions: { torrent: false, nzb: true }, extension: 'torrent', intercepted: false },
+    { interceptions: { torrent: false, nzb: true }, extension: 'nzb', intercepted: true },
+  ])('selects each file extension independently: $extension/$intercepted', ({ interceptions, extension, intercepted }) => {
+    expect.assertions(2);
+    setInterception(true, interceptions);
+    const { event } = clickLink(`https://example.com/file.${extension}`);
+    expect(event.defaultPrevented).toBe(intercepted);
+    expect(receivedAnchor).toHaveBeenCalledTimes(intercepted ? 1 : 0);
+  });
+
+  it('leaves unsupported protocols and extensions native even with unknown saved preferences', () => {
+    expect.assertions(3);
+    setInterception(true, { torrent: true, ...{ zip: true, ftp: true } });
+    const unsupportedFile = clickLink('https://example.com/file.zip');
+    const unsupportedProtocol = clickLink('ftp://example.com/file.torrent');
+    expect(unsupportedFile.event.defaultPrevented).toBe(false);
+    expect(unsupportedProtocol.event.defaultPrevented).toBe(false);
+    expect(receivedAnchor).not.toHaveBeenCalled();
+  });
+
   it('disables protocol interception through the existing setting', () => {
     expect.assertions(2);
-    setInterception(false, true);
+    setInterception(false, { torrent: true });
     const { event } = clickLink('magnet:download');
     expect(event.defaultPrevented).toBe(false);
     expect(receivedAnchor).not.toHaveBeenCalled();

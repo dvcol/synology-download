@@ -1,18 +1,19 @@
 import type { QuickMenu } from '../../../../models/menu.model';
-import type { ContentSettings } from '../../../../models/settings.model';
+import type { ContentInterception, ContentSettings } from '../../../../models/settings.model';
 import type { StoreState } from '../../../../store/store';
 
-import { CardHeader, Typography } from '@mui/material';
+import { CardHeader, Grid, Typography } from '@mui/material';
 import * as React from 'react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { defaultQuickMenu } from '../../../../models/menu.model';
-import { defaultContentSettings, InterfaceHeader } from '../../../../models/settings.model';
+import { defaultContentSettings, InterfaceHeader, supportedContentInterceptions } from '../../../../models/settings.model';
 import { resetQuickMenus, saveQuickMenu, setQuickMenus, syncContentSettings } from '../../../../store/actions/settings.action';
-import { getContentSettings, getQuick } from '../../../../store/selectors/settings.selector';
+import { getContentInterceptions, getContentSettings, getQuick } from '../../../../store/selectors/settings.selector';
 import { useI18n } from '../../../../utils/webex.utils';
+import { FormCheckbox } from '../../../common/form/form-checkbox';
 import { FormSwitch } from '../../../common/form/form-switch';
 import { SettingsAccordion } from '../common/settings-accordion';
 import { SettingsQuickMenu } from './settings-quick-menu';
@@ -35,12 +36,14 @@ export function SettingsQuickMenus() {
 
   const contentSettings = useSelector<StoreState, ContentSettings>(getContentSettings);
 
-  const { control } = useForm<ContentSettings>({
+  const interceptions = useSelector(getContentInterceptions);
+
+  const { control, getValues } = useForm<ContentSettings>({
     mode: 'onChange',
     defaultValues: {
       ...contentSettings,
       intercept: contentSettings.intercept ?? defaultContentSettings.intercept,
-      interceptFiles: contentSettings.interceptFiles ?? false,
+      interceptions,
     },
   });
 
@@ -69,21 +72,31 @@ export function SettingsQuickMenus() {
             sx={{ p: '0.5rem 0' }}
           />
           <CardHeader
-            title={i18n('files_title')}
-            subheader={i18n('files_subheader')}
+            title={i18n('interceptions_title')}
+            subheader={i18n('interceptions_subheader')}
             slotProps={{ title: { variant: 'subtitle2' }, subheader: { variant: 'subtitle2' } }}
-            action={(
-              <FormSwitch
-                controllerProps={{ name: 'interceptFiles', control }}
-                formControlLabelProps={{ label: '' }}
-                switchProps={{
-                  slotProps: { input: { 'aria-label': i18n('files_title') } },
-                  onChange: (_, checked) => dispatch(syncContentSettings({ interceptFiles: checked })),
-                }}
-              />
-            )}
             sx={{ p: '0.5rem 0' }}
           />
+          <Grid container spacing={1} columnSpacing={1}>
+            {(Object.keys(supportedContentInterceptions) as ContentInterception[]).map((interception) => {
+              const definition = supportedContentInterceptions[interception];
+              const label = 'protocol' in definition ? definition.protocol : definition.extension;
+              return (
+                <Grid size={{ xs: 6, sm: 4 }} key={interception}>
+                  <FormCheckbox<ContentSettings>
+                    controllerProps={{ name: `interceptions.${interception}`, control }}
+                    formControlLabelProps={{ label }}
+                    checkboxProps={{
+                      disabled: contentSettings.intercept === false,
+                      onChange: (_, checked) => dispatch(syncContentSettings({
+                        interceptions: { ...getValues('interceptions'), [interception]: checked },
+                      })),
+                    }}
+                  />
+                </Grid>
+              );
+            })}
+          </Grid>
         </>
       )}
       summary={m => (

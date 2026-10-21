@@ -419,14 +419,32 @@ export const defaultScrapeSettings: ScrapeSettings = {
   menu: true,
 };
 
+/** Supported quick-menu links and their defaults for existing installations. */
+export const supportedContentInterceptions = {
+  magnet: { protocol: 'magnet:', enabled: true },
+  thunder: { protocol: 'thunder:', enabled: true },
+  flashget: { protocol: 'flashget:', enabled: true },
+  qqdl: { protocol: 'qqdl:', enabled: true },
+  ed2k: { protocol: 'ed2k:', enabled: true },
+  torrent: { extension: '.torrent', enabled: false },
+  nzb: { extension: '.nzb', enabled: false },
+} as const;
+
+export type ContentInterception = keyof typeof supportedContentInterceptions;
+export type ContentInterceptions = Record<ContentInterception, boolean>;
+
+export const defaultContentInterceptions = Object.fromEntries(
+  Object.entries(supportedContentInterceptions).map(([interception, definition]) => [interception, definition.enabled]),
+) as ContentInterceptions;
+
 export interface ContentSettings {
   intercept: boolean;
-  interceptFiles?: boolean;
+  interceptions?: Partial<ContentInterceptions>;
 }
 
 export const defaultContentSettings: ContentSettings = {
   intercept: true,
-  interceptFiles: false,
+  interceptions: defaultContentInterceptions,
 };
 
 export interface TaskSettings {

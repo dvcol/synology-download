@@ -1,34 +1,30 @@
+import type { ContentInterception } from '../../../models/settings.model';
+
 import { fromEventPattern } from 'rxjs';
 
+import { defaultContentInterceptions, supportedContentInterceptions } from '../../../models/settings.model';
 import { storeProxy } from '../../../store/store-proxy';
 import { anchor$, lastClick$ } from '../service/anchor.service';
 
-/**
- * List of supported protocols
- */
-const DOWNLOAD_ONLY_PROTOCOLS = ['magnet', 'thunder', 'flashget', 'qqdl', 'ed2k'];
-const DOWNLOAD_FILE_EXTENSION = /\.(?:torrent|nzb)$/i;
+/** Preserve custom protocol syntax and match HTTP(S) file paths without inspecting query parameters. */
+function getSupportedInterception(url: string): ContentInterception | undefined {
+  const interceptions = Object.keys(supportedContentInterceptions) as ContentInterception[];
+  const protocolInterception = interceptions.find((interception) => {
+    const definition = supportedContentInterceptions[interception];
+    return 'protocol' in definition && url.startsWith(definition.protocol);
+  });
+  if (protocolInterception) return protocolInterception;
 
-/** Match file extensions in HTTP(S) paths without inspecting query parameters. */
-function isDownloadFileLink(url: string): boolean {
   try {
     const { protocol, pathname } = new URL(url);
-    return (protocol === 'http:' || protocol === 'https:') && DOWNLOAD_FILE_EXTENSION.test(pathname);
+    if (protocol !== 'http:' && protocol !== 'https:') return undefined;
+    return interceptions.find((interception) => {
+      const definition = supportedContentInterceptions[interception];
+      return 'extension' in definition && pathname.toLowerCase().endsWith(definition.extension);
+    });
   } catch {
-    return false;
+    return undefined;
   }
-}
-
-/**
- * Check if the url starts with the given protocol(s)
- * @param url the url to test
- * @param protocols the protocol(s)
- */
-function startsWithAnyProtocol(url: string, protocols: string | string[]) {
-  if (typeof protocols === 'string') {
-    return url.startsWith(`${protocols}:`);
-  }
-  return protocols.some(protocol => url.startsWith(`${protocol}:`));
 }
 
 /**
@@ -62,10 +58,11 @@ async function listener(event: MouseEvent) {
   // Left clicks only
   if (event.button !== 0) return;
   if (!anchor?.href) return;
-  if (!startsWithAnyProtocol(anchor.href, DOWNLOAD_ONLY_PROTOCOLS)) {
-    if (settings?.interceptFiles !== true) return;
+  const interception = getSupportedInterception(anchor.href);
+  if (!interception) return;
+  if ((settings?.interceptions?.[interception] ?? defaultContentInterceptions[interception]) !== true) return;
+  if ('extension' in supportedContentInterceptions[interception]) {
     if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-    if (!isDownloadFileLink(anchor.href)) return;
   }
   anchor$.next({
     event,
