@@ -31,7 +31,7 @@ jobs:
 
     steps:
       - name: ⛙ Checkout branch ${{ github.ref }}
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ inputs.commit-hash || 'main' }}
           fetch-depth: 0
@@ -56,7 +56,7 @@ jobs:
           pnpm publish --provenance --no-git-checks
 
       - name: 💾 Caching build artefacts
-        uses: actions/cache/save@v5
+        uses: actions/cache/save@v6
         with:
           path: dist
           key: ${{ github.ref }}-${{ github.run_id }}-build
@@ -71,7 +71,7 @@ jobs:
 
     steps:
       - name: ⛙ Checkout branch ${{ github.ref }}
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: ${{ inputs.commit-hash || 'main' }}
           fetch-depth: 0
