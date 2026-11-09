@@ -10,7 +10,7 @@ import type { StoreOrProxy } from '../../models/store.model';
 import type { CommonResponse, InfoResponse, LoginRequest, LoginResponse, SynologyFileStationInfo, TaskBtEditRequest, TaskCompleteResponse, TaskCreateRequest, TaskCreateResponse, TaskEditResponse, TaskFileEditRequest, TaskListDeleteResponse, TaskListDownloadRequest, TaskListDownloadResponse, TaskListFilesRequest, TaskListFilesResponse, TaskListResponse } from '../../models/synology.model';
 import type { Task, TaskComplete, TaskList } from '../../models/task.model';
 
-import { catchError, EMPTY, exhaustMap, finalize, forkJoin, map, of, retry, Subject, switchMap, take, takeUntil, tap, throttleTime, throwError } from 'rxjs';
+import { catchError, defer, EMPTY, exhaustMap, finalize, forkJoin, map, of, retry, Subject, switchMap, take, takeUntil, tap, throttleTime, throwError } from 'rxjs';
 
 import { FetchError, LoginError, NotReadyError } from '../../models/error.model';
 import { FileListOption } from '../../models/file.model';
@@ -25,6 +25,7 @@ import { getCredentials, getNotificationsBannerFailedEnabled, getNotificationsBa
 import { getApi, getDownloadStation2APITask, getLogged, getOption, getPopup, getSid } from '../../store/selectors/state.selector';
 import { getStoppingIds, getTasksIdsByStatusType } from '../../store/selectors/tasks.selector';
 import { sendMessage } from '../../utils/chrome/chrome-message.utils';
+import { decryptPassword } from '../../utils/crypto.utils';
 import { before, store$ } from '../../utils/rxjs.utils';
 import { useI18n } from '../../utils/webex.utils';
 import { SynologyAuthService } from '../http/synology-auth.service';
@@ -261,9 +262,17 @@ export class QueryService {
         return throwError(() => e);
       }
     }
-    return this.authClient
-      .login(request, authVersion?.toString(), doNotProxy)
-      .pipe(this.readyCheckOperator({ logged: false, ready: !baseUrl?.length }));
+    // The stored password may be encrypted at rest: decrypt it only for the request
+    return defer(async () => decryptPassword(password).catch((error: Error) => {
+      LoggerService.error('Failed to decrypt the stored password', error);
+      throw new Error(i18n('password_decrypt_failed'));
+    })).pipe(
+      switchMap(passwd =>
+        this.authClient
+          .login({ ...request, passwd: passwd ?? '' }, authVersion?.toString(), doNotProxy)
+          .pipe(this.readyCheckOperator({ logged: false, ready: !baseUrl?.length })),
+      ),
+    );
   }
 
   private static twoFactorRequest(request: LoginRequest, { otp_code, enable_device_token, device_name, device_id }: Credentials): LoginRequest {
