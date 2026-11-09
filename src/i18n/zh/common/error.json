@@ -8,6 +8,9 @@
   "common__error__login_password_required": {
     "message": "缺少必需的用户名 '$1' 或密码 '$2'"
   },
+  "common__error__password_decrypt_failed": {
+    "message": "无法解密已保存的密码，请重新输入"
+  },
   "common__error__otp_code_device_required": {
     "message": "缺少必需的 2FA 代码 '$1' 或设备名称 '$2'"
   },

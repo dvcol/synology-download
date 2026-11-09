@@ -24,6 +24,7 @@ import { syncConnection } from '../../../../store/actions/settings.action';
 import { getConnection, urlReducer } from '../../../../store/selectors/settings.selector';
 import { getLogged } from '../../../../store/selectors/state.selector';
 import { createTab } from '../../../../utils/chrome/chrome.utils';
+import { encryptPassword } from '../../../../utils/crypto.utils';
 import { useDebounceObservable } from '../../../../utils/hooks.utils';
 import { before } from '../../../../utils/rxjs.utils';
 import { useI18n } from '../../../../utils/webex.utils';
@@ -139,6 +140,15 @@ export const SettingsCredentials: FC = () => {
     }
   };
 
+  // The password is encrypted at rest. Encryption is async, so it happens here and never in the (synchronous) reducer.
+  const saveConnection = async (data: ConnectionSettings) =>
+    encryptPassword(data.password)
+      .then(password => dispatch(syncConnection({ ...data, password })))
+      .catch((error: Error) => {
+        LoggerService.error('Failed to encrypt the password', error);
+        NotificationService.error({ title: i18n('error', 'common'), message: error?.message ?? error?.name ?? '' });
+      });
+
   const syncOnSubscribe = async <T extends LoginResponse | void>(
     data: ConnectionSettings,
     query: (credentials: Credentials, basUrl?: string) => Observable<unknown>,
@@ -164,7 +174,7 @@ export const SettingsCredentials: FC = () => {
         complete: () => {
           if (_type !== 'login_test') {
             QueryService.setBaseUrl(baseUrl);
-            dispatch(syncConnection(data));
+            void saveConnection(data);
           }
           setLoginError({ ...loginError, [_type]: false });
           NotificationService.info({
@@ -202,7 +212,7 @@ export const SettingsCredentials: FC = () => {
   };
 
   const onSave = (data: ConnectionSettings) => {
-    dispatch(syncConnection(data));
+    void saveConnection(data);
     reset(data, { keepIsSubmitted: true, keepSubmitCount: true });
   };
 
