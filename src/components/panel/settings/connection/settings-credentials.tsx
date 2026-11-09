@@ -63,6 +63,9 @@ export const SettingsCredentials: FC = () => {
 
   const authVersion = watch('authVersion') ?? defaultConnection.authVersion ?? 3;
   const isAuthV6 = authVersion >= 6;
+  // Until the NAS has been queried the auth version is unknown, so device token must not be locked out
+  const [hasInfo, setHasInfo] = useState<InfoResponse>();
+  const noDeviceToken = !!hasInfo && !isAuthV6;
   const type = watch('type');
   const isQC = type === ConnectionType.quickConnect;
   const is2FA = type === ConnectionType.twoFactor;
@@ -108,7 +111,6 @@ export const SettingsCredentials: FC = () => {
       }),
     ), [next]);
 
-  const [hasInfo, setHasInfo] = useState<InfoResponse>();
   const queryInfo = useCallback(async (baseUrl?: string) =>
     lastValueFrom(QueryService.info(baseUrl, true).pipe(loadingOperator))
       .then((res: InfoResponse) => {
@@ -146,7 +148,11 @@ export const SettingsCredentials: FC = () => {
   ) => {
     const baseUrl = buildUrl(data, _type === 'login_test' ? 'test' : 'login');
     if (!baseUrl) return;
-    if (!hasInfo) data.authVersion = await queryInfo(baseUrl);
+    if (!hasInfo) {
+      data.authVersion = await queryInfo(baseUrl);
+      // Device token was allowed before the NAS version was known: drop it if unsupported
+      if ((data.authVersion ?? 0) < 6) data.enable_device_token = false;
+    }
     return query
       .bind(QueryService)(data, baseUrl)
       .pipe<T>(loadingOperator)
@@ -424,7 +430,7 @@ export const SettingsCredentials: FC = () => {
             action={(
               <FormCheckbox
                 controllerProps={{ name: 'enable_device_token', control, rules: rules.enable_device_token }}
-                formControlLabelProps={{ label: i18n('enable_device_token'), disabled: !is2FA || !isAuthV6 }}
+                formControlLabelProps={{ label: i18n('enable_device_token'), disabled: !is2FA || noDeviceToken }}
               />
             )}
             sx={{ p: '0.5rem 0' }}
@@ -434,7 +440,7 @@ export const SettingsCredentials: FC = () => {
               {i18n('2fa__warning')}
             </Typography>
           </Collapse>
-          <Collapse in={is2FA && !isAuthV6} unmountOnExit={true}>
+          <Collapse in={is2FA && noDeviceToken} unmountOnExit={true}>
             <Typography color={ColorLevelMap[ColorLevel.warning]} variant="subtitle2" sx={{ m: '0 0 0.75rem', fontSize: '0.7rem' }}>
               {i18n('auth_v6__warning')}
             </Typography>
@@ -468,7 +474,7 @@ export const SettingsCredentials: FC = () => {
                 textFieldProps={{
                   type: 'text',
                   label: i18n('device_name'),
-                  disabled: !is2FA || !getValues().enable_device_token || !isAuthV6,
+                  disabled: !is2FA || !getValues().enable_device_token || noDeviceToken,
                 }}
               />
             </Grid>
