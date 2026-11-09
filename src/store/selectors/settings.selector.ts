@@ -54,9 +54,16 @@ function shouldAutoLogin(connection: ConnectionSettings) {
 
 export const getShouldAutoLogin: (state: StoreState) => boolean = createSelector(getConnection, shouldAutoLogin);
 
+const schemeRegex = /^[a-z][a-z\d+.-]*:\/\//i;
+const trailingSlashesRegex = /\/+$/;
+
 export function urlReducer(connection: ConnectionSettings) {
-  const { type, protocol, path, port } = connection;
-  if (ConnectionType.custom === type && path) return new URL(path).toString();
+  const { type, protocol, port } = connection;
+  const raw = connection.path?.trim();
+  // Custom paths are full urls: ensure a trailing slash so the api prefix is appended as a path segment
+  if (ConnectionType.custom === type && raw) return new URL(raw.endsWith('/') ? raw : `${raw}/`).toString();
+  // Other types expect a bare host: tolerate a pasted scheme or trailing slashes
+  const path = raw?.replace(schemeRegex, '').replace(trailingSlashesRegex, '');
   if (ConnectionType.quickConnect === type && protocol && path) return new URL(`${protocol}://${path}.quickconnect.to`).toString();
   if (protocol && path && port) return new URL(`${protocol}://${path}:${port}`).toString();
   return '';
