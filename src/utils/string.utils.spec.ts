@@ -1,6 +1,6 @@
 import { vi } from 'vitest';
 
-import { eMuleRegex, parseMagnetLink, parseSrc, sanitizeUrl } from './string.utils';
+import { eMuleRegex, extractDownloadUrls, parseMagnetLink, parseSrc, sanitizeUrl } from './string.utils';
 
 vi.mock('../services/logger/logger.service', () => ({
   LoggerService: { warn: vi.fn(), debug: vi.fn(), error: vi.fn() },
@@ -42,6 +42,44 @@ describe('string.utils', () => {
 
     it('should return dn value even with unusual params', () => {
       expect(parseMagnetLink('magnet:?dn=test&invalid://[', 'fallback')).toBe('test');
+    });
+  });
+
+  describe('extractDownloadUrls', () => {
+    const emule = 'ed2k://|file|test.txt|1234|abcdef01234567890abcdef012345678|/';
+    const emule2 = 'ed2k://|file|movie.mkv|987654|0123456789abcdef0123456789abcdef|/';
+
+    it('should return empty array for empty or blank text', () => {
+      expect(extractDownloadUrls('')).toEqual([]);
+      expect(extractDownloadUrls('   \n  ')).toEqual([]);
+      expect(extractDownloadUrls(undefined)).toEqual([]);
+    });
+
+    it('should extract a single ed2k link surrounded by text', () => {
+      expect(extractDownloadUrls(`Download here: ${emule} thanks!`)).toEqual([emule]);
+    });
+
+    it('should extract a matching ed2k link (eMuleRegex compatible)', () => {
+      const [link] = extractDownloadUrls(`prefix ${emule} suffix`);
+      expect(eMuleRegex.test(link)).toBe(true);
+    });
+
+    it('should extract multiple ed2k links from a selection', () => {
+      const text = `${emule}\nsome random text\n${emule2}`;
+      expect(extractDownloadUrls(text)).toEqual([emule, emule2]);
+    });
+
+    it('should extract magnet and http links', () => {
+      const text = 'magnet:?xt=urn:btih:abc&dn=Foo and https://example.com/file.zip';
+      expect(extractDownloadUrls(text)).toEqual(['magnet:?xt=urn:btih:abc&dn=Foo', 'https://example.com/file.zip']);
+    });
+
+    it('should de-duplicate identical links', () => {
+      expect(extractDownloadUrls(`${emule} ${emule}`)).toEqual([emule]);
+    });
+
+    it('should return empty array when no downloadable link is present', () => {
+      expect(extractDownloadUrls('just some plain text with no links')).toEqual([]);
     });
   });
 
