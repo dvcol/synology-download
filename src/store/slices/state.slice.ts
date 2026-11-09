@@ -13,6 +13,7 @@ import {
   syncFoldersHistoryReducer,
   syncLoggedReducer,
   syncLogHistoryReducer,
+  syncSidReducer,
 } from '../reducers/state.reducer';
 
 export const initialState: StateSlice = {
@@ -48,7 +49,7 @@ export const stateSlice = createSlice({
   reducers: {
     restoreState: (state, { payload }: PayloadAction<Partial<StateSlice>>) => ({ ...state, ...payload }),
     setLogged: syncLoggedReducer,
-    setSid: (state, { payload: sid }: PayloadAction<string | undefined>) => ({ ...state, sid }),
+    setSid: syncSidReducer,
     setPopup: (state, { payload: popup }: PayloadAction<boolean>) => ({ ...state, modal: { ...state.modal, popup } }),
     setPanel: (state, { payload: panel }: PayloadAction<boolean>) => ({ ...state, modal: { ...state.modal, panel } }),
     setOption: (state, { payload: option }: PayloadAction<boolean>) => ({ ...state, modal: { ...state.modal, option } }),

@@ -7,7 +7,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { QueryService } from '../../../services/query/query.service';
 import { restoreState } from '../../../store/actions/state.action';
 import { localGet } from '../../../utils/webex.utils';
-import { restoreLocalSate, restoreLoginSate } from './state-handler';
+import { restoreLocalSate, restoreLoginSate, restoreSession } from './state-handler';
 
 vi.mock('../../../utils/webex.utils', () => ({
   localGet: vi.fn(),
@@ -28,6 +28,8 @@ vi.mock('../../../services/query/query.service', () => ({
   QueryService: {
     isReady: false,
     autoLogin: vi.fn(() => of(null)),
+    getInfo: vi.fn(() => of({})),
+    setSid: vi.fn(),
     init: vi.fn(),
     isLoggedIn: false,
   },
@@ -35,6 +37,12 @@ vi.mock('../../../services/query/query.service', () => ({
 
 vi.mock('../../../store/actions/state.action', () => ({
   restoreState: vi.fn((v: unknown) => ({ type: 'RESTORE_STATE', payload: v })),
+  setLogged: vi.fn((v: unknown) => ({ type: 'SET_LOGGED', payload: v })),
+  setSid: vi.fn((v: unknown) => ({ type: 'SET_SID', payload: v })),
+}));
+
+vi.mock('../../../store/reducers/state.reducer', () => ({
+  SidSessionKey: 'sid',
 }));
 
 vi.mock('../../../store/slices/state.slice', () => ({
@@ -97,6 +105,53 @@ describe('state-handler', () => {
 
       const result = await firstValueFrom(restoreLocalSate(store));
       expect(result).toBeNull();
+    });
+
+    it('should resume the session saved in session storage', async () => {
+      vi.mocked(localGet).mockReturnValue(of({}) as any);
+      (QueryService as any).isReady = true;
+      (chrome.storage as any).session = { get: vi.fn(async () => Promise.resolve({ sid: 'saved-sid' })) };
+
+      await firstValueFrom(restoreLocalSate(store));
+
+      expect(QueryService.setSid).toHaveBeenCalledWith('saved-sid');
+      expect(store.dispatch).toHaveBeenCalledWith({ type: 'SET_LOGGED', payload: true });
+      expect(QueryService.autoLogin).not.toHaveBeenCalled();
+      delete (chrome.storage as any).session;
+    });
+  });
+
+  describe('restoreSession', () => {
+    it('should auto-login when there is no saved sid', async () => {
+      (QueryService as any).isReady = true;
+
+      await firstValueFrom(restoreSession(store));
+
+      expect(QueryService.getInfo).not.toHaveBeenCalled();
+      expect(QueryService.autoLogin).toHaveBeenCalledWith({ notify: false });
+    });
+
+    it('should restore the sid and logged state when the session is still valid', async () => {
+      (QueryService as any).isReady = true;
+
+      const result = await firstValueFrom(restoreSession(store, 'saved-sid'));
+
+      expect(result).toBeNull();
+      expect(store.dispatch).toHaveBeenCalledWith({ type: 'SET_SID', payload: 'saved-sid' });
+      expect(store.dispatch).toHaveBeenCalledWith({ type: 'SET_LOGGED', payload: true });
+      expect(QueryService.autoLogin).not.toHaveBeenCalled();
+    });
+
+    it('should clear the sid and fall back to auto-login when the session expired', async () => {
+      (QueryService as any).isReady = true;
+      vi.mocked(QueryService.getInfo).mockReturnValueOnce(throwError(() => new Error('session timeout')) as any);
+
+      await firstValueFrom(restoreSession(store, 'expired-sid'));
+
+      expect(store.dispatch).toHaveBeenCalledWith({ type: 'SET_SID', payload: undefined });
+      expect(store.dispatch).toHaveBeenLastCalledWith({ type: 'SET_LOGGED', payload: false });
+      expect(QueryService.setSid).toHaveBeenLastCalledWith(undefined);
+      expect(QueryService.autoLogin).toHaveBeenCalledWith({ notify: false });
     });
   });
 });
