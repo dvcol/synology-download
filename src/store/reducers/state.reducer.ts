@@ -48,6 +48,23 @@ export function syncStateReducer(state: StateSlice): StateSlice {
   return state;
 }
 
+/** Session storage key holding the current DSM sid (in memory only, cleared when the browser closes) */
+export const SidSessionKey = 'sid';
+
+/**
+ * Keeps the sid in session storage so it survives MV3 service worker restarts within the same browser session.
+ */
+export const syncSidReducer: CaseReducer<StateSlice, PayloadAction<string | undefined>> = (state, { payload: sid }) => {
+  // TODO : move to thunk ?
+  const session = globalThis.chrome?.storage?.session;
+  if (session && sid !== state.sid) {
+    (sid ? session.set({ [SidSessionKey]: sid }) : session.remove(SidSessionKey)).catch((error: Error) =>
+      LoggerService.error('Failed to sync sid to session storage', error),
+    );
+  }
+  return { ...state, sid };
+};
+
 export const syncLoggedReducer: CaseReducer<StateSlice, PayloadAction<boolean>> = (state, { payload: logged }) => {
   if (state.logged !== logged) {
     const icon = `icon${logged ? '' : '-disabled'}`;

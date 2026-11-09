@@ -3,7 +3,7 @@ import type { Log } from '../../models/settings.model';
 import type { StateSlice } from '../../models/store.model';
 
 import { of } from 'rxjs';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('../../utils/webex.utils', () => ({
   localSet: vi.fn(() => of(undefined)),
@@ -21,18 +21,20 @@ vi.mock('../slices/state.slice', () => ({
 }));
 
 vi.mock('../../services/logger/logger.service', () => ({
-  LoggerService: { debug: vi.fn() },
+  LoggerService: { debug: vi.fn(), error: vi.fn() },
 }));
 
 import { setBadgeText, setIcon, setTitle } from '../../utils/chrome/chrome.utils';
 import { localSet } from '../../utils/webex.utils';
 import {
   setCountAndStats,
+  SidSessionKey,
   syncDestinationsHistoryReducer,
   syncDownloadStateReducer,
   syncFoldersHistoryReducer,
   syncLoggedReducer,
   syncLogHistoryReducer,
+  syncSidReducer,
 } from './state.reducer';
 
 const mockSetBadgeText = vi.mocked(setBadgeText);
@@ -183,6 +185,44 @@ describe('state.reducer', () => {
       const download = { enabled: false, defaultFolder: undefined };
       syncDownloadStateReducer(initialState, { type: 'test', payload: download });
       expect(mockLocalSet).toHaveBeenCalled();
+    });
+  });
+
+  describe('syncSidReducer', () => {
+    const session = { set: vi.fn(async () => Promise.resolve()), remove: vi.fn(async () => Promise.resolve()) };
+
+    beforeEach(() => {
+      session.set.mockClear();
+      session.remove.mockClear();
+      (chrome.storage as any).session = session;
+    });
+
+    afterEach(() => {
+      delete (chrome.storage as any).session;
+    });
+
+    it('should set the sid and save it to session storage', () => {
+      const result = syncSidReducer(initialState, { type: 'test', payload: 'new-sid' });
+      expect(result.sid).toBe('new-sid');
+      expect(session.set).toHaveBeenCalledWith({ [SidSessionKey]: 'new-sid' });
+    });
+
+    it('should remove the sid from session storage when cleared', () => {
+      const result = syncSidReducer({ ...initialState, sid: 'old-sid' }, { type: 'test', payload: undefined });
+      expect(result.sid).toBeUndefined();
+      expect(session.remove).toHaveBeenCalledWith(SidSessionKey);
+    });
+
+    it('should not write when the sid is unchanged', () => {
+      syncSidReducer({ ...initialState, sid: 'same' }, { type: 'test', payload: 'same' });
+      expect(session.set).not.toHaveBeenCalled();
+      expect(session.remove).not.toHaveBeenCalled();
+    });
+
+    it('should still update the state when session storage is unavailable', () => {
+      delete (chrome.storage as any).session;
+      const result = syncSidReducer(initialState, { type: 'test', payload: 'new-sid' });
+      expect(result.sid).toBe('new-sid');
     });
   });
 });
