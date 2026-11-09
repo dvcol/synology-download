@@ -277,8 +277,9 @@ export class QueryService {
     }
     // If we enable remember device
     if (enable_device_token) {
-      // If we already have token, we return omitted OTP request
-      if (device_id) return { ...request, device_id, device_name };
+      // If we already have token and no fresh code was typed, we return omitted OTP request
+      // (a typed code always wins: the saved token may have been revoked or expired on the NAS)
+      if (device_id && !otp_code) return { ...request, device_id, device_name };
       // If not we demand a device token with name and otp
       return { ...request, enable_device_token: 'yes', device_name, otp_code };
     }
@@ -336,8 +337,8 @@ export class QueryService {
     // If missing required settings
     if (!autoLogin) return of(null);
 
-    // Attempt to Restore login
-    return QueryService.login().pipe(
+    // Attempt to Restore login (a previously typed OTP is single-use, never replay it)
+    return QueryService.login({ ...getCredentials(this.store.getState()), otp_code: '' }).pipe(
       this.loadingOperator({ logged: false, ready: true }),
       tap({
         next: () => LoggerService.debug('Auto-login attempt successful'),
