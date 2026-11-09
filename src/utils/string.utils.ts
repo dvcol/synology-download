@@ -11,6 +11,41 @@ export const stringifyParams = _stringifyParams;
 export const eMuleRegex = /^ed2k:\/\/\|file\|[^|]+\|\d+\|[a-fA-F0-9]{32}\|(h=[a-zA-Z0-9]{32}\|)?\/$/;
 const fileExtensionRegex = /\.\w+$/;
 
+/**
+ * Global matchers used to extract downloadable links out of a free-form text selection.
+ *
+ * Order matters: scheme-specific links (ed2k, magnet, thunder/flashget/qqdl) are matched
+ * before the generic http(s) matcher so they are never partially swallowed.
+ */
+const downloadLinkRegexes: RegExp[] = [
+  /ed2k:\/\/\|file\|[^|]+\|\d+\|[a-f0-9]{32}\|(?:h=[a-z0-9]{32}\|)?\//gi,
+  /magnet:\?[^\s"'<>\]]+/gi,
+  /(?:thunder|flashget|qqdl):\/\/[^\s"'<>\]]+/gi,
+  /https?:\/\/[^\s"'<>\]]+/gi,
+];
+
+/**
+ * Extract every supported downloadable link (ed2k, magnet, thunder/flashget/qqdl, http(s))
+ * from an arbitrary text blob such as a right-click text selection.
+ *
+ * Returns a de-duplicated list preserving first-seen order. When no link is found the
+ * returned array is empty, leaving callers free to fall back to the raw text.
+ *
+ * @param text the free-form text to scan
+ */
+export function extractDownloadUrls(text?: string): string[] {
+  if (!text?.trim()) return [];
+  const found = new Set<string>();
+  downloadLinkRegexes.forEach((regex) => {
+    regex.lastIndex = 0;
+    for (const match of text.matchAll(regex)) {
+      const link = match[0]?.trim();
+      if (link) found.add(link);
+    }
+  });
+  return [...found];
+}
+
 const commaRegex = /,/g;
 const commaReplacement = '%2C';
 

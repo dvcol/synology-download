@@ -18,6 +18,7 @@ import { QueryService } from '../../../services/query/query.service';
 import { getDestinationsHistory } from '../../../store/selectors/state.selector';
 import { storeProxy } from '../../../store/store-proxy';
 import { onMessage, sendMessage } from '../../../utils/chrome/chrome-message.utils';
+import { extractDownloadUrls } from '../../../utils/string.utils';
 import { i18n } from '../../../utils/webex.utils';
 import { taskDialog$ } from '../service/dialog.service';
 
@@ -57,7 +58,11 @@ export const ContentTaskDialog: FC<{ container?: PortalProps['container'] }> = (
             menu: { modal, popup, panel, destination: configuredDestination },
           } = message.payload;
 
-          const uri = linkUrl ?? selectionText;
+          // When clicking a link directly we already have its target; otherwise scan the
+          // text selection for every supported downloadable link (ed2k, magnet, http(s), ...).
+          const urls = linkUrl ? [linkUrl] : extractDownloadUrls(selectionText);
+          // Newline-joined value feeds the multiline task form, which splits it back into urls.
+          const uri = urls.length ? urls.join('\n') : selectionText;
           let destination = configuredDestination;
           if (configuredDestination?.lastUsed) {
             const path = getDestinationsHistory(storeProxy.getState())[0];
@@ -79,7 +84,7 @@ export const ContentTaskDialog: FC<{ container?: PortalProps['container'] }> = (
               setForm({ uri, source, destination });
               _setOpen(true);
             } else {
-              QueryService.createTask({ url: [uri], destination: destination?.custom ? destination.path : undefined }, { source }).subscribe();
+              QueryService.createTask({ url: urls.length ? urls : [uri], destination: destination?.custom ? destination.path : undefined }, { source }).subscribe();
             }
           } else if (uri) {
             NotificationService.loginRequired();
