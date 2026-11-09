@@ -185,8 +185,6 @@ export const SettingsCredentials: FC = () => {
       });
   };
 
-  const testLogin = async (data: ConnectionSettings) => syncOnSubscribe(data, QueryService.loginTest.bind(QueryService), 'login_test');
-
   const testPermission = async () => {
     const { file, download } = await lastValueFrom(QueryService.permissions());
     if (file && download) return NotificationService.info({ title: i18n('permissions'), message: i18n('permissions_success'), success: true });
@@ -511,27 +509,16 @@ export const SettingsCredentials: FC = () => {
           >
             {i18n(logged ? 'logout' : 'login')}
           </Button>
-          {logged
-            ? (
-                <Button
-                  variant="outlined"
-                  color={getColor('permissions')}
-                  disabled={!logged || loading || !isValid}
-                  onClick={handleSubmit(testPermission)}
-                >
-                  {i18n('permissions')}
-                </Button>
-              )
-            : (
-                <Button
-                  variant="outlined"
-                  color={getColor('test')}
-                  disabled={loading || !isValid || (logged && is2FA && !getValues()?.otp_code)}
-                  onClick={handleSubmit(testLogin)}
-                >
-                  {i18n('login_test')}
-                </Button>
-              )}
+          {logged && (
+            <Button
+              variant="outlined"
+              color={getColor('permissions')}
+              disabled={!logged || loading || !isValid}
+              onClick={handleSubmit(testPermission)}
+            >
+              {i18n('permissions')}
+            </Button>
+          )}
         </Stack>
         <Stack
           direction="row"
