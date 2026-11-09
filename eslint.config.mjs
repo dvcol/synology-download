@@ -1,10 +1,12 @@
+import { fileURLToPath } from 'node:url';
+
 import { defineReactConfig } from '@dvcol/eslint-config';
 
 export default defineReactConfig(
   {
     typescript: {
-      tsconfigPath: new URL('./tsconfig.vitest.json', import.meta.url).pathname,
-      tsconfigRootDir: new URL('./', import.meta.url).pathname,
+      tsconfigPath: fileURLToPath(new URL('./tsconfig.vitest.json', import.meta.url)),
+      tsconfigRootDir: fileURLToPath(new URL('./', import.meta.url)),
     },
     ignores: [
       'src/assets/icons/**/*',
